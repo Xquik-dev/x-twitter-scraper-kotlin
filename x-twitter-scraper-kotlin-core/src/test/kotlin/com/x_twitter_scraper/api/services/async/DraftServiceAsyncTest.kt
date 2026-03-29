@@ -1,0 +1,80 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package com.x_twitter_scraper.api.services.async
+
+import com.x_twitter_scraper.api.client.okhttp.XTwitterScraperOkHttpClientAsync
+import com.x_twitter_scraper.api.models.drafts.DraftCreateParams
+import com.x_twitter_scraper.api.models.drafts.DraftListParams
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
+
+internal class DraftServiceAsyncTest {
+
+    @Disabled("Mock server tests are disabled")
+    @Test
+    suspend fun create() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val draftServiceAsync = client.drafts()
+
+        val draft =
+            draftServiceAsync.create(
+                DraftCreateParams.builder()
+                    .text("text")
+                    .goal(DraftCreateParams.Goal.ENGAGEMENT)
+                    .topic("topic")
+                    .build()
+            )
+
+        draft.validate()
+    }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
+    suspend fun retrieve() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val draftServiceAsync = client.drafts()
+
+        val draft = draftServiceAsync.retrieve("id")
+
+        draft.validate()
+    }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
+    suspend fun list() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val draftServiceAsync = client.drafts()
+
+        val drafts =
+            draftServiceAsync.list(
+                DraftListParams.builder().afterCursor("afterCursor").limit(1L).build()
+            )
+
+        drafts.validate()
+    }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
+    suspend fun delete() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val draftServiceAsync = client.drafts()
+
+        draftServiceAsync.delete("id")
+    }
+}
