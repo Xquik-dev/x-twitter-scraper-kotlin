@@ -8,7 +8,6 @@ import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.http.HttpResponse
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.models.styles.StyleAnalyzeParams
-import com.x_twitter_scraper.api.models.styles.StyleAnalyzeResponse
 import com.x_twitter_scraper.api.models.styles.StyleCompareParams
 import com.x_twitter_scraper.api.models.styles.StyleCompareResponse
 import com.x_twitter_scraper.api.models.styles.StyleDeleteParams
@@ -16,10 +15,9 @@ import com.x_twitter_scraper.api.models.styles.StyleGetPerformanceParams
 import com.x_twitter_scraper.api.models.styles.StyleGetPerformanceResponse
 import com.x_twitter_scraper.api.models.styles.StyleListParams
 import com.x_twitter_scraper.api.models.styles.StyleListResponse
+import com.x_twitter_scraper.api.models.styles.StyleProfile
 import com.x_twitter_scraper.api.models.styles.StyleRetrieveParams
-import com.x_twitter_scraper.api.models.styles.StyleRetrieveResponse
 import com.x_twitter_scraper.api.models.styles.StyleUpdateParams
-import com.x_twitter_scraper.api.models.styles.StyleUpdateResponse
 
 /** Tweet composition, drafts, writing styles & radar */
 interface StyleServiceAsync {
@@ -41,17 +39,16 @@ interface StyleServiceAsync {
         username: String,
         params: StyleRetrieveParams = StyleRetrieveParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): StyleRetrieveResponse =
-        retrieve(params.toBuilder().username(username).build(), requestOptions)
+    ): StyleProfile = retrieve(params.toBuilder().username(username).build(), requestOptions)
 
     /** @see retrieve */
     suspend fun retrieve(
         params: StyleRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): StyleRetrieveResponse
+    ): StyleProfile
 
     /** @see retrieve */
-    suspend fun retrieve(username: String, requestOptions: RequestOptions): StyleRetrieveResponse =
+    suspend fun retrieve(username: String, requestOptions: RequestOptions): StyleProfile =
         retrieve(username, StyleRetrieveParams.none(), requestOptions)
 
     /** Save style profile with custom tweets */
@@ -59,13 +56,13 @@ interface StyleServiceAsync {
         username: String,
         params: StyleUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): StyleUpdateResponse = update(params.toBuilder().username(username).build(), requestOptions)
+    ): StyleProfile = update(params.toBuilder().username(username).build(), requestOptions)
 
     /** @see update */
     suspend fun update(
         params: StyleUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): StyleUpdateResponse
+    ): StyleProfile
 
     /** List cached style profiles */
     suspend fun list(
@@ -98,7 +95,7 @@ interface StyleServiceAsync {
     suspend fun analyze(
         params: StyleAnalyzeParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): StyleAnalyzeResponse
+    ): StyleProfile
 
     /** Compare two style profiles */
     suspend fun compare(
@@ -148,7 +145,7 @@ interface StyleServiceAsync {
             username: String,
             params: StyleRetrieveParams = StyleRetrieveParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<StyleRetrieveResponse> =
+        ): HttpResponseFor<StyleProfile> =
             retrieve(params.toBuilder().username(username).build(), requestOptions)
 
         /** @see retrieve */
@@ -156,14 +153,14 @@ interface StyleServiceAsync {
         suspend fun retrieve(
             params: StyleRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<StyleRetrieveResponse>
+        ): HttpResponseFor<StyleProfile>
 
         /** @see retrieve */
         @MustBeClosed
         suspend fun retrieve(
             username: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<StyleRetrieveResponse> =
+        ): HttpResponseFor<StyleProfile> =
             retrieve(username, StyleRetrieveParams.none(), requestOptions)
 
         /**
@@ -175,7 +172,7 @@ interface StyleServiceAsync {
             username: String,
             params: StyleUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<StyleUpdateResponse> =
+        ): HttpResponseFor<StyleProfile> =
             update(params.toBuilder().username(username).build(), requestOptions)
 
         /** @see update */
@@ -183,7 +180,7 @@ interface StyleServiceAsync {
         suspend fun update(
             params: StyleUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<StyleUpdateResponse>
+        ): HttpResponseFor<StyleProfile>
 
         /**
          * Returns a raw HTTP response for `get /styles`, but is otherwise the same as
@@ -231,7 +228,7 @@ interface StyleServiceAsync {
         suspend fun analyze(
             params: StyleAnalyzeParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<StyleAnalyzeResponse>
+        ): HttpResponseFor<StyleProfile>
 
         /**
          * Returns a raw HTTP response for `get /styles/compare`, but is otherwise the same as

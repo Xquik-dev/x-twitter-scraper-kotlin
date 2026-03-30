@@ -14,8 +14,8 @@ import com.x_twitter_scraper.api.core.http.HttpResponse.Handler
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.core.http.parseable
 import com.x_twitter_scraper.api.core.prepareAsync
-import com.x_twitter_scraper.api.models.x.followers.FollowerRetrieveCheckParams
-import com.x_twitter_scraper.api.models.x.followers.FollowerRetrieveCheckResponse
+import com.x_twitter_scraper.api.models.x.followers.FollowerCheckParams
+import com.x_twitter_scraper.api.models.x.followers.FollowerCheckResponse
 
 /** X data lookups (subscription required) */
 class FollowerServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -30,12 +30,12 @@ class FollowerServiceAsyncImpl internal constructor(private val clientOptions: C
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): FollowerServiceAsync =
         FollowerServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
 
-    override suspend fun retrieveCheck(
-        params: FollowerRetrieveCheckParams,
+    override suspend fun check(
+        params: FollowerCheckParams,
         requestOptions: RequestOptions,
-    ): FollowerRetrieveCheckResponse =
+    ): FollowerCheckResponse =
         // get /x/followers/check
-        withRawResponse().retrieveCheck(params, requestOptions).parse()
+        withRawResponse().check(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         FollowerServiceAsync.WithRawResponse {
@@ -50,13 +50,13 @@ class FollowerServiceAsyncImpl internal constructor(private val clientOptions: C
                 clientOptions.toBuilder().apply(modifier).build()
             )
 
-        private val retrieveCheckHandler: Handler<FollowerRetrieveCheckResponse> =
-            jsonHandler<FollowerRetrieveCheckResponse>(clientOptions.jsonMapper)
+        private val checkHandler: Handler<FollowerCheckResponse> =
+            jsonHandler<FollowerCheckResponse>(clientOptions.jsonMapper)
 
-        override suspend fun retrieveCheck(
-            params: FollowerRetrieveCheckParams,
+        override suspend fun check(
+            params: FollowerCheckParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<FollowerRetrieveCheckResponse> {
+        ): HttpResponseFor<FollowerCheckResponse> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -68,7 +68,7 @@ class FollowerServiceAsyncImpl internal constructor(private val clientOptions: C
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
             return errorHandler.handle(response).parseable {
                 response
-                    .use { retrieveCheckHandler.handle(it) }
+                    .use { checkHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()

@@ -18,7 +18,6 @@ import com.x_twitter_scraper.api.core.http.json
 import com.x_twitter_scraper.api.core.http.parseable
 import com.x_twitter_scraper.api.core.prepareAsync
 import com.x_twitter_scraper.api.models.styles.StyleAnalyzeParams
-import com.x_twitter_scraper.api.models.styles.StyleAnalyzeResponse
 import com.x_twitter_scraper.api.models.styles.StyleCompareParams
 import com.x_twitter_scraper.api.models.styles.StyleCompareResponse
 import com.x_twitter_scraper.api.models.styles.StyleDeleteParams
@@ -26,10 +25,9 @@ import com.x_twitter_scraper.api.models.styles.StyleGetPerformanceParams
 import com.x_twitter_scraper.api.models.styles.StyleGetPerformanceResponse
 import com.x_twitter_scraper.api.models.styles.StyleListParams
 import com.x_twitter_scraper.api.models.styles.StyleListResponse
+import com.x_twitter_scraper.api.models.styles.StyleProfile
 import com.x_twitter_scraper.api.models.styles.StyleRetrieveParams
-import com.x_twitter_scraper.api.models.styles.StyleRetrieveResponse
 import com.x_twitter_scraper.api.models.styles.StyleUpdateParams
-import com.x_twitter_scraper.api.models.styles.StyleUpdateResponse
 
 /** Tweet composition, drafts, writing styles & radar */
 class StyleServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -47,14 +45,14 @@ class StyleServiceAsyncImpl internal constructor(private val clientOptions: Clie
     override suspend fun retrieve(
         params: StyleRetrieveParams,
         requestOptions: RequestOptions,
-    ): StyleRetrieveResponse =
+    ): StyleProfile =
         // get /styles/{username}
         withRawResponse().retrieve(params, requestOptions).parse()
 
     override suspend fun update(
         params: StyleUpdateParams,
         requestOptions: RequestOptions,
-    ): StyleUpdateResponse =
+    ): StyleProfile =
         // put /styles/{username}
         withRawResponse().update(params, requestOptions).parse()
 
@@ -73,7 +71,7 @@ class StyleServiceAsyncImpl internal constructor(private val clientOptions: Clie
     override suspend fun analyze(
         params: StyleAnalyzeParams,
         requestOptions: RequestOptions,
-    ): StyleAnalyzeResponse =
+    ): StyleProfile =
         // post /styles
         withRawResponse().analyze(params, requestOptions).parse()
 
@@ -104,13 +102,13 @@ class StyleServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 clientOptions.toBuilder().apply(modifier).build()
             )
 
-        private val retrieveHandler: Handler<StyleRetrieveResponse> =
-            jsonHandler<StyleRetrieveResponse>(clientOptions.jsonMapper)
+        private val retrieveHandler: Handler<StyleProfile> =
+            jsonHandler<StyleProfile>(clientOptions.jsonMapper)
 
         override suspend fun retrieve(
             params: StyleRetrieveParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<StyleRetrieveResponse> {
+        ): HttpResponseFor<StyleProfile> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("username", params.username())
@@ -134,13 +132,13 @@ class StyleServiceAsyncImpl internal constructor(private val clientOptions: Clie
             }
         }
 
-        private val updateHandler: Handler<StyleUpdateResponse> =
-            jsonHandler<StyleUpdateResponse>(clientOptions.jsonMapper)
+        private val updateHandler: Handler<StyleProfile> =
+            jsonHandler<StyleProfile>(clientOptions.jsonMapper)
 
         override suspend fun update(
             params: StyleUpdateParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<StyleUpdateResponse> {
+        ): HttpResponseFor<StyleProfile> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("username", params.username())
@@ -216,13 +214,13 @@ class StyleServiceAsyncImpl internal constructor(private val clientOptions: Clie
             }
         }
 
-        private val analyzeHandler: Handler<StyleAnalyzeResponse> =
-            jsonHandler<StyleAnalyzeResponse>(clientOptions.jsonMapper)
+        private val analyzeHandler: Handler<StyleProfile> =
+            jsonHandler<StyleProfile>(clientOptions.jsonMapper)
 
         override suspend fun analyze(
             params: StyleAnalyzeParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<StyleAnalyzeResponse> {
+        ): HttpResponseFor<StyleProfile> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)

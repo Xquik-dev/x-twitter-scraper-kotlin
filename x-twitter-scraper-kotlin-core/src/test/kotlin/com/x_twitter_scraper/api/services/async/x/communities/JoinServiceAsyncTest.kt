@@ -20,10 +20,10 @@ internal class JoinServiceAsyncTest {
                 .build()
         val joinServiceAsync = client.x().communities().join()
 
-        val join =
+        val communityActionResult =
             joinServiceAsync.create(JoinCreateParams.builder().id("id").account("account").build())
 
-        join.validate()
+        communityActionResult.validate()
     }
 
     @Disabled("Mock server tests are disabled")
@@ -36,11 +36,11 @@ internal class JoinServiceAsyncTest {
                 .build()
         val joinServiceAsync = client.x().communities().join()
 
-        val response =
+        val communityActionResult =
             joinServiceAsync.deleteAll(
                 JoinDeleteAllParams.builder().id("id").account("account").build()
             )
 
-        response.validate()
+        communityActionResult.validate()
     }
 }

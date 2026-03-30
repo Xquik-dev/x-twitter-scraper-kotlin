@@ -6,8 +6,8 @@ import com.google.errorprone.annotations.MustBeClosed
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
-import com.x_twitter_scraper.api.models.x.followers.FollowerRetrieveCheckParams
-import com.x_twitter_scraper.api.models.x.followers.FollowerRetrieveCheckResponse
+import com.x_twitter_scraper.api.models.x.followers.FollowerCheckParams
+import com.x_twitter_scraper.api.models.x.followers.FollowerCheckResponse
 
 /** X data lookups (subscription required) */
 interface FollowerService {
@@ -25,10 +25,10 @@ interface FollowerService {
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): FollowerService
 
     /** Check follow relationship */
-    fun retrieveCheck(
-        params: FollowerRetrieveCheckParams,
+    fun check(
+        params: FollowerCheckParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): FollowerRetrieveCheckResponse
+    ): FollowerCheckResponse
 
     /** A view of [FollowerService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -42,12 +42,12 @@ interface FollowerService {
 
         /**
          * Returns a raw HTTP response for `get /x/followers/check`, but is otherwise the same as
-         * [FollowerService.retrieveCheck].
+         * [FollowerService.check].
          */
         @MustBeClosed
-        fun retrieveCheck(
-            params: FollowerRetrieveCheckParams,
+        fun check(
+            params: FollowerCheckParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<FollowerRetrieveCheckResponse>
+        ): HttpResponseFor<FollowerCheckResponse>
     }
 }

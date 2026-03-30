@@ -6,10 +6,10 @@ import com.google.errorprone.annotations.MustBeClosed
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
-import com.x_twitter_scraper.api.models.x.media.MediaCreateParams
-import com.x_twitter_scraper.api.models.x.media.MediaCreateResponse
 import com.x_twitter_scraper.api.models.x.media.MediaDownloadParams
 import com.x_twitter_scraper.api.models.x.media.MediaDownloadResponse
+import com.x_twitter_scraper.api.models.x.media.MediaUploadParams
+import com.x_twitter_scraper.api.models.x.media.MediaUploadResponse
 
 /** Media upload & download */
 interface MediaServiceAsync {
@@ -26,12 +26,6 @@ interface MediaServiceAsync {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): MediaServiceAsync
 
-    /** Upload media */
-    suspend fun create(
-        params: MediaCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): MediaCreateResponse
-
     /** Download tweet media */
     suspend fun download(
         params: MediaDownloadParams = MediaDownloadParams.none(),
@@ -41,6 +35,12 @@ interface MediaServiceAsync {
     /** @see download */
     suspend fun download(requestOptions: RequestOptions): MediaDownloadResponse =
         download(MediaDownloadParams.none(), requestOptions)
+
+    /** Upload media */
+    suspend fun upload(
+        params: MediaUploadParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): MediaUploadResponse
 
     /** A view of [MediaServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -53,16 +53,6 @@ interface MediaServiceAsync {
         fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): MediaServiceAsync.WithRawResponse
-
-        /**
-         * Returns a raw HTTP response for `post /x/media`, but is otherwise the same as
-         * [MediaServiceAsync.create].
-         */
-        @MustBeClosed
-        suspend fun create(
-            params: MediaCreateParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MediaCreateResponse>
 
         /**
          * Returns a raw HTTP response for `post /x/media/download`, but is otherwise the same as
@@ -80,5 +70,15 @@ interface MediaServiceAsync {
             requestOptions: RequestOptions
         ): HttpResponseFor<MediaDownloadResponse> =
             download(MediaDownloadParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /x/media`, but is otherwise the same as
+         * [MediaServiceAsync.upload].
+         */
+        @MustBeClosed
+        suspend fun upload(
+            params: MediaUploadParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<MediaUploadResponse>
     }
 }
