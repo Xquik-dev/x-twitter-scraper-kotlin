@@ -14,6 +14,7 @@ import com.x_twitter_scraper.api.core.checkKnown
 import com.x_twitter_scraper.api.core.checkRequired
 import com.x_twitter_scraper.api.core.toImmutable
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
+import com.x_twitter_scraper.api.models.x.users.UserProfile
 import java.util.Collections
 import java.util.Objects
 
@@ -22,7 +23,7 @@ class PaginatedUsers
 private constructor(
     private val hasNextPage: JsonField<Boolean>,
     private val nextCursor: JsonField<String>,
-    private val users: JsonField<List<JsonValue>>,
+    private val users: JsonField<List<UserProfile>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -34,7 +35,9 @@ private constructor(
         @JsonProperty("next_cursor")
         @ExcludeMissing
         nextCursor: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("users") @ExcludeMissing users: JsonField<List<JsonValue>> = JsonMissing.of(),
+        @JsonProperty("users")
+        @ExcludeMissing
+        users: JsonField<List<UserProfile>> = JsonMissing.of(),
     ) : this(hasNextPage, nextCursor, users, mutableMapOf())
 
     /**
@@ -53,7 +56,7 @@ private constructor(
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun users(): List<JsonValue> = users.getRequired("users")
+    fun users(): List<UserProfile> = users.getRequired("users")
 
     /**
      * Returns the raw JSON value of [hasNextPage].
@@ -76,7 +79,7 @@ private constructor(
      *
      * Unlike [users], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("users") @ExcludeMissing fun _users(): JsonField<List<JsonValue>> = users
+    @JsonProperty("users") @ExcludeMissing fun _users(): JsonField<List<UserProfile>> = users
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -110,7 +113,7 @@ private constructor(
 
         private var hasNextPage: JsonField<Boolean>? = null
         private var nextCursor: JsonField<String>? = null
-        private var users: JsonField<MutableList<JsonValue>>? = null
+        private var users: JsonField<MutableList<UserProfile>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(paginatedUsers: PaginatedUsers) = apply {
@@ -142,25 +145,25 @@ private constructor(
          */
         fun nextCursor(nextCursor: JsonField<String>) = apply { this.nextCursor = nextCursor }
 
-        fun users(users: List<JsonValue>) = users(JsonField.of(users))
+        fun users(users: List<UserProfile>) = users(JsonField.of(users))
 
         /**
          * Sets [Builder.users] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.users] with a well-typed `List<JsonValue>` value
+         * You should usually call [Builder.users] with a well-typed `List<UserProfile>` value
          * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun users(users: JsonField<List<JsonValue>>) = apply {
+        fun users(users: JsonField<List<UserProfile>>) = apply {
             this.users = users.map { it.toMutableList() }
         }
 
         /**
-         * Adds a single [JsonValue] to [users].
+         * Adds a single [UserProfile] to [users].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addUser(user: JsonValue) = apply {
+        fun addUser(user: UserProfile) = apply {
             users =
                 (users ?: JsonField.of(mutableListOf())).also { checkKnown("users", it).add(user) }
         }
@@ -216,7 +219,7 @@ private constructor(
 
         hasNextPage()
         nextCursor()
-        users()
+        users().forEach { it.validate() }
         validated = true
     }
 
@@ -236,7 +239,7 @@ private constructor(
     internal fun validity(): Int =
         (if (hasNextPage.asKnown() == null) 0 else 1) +
             (if (nextCursor.asKnown() == null) 0 else 1) +
-            (users.asKnown()?.size ?: 0)
+            (users.asKnown()?.sumOf { it.validity().toInt() } ?: 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
