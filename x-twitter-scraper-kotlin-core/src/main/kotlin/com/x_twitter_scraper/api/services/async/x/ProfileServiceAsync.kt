@@ -6,12 +6,12 @@ import com.google.errorprone.annotations.MustBeClosed
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
-import com.x_twitter_scraper.api.models.x.profile.ProfilePatchAllParams
-import com.x_twitter_scraper.api.models.x.profile.ProfilePatchAllResponse
 import com.x_twitter_scraper.api.models.x.profile.ProfileUpdateAvatarParams
 import com.x_twitter_scraper.api.models.x.profile.ProfileUpdateAvatarResponse
 import com.x_twitter_scraper.api.models.x.profile.ProfileUpdateBannerParams
 import com.x_twitter_scraper.api.models.x.profile.ProfileUpdateBannerResponse
+import com.x_twitter_scraper.api.models.x.profile.ProfileUpdateParams
+import com.x_twitter_scraper.api.models.x.profile.ProfileUpdateResponse
 
 /** X write actions (tweets, likes, follows, DMs) */
 interface ProfileServiceAsync {
@@ -29,10 +29,10 @@ interface ProfileServiceAsync {
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ProfileServiceAsync
 
     /** Update X profile */
-    suspend fun patchAll(
-        params: ProfilePatchAllParams,
+    suspend fun update(
+        params: ProfileUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): ProfilePatchAllResponse
+    ): ProfileUpdateResponse
 
     /** Update profile avatar */
     suspend fun updateAvatar(
@@ -62,13 +62,13 @@ interface ProfileServiceAsync {
 
         /**
          * Returns a raw HTTP response for `patch /x/profile`, but is otherwise the same as
-         * [ProfileServiceAsync.patchAll].
+         * [ProfileServiceAsync.update].
          */
         @MustBeClosed
-        suspend fun patchAll(
-            params: ProfilePatchAllParams,
+        suspend fun update(
+            params: ProfileUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<ProfilePatchAllResponse>
+        ): HttpResponseFor<ProfileUpdateResponse>
 
         /**
          * Returns a raw HTTP response for `patch /x/profile/avatar`, but is otherwise the same as

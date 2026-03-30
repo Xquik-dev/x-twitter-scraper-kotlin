@@ -16,10 +16,9 @@ import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.core.http.json
 import com.x_twitter_scraper.api.core.http.parseable
 import com.x_twitter_scraper.api.core.prepareAsync
+import com.x_twitter_scraper.api.models.x.communities.CommunityActionResult
 import com.x_twitter_scraper.api.models.x.communities.join.JoinCreateParams
-import com.x_twitter_scraper.api.models.x.communities.join.JoinCreateResponse
 import com.x_twitter_scraper.api.models.x.communities.join.JoinDeleteAllParams
-import com.x_twitter_scraper.api.models.x.communities.join.JoinDeleteAllResponse
 
 /** X write actions (tweets, likes, follows, DMs) */
 class JoinServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -37,14 +36,14 @@ class JoinServiceAsyncImpl internal constructor(private val clientOptions: Clien
     override suspend fun create(
         params: JoinCreateParams,
         requestOptions: RequestOptions,
-    ): JoinCreateResponse =
+    ): CommunityActionResult =
         // post /x/communities/{id}/join
         withRawResponse().create(params, requestOptions).parse()
 
     override suspend fun deleteAll(
         params: JoinDeleteAllParams,
         requestOptions: RequestOptions,
-    ): JoinDeleteAllResponse =
+    ): CommunityActionResult =
         // delete /x/communities/{id}/join
         withRawResponse().deleteAll(params, requestOptions).parse()
 
@@ -61,13 +60,13 @@ class JoinServiceAsyncImpl internal constructor(private val clientOptions: Clien
                 clientOptions.toBuilder().apply(modifier).build()
             )
 
-        private val createHandler: Handler<JoinCreateResponse> =
-            jsonHandler<JoinCreateResponse>(clientOptions.jsonMapper)
+        private val createHandler: Handler<CommunityActionResult> =
+            jsonHandler<CommunityActionResult>(clientOptions.jsonMapper)
 
         override suspend fun create(
             params: JoinCreateParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<JoinCreateResponse> {
+        ): HttpResponseFor<CommunityActionResult> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id())
@@ -92,13 +91,13 @@ class JoinServiceAsyncImpl internal constructor(private val clientOptions: Clien
             }
         }
 
-        private val deleteAllHandler: Handler<JoinDeleteAllResponse> =
-            jsonHandler<JoinDeleteAllResponse>(clientOptions.jsonMapper)
+        private val deleteAllHandler: Handler<CommunityActionResult> =
+            jsonHandler<CommunityActionResult>(clientOptions.jsonMapper)
 
         override suspend fun deleteAll(
             params: JoinDeleteAllParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<JoinDeleteAllResponse> {
+        ): HttpResponseFor<CommunityActionResult> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id())

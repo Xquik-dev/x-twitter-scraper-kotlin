@@ -154,7 +154,6 @@ class XTwitterScraperClientImpl(private val clientOptions: ClientOptions) : XTwi
     /** Trending topics by region */
     override fun trends(): TrendService = trends
 
-    /** Telegram bot service endpoints */
     override fun bot(): BotService = bot
 
     override fun support(): SupportService = support
@@ -291,7 +290,6 @@ class XTwitterScraperClientImpl(private val clientOptions: ClientOptions) : XTwi
         /** Trending topics by region */
         override fun trends(): TrendService.WithRawResponse = trends
 
-        /** Telegram bot service endpoints */
         override fun bot(): BotService.WithRawResponse = bot
 
         override fun support(): SupportService.WithRawResponse = support

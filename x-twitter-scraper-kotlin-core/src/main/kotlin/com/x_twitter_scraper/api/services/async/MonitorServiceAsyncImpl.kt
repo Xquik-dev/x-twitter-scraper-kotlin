@@ -16,6 +16,7 @@ import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.core.http.json
 import com.x_twitter_scraper.api.core.http.parseable
 import com.x_twitter_scraper.api.core.prepareAsync
+import com.x_twitter_scraper.api.models.monitors.Monitor
 import com.x_twitter_scraper.api.models.monitors.MonitorCreateParams
 import com.x_twitter_scraper.api.models.monitors.MonitorCreateResponse
 import com.x_twitter_scraper.api.models.monitors.MonitorDeactivateParams
@@ -23,9 +24,7 @@ import com.x_twitter_scraper.api.models.monitors.MonitorDeactivateResponse
 import com.x_twitter_scraper.api.models.monitors.MonitorListParams
 import com.x_twitter_scraper.api.models.monitors.MonitorListResponse
 import com.x_twitter_scraper.api.models.monitors.MonitorRetrieveParams
-import com.x_twitter_scraper.api.models.monitors.MonitorRetrieveResponse
 import com.x_twitter_scraper.api.models.monitors.MonitorUpdateParams
-import com.x_twitter_scraper.api.models.monitors.MonitorUpdateResponse
 
 /** Real-time X account monitoring */
 class MonitorServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -50,14 +49,14 @@ class MonitorServiceAsyncImpl internal constructor(private val clientOptions: Cl
     override suspend fun retrieve(
         params: MonitorRetrieveParams,
         requestOptions: RequestOptions,
-    ): MonitorRetrieveResponse =
+    ): Monitor =
         // get /monitors/{id}
         withRawResponse().retrieve(params, requestOptions).parse()
 
     override suspend fun update(
         params: MonitorUpdateParams,
         requestOptions: RequestOptions,
-    ): MonitorUpdateResponse =
+    ): Monitor =
         // patch /monitors/{id}
         withRawResponse().update(params, requestOptions).parse()
 
@@ -116,13 +115,13 @@ class MonitorServiceAsyncImpl internal constructor(private val clientOptions: Cl
             }
         }
 
-        private val retrieveHandler: Handler<MonitorRetrieveResponse> =
-            jsonHandler<MonitorRetrieveResponse>(clientOptions.jsonMapper)
+        private val retrieveHandler: Handler<Monitor> =
+            jsonHandler<Monitor>(clientOptions.jsonMapper)
 
         override suspend fun retrieve(
             params: MonitorRetrieveParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<MonitorRetrieveResponse> {
+        ): HttpResponseFor<Monitor> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id())
@@ -146,13 +145,12 @@ class MonitorServiceAsyncImpl internal constructor(private val clientOptions: Cl
             }
         }
 
-        private val updateHandler: Handler<MonitorUpdateResponse> =
-            jsonHandler<MonitorUpdateResponse>(clientOptions.jsonMapper)
+        private val updateHandler: Handler<Monitor> = jsonHandler<Monitor>(clientOptions.jsonMapper)
 
         override suspend fun update(
             params: MonitorUpdateParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<MonitorUpdateResponse> {
+        ): HttpResponseFor<Monitor> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id())

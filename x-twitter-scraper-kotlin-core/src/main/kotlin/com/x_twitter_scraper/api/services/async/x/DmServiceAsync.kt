@@ -8,8 +8,8 @@ import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.models.x.dm.DmRetrieveHistoryParams
 import com.x_twitter_scraper.api.models.x.dm.DmRetrieveHistoryResponse
-import com.x_twitter_scraper.api.models.x.dm.DmUpdateParams
-import com.x_twitter_scraper.api.models.x.dm.DmUpdateResponse
+import com.x_twitter_scraper.api.models.x.dm.DmSendParams
+import com.x_twitter_scraper.api.models.x.dm.DmSendResponse
 
 interface DmServiceAsync {
 
@@ -24,19 +24,6 @@ interface DmServiceAsync {
      * The original service is not modified.
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): DmServiceAsync
-
-    /** Send direct message */
-    suspend fun update(
-        userId: String,
-        params: DmUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): DmUpdateResponse = update(params.toBuilder().userId(userId).build(), requestOptions)
-
-    /** @see update */
-    suspend fun update(
-        params: DmUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): DmUpdateResponse
 
     /** Get DM conversation history */
     suspend fun retrieveHistory(
@@ -59,6 +46,19 @@ interface DmServiceAsync {
     ): DmRetrieveHistoryResponse =
         retrieveHistory(userId, DmRetrieveHistoryParams.none(), requestOptions)
 
+    /** Send direct message */
+    suspend fun send(
+        userId: String,
+        params: DmSendParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): DmSendResponse = send(params.toBuilder().userId(userId).build(), requestOptions)
+
+    /** @see send */
+    suspend fun send(
+        params: DmSendParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): DmSendResponse
+
     /** A view of [DmServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
 
@@ -68,25 +68,6 @@ interface DmServiceAsync {
          * The original service is not modified.
          */
         fun withOptions(modifier: (ClientOptions.Builder) -> Unit): DmServiceAsync.WithRawResponse
-
-        /**
-         * Returns a raw HTTP response for `post /x/dm/{userId}`, but is otherwise the same as
-         * [DmServiceAsync.update].
-         */
-        @MustBeClosed
-        suspend fun update(
-            userId: String,
-            params: DmUpdateParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<DmUpdateResponse> =
-            update(params.toBuilder().userId(userId).build(), requestOptions)
-
-        /** @see update */
-        @MustBeClosed
-        suspend fun update(
-            params: DmUpdateParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<DmUpdateResponse>
 
         /**
          * Returns a raw HTTP response for `get /x/dm/{userId}/history`, but is otherwise the same
@@ -114,5 +95,24 @@ interface DmServiceAsync {
             requestOptions: RequestOptions,
         ): HttpResponseFor<DmRetrieveHistoryResponse> =
             retrieveHistory(userId, DmRetrieveHistoryParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /x/dm/{userId}`, but is otherwise the same as
+         * [DmServiceAsync.send].
+         */
+        @MustBeClosed
+        suspend fun send(
+            userId: String,
+            params: DmSendParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<DmSendResponse> =
+            send(params.toBuilder().userId(userId).build(), requestOptions)
+
+        /** @see send */
+        @MustBeClosed
+        suspend fun send(
+            params: DmSendParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<DmSendResponse>
     }
 }

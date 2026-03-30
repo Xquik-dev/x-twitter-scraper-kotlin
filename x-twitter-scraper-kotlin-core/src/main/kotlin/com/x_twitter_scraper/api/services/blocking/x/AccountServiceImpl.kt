@@ -26,7 +26,7 @@ import com.x_twitter_scraper.api.models.x.accounts.AccountListResponse
 import com.x_twitter_scraper.api.models.x.accounts.AccountReauthParams
 import com.x_twitter_scraper.api.models.x.accounts.AccountReauthResponse
 import com.x_twitter_scraper.api.models.x.accounts.AccountRetrieveParams
-import com.x_twitter_scraper.api.models.x.accounts.AccountRetrieveResponse
+import com.x_twitter_scraper.api.models.x.accounts.XAccountDetail
 
 /** Connected X account management */
 class AccountServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -51,7 +51,7 @@ class AccountServiceImpl internal constructor(private val clientOptions: ClientO
     override fun retrieve(
         params: AccountRetrieveParams,
         requestOptions: RequestOptions,
-    ): AccountRetrieveResponse =
+    ): XAccountDetail =
         // get /x/accounts/{id}
         withRawResponse().retrieve(params, requestOptions).parse()
 
@@ -117,13 +117,13 @@ class AccountServiceImpl internal constructor(private val clientOptions: ClientO
             }
         }
 
-        private val retrieveHandler: Handler<AccountRetrieveResponse> =
-            jsonHandler<AccountRetrieveResponse>(clientOptions.jsonMapper)
+        private val retrieveHandler: Handler<XAccountDetail> =
+            jsonHandler<XAccountDetail>(clientOptions.jsonMapper)
 
         override fun retrieve(
             params: AccountRetrieveParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<AccountRetrieveResponse> {
+        ): HttpResponseFor<XAccountDetail> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id())

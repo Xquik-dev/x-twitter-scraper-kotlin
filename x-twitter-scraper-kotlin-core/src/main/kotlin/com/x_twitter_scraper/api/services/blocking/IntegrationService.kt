@@ -6,8 +6,8 @@ import com.google.errorprone.annotations.MustBeClosed
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
+import com.x_twitter_scraper.api.models.integrations.Integration
 import com.x_twitter_scraper.api.models.integrations.IntegrationCreateParams
-import com.x_twitter_scraper.api.models.integrations.IntegrationCreateResponse
 import com.x_twitter_scraper.api.models.integrations.IntegrationDeleteParams
 import com.x_twitter_scraper.api.models.integrations.IntegrationDeleteResponse
 import com.x_twitter_scraper.api.models.integrations.IntegrationListDeliveriesParams
@@ -15,11 +15,9 @@ import com.x_twitter_scraper.api.models.integrations.IntegrationListDeliveriesRe
 import com.x_twitter_scraper.api.models.integrations.IntegrationListParams
 import com.x_twitter_scraper.api.models.integrations.IntegrationListResponse
 import com.x_twitter_scraper.api.models.integrations.IntegrationRetrieveParams
-import com.x_twitter_scraper.api.models.integrations.IntegrationRetrieveResponse
 import com.x_twitter_scraper.api.models.integrations.IntegrationSendTestParams
 import com.x_twitter_scraper.api.models.integrations.IntegrationSendTestResponse
 import com.x_twitter_scraper.api.models.integrations.IntegrationUpdateParams
-import com.x_twitter_scraper.api.models.integrations.IntegrationUpdateResponse
 
 /** Push notification integrations (Telegram) */
 interface IntegrationService {
@@ -40,23 +38,23 @@ interface IntegrationService {
     fun create(
         params: IntegrationCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): IntegrationCreateResponse
+    ): Integration
 
     /** Get integration details */
     fun retrieve(
         id: String,
         params: IntegrationRetrieveParams = IntegrationRetrieveParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): IntegrationRetrieveResponse = retrieve(params.toBuilder().id(id).build(), requestOptions)
+    ): Integration = retrieve(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see retrieve */
     fun retrieve(
         params: IntegrationRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): IntegrationRetrieveResponse
+    ): Integration
 
     /** @see retrieve */
-    fun retrieve(id: String, requestOptions: RequestOptions): IntegrationRetrieveResponse =
+    fun retrieve(id: String, requestOptions: RequestOptions): Integration =
         retrieve(id, IntegrationRetrieveParams.none(), requestOptions)
 
     /** Update integration */
@@ -64,16 +62,16 @@ interface IntegrationService {
         id: String,
         params: IntegrationUpdateParams = IntegrationUpdateParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): IntegrationUpdateResponse = update(params.toBuilder().id(id).build(), requestOptions)
+    ): Integration = update(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see update */
     fun update(
         params: IntegrationUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): IntegrationUpdateResponse
+    ): Integration
 
     /** @see update */
-    fun update(id: String, requestOptions: RequestOptions): IntegrationUpdateResponse =
+    fun update(id: String, requestOptions: RequestOptions): Integration =
         update(id, IntegrationUpdateParams.none(), requestOptions)
 
     /** List integrations */
@@ -163,7 +161,7 @@ interface IntegrationService {
         fun create(
             params: IntegrationCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<IntegrationCreateResponse>
+        ): HttpResponseFor<Integration>
 
         /**
          * Returns a raw HTTP response for `get /integrations/{id}`, but is otherwise the same as
@@ -174,7 +172,7 @@ interface IntegrationService {
             id: String,
             params: IntegrationRetrieveParams = IntegrationRetrieveParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<IntegrationRetrieveResponse> =
+        ): HttpResponseFor<Integration> =
             retrieve(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see retrieve */
@@ -182,14 +180,11 @@ interface IntegrationService {
         fun retrieve(
             params: IntegrationRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<IntegrationRetrieveResponse>
+        ): HttpResponseFor<Integration>
 
         /** @see retrieve */
         @MustBeClosed
-        fun retrieve(
-            id: String,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<IntegrationRetrieveResponse> =
+        fun retrieve(id: String, requestOptions: RequestOptions): HttpResponseFor<Integration> =
             retrieve(id, IntegrationRetrieveParams.none(), requestOptions)
 
         /**
@@ -201,22 +196,18 @@ interface IntegrationService {
             id: String,
             params: IntegrationUpdateParams = IntegrationUpdateParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<IntegrationUpdateResponse> =
-            update(params.toBuilder().id(id).build(), requestOptions)
+        ): HttpResponseFor<Integration> = update(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see update */
         @MustBeClosed
         fun update(
             params: IntegrationUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<IntegrationUpdateResponse>
+        ): HttpResponseFor<Integration>
 
         /** @see update */
         @MustBeClosed
-        fun update(
-            id: String,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<IntegrationUpdateResponse> =
+        fun update(id: String, requestOptions: RequestOptions): HttpResponseFor<Integration> =
             update(id, IntegrationUpdateParams.none(), requestOptions)
 
         /**

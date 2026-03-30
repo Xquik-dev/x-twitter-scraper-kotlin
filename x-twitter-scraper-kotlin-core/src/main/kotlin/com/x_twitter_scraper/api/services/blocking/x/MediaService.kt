@@ -6,10 +6,10 @@ import com.google.errorprone.annotations.MustBeClosed
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
-import com.x_twitter_scraper.api.models.x.media.MediaCreateParams
-import com.x_twitter_scraper.api.models.x.media.MediaCreateResponse
 import com.x_twitter_scraper.api.models.x.media.MediaDownloadParams
 import com.x_twitter_scraper.api.models.x.media.MediaDownloadResponse
+import com.x_twitter_scraper.api.models.x.media.MediaUploadParams
+import com.x_twitter_scraper.api.models.x.media.MediaUploadResponse
 
 /** Media upload & download */
 interface MediaService {
@@ -26,12 +26,6 @@ interface MediaService {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): MediaService
 
-    /** Upload media */
-    fun create(
-        params: MediaCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): MediaCreateResponse
-
     /** Download tweet media */
     fun download(
         params: MediaDownloadParams = MediaDownloadParams.none(),
@@ -42,6 +36,12 @@ interface MediaService {
     fun download(requestOptions: RequestOptions): MediaDownloadResponse =
         download(MediaDownloadParams.none(), requestOptions)
 
+    /** Upload media */
+    fun upload(
+        params: MediaUploadParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): MediaUploadResponse
+
     /** A view of [MediaService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
 
@@ -51,16 +51,6 @@ interface MediaService {
          * The original service is not modified.
          */
         fun withOptions(modifier: (ClientOptions.Builder) -> Unit): MediaService.WithRawResponse
-
-        /**
-         * Returns a raw HTTP response for `post /x/media`, but is otherwise the same as
-         * [MediaService.create].
-         */
-        @MustBeClosed
-        fun create(
-            params: MediaCreateParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MediaCreateResponse>
 
         /**
          * Returns a raw HTTP response for `post /x/media/download`, but is otherwise the same as
@@ -76,5 +66,15 @@ interface MediaService {
         @MustBeClosed
         fun download(requestOptions: RequestOptions): HttpResponseFor<MediaDownloadResponse> =
             download(MediaDownloadParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /x/media`, but is otherwise the same as
+         * [MediaService.upload].
+         */
+        @MustBeClosed
+        fun upload(
+            params: MediaUploadParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<MediaUploadResponse>
     }
 }
