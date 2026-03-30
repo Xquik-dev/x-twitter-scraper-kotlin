@@ -27,9 +27,9 @@ configure<PublishingExtension> {
                 }
 
                 scm {
-                    connection.set("scm:git:git://github.com/stainless-sdks/x-twitter-scraper-kotlin.git")
-                    developerConnection.set("scm:git:git://github.com/stainless-sdks/x-twitter-scraper-kotlin.git")
-                    url.set("https://github.com/stainless-sdks/x-twitter-scraper-kotlin")
+                    connection.set("scm:git:git://github.com/Xquik-dev/x-twitter-scraper-kotlin.git")
+                    developerConnection.set("scm:git:git://github.com/Xquik-dev/x-twitter-scraper-kotlin.git")
+                    url.set("https://github.com/Xquik-dev/x-twitter-scraper-kotlin")
                 }
 
                 versionMapping {
