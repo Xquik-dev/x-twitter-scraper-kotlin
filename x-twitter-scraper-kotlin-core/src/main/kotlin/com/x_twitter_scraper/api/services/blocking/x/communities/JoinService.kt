@@ -6,9 +6,10 @@ import com.google.errorprone.annotations.MustBeClosed
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
-import com.x_twitter_scraper.api.models.x.communities.CommunityActionResult
 import com.x_twitter_scraper.api.models.x.communities.join.JoinCreateParams
+import com.x_twitter_scraper.api.models.x.communities.join.JoinCreateResponse
 import com.x_twitter_scraper.api.models.x.communities.join.JoinDeleteAllParams
+import com.x_twitter_scraper.api.models.x.communities.join.JoinDeleteAllResponse
 
 /** X write actions (tweets, likes, follows, DMs) */
 interface JoinService {
@@ -30,26 +31,26 @@ interface JoinService {
         id: String,
         params: JoinCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CommunityActionResult = create(params.toBuilder().id(id).build(), requestOptions)
+    ): JoinCreateResponse = create(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see create */
     fun create(
         params: JoinCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CommunityActionResult
+    ): JoinCreateResponse
 
     /** Leave community */
     fun deleteAll(
         id: String,
         params: JoinDeleteAllParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CommunityActionResult = deleteAll(params.toBuilder().id(id).build(), requestOptions)
+    ): JoinDeleteAllResponse = deleteAll(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see deleteAll */
     fun deleteAll(
         params: JoinDeleteAllParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CommunityActionResult
+    ): JoinDeleteAllResponse
 
     /** A view of [JoinService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -70,7 +71,7 @@ interface JoinService {
             id: String,
             params: JoinCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<CommunityActionResult> =
+        ): HttpResponseFor<JoinCreateResponse> =
             create(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see create */
@@ -78,7 +79,7 @@ interface JoinService {
         fun create(
             params: JoinCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<CommunityActionResult>
+        ): HttpResponseFor<JoinCreateResponse>
 
         /**
          * Returns a raw HTTP response for `delete /x/communities/{id}/join`, but is otherwise the
@@ -89,7 +90,7 @@ interface JoinService {
             id: String,
             params: JoinDeleteAllParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<CommunityActionResult> =
+        ): HttpResponseFor<JoinDeleteAllResponse> =
             deleteAll(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see deleteAll */
@@ -97,6 +98,6 @@ interface JoinService {
         fun deleteAll(
             params: JoinDeleteAllParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<CommunityActionResult>
+        ): HttpResponseFor<JoinDeleteAllResponse>
     }
 }

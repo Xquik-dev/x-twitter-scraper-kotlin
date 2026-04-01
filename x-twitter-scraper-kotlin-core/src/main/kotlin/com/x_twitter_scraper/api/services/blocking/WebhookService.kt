@@ -6,7 +6,6 @@ import com.google.errorprone.annotations.MustBeClosed
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
-import com.x_twitter_scraper.api.models.webhooks.Webhook
 import com.x_twitter_scraper.api.models.webhooks.WebhookCreateParams
 import com.x_twitter_scraper.api.models.webhooks.WebhookCreateResponse
 import com.x_twitter_scraper.api.models.webhooks.WebhookDeactivateParams
@@ -18,6 +17,7 @@ import com.x_twitter_scraper.api.models.webhooks.WebhookListResponse
 import com.x_twitter_scraper.api.models.webhooks.WebhookTestParams
 import com.x_twitter_scraper.api.models.webhooks.WebhookTestResponse
 import com.x_twitter_scraper.api.models.webhooks.WebhookUpdateParams
+import com.x_twitter_scraper.api.models.webhooks.WebhookUpdateResponse
 
 /** Webhook endpoint management & delivery */
 interface WebhookService {
@@ -45,16 +45,16 @@ interface WebhookService {
         id: String,
         params: WebhookUpdateParams = WebhookUpdateParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): Webhook = update(params.toBuilder().id(id).build(), requestOptions)
+    ): WebhookUpdateResponse = update(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see update */
     fun update(
         params: WebhookUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): Webhook
+    ): WebhookUpdateResponse
 
     /** @see update */
-    fun update(id: String, requestOptions: RequestOptions): Webhook =
+    fun update(id: String, requestOptions: RequestOptions): WebhookUpdateResponse =
         update(id, WebhookUpdateParams.none(), requestOptions)
 
     /** List webhooks */
@@ -148,18 +148,22 @@ interface WebhookService {
             id: String,
             params: WebhookUpdateParams = WebhookUpdateParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Webhook> = update(params.toBuilder().id(id).build(), requestOptions)
+        ): HttpResponseFor<WebhookUpdateResponse> =
+            update(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see update */
         @MustBeClosed
         fun update(
             params: WebhookUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Webhook>
+        ): HttpResponseFor<WebhookUpdateResponse>
 
         /** @see update */
         @MustBeClosed
-        fun update(id: String, requestOptions: RequestOptions): HttpResponseFor<Webhook> =
+        fun update(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<WebhookUpdateResponse> =
             update(id, WebhookUpdateParams.none(), requestOptions)
 
         /**
