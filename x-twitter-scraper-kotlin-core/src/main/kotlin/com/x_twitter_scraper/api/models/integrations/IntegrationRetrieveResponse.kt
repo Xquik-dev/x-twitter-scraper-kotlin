@@ -81,6 +81,8 @@ private constructor(
     fun id(): String = id.getRequired("id")
 
     /**
+     * Integration config — shape varies by type (JSON)
+     *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -117,6 +119,8 @@ private constructor(
     fun type(): Type = type.getRequired("type")
 
     /**
+     * Event filter rules (JSON)
+     *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
@@ -298,6 +302,7 @@ private constructor(
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
+        /** Integration config — shape varies by type (JSON) */
         fun config(config: Config) = config(JsonField.of(config))
 
         /**
@@ -375,6 +380,7 @@ private constructor(
          */
         fun type(type: JsonField<Type>) = apply { this.type = type }
 
+        /** Event filter rules (JSON) */
         fun filters(filters: Filters) = filters(JsonField.of(filters))
 
         /**
@@ -525,6 +531,7 @@ private constructor(
             (if (scopeAllMonitors.asKnown() == null) 0 else 1) +
             (if (silentPush.asKnown() == null) 0 else 1)
 
+    /** Integration config — shape varies by type (JSON) */
     class Config
     @JsonCreator
     private constructor(
@@ -894,6 +901,7 @@ private constructor(
         override fun toString() = value.toString()
     }
 
+    /** Event filter rules (JSON) */
     class Filters
     @JsonCreator
     private constructor(

@@ -103,7 +103,11 @@ class AccountServiceAsyncImpl internal constructor(private val clientOptions: Cl
                     .addPathSegments("x", "accounts")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
-                    .prepareAsync(clientOptions, params, SecurityOptions.none())
+                    .prepareAsync(
+                        clientOptions,
+                        params,
+                        SecurityOptions.builder().apiKey(true).build(),
+                    )
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
             return errorHandler.handle(response).parseable {
@@ -133,7 +137,11 @@ class AccountServiceAsyncImpl internal constructor(private val clientOptions: Cl
                     .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("x", "accounts", params._pathParam(0))
                     .build()
-                    .prepareAsync(clientOptions, params, SecurityOptions.none())
+                    .prepareAsync(
+                        clientOptions,
+                        params,
+                        SecurityOptions.builder().apiKey(true).build(),
+                    )
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
             return errorHandler.handle(response).parseable {
@@ -160,7 +168,11 @@ class AccountServiceAsyncImpl internal constructor(private val clientOptions: Cl
                     .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("x", "accounts")
                     .build()
-                    .prepareAsync(clientOptions, params, SecurityOptions.none())
+                    .prepareAsync(
+                        clientOptions,
+                        params,
+                        SecurityOptions.builder().apiKey(true).build(),
+                    )
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
             return errorHandler.handle(response).parseable {
@@ -191,7 +203,11 @@ class AccountServiceAsyncImpl internal constructor(private val clientOptions: Cl
                     .addPathSegments("x", "accounts", params._pathParam(0))
                     .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
-                    .prepareAsync(clientOptions, params, SecurityOptions.none())
+                    .prepareAsync(
+                        clientOptions,
+                        params,
+                        SecurityOptions.builder().apiKey(true).build(),
+                    )
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
             return errorHandler.handle(response).parseable {
@@ -222,7 +238,11 @@ class AccountServiceAsyncImpl internal constructor(private val clientOptions: Cl
                     .addPathSegments("x", "accounts", params._pathParam(0), "reauth")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
-                    .prepareAsync(clientOptions, params, SecurityOptions.none())
+                    .prepareAsync(
+                        clientOptions,
+                        params,
+                        SecurityOptions.builder().apiKey(true).build(),
+                    )
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
             return errorHandler.handle(response).parseable {

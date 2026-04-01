@@ -3,7 +3,6 @@
 package com.x_twitter_scraper.api.models.compose
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
-import com.x_twitter_scraper.api.core.JsonValue
 import com.x_twitter_scraper.api.core.jsonMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -14,8 +13,16 @@ internal class ComposeCreateResponseTest {
     fun create() {
         val composeCreateResponse =
             ComposeCreateResponse.builder()
-                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                .feedback("feedback")
+                .score(0.0)
+                .addSuggestion("string")
+                .text("text")
                 .build()
+
+        assertThat(composeCreateResponse.feedback()).isEqualTo("feedback")
+        assertThat(composeCreateResponse.score()).isEqualTo(0.0)
+        assertThat(composeCreateResponse.suggestions()).containsExactly("string")
+        assertThat(composeCreateResponse.text()).isEqualTo("text")
     }
 
     @Test
@@ -23,7 +30,10 @@ internal class ComposeCreateResponseTest {
         val jsonMapper = jsonMapper()
         val composeCreateResponse =
             ComposeCreateResponse.builder()
-                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                .feedback("feedback")
+                .score(0.0)
+                .addSuggestion("string")
+                .text("text")
                 .build()
 
         val roundtrippedComposeCreateResponse =
