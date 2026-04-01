@@ -38,6 +38,8 @@ private constructor(
     fun eventTypes(): List<EventType>? = body.eventTypes()
 
     /**
+     * Event filter rules (JSON)
+     *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
@@ -50,6 +52,8 @@ private constructor(
     fun isActive(): Boolean? = body.isActive()
 
     /**
+     * Custom message template (JSON)
+     *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
@@ -192,6 +196,7 @@ private constructor(
          */
         fun addEventType(eventType: EventType) = apply { body.addEventType(eventType) }
 
+        /** Event filter rules (JSON) */
         fun filters(filters: Filters) = apply { body.filters(filters) }
 
         /**
@@ -213,6 +218,7 @@ private constructor(
          */
         fun isActive(isActive: JsonField<Boolean>) = apply { body.isActive(isActive) }
 
+        /** Custom message template (JSON) */
         fun messageTemplate(messageTemplate: MessageTemplate) = apply {
             body.messageTemplate(messageTemplate)
         }
@@ -457,6 +463,8 @@ private constructor(
         fun eventTypes(): List<EventType>? = eventTypes.getNullable("eventTypes")
 
         /**
+         * Event filter rules (JSON)
+         *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
@@ -469,6 +477,8 @@ private constructor(
         fun isActive(): Boolean? = isActive.getNullable("isActive")
 
         /**
+         * Custom message template (JSON)
+         *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
@@ -617,6 +627,7 @@ private constructor(
                     }
             }
 
+            /** Event filter rules (JSON) */
             fun filters(filters: Filters) = filters(JsonField.of(filters))
 
             /**
@@ -639,6 +650,7 @@ private constructor(
              */
             fun isActive(isActive: JsonField<Boolean>) = apply { this.isActive = isActive }
 
+            /** Custom message template (JSON) */
             fun messageTemplate(messageTemplate: MessageTemplate) =
                 messageTemplate(JsonField.of(messageTemplate))
 
@@ -953,6 +965,7 @@ private constructor(
         override fun toString() = value.toString()
     }
 
+    /** Event filter rules (JSON) */
     class Filters
     @JsonCreator
     private constructor(
@@ -1050,6 +1063,7 @@ private constructor(
         override fun toString() = "Filters{additionalProperties=$additionalProperties}"
     }
 
+    /** Custom message template (JSON) */
     class MessageTemplate
     @JsonCreator
     private constructor(

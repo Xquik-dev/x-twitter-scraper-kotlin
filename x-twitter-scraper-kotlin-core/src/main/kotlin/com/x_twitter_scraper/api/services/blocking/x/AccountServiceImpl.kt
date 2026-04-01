@@ -103,7 +103,7 @@ class AccountServiceImpl internal constructor(private val clientOptions: ClientO
                     .addPathSegments("x", "accounts")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
-                    .prepare(clientOptions, params, SecurityOptions.none())
+                    .prepare(clientOptions, params, SecurityOptions.builder().apiKey(true).build())
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
@@ -133,7 +133,7 @@ class AccountServiceImpl internal constructor(private val clientOptions: ClientO
                     .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("x", "accounts", params._pathParam(0))
                     .build()
-                    .prepare(clientOptions, params, SecurityOptions.none())
+                    .prepare(clientOptions, params, SecurityOptions.builder().apiKey(true).build())
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
@@ -160,7 +160,7 @@ class AccountServiceImpl internal constructor(private val clientOptions: ClientO
                     .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("x", "accounts")
                     .build()
-                    .prepare(clientOptions, params, SecurityOptions.none())
+                    .prepare(clientOptions, params, SecurityOptions.builder().apiKey(true).build())
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
@@ -191,7 +191,7 @@ class AccountServiceImpl internal constructor(private val clientOptions: ClientO
                     .addPathSegments("x", "accounts", params._pathParam(0))
                     .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
-                    .prepare(clientOptions, params, SecurityOptions.none())
+                    .prepare(clientOptions, params, SecurityOptions.builder().apiKey(true).build())
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
@@ -222,7 +222,7 @@ class AccountServiceImpl internal constructor(private val clientOptions: ClientO
                     .addPathSegments("x", "accounts", params._pathParam(0), "reauth")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
-                    .prepare(clientOptions, params, SecurityOptions.none())
+                    .prepare(clientOptions, params, SecurityOptions.builder().apiKey(true).build())
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {

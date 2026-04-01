@@ -51,6 +51,8 @@ private constructor(
     fun id(): String = id.getRequired("id")
 
     /**
+     * Event payload — shape varies by event type (JSON)
+     *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -200,6 +202,7 @@ private constructor(
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
+        /** Event payload — shape varies by event type (JSON) */
         fun data(data: Data) = data(JsonField.of(data))
 
         /**
@@ -352,6 +355,7 @@ private constructor(
             (if (username.asKnown() == null) 0 else 1) +
             (if (xEventId.asKnown() == null) 0 else 1)
 
+    /** Event payload — shape varies by event type (JSON) */
     class Data
     @JsonCreator
     private constructor(
