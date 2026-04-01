@@ -6,10 +6,10 @@ import com.google.errorprone.annotations.MustBeClosed
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
-import com.x_twitter_scraper.api.models.events.EventDetail
 import com.x_twitter_scraper.api.models.events.EventListParams
 import com.x_twitter_scraper.api.models.events.EventListResponse
 import com.x_twitter_scraper.api.models.events.EventRetrieveParams
+import com.x_twitter_scraper.api.models.events.EventRetrieveResponse
 
 /** Activity events from monitored accounts */
 interface EventService {
@@ -31,16 +31,16 @@ interface EventService {
         id: String,
         params: EventRetrieveParams = EventRetrieveParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): EventDetail = retrieve(params.toBuilder().id(id).build(), requestOptions)
+    ): EventRetrieveResponse = retrieve(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see retrieve */
     fun retrieve(
         params: EventRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): EventDetail
+    ): EventRetrieveResponse
 
     /** @see retrieve */
-    fun retrieve(id: String, requestOptions: RequestOptions): EventDetail =
+    fun retrieve(id: String, requestOptions: RequestOptions): EventRetrieveResponse =
         retrieve(id, EventRetrieveParams.none(), requestOptions)
 
     /** List events */
@@ -72,7 +72,7 @@ interface EventService {
             id: String,
             params: EventRetrieveParams = EventRetrieveParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<EventDetail> =
+        ): HttpResponseFor<EventRetrieveResponse> =
             retrieve(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see retrieve */
@@ -80,11 +80,14 @@ interface EventService {
         fun retrieve(
             params: EventRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<EventDetail>
+        ): HttpResponseFor<EventRetrieveResponse>
 
         /** @see retrieve */
         @MustBeClosed
-        fun retrieve(id: String, requestOptions: RequestOptions): HttpResponseFor<EventDetail> =
+        fun retrieve(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<EventRetrieveResponse> =
             retrieve(id, EventRetrieveParams.none(), requestOptions)
 
         /**

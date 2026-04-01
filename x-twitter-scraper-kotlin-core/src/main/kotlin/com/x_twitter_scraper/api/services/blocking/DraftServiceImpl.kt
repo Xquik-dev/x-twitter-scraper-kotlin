@@ -18,11 +18,12 @@ import com.x_twitter_scraper.api.core.http.json
 import com.x_twitter_scraper.api.core.http.parseable
 import com.x_twitter_scraper.api.core.prepare
 import com.x_twitter_scraper.api.models.drafts.DraftCreateParams
+import com.x_twitter_scraper.api.models.drafts.DraftCreateResponse
 import com.x_twitter_scraper.api.models.drafts.DraftDeleteParams
-import com.x_twitter_scraper.api.models.drafts.DraftDetail
 import com.x_twitter_scraper.api.models.drafts.DraftListParams
 import com.x_twitter_scraper.api.models.drafts.DraftListResponse
 import com.x_twitter_scraper.api.models.drafts.DraftRetrieveParams
+import com.x_twitter_scraper.api.models.drafts.DraftRetrieveResponse
 
 /** Tweet composition, drafts, writing styles & radar */
 class DraftServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -37,14 +38,17 @@ class DraftServiceImpl internal constructor(private val clientOptions: ClientOpt
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): DraftService =
         DraftServiceImpl(clientOptions.toBuilder().apply(modifier).build())
 
-    override fun create(params: DraftCreateParams, requestOptions: RequestOptions): DraftDetail =
+    override fun create(
+        params: DraftCreateParams,
+        requestOptions: RequestOptions,
+    ): DraftCreateResponse =
         // post /drafts
         withRawResponse().create(params, requestOptions).parse()
 
     override fun retrieve(
         params: DraftRetrieveParams,
         requestOptions: RequestOptions,
-    ): DraftDetail =
+    ): DraftRetrieveResponse =
         // get /drafts/{id}
         withRawResponse().retrieve(params, requestOptions).parse()
 
@@ -68,13 +72,13 @@ class DraftServiceImpl internal constructor(private val clientOptions: ClientOpt
         ): DraftService.WithRawResponse =
             DraftServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
 
-        private val createHandler: Handler<DraftDetail> =
-            jsonHandler<DraftDetail>(clientOptions.jsonMapper)
+        private val createHandler: Handler<DraftCreateResponse> =
+            jsonHandler<DraftCreateResponse>(clientOptions.jsonMapper)
 
         override fun create(
             params: DraftCreateParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<DraftDetail> {
+        ): HttpResponseFor<DraftCreateResponse> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -96,13 +100,13 @@ class DraftServiceImpl internal constructor(private val clientOptions: ClientOpt
             }
         }
 
-        private val retrieveHandler: Handler<DraftDetail> =
-            jsonHandler<DraftDetail>(clientOptions.jsonMapper)
+        private val retrieveHandler: Handler<DraftRetrieveResponse> =
+            jsonHandler<DraftRetrieveResponse>(clientOptions.jsonMapper)
 
         override fun retrieve(
             params: DraftRetrieveParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<DraftDetail> {
+        ): HttpResponseFor<DraftRetrieveResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id())

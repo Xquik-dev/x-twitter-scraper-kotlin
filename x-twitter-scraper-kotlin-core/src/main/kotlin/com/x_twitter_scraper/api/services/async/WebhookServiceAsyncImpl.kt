@@ -16,7 +16,6 @@ import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.core.http.json
 import com.x_twitter_scraper.api.core.http.parseable
 import com.x_twitter_scraper.api.core.prepareAsync
-import com.x_twitter_scraper.api.models.webhooks.Webhook
 import com.x_twitter_scraper.api.models.webhooks.WebhookCreateParams
 import com.x_twitter_scraper.api.models.webhooks.WebhookCreateResponse
 import com.x_twitter_scraper.api.models.webhooks.WebhookDeactivateParams
@@ -28,6 +27,7 @@ import com.x_twitter_scraper.api.models.webhooks.WebhookListResponse
 import com.x_twitter_scraper.api.models.webhooks.WebhookTestParams
 import com.x_twitter_scraper.api.models.webhooks.WebhookTestResponse
 import com.x_twitter_scraper.api.models.webhooks.WebhookUpdateParams
+import com.x_twitter_scraper.api.models.webhooks.WebhookUpdateResponse
 
 /** Webhook endpoint management & delivery */
 class WebhookServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -52,7 +52,7 @@ class WebhookServiceAsyncImpl internal constructor(private val clientOptions: Cl
     override suspend fun update(
         params: WebhookUpdateParams,
         requestOptions: RequestOptions,
-    ): Webhook =
+    ): WebhookUpdateResponse =
         // patch /webhooks/{id}
         withRawResponse().update(params, requestOptions).parse()
 
@@ -125,12 +125,13 @@ class WebhookServiceAsyncImpl internal constructor(private val clientOptions: Cl
             }
         }
 
-        private val updateHandler: Handler<Webhook> = jsonHandler<Webhook>(clientOptions.jsonMapper)
+        private val updateHandler: Handler<WebhookUpdateResponse> =
+            jsonHandler<WebhookUpdateResponse>(clientOptions.jsonMapper)
 
         override suspend fun update(
             params: WebhookUpdateParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<Webhook> {
+        ): HttpResponseFor<WebhookUpdateResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id())
