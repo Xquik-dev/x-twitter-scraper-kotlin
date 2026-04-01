@@ -35,7 +35,7 @@ internal class XServiceAsyncTest {
                 .build()
         val xServiceAsync = client.x()
 
-        val paginatedTweets =
+        val response =
             xServiceAsync.getHomeTimeline(
                 XGetHomeTimelineParams.builder()
                     .cursor("cursor")
@@ -43,7 +43,7 @@ internal class XServiceAsyncTest {
                     .build()
             )
 
-        paginatedTweets.validate()
+        response.validate()
     }
 
     @Disabled("Mock server tests are disabled")

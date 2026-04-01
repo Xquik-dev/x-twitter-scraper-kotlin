@@ -6,8 +6,8 @@ import com.google.errorprone.annotations.MustBeClosed
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
-import com.x_twitter_scraper.api.models.integrations.Integration
 import com.x_twitter_scraper.api.models.integrations.IntegrationCreateParams
+import com.x_twitter_scraper.api.models.integrations.IntegrationCreateResponse
 import com.x_twitter_scraper.api.models.integrations.IntegrationDeleteParams
 import com.x_twitter_scraper.api.models.integrations.IntegrationDeleteResponse
 import com.x_twitter_scraper.api.models.integrations.IntegrationListDeliveriesParams
@@ -15,9 +15,11 @@ import com.x_twitter_scraper.api.models.integrations.IntegrationListDeliveriesRe
 import com.x_twitter_scraper.api.models.integrations.IntegrationListParams
 import com.x_twitter_scraper.api.models.integrations.IntegrationListResponse
 import com.x_twitter_scraper.api.models.integrations.IntegrationRetrieveParams
+import com.x_twitter_scraper.api.models.integrations.IntegrationRetrieveResponse
 import com.x_twitter_scraper.api.models.integrations.IntegrationSendTestParams
 import com.x_twitter_scraper.api.models.integrations.IntegrationSendTestResponse
 import com.x_twitter_scraper.api.models.integrations.IntegrationUpdateParams
+import com.x_twitter_scraper.api.models.integrations.IntegrationUpdateResponse
 
 /** Push notification integrations (Telegram) */
 interface IntegrationServiceAsync {
@@ -38,23 +40,23 @@ interface IntegrationServiceAsync {
     suspend fun create(
         params: IntegrationCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): Integration
+    ): IntegrationCreateResponse
 
     /** Get integration details */
     suspend fun retrieve(
         id: String,
         params: IntegrationRetrieveParams = IntegrationRetrieveParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): Integration = retrieve(params.toBuilder().id(id).build(), requestOptions)
+    ): IntegrationRetrieveResponse = retrieve(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see retrieve */
     suspend fun retrieve(
         params: IntegrationRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): Integration
+    ): IntegrationRetrieveResponse
 
     /** @see retrieve */
-    suspend fun retrieve(id: String, requestOptions: RequestOptions): Integration =
+    suspend fun retrieve(id: String, requestOptions: RequestOptions): IntegrationRetrieveResponse =
         retrieve(id, IntegrationRetrieveParams.none(), requestOptions)
 
     /** Update integration */
@@ -62,16 +64,16 @@ interface IntegrationServiceAsync {
         id: String,
         params: IntegrationUpdateParams = IntegrationUpdateParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): Integration = update(params.toBuilder().id(id).build(), requestOptions)
+    ): IntegrationUpdateResponse = update(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see update */
     suspend fun update(
         params: IntegrationUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): Integration
+    ): IntegrationUpdateResponse
 
     /** @see update */
-    suspend fun update(id: String, requestOptions: RequestOptions): Integration =
+    suspend fun update(id: String, requestOptions: RequestOptions): IntegrationUpdateResponse =
         update(id, IntegrationUpdateParams.none(), requestOptions)
 
     /** List integrations */
@@ -162,7 +164,7 @@ interface IntegrationServiceAsync {
         suspend fun create(
             params: IntegrationCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Integration>
+        ): HttpResponseFor<IntegrationCreateResponse>
 
         /**
          * Returns a raw HTTP response for `get /integrations/{id}`, but is otherwise the same as
@@ -173,7 +175,7 @@ interface IntegrationServiceAsync {
             id: String,
             params: IntegrationRetrieveParams = IntegrationRetrieveParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Integration> =
+        ): HttpResponseFor<IntegrationRetrieveResponse> =
             retrieve(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see retrieve */
@@ -181,14 +183,14 @@ interface IntegrationServiceAsync {
         suspend fun retrieve(
             params: IntegrationRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Integration>
+        ): HttpResponseFor<IntegrationRetrieveResponse>
 
         /** @see retrieve */
         @MustBeClosed
         suspend fun retrieve(
             id: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<Integration> =
+        ): HttpResponseFor<IntegrationRetrieveResponse> =
             retrieve(id, IntegrationRetrieveParams.none(), requestOptions)
 
         /**
@@ -200,21 +202,23 @@ interface IntegrationServiceAsync {
             id: String,
             params: IntegrationUpdateParams = IntegrationUpdateParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Integration> = update(params.toBuilder().id(id).build(), requestOptions)
+        ): HttpResponseFor<IntegrationUpdateResponse> =
+            update(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see update */
         @MustBeClosed
         suspend fun update(
             params: IntegrationUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Integration>
+        ): HttpResponseFor<IntegrationUpdateResponse>
 
         /** @see update */
         @MustBeClosed
         suspend fun update(
             id: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<Integration> = update(id, IntegrationUpdateParams.none(), requestOptions)
+        ): HttpResponseFor<IntegrationUpdateResponse> =
+            update(id, IntegrationUpdateParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /integrations`, but is otherwise the same as

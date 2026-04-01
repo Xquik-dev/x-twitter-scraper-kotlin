@@ -7,10 +7,10 @@ import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.http.HttpResponse
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
-import com.x_twitter_scraper.api.models.PaginatedTweets
 import com.x_twitter_scraper.api.models.x.XGetArticleParams
 import com.x_twitter_scraper.api.models.x.XGetArticleResponse
 import com.x_twitter_scraper.api.models.x.XGetHomeTimelineParams
+import com.x_twitter_scraper.api.models.x.XGetHomeTimelineResponse
 import com.x_twitter_scraper.api.models.x.XGetNotificationsParams
 import com.x_twitter_scraper.api.models.x.XGetNotificationsResponse
 import com.x_twitter_scraper.api.models.x.XGetTrendsParams
@@ -88,10 +88,10 @@ interface XServiceAsync {
     suspend fun getHomeTimeline(
         params: XGetHomeTimelineParams = XGetHomeTimelineParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): PaginatedTweets
+    ): XGetHomeTimelineResponse
 
     /** @see getHomeTimeline */
-    suspend fun getHomeTimeline(requestOptions: RequestOptions): PaginatedTweets =
+    suspend fun getHomeTimeline(requestOptions: RequestOptions): XGetHomeTimelineResponse =
         getHomeTimeline(XGetHomeTimelineParams.none(), requestOptions)
 
     /** Get notifications */
@@ -186,13 +186,13 @@ interface XServiceAsync {
         suspend fun getHomeTimeline(
             params: XGetHomeTimelineParams = XGetHomeTimelineParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<PaginatedTweets>
+        ): HttpResponseFor<XGetHomeTimelineResponse>
 
         /** @see getHomeTimeline */
         @MustBeClosed
         suspend fun getHomeTimeline(
             requestOptions: RequestOptions
-        ): HttpResponseFor<PaginatedTweets> =
+        ): HttpResponseFor<XGetHomeTimelineResponse> =
             getHomeTimeline(XGetHomeTimelineParams.none(), requestOptions)
 
         /**

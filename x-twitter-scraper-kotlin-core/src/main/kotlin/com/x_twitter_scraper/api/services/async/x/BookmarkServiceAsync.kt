@@ -6,8 +6,8 @@ import com.google.errorprone.annotations.MustBeClosed
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
-import com.x_twitter_scraper.api.models.PaginatedTweets
 import com.x_twitter_scraper.api.models.x.bookmarks.BookmarkListParams
+import com.x_twitter_scraper.api.models.x.bookmarks.BookmarkListResponse
 import com.x_twitter_scraper.api.models.x.bookmarks.BookmarkRetrieveFoldersParams
 import com.x_twitter_scraper.api.models.x.bookmarks.BookmarkRetrieveFoldersResponse
 
@@ -30,10 +30,10 @@ interface BookmarkServiceAsync {
     suspend fun list(
         params: BookmarkListParams = BookmarkListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): PaginatedTweets
+    ): BookmarkListResponse
 
     /** @see list */
-    suspend fun list(requestOptions: RequestOptions): PaginatedTweets =
+    suspend fun list(requestOptions: RequestOptions): BookmarkListResponse =
         list(BookmarkListParams.none(), requestOptions)
 
     /** Get bookmark folders */
@@ -68,11 +68,11 @@ interface BookmarkServiceAsync {
         suspend fun list(
             params: BookmarkListParams = BookmarkListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<PaginatedTweets>
+        ): HttpResponseFor<BookmarkListResponse>
 
         /** @see list */
         @MustBeClosed
-        suspend fun list(requestOptions: RequestOptions): HttpResponseFor<PaginatedTweets> =
+        suspend fun list(requestOptions: RequestOptions): HttpResponseFor<BookmarkListResponse> =
             list(BookmarkListParams.none(), requestOptions)
 
         /**
