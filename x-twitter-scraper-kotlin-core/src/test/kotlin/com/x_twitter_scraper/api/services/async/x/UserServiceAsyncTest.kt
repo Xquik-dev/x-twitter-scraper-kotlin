@@ -20,21 +20,6 @@ internal class UserServiceAsyncTest {
 
     @Disabled("Mock server tests are disabled")
     @Test
-    suspend fun retrieve() {
-        val client =
-            XTwitterScraperOkHttpClientAsync.builder()
-                .apiKey("My API Key")
-                .bearerToken("My Bearer Token")
-                .build()
-        val userServiceAsync = client.x().users()
-
-        val user = userServiceAsync.retrieve("username")
-
-        user.validate()
-    }
-
-    @Disabled("Mock server tests are disabled")
-    @Test
     suspend fun retrieveBatch() {
         val client =
             XTwitterScraperOkHttpClientAsync.builder()

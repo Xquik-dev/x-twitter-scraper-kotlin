@@ -9,8 +9,6 @@ import com.x_twitter_scraper.api.core.http.HttpResponse
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.models.x.tweets.TweetCreateParams
 import com.x_twitter_scraper.api.models.x.tweets.TweetCreateResponse
-import com.x_twitter_scraper.api.models.x.tweets.TweetDeleteParams
-import com.x_twitter_scraper.api.models.x.tweets.TweetDeleteResponse
 import com.x_twitter_scraper.api.models.x.tweets.TweetGetFavoritersParams
 import com.x_twitter_scraper.api.models.x.tweets.TweetGetFavoritersResponse
 import com.x_twitter_scraper.api.models.x.tweets.TweetGetQuotesParams
@@ -22,8 +20,6 @@ import com.x_twitter_scraper.api.models.x.tweets.TweetGetRetweetersResponse
 import com.x_twitter_scraper.api.models.x.tweets.TweetGetThreadParams
 import com.x_twitter_scraper.api.models.x.tweets.TweetGetThreadResponse
 import com.x_twitter_scraper.api.models.x.tweets.TweetListParams
-import com.x_twitter_scraper.api.models.x.tweets.TweetRetrieveParams
-import com.x_twitter_scraper.api.models.x.tweets.TweetRetrieveResponse
 import com.x_twitter_scraper.api.models.x.tweets.TweetSearchParams
 import com.x_twitter_scraper.api.models.x.tweets.TweetSearchResponse
 import com.x_twitter_scraper.api.services.async.x.tweets.LikeServiceAsync
@@ -43,10 +39,8 @@ interface TweetServiceAsync {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): TweetServiceAsync
 
-    /** X write actions (tweets, likes, follows, DMs) */
     fun like(): LikeServiceAsync
 
-    /** X write actions (tweets, likes, follows, DMs) */
     fun retweet(): RetweetServiceAsync
 
     /** Create tweet */
@@ -55,41 +49,11 @@ interface TweetServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): TweetCreateResponse
 
-    /** Look up tweet */
-    suspend fun retrieve(
-        tweetId: String,
-        params: TweetRetrieveParams = TweetRetrieveParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): TweetRetrieveResponse = retrieve(params.toBuilder().tweetId(tweetId).build(), requestOptions)
-
-    /** @see retrieve */
-    suspend fun retrieve(
-        params: TweetRetrieveParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): TweetRetrieveResponse
-
-    /** @see retrieve */
-    suspend fun retrieve(tweetId: String, requestOptions: RequestOptions): TweetRetrieveResponse =
-        retrieve(tweetId, TweetRetrieveParams.none(), requestOptions)
-
     /** Get multiple tweets by IDs */
     suspend fun list(
         params: TweetListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     )
-
-    /** Delete tweet */
-    suspend fun delete(
-        tweetId: String,
-        params: TweetDeleteParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): TweetDeleteResponse = delete(params.toBuilder().tweetId(tweetId).build(), requestOptions)
-
-    /** @see delete */
-    suspend fun delete(
-        params: TweetDeleteParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): TweetDeleteResponse
 
     /** Get users who liked a tweet */
     suspend fun getFavoriters(
@@ -200,10 +164,8 @@ interface TweetServiceAsync {
             modifier: (ClientOptions.Builder) -> Unit
         ): TweetServiceAsync.WithRawResponse
 
-        /** X write actions (tweets, likes, follows, DMs) */
         fun like(): LikeServiceAsync.WithRawResponse
 
-        /** X write actions (tweets, likes, follows, DMs) */
         fun retweet(): RetweetServiceAsync.WithRawResponse
 
         /**
@@ -217,33 +179,6 @@ interface TweetServiceAsync {
         ): HttpResponseFor<TweetCreateResponse>
 
         /**
-         * Returns a raw HTTP response for `get /x/tweets/{tweetId}`, but is otherwise the same as
-         * [TweetServiceAsync.retrieve].
-         */
-        @MustBeClosed
-        suspend fun retrieve(
-            tweetId: String,
-            params: TweetRetrieveParams = TweetRetrieveParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TweetRetrieveResponse> =
-            retrieve(params.toBuilder().tweetId(tweetId).build(), requestOptions)
-
-        /** @see retrieve */
-        @MustBeClosed
-        suspend fun retrieve(
-            params: TweetRetrieveParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TweetRetrieveResponse>
-
-        /** @see retrieve */
-        @MustBeClosed
-        suspend fun retrieve(
-            tweetId: String,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<TweetRetrieveResponse> =
-            retrieve(tweetId, TweetRetrieveParams.none(), requestOptions)
-
-        /**
          * Returns a raw HTTP response for `get /x/tweets`, but is otherwise the same as
          * [TweetServiceAsync.list].
          */
@@ -252,25 +187,6 @@ interface TweetServiceAsync {
             params: TweetListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse
-
-        /**
-         * Returns a raw HTTP response for `delete /x/tweets/{tweetId}`, but is otherwise the same
-         * as [TweetServiceAsync.delete].
-         */
-        @MustBeClosed
-        suspend fun delete(
-            tweetId: String,
-            params: TweetDeleteParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TweetDeleteResponse> =
-            delete(params.toBuilder().tweetId(tweetId).build(), requestOptions)
-
-        /** @see delete */
-        @MustBeClosed
-        suspend fun delete(
-            params: TweetDeleteParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TweetDeleteResponse>
 
         /**
          * Returns a raw HTTP response for `get /x/tweets/{id}/favoriters`, but is otherwise the

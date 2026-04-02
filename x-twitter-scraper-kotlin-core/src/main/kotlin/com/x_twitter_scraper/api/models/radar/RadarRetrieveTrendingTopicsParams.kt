@@ -2,9 +2,13 @@
 
 package com.x_twitter_scraper.api.models.radar
 
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.x_twitter_scraper.api.core.Enum
+import com.x_twitter_scraper.api.core.JsonField
 import com.x_twitter_scraper.api.core.Params
 import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
+import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
 import java.util.Objects
 
 /** Get trending topics from curated sources */
@@ -14,7 +18,7 @@ private constructor(
     private val count: Long?,
     private val hours: Long?,
     private val region: String?,
-    private val source: String?,
+    private val source: Source?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -35,7 +39,7 @@ private constructor(
      * Source filter. One of: github, google_trends, hacker_news, polymarket, reddit, trustmrr,
      * wikipedia
      */
-    fun source(): String? = source
+    fun source(): Source? = source
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -63,7 +67,7 @@ private constructor(
         private var count: Long? = null
         private var hours: Long? = null
         private var region: String? = null
-        private var source: String? = null
+        private var source: Source? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -109,7 +113,7 @@ private constructor(
          * Source filter. One of: github, google_trends, hacker_news, polymarket, reddit, trustmrr,
          * wikipedia
          */
-        fun source(source: String?) = apply { this.source = source }
+        fun source(source: Source?) = apply { this.source = source }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -235,10 +239,170 @@ private constructor(
                 count?.let { put("count", it.toString()) }
                 hours?.let { put("hours", it.toString()) }
                 region?.let { put("region", it) }
-                source?.let { put("source", it) }
+                source?.let { put("source", it.toString()) }
                 putAll(additionalQueryParams)
             }
             .build()
+
+    /**
+     * Source filter. One of: github, google_trends, hacker_news, polymarket, reddit, trustmrr,
+     * wikipedia
+     */
+    class Source @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            val GITHUB = of("github")
+
+            val GOOGLE_TRENDS = of("google_trends")
+
+            val HACKER_NEWS = of("hacker_news")
+
+            val POLYMARKET = of("polymarket")
+
+            val REDDIT = of("reddit")
+
+            val TRUSTMRR = of("trustmrr")
+
+            val WIKIPEDIA = of("wikipedia")
+
+            fun of(value: String) = Source(JsonField.of(value))
+        }
+
+        /** An enum containing [Source]'s known values. */
+        enum class Known {
+            GITHUB,
+            GOOGLE_TRENDS,
+            HACKER_NEWS,
+            POLYMARKET,
+            REDDIT,
+            TRUSTMRR,
+            WIKIPEDIA,
+        }
+
+        /**
+         * An enum containing [Source]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [Source] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            GITHUB,
+            GOOGLE_TRENDS,
+            HACKER_NEWS,
+            POLYMARKET,
+            REDDIT,
+            TRUSTMRR,
+            WIKIPEDIA,
+            /** An enum member indicating that [Source] was instantiated with an unknown value. */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                GITHUB -> Value.GITHUB
+                GOOGLE_TRENDS -> Value.GOOGLE_TRENDS
+                HACKER_NEWS -> Value.HACKER_NEWS
+                POLYMARKET -> Value.POLYMARKET
+                REDDIT -> Value.REDDIT
+                TRUSTMRR -> Value.TRUSTMRR
+                WIKIPEDIA -> Value.WIKIPEDIA
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws XTwitterScraperInvalidDataException if this class instance's value is a not a
+         *   known member.
+         */
+        fun known(): Known =
+            when (this) {
+                GITHUB -> Known.GITHUB
+                GOOGLE_TRENDS -> Known.GOOGLE_TRENDS
+                HACKER_NEWS -> Known.HACKER_NEWS
+                POLYMARKET -> Known.POLYMARKET
+                REDDIT -> Known.REDDIT
+                TRUSTMRR -> Known.TRUSTMRR
+                WIKIPEDIA -> Known.WIKIPEDIA
+                else -> throw XTwitterScraperInvalidDataException("Unknown Source: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws XTwitterScraperInvalidDataException if this class instance's value does not have
+         *   the expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString()
+                ?: throw XTwitterScraperInvalidDataException("Value is not a String")
+
+        private var validated: Boolean = false
+
+        fun validate(): Source = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: XTwitterScraperInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Source && value == other.value
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
