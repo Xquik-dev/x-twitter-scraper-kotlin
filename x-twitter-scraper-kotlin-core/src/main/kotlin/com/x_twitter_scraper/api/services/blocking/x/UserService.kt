@@ -17,8 +17,6 @@ import com.x_twitter_scraper.api.models.x.users.UserRetrieveLikesResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveMediaParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveMediaResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveMentionsParams
-import com.x_twitter_scraper.api.models.x.users.UserRetrieveParams
-import com.x_twitter_scraper.api.models.x.users.UserRetrieveResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveSearchParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveTweetsParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveTweetsResponse
@@ -40,26 +38,7 @@ interface UserService {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): UserService
 
-    /** X write actions (tweets, likes, follows, DMs) */
     fun follow(): FollowService
-
-    /** Look up X user */
-    fun retrieve(
-        username: String,
-        params: UserRetrieveParams = UserRetrieveParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): UserRetrieveResponse =
-        retrieve(params.toBuilder().username(username).build(), requestOptions)
-
-    /** @see retrieve */
-    fun retrieve(
-        params: UserRetrieveParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): UserRetrieveResponse
-
-    /** @see retrieve */
-    fun retrieve(username: String, requestOptions: RequestOptions): UserRetrieveResponse =
-        retrieve(username, UserRetrieveParams.none(), requestOptions)
 
     /** Get multiple users by IDs */
     fun retrieveBatch(
@@ -224,35 +203,7 @@ interface UserService {
          */
         fun withOptions(modifier: (ClientOptions.Builder) -> Unit): UserService.WithRawResponse
 
-        /** X write actions (tweets, likes, follows, DMs) */
         fun follow(): FollowService.WithRawResponse
-
-        /**
-         * Returns a raw HTTP response for `get /x/users/{username}`, but is otherwise the same as
-         * [UserService.retrieve].
-         */
-        @MustBeClosed
-        fun retrieve(
-            username: String,
-            params: UserRetrieveParams = UserRetrieveParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<UserRetrieveResponse> =
-            retrieve(params.toBuilder().username(username).build(), requestOptions)
-
-        /** @see retrieve */
-        @MustBeClosed
-        fun retrieve(
-            params: UserRetrieveParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<UserRetrieveResponse>
-
-        /** @see retrieve */
-        @MustBeClosed
-        fun retrieve(
-            username: String,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<UserRetrieveResponse> =
-            retrieve(username, UserRetrieveParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /x/users/batch`, but is otherwise the same as

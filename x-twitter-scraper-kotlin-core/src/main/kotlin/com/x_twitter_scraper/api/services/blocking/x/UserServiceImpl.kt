@@ -26,8 +26,6 @@ import com.x_twitter_scraper.api.models.x.users.UserRetrieveLikesResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveMediaParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveMediaResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveMentionsParams
-import com.x_twitter_scraper.api.models.x.users.UserRetrieveParams
-import com.x_twitter_scraper.api.models.x.users.UserRetrieveResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveSearchParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveTweetsParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveTweetsResponse
@@ -49,15 +47,7 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): UserService =
         UserServiceImpl(clientOptions.toBuilder().apply(modifier).build())
 
-    /** X write actions (tweets, likes, follows, DMs) */
     override fun follow(): FollowService = follow
-
-    override fun retrieve(
-        params: UserRetrieveParams,
-        requestOptions: RequestOptions,
-    ): UserRetrieveResponse =
-        // get /x/users/{username}
-        withRawResponse().retrieve(params, requestOptions).parse()
 
     override fun retrieveBatch(params: UserRetrieveBatchParams, requestOptions: RequestOptions) {
         // get /x/users/batch
@@ -144,38 +134,7 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
         ): UserService.WithRawResponse =
             UserServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
 
-        /** X write actions (tweets, likes, follows, DMs) */
         override fun follow(): FollowService.WithRawResponse = follow
-
-        private val retrieveHandler: Handler<UserRetrieveResponse> =
-            jsonHandler<UserRetrieveResponse>(clientOptions.jsonMapper)
-
-        override fun retrieve(
-            params: UserRetrieveParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<UserRetrieveResponse> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
-            checkRequired("username", params.username())
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("x", "users", params._pathParam(0))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response
-                    .use { retrieveHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
-        }
 
         private val retrieveBatchHandler: Handler<Void?> = emptyHandler()
 

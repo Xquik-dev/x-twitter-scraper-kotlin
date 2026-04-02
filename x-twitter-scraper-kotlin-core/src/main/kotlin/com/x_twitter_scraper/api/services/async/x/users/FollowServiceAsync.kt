@@ -2,16 +2,8 @@
 
 package com.x_twitter_scraper.api.services.async.x.users
 
-import com.google.errorprone.annotations.MustBeClosed
 import com.x_twitter_scraper.api.core.ClientOptions
-import com.x_twitter_scraper.api.core.RequestOptions
-import com.x_twitter_scraper.api.core.http.HttpResponseFor
-import com.x_twitter_scraper.api.models.x.users.follow.FollowCreateParams
-import com.x_twitter_scraper.api.models.x.users.follow.FollowCreateResponse
-import com.x_twitter_scraper.api.models.x.users.follow.FollowDeleteAllParams
-import com.x_twitter_scraper.api.models.x.users.follow.FollowDeleteAllResponse
 
-/** X write actions (tweets, likes, follows, DMs) */
 interface FollowServiceAsync {
 
     /**
@@ -26,33 +18,6 @@ interface FollowServiceAsync {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): FollowServiceAsync
 
-    /** Follow user */
-    suspend fun create(
-        userId: String,
-        params: FollowCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): FollowCreateResponse = create(params.toBuilder().userId(userId).build(), requestOptions)
-
-    /** @see create */
-    suspend fun create(
-        params: FollowCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): FollowCreateResponse
-
-    /** Unfollow user */
-    suspend fun deleteAll(
-        userId: String,
-        params: FollowDeleteAllParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): FollowDeleteAllResponse =
-        deleteAll(params.toBuilder().userId(userId).build(), requestOptions)
-
-    /** @see deleteAll */
-    suspend fun deleteAll(
-        params: FollowDeleteAllParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): FollowDeleteAllResponse
-
     /**
      * A view of [FollowServiceAsync] that provides access to raw HTTP responses for each method.
      */
@@ -66,43 +31,5 @@ interface FollowServiceAsync {
         fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): FollowServiceAsync.WithRawResponse
-
-        /**
-         * Returns a raw HTTP response for `post /x/users/{userId}/follow`, but is otherwise the
-         * same as [FollowServiceAsync.create].
-         */
-        @MustBeClosed
-        suspend fun create(
-            userId: String,
-            params: FollowCreateParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<FollowCreateResponse> =
-            create(params.toBuilder().userId(userId).build(), requestOptions)
-
-        /** @see create */
-        @MustBeClosed
-        suspend fun create(
-            params: FollowCreateParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<FollowCreateResponse>
-
-        /**
-         * Returns a raw HTTP response for `delete /x/users/{userId}/follow`, but is otherwise the
-         * same as [FollowServiceAsync.deleteAll].
-         */
-        @MustBeClosed
-        suspend fun deleteAll(
-            userId: String,
-            params: FollowDeleteAllParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<FollowDeleteAllResponse> =
-            deleteAll(params.toBuilder().userId(userId).build(), requestOptions)
-
-        /** @see deleteAll */
-        @MustBeClosed
-        suspend fun deleteAll(
-            params: FollowDeleteAllParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<FollowDeleteAllResponse>
     }
 }
