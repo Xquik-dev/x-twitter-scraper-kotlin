@@ -31,7 +31,7 @@ private constructor(
     /** Pagination cursor from previous response */
     fun cursor(): String? = cursor
 
-    /** Deprecated — use cursor-based pagination instead */
+    /** Max tweets to return (server paginates internally). Omit for single page (~20). */
     fun limit(): Long? = limit
 
     /** Sort order — Latest (chronological) or Top (engagement-ranked) */
@@ -93,7 +93,7 @@ private constructor(
         /** Pagination cursor from previous response */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
-        /** Deprecated — use cursor-based pagination instead */
+        /** Max tweets to return (server paginates internally). Omit for single page (~20). */
         fun limit(limit: Long?) = apply { this.limit = limit }
 
         /**
