@@ -3,6 +3,7 @@
 package com.x_twitter_scraper.api.models.x.tweets
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.x_twitter_scraper.api.core.JsonValue
 import com.x_twitter_scraper.api.core.jsonMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -21,7 +22,21 @@ internal class TweetDetailTest {
                 .retweetCount(0L)
                 .text("text")
                 .viewCount(0L)
+                .conversationId("conversationId")
                 .createdAt("createdAt")
+                .entities(JsonValue.from(mapOf<String, Any>()))
+                .isNoteTweet(true)
+                .isQuoteStatus(true)
+                .isReply(true)
+                .addMedia(
+                    TweetDetail.Media.builder()
+                        .mediaUrl("mediaUrl")
+                        .type(TweetDetail.Media.Type.PHOTO)
+                        .url("url")
+                        .build()
+                )
+                .quotedTweet(JsonValue.from(mapOf<String, Any>()))
+                .source("source")
                 .build()
 
         assertThat(tweetDetail.id()).isEqualTo("id")
@@ -32,7 +47,22 @@ internal class TweetDetailTest {
         assertThat(tweetDetail.retweetCount()).isEqualTo(0L)
         assertThat(tweetDetail.text()).isEqualTo("text")
         assertThat(tweetDetail.viewCount()).isEqualTo(0L)
+        assertThat(tweetDetail.conversationId()).isEqualTo("conversationId")
         assertThat(tweetDetail.createdAt()).isEqualTo("createdAt")
+        assertThat(tweetDetail._entities()).isEqualTo(JsonValue.from(mapOf<String, Any>()))
+        assertThat(tweetDetail.isNoteTweet()).isEqualTo(true)
+        assertThat(tweetDetail.isQuoteStatus()).isEqualTo(true)
+        assertThat(tweetDetail.isReply()).isEqualTo(true)
+        assertThat(tweetDetail.media())
+            .containsExactly(
+                TweetDetail.Media.builder()
+                    .mediaUrl("mediaUrl")
+                    .type(TweetDetail.Media.Type.PHOTO)
+                    .url("url")
+                    .build()
+            )
+        assertThat(tweetDetail._quotedTweet()).isEqualTo(JsonValue.from(mapOf<String, Any>()))
+        assertThat(tweetDetail.source()).isEqualTo("source")
     }
 
     @Test
@@ -48,7 +78,21 @@ internal class TweetDetailTest {
                 .retweetCount(0L)
                 .text("text")
                 .viewCount(0L)
+                .conversationId("conversationId")
                 .createdAt("createdAt")
+                .entities(JsonValue.from(mapOf<String, Any>()))
+                .isNoteTweet(true)
+                .isQuoteStatus(true)
+                .isReply(true)
+                .addMedia(
+                    TweetDetail.Media.builder()
+                        .mediaUrl("mediaUrl")
+                        .type(TweetDetail.Media.Type.PHOTO)
+                        .url("url")
+                        .build()
+                )
+                .quotedTweet(JsonValue.from(mapOf<String, Any>()))
+                .source("source")
                 .build()
 
         val roundtrippedTweetDetail =
