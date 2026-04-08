@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.x_twitter_scraper.api.core.Enum
 import com.x_twitter_scraper.api.core.ExcludeMissing
 import com.x_twitter_scraper.api.core.JsonField
 import com.x_twitter_scraper.api.core.JsonMissing
@@ -53,10 +52,15 @@ private constructor(
     fun name(): String = body.name()
 
     /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     * Expected to always return the following:
+     * ```kotlin
+     * JsonValue.from("telegram")
+     * ```
+     *
+     * However, this method can be useful for debugging and logging (e.g. if the server responded
+     * with an unexpected value).
      */
-    fun type(): Type = body.type()
+    fun _type(): JsonValue = body._type()
 
     /**
      * Returns the raw JSON value of [config].
@@ -79,13 +83,6 @@ private constructor(
      */
     fun _name(): JsonField<String> = body._name()
 
-    /**
-     * Returns the raw JSON value of [type].
-     *
-     * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _type(): JsonField<Type> = body._type()
-
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     /** Additional headers to send with the request. */
@@ -106,7 +103,6 @@ private constructor(
          * .config()
          * .eventTypes()
          * .name()
-         * .type()
          * ```
          */
         fun builder() = Builder()
@@ -179,15 +175,19 @@ private constructor(
          */
         fun name(name: JsonField<String>) = apply { body.name(name) }
 
-        fun type(type: Type) = apply { body.type(type) }
-
         /**
-         * Sets [Builder.type] to an arbitrary JSON value.
+         * Sets the field to an arbitrary JSON value.
          *
-         * You should usually call [Builder.type] with a well-typed [Type] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
+         * It is usually unnecessary to call this method because the field defaults to the
+         * following:
+         * ```kotlin
+         * JsonValue.from("telegram")
+         * ```
+         *
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun type(type: JsonField<Type>) = apply { body.type(type) }
+        fun type(type: JsonValue) = apply { body.type(type) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -316,7 +316,6 @@ private constructor(
          * .config()
          * .eventTypes()
          * .name()
-         * .type()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
@@ -341,7 +340,7 @@ private constructor(
         private val config: JsonField<Config>,
         private val eventTypes: JsonField<List<EventType>>,
         private val name: JsonField<String>,
-        private val type: JsonField<Type>,
+        private val type: JsonValue,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -352,7 +351,7 @@ private constructor(
             @ExcludeMissing
             eventTypes: JsonField<List<EventType>> = JsonMissing.of(),
             @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
+            @JsonProperty("type") @ExcludeMissing type: JsonValue = JsonMissing.of(),
         ) : this(config, eventTypes, name, type, mutableMapOf())
 
         /**
@@ -381,11 +380,15 @@ private constructor(
         fun name(): String = name.getRequired("name")
 
         /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         * Expected to always return the following:
+         * ```kotlin
+         * JsonValue.from("telegram")
+         * ```
+         *
+         * However, this method can be useful for debugging and logging (e.g. if the server
+         * responded with an unexpected value).
          */
-        fun type(): Type = type.getRequired("type")
+        @JsonProperty("type") @ExcludeMissing fun _type(): JsonValue = type
 
         /**
          * Returns the raw JSON value of [config].
@@ -410,13 +413,6 @@ private constructor(
          */
         @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
-        /**
-         * Returns the raw JSON value of [type].
-         *
-         * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
-
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
             additionalProperties.put(key, value)
@@ -439,7 +435,6 @@ private constructor(
              * .config()
              * .eventTypes()
              * .name()
-             * .type()
              * ```
              */
             fun builder() = Builder()
@@ -451,7 +446,7 @@ private constructor(
             private var config: JsonField<Config>? = null
             private var eventTypes: JsonField<MutableList<EventType>>? = null
             private var name: JsonField<String>? = null
-            private var type: JsonField<Type>? = null
+            private var type: JsonValue = JsonValue.from("telegram")
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(body: Body) = apply {
@@ -511,16 +506,19 @@ private constructor(
              */
             fun name(name: JsonField<String>) = apply { this.name = name }
 
-            fun type(type: Type) = type(JsonField.of(type))
-
             /**
-             * Sets [Builder.type] to an arbitrary JSON value.
+             * Sets the field to an arbitrary JSON value.
              *
-             * You should usually call [Builder.type] with a well-typed [Type] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
+             * It is usually unnecessary to call this method because the field defaults to the
+             * following:
+             * ```kotlin
+             * JsonValue.from("telegram")
+             * ```
+             *
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            fun type(type: JsonField<Type>) = apply { this.type = type }
+            fun type(type: JsonValue) = apply { this.type = type }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -551,7 +549,6 @@ private constructor(
              * .config()
              * .eventTypes()
              * .name()
-             * .type()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
@@ -561,7 +558,7 @@ private constructor(
                     checkRequired("config", config),
                     checkRequired("eventTypes", eventTypes).map { it.toImmutable() },
                     checkRequired("name", name),
-                    checkRequired("type", type),
+                    type,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -576,7 +573,11 @@ private constructor(
             config().validate()
             eventTypes().forEach { it.validate() }
             name()
-            type().validate()
+            _type().let {
+                if (it != JsonValue.from("telegram")) {
+                    throw XTwitterScraperInvalidDataException("'type' is invalid, received $it")
+                }
+            }
             validated = true
         }
 
@@ -598,7 +599,7 @@ private constructor(
             (config.asKnown()?.validity() ?: 0) +
                 (eventTypes.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
                 (if (name.asKnown() == null) 0 else 1) +
-                (type.asKnown()?.validity() ?: 0)
+                type.let { if (it == JsonValue.from("telegram")) 1 else 0 }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -775,126 +776,6 @@ private constructor(
 
         override fun toString() =
             "Config{chatId=$chatId, additionalProperties=$additionalProperties}"
-    }
-
-    class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
-
-        /**
-         * Returns this class instance's raw value.
-         *
-         * This is usually only useful if this instance was deserialized from data that doesn't
-         * match any known member, and you want to know that value. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new members that the SDK is
-         * unaware of.
-         */
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-        companion object {
-
-            val TELEGRAM = of("telegram")
-
-            fun of(value: String) = Type(JsonField.of(value))
-        }
-
-        /** An enum containing [Type]'s known values. */
-        enum class Known {
-            TELEGRAM
-        }
-
-        /**
-         * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
-         *
-         * An instance of [Type] can contain an unknown value in a couple of cases:
-         * - It was deserialized from data that doesn't match any known member. For example, if the
-         *   SDK is on an older version than the API, then the API may respond with new members that
-         *   the SDK is unaware of.
-         * - It was constructed with an arbitrary value using the [of] method.
-         */
-        enum class Value {
-            TELEGRAM,
-            /** An enum member indicating that [Type] was instantiated with an unknown value. */
-            _UNKNOWN,
-        }
-
-        /**
-         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
-         * if the class was instantiated with an unknown value.
-         *
-         * Use the [known] method instead if you're certain the value is always known or if you want
-         * to throw for the unknown case.
-         */
-        fun value(): Value =
-            when (this) {
-                TELEGRAM -> Value.TELEGRAM
-                else -> Value._UNKNOWN
-            }
-
-        /**
-         * Returns an enum member corresponding to this class instance's value.
-         *
-         * Use the [value] method instead if you're uncertain the value is always known and don't
-         * want to throw for the unknown case.
-         *
-         * @throws XTwitterScraperInvalidDataException if this class instance's value is a not a
-         *   known member.
-         */
-        fun known(): Known =
-            when (this) {
-                TELEGRAM -> Known.TELEGRAM
-                else -> throw XTwitterScraperInvalidDataException("Unknown Type: $value")
-            }
-
-        /**
-         * Returns this class instance's primitive wire representation.
-         *
-         * This differs from the [toString] method because that method is primarily for debugging
-         * and generally doesn't throw.
-         *
-         * @throws XTwitterScraperInvalidDataException if this class instance's value does not have
-         *   the expected primitive type.
-         */
-        fun asString(): String =
-            _value().asString()
-                ?: throw XTwitterScraperInvalidDataException("Value is not a String")
-
-        private var validated: Boolean = false
-
-        fun validate(): Type = apply {
-            if (validated) {
-                return@apply
-            }
-
-            known()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Type && value == other.value
-        }
-
-        override fun hashCode() = value.hashCode()
-
-        override fun toString() = value.toString()
     }
 
     override fun equals(other: Any?): Boolean {
