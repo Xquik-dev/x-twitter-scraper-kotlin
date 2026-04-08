@@ -6,6 +6,8 @@ import com.google.errorprone.annotations.MustBeClosed
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
+import com.x_twitter_scraper.api.models.PaginatedTweets
+import com.x_twitter_scraper.api.models.PaginatedUsers
 import com.x_twitter_scraper.api.models.x.communities.CommunityCreateParams
 import com.x_twitter_scraper.api.models.x.communities.CommunityCreateResponse
 import com.x_twitter_scraper.api.models.x.communities.CommunityDeleteParams
@@ -13,11 +15,8 @@ import com.x_twitter_scraper.api.models.x.communities.CommunityDeleteResponse
 import com.x_twitter_scraper.api.models.x.communities.CommunityRetrieveInfoParams
 import com.x_twitter_scraper.api.models.x.communities.CommunityRetrieveInfoResponse
 import com.x_twitter_scraper.api.models.x.communities.CommunityRetrieveMembersParams
-import com.x_twitter_scraper.api.models.x.communities.CommunityRetrieveMembersResponse
 import com.x_twitter_scraper.api.models.x.communities.CommunityRetrieveModeratorsParams
-import com.x_twitter_scraper.api.models.x.communities.CommunityRetrieveModeratorsResponse
 import com.x_twitter_scraper.api.models.x.communities.CommunityRetrieveSearchParams
-import com.x_twitter_scraper.api.models.x.communities.CommunityRetrieveSearchResponse
 import com.x_twitter_scraper.api.services.async.x.communities.JoinServiceAsync
 import com.x_twitter_scraper.api.services.async.x.communities.TweetServiceAsync
 
@@ -86,20 +85,16 @@ interface CommunityServiceAsync {
         id: String,
         params: CommunityRetrieveMembersParams = CommunityRetrieveMembersParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CommunityRetrieveMembersResponse =
-        retrieveMembers(params.toBuilder().id(id).build(), requestOptions)
+    ): PaginatedUsers = retrieveMembers(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see retrieveMembers */
     suspend fun retrieveMembers(
         params: CommunityRetrieveMembersParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CommunityRetrieveMembersResponse
+    ): PaginatedUsers
 
     /** @see retrieveMembers */
-    suspend fun retrieveMembers(
-        id: String,
-        requestOptions: RequestOptions,
-    ): CommunityRetrieveMembersResponse =
+    suspend fun retrieveMembers(id: String, requestOptions: RequestOptions): PaginatedUsers =
         retrieveMembers(id, CommunityRetrieveMembersParams.none(), requestOptions)
 
     /** Get community moderators */
@@ -107,27 +102,23 @@ interface CommunityServiceAsync {
         id: String,
         params: CommunityRetrieveModeratorsParams = CommunityRetrieveModeratorsParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CommunityRetrieveModeratorsResponse =
-        retrieveModerators(params.toBuilder().id(id).build(), requestOptions)
+    ): PaginatedUsers = retrieveModerators(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see retrieveModerators */
     suspend fun retrieveModerators(
         params: CommunityRetrieveModeratorsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CommunityRetrieveModeratorsResponse
+    ): PaginatedUsers
 
     /** @see retrieveModerators */
-    suspend fun retrieveModerators(
-        id: String,
-        requestOptions: RequestOptions,
-    ): CommunityRetrieveModeratorsResponse =
+    suspend fun retrieveModerators(id: String, requestOptions: RequestOptions): PaginatedUsers =
         retrieveModerators(id, CommunityRetrieveModeratorsParams.none(), requestOptions)
 
     /** Search tweets across communities */
     suspend fun retrieveSearch(
         params: CommunityRetrieveSearchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CommunityRetrieveSearchResponse
+    ): PaginatedTweets
 
     /**
      * A view of [CommunityServiceAsync] that provides access to raw HTTP responses for each method.
@@ -214,7 +205,7 @@ interface CommunityServiceAsync {
             id: String,
             params: CommunityRetrieveMembersParams = CommunityRetrieveMembersParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<CommunityRetrieveMembersResponse> =
+        ): HttpResponseFor<PaginatedUsers> =
             retrieveMembers(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see retrieveMembers */
@@ -222,14 +213,14 @@ interface CommunityServiceAsync {
         suspend fun retrieveMembers(
             params: CommunityRetrieveMembersParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<CommunityRetrieveMembersResponse>
+        ): HttpResponseFor<PaginatedUsers>
 
         /** @see retrieveMembers */
         @MustBeClosed
         suspend fun retrieveMembers(
             id: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<CommunityRetrieveMembersResponse> =
+        ): HttpResponseFor<PaginatedUsers> =
             retrieveMembers(id, CommunityRetrieveMembersParams.none(), requestOptions)
 
         /**
@@ -241,7 +232,7 @@ interface CommunityServiceAsync {
             id: String,
             params: CommunityRetrieveModeratorsParams = CommunityRetrieveModeratorsParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<CommunityRetrieveModeratorsResponse> =
+        ): HttpResponseFor<PaginatedUsers> =
             retrieveModerators(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see retrieveModerators */
@@ -249,14 +240,14 @@ interface CommunityServiceAsync {
         suspend fun retrieveModerators(
             params: CommunityRetrieveModeratorsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<CommunityRetrieveModeratorsResponse>
+        ): HttpResponseFor<PaginatedUsers>
 
         /** @see retrieveModerators */
         @MustBeClosed
         suspend fun retrieveModerators(
             id: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<CommunityRetrieveModeratorsResponse> =
+        ): HttpResponseFor<PaginatedUsers> =
             retrieveModerators(id, CommunityRetrieveModeratorsParams.none(), requestOptions)
 
         /**
@@ -267,6 +258,6 @@ interface CommunityServiceAsync {
         suspend fun retrieveSearch(
             params: CommunityRetrieveSearchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<CommunityRetrieveSearchResponse>
+        ): HttpResponseFor<PaginatedTweets>
     }
 }

@@ -14,8 +14,9 @@ import com.x_twitter_scraper.api.core.http.HttpResponse.Handler
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.core.http.parseable
 import com.x_twitter_scraper.api.core.prepareAsync
+import com.x_twitter_scraper.api.models.PaginatedTweets
+import com.x_twitter_scraper.api.models.x.bookmarks.BookmarkListPageAsync
 import com.x_twitter_scraper.api.models.x.bookmarks.BookmarkListParams
-import com.x_twitter_scraper.api.models.x.bookmarks.BookmarkListResponse
 import com.x_twitter_scraper.api.models.x.bookmarks.BookmarkRetrieveFoldersParams
 import com.x_twitter_scraper.api.models.x.bookmarks.BookmarkRetrieveFoldersResponse
 
@@ -35,7 +36,7 @@ class BookmarkServiceAsyncImpl internal constructor(private val clientOptions: C
     override suspend fun list(
         params: BookmarkListParams,
         requestOptions: RequestOptions,
-    ): BookmarkListResponse =
+    ): BookmarkListPageAsync =
         // get /x/bookmarks
         withRawResponse().list(params, requestOptions).parse()
 
@@ -59,13 +60,13 @@ class BookmarkServiceAsyncImpl internal constructor(private val clientOptions: C
                 clientOptions.toBuilder().apply(modifier).build()
             )
 
-        private val listHandler: Handler<BookmarkListResponse> =
-            jsonHandler<BookmarkListResponse>(clientOptions.jsonMapper)
+        private val listHandler: Handler<PaginatedTweets> =
+            jsonHandler<PaginatedTweets>(clientOptions.jsonMapper)
 
         override suspend fun list(
             params: BookmarkListParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<BookmarkListResponse> {
+        ): HttpResponseFor<BookmarkListPageAsync> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -82,6 +83,13 @@ class BookmarkServiceAsyncImpl internal constructor(private val clientOptions: C
                         if (requestOptions.responseValidation!!) {
                             it.validate()
                         }
+                    }
+                    .let {
+                        BookmarkListPageAsync.builder()
+                            .service(BookmarkServiceAsyncImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
                     }
             }
         }

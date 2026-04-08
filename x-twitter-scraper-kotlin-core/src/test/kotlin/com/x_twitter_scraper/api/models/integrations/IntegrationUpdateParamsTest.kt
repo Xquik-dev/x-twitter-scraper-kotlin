@@ -2,6 +2,7 @@
 
 package com.x_twitter_scraper.api.models.integrations
 
+import com.x_twitter_scraper.api.models.EventType
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -11,8 +12,7 @@ internal class IntegrationUpdateParamsTest {
     fun create() {
         IntegrationUpdateParams.builder()
             .id("id")
-            .addEventType(IntegrationUpdateParams.EventType.TWEET_NEW)
-            .addEventType(IntegrationUpdateParams.EventType.FOLLOWER_GAINED)
+            .addEventType(EventType.TWEET_NEW)
             .filters(IntegrationUpdateParams.Filters.builder().build())
             .isActive(true)
             .messageTemplate(IntegrationUpdateParams.MessageTemplate.builder().build())
@@ -36,8 +36,7 @@ internal class IntegrationUpdateParamsTest {
         val params =
             IntegrationUpdateParams.builder()
                 .id("id")
-                .addEventType(IntegrationUpdateParams.EventType.TWEET_NEW)
-                .addEventType(IntegrationUpdateParams.EventType.FOLLOWER_GAINED)
+                .addEventType(EventType.TWEET_NEW)
                 .filters(IntegrationUpdateParams.Filters.builder().build())
                 .isActive(true)
                 .messageTemplate(IntegrationUpdateParams.MessageTemplate.builder().build())
@@ -48,11 +47,7 @@ internal class IntegrationUpdateParamsTest {
 
         val body = params._body()
 
-        assertThat(body.eventTypes())
-            .containsExactly(
-                IntegrationUpdateParams.EventType.TWEET_NEW,
-                IntegrationUpdateParams.EventType.FOLLOWER_GAINED,
-            )
+        assertThat(body.eventTypes()).containsExactly(EventType.TWEET_NEW)
         assertThat(body.filters()).isEqualTo(IntegrationUpdateParams.Filters.builder().build())
         assertThat(body.isActive()).isEqualTo(true)
         assertThat(body.messageTemplate())

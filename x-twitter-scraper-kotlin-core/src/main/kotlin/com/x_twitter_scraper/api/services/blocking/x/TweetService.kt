@@ -6,22 +6,21 @@ import com.google.errorprone.annotations.MustBeClosed
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
+import com.x_twitter_scraper.api.models.PaginatedTweets
+import com.x_twitter_scraper.api.models.PaginatedUsers
 import com.x_twitter_scraper.api.models.x.tweets.TweetCreateParams
 import com.x_twitter_scraper.api.models.x.tweets.TweetCreateResponse
+import com.x_twitter_scraper.api.models.x.tweets.TweetDeleteParams
+import com.x_twitter_scraper.api.models.x.tweets.TweetDeleteResponse
 import com.x_twitter_scraper.api.models.x.tweets.TweetGetFavoritersParams
-import com.x_twitter_scraper.api.models.x.tweets.TweetGetFavoritersResponse
 import com.x_twitter_scraper.api.models.x.tweets.TweetGetQuotesParams
-import com.x_twitter_scraper.api.models.x.tweets.TweetGetQuotesResponse
 import com.x_twitter_scraper.api.models.x.tweets.TweetGetRepliesParams
-import com.x_twitter_scraper.api.models.x.tweets.TweetGetRepliesResponse
 import com.x_twitter_scraper.api.models.x.tweets.TweetGetRetweetersParams
-import com.x_twitter_scraper.api.models.x.tweets.TweetGetRetweetersResponse
 import com.x_twitter_scraper.api.models.x.tweets.TweetGetThreadParams
-import com.x_twitter_scraper.api.models.x.tweets.TweetGetThreadResponse
 import com.x_twitter_scraper.api.models.x.tweets.TweetListParams
-import com.x_twitter_scraper.api.models.x.tweets.TweetListResponse
+import com.x_twitter_scraper.api.models.x.tweets.TweetRetrieveParams
+import com.x_twitter_scraper.api.models.x.tweets.TweetRetrieveResponse
 import com.x_twitter_scraper.api.models.x.tweets.TweetSearchParams
-import com.x_twitter_scraper.api.models.x.tweets.TweetSearchResponse
 import com.x_twitter_scraper.api.services.blocking.x.tweets.LikeService
 import com.x_twitter_scraper.api.services.blocking.x.tweets.RetweetService
 
@@ -39,8 +38,10 @@ interface TweetService {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): TweetService
 
+    /** X write actions (tweets, likes, follows, DMs) */
     fun like(): LikeService
 
+    /** X write actions (tweets, likes, follows, DMs) */
     fun retweet(): RetweetService
 
     /** Create tweet */
@@ -49,27 +50,57 @@ interface TweetService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): TweetCreateResponse
 
+    /** Look up tweet */
+    fun retrieve(
+        id: String,
+        params: TweetRetrieveParams = TweetRetrieveParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): TweetRetrieveResponse = retrieve(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see retrieve */
+    fun retrieve(
+        params: TweetRetrieveParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): TweetRetrieveResponse
+
+    /** @see retrieve */
+    fun retrieve(id: String, requestOptions: RequestOptions): TweetRetrieveResponse =
+        retrieve(id, TweetRetrieveParams.none(), requestOptions)
+
     /** Get multiple tweets by IDs */
     fun list(
         params: TweetListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): TweetListResponse
+    ): PaginatedTweets
+
+    /** Delete tweet */
+    fun delete(
+        id: String,
+        params: TweetDeleteParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): TweetDeleteResponse = delete(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see delete */
+    fun delete(
+        params: TweetDeleteParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): TweetDeleteResponse
 
     /** Get users who liked a tweet */
     fun getFavoriters(
         id: String,
         params: TweetGetFavoritersParams = TweetGetFavoritersParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): TweetGetFavoritersResponse = getFavoriters(params.toBuilder().id(id).build(), requestOptions)
+    ): PaginatedUsers = getFavoriters(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see getFavoriters */
     fun getFavoriters(
         params: TweetGetFavoritersParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): TweetGetFavoritersResponse
+    ): PaginatedUsers
 
     /** @see getFavoriters */
-    fun getFavoriters(id: String, requestOptions: RequestOptions): TweetGetFavoritersResponse =
+    fun getFavoriters(id: String, requestOptions: RequestOptions): PaginatedUsers =
         getFavoriters(id, TweetGetFavoritersParams.none(), requestOptions)
 
     /** Get quote tweets of a tweet */
@@ -77,16 +108,16 @@ interface TweetService {
         id: String,
         params: TweetGetQuotesParams = TweetGetQuotesParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): TweetGetQuotesResponse = getQuotes(params.toBuilder().id(id).build(), requestOptions)
+    ): PaginatedTweets = getQuotes(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see getQuotes */
     fun getQuotes(
         params: TweetGetQuotesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): TweetGetQuotesResponse
+    ): PaginatedTweets
 
     /** @see getQuotes */
-    fun getQuotes(id: String, requestOptions: RequestOptions): TweetGetQuotesResponse =
+    fun getQuotes(id: String, requestOptions: RequestOptions): PaginatedTweets =
         getQuotes(id, TweetGetQuotesParams.none(), requestOptions)
 
     /** Get replies to a tweet */
@@ -94,16 +125,16 @@ interface TweetService {
         id: String,
         params: TweetGetRepliesParams = TweetGetRepliesParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): TweetGetRepliesResponse = getReplies(params.toBuilder().id(id).build(), requestOptions)
+    ): PaginatedTweets = getReplies(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see getReplies */
     fun getReplies(
         params: TweetGetRepliesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): TweetGetRepliesResponse
+    ): PaginatedTweets
 
     /** @see getReplies */
-    fun getReplies(id: String, requestOptions: RequestOptions): TweetGetRepliesResponse =
+    fun getReplies(id: String, requestOptions: RequestOptions): PaginatedTweets =
         getReplies(id, TweetGetRepliesParams.none(), requestOptions)
 
     /** Get users who retweeted a tweet */
@@ -111,16 +142,16 @@ interface TweetService {
         id: String,
         params: TweetGetRetweetersParams = TweetGetRetweetersParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): TweetGetRetweetersResponse = getRetweeters(params.toBuilder().id(id).build(), requestOptions)
+    ): PaginatedUsers = getRetweeters(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see getRetweeters */
     fun getRetweeters(
         params: TweetGetRetweetersParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): TweetGetRetweetersResponse
+    ): PaginatedUsers
 
     /** @see getRetweeters */
-    fun getRetweeters(id: String, requestOptions: RequestOptions): TweetGetRetweetersResponse =
+    fun getRetweeters(id: String, requestOptions: RequestOptions): PaginatedUsers =
         getRetweeters(id, TweetGetRetweetersParams.none(), requestOptions)
 
     /** Get thread context for a tweet */
@@ -128,23 +159,23 @@ interface TweetService {
         id: String,
         params: TweetGetThreadParams = TweetGetThreadParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): TweetGetThreadResponse = getThread(params.toBuilder().id(id).build(), requestOptions)
+    ): PaginatedTweets = getThread(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see getThread */
     fun getThread(
         params: TweetGetThreadParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): TweetGetThreadResponse
+    ): PaginatedTweets
 
     /** @see getThread */
-    fun getThread(id: String, requestOptions: RequestOptions): TweetGetThreadResponse =
+    fun getThread(id: String, requestOptions: RequestOptions): PaginatedTweets =
         getThread(id, TweetGetThreadParams.none(), requestOptions)
 
     /** Search tweets */
     fun search(
         params: TweetSearchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): TweetSearchResponse
+    ): PaginatedTweets
 
     /** A view of [TweetService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -156,8 +187,10 @@ interface TweetService {
          */
         fun withOptions(modifier: (ClientOptions.Builder) -> Unit): TweetService.WithRawResponse
 
+        /** X write actions (tweets, likes, follows, DMs) */
         fun like(): LikeService.WithRawResponse
 
+        /** X write actions (tweets, likes, follows, DMs) */
         fun retweet(): RetweetService.WithRawResponse
 
         /**
@@ -171,6 +204,33 @@ interface TweetService {
         ): HttpResponseFor<TweetCreateResponse>
 
         /**
+         * Returns a raw HTTP response for `get /x/tweets/{id}`, but is otherwise the same as
+         * [TweetService.retrieve].
+         */
+        @MustBeClosed
+        fun retrieve(
+            id: String,
+            params: TweetRetrieveParams = TweetRetrieveParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<TweetRetrieveResponse> =
+            retrieve(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see retrieve */
+        @MustBeClosed
+        fun retrieve(
+            params: TweetRetrieveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<TweetRetrieveResponse>
+
+        /** @see retrieve */
+        @MustBeClosed
+        fun retrieve(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<TweetRetrieveResponse> =
+            retrieve(id, TweetRetrieveParams.none(), requestOptions)
+
+        /**
          * Returns a raw HTTP response for `get /x/tweets`, but is otherwise the same as
          * [TweetService.list].
          */
@@ -178,7 +238,26 @@ interface TweetService {
         fun list(
             params: TweetListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TweetListResponse>
+        ): HttpResponseFor<PaginatedTweets>
+
+        /**
+         * Returns a raw HTTP response for `delete /x/tweets/{id}`, but is otherwise the same as
+         * [TweetService.delete].
+         */
+        @MustBeClosed
+        fun delete(
+            id: String,
+            params: TweetDeleteParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<TweetDeleteResponse> =
+            delete(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see delete */
+        @MustBeClosed
+        fun delete(
+            params: TweetDeleteParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<TweetDeleteResponse>
 
         /**
          * Returns a raw HTTP response for `get /x/tweets/{id}/favoriters`, but is otherwise the
@@ -189,7 +268,7 @@ interface TweetService {
             id: String,
             params: TweetGetFavoritersParams = TweetGetFavoritersParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TweetGetFavoritersResponse> =
+        ): HttpResponseFor<PaginatedUsers> =
             getFavoriters(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see getFavoriters */
@@ -197,14 +276,14 @@ interface TweetService {
         fun getFavoriters(
             params: TweetGetFavoritersParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TweetGetFavoritersResponse>
+        ): HttpResponseFor<PaginatedUsers>
 
         /** @see getFavoriters */
         @MustBeClosed
         fun getFavoriters(
             id: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<TweetGetFavoritersResponse> =
+        ): HttpResponseFor<PaginatedUsers> =
             getFavoriters(id, TweetGetFavoritersParams.none(), requestOptions)
 
         /**
@@ -216,7 +295,7 @@ interface TweetService {
             id: String,
             params: TweetGetQuotesParams = TweetGetQuotesParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TweetGetQuotesResponse> =
+        ): HttpResponseFor<PaginatedTweets> =
             getQuotes(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see getQuotes */
@@ -224,14 +303,14 @@ interface TweetService {
         fun getQuotes(
             params: TweetGetQuotesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TweetGetQuotesResponse>
+        ): HttpResponseFor<PaginatedTweets>
 
         /** @see getQuotes */
         @MustBeClosed
         fun getQuotes(
             id: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<TweetGetQuotesResponse> =
+        ): HttpResponseFor<PaginatedTweets> =
             getQuotes(id, TweetGetQuotesParams.none(), requestOptions)
 
         /**
@@ -243,7 +322,7 @@ interface TweetService {
             id: String,
             params: TweetGetRepliesParams = TweetGetRepliesParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TweetGetRepliesResponse> =
+        ): HttpResponseFor<PaginatedTweets> =
             getReplies(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see getReplies */
@@ -251,14 +330,14 @@ interface TweetService {
         fun getReplies(
             params: TweetGetRepliesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TweetGetRepliesResponse>
+        ): HttpResponseFor<PaginatedTweets>
 
         /** @see getReplies */
         @MustBeClosed
         fun getReplies(
             id: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<TweetGetRepliesResponse> =
+        ): HttpResponseFor<PaginatedTweets> =
             getReplies(id, TweetGetRepliesParams.none(), requestOptions)
 
         /**
@@ -270,7 +349,7 @@ interface TweetService {
             id: String,
             params: TweetGetRetweetersParams = TweetGetRetweetersParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TweetGetRetweetersResponse> =
+        ): HttpResponseFor<PaginatedUsers> =
             getRetweeters(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see getRetweeters */
@@ -278,14 +357,14 @@ interface TweetService {
         fun getRetweeters(
             params: TweetGetRetweetersParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TweetGetRetweetersResponse>
+        ): HttpResponseFor<PaginatedUsers>
 
         /** @see getRetweeters */
         @MustBeClosed
         fun getRetweeters(
             id: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<TweetGetRetweetersResponse> =
+        ): HttpResponseFor<PaginatedUsers> =
             getRetweeters(id, TweetGetRetweetersParams.none(), requestOptions)
 
         /**
@@ -297,7 +376,7 @@ interface TweetService {
             id: String,
             params: TweetGetThreadParams = TweetGetThreadParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TweetGetThreadResponse> =
+        ): HttpResponseFor<PaginatedTweets> =
             getThread(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see getThread */
@@ -305,14 +384,14 @@ interface TweetService {
         fun getThread(
             params: TweetGetThreadParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TweetGetThreadResponse>
+        ): HttpResponseFor<PaginatedTweets>
 
         /** @see getThread */
         @MustBeClosed
         fun getThread(
             id: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<TweetGetThreadResponse> =
+        ): HttpResponseFor<PaginatedTweets> =
             getThread(id, TweetGetThreadParams.none(), requestOptions)
 
         /**
@@ -323,6 +402,6 @@ interface TweetService {
         fun search(
             params: TweetSearchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TweetSearchResponse>
+        ): HttpResponseFor<PaginatedTweets>
     }
 }

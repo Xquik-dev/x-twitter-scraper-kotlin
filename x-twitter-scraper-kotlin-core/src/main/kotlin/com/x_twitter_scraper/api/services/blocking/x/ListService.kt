@@ -6,12 +6,11 @@ import com.google.errorprone.annotations.MustBeClosed
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
+import com.x_twitter_scraper.api.models.PaginatedTweets
+import com.x_twitter_scraper.api.models.PaginatedUsers
 import com.x_twitter_scraper.api.models.x.lists.ListRetrieveFollowersParams
-import com.x_twitter_scraper.api.models.x.lists.ListRetrieveFollowersResponse
 import com.x_twitter_scraper.api.models.x.lists.ListRetrieveMembersParams
-import com.x_twitter_scraper.api.models.x.lists.ListRetrieveMembersResponse
 import com.x_twitter_scraper.api.models.x.lists.ListRetrieveTweetsParams
-import com.x_twitter_scraper.api.models.x.lists.ListRetrieveTweetsResponse
 
 /** X data lookups (subscription required) */
 interface ListService {
@@ -33,20 +32,16 @@ interface ListService {
         id: String,
         params: ListRetrieveFollowersParams = ListRetrieveFollowersParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): ListRetrieveFollowersResponse =
-        retrieveFollowers(params.toBuilder().id(id).build(), requestOptions)
+    ): PaginatedUsers = retrieveFollowers(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see retrieveFollowers */
     fun retrieveFollowers(
         params: ListRetrieveFollowersParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): ListRetrieveFollowersResponse
+    ): PaginatedUsers
 
     /** @see retrieveFollowers */
-    fun retrieveFollowers(
-        id: String,
-        requestOptions: RequestOptions,
-    ): ListRetrieveFollowersResponse =
+    fun retrieveFollowers(id: String, requestOptions: RequestOptions): PaginatedUsers =
         retrieveFollowers(id, ListRetrieveFollowersParams.none(), requestOptions)
 
     /** Get list members */
@@ -54,17 +49,16 @@ interface ListService {
         id: String,
         params: ListRetrieveMembersParams = ListRetrieveMembersParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): ListRetrieveMembersResponse =
-        retrieveMembers(params.toBuilder().id(id).build(), requestOptions)
+    ): PaginatedUsers = retrieveMembers(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see retrieveMembers */
     fun retrieveMembers(
         params: ListRetrieveMembersParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): ListRetrieveMembersResponse
+    ): PaginatedUsers
 
     /** @see retrieveMembers */
-    fun retrieveMembers(id: String, requestOptions: RequestOptions): ListRetrieveMembersResponse =
+    fun retrieveMembers(id: String, requestOptions: RequestOptions): PaginatedUsers =
         retrieveMembers(id, ListRetrieveMembersParams.none(), requestOptions)
 
     /** Get list tweets */
@@ -72,17 +66,16 @@ interface ListService {
         id: String,
         params: ListRetrieveTweetsParams = ListRetrieveTweetsParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): ListRetrieveTweetsResponse =
-        retrieveTweets(params.toBuilder().id(id).build(), requestOptions)
+    ): PaginatedTweets = retrieveTweets(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see retrieveTweets */
     fun retrieveTweets(
         params: ListRetrieveTweetsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): ListRetrieveTweetsResponse
+    ): PaginatedTweets
 
     /** @see retrieveTweets */
-    fun retrieveTweets(id: String, requestOptions: RequestOptions): ListRetrieveTweetsResponse =
+    fun retrieveTweets(id: String, requestOptions: RequestOptions): PaginatedTweets =
         retrieveTweets(id, ListRetrieveTweetsParams.none(), requestOptions)
 
     /** A view of [ListService] that provides access to raw HTTP responses for each method. */
@@ -104,7 +97,7 @@ interface ListService {
             id: String,
             params: ListRetrieveFollowersParams = ListRetrieveFollowersParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<ListRetrieveFollowersResponse> =
+        ): HttpResponseFor<PaginatedUsers> =
             retrieveFollowers(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see retrieveFollowers */
@@ -112,14 +105,14 @@ interface ListService {
         fun retrieveFollowers(
             params: ListRetrieveFollowersParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<ListRetrieveFollowersResponse>
+        ): HttpResponseFor<PaginatedUsers>
 
         /** @see retrieveFollowers */
         @MustBeClosed
         fun retrieveFollowers(
             id: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<ListRetrieveFollowersResponse> =
+        ): HttpResponseFor<PaginatedUsers> =
             retrieveFollowers(id, ListRetrieveFollowersParams.none(), requestOptions)
 
         /**
@@ -131,7 +124,7 @@ interface ListService {
             id: String,
             params: ListRetrieveMembersParams = ListRetrieveMembersParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<ListRetrieveMembersResponse> =
+        ): HttpResponseFor<PaginatedUsers> =
             retrieveMembers(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see retrieveMembers */
@@ -139,14 +132,14 @@ interface ListService {
         fun retrieveMembers(
             params: ListRetrieveMembersParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<ListRetrieveMembersResponse>
+        ): HttpResponseFor<PaginatedUsers>
 
         /** @see retrieveMembers */
         @MustBeClosed
         fun retrieveMembers(
             id: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<ListRetrieveMembersResponse> =
+        ): HttpResponseFor<PaginatedUsers> =
             retrieveMembers(id, ListRetrieveMembersParams.none(), requestOptions)
 
         /**
@@ -158,7 +151,7 @@ interface ListService {
             id: String,
             params: ListRetrieveTweetsParams = ListRetrieveTweetsParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<ListRetrieveTweetsResponse> =
+        ): HttpResponseFor<PaginatedTweets> =
             retrieveTweets(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see retrieveTweets */
@@ -166,14 +159,14 @@ interface ListService {
         fun retrieveTweets(
             params: ListRetrieveTweetsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<ListRetrieveTweetsResponse>
+        ): HttpResponseFor<PaginatedTweets>
 
         /** @see retrieveTweets */
         @MustBeClosed
         fun retrieveTweets(
             id: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<ListRetrieveTweetsResponse> =
+        ): HttpResponseFor<PaginatedTweets> =
             retrieveTweets(id, ListRetrieveTweetsParams.none(), requestOptions)
     }
 }

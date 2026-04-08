@@ -21,12 +21,12 @@ internal class ListServiceAsyncTest {
                 .build()
         val listServiceAsync = client.x().lists()
 
-        val response =
+        val paginatedUsers =
             listServiceAsync.retrieveFollowers(
                 ListRetrieveFollowersParams.builder().id("id").cursor("cursor").build()
             )
 
-        response.validate()
+        paginatedUsers.validate()
     }
 
     @Disabled("Mock server tests are disabled")
@@ -39,12 +39,12 @@ internal class ListServiceAsyncTest {
                 .build()
         val listServiceAsync = client.x().lists()
 
-        val response =
+        val paginatedUsers =
             listServiceAsync.retrieveMembers(
                 ListRetrieveMembersParams.builder().id("id").cursor("cursor").build()
             )
 
-        response.validate()
+        paginatedUsers.validate()
     }
 
     @Disabled("Mock server tests are disabled")
@@ -57,7 +57,7 @@ internal class ListServiceAsyncTest {
                 .build()
         val listServiceAsync = client.x().lists()
 
-        val response =
+        val paginatedTweets =
             listServiceAsync.retrieveTweets(
                 ListRetrieveTweetsParams.builder()
                     .id("id")
@@ -68,6 +68,6 @@ internal class ListServiceAsyncTest {
                     .build()
             )
 
-        response.validate()
+        paginatedTweets.validate()
     }
 }
