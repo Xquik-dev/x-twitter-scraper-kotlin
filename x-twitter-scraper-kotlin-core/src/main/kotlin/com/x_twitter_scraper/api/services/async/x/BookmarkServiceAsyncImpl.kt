@@ -15,7 +15,6 @@ import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.core.http.parseable
 import com.x_twitter_scraper.api.core.prepareAsync
 import com.x_twitter_scraper.api.models.PaginatedTweets
-import com.x_twitter_scraper.api.models.x.bookmarks.BookmarkListPageAsync
 import com.x_twitter_scraper.api.models.x.bookmarks.BookmarkListParams
 import com.x_twitter_scraper.api.models.x.bookmarks.BookmarkRetrieveFoldersParams
 import com.x_twitter_scraper.api.models.x.bookmarks.BookmarkRetrieveFoldersResponse
@@ -36,7 +35,7 @@ class BookmarkServiceAsyncImpl internal constructor(private val clientOptions: C
     override suspend fun list(
         params: BookmarkListParams,
         requestOptions: RequestOptions,
-    ): BookmarkListPageAsync =
+    ): PaginatedTweets =
         // get /x/bookmarks
         withRawResponse().list(params, requestOptions).parse()
 
@@ -66,7 +65,7 @@ class BookmarkServiceAsyncImpl internal constructor(private val clientOptions: C
         override suspend fun list(
             params: BookmarkListParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<BookmarkListPageAsync> {
+        ): HttpResponseFor<PaginatedTweets> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -83,13 +82,6 @@ class BookmarkServiceAsyncImpl internal constructor(private val clientOptions: C
                         if (requestOptions.responseValidation!!) {
                             it.validate()
                         }
-                    }
-                    .let {
-                        BookmarkListPageAsync.builder()
-                            .service(BookmarkServiceAsyncImpl(clientOptions))
-                            .params(params)
-                            .response(it)
-                            .build()
                     }
             }
         }
