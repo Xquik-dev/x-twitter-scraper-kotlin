@@ -6,8 +6,10 @@ import com.google.errorprone.annotations.MustBeClosed
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
+import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListByCommunityPage
+import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListByCommunityParams
+import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListPage
 import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListParams
-import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListResponse
 
 /** X data lookups (subscription required) */
 interface TweetService {
@@ -28,7 +30,24 @@ interface TweetService {
     fun list(
         params: TweetListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): TweetListResponse
+    ): TweetListPage
+
+    /** Get community tweets */
+    fun listByCommunity(
+        id: String,
+        params: TweetListByCommunityParams = TweetListByCommunityParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): TweetListByCommunityPage = listByCommunity(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see listByCommunity */
+    fun listByCommunity(
+        params: TweetListByCommunityParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): TweetListByCommunityPage
+
+    /** @see listByCommunity */
+    fun listByCommunity(id: String, requestOptions: RequestOptions): TweetListByCommunityPage =
+        listByCommunity(id, TweetListByCommunityParams.none(), requestOptions)
 
     /** A view of [TweetService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -48,6 +67,33 @@ interface TweetService {
         fun list(
             params: TweetListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TweetListResponse>
+        ): HttpResponseFor<TweetListPage>
+
+        /**
+         * Returns a raw HTTP response for `get /x/communities/{id}/tweets`, but is otherwise the
+         * same as [TweetService.listByCommunity].
+         */
+        @MustBeClosed
+        fun listByCommunity(
+            id: String,
+            params: TweetListByCommunityParams = TweetListByCommunityParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<TweetListByCommunityPage> =
+            listByCommunity(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see listByCommunity */
+        @MustBeClosed
+        fun listByCommunity(
+            params: TweetListByCommunityParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<TweetListByCommunityPage>
+
+        /** @see listByCommunity */
+        @MustBeClosed
+        fun listByCommunity(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<TweetListByCommunityPage> =
+            listByCommunity(id, TweetListByCommunityParams.none(), requestOptions)
     }
 }

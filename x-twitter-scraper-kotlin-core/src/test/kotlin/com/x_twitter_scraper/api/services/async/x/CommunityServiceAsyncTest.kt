@@ -82,12 +82,12 @@ internal class CommunityServiceAsyncTest {
                 .build()
         val communityServiceAsync = client.x().communities()
 
-        val response =
+        val paginatedUsers =
             communityServiceAsync.retrieveMembers(
                 CommunityRetrieveMembersParams.builder().id("id").cursor("cursor").build()
             )
 
-        response.validate()
+        paginatedUsers.validate()
     }
 
     @Disabled("Mock server tests are disabled")
@@ -100,12 +100,12 @@ internal class CommunityServiceAsyncTest {
                 .build()
         val communityServiceAsync = client.x().communities()
 
-        val response =
+        val paginatedUsers =
             communityServiceAsync.retrieveModerators(
                 CommunityRetrieveModeratorsParams.builder().id("id").cursor("cursor").build()
             )
 
-        response.validate()
+        paginatedUsers.validate()
     }
 
     @Disabled("Mock server tests are disabled")
@@ -118,7 +118,7 @@ internal class CommunityServiceAsyncTest {
                 .build()
         val communityServiceAsync = client.x().communities()
 
-        val response =
+        val paginatedTweets =
             communityServiceAsync.retrieveSearch(
                 CommunityRetrieveSearchParams.builder()
                     .q("q")
@@ -127,6 +127,6 @@ internal class CommunityServiceAsyncTest {
                     .build()
             )
 
-        response.validate()
+        paginatedTweets.validate()
     }
 }

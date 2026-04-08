@@ -4,6 +4,8 @@ package com.x_twitter_scraper.api.services.async
 
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
+import com.x_twitter_scraper.api.core.checkRequired
+import com.x_twitter_scraper.api.core.handlers.emptyHandler
 import com.x_twitter_scraper.api.core.handlers.errorBodyHandler
 import com.x_twitter_scraper.api.core.handlers.errorHandler
 import com.x_twitter_scraper.api.core.handlers.jsonHandler
@@ -16,11 +18,16 @@ import com.x_twitter_scraper.api.core.http.json
 import com.x_twitter_scraper.api.core.http.parseable
 import com.x_twitter_scraper.api.core.prepareAsync
 import com.x_twitter_scraper.api.models.styles.StyleAnalyzeParams
-import com.x_twitter_scraper.api.models.styles.StyleAnalyzeResponse
 import com.x_twitter_scraper.api.models.styles.StyleCompareParams
 import com.x_twitter_scraper.api.models.styles.StyleCompareResponse
+import com.x_twitter_scraper.api.models.styles.StyleDeleteParams
+import com.x_twitter_scraper.api.models.styles.StyleGetPerformanceParams
+import com.x_twitter_scraper.api.models.styles.StyleGetPerformanceResponse
 import com.x_twitter_scraper.api.models.styles.StyleListParams
 import com.x_twitter_scraper.api.models.styles.StyleListResponse
+import com.x_twitter_scraper.api.models.styles.StyleProfile
+import com.x_twitter_scraper.api.models.styles.StyleRetrieveParams
+import com.x_twitter_scraper.api.models.styles.StyleUpdateParams
 
 /** Tweet composition, drafts, writing styles & radar */
 class StyleServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -35,6 +42,20 @@ class StyleServiceAsyncImpl internal constructor(private val clientOptions: Clie
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): StyleServiceAsync =
         StyleServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
 
+    override suspend fun retrieve(
+        params: StyleRetrieveParams,
+        requestOptions: RequestOptions,
+    ): StyleProfile =
+        // get /styles/{id}
+        withRawResponse().retrieve(params, requestOptions).parse()
+
+    override suspend fun update(
+        params: StyleUpdateParams,
+        requestOptions: RequestOptions,
+    ): StyleProfile =
+        // put /styles/{id}
+        withRawResponse().update(params, requestOptions).parse()
+
     override suspend fun list(
         params: StyleListParams,
         requestOptions: RequestOptions,
@@ -42,10 +63,15 @@ class StyleServiceAsyncImpl internal constructor(private val clientOptions: Clie
         // get /styles
         withRawResponse().list(params, requestOptions).parse()
 
+    override suspend fun delete(params: StyleDeleteParams, requestOptions: RequestOptions) {
+        // delete /styles/{id}
+        withRawResponse().delete(params, requestOptions)
+    }
+
     override suspend fun analyze(
         params: StyleAnalyzeParams,
         requestOptions: RequestOptions,
-    ): StyleAnalyzeResponse =
+    ): StyleProfile =
         // post /styles
         withRawResponse().analyze(params, requestOptions).parse()
 
@@ -55,6 +81,13 @@ class StyleServiceAsyncImpl internal constructor(private val clientOptions: Clie
     ): StyleCompareResponse =
         // get /styles/compare
         withRawResponse().compare(params, requestOptions).parse()
+
+    override suspend fun getPerformance(
+        params: StyleGetPerformanceParams,
+        requestOptions: RequestOptions,
+    ): StyleGetPerformanceResponse =
+        // get /styles/{id}/performance
+        withRawResponse().getPerformance(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         StyleServiceAsync.WithRawResponse {
@@ -68,6 +101,67 @@ class StyleServiceAsyncImpl internal constructor(private val clientOptions: Clie
             StyleServiceAsyncImpl.WithRawResponseImpl(
                 clientOptions.toBuilder().apply(modifier).build()
             )
+
+        private val retrieveHandler: Handler<StyleProfile> =
+            jsonHandler<StyleProfile>(clientOptions.jsonMapper)
+
+        override suspend fun retrieve(
+            params: StyleRetrieveParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<StyleProfile> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("styles", params._pathParam(0))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { retrieveHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val updateHandler: Handler<StyleProfile> =
+            jsonHandler<StyleProfile>(clientOptions.jsonMapper)
+
+        override suspend fun update(
+            params: StyleUpdateParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<StyleProfile> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("styles", params._pathParam(0))
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { updateHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
 
         private val listHandler: Handler<StyleListResponse> =
             jsonHandler<StyleListResponse>(clientOptions.jsonMapper)
@@ -96,13 +190,37 @@ class StyleServiceAsyncImpl internal constructor(private val clientOptions: Clie
             }
         }
 
-        private val analyzeHandler: Handler<StyleAnalyzeResponse> =
-            jsonHandler<StyleAnalyzeResponse>(clientOptions.jsonMapper)
+        private val deleteHandler: Handler<Void?> = emptyHandler()
+
+        override suspend fun delete(
+            params: StyleDeleteParams,
+            requestOptions: RequestOptions,
+        ): HttpResponse {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.DELETE)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("styles", params._pathParam(0))
+                    .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response.use { deleteHandler.handle(it) }
+            }
+        }
+
+        private val analyzeHandler: Handler<StyleProfile> =
+            jsonHandler<StyleProfile>(clientOptions.jsonMapper)
 
         override suspend fun analyze(
             params: StyleAnalyzeParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<StyleAnalyzeResponse> {
+        ): HttpResponseFor<StyleProfile> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -143,6 +261,36 @@ class StyleServiceAsyncImpl internal constructor(private val clientOptions: Clie
             return errorHandler.handle(response).parseable {
                 response
                     .use { compareHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val getPerformanceHandler: Handler<StyleGetPerformanceResponse> =
+            jsonHandler<StyleGetPerformanceResponse>(clientOptions.jsonMapper)
+
+        override suspend fun getPerformance(
+            params: StyleGetPerformanceParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<StyleGetPerformanceResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("styles", params._pathParam(0), "performance")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { getPerformanceHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()

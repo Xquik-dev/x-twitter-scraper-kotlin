@@ -6,8 +6,10 @@ import com.google.errorprone.annotations.MustBeClosed
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
+import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListByCommunityPageAsync
+import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListByCommunityParams
+import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListPageAsync
 import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListParams
-import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListResponse
 
 /** X data lookups (subscription required) */
 interface TweetServiceAsync {
@@ -28,7 +30,28 @@ interface TweetServiceAsync {
     suspend fun list(
         params: TweetListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): TweetListResponse
+    ): TweetListPageAsync
+
+    /** Get community tweets */
+    suspend fun listByCommunity(
+        id: String,
+        params: TweetListByCommunityParams = TweetListByCommunityParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): TweetListByCommunityPageAsync =
+        listByCommunity(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see listByCommunity */
+    suspend fun listByCommunity(
+        params: TweetListByCommunityParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): TweetListByCommunityPageAsync
+
+    /** @see listByCommunity */
+    suspend fun listByCommunity(
+        id: String,
+        requestOptions: RequestOptions,
+    ): TweetListByCommunityPageAsync =
+        listByCommunity(id, TweetListByCommunityParams.none(), requestOptions)
 
     /** A view of [TweetServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -50,6 +73,33 @@ interface TweetServiceAsync {
         suspend fun list(
             params: TweetListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TweetListResponse>
+        ): HttpResponseFor<TweetListPageAsync>
+
+        /**
+         * Returns a raw HTTP response for `get /x/communities/{id}/tweets`, but is otherwise the
+         * same as [TweetServiceAsync.listByCommunity].
+         */
+        @MustBeClosed
+        suspend fun listByCommunity(
+            id: String,
+            params: TweetListByCommunityParams = TweetListByCommunityParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<TweetListByCommunityPageAsync> =
+            listByCommunity(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see listByCommunity */
+        @MustBeClosed
+        suspend fun listByCommunity(
+            params: TweetListByCommunityParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<TweetListByCommunityPageAsync>
+
+        /** @see listByCommunity */
+        @MustBeClosed
+        suspend fun listByCommunity(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<TweetListByCommunityPageAsync> =
+            listByCommunity(id, TweetListByCommunityParams.none(), requestOptions)
     }
 }

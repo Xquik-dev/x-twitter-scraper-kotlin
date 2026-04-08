@@ -19,11 +19,23 @@ internal class TweetServiceAsyncTest {
                 .build()
         val tweetServiceAsync = client.x().communities().tweets()
 
-        val tweets =
-            tweetServiceAsync.list(
-                TweetListParams.builder().q("q").cursor("cursor").queryType("queryType").build()
-            )
+        val page = tweetServiceAsync.list(TweetListParams.builder().q("q").build())
 
-        tweets.validate()
+        page.response().validate()
+    }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
+    suspend fun listByCommunity() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val tweetServiceAsync = client.x().communities().tweets()
+
+        val page = tweetServiceAsync.listByCommunity("id")
+
+        page.response().validate()
     }
 }
