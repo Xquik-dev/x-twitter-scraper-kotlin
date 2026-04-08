@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.3.0 (2026-04-08)
+
+Full Changelog: [v0.2.0...v0.3.0](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.2.0...v0.3.0)
+
+### Features
+
+* **api:** api update ([290e4a9](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/290e4a9765c8bb118d1cd1dd4f8043a4319c408b))
+* **api:** api update ([f91e85f](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/f91e85ff8d37363b4fb5c7d37685181088308e93))
+* **api:** api update ([bb34fdc](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/bb34fdce79d70abc817e5bb418b85f9c5e4c64b8))
+* **api:** api update ([b6b837e](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/b6b837e074c07ccd513edb9a96063d3525cdd1fb))
+* **api:** api update ([da8016a](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/da8016ac13bde85d698b0627ebe5fbb49c79e67e))
+
 ## 0.2.0 (2026-04-01)
 
 Full Changelog: [v0.1.0...v0.2.0](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.1.0...v0.2.0)
