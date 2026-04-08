@@ -16,9 +16,7 @@ import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.core.http.parseable
 import com.x_twitter_scraper.api.core.prepareAsync
 import com.x_twitter_scraper.api.models.PaginatedTweets
-import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListByCommunityPageAsync
 import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListByCommunityParams
-import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListPageAsync
 import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListParams
 
 /** X data lookups (subscription required) */
@@ -37,14 +35,14 @@ class TweetServiceAsyncImpl internal constructor(private val clientOptions: Clie
     override suspend fun list(
         params: TweetListParams,
         requestOptions: RequestOptions,
-    ): TweetListPageAsync =
+    ): PaginatedTweets =
         // get /x/communities/tweets
         withRawResponse().list(params, requestOptions).parse()
 
     override suspend fun listByCommunity(
         params: TweetListByCommunityParams,
         requestOptions: RequestOptions,
-    ): TweetListByCommunityPageAsync =
+    ): PaginatedTweets =
         // get /x/communities/{id}/tweets
         withRawResponse().listByCommunity(params, requestOptions).parse()
 
@@ -67,7 +65,7 @@ class TweetServiceAsyncImpl internal constructor(private val clientOptions: Clie
         override suspend fun list(
             params: TweetListParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<TweetListPageAsync> {
+        ): HttpResponseFor<PaginatedTweets> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -85,13 +83,6 @@ class TweetServiceAsyncImpl internal constructor(private val clientOptions: Clie
                             it.validate()
                         }
                     }
-                    .let {
-                        TweetListPageAsync.builder()
-                            .service(TweetServiceAsyncImpl(clientOptions))
-                            .params(params)
-                            .response(it)
-                            .build()
-                    }
             }
         }
 
@@ -101,7 +92,7 @@ class TweetServiceAsyncImpl internal constructor(private val clientOptions: Clie
         override suspend fun listByCommunity(
             params: TweetListByCommunityParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<TweetListByCommunityPageAsync> {
+        ): HttpResponseFor<PaginatedTweets> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id())
@@ -121,13 +112,6 @@ class TweetServiceAsyncImpl internal constructor(private val clientOptions: Clie
                         if (requestOptions.responseValidation!!) {
                             it.validate()
                         }
-                    }
-                    .let {
-                        TweetListByCommunityPageAsync.builder()
-                            .service(TweetServiceAsyncImpl(clientOptions))
-                            .params(params)
-                            .response(it)
-                            .build()
                     }
             }
         }

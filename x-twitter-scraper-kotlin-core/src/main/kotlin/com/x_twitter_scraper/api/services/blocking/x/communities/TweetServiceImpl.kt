@@ -16,9 +16,7 @@ import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.core.http.parseable
 import com.x_twitter_scraper.api.core.prepare
 import com.x_twitter_scraper.api.models.PaginatedTweets
-import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListByCommunityPage
 import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListByCommunityParams
-import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListPage
 import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListParams
 
 /** X data lookups (subscription required) */
@@ -34,14 +32,14 @@ class TweetServiceImpl internal constructor(private val clientOptions: ClientOpt
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): TweetService =
         TweetServiceImpl(clientOptions.toBuilder().apply(modifier).build())
 
-    override fun list(params: TweetListParams, requestOptions: RequestOptions): TweetListPage =
+    override fun list(params: TweetListParams, requestOptions: RequestOptions): PaginatedTweets =
         // get /x/communities/tweets
         withRawResponse().list(params, requestOptions).parse()
 
     override fun listByCommunity(
         params: TweetListByCommunityParams,
         requestOptions: RequestOptions,
-    ): TweetListByCommunityPage =
+    ): PaginatedTweets =
         // get /x/communities/{id}/tweets
         withRawResponse().listByCommunity(params, requestOptions).parse()
 
@@ -62,7 +60,7 @@ class TweetServiceImpl internal constructor(private val clientOptions: ClientOpt
         override fun list(
             params: TweetListParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<TweetListPage> {
+        ): HttpResponseFor<PaginatedTweets> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -80,13 +78,6 @@ class TweetServiceImpl internal constructor(private val clientOptions: ClientOpt
                             it.validate()
                         }
                     }
-                    .let {
-                        TweetListPage.builder()
-                            .service(TweetServiceImpl(clientOptions))
-                            .params(params)
-                            .response(it)
-                            .build()
-                    }
             }
         }
 
@@ -96,7 +87,7 @@ class TweetServiceImpl internal constructor(private val clientOptions: ClientOpt
         override fun listByCommunity(
             params: TweetListByCommunityParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<TweetListByCommunityPage> {
+        ): HttpResponseFor<PaginatedTweets> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id())
@@ -116,13 +107,6 @@ class TweetServiceImpl internal constructor(private val clientOptions: ClientOpt
                         if (requestOptions.responseValidation!!) {
                             it.validate()
                         }
-                    }
-                    .let {
-                        TweetListByCommunityPage.builder()
-                            .service(TweetServiceImpl(clientOptions))
-                            .params(params)
-                            .response(it)
-                            .build()
                     }
             }
         }

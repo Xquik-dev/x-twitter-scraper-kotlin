@@ -3,6 +3,7 @@
 package com.x_twitter_scraper.api.services.async.x
 
 import com.x_twitter_scraper.api.client.okhttp.XTwitterScraperOkHttpClientAsync
+import com.x_twitter_scraper.api.models.x.bookmarks.BookmarkListParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
@@ -18,9 +19,12 @@ internal class BookmarkServiceAsyncTest {
                 .build()
         val bookmarkServiceAsync = client.x().bookmarks()
 
-        val page = bookmarkServiceAsync.list()
+        val paginatedTweets =
+            bookmarkServiceAsync.list(
+                BookmarkListParams.builder().cursor("folders_value").folderId("folderId").build()
+            )
 
-        page.response().validate()
+        paginatedTweets.validate()
     }
 
     @Disabled("Mock server tests are disabled")

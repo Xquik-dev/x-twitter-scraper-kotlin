@@ -6,9 +6,8 @@ import com.google.errorprone.annotations.MustBeClosed
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
-import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListByCommunityPageAsync
+import com.x_twitter_scraper.api.models.PaginatedTweets
 import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListByCommunityParams
-import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListPageAsync
 import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListParams
 
 /** X data lookups (subscription required) */
@@ -30,27 +29,23 @@ interface TweetServiceAsync {
     suspend fun list(
         params: TweetListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): TweetListPageAsync
+    ): PaginatedTweets
 
     /** Get community tweets */
     suspend fun listByCommunity(
         id: String,
         params: TweetListByCommunityParams = TweetListByCommunityParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): TweetListByCommunityPageAsync =
-        listByCommunity(params.toBuilder().id(id).build(), requestOptions)
+    ): PaginatedTweets = listByCommunity(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see listByCommunity */
     suspend fun listByCommunity(
         params: TweetListByCommunityParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): TweetListByCommunityPageAsync
+    ): PaginatedTweets
 
     /** @see listByCommunity */
-    suspend fun listByCommunity(
-        id: String,
-        requestOptions: RequestOptions,
-    ): TweetListByCommunityPageAsync =
+    suspend fun listByCommunity(id: String, requestOptions: RequestOptions): PaginatedTweets =
         listByCommunity(id, TweetListByCommunityParams.none(), requestOptions)
 
     /** A view of [TweetServiceAsync] that provides access to raw HTTP responses for each method. */
@@ -73,7 +68,7 @@ interface TweetServiceAsync {
         suspend fun list(
             params: TweetListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TweetListPageAsync>
+        ): HttpResponseFor<PaginatedTweets>
 
         /**
          * Returns a raw HTTP response for `get /x/communities/{id}/tweets`, but is otherwise the
@@ -84,7 +79,7 @@ interface TweetServiceAsync {
             id: String,
             params: TweetListByCommunityParams = TweetListByCommunityParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TweetListByCommunityPageAsync> =
+        ): HttpResponseFor<PaginatedTweets> =
             listByCommunity(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see listByCommunity */
@@ -92,14 +87,14 @@ interface TweetServiceAsync {
         suspend fun listByCommunity(
             params: TweetListByCommunityParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TweetListByCommunityPageAsync>
+        ): HttpResponseFor<PaginatedTweets>
 
         /** @see listByCommunity */
         @MustBeClosed
         suspend fun listByCommunity(
             id: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<TweetListByCommunityPageAsync> =
+        ): HttpResponseFor<PaginatedTweets> =
             listByCommunity(id, TweetListByCommunityParams.none(), requestOptions)
     }
 }
