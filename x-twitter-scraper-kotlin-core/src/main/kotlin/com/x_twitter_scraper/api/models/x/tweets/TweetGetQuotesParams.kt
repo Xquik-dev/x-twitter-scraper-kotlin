@@ -21,16 +21,16 @@ private constructor(
 
     fun id(): String? = id
 
-    /** Pagination cursor */
+    /** Pagination cursor for quote tweets */
     fun cursor(): String? = cursor
 
-    /** Include replies (default false) */
+    /** Include reply quotes (default false) */
     fun includeReplies(): Boolean? = includeReplies
 
-    /** Unix timestamp - filter after */
+    /** Unix timestamp - return quotes posted after this time */
     fun sinceTime(): String? = sinceTime
 
-    /** Unix timestamp - filter before */
+    /** Unix timestamp - return quotes posted before this time */
     fun untilTime(): String? = untilTime
 
     /** Additional headers to send with the request. */
@@ -72,10 +72,10 @@ private constructor(
 
         fun id(id: String?) = apply { this.id = id }
 
-        /** Pagination cursor */
+        /** Pagination cursor for quote tweets */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
-        /** Include replies (default false) */
+        /** Include reply quotes (default false) */
         fun includeReplies(includeReplies: Boolean?) = apply {
             this.includeReplies = includeReplies
         }
@@ -87,10 +87,10 @@ private constructor(
          */
         fun includeReplies(includeReplies: Boolean) = includeReplies(includeReplies as Boolean?)
 
-        /** Unix timestamp - filter after */
+        /** Unix timestamp - return quotes posted after this time */
         fun sinceTime(sinceTime: String?) = apply { this.sinceTime = sinceTime }
 
-        /** Unix timestamp - filter before */
+        /** Unix timestamp - return quotes posted before this time */
         fun untilTime(untilTime: String?) = apply { this.untilTime = untilTime }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {

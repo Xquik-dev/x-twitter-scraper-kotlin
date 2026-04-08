@@ -38,6 +38,8 @@ private constructor(
     fun config(): Config = body.config()
 
     /**
+     * Array of event types to subscribe to.
+     *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -145,6 +147,7 @@ private constructor(
          */
         fun config(config: JsonField<Config>) = apply { body.config(config) }
 
+        /** Array of event types to subscribe to. */
         fun eventTypes(eventTypes: List<EventType>) = apply { body.eventTypes(eventTypes) }
 
         /**
@@ -361,6 +364,8 @@ private constructor(
         fun config(): Config = config.getRequired("config")
 
         /**
+         * Array of event types to subscribe to.
+         *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
          *   value).
@@ -468,6 +473,7 @@ private constructor(
              */
             fun config(config: JsonField<Config>) = apply { this.config = config }
 
+            /** Array of event types to subscribe to. */
             fun eventTypes(eventTypes: List<EventType>) = eventTypes(JsonField.of(eventTypes))
 
             /**
@@ -770,6 +776,7 @@ private constructor(
             "Config{chatId=$chatId, additionalProperties=$additionalProperties}"
     }
 
+    /** Type of monitor event fired when account activity occurs. */
     class EventType @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**

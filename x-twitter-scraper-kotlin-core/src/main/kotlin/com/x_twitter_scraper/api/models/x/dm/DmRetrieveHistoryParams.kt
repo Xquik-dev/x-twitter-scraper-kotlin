@@ -19,7 +19,7 @@ private constructor(
 
     fun userId(): String? = userId
 
-    /** Pagination cursor from previous response */
+    /** Pagination cursor for DM history */
     fun cursor(): String? = cursor
 
     /** Legacy pagination cursor (backward compat) */
@@ -60,7 +60,7 @@ private constructor(
 
         fun userId(userId: String?) = apply { this.userId = userId }
 
-        /** Pagination cursor from previous response */
+        /** Pagination cursor for DM history */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
         /** Legacy pagination cursor (backward compat) */

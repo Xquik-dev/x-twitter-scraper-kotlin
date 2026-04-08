@@ -162,6 +162,7 @@ private constructor(
      */
     internal fun validity(): Int = (keys.asKnown()?.sumOf { it.validity().toInt() } ?: 0)
 
+    /** API key metadata returned when listing keys. */
     class Key
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(

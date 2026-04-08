@@ -204,6 +204,7 @@ private constructor(
         (monitors.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
             (if (total.asKnown() == null) 0 else 1)
 
+    /** Account monitor that tracks activity for a given X user. */
     class Monitor
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
@@ -249,6 +250,8 @@ private constructor(
         fun createdAt(): OffsetDateTime = createdAt.getRequired("createdAt")
 
         /**
+         * Array of event types to subscribe to.
+         *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
          *   value).
@@ -397,6 +400,7 @@ private constructor(
                 this.createdAt = createdAt
             }
 
+            /** Array of event types to subscribe to. */
             fun eventTypes(eventTypes: List<EventType>) = eventTypes(JsonField.of(eventTypes))
 
             /**
@@ -541,6 +545,7 @@ private constructor(
                 (if (username.asKnown() == null) 0 else 1) +
                 (if (xUserId.asKnown() == null) 0 else 1)
 
+        /** Type of monitor event fired when account activity occurs. */
         class EventType @JsonCreator private constructor(private val value: JsonField<String>) :
             Enum {
 

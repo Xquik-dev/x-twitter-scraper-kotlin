@@ -18,6 +18,7 @@ private constructor(
 
     fun id(): String? = id
 
+    /** Maximum number of items to return (1-100, default 50) */
     fun limit(): Long? = limit
 
     /** Additional headers to send with the request. */
@@ -58,6 +59,7 @@ private constructor(
 
         fun id(id: String?) = apply { this.id = id }
 
+        /** Maximum number of items to return (1-100, default 50) */
         fun limit(limit: Long?) = apply { this.limit = limit }
 
         /**

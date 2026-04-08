@@ -18,6 +18,7 @@ import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 
+/** Full monitor event including payload data and optional X event ID. */
 class EventDetail
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
@@ -71,6 +72,8 @@ private constructor(
     fun occurredAt(): OffsetDateTime = occurredAt.getRequired("occurredAt")
 
     /**
+     * Type of monitor event fired when account activity occurs.
+     *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -237,6 +240,7 @@ private constructor(
             this.occurredAt = occurredAt
         }
 
+        /** Type of monitor event fired when account activity occurs. */
         fun type(type: Type) = type(JsonField.of(type))
 
         /**
@@ -453,6 +457,7 @@ private constructor(
         override fun toString() = "Data{additionalProperties=$additionalProperties}"
     }
 
+    /** Type of monitor event fired when account activity occurs. */
     class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**

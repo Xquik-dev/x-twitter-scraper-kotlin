@@ -16,7 +16,7 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** Pagination cursor from previous response */
+    /** Pagination cursor for bookmarks */
     fun cursor(): String? = cursor
 
     /** Optional bookmark folder ID */
@@ -53,7 +53,7 @@ private constructor(
             additionalQueryParams = bookmarkListParams.additionalQueryParams.toBuilder()
         }
 
-        /** Pagination cursor from previous response */
+        /** Pagination cursor for bookmarks */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
         /** Optional bookmark folder ID */

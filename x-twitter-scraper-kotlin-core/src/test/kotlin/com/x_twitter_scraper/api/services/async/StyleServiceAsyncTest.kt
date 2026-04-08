@@ -36,7 +36,7 @@ internal class StyleServiceAsyncTest {
         val styleServiceAsync = client.styles()
 
         val response =
-            styleServiceAsync.analyze(StyleAnalyzeParams.builder().username("username").build())
+            styleServiceAsync.analyze(StyleAnalyzeParams.builder().username("elonmusk").build())
 
         response.validate()
     }

@@ -237,6 +237,7 @@ private constructor(
             (if (hasMore.asKnown() == null) 0 else 1) +
             (if (nextCursor.asKnown() == null) 0 else 1)
 
+    /** Extraction job tracking status, tool type, and result count. */
     class Extraction
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
@@ -289,6 +290,8 @@ private constructor(
         fun status(): Status = status.getRequired("status")
 
         /**
+         * Identifier for the extraction tool used to run a job.
+         *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
          *   value).
@@ -442,6 +445,7 @@ private constructor(
              */
             fun status(status: JsonField<Status>) = apply { this.status = status }
 
+            /** Identifier for the extraction tool used to run a job. */
             fun toolType(toolType: ToolType) = toolType(JsonField.of(toolType))
 
             /**
@@ -698,6 +702,7 @@ private constructor(
             override fun toString() = value.toString()
         }
 
+        /** Identifier for the extraction tool used to run a job. */
         class ToolType @JsonCreator private constructor(private val value: JsonField<String>) :
             Enum {
 

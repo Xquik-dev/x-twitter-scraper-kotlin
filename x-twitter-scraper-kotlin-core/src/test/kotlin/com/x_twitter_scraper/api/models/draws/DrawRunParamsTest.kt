@@ -10,18 +10,18 @@ internal class DrawRunParamsTest {
     @Test
     fun create() {
         DrawRunParams.builder()
-            .tweetUrl("https://example.com")
-            .backupCount(0L)
-            .filterAccountAgeDays(0L)
-            .filterLanguage("filterLanguage")
-            .filterMinFollowers(0L)
-            .mustFollowUsername("mustFollowUsername")
+            .tweetUrl("https://x.com/elonmusk/status/1234567890")
+            .backupCount(2L)
+            .filterAccountAgeDays(30L)
+            .filterLanguage("en")
+            .filterMinFollowers(50L)
+            .mustFollowUsername("elonmusk")
             .mustRetweet(true)
-            .addRequiredHashtag("string")
-            .addRequiredKeyword("string")
-            .addRequiredMention("string")
+            .addRequiredHashtag("#giveaway")
+            .addRequiredKeyword("entered")
+            .addRequiredMention("@elonmusk")
             .uniqueAuthorsOnly(true)
-            .winnerCount(0L)
+            .winnerCount(3L)
             .build()
     }
 
@@ -29,42 +29,43 @@ internal class DrawRunParamsTest {
     fun body() {
         val params =
             DrawRunParams.builder()
-                .tweetUrl("https://example.com")
-                .backupCount(0L)
-                .filterAccountAgeDays(0L)
-                .filterLanguage("filterLanguage")
-                .filterMinFollowers(0L)
-                .mustFollowUsername("mustFollowUsername")
+                .tweetUrl("https://x.com/elonmusk/status/1234567890")
+                .backupCount(2L)
+                .filterAccountAgeDays(30L)
+                .filterLanguage("en")
+                .filterMinFollowers(50L)
+                .mustFollowUsername("elonmusk")
                 .mustRetweet(true)
-                .addRequiredHashtag("string")
-                .addRequiredKeyword("string")
-                .addRequiredMention("string")
+                .addRequiredHashtag("#giveaway")
+                .addRequiredKeyword("entered")
+                .addRequiredMention("@elonmusk")
                 .uniqueAuthorsOnly(true)
-                .winnerCount(0L)
+                .winnerCount(3L)
                 .build()
 
         val body = params._body()
 
-        assertThat(body.tweetUrl()).isEqualTo("https://example.com")
-        assertThat(body.backupCount()).isEqualTo(0L)
-        assertThat(body.filterAccountAgeDays()).isEqualTo(0L)
-        assertThat(body.filterLanguage()).isEqualTo("filterLanguage")
-        assertThat(body.filterMinFollowers()).isEqualTo(0L)
-        assertThat(body.mustFollowUsername()).isEqualTo("mustFollowUsername")
+        assertThat(body.tweetUrl()).isEqualTo("https://x.com/elonmusk/status/1234567890")
+        assertThat(body.backupCount()).isEqualTo(2L)
+        assertThat(body.filterAccountAgeDays()).isEqualTo(30L)
+        assertThat(body.filterLanguage()).isEqualTo("en")
+        assertThat(body.filterMinFollowers()).isEqualTo(50L)
+        assertThat(body.mustFollowUsername()).isEqualTo("elonmusk")
         assertThat(body.mustRetweet()).isEqualTo(true)
-        assertThat(body.requiredHashtags()).containsExactly("string")
-        assertThat(body.requiredKeywords()).containsExactly("string")
-        assertThat(body.requiredMentions()).containsExactly("string")
+        assertThat(body.requiredHashtags()).containsExactly("#giveaway")
+        assertThat(body.requiredKeywords()).containsExactly("entered")
+        assertThat(body.requiredMentions()).containsExactly("@elonmusk")
         assertThat(body.uniqueAuthorsOnly()).isEqualTo(true)
-        assertThat(body.winnerCount()).isEqualTo(0L)
+        assertThat(body.winnerCount()).isEqualTo(3L)
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = DrawRunParams.builder().tweetUrl("https://example.com").build()
+        val params =
+            DrawRunParams.builder().tweetUrl("https://x.com/elonmusk/status/1234567890").build()
 
         val body = params._body()
 
-        assertThat(body.tweetUrl()).isEqualTo("https://example.com")
+        assertThat(body.tweetUrl()).isEqualTo("https://x.com/elonmusk/status/1234567890")
     }
 }

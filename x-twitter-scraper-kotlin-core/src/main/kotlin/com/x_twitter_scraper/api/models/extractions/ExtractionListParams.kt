@@ -22,13 +22,16 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** Cursor for pagination */
+    /** Cursor for keyset pagination */
     fun after(): String? = after
 
+    /** Maximum number of items to return (1-100, default 50) */
     fun limit(): Long? = limit
 
+    /** Filter by job status */
     fun status(): Status? = status
 
+    /** Filter by extraction tool type */
     fun toolType(): ToolType? = toolType
 
     /** Additional headers to send with the request. */
@@ -66,9 +69,10 @@ private constructor(
             additionalQueryParams = extractionListParams.additionalQueryParams.toBuilder()
         }
 
-        /** Cursor for pagination */
+        /** Cursor for keyset pagination */
         fun after(after: String?) = apply { this.after = after }
 
+        /** Maximum number of items to return (1-100, default 50) */
         fun limit(limit: Long?) = apply { this.limit = limit }
 
         /**
@@ -78,8 +82,10 @@ private constructor(
          */
         fun limit(limit: Long) = limit(limit as Long?)
 
+        /** Filter by job status */
         fun status(status: Status?) = apply { this.status = status }
 
+        /** Filter by extraction tool type */
         fun toolType(toolType: ToolType?) = apply { this.toolType = toolType }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -209,6 +215,7 @@ private constructor(
             }
             .build()
 
+    /** Filter by job status */
     class Status @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
@@ -341,6 +348,7 @@ private constructor(
         override fun toString() = value.toString()
     }
 
+    /** Filter by extraction tool type */
     class ToolType @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**

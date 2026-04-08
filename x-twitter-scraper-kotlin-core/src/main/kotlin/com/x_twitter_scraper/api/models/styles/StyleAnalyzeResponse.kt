@@ -18,6 +18,7 @@ import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 
+/** Full style profile with sampled tweets used for tone analysis. */
 class StyleAnalyzeResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(

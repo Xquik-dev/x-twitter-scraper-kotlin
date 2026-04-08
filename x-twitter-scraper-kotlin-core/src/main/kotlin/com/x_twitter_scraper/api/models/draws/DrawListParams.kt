@@ -16,9 +16,10 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** Cursor for pagination */
+    /** Cursor for keyset pagination */
     fun after(): String? = after
 
+    /** Maximum number of items to return (1-100, default 50) */
     fun limit(): Long? = limit
 
     /** Additional headers to send with the request. */
@@ -52,9 +53,10 @@ private constructor(
             additionalQueryParams = drawListParams.additionalQueryParams.toBuilder()
         }
 
-        /** Cursor for pagination */
+        /** Cursor for keyset pagination */
         fun after(after: String?) = apply { this.after = after }
 
+        /** Maximum number of items to return (1-100, default 50) */
         fun limit(limit: Long?) = apply { this.limit = limit }
 
         /**

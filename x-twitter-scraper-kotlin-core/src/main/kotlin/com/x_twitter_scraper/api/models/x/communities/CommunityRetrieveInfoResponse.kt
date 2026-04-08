@@ -217,7 +217,7 @@ private constructor(
         )
 
         /**
-         * Community ID
+         * Unique community identifier
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -242,7 +242,7 @@ private constructor(
         fun createdAt(): String? = createdAt.getNullable("created_at")
 
         /**
-         * Community description
+         * About text for the community
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -274,7 +274,7 @@ private constructor(
         fun moderatorCount(): Long? = moderatorCount.getNullable("moderator_count")
 
         /**
-         * Community name
+         * Display name of the community
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -433,7 +433,7 @@ private constructor(
                 additionalProperties = community.additionalProperties.toMutableMap()
             }
 
-            /** Community ID */
+            /** Unique community identifier */
             fun id(id: String) = id(JsonField.of(id))
 
             /**
@@ -469,7 +469,7 @@ private constructor(
              */
             fun createdAt(createdAt: JsonField<String>) = apply { this.createdAt = createdAt }
 
-            /** Community description */
+            /** About text for the community */
             fun description(description: String) = description(JsonField.of(description))
 
             /**
@@ -521,7 +521,7 @@ private constructor(
                 this.moderatorCount = moderatorCount
             }
 
-            /** Community name */
+            /** Display name of the community */
             fun name(name: String) = name(JsonField.of(name))
 
             /**

@@ -19,8 +19,11 @@ internal class TweetServiceAsyncTest {
                 .build()
         val tweetServiceAsync = client.x().communities().tweets()
 
-        tweetServiceAsync.list(
-            TweetListParams.builder().q("q").cursor("cursor").queryType("queryType").build()
-        )
+        val tweets =
+            tweetServiceAsync.list(
+                TweetListParams.builder().q("q").cursor("cursor").queryType("queryType").build()
+            )
+
+        tweets.validate()
     }
 }

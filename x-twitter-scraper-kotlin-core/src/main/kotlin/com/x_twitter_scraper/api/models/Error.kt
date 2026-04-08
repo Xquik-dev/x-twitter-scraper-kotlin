@@ -16,6 +16,7 @@ import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
 import java.util.Collections
 import java.util.Objects
 
+/** Error response containing a machine-readable error code. */
 class Error
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(

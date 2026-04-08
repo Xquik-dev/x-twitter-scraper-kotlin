@@ -33,6 +33,8 @@ private constructor(
     ) : this(draw, winners, mutableMapOf())
 
     /**
+     * Full giveaway draw with tweet metrics, entries, and timing.
+     *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -97,6 +99,7 @@ private constructor(
             additionalProperties = drawRetrieveResponse.additionalProperties.toMutableMap()
         }
 
+        /** Full giveaway draw with tweet metrics, entries, and timing. */
         fun draw(draw: Draw) = draw(JsonField.of(draw))
 
         /**
@@ -201,6 +204,7 @@ private constructor(
         (draw.asKnown()?.validity() ?: 0) +
             (winners.asKnown()?.sumOf { it.validity().toInt() } ?: 0)
 
+    /** Full giveaway draw with tweet metrics, entries, and timing. */
     class Draw
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
@@ -909,6 +913,7 @@ private constructor(
             "Draw{id=$id, createdAt=$createdAt, status=$status, totalEntries=$totalEntries, tweetAuthorUsername=$tweetAuthorUsername, tweetId=$tweetId, tweetLikeCount=$tweetLikeCount, tweetQuoteCount=$tweetQuoteCount, tweetReplyCount=$tweetReplyCount, tweetRetweetCount=$tweetRetweetCount, tweetText=$tweetText, tweetUrl=$tweetUrl, validEntries=$validEntries, drawnAt=$drawnAt, additionalProperties=$additionalProperties}"
     }
 
+    /** Giveaway draw winner with position and backup flag. */
     class Winner
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(

@@ -232,6 +232,7 @@ private constructor(
             (if (hasMore.asKnown() == null) 0 else 1) +
             (if (nextCursor.asKnown() == null) 0 else 1)
 
+    /** Saved tweet draft with optional topic and goal. */
     class Draft
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(

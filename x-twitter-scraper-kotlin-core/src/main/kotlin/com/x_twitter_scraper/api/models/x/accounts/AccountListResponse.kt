@@ -170,6 +170,7 @@ private constructor(
      */
     internal fun validity(): Int = (accounts.asKnown()?.sumOf { it.validity().toInt() } ?: 0)
 
+    /** Linked X account summary with username and connection status. */
     class Account
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(

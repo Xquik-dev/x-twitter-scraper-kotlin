@@ -26,9 +26,9 @@ internal class CommunityServiceAsyncTest {
         val community =
             communityServiceAsync.create(
                 CommunityCreateParams.builder()
-                    .account("account")
-                    .name("name")
-                    .description("description")
+                    .account("@elonmusk")
+                    .name("Example Name")
+                    .description("A community for Tesla enthusiasts")
                     .build()
             )
 
@@ -49,8 +49,8 @@ internal class CommunityServiceAsyncTest {
             communityServiceAsync.delete(
                 CommunityDeleteParams.builder()
                     .id("id")
-                    .account("account")
-                    .communityName("community_name")
+                    .account("@elonmusk")
+                    .communityName("Tesla Fans")
                     .build()
             )
 
@@ -82,9 +82,12 @@ internal class CommunityServiceAsyncTest {
                 .build()
         val communityServiceAsync = client.x().communities()
 
-        communityServiceAsync.retrieveMembers(
-            CommunityRetrieveMembersParams.builder().id("id").cursor("cursor").build()
-        )
+        val response =
+            communityServiceAsync.retrieveMembers(
+                CommunityRetrieveMembersParams.builder().id("id").cursor("cursor").build()
+            )
+
+        response.validate()
     }
 
     @Disabled("Mock server tests are disabled")
@@ -97,9 +100,12 @@ internal class CommunityServiceAsyncTest {
                 .build()
         val communityServiceAsync = client.x().communities()
 
-        communityServiceAsync.retrieveModerators(
-            CommunityRetrieveModeratorsParams.builder().id("id").cursor("cursor").build()
-        )
+        val response =
+            communityServiceAsync.retrieveModerators(
+                CommunityRetrieveModeratorsParams.builder().id("id").cursor("cursor").build()
+            )
+
+        response.validate()
     }
 
     @Disabled("Mock server tests are disabled")
@@ -112,12 +118,15 @@ internal class CommunityServiceAsyncTest {
                 .build()
         val communityServiceAsync = client.x().communities()
 
-        communityServiceAsync.retrieveSearch(
-            CommunityRetrieveSearchParams.builder()
-                .q("q")
-                .cursor("cursor")
-                .queryType("queryType")
-                .build()
-        )
+        val response =
+            communityServiceAsync.retrieveSearch(
+                CommunityRetrieveSearchParams.builder()
+                    .q("q")
+                    .cursor("cursor")
+                    .queryType("queryType")
+                    .build()
+            )
+
+        response.validate()
     }
 }

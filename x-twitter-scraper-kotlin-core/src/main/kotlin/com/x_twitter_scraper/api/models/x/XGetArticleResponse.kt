@@ -38,6 +38,8 @@ private constructor(
     fun article(): Article = article.getRequired("article")
 
     /**
+     * Author of a tweet with follower count and verification status.
+     *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
@@ -105,6 +107,7 @@ private constructor(
          */
         fun article(article: JsonField<Article>) = apply { this.article = article }
 
+        /** Author of a tweet with follower count and verification status. */
         fun author(author: Author) = author(JsonField.of(author))
 
         /**
@@ -921,6 +924,7 @@ private constructor(
             "Article{contents=$contents, coverImageUrl=$coverImageUrl, createdAt=$createdAt, likeCount=$likeCount, previewText=$previewText, quoteCount=$quoteCount, replyCount=$replyCount, title=$title, viewCount=$viewCount, additionalProperties=$additionalProperties}"
     }
 
+    /** Author of a tweet with follower count and verification status. */
     class Author
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(

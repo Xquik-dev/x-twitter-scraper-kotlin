@@ -30,7 +30,7 @@ private constructor(
     fun id(): String? = id
 
     /**
-     * Account password
+     * Updated account password
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -38,7 +38,7 @@ private constructor(
     fun password(): String = body.password()
 
     /**
-     * TOTP secret for 2FA
+     * TOTP secret for 2FA re-authentication
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
@@ -109,7 +109,7 @@ private constructor(
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
-        /** Account password */
+        /** Updated account password */
         fun password(password: String) = apply { body.password(password) }
 
         /**
@@ -120,7 +120,7 @@ private constructor(
          */
         fun password(password: JsonField<String>) = apply { body.password(password) }
 
-        /** TOTP secret for 2FA */
+        /** TOTP secret for 2FA re-authentication */
         fun totpSecret(totpSecret: String) = apply { body.totpSecret(totpSecret) }
 
         /**
@@ -301,7 +301,7 @@ private constructor(
         ) : this(password, totpSecret, mutableMapOf())
 
         /**
-         * Account password
+         * Updated account password
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -310,7 +310,7 @@ private constructor(
         fun password(): String = password.getRequired("password")
 
         /**
-         * TOTP secret for 2FA
+         * TOTP secret for 2FA re-authentication
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -371,7 +371,7 @@ private constructor(
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
-            /** Account password */
+            /** Updated account password */
             fun password(password: String) = password(JsonField.of(password))
 
             /**
@@ -383,7 +383,7 @@ private constructor(
              */
             fun password(password: JsonField<String>) = apply { this.password = password }
 
-            /** TOTP secret for 2FA */
+            /** TOTP secret for 2FA re-authentication */
             fun totpSecret(totpSecret: String) = totpSecret(JsonField.of(totpSecret))
 
             /**

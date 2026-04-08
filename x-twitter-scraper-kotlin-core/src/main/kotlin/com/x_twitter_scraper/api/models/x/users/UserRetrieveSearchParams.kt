@@ -17,10 +17,10 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** Search query */
+    /** User search query */
     fun q(): String = q
 
-    /** Pagination cursor */
+    /** Pagination cursor for user search */
     fun cursor(): String? = cursor
 
     /** Additional headers to send with the request. */
@@ -59,10 +59,10 @@ private constructor(
             additionalQueryParams = userRetrieveSearchParams.additionalQueryParams.toBuilder()
         }
 
-        /** Search query */
+        /** User search query */
         fun q(q: String) = apply { this.q = q }
 
-        /** Pagination cursor */
+        /** Pagination cursor for user search */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {

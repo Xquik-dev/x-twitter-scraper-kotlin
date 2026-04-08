@@ -16,6 +16,7 @@ import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 
+/** Trending topic with score, category, source, and region. */
 class RadarItem
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(

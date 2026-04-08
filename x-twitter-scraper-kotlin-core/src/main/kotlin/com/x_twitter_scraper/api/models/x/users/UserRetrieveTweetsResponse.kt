@@ -17,6 +17,7 @@ import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
 import java.util.Collections
 import java.util.Objects
 
+/** Paginated list of tweets with cursor-based navigation. */
 class UserRetrieveTweetsResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
@@ -240,6 +241,7 @@ private constructor(
             (if (nextCursor.asKnown() == null) 0 else 1) +
             (tweets.asKnown()?.sumOf { it.validity().toInt() } ?: 0)
 
+    /** Tweet returned from search results with inline author info. */
     class Tweet
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
@@ -332,7 +334,7 @@ private constructor(
         fun createdAt(): String? = createdAt.getNullable("createdAt")
 
         /**
-         * Whether this is a Note Tweet (long-form post, up to 25,000 characters)
+         * True for Note Tweets (long-form content, up to 25,000 characters)
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
@@ -568,7 +570,7 @@ private constructor(
              */
             fun createdAt(createdAt: JsonField<String>) = apply { this.createdAt = createdAt }
 
-            /** Whether this is a Note Tweet (long-form post, up to 25,000 characters) */
+            /** True for Note Tweets (long-form content, up to 25,000 characters) */
             fun isNoteTweet(isNoteTweet: Boolean) = isNoteTweet(JsonField.of(isNoteTweet))
 
             /**

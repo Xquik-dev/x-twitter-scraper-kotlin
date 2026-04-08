@@ -5,7 +5,6 @@ package com.x_twitter_scraper.api.services.blocking
 import com.google.errorprone.annotations.MustBeClosed
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
-import com.x_twitter_scraper.api.core.http.HttpResponse
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.models.x.XGetArticleParams
 import com.x_twitter_scraper.api.models.x.XGetArticleResponse
@@ -14,6 +13,7 @@ import com.x_twitter_scraper.api.models.x.XGetHomeTimelineResponse
 import com.x_twitter_scraper.api.models.x.XGetNotificationsParams
 import com.x_twitter_scraper.api.models.x.XGetNotificationsResponse
 import com.x_twitter_scraper.api.models.x.XGetTrendsParams
+import com.x_twitter_scraper.api.models.x.XGetTrendsResponse
 import com.x_twitter_scraper.api.services.blocking.x.AccountService
 import com.x_twitter_scraper.api.services.blocking.x.BookmarkService
 import com.x_twitter_scraper.api.services.blocking.x.CommunityService
@@ -108,10 +108,10 @@ interface XService {
     fun getTrends(
         params: XGetTrendsParams = XGetTrendsParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    )
+    ): XGetTrendsResponse
 
     /** @see getTrends */
-    fun getTrends(requestOptions: RequestOptions) =
+    fun getTrends(requestOptions: RequestOptions): XGetTrendsResponse =
         getTrends(XGetTrendsParams.none(), requestOptions)
 
     /** A view of [XService] that provides access to raw HTTP responses for each method. */
@@ -220,11 +220,11 @@ interface XService {
         fun getTrends(
             params: XGetTrendsParams = XGetTrendsParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse
+        ): HttpResponseFor<XGetTrendsResponse>
 
         /** @see getTrends */
         @MustBeClosed
-        fun getTrends(requestOptions: RequestOptions): HttpResponse =
+        fun getTrends(requestOptions: RequestOptions): HttpResponseFor<XGetTrendsResponse> =
             getTrends(XGetTrendsParams.none(), requestOptions)
     }
 }
