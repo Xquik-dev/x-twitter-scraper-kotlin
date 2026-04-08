@@ -5,22 +5,27 @@ package com.x_twitter_scraper.api.services.blocking.x
 import com.google.errorprone.annotations.MustBeClosed
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
-import com.x_twitter_scraper.api.core.http.HttpResponse
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveBatchParams
+import com.x_twitter_scraper.api.models.x.users.UserRetrieveBatchResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveFollowersParams
+import com.x_twitter_scraper.api.models.x.users.UserRetrieveFollowersResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveFollowersYouKnowParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveFollowersYouKnowResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveFollowingParams
+import com.x_twitter_scraper.api.models.x.users.UserRetrieveFollowingResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveLikesParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveLikesResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveMediaParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveMediaResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveMentionsParams
+import com.x_twitter_scraper.api.models.x.users.UserRetrieveMentionsResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveSearchParams
+import com.x_twitter_scraper.api.models.x.users.UserRetrieveSearchResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveTweetsParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveTweetsResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveVerifiedFollowersParams
+import com.x_twitter_scraper.api.models.x.users.UserRetrieveVerifiedFollowersResponse
 import com.x_twitter_scraper.api.services.blocking.x.users.FollowService
 
 /** X data lookups (subscription required) */
@@ -44,23 +49,27 @@ interface UserService {
     fun retrieveBatch(
         params: UserRetrieveBatchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    )
+    ): UserRetrieveBatchResponse
 
     /** Get user followers */
     fun retrieveFollowers(
         id: String,
         params: UserRetrieveFollowersParams = UserRetrieveFollowersParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ) = retrieveFollowers(params.toBuilder().id(id).build(), requestOptions)
+    ): UserRetrieveFollowersResponse =
+        retrieveFollowers(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see retrieveFollowers */
     fun retrieveFollowers(
         params: UserRetrieveFollowersParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    )
+    ): UserRetrieveFollowersResponse
 
     /** @see retrieveFollowers */
-    fun retrieveFollowers(id: String, requestOptions: RequestOptions) =
+    fun retrieveFollowers(
+        id: String,
+        requestOptions: RequestOptions,
+    ): UserRetrieveFollowersResponse =
         retrieveFollowers(id, UserRetrieveFollowersParams.none(), requestOptions)
 
     /** Get followers you know for a user */
@@ -89,16 +98,20 @@ interface UserService {
         id: String,
         params: UserRetrieveFollowingParams = UserRetrieveFollowingParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ) = retrieveFollowing(params.toBuilder().id(id).build(), requestOptions)
+    ): UserRetrieveFollowingResponse =
+        retrieveFollowing(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see retrieveFollowing */
     fun retrieveFollowing(
         params: UserRetrieveFollowingParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    )
+    ): UserRetrieveFollowingResponse
 
     /** @see retrieveFollowing */
-    fun retrieveFollowing(id: String, requestOptions: RequestOptions) =
+    fun retrieveFollowing(
+        id: String,
+        requestOptions: RequestOptions,
+    ): UserRetrieveFollowingResponse =
         retrieveFollowing(id, UserRetrieveFollowingParams.none(), requestOptions)
 
     /** Get tweets liked by a user */
@@ -140,23 +153,24 @@ interface UserService {
         id: String,
         params: UserRetrieveMentionsParams = UserRetrieveMentionsParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ) = retrieveMentions(params.toBuilder().id(id).build(), requestOptions)
+    ): UserRetrieveMentionsResponse =
+        retrieveMentions(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see retrieveMentions */
     fun retrieveMentions(
         params: UserRetrieveMentionsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    )
+    ): UserRetrieveMentionsResponse
 
     /** @see retrieveMentions */
-    fun retrieveMentions(id: String, requestOptions: RequestOptions) =
+    fun retrieveMentions(id: String, requestOptions: RequestOptions): UserRetrieveMentionsResponse =
         retrieveMentions(id, UserRetrieveMentionsParams.none(), requestOptions)
 
     /** Search users by name or username */
     fun retrieveSearch(
         params: UserRetrieveSearchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    )
+    ): UserRetrieveSearchResponse
 
     /** Get recent tweets by a user */
     fun retrieveTweets(
@@ -181,16 +195,20 @@ interface UserService {
         id: String,
         params: UserRetrieveVerifiedFollowersParams = UserRetrieveVerifiedFollowersParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ) = retrieveVerifiedFollowers(params.toBuilder().id(id).build(), requestOptions)
+    ): UserRetrieveVerifiedFollowersResponse =
+        retrieveVerifiedFollowers(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see retrieveVerifiedFollowers */
     fun retrieveVerifiedFollowers(
         params: UserRetrieveVerifiedFollowersParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    )
+    ): UserRetrieveVerifiedFollowersResponse
 
     /** @see retrieveVerifiedFollowers */
-    fun retrieveVerifiedFollowers(id: String, requestOptions: RequestOptions) =
+    fun retrieveVerifiedFollowers(
+        id: String,
+        requestOptions: RequestOptions,
+    ): UserRetrieveVerifiedFollowersResponse =
         retrieveVerifiedFollowers(id, UserRetrieveVerifiedFollowersParams.none(), requestOptions)
 
     /** A view of [UserService] that provides access to raw HTTP responses for each method. */
@@ -213,7 +231,7 @@ interface UserService {
         fun retrieveBatch(
             params: UserRetrieveBatchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse
+        ): HttpResponseFor<UserRetrieveBatchResponse>
 
         /**
          * Returns a raw HTTP response for `get /x/users/{id}/followers`, but is otherwise the same
@@ -224,18 +242,22 @@ interface UserService {
             id: String,
             params: UserRetrieveFollowersParams = UserRetrieveFollowersParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse = retrieveFollowers(params.toBuilder().id(id).build(), requestOptions)
+        ): HttpResponseFor<UserRetrieveFollowersResponse> =
+            retrieveFollowers(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see retrieveFollowers */
         @MustBeClosed
         fun retrieveFollowers(
             params: UserRetrieveFollowersParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse
+        ): HttpResponseFor<UserRetrieveFollowersResponse>
 
         /** @see retrieveFollowers */
         @MustBeClosed
-        fun retrieveFollowers(id: String, requestOptions: RequestOptions): HttpResponse =
+        fun retrieveFollowers(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<UserRetrieveFollowersResponse> =
             retrieveFollowers(id, UserRetrieveFollowersParams.none(), requestOptions)
 
         /**
@@ -274,18 +296,22 @@ interface UserService {
             id: String,
             params: UserRetrieveFollowingParams = UserRetrieveFollowingParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse = retrieveFollowing(params.toBuilder().id(id).build(), requestOptions)
+        ): HttpResponseFor<UserRetrieveFollowingResponse> =
+            retrieveFollowing(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see retrieveFollowing */
         @MustBeClosed
         fun retrieveFollowing(
             params: UserRetrieveFollowingParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse
+        ): HttpResponseFor<UserRetrieveFollowingResponse>
 
         /** @see retrieveFollowing */
         @MustBeClosed
-        fun retrieveFollowing(id: String, requestOptions: RequestOptions): HttpResponse =
+        fun retrieveFollowing(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<UserRetrieveFollowingResponse> =
             retrieveFollowing(id, UserRetrieveFollowingParams.none(), requestOptions)
 
         /**
@@ -351,18 +377,22 @@ interface UserService {
             id: String,
             params: UserRetrieveMentionsParams = UserRetrieveMentionsParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse = retrieveMentions(params.toBuilder().id(id).build(), requestOptions)
+        ): HttpResponseFor<UserRetrieveMentionsResponse> =
+            retrieveMentions(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see retrieveMentions */
         @MustBeClosed
         fun retrieveMentions(
             params: UserRetrieveMentionsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse
+        ): HttpResponseFor<UserRetrieveMentionsResponse>
 
         /** @see retrieveMentions */
         @MustBeClosed
-        fun retrieveMentions(id: String, requestOptions: RequestOptions): HttpResponse =
+        fun retrieveMentions(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<UserRetrieveMentionsResponse> =
             retrieveMentions(id, UserRetrieveMentionsParams.none(), requestOptions)
 
         /**
@@ -373,7 +403,7 @@ interface UserService {
         fun retrieveSearch(
             params: UserRetrieveSearchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse
+        ): HttpResponseFor<UserRetrieveSearchResponse>
 
         /**
          * Returns a raw HTTP response for `get /x/users/{id}/tweets`, but is otherwise the same as
@@ -412,7 +442,7 @@ interface UserService {
             params: UserRetrieveVerifiedFollowersParams =
                 UserRetrieveVerifiedFollowersParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse =
+        ): HttpResponseFor<UserRetrieveVerifiedFollowersResponse> =
             retrieveVerifiedFollowers(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see retrieveVerifiedFollowers */
@@ -420,11 +450,14 @@ interface UserService {
         fun retrieveVerifiedFollowers(
             params: UserRetrieveVerifiedFollowersParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse
+        ): HttpResponseFor<UserRetrieveVerifiedFollowersResponse>
 
         /** @see retrieveVerifiedFollowers */
         @MustBeClosed
-        fun retrieveVerifiedFollowers(id: String, requestOptions: RequestOptions): HttpResponse =
+        fun retrieveVerifiedFollowers(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<UserRetrieveVerifiedFollowersResponse> =
             retrieveVerifiedFollowers(
                 id,
                 UserRetrieveVerifiedFollowersParams.none(),

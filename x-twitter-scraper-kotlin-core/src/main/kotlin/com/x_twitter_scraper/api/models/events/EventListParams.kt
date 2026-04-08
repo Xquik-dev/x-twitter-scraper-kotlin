@@ -22,13 +22,16 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** Cursor for pagination */
+    /** Cursor for keyset pagination */
     fun after(): String? = after
 
+    /** Filter events by type */
     fun eventType(): EventType? = eventType
 
+    /** Maximum number of items to return (1-100, default 50) */
     fun limit(): Long? = limit
 
+    /** Filter events by monitor ID */
     fun monitorId(): String? = monitorId
 
     /** Additional headers to send with the request. */
@@ -66,11 +69,13 @@ private constructor(
             additionalQueryParams = eventListParams.additionalQueryParams.toBuilder()
         }
 
-        /** Cursor for pagination */
+        /** Cursor for keyset pagination */
         fun after(after: String?) = apply { this.after = after }
 
+        /** Filter events by type */
         fun eventType(eventType: EventType?) = apply { this.eventType = eventType }
 
+        /** Maximum number of items to return (1-100, default 50) */
         fun limit(limit: Long?) = apply { this.limit = limit }
 
         /**
@@ -80,6 +85,7 @@ private constructor(
          */
         fun limit(limit: Long) = limit(limit as Long?)
 
+        /** Filter events by monitor ID */
         fun monitorId(monitorId: String?) = apply { this.monitorId = monitorId }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -209,6 +215,7 @@ private constructor(
             }
             .build()
 
+    /** Filter events by type */
     class EventType @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**

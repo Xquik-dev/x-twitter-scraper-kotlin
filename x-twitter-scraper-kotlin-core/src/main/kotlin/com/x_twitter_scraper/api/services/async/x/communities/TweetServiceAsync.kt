@@ -5,8 +5,9 @@ package com.x_twitter_scraper.api.services.async.x.communities
 import com.google.errorprone.annotations.MustBeClosed
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
-import com.x_twitter_scraper.api.core.http.HttpResponse
+import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListParams
+import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListResponse
 
 /** X data lookups (subscription required) */
 interface TweetServiceAsync {
@@ -27,7 +28,7 @@ interface TweetServiceAsync {
     suspend fun list(
         params: TweetListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    )
+    ): TweetListResponse
 
     /** A view of [TweetServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -49,6 +50,6 @@ interface TweetServiceAsync {
         suspend fun list(
             params: TweetListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse
+        ): HttpResponseFor<TweetListResponse>
     }
 }

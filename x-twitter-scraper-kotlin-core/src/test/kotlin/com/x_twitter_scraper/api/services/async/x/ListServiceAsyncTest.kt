@@ -21,9 +21,12 @@ internal class ListServiceAsyncTest {
                 .build()
         val listServiceAsync = client.x().lists()
 
-        listServiceAsync.retrieveFollowers(
-            ListRetrieveFollowersParams.builder().id("id").cursor("cursor").build()
-        )
+        val response =
+            listServiceAsync.retrieveFollowers(
+                ListRetrieveFollowersParams.builder().id("id").cursor("cursor").build()
+            )
+
+        response.validate()
     }
 
     @Disabled("Mock server tests are disabled")
@@ -36,9 +39,12 @@ internal class ListServiceAsyncTest {
                 .build()
         val listServiceAsync = client.x().lists()
 
-        listServiceAsync.retrieveMembers(
-            ListRetrieveMembersParams.builder().id("id").cursor("cursor").build()
-        )
+        val response =
+            listServiceAsync.retrieveMembers(
+                ListRetrieveMembersParams.builder().id("id").cursor("cursor").build()
+            )
+
+        response.validate()
     }
 
     @Disabled("Mock server tests are disabled")
@@ -51,14 +57,17 @@ internal class ListServiceAsyncTest {
                 .build()
         val listServiceAsync = client.x().lists()
 
-        listServiceAsync.retrieveTweets(
-            ListRetrieveTweetsParams.builder()
-                .id("id")
-                .cursor("cursor")
-                .includeReplies(true)
-                .sinceTime("sinceTime")
-                .untilTime("untilTime")
-                .build()
-        )
+        val response =
+            listServiceAsync.retrieveTweets(
+                ListRetrieveTweetsParams.builder()
+                    .id("id")
+                    .cursor("cursor")
+                    .includeReplies(true)
+                    .sinceTime("sinceTime")
+                    .untilTime("untilTime")
+                    .build()
+            )
+
+        response.validate()
     }
 }

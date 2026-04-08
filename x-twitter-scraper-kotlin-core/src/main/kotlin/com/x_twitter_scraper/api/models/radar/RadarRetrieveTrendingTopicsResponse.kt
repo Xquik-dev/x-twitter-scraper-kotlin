@@ -203,6 +203,7 @@ private constructor(
         (items.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
             (if (total.asKnown() == null) 0 else 1)
 
+    /** Trending topic with score, category, source, and region. */
     class Item
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(

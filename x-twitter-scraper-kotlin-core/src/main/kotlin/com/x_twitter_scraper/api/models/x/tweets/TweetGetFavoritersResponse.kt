@@ -17,6 +17,7 @@ import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
 import java.util.Collections
 import java.util.Objects
 
+/** Paginated list of user profiles with cursor-based navigation. */
 class TweetGetFavoritersResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
@@ -238,6 +239,7 @@ private constructor(
             (if (nextCursor.asKnown() == null) 0 else 1) +
             (users.asKnown()?.sumOf { it.validity().toInt() } ?: 0)
 
+    /** X user profile with bio, follower counts, and verification status. */
     class User
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(

@@ -19,10 +19,10 @@ private constructor(
 
     fun id(): String? = id
 
-    /** Pagination cursor */
+    /** Pagination cursor for following list */
     fun cursor(): String? = cursor
 
-    /** Items per page (20-200, default 200) */
+    /** Results per page (20-200, default 200) */
     fun pageSize(): Long? = pageSize
 
     /** Additional headers to send with the request. */
@@ -62,10 +62,10 @@ private constructor(
 
         fun id(id: String?) = apply { this.id = id }
 
-        /** Pagination cursor */
+        /** Pagination cursor for following list */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
-        /** Items per page (20-200, default 200) */
+        /** Results per page (20-200, default 200) */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
         /**

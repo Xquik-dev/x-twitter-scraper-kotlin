@@ -200,7 +200,7 @@ import com.x_twitter_scraper.api.models.x.media.MediaUploadResponse
 import java.nio.file.Paths
 
 val params: MediaUploadParams = MediaUploadParams.builder()
-    .account("account")
+    .account("@elonmusk")
     .file(Paths.get("/path/to/file"))
     .build()
 val response: MediaUploadResponse = client.x().media().upload(params)
@@ -214,7 +214,7 @@ import com.x_twitter_scraper.api.models.x.media.MediaUploadResponse
 import java.net.URL
 
 val params: MediaUploadParams = MediaUploadParams.builder()
-    .account("account")
+    .account("@elonmusk")
     .file(URL("https://example.com//path/to/file").openStream())
     .build()
 val response: MediaUploadResponse = client.x().media().upload(params)
@@ -227,7 +227,7 @@ import com.x_twitter_scraper.api.models.x.media.MediaUploadParams
 import com.x_twitter_scraper.api.models.x.media.MediaUploadResponse
 
 val params: MediaUploadParams = MediaUploadParams.builder()
-    .account("account")
+    .account("@elonmusk")
     .file("content".toByteArray())
     .build()
 val response: MediaUploadResponse = client.x().media().upload(params)
@@ -243,7 +243,7 @@ import java.io.InputStream
 import java.net.URL
 
 val params: MediaUploadParams = MediaUploadParams.builder()
-    .account("account")
+    .account("@elonmusk")
     .file(MultipartField.builder<InputStream>()
         .value(URL("https://example.com//path/to/file").openStream())
         .filename("/path/to/file")

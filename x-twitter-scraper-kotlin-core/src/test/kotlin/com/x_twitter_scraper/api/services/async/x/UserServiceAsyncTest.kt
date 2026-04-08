@@ -28,7 +28,10 @@ internal class UserServiceAsyncTest {
                 .build()
         val userServiceAsync = client.x().users()
 
-        userServiceAsync.retrieveBatch(UserRetrieveBatchParams.builder().ids("ids").build())
+        val response =
+            userServiceAsync.retrieveBatch(UserRetrieveBatchParams.builder().ids("ids").build())
+
+        response.validate()
     }
 
     @Disabled("Mock server tests are disabled")
@@ -41,9 +44,12 @@ internal class UserServiceAsyncTest {
                 .build()
         val userServiceAsync = client.x().users()
 
-        userServiceAsync.retrieveFollowers(
-            UserRetrieveFollowersParams.builder().id("id").cursor("cursor").pageSize(0L).build()
-        )
+        val response =
+            userServiceAsync.retrieveFollowers(
+                UserRetrieveFollowersParams.builder().id("id").cursor("cursor").pageSize(0L).build()
+            )
+
+        response.validate()
     }
 
     @Disabled("Mock server tests are disabled")
@@ -74,9 +80,12 @@ internal class UserServiceAsyncTest {
                 .build()
         val userServiceAsync = client.x().users()
 
-        userServiceAsync.retrieveFollowing(
-            UserRetrieveFollowingParams.builder().id("id").cursor("cursor").pageSize(0L).build()
-        )
+        val response =
+            userServiceAsync.retrieveFollowing(
+                UserRetrieveFollowingParams.builder().id("id").cursor("cursor").pageSize(0L).build()
+            )
+
+        response.validate()
     }
 
     @Disabled("Mock server tests are disabled")
@@ -125,14 +134,17 @@ internal class UserServiceAsyncTest {
                 .build()
         val userServiceAsync = client.x().users()
 
-        userServiceAsync.retrieveMentions(
-            UserRetrieveMentionsParams.builder()
-                .id("id")
-                .cursor("cursor")
-                .sinceTime("sinceTime")
-                .untilTime("untilTime")
-                .build()
-        )
+        val response =
+            userServiceAsync.retrieveMentions(
+                UserRetrieveMentionsParams.builder()
+                    .id("id")
+                    .cursor("cursor")
+                    .sinceTime("sinceTime")
+                    .untilTime("untilTime")
+                    .build()
+            )
+
+        response.validate()
     }
 
     @Disabled("Mock server tests are disabled")
@@ -145,9 +157,12 @@ internal class UserServiceAsyncTest {
                 .build()
         val userServiceAsync = client.x().users()
 
-        userServiceAsync.retrieveSearch(
-            UserRetrieveSearchParams.builder().q("q").cursor("cursor").build()
-        )
+        val response =
+            userServiceAsync.retrieveSearch(
+                UserRetrieveSearchParams.builder().q("q").cursor("cursor").build()
+            )
+
+        response.validate()
     }
 
     @Disabled("Mock server tests are disabled")
@@ -183,8 +198,11 @@ internal class UserServiceAsyncTest {
                 .build()
         val userServiceAsync = client.x().users()
 
-        userServiceAsync.retrieveVerifiedFollowers(
-            UserRetrieveVerifiedFollowersParams.builder().id("id").cursor("cursor").build()
-        )
+        val response =
+            userServiceAsync.retrieveVerifiedFollowers(
+                UserRetrieveVerifiedFollowersParams.builder().id("id").cursor("cursor").build()
+            )
+
+        response.validate()
     }
 }

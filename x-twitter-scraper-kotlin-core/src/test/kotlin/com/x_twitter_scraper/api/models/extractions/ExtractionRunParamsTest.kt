@@ -10,16 +10,16 @@ internal class ExtractionRunParamsTest {
     @Test
     fun create() {
         ExtractionRunParams.builder()
-            .toolType(ExtractionRunParams.ToolType.ARTICLE_EXTRACTOR)
-            .advancedQuery("advancedQuery")
-            .exactPhrase("exactPhrase")
-            .excludeWords("excludeWords")
-            .searchQuery("searchQuery")
-            .targetCommunityId("targetCommunityId")
-            .targetListId("targetListId")
-            .targetSpaceId("targetSpaceId")
-            .targetTweetId("targetTweetId")
-            .targetUsername("targetUsername")
+            .toolType(ExtractionRunParams.ToolType.FOLLOWER_EXPLORER)
+            .advancedQuery("min_faves:100")
+            .exactPhrase("artificial intelligence")
+            .excludeWords("spam")
+            .searchQuery("AI trends 2025")
+            .targetCommunityId("1500000000000000000")
+            .targetListId("1234567890")
+            .targetSpaceId("1vOGwMdBqpwGB")
+            .targetTweetId("1234567890")
+            .targetUsername("elonmusk")
             .build()
     }
 
@@ -27,41 +27,41 @@ internal class ExtractionRunParamsTest {
     fun body() {
         val params =
             ExtractionRunParams.builder()
-                .toolType(ExtractionRunParams.ToolType.ARTICLE_EXTRACTOR)
-                .advancedQuery("advancedQuery")
-                .exactPhrase("exactPhrase")
-                .excludeWords("excludeWords")
-                .searchQuery("searchQuery")
-                .targetCommunityId("targetCommunityId")
-                .targetListId("targetListId")
-                .targetSpaceId("targetSpaceId")
-                .targetTweetId("targetTweetId")
-                .targetUsername("targetUsername")
+                .toolType(ExtractionRunParams.ToolType.FOLLOWER_EXPLORER)
+                .advancedQuery("min_faves:100")
+                .exactPhrase("artificial intelligence")
+                .excludeWords("spam")
+                .searchQuery("AI trends 2025")
+                .targetCommunityId("1500000000000000000")
+                .targetListId("1234567890")
+                .targetSpaceId("1vOGwMdBqpwGB")
+                .targetTweetId("1234567890")
+                .targetUsername("elonmusk")
                 .build()
 
         val body = params._body()
 
-        assertThat(body.toolType()).isEqualTo(ExtractionRunParams.ToolType.ARTICLE_EXTRACTOR)
-        assertThat(body.advancedQuery()).isEqualTo("advancedQuery")
-        assertThat(body.exactPhrase()).isEqualTo("exactPhrase")
-        assertThat(body.excludeWords()).isEqualTo("excludeWords")
-        assertThat(body.searchQuery()).isEqualTo("searchQuery")
-        assertThat(body.targetCommunityId()).isEqualTo("targetCommunityId")
-        assertThat(body.targetListId()).isEqualTo("targetListId")
-        assertThat(body.targetSpaceId()).isEqualTo("targetSpaceId")
-        assertThat(body.targetTweetId()).isEqualTo("targetTweetId")
-        assertThat(body.targetUsername()).isEqualTo("targetUsername")
+        assertThat(body.toolType()).isEqualTo(ExtractionRunParams.ToolType.FOLLOWER_EXPLORER)
+        assertThat(body.advancedQuery()).isEqualTo("min_faves:100")
+        assertThat(body.exactPhrase()).isEqualTo("artificial intelligence")
+        assertThat(body.excludeWords()).isEqualTo("spam")
+        assertThat(body.searchQuery()).isEqualTo("AI trends 2025")
+        assertThat(body.targetCommunityId()).isEqualTo("1500000000000000000")
+        assertThat(body.targetListId()).isEqualTo("1234567890")
+        assertThat(body.targetSpaceId()).isEqualTo("1vOGwMdBqpwGB")
+        assertThat(body.targetTweetId()).isEqualTo("1234567890")
+        assertThat(body.targetUsername()).isEqualTo("elonmusk")
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
         val params =
             ExtractionRunParams.builder()
-                .toolType(ExtractionRunParams.ToolType.ARTICLE_EXTRACTOR)
+                .toolType(ExtractionRunParams.ToolType.FOLLOWER_EXPLORER)
                 .build()
 
         val body = params._body()
 
-        assertThat(body.toolType()).isEqualTo(ExtractionRunParams.ToolType.ARTICLE_EXTRACTOR)
+        assertThat(body.toolType()).isEqualTo(ExtractionRunParams.ToolType.FOLLOWER_EXPLORER)
     }
 }

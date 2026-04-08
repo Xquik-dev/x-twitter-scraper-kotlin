@@ -16,6 +16,7 @@ import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 
+/** API key metadata returned when listing keys. */
 class ApiKey
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(

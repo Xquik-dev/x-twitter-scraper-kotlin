@@ -20,13 +20,13 @@ private constructor(
 
     fun id(): String? = id
 
-    /** Pagination cursor */
+    /** Pagination cursor for mentions */
     fun cursor(): String? = cursor
 
-    /** Unix timestamp - filter after */
+    /** Unix timestamp - return mentions after this time */
     fun sinceTime(): String? = sinceTime
 
-    /** Unix timestamp - filter before */
+    /** Unix timestamp - return mentions before this time */
     fun untilTime(): String? = untilTime
 
     /** Additional headers to send with the request. */
@@ -68,13 +68,13 @@ private constructor(
 
         fun id(id: String?) = apply { this.id = id }
 
-        /** Pagination cursor */
+        /** Pagination cursor for mentions */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
-        /** Unix timestamp - filter after */
+        /** Unix timestamp - return mentions after this time */
         fun sinceTime(sinceTime: String?) = apply { this.sinceTime = sinceTime }
 
-        /** Unix timestamp - filter before */
+        /** Unix timestamp - return mentions before this time */
         fun untilTime(untilTime: String?) = apply { this.untilTime = untilTime }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {

@@ -5,18 +5,22 @@ package com.x_twitter_scraper.api.services.async.x
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.checkRequired
-import com.x_twitter_scraper.api.core.handlers.emptyHandler
 import com.x_twitter_scraper.api.core.handlers.errorBodyHandler
 import com.x_twitter_scraper.api.core.handlers.errorHandler
+import com.x_twitter_scraper.api.core.handlers.jsonHandler
 import com.x_twitter_scraper.api.core.http.HttpMethod
 import com.x_twitter_scraper.api.core.http.HttpRequest
 import com.x_twitter_scraper.api.core.http.HttpResponse
 import com.x_twitter_scraper.api.core.http.HttpResponse.Handler
+import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.core.http.parseable
 import com.x_twitter_scraper.api.core.prepareAsync
 import com.x_twitter_scraper.api.models.x.lists.ListRetrieveFollowersParams
+import com.x_twitter_scraper.api.models.x.lists.ListRetrieveFollowersResponse
 import com.x_twitter_scraper.api.models.x.lists.ListRetrieveMembersParams
+import com.x_twitter_scraper.api.models.x.lists.ListRetrieveMembersResponse
 import com.x_twitter_scraper.api.models.x.lists.ListRetrieveTweetsParams
+import com.x_twitter_scraper.api.models.x.lists.ListRetrieveTweetsResponse
 
 /** X data lookups (subscription required) */
 class ListServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -34,26 +38,23 @@ class ListServiceAsyncImpl internal constructor(private val clientOptions: Clien
     override suspend fun retrieveFollowers(
         params: ListRetrieveFollowersParams,
         requestOptions: RequestOptions,
-    ) {
+    ): ListRetrieveFollowersResponse =
         // get /x/lists/{id}/followers
-        withRawResponse().retrieveFollowers(params, requestOptions)
-    }
+        withRawResponse().retrieveFollowers(params, requestOptions).parse()
 
     override suspend fun retrieveMembers(
         params: ListRetrieveMembersParams,
         requestOptions: RequestOptions,
-    ) {
+    ): ListRetrieveMembersResponse =
         // get /x/lists/{id}/members
-        withRawResponse().retrieveMembers(params, requestOptions)
-    }
+        withRawResponse().retrieveMembers(params, requestOptions).parse()
 
     override suspend fun retrieveTweets(
         params: ListRetrieveTweetsParams,
         requestOptions: RequestOptions,
-    ) {
+    ): ListRetrieveTweetsResponse =
         // get /x/lists/{id}/tweets
-        withRawResponse().retrieveTweets(params, requestOptions)
-    }
+        withRawResponse().retrieveTweets(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         ListServiceAsync.WithRawResponse {
@@ -68,12 +69,13 @@ class ListServiceAsyncImpl internal constructor(private val clientOptions: Clien
                 clientOptions.toBuilder().apply(modifier).build()
             )
 
-        private val retrieveFollowersHandler: Handler<Void?> = emptyHandler()
+        private val retrieveFollowersHandler: Handler<ListRetrieveFollowersResponse> =
+            jsonHandler<ListRetrieveFollowersResponse>(clientOptions.jsonMapper)
 
         override suspend fun retrieveFollowers(
             params: ListRetrieveFollowersParams,
             requestOptions: RequestOptions,
-        ): HttpResponse {
+        ): HttpResponseFor<ListRetrieveFollowersResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id())
@@ -87,16 +89,23 @@ class ListServiceAsyncImpl internal constructor(private val clientOptions: Clien
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
             return errorHandler.handle(response).parseable {
-                response.use { retrieveFollowersHandler.handle(it) }
+                response
+                    .use { retrieveFollowersHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
             }
         }
 
-        private val retrieveMembersHandler: Handler<Void?> = emptyHandler()
+        private val retrieveMembersHandler: Handler<ListRetrieveMembersResponse> =
+            jsonHandler<ListRetrieveMembersResponse>(clientOptions.jsonMapper)
 
         override suspend fun retrieveMembers(
             params: ListRetrieveMembersParams,
             requestOptions: RequestOptions,
-        ): HttpResponse {
+        ): HttpResponseFor<ListRetrieveMembersResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id())
@@ -110,16 +119,23 @@ class ListServiceAsyncImpl internal constructor(private val clientOptions: Clien
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
             return errorHandler.handle(response).parseable {
-                response.use { retrieveMembersHandler.handle(it) }
+                response
+                    .use { retrieveMembersHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
             }
         }
 
-        private val retrieveTweetsHandler: Handler<Void?> = emptyHandler()
+        private val retrieveTweetsHandler: Handler<ListRetrieveTweetsResponse> =
+            jsonHandler<ListRetrieveTweetsResponse>(clientOptions.jsonMapper)
 
         override suspend fun retrieveTweets(
             params: ListRetrieveTweetsParams,
             requestOptions: RequestOptions,
-        ): HttpResponse {
+        ): HttpResponseFor<ListRetrieveTweetsResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id())
@@ -133,7 +149,13 @@ class ListServiceAsyncImpl internal constructor(private val clientOptions: Clien
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
             return errorHandler.handle(response).parseable {
-                response.use { retrieveTweetsHandler.handle(it) }
+                response
+                    .use { retrieveTweetsHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
             }
         }
     }

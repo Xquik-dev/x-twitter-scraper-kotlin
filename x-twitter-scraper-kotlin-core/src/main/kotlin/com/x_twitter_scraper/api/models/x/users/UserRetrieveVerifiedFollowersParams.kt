@@ -18,7 +18,7 @@ private constructor(
 
     fun id(): String? = id
 
-    /** Pagination cursor */
+    /** Pagination cursor for verified followers */
     fun cursor(): String? = cursor
 
     /** Additional headers to send with the request. */
@@ -60,7 +60,7 @@ private constructor(
 
         fun id(id: String?) = apply { this.id = id }
 
-        /** Pagination cursor */
+        /** Pagination cursor for verified followers */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {

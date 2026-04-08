@@ -23,6 +23,7 @@ private constructor(
 
     fun id(): String? = id
 
+    /** Export output format */
     fun format(): Format? = format
 
     /** Export winners or all entries */
@@ -63,6 +64,7 @@ private constructor(
 
         fun id(id: String?) = apply { this.id = id }
 
+        /** Export output format */
         fun format(format: Format?) = apply { this.format = format }
 
         /** Export winners or all entries */
@@ -198,6 +200,7 @@ private constructor(
             }
             .build()
 
+    /** Export output format */
     class Format @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**

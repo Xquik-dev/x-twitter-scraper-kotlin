@@ -19,7 +19,7 @@ private constructor(
 
     fun id(): String? = id
 
-    /** Pagination cursor */
+    /** Pagination cursor for followers list */
     fun cursor(): String? = cursor
 
     /** Items per page (20-200, default 200) */
@@ -62,7 +62,7 @@ private constructor(
 
         fun id(id: String?) = apply { this.id = id }
 
-        /** Pagination cursor */
+        /** Pagination cursor for followers list */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
         /** Items per page (20-200, default 200) */

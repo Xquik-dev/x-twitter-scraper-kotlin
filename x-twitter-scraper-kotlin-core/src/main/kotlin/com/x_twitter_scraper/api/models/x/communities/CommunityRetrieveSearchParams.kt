@@ -21,7 +21,7 @@ private constructor(
     /** Search query */
     fun q(): String = q
 
-    /** Pagination cursor */
+    /** Pagination cursor for community search */
     fun cursor(): String? = cursor
 
     /** Sort order (Latest or Top) */
@@ -69,7 +69,7 @@ private constructor(
         /** Search query */
         fun q(q: String) = apply { this.q = q }
 
-        /** Pagination cursor */
+        /** Pagination cursor for community search */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
         /** Sort order (Latest or Top) */

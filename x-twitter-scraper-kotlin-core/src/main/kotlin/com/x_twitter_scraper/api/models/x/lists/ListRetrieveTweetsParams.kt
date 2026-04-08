@@ -21,7 +21,7 @@ private constructor(
 
     fun id(): String? = id
 
-    /** Pagination cursor */
+    /** Pagination cursor for list tweets */
     fun cursor(): String? = cursor
 
     /** Include replies (default false) */
@@ -72,7 +72,7 @@ private constructor(
 
         fun id(id: String?) = apply { this.id = id }
 
-        /** Pagination cursor */
+        /** Pagination cursor for list tweets */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
         /** Include replies (default false) */

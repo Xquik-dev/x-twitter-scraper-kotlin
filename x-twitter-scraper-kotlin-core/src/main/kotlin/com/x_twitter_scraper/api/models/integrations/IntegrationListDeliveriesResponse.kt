@@ -175,6 +175,7 @@ private constructor(
      */
     internal fun validity(): Int = (deliveries.asKnown()?.sumOf { it.validity().toInt() } ?: 0)
 
+    /** Integration delivery attempt record with status and retry count. */
     class Delivery
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(

@@ -16,6 +16,7 @@ import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 
+/** Giveaway draw summary with entry counts and status. */
 class DrawListItem
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(

@@ -24,7 +24,8 @@ internal class WebhookServiceAsyncTest {
             webhookServiceAsync.create(
                 WebhookCreateParams.builder()
                     .addEventType(WebhookCreateParams.EventType.TWEET_NEW)
-                    .url("https://example.com")
+                    .addEventType(WebhookCreateParams.EventType.FOLLOWER_GAINED)
+                    .url("https://example.com/webhook")
                     .build()
             )
 
@@ -46,8 +47,9 @@ internal class WebhookServiceAsyncTest {
                 WebhookUpdateParams.builder()
                     .id("id")
                     .addEventType(WebhookUpdateParams.EventType.TWEET_NEW)
+                    .addEventType(WebhookUpdateParams.EventType.FOLLOWER_GAINED)
                     .isActive(true)
-                    .url("https://example.com")
+                    .url("https://example.com/webhook")
                     .build()
             )
 

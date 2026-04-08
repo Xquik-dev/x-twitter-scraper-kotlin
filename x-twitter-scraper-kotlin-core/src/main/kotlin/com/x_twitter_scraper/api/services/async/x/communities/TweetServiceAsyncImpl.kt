@@ -4,16 +4,18 @@ package com.x_twitter_scraper.api.services.async.x.communities
 
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
-import com.x_twitter_scraper.api.core.handlers.emptyHandler
 import com.x_twitter_scraper.api.core.handlers.errorBodyHandler
 import com.x_twitter_scraper.api.core.handlers.errorHandler
+import com.x_twitter_scraper.api.core.handlers.jsonHandler
 import com.x_twitter_scraper.api.core.http.HttpMethod
 import com.x_twitter_scraper.api.core.http.HttpRequest
 import com.x_twitter_scraper.api.core.http.HttpResponse
 import com.x_twitter_scraper.api.core.http.HttpResponse.Handler
+import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.core.http.parseable
 import com.x_twitter_scraper.api.core.prepareAsync
 import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListParams
+import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListResponse
 
 /** X data lookups (subscription required) */
 class TweetServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -28,10 +30,12 @@ class TweetServiceAsyncImpl internal constructor(private val clientOptions: Clie
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): TweetServiceAsync =
         TweetServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
 
-    override suspend fun list(params: TweetListParams, requestOptions: RequestOptions) {
+    override suspend fun list(
+        params: TweetListParams,
+        requestOptions: RequestOptions,
+    ): TweetListResponse =
         // get /x/communities/tweets
-        withRawResponse().list(params, requestOptions)
-    }
+        withRawResponse().list(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         TweetServiceAsync.WithRawResponse {
@@ -46,12 +50,13 @@ class TweetServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 clientOptions.toBuilder().apply(modifier).build()
             )
 
-        private val listHandler: Handler<Void?> = emptyHandler()
+        private val listHandler: Handler<TweetListResponse> =
+            jsonHandler<TweetListResponse>(clientOptions.jsonMapper)
 
         override suspend fun list(
             params: TweetListParams,
             requestOptions: RequestOptions,
-        ): HttpResponse {
+        ): HttpResponseFor<TweetListResponse> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -62,7 +67,13 @@ class TweetServiceAsyncImpl internal constructor(private val clientOptions: Clie
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
             return errorHandler.handle(response).parseable {
-                response.use { listHandler.handle(it) }
+                response
+                    .use { listHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
             }
         }
     }

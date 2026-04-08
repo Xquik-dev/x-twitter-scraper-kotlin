@@ -77,6 +77,8 @@ internal class XServiceAsyncTest {
                 .build()
         val xServiceAsync = client.x()
 
-        xServiceAsync.getTrends()
+        val response = xServiceAsync.getTrends()
+
+        response.validate()
     }
 }

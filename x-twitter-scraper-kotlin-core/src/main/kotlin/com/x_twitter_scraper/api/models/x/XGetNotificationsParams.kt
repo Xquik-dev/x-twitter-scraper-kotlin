@@ -20,7 +20,7 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** Pagination cursor from previous response */
+    /** Pagination cursor for notifications */
     fun cursor(): String? = cursor
 
     /** Notification type filter */
@@ -57,7 +57,7 @@ private constructor(
             additionalQueryParams = xGetNotificationsParams.additionalQueryParams.toBuilder()
         }
 
-        /** Pagination cursor from previous response */
+        /** Pagination cursor for notifications */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
         /** Notification type filter */

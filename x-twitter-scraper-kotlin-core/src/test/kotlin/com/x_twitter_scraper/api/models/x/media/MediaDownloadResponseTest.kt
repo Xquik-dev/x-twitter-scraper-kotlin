@@ -13,18 +13,18 @@ internal class MediaDownloadResponseTest {
     fun create() {
         val mediaDownloadResponse =
             MediaDownloadResponse.builder()
-                .cacheHit(true)
-                .galleryUrl("galleryUrl")
-                .totalMedia(0L)
-                .totalTweets(0L)
-                .tweetId("tweetId")
+                .cacheHit(false)
+                .galleryUrl("https://xquik.com/gallery/abc123")
+                .totalMedia(5L)
+                .totalTweets(2L)
+                .tweetId("1234567890")
                 .build()
 
-        assertThat(mediaDownloadResponse.cacheHit()).isEqualTo(true)
-        assertThat(mediaDownloadResponse.galleryUrl()).isEqualTo("galleryUrl")
-        assertThat(mediaDownloadResponse.totalMedia()).isEqualTo(0L)
-        assertThat(mediaDownloadResponse.totalTweets()).isEqualTo(0L)
-        assertThat(mediaDownloadResponse.tweetId()).isEqualTo("tweetId")
+        assertThat(mediaDownloadResponse.cacheHit()).isEqualTo(false)
+        assertThat(mediaDownloadResponse.galleryUrl()).isEqualTo("https://xquik.com/gallery/abc123")
+        assertThat(mediaDownloadResponse.totalMedia()).isEqualTo(5L)
+        assertThat(mediaDownloadResponse.totalTweets()).isEqualTo(2L)
+        assertThat(mediaDownloadResponse.tweetId()).isEqualTo("1234567890")
     }
 
     @Test
@@ -32,11 +32,11 @@ internal class MediaDownloadResponseTest {
         val jsonMapper = jsonMapper()
         val mediaDownloadResponse =
             MediaDownloadResponse.builder()
-                .cacheHit(true)
-                .galleryUrl("galleryUrl")
-                .totalMedia(0L)
-                .totalTweets(0L)
-                .tweetId("tweetId")
+                .cacheHit(false)
+                .galleryUrl("https://xquik.com/gallery/abc123")
+                .totalMedia(5L)
+                .totalTweets(2L)
+                .tweetId("1234567890")
                 .build()
 
         val roundtrippedMediaDownloadResponse =
