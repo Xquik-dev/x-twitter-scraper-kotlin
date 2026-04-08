@@ -5,7 +5,6 @@ package com.x_twitter_scraper.api.services.async
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.checkRequired
-import com.x_twitter_scraper.api.core.handlers.emptyHandler
 import com.x_twitter_scraper.api.core.handlers.errorBodyHandler
 import com.x_twitter_scraper.api.core.handlers.errorHandler
 import com.x_twitter_scraper.api.core.handlers.jsonHandler
@@ -16,13 +15,14 @@ import com.x_twitter_scraper.api.core.http.HttpResponse.Handler
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.core.http.parseable
 import com.x_twitter_scraper.api.core.prepareAsync
+import com.x_twitter_scraper.api.models.PaginatedTweets
 import com.x_twitter_scraper.api.models.x.XGetArticleParams
 import com.x_twitter_scraper.api.models.x.XGetArticleResponse
 import com.x_twitter_scraper.api.models.x.XGetHomeTimelineParams
-import com.x_twitter_scraper.api.models.x.XGetHomeTimelineResponse
 import com.x_twitter_scraper.api.models.x.XGetNotificationsParams
 import com.x_twitter_scraper.api.models.x.XGetNotificationsResponse
 import com.x_twitter_scraper.api.models.x.XGetTrendsParams
+import com.x_twitter_scraper.api.models.x.XGetTrendsResponse
 import com.x_twitter_scraper.api.services.async.x.AccountServiceAsync
 import com.x_twitter_scraper.api.services.async.x.AccountServiceAsyncImpl
 import com.x_twitter_scraper.api.services.async.x.BookmarkServiceAsync
@@ -116,7 +116,7 @@ class XServiceAsyncImpl internal constructor(private val clientOptions: ClientOp
     override suspend fun getHomeTimeline(
         params: XGetHomeTimelineParams,
         requestOptions: RequestOptions,
-    ): XGetHomeTimelineResponse =
+    ): PaginatedTweets =
         // get /x/timeline
         withRawResponse().getHomeTimeline(params, requestOptions).parse()
 
@@ -127,10 +127,12 @@ class XServiceAsyncImpl internal constructor(private val clientOptions: ClientOp
         // get /x/notifications
         withRawResponse().getNotifications(params, requestOptions).parse()
 
-    override suspend fun getTrends(params: XGetTrendsParams, requestOptions: RequestOptions) {
+    override suspend fun getTrends(
+        params: XGetTrendsParams,
+        requestOptions: RequestOptions,
+    ): XGetTrendsResponse =
         // get /x/trends
-        withRawResponse().getTrends(params, requestOptions)
-    }
+        withRawResponse().getTrends(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         XServiceAsync.WithRawResponse {
@@ -240,13 +242,13 @@ class XServiceAsyncImpl internal constructor(private val clientOptions: ClientOp
             }
         }
 
-        private val getHomeTimelineHandler: Handler<XGetHomeTimelineResponse> =
-            jsonHandler<XGetHomeTimelineResponse>(clientOptions.jsonMapper)
+        private val getHomeTimelineHandler: Handler<PaginatedTweets> =
+            jsonHandler<PaginatedTweets>(clientOptions.jsonMapper)
 
         override suspend fun getHomeTimeline(
             params: XGetHomeTimelineParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<XGetHomeTimelineResponse> {
+        ): HttpResponseFor<PaginatedTweets> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -294,12 +296,13 @@ class XServiceAsyncImpl internal constructor(private val clientOptions: ClientOp
             }
         }
 
-        private val getTrendsHandler: Handler<Void?> = emptyHandler()
+        private val getTrendsHandler: Handler<XGetTrendsResponse> =
+            jsonHandler<XGetTrendsResponse>(clientOptions.jsonMapper)
 
         override suspend fun getTrends(
             params: XGetTrendsParams,
             requestOptions: RequestOptions,
-        ): HttpResponse {
+        ): HttpResponseFor<XGetTrendsResponse> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -310,7 +313,13 @@ class XServiceAsyncImpl internal constructor(private val clientOptions: ClientOp
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
             return errorHandler.handle(response).parseable {
-                response.use { getTrendsHandler.handle(it) }
+                response
+                    .use { getTrendsHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
             }
         }
     }

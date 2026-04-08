@@ -5,15 +5,15 @@ package com.x_twitter_scraper.api.services.async
 import com.google.errorprone.annotations.MustBeClosed
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
-import com.x_twitter_scraper.api.core.http.HttpResponse
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
+import com.x_twitter_scraper.api.models.PaginatedTweets
 import com.x_twitter_scraper.api.models.x.XGetArticleParams
 import com.x_twitter_scraper.api.models.x.XGetArticleResponse
 import com.x_twitter_scraper.api.models.x.XGetHomeTimelineParams
-import com.x_twitter_scraper.api.models.x.XGetHomeTimelineResponse
 import com.x_twitter_scraper.api.models.x.XGetNotificationsParams
 import com.x_twitter_scraper.api.models.x.XGetNotificationsResponse
 import com.x_twitter_scraper.api.models.x.XGetTrendsParams
+import com.x_twitter_scraper.api.models.x.XGetTrendsResponse
 import com.x_twitter_scraper.api.services.async.x.AccountServiceAsync
 import com.x_twitter_scraper.api.services.async.x.BookmarkServiceAsync
 import com.x_twitter_scraper.api.services.async.x.CommunityServiceAsync
@@ -88,10 +88,10 @@ interface XServiceAsync {
     suspend fun getHomeTimeline(
         params: XGetHomeTimelineParams = XGetHomeTimelineParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): XGetHomeTimelineResponse
+    ): PaginatedTweets
 
     /** @see getHomeTimeline */
-    suspend fun getHomeTimeline(requestOptions: RequestOptions): XGetHomeTimelineResponse =
+    suspend fun getHomeTimeline(requestOptions: RequestOptions): PaginatedTweets =
         getHomeTimeline(XGetHomeTimelineParams.none(), requestOptions)
 
     /** Get notifications */
@@ -108,10 +108,10 @@ interface XServiceAsync {
     suspend fun getTrends(
         params: XGetTrendsParams = XGetTrendsParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    )
+    ): XGetTrendsResponse
 
     /** @see getTrends */
-    suspend fun getTrends(requestOptions: RequestOptions) =
+    suspend fun getTrends(requestOptions: RequestOptions): XGetTrendsResponse =
         getTrends(XGetTrendsParams.none(), requestOptions)
 
     /** A view of [XServiceAsync] that provides access to raw HTTP responses for each method. */
@@ -186,13 +186,13 @@ interface XServiceAsync {
         suspend fun getHomeTimeline(
             params: XGetHomeTimelineParams = XGetHomeTimelineParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<XGetHomeTimelineResponse>
+        ): HttpResponseFor<PaginatedTweets>
 
         /** @see getHomeTimeline */
         @MustBeClosed
         suspend fun getHomeTimeline(
             requestOptions: RequestOptions
-        ): HttpResponseFor<XGetHomeTimelineResponse> =
+        ): HttpResponseFor<PaginatedTweets> =
             getHomeTimeline(XGetHomeTimelineParams.none(), requestOptions)
 
         /**
@@ -220,11 +220,11 @@ interface XServiceAsync {
         suspend fun getTrends(
             params: XGetTrendsParams = XGetTrendsParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse
+        ): HttpResponseFor<XGetTrendsResponse>
 
         /** @see getTrends */
         @MustBeClosed
-        suspend fun getTrends(requestOptions: RequestOptions): HttpResponse =
+        suspend fun getTrends(requestOptions: RequestOptions): HttpResponseFor<XGetTrendsResponse> =
             getTrends(XGetTrendsParams.none(), requestOptions)
     }
 }

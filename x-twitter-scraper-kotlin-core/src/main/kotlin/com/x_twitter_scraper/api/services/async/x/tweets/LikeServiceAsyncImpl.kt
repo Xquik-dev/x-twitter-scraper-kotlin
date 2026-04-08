@@ -38,14 +38,14 @@ class LikeServiceAsyncImpl internal constructor(private val clientOptions: Clien
         params: LikeCreateParams,
         requestOptions: RequestOptions,
     ): LikeCreateResponse =
-        // post /x/tweets/{tweetId}/like
+        // post /x/tweets/{id}/like
         withRawResponse().create(params, requestOptions).parse()
 
     override suspend fun delete(
         params: LikeDeleteParams,
         requestOptions: RequestOptions,
     ): LikeDeleteResponse =
-        // delete /x/tweets/{tweetId}/like
+        // delete /x/tweets/{id}/like
         withRawResponse().delete(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -70,7 +70,7 @@ class LikeServiceAsyncImpl internal constructor(private val clientOptions: Clien
         ): HttpResponseFor<LikeCreateResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
-            checkRequired("tweetId", params.tweetId())
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -101,7 +101,7 @@ class LikeServiceAsyncImpl internal constructor(private val clientOptions: Clien
         ): HttpResponseFor<LikeDeleteResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
-            checkRequired("tweetId", params.tweetId())
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)

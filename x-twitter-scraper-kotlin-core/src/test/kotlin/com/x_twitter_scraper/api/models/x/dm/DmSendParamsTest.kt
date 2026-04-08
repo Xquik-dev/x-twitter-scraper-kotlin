@@ -11,16 +11,21 @@ internal class DmSendParamsTest {
     fun create() {
         DmSendParams.builder()
             .userId("userId")
-            .account("account")
-            .text("text")
-            .addMediaId("string")
-            .replyToMessageId("reply_to_message_id")
+            .account("@elonmusk")
+            .text("Example text content")
+            .addMediaId("1234567890123456789")
+            .replyToMessageId("1234567890123456789")
             .build()
     }
 
     @Test
     fun pathParams() {
-        val params = DmSendParams.builder().userId("userId").account("account").text("text").build()
+        val params =
+            DmSendParams.builder()
+                .userId("userId")
+                .account("@elonmusk")
+                .text("Example text content")
+                .build()
 
         assertThat(params._pathParam(0)).isEqualTo("userId")
         // out-of-bound path param
@@ -32,27 +37,32 @@ internal class DmSendParamsTest {
         val params =
             DmSendParams.builder()
                 .userId("userId")
-                .account("account")
-                .text("text")
-                .addMediaId("string")
-                .replyToMessageId("reply_to_message_id")
+                .account("@elonmusk")
+                .text("Example text content")
+                .addMediaId("1234567890123456789")
+                .replyToMessageId("1234567890123456789")
                 .build()
 
         val body = params._body()
 
-        assertThat(body.account()).isEqualTo("account")
-        assertThat(body.text()).isEqualTo("text")
-        assertThat(body.mediaIds()).containsExactly("string")
-        assertThat(body.replyToMessageId()).isEqualTo("reply_to_message_id")
+        assertThat(body.account()).isEqualTo("@elonmusk")
+        assertThat(body.text()).isEqualTo("Example text content")
+        assertThat(body.mediaIds()).containsExactly("1234567890123456789")
+        assertThat(body.replyToMessageId()).isEqualTo("1234567890123456789")
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = DmSendParams.builder().userId("userId").account("account").text("text").build()
+        val params =
+            DmSendParams.builder()
+                .userId("userId")
+                .account("@elonmusk")
+                .text("Example text content")
+                .build()
 
         val body = params._body()
 
-        assertThat(body.account()).isEqualTo("account")
-        assertThat(body.text()).isEqualTo("text")
+        assertThat(body.account()).isEqualTo("@elonmusk")
+        assertThat(body.text()).isEqualTo("Example text content")
     }
 }

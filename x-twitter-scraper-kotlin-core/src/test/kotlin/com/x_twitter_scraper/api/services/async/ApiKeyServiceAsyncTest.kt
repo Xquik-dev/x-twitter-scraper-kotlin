@@ -19,7 +19,8 @@ internal class ApiKeyServiceAsyncTest {
                 .build()
         val apiKeyServiceAsync = client.apiKeys()
 
-        val apiKey = apiKeyServiceAsync.create(ApiKeyCreateParams.builder().name("name").build())
+        val apiKey =
+            apiKeyServiceAsync.create(ApiKeyCreateParams.builder().name("My API Key").build())
 
         apiKey.validate()
     }

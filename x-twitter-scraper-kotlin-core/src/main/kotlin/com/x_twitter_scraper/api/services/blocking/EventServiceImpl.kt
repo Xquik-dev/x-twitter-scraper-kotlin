@@ -16,10 +16,10 @@ import com.x_twitter_scraper.api.core.http.HttpResponse.Handler
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.core.http.parseable
 import com.x_twitter_scraper.api.core.prepare
+import com.x_twitter_scraper.api.models.events.EventDetail
 import com.x_twitter_scraper.api.models.events.EventListParams
 import com.x_twitter_scraper.api.models.events.EventListResponse
 import com.x_twitter_scraper.api.models.events.EventRetrieveParams
-import com.x_twitter_scraper.api.models.events.EventRetrieveResponse
 
 /** Activity events from monitored accounts */
 class EventServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -37,7 +37,7 @@ class EventServiceImpl internal constructor(private val clientOptions: ClientOpt
     override fun retrieve(
         params: EventRetrieveParams,
         requestOptions: RequestOptions,
-    ): EventRetrieveResponse =
+    ): EventDetail =
         // get /events/{id}
         withRawResponse().retrieve(params, requestOptions).parse()
 
@@ -56,13 +56,13 @@ class EventServiceImpl internal constructor(private val clientOptions: ClientOpt
         ): EventService.WithRawResponse =
             EventServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
 
-        private val retrieveHandler: Handler<EventRetrieveResponse> =
-            jsonHandler<EventRetrieveResponse>(clientOptions.jsonMapper)
+        private val retrieveHandler: Handler<EventDetail> =
+            jsonHandler<EventDetail>(clientOptions.jsonMapper)
 
         override fun retrieve(
             params: EventRetrieveParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<EventRetrieveResponse> {
+        ): HttpResponseFor<EventDetail> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id())

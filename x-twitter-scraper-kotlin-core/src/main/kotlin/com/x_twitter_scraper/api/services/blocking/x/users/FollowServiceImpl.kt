@@ -38,14 +38,14 @@ class FollowServiceImpl internal constructor(private val clientOptions: ClientOp
         params: FollowCreateParams,
         requestOptions: RequestOptions,
     ): FollowCreateResponse =
-        // post /x/users/{userId}/follow
+        // post /x/users/{id}/follow
         withRawResponse().create(params, requestOptions).parse()
 
     override fun deleteAll(
         params: FollowDeleteAllParams,
         requestOptions: RequestOptions,
     ): FollowDeleteAllResponse =
-        // delete /x/users/{userId}/follow
+        // delete /x/users/{id}/follow
         withRawResponse().deleteAll(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -68,7 +68,7 @@ class FollowServiceImpl internal constructor(private val clientOptions: ClientOp
         ): HttpResponseFor<FollowCreateResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
-            checkRequired("userId", params.userId())
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -99,7 +99,7 @@ class FollowServiceImpl internal constructor(private val clientOptions: ClientOp
         ): HttpResponseFor<FollowDeleteAllResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
-            checkRequired("userId", params.userId())
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)

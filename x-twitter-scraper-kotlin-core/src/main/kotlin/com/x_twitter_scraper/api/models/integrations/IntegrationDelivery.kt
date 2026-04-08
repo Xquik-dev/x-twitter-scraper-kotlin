@@ -16,6 +16,7 @@ import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 
+/** Integration delivery attempt record with status and retry count. */
 class IntegrationDelivery
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(

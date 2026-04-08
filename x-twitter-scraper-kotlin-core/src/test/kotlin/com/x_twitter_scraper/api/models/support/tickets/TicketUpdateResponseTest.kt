@@ -12,17 +12,17 @@ internal class TicketUpdateResponseTest {
     @Test
     fun create() {
         val ticketUpdateResponse =
-            TicketUpdateResponse.builder().publicId("publicId").status("status").build()
+            TicketUpdateResponse.builder().publicId("tk_abc123").status("resolved").build()
 
-        assertThat(ticketUpdateResponse.publicId()).isEqualTo("publicId")
-        assertThat(ticketUpdateResponse.status()).isEqualTo("status")
+        assertThat(ticketUpdateResponse.publicId()).isEqualTo("tk_abc123")
+        assertThat(ticketUpdateResponse.status()).isEqualTo("resolved")
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
         val ticketUpdateResponse =
-            TicketUpdateResponse.builder().publicId("publicId").status("status").build()
+            TicketUpdateResponse.builder().publicId("tk_abc123").status("resolved").build()
 
         val roundtrippedTicketUpdateResponse =
             jsonMapper.readValue(

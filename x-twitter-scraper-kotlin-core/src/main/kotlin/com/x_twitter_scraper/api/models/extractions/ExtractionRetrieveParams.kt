@@ -19,9 +19,10 @@ private constructor(
 
     fun id(): String? = id
 
-    /** Cursor for pagination */
+    /** Cursor for keyset pagination */
     fun after(): String? = after
 
+    /** Maximum number of results to return (1-1000, default 100) */
     fun limit(): Long? = limit
 
     /** Additional headers to send with the request. */
@@ -59,9 +60,10 @@ private constructor(
 
         fun id(id: String?) = apply { this.id = id }
 
-        /** Cursor for pagination */
+        /** Cursor for keyset pagination */
         fun after(after: String?) = apply { this.after = after }
 
+        /** Maximum number of results to return (1-1000, default 100) */
         fun limit(limit: Long?) = apply { this.limit = limit }
 
         /**

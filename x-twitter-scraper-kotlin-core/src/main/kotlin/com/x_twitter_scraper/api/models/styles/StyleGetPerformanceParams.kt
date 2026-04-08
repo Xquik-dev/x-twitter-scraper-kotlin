@@ -10,12 +10,12 @@ import java.util.Objects
 /** Get engagement metrics for style tweets */
 class StyleGetPerformanceParams
 private constructor(
-    private val username: String?,
+    private val id: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun username(): String? = username
+    fun id(): String? = id
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -38,17 +38,17 @@ private constructor(
     /** A builder for [StyleGetPerformanceParams]. */
     class Builder internal constructor() {
 
-        private var username: String? = null
+        private var id: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(styleGetPerformanceParams: StyleGetPerformanceParams) = apply {
-            username = styleGetPerformanceParams.username
+            id = styleGetPerformanceParams.id
             additionalHeaders = styleGetPerformanceParams.additionalHeaders.toBuilder()
             additionalQueryParams = styleGetPerformanceParams.additionalQueryParams.toBuilder()
         }
 
-        fun username(username: String?) = apply { this.username = username }
+        fun id(id: String?) = apply { this.id = id }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -154,16 +154,12 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          */
         fun build(): StyleGetPerformanceParams =
-            StyleGetPerformanceParams(
-                username,
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
-            )
+            StyleGetPerformanceParams(id, additionalHeaders.build(), additionalQueryParams.build())
     }
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> username ?: ""
+            0 -> id ?: ""
             else -> ""
         }
 
@@ -177,13 +173,13 @@ private constructor(
         }
 
         return other is StyleGetPerformanceParams &&
-            username == other.username &&
+            id == other.id &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = Objects.hash(username, additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int = Objects.hash(id, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "StyleGetPerformanceParams{username=$username, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "StyleGetPerformanceParams{id=$id, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

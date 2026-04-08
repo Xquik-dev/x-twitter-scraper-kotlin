@@ -21,16 +21,16 @@ import java.util.Objects
 /** Unfollow user */
 class FollowDeleteAllParams
 private constructor(
-    private val userId: String?,
+    private val id: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun userId(): String? = userId
+    fun id(): String? = id
 
     /**
-     * X account (@username or account ID)
+     * X account identifier (@username or account ID)
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -70,19 +70,19 @@ private constructor(
     /** A builder for [FollowDeleteAllParams]. */
     class Builder internal constructor() {
 
-        private var userId: String? = null
+        private var id: String? = null
         private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(followDeleteAllParams: FollowDeleteAllParams) = apply {
-            userId = followDeleteAllParams.userId
+            id = followDeleteAllParams.id
             body = followDeleteAllParams.body.toBuilder()
             additionalHeaders = followDeleteAllParams.additionalHeaders.toBuilder()
             additionalQueryParams = followDeleteAllParams.additionalQueryParams.toBuilder()
         }
 
-        fun userId(userId: String?) = apply { this.userId = userId }
+        fun id(id: String?) = apply { this.id = id }
 
         /**
          * Sets the entire request body.
@@ -93,7 +93,7 @@ private constructor(
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
-        /** X account (@username or account ID) */
+        /** X account identifier (@username or account ID) */
         fun account(account: String) = apply { body.account(account) }
 
         /**
@@ -235,7 +235,7 @@ private constructor(
          */
         fun build(): FollowDeleteAllParams =
             FollowDeleteAllParams(
-                userId,
+                id,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -246,7 +246,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> userId ?: ""
+            0 -> id ?: ""
             else -> ""
         }
 
@@ -254,6 +254,7 @@ private constructor(
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
+    /** Request body identifying an X account by username or ID. */
     class Body
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
@@ -267,7 +268,7 @@ private constructor(
         ) : this(account, mutableMapOf())
 
         /**
-         * X account (@username or account ID)
+         * X account identifier (@username or account ID)
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -318,7 +319,7 @@ private constructor(
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
-            /** X account (@username or account ID) */
+            /** X account identifier (@username or account ID) */
             fun account(account: String) = account(JsonField.of(account))
 
             /**
@@ -416,15 +417,14 @@ private constructor(
         }
 
         return other is FollowDeleteAllParams &&
-            userId == other.userId &&
+            id == other.id &&
             body == other.body &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int =
-        Objects.hash(userId, body, additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int = Objects.hash(id, body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "FollowDeleteAllParams{userId=$userId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "FollowDeleteAllParams{id=$id, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

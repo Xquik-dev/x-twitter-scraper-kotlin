@@ -22,6 +22,7 @@ private constructor(
 
     fun id(): String? = id
 
+    /** Export file format */
     fun format(): Format? = format
 
     /** Additional headers to send with the request. */
@@ -60,6 +61,7 @@ private constructor(
 
         fun id(id: String?) = apply { this.id = id }
 
+        /** Export file format */
         fun format(format: Format?) = apply { this.format = format }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -190,6 +192,7 @@ private constructor(
             }
             .build()
 
+    /** Export file format */
     class Format @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**

@@ -28,10 +28,10 @@ interface FollowService {
 
     /** Follow user */
     fun create(
-        userId: String,
+        id: String,
         params: FollowCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): FollowCreateResponse = create(params.toBuilder().userId(userId).build(), requestOptions)
+    ): FollowCreateResponse = create(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see create */
     fun create(
@@ -41,11 +41,10 @@ interface FollowService {
 
     /** Unfollow user */
     fun deleteAll(
-        userId: String,
+        id: String,
         params: FollowDeleteAllParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): FollowDeleteAllResponse =
-        deleteAll(params.toBuilder().userId(userId).build(), requestOptions)
+    ): FollowDeleteAllResponse = deleteAll(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see deleteAll */
     fun deleteAll(
@@ -64,16 +63,16 @@ interface FollowService {
         fun withOptions(modifier: (ClientOptions.Builder) -> Unit): FollowService.WithRawResponse
 
         /**
-         * Returns a raw HTTP response for `post /x/users/{userId}/follow`, but is otherwise the
-         * same as [FollowService.create].
+         * Returns a raw HTTP response for `post /x/users/{id}/follow`, but is otherwise the same as
+         * [FollowService.create].
          */
         @MustBeClosed
         fun create(
-            userId: String,
+            id: String,
             params: FollowCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<FollowCreateResponse> =
-            create(params.toBuilder().userId(userId).build(), requestOptions)
+            create(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see create */
         @MustBeClosed
@@ -83,16 +82,16 @@ interface FollowService {
         ): HttpResponseFor<FollowCreateResponse>
 
         /**
-         * Returns a raw HTTP response for `delete /x/users/{userId}/follow`, but is otherwise the
-         * same as [FollowService.deleteAll].
+         * Returns a raw HTTP response for `delete /x/users/{id}/follow`, but is otherwise the same
+         * as [FollowService.deleteAll].
          */
         @MustBeClosed
         fun deleteAll(
-            userId: String,
+            id: String,
             params: FollowDeleteAllParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<FollowDeleteAllResponse> =
-            deleteAll(params.toBuilder().userId(userId).build(), requestOptions)
+            deleteAll(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see deleteAll */
         @MustBeClosed

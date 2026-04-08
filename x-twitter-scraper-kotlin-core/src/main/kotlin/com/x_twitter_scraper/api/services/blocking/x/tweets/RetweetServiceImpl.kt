@@ -38,14 +38,14 @@ class RetweetServiceImpl internal constructor(private val clientOptions: ClientO
         params: RetweetCreateParams,
         requestOptions: RequestOptions,
     ): RetweetCreateResponse =
-        // post /x/tweets/{tweetId}/retweet
+        // post /x/tweets/{id}/retweet
         withRawResponse().create(params, requestOptions).parse()
 
     override fun delete(
         params: RetweetDeleteParams,
         requestOptions: RequestOptions,
     ): RetweetDeleteResponse =
-        // delete /x/tweets/{tweetId}/retweet
+        // delete /x/tweets/{id}/retweet
         withRawResponse().delete(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -70,7 +70,7 @@ class RetweetServiceImpl internal constructor(private val clientOptions: ClientO
         ): HttpResponseFor<RetweetCreateResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
-            checkRequired("tweetId", params.tweetId())
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -101,7 +101,7 @@ class RetweetServiceImpl internal constructor(private val clientOptions: ClientO
         ): HttpResponseFor<RetweetDeleteResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
-            checkRequired("tweetId", params.tweetId())
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)

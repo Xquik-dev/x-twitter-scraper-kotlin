@@ -28,10 +28,10 @@ interface RetweetService {
 
     /** Retweet */
     fun create(
-        tweetId: String,
+        id: String,
         params: RetweetCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): RetweetCreateResponse = create(params.toBuilder().tweetId(tweetId).build(), requestOptions)
+    ): RetweetCreateResponse = create(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see create */
     fun create(
@@ -41,10 +41,10 @@ interface RetweetService {
 
     /** Unretweet */
     fun delete(
-        tweetId: String,
+        id: String,
         params: RetweetDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): RetweetDeleteResponse = delete(params.toBuilder().tweetId(tweetId).build(), requestOptions)
+    ): RetweetDeleteResponse = delete(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see delete */
     fun delete(
@@ -63,16 +63,16 @@ interface RetweetService {
         fun withOptions(modifier: (ClientOptions.Builder) -> Unit): RetweetService.WithRawResponse
 
         /**
-         * Returns a raw HTTP response for `post /x/tweets/{tweetId}/retweet`, but is otherwise the
-         * same as [RetweetService.create].
+         * Returns a raw HTTP response for `post /x/tweets/{id}/retweet`, but is otherwise the same
+         * as [RetweetService.create].
          */
         @MustBeClosed
         fun create(
-            tweetId: String,
+            id: String,
             params: RetweetCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<RetweetCreateResponse> =
-            create(params.toBuilder().tweetId(tweetId).build(), requestOptions)
+            create(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see create */
         @MustBeClosed
@@ -82,16 +82,16 @@ interface RetweetService {
         ): HttpResponseFor<RetweetCreateResponse>
 
         /**
-         * Returns a raw HTTP response for `delete /x/tweets/{tweetId}/retweet`, but is otherwise
-         * the same as [RetweetService.delete].
+         * Returns a raw HTTP response for `delete /x/tweets/{id}/retweet`, but is otherwise the
+         * same as [RetweetService.delete].
          */
         @MustBeClosed
         fun delete(
-            tweetId: String,
+            id: String,
             params: RetweetDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<RetweetDeleteResponse> =
-            delete(params.toBuilder().tweetId(tweetId).build(), requestOptions)
+            delete(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see delete */
         @MustBeClosed

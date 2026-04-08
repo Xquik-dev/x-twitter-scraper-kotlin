@@ -30,7 +30,7 @@ private constructor(
     fun id(): String? = id
 
     /**
-     * X account (@username or account ID)
+     * X account identifier (@username or account ID)
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -93,7 +93,7 @@ private constructor(
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
-        /** X account (@username or account ID) */
+        /** X account identifier (@username or account ID) */
         fun account(account: String) = apply { body.account(account) }
 
         /**
@@ -254,6 +254,7 @@ private constructor(
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
+    /** Request body identifying an X account by username or ID. */
     class Body
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
@@ -267,7 +268,7 @@ private constructor(
         ) : this(account, mutableMapOf())
 
         /**
-         * X account (@username or account ID)
+         * X account identifier (@username or account ID)
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -318,7 +319,7 @@ private constructor(
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
-            /** X account (@username or account ID) */
+            /** X account identifier (@username or account ID) */
             fun account(account: String) = account(JsonField.of(account))
 
             /**

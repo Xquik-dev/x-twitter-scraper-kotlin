@@ -28,10 +28,10 @@ interface LikeService {
 
     /** Like tweet */
     fun create(
-        tweetId: String,
+        id: String,
         params: LikeCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): LikeCreateResponse = create(params.toBuilder().tweetId(tweetId).build(), requestOptions)
+    ): LikeCreateResponse = create(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see create */
     fun create(
@@ -41,10 +41,10 @@ interface LikeService {
 
     /** Unlike tweet */
     fun delete(
-        tweetId: String,
+        id: String,
         params: LikeDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): LikeDeleteResponse = delete(params.toBuilder().tweetId(tweetId).build(), requestOptions)
+    ): LikeDeleteResponse = delete(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see delete */
     fun delete(
@@ -63,16 +63,16 @@ interface LikeService {
         fun withOptions(modifier: (ClientOptions.Builder) -> Unit): LikeService.WithRawResponse
 
         /**
-         * Returns a raw HTTP response for `post /x/tweets/{tweetId}/like`, but is otherwise the
-         * same as [LikeService.create].
+         * Returns a raw HTTP response for `post /x/tweets/{id}/like`, but is otherwise the same as
+         * [LikeService.create].
          */
         @MustBeClosed
         fun create(
-            tweetId: String,
+            id: String,
             params: LikeCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<LikeCreateResponse> =
-            create(params.toBuilder().tweetId(tweetId).build(), requestOptions)
+            create(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see create */
         @MustBeClosed
@@ -82,16 +82,16 @@ interface LikeService {
         ): HttpResponseFor<LikeCreateResponse>
 
         /**
-         * Returns a raw HTTP response for `delete /x/tweets/{tweetId}/like`, but is otherwise the
-         * same as [LikeService.delete].
+         * Returns a raw HTTP response for `delete /x/tweets/{id}/like`, but is otherwise the same
+         * as [LikeService.delete].
          */
         @MustBeClosed
         fun delete(
-            tweetId: String,
+            id: String,
             params: LikeDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<LikeDeleteResponse> =
-            delete(params.toBuilder().tweetId(tweetId).build(), requestOptions)
+            delete(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see delete */
         @MustBeClosed

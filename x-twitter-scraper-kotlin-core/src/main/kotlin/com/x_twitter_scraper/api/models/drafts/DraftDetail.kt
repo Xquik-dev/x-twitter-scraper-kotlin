@@ -16,6 +16,7 @@ import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 
+/** Full tweet draft including update timestamp. */
 class DraftDetail
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(

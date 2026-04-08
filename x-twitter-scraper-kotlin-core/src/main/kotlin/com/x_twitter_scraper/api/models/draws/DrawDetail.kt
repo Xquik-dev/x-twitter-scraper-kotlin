@@ -16,6 +16,7 @@ import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 
+/** Full giveaway draw with tweet metrics, entries, and timing. */
 class DrawDetail
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(

@@ -18,13 +18,13 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** Search query */
+    /** Search query for cross-community tweets */
     fun q(): String = q
 
-    /** Pagination cursor */
+    /** Pagination cursor for cross-community results */
     fun cursor(): String? = cursor
 
-    /** Sort order (Latest or Top) */
+    /** Sort order for cross-community results (Latest or Top) */
     fun queryType(): String? = queryType
 
     /** Additional headers to send with the request. */
@@ -65,13 +65,13 @@ private constructor(
             additionalQueryParams = tweetListParams.additionalQueryParams.toBuilder()
         }
 
-        /** Search query */
+        /** Search query for cross-community tweets */
         fun q(q: String) = apply { this.q = q }
 
-        /** Pagination cursor */
+        /** Pagination cursor for cross-community results */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
-        /** Sort order (Latest or Top) */
+        /** Sort order for cross-community results (Latest or Top) */
         fun queryType(queryType: String?) = apply { this.queryType = queryType }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {

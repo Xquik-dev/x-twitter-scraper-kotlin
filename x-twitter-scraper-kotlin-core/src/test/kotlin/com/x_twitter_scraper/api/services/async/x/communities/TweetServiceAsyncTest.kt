@@ -3,6 +3,7 @@
 package com.x_twitter_scraper.api.services.async.x.communities
 
 import com.x_twitter_scraper.api.client.okhttp.XTwitterScraperOkHttpClientAsync
+import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListByCommunityParams
 import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -19,8 +20,29 @@ internal class TweetServiceAsyncTest {
                 .build()
         val tweetServiceAsync = client.x().communities().tweets()
 
-        tweetServiceAsync.list(
-            TweetListParams.builder().q("q").cursor("cursor").queryType("queryType").build()
-        )
+        val paginatedTweets =
+            tweetServiceAsync.list(
+                TweetListParams.builder().q("q").cursor("cursor").queryType("queryType").build()
+            )
+
+        paginatedTweets.validate()
+    }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
+    suspend fun listByCommunity() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val tweetServiceAsync = client.x().communities().tweets()
+
+        val paginatedTweets =
+            tweetServiceAsync.listByCommunity(
+                TweetListByCommunityParams.builder().id("id").cursor("cursor").build()
+            )
+
+        paginatedTweets.validate()
     }
 }

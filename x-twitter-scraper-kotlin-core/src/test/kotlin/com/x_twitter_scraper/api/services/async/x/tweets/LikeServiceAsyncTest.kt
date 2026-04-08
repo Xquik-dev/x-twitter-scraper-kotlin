@@ -22,7 +22,7 @@ internal class LikeServiceAsyncTest {
 
         val like =
             likeServiceAsync.create(
-                LikeCreateParams.builder().tweetId("tweetId").account("account").build()
+                LikeCreateParams.builder().id("id").account("@elonmusk").build()
             )
 
         like.validate()
@@ -40,7 +40,7 @@ internal class LikeServiceAsyncTest {
 
         val like =
             likeServiceAsync.delete(
-                LikeDeleteParams.builder().tweetId("tweetId").account("account").build()
+                LikeDeleteParams.builder().id("id").account("@elonmusk").build()
             )
 
         like.validate()

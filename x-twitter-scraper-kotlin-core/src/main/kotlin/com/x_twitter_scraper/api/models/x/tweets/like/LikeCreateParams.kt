@@ -21,16 +21,16 @@ import java.util.Objects
 /** Like tweet */
 class LikeCreateParams
 private constructor(
-    private val tweetId: String?,
+    private val id: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun tweetId(): String? = tweetId
+    fun id(): String? = id
 
     /**
-     * X account (@username or account ID)
+     * X account identifier (@username or account ID)
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -70,19 +70,19 @@ private constructor(
     /** A builder for [LikeCreateParams]. */
     class Builder internal constructor() {
 
-        private var tweetId: String? = null
+        private var id: String? = null
         private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(likeCreateParams: LikeCreateParams) = apply {
-            tweetId = likeCreateParams.tweetId
+            id = likeCreateParams.id
             body = likeCreateParams.body.toBuilder()
             additionalHeaders = likeCreateParams.additionalHeaders.toBuilder()
             additionalQueryParams = likeCreateParams.additionalQueryParams.toBuilder()
         }
 
-        fun tweetId(tweetId: String?) = apply { this.tweetId = tweetId }
+        fun id(id: String?) = apply { this.id = id }
 
         /**
          * Sets the entire request body.
@@ -93,7 +93,7 @@ private constructor(
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
-        /** X account (@username or account ID) */
+        /** X account identifier (@username or account ID) */
         fun account(account: String) = apply { body.account(account) }
 
         /**
@@ -235,7 +235,7 @@ private constructor(
          */
         fun build(): LikeCreateParams =
             LikeCreateParams(
-                tweetId,
+                id,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -246,7 +246,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> tweetId ?: ""
+            0 -> id ?: ""
             else -> ""
         }
 
@@ -254,6 +254,7 @@ private constructor(
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
+    /** Request body identifying an X account by username or ID. */
     class Body
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
@@ -267,7 +268,7 @@ private constructor(
         ) : this(account, mutableMapOf())
 
         /**
-         * X account (@username or account ID)
+         * X account identifier (@username or account ID)
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -318,7 +319,7 @@ private constructor(
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
-            /** X account (@username or account ID) */
+            /** X account identifier (@username or account ID) */
             fun account(account: String) = account(JsonField.of(account))
 
             /**
@@ -416,15 +417,14 @@ private constructor(
         }
 
         return other is LikeCreateParams &&
-            tweetId == other.tweetId &&
+            id == other.id &&
             body == other.body &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int =
-        Objects.hash(tweetId, body, additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int = Objects.hash(id, body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "LikeCreateParams{tweetId=$tweetId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "LikeCreateParams{id=$id, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

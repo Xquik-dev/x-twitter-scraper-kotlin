@@ -16,6 +16,7 @@ import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 
+/** Full X account details including proxy, cookies, and update timestamp. */
 class XAccountDetail
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(

@@ -2,6 +2,7 @@
 
 package com.x_twitter_scraper.api.models.webhooks
 
+import com.x_twitter_scraper.api.models.EventType
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -11,9 +12,9 @@ internal class WebhookUpdateParamsTest {
     fun create() {
         WebhookUpdateParams.builder()
             .id("id")
-            .addEventType(WebhookUpdateParams.EventType.TWEET_NEW)
+            .addEventType(EventType.TWEET_NEW)
             .isActive(true)
-            .url("https://example.com")
+            .url("https://example.com/webhook")
             .build()
     }
 
@@ -31,16 +32,16 @@ internal class WebhookUpdateParamsTest {
         val params =
             WebhookUpdateParams.builder()
                 .id("id")
-                .addEventType(WebhookUpdateParams.EventType.TWEET_NEW)
+                .addEventType(EventType.TWEET_NEW)
                 .isActive(true)
-                .url("https://example.com")
+                .url("https://example.com/webhook")
                 .build()
 
         val body = params._body()
 
-        assertThat(body.eventTypes()).containsExactly(WebhookUpdateParams.EventType.TWEET_NEW)
+        assertThat(body.eventTypes()).containsExactly(EventType.TWEET_NEW)
         assertThat(body.isActive()).isEqualTo(true)
-        assertThat(body.url()).isEqualTo("https://example.com")
+        assertThat(body.url()).isEqualTo("https://example.com/webhook")
     }
 
     @Test
