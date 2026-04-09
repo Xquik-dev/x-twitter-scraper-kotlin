@@ -14,11 +14,7 @@ internal class TicketServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun create() {
-        val client =
-            XTwitterScraperOkHttpClientAsync.builder()
-                .apiKey("My API Key")
-                .bearerToken("My Bearer Token")
-                .build()
+        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
         val ticketServiceAsync = client.support().tickets()
 
         val ticket =
@@ -35,11 +31,7 @@ internal class TicketServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun retrieve() {
-        val client =
-            XTwitterScraperOkHttpClientAsync.builder()
-                .apiKey("My API Key")
-                .bearerToken("My Bearer Token")
-                .build()
+        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
         val ticketServiceAsync = client.support().tickets()
 
         val ticket = ticketServiceAsync.retrieve("messages_value")
@@ -50,11 +42,7 @@ internal class TicketServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun update() {
-        val client =
-            XTwitterScraperOkHttpClientAsync.builder()
-                .apiKey("My API Key")
-                .bearerToken("My Bearer Token")
-                .build()
+        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
         val ticketServiceAsync = client.support().tickets()
 
         val ticket =
@@ -71,11 +59,7 @@ internal class TicketServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun list() {
-        val client =
-            XTwitterScraperOkHttpClientAsync.builder()
-                .apiKey("My API Key")
-                .bearerToken("My Bearer Token")
-                .build()
+        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
         val ticketServiceAsync = client.support().tickets()
 
         val tickets = ticketServiceAsync.list()
@@ -86,11 +70,7 @@ internal class TicketServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun reply() {
-        val client =
-            XTwitterScraperOkHttpClientAsync.builder()
-                .apiKey("My API Key")
-                .bearerToken("My Bearer Token")
-                .build()
+        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
         val ticketServiceAsync = client.support().tickets()
 
         val response =

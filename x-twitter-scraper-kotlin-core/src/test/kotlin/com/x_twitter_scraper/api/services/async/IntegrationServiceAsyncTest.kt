@@ -15,11 +15,7 @@ internal class IntegrationServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun create() {
-        val client =
-            XTwitterScraperOkHttpClientAsync.builder()
-                .apiKey("My API Key")
-                .bearerToken("My Bearer Token")
-                .build()
+        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
         val integrationServiceAsync = client.integrations()
 
         val integration =
@@ -40,11 +36,7 @@ internal class IntegrationServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun retrieve() {
-        val client =
-            XTwitterScraperOkHttpClientAsync.builder()
-                .apiKey("My API Key")
-                .bearerToken("My Bearer Token")
-                .build()
+        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
         val integrationServiceAsync = client.integrations()
 
         val integration = integrationServiceAsync.retrieve("id")
@@ -55,11 +47,7 @@ internal class IntegrationServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun update() {
-        val client =
-            XTwitterScraperOkHttpClientAsync.builder()
-                .apiKey("My API Key")
-                .bearerToken("My Bearer Token")
-                .build()
+        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
         val integrationServiceAsync = client.integrations()
 
         val integration =
@@ -82,11 +70,7 @@ internal class IntegrationServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun list() {
-        val client =
-            XTwitterScraperOkHttpClientAsync.builder()
-                .apiKey("My API Key")
-                .bearerToken("My Bearer Token")
-                .build()
+        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
         val integrationServiceAsync = client.integrations()
 
         val integrations = integrationServiceAsync.list()
@@ -97,11 +81,7 @@ internal class IntegrationServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun delete() {
-        val client =
-            XTwitterScraperOkHttpClientAsync.builder()
-                .apiKey("My API Key")
-                .bearerToken("My Bearer Token")
-                .build()
+        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
         val integrationServiceAsync = client.integrations()
 
         val integration = integrationServiceAsync.delete("id")
@@ -112,11 +92,7 @@ internal class IntegrationServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun listDeliveries() {
-        val client =
-            XTwitterScraperOkHttpClientAsync.builder()
-                .apiKey("My API Key")
-                .bearerToken("My Bearer Token")
-                .build()
+        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
         val integrationServiceAsync = client.integrations()
 
         val response =
@@ -130,11 +106,7 @@ internal class IntegrationServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun sendTest() {
-        val client =
-            XTwitterScraperOkHttpClientAsync.builder()
-                .apiKey("My API Key")
-                .bearerToken("My Bearer Token")
-                .build()
+        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
         val integrationServiceAsync = client.integrations()
 
         val response = integrationServiceAsync.sendTest("id")
