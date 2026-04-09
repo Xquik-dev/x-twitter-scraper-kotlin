@@ -13,11 +13,7 @@ internal class TweetServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun list() {
-        val client =
-            XTwitterScraperOkHttpClientAsync.builder()
-                .apiKey("My API Key")
-                .bearerToken("My Bearer Token")
-                .build()
+        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
         val tweetServiceAsync = client.x().communities().tweets()
 
         val paginatedTweets =
@@ -31,11 +27,7 @@ internal class TweetServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun listByCommunity() {
-        val client =
-            XTwitterScraperOkHttpClientAsync.builder()
-                .apiKey("My API Key")
-                .bearerToken("My Bearer Token")
-                .build()
+        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
         val tweetServiceAsync = client.x().communities().tweets()
 
         val paginatedTweets =

@@ -13,11 +13,7 @@ internal class MediaServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun download() {
-        val client =
-            XTwitterScraperOkHttpClientAsync.builder()
-                .apiKey("My API Key")
-                .bearerToken("My Bearer Token")
-                .build()
+        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
         val mediaServiceAsync = client.x().media()
 
         val response =
@@ -35,11 +31,7 @@ internal class MediaServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun upload() {
-        val client =
-            XTwitterScraperOkHttpClientAsync.builder()
-                .apiKey("My API Key")
-                .bearerToken("My Bearer Token")
-                .build()
+        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
         val mediaServiceAsync = client.x().media()
 
         val response =

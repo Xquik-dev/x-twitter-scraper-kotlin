@@ -14,11 +14,7 @@ internal class StyleServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun retrieve() {
-        val client =
-            XTwitterScraperOkHttpClientAsync.builder()
-                .apiKey("My API Key")
-                .bearerToken("My Bearer Token")
-                .build()
+        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
         val styleServiceAsync = client.styles()
 
         val styleProfile = styleServiceAsync.retrieve("id")
@@ -29,11 +25,7 @@ internal class StyleServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun update() {
-        val client =
-            XTwitterScraperOkHttpClientAsync.builder()
-                .apiKey("My API Key")
-                .bearerToken("My Bearer Token")
-                .build()
+        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
         val styleServiceAsync = client.styles()
 
         val styleProfile =
@@ -55,11 +47,7 @@ internal class StyleServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun list() {
-        val client =
-            XTwitterScraperOkHttpClientAsync.builder()
-                .apiKey("My API Key")
-                .bearerToken("My Bearer Token")
-                .build()
+        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
         val styleServiceAsync = client.styles()
 
         val styles = styleServiceAsync.list()
@@ -70,11 +58,7 @@ internal class StyleServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun delete() {
-        val client =
-            XTwitterScraperOkHttpClientAsync.builder()
-                .apiKey("My API Key")
-                .bearerToken("My Bearer Token")
-                .build()
+        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
         val styleServiceAsync = client.styles()
 
         styleServiceAsync.delete("id")
@@ -83,11 +67,7 @@ internal class StyleServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun analyze() {
-        val client =
-            XTwitterScraperOkHttpClientAsync.builder()
-                .apiKey("My API Key")
-                .bearerToken("My Bearer Token")
-                .build()
+        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
         val styleServiceAsync = client.styles()
 
         val styleProfile =
@@ -99,11 +79,7 @@ internal class StyleServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun compare() {
-        val client =
-            XTwitterScraperOkHttpClientAsync.builder()
-                .apiKey("My API Key")
-                .bearerToken("My Bearer Token")
-                .build()
+        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
         val styleServiceAsync = client.styles()
 
         val response =
@@ -117,11 +93,7 @@ internal class StyleServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun getPerformance() {
-        val client =
-            XTwitterScraperOkHttpClientAsync.builder()
-                .apiKey("My API Key")
-                .bearerToken("My Bearer Token")
-                .build()
+        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
         val styleServiceAsync = client.styles()
 
         val response = styleServiceAsync.getPerformance("id")

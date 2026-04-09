@@ -4,7 +4,6 @@ package com.x_twitter_scraper.api.services.blocking.x
 
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
-import com.x_twitter_scraper.api.core.SecurityOptions
 import com.x_twitter_scraper.api.core.checkRequired
 import com.x_twitter_scraper.api.core.handlers.errorBodyHandler
 import com.x_twitter_scraper.api.core.handlers.errorHandler
@@ -112,7 +111,7 @@ class AccountServiceImpl internal constructor(private val clientOptions: ClientO
                     .addPathSegments("x", "accounts")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
-                    .prepare(clientOptions, params, SecurityOptions.builder().apiKey(true).build())
+                    .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
@@ -142,7 +141,7 @@ class AccountServiceImpl internal constructor(private val clientOptions: ClientO
                     .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("x", "accounts", params._pathParam(0))
                     .build()
-                    .prepare(clientOptions, params, SecurityOptions.builder().apiKey(true).build())
+                    .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
@@ -169,7 +168,7 @@ class AccountServiceImpl internal constructor(private val clientOptions: ClientO
                     .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("x", "accounts")
                     .build()
-                    .prepare(clientOptions, params, SecurityOptions.builder().apiKey(true).build())
+                    .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
@@ -200,7 +199,7 @@ class AccountServiceImpl internal constructor(private val clientOptions: ClientO
                     .addPathSegments("x", "accounts", params._pathParam(0))
                     .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
-                    .prepare(clientOptions, params, SecurityOptions.builder().apiKey(true).build())
+                    .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
@@ -228,7 +227,7 @@ class AccountServiceImpl internal constructor(private val clientOptions: ClientO
                     .addPathSegments("x", "accounts", "bulk-retry")
                     .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
-                    .prepare(clientOptions, params, SecurityOptions.builder().apiKey(true).build())
+                    .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
@@ -259,7 +258,7 @@ class AccountServiceImpl internal constructor(private val clientOptions: ClientO
                     .addPathSegments("x", "accounts", params._pathParam(0), "reauth")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
-                    .prepare(clientOptions, params, SecurityOptions.builder().apiKey(true).build())
+                    .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
