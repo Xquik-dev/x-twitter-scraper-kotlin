@@ -9,7 +9,7 @@ import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.models.x.followers.FollowerCheckParams
 import com.x_twitter_scraper.api.models.x.followers.FollowerCheckResponse
 
-/** X data lookups (subscription required) */
+/** Look up, search, and explore user profiles and relationships */
 interface FollowerService {
 
     /**
@@ -24,7 +24,7 @@ interface FollowerService {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): FollowerService
 
-    /** Check follow relationship */
+    /** Check if one user follows another */
     fun check(
         params: FollowerCheckParams,
         requestOptions: RequestOptions = RequestOptions.none(),

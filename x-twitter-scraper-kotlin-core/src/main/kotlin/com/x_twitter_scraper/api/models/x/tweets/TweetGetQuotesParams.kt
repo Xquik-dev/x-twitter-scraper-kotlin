@@ -7,7 +7,7 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
 
-/** Get quote tweets of a tweet */
+/** List quote tweets of a tweet */
 class TweetGetQuotesParams
 private constructor(
     private val id: String?,

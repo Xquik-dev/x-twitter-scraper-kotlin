@@ -22,7 +22,7 @@ import com.x_twitter_scraper.api.models.account.AccountSetXUsernameResponse
 import com.x_twitter_scraper.api.models.account.AccountUpdateLocaleParams
 import com.x_twitter_scraper.api.models.account.AccountUpdateLocaleResponse
 
-/** Account info & settings */
+/** Account info and settings */
 class AccountServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     AccountServiceAsync {
 

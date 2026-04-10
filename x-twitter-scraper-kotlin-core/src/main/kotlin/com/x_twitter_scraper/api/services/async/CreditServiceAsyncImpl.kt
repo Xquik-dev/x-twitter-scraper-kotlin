@@ -20,7 +20,7 @@ import com.x_twitter_scraper.api.models.credits.CreditRetrieveBalanceResponse
 import com.x_twitter_scraper.api.models.credits.CreditTopupBalanceParams
 import com.x_twitter_scraper.api.models.credits.CreditTopupBalanceResponse
 
-/** Subscription & billing */
+/** Subscription, billing, and credits */
 class CreditServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     CreditServiceAsync {
 

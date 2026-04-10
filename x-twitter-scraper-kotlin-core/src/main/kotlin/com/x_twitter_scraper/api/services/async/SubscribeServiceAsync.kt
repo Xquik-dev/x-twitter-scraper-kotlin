@@ -9,7 +9,7 @@ import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.models.subscribe.SubscribeCreateParams
 import com.x_twitter_scraper.api.models.subscribe.SubscribeCreateResponse
 
-/** Subscription & billing */
+/** Subscription, billing, and credits */
 interface SubscribeServiceAsync {
 
     /**

@@ -19,7 +19,7 @@ import com.x_twitter_scraper.api.models.webhooks.WebhookTestParams
 import com.x_twitter_scraper.api.models.webhooks.WebhookTestResponse
 import com.x_twitter_scraper.api.models.webhooks.WebhookUpdateParams
 
-/** Webhook endpoint management & delivery */
+/** Webhook endpoint management and delivery */
 interface WebhookServiceAsync {
 
     /**

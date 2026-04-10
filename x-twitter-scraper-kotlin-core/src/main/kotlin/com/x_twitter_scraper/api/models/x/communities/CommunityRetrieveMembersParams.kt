@@ -7,7 +7,7 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
 
-/** Get community members */
+/** List members of a community */
 class CommunityRetrieveMembersParams
 private constructor(
     private val id: String?,

@@ -32,7 +32,7 @@ import com.x_twitter_scraper.api.models.x.users.UserRetrieveVerifiedFollowersPar
 import com.x_twitter_scraper.api.services.async.x.users.FollowServiceAsync
 import com.x_twitter_scraper.api.services.async.x.users.FollowServiceAsyncImpl
 
-/** X data lookups (subscription required) */
+/** Look up, search, and explore user profiles and relationships */
 class UserServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     UserServiceAsync {
 

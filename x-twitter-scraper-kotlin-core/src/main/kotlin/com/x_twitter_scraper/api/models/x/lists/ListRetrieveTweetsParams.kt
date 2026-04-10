@@ -7,7 +7,7 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
 
-/** Get list tweets */
+/** List tweets from an X List */
 class ListRetrieveTweetsParams
 private constructor(
     private val id: String?,

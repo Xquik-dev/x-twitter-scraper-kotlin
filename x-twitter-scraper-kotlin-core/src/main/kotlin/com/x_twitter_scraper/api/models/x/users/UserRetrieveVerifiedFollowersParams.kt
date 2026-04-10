@@ -7,7 +7,7 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
 
-/** Get verified followers */
+/** List verified followers of a user */
 class UserRetrieveVerifiedFollowersParams
 private constructor(
     private val id: String?,

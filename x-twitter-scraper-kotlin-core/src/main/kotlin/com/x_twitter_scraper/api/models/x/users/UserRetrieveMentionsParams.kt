@@ -7,7 +7,7 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
 
-/** Get tweets mentioning a user */
+/** List tweets mentioning a user */
 class UserRetrieveMentionsParams
 private constructor(
     private val id: String?,

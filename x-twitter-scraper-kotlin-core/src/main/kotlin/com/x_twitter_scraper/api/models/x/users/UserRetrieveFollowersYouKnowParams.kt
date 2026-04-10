@@ -7,7 +7,7 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
 
-/** Get followers you know for a user */
+/** List mutual followers between you and a user */
 class UserRetrieveFollowersYouKnowParams
 private constructor(
     private val id: String?,
