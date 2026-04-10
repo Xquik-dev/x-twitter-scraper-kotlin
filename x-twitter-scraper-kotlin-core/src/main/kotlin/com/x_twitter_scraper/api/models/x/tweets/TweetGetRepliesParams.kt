@@ -7,7 +7,7 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
 
-/** Get replies to a tweet */
+/** List replies to a tweet */
 class TweetGetRepliesParams
 private constructor(
     private val id: String?,

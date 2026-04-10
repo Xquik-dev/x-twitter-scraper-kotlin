@@ -25,7 +25,6 @@ import com.x_twitter_scraper.api.services.async.x.ProfileServiceAsync
 import com.x_twitter_scraper.api.services.async.x.TweetServiceAsync
 import com.x_twitter_scraper.api.services.async.x.UserServiceAsync
 
-/** X data lookups (subscription required) */
 interface XServiceAsync {
 
     /**
@@ -42,15 +41,15 @@ interface XServiceAsync {
 
     fun tweets(): TweetServiceAsync
 
-    /** X data lookups (subscription required) */
+    /** Look up, search, and explore user profiles and relationships */
     fun users(): UserServiceAsync
 
-    /** X data lookups (subscription required) */
+    /** Look up, search, and explore user profiles and relationships */
     fun followers(): FollowerServiceAsync
 
     fun dm(): DmServiceAsync
 
-    /** Media upload & download */
+    /** Media upload and download */
     fun media(): MediaServiceAsync
 
     /** X write actions (tweets, likes, follows, DMs) */
@@ -61,10 +60,10 @@ interface XServiceAsync {
     /** Connected X account management */
     fun accounts(): AccountServiceAsync
 
-    /** X data lookups (subscription required) */
+    /** Look up, search, and analyze individual tweets */
     fun bookmarks(): BookmarkServiceAsync
 
-    /** X data lookups (subscription required) */
+    /** X List followers, members, and tweets */
     fun lists(): ListServiceAsync
 
     /** Retrieve the full content of an X Article (long-form post) by tweet ID. */
@@ -104,7 +103,7 @@ interface XServiceAsync {
     suspend fun getNotifications(requestOptions: RequestOptions): XGetNotificationsResponse =
         getNotifications(XGetNotificationsParams.none(), requestOptions)
 
-    /** Get trending topics */
+    /** Get trending hashtags & topics from X by region */
     suspend fun getTrends(
         params: XGetTrendsParams = XGetTrendsParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -126,15 +125,15 @@ interface XServiceAsync {
 
         fun tweets(): TweetServiceAsync.WithRawResponse
 
-        /** X data lookups (subscription required) */
+        /** Look up, search, and explore user profiles and relationships */
         fun users(): UserServiceAsync.WithRawResponse
 
-        /** X data lookups (subscription required) */
+        /** Look up, search, and explore user profiles and relationships */
         fun followers(): FollowerServiceAsync.WithRawResponse
 
         fun dm(): DmServiceAsync.WithRawResponse
 
-        /** Media upload & download */
+        /** Media upload and download */
         fun media(): MediaServiceAsync.WithRawResponse
 
         /** X write actions (tweets, likes, follows, DMs) */
@@ -145,10 +144,10 @@ interface XServiceAsync {
         /** Connected X account management */
         fun accounts(): AccountServiceAsync.WithRawResponse
 
-        /** X data lookups (subscription required) */
+        /** Look up, search, and analyze individual tweets */
         fun bookmarks(): BookmarkServiceAsync.WithRawResponse
 
-        /** X data lookups (subscription required) */
+        /** X List followers, members, and tweets */
         fun lists(): ListServiceAsync.WithRawResponse
 
         /**

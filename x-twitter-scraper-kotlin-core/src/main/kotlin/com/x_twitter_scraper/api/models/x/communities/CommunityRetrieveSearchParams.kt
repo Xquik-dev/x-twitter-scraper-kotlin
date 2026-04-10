@@ -8,7 +8,7 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
 
-/** Search tweets across communities */
+/** Search for communities by keyword */
 class CommunityRetrieveSearchParams
 private constructor(
     private val q: String,

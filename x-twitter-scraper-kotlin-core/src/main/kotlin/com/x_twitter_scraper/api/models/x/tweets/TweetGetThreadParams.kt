@@ -7,7 +7,7 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
 
-/** Get thread context for a tweet */
+/** Get full conversation thread for a tweet */
 class TweetGetThreadParams
 private constructor(
     private val id: String?,

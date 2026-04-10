@@ -18,7 +18,7 @@ import com.x_twitter_scraper.api.core.prepare
 import com.x_twitter_scraper.api.models.compose.ComposeCreateParams
 import com.x_twitter_scraper.api.models.compose.ComposeCreateResponse
 
-/** Tweet composition, drafts, writing styles & radar */
+/** AI tweet composition, drafts, writing styles, and radar */
 class ComposeServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     ComposeService {
 

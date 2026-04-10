@@ -11,7 +11,7 @@ import com.x_twitter_scraper.api.models.x.media.MediaDownloadResponse
 import com.x_twitter_scraper.api.models.x.media.MediaUploadParams
 import com.x_twitter_scraper.api.models.x.media.MediaUploadResponse
 
-/** Media upload & download */
+/** Media upload and download */
 interface MediaServiceAsync {
 
     /**
@@ -26,7 +26,7 @@ interface MediaServiceAsync {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): MediaServiceAsync
 
-    /** Download tweet media */
+    /** Download images & videos from tweets */
     suspend fun download(
         params: MediaDownloadParams = MediaDownloadParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),

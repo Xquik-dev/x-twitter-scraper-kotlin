@@ -7,7 +7,7 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
 
-/** Get community tweets */
+/** List tweets posted in a community */
 class TweetListByCommunityParams
 private constructor(
     private val id: String?,

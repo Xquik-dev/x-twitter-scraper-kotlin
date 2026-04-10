@@ -29,7 +29,7 @@ import com.x_twitter_scraper.api.models.styles.StyleProfile
 import com.x_twitter_scraper.api.models.styles.StyleRetrieveParams
 import com.x_twitter_scraper.api.models.styles.StyleUpdateParams
 
-/** Tweet composition, drafts, writing styles & radar */
+/** AI tweet composition, drafts, writing styles, and radar */
 class StyleServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     StyleServiceAsync {
 

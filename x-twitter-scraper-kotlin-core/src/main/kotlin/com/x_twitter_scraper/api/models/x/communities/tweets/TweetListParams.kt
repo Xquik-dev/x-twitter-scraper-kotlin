@@ -8,7 +8,7 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
 
-/** Search tweets across all communities */
+/** List tweets across all communities */
 class TweetListParams
 private constructor(
     private val q: String,

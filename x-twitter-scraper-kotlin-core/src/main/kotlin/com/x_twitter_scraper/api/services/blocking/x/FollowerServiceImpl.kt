@@ -17,7 +17,7 @@ import com.x_twitter_scraper.api.core.prepare
 import com.x_twitter_scraper.api.models.x.followers.FollowerCheckParams
 import com.x_twitter_scraper.api.models.x.followers.FollowerCheckResponse
 
-/** X data lookups (subscription required) */
+/** Look up, search, and explore user profiles and relationships */
 class FollowerServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     FollowerService {
 

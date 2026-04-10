@@ -19,7 +19,7 @@ import com.x_twitter_scraper.api.models.PaginatedTweets
 import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListByCommunityParams
 import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListParams
 
-/** X data lookups (subscription required) */
+/** X Community info, members, and tweets */
 class TweetServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     TweetServiceAsync {
 

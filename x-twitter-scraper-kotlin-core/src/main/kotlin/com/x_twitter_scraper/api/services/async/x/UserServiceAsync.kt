@@ -22,7 +22,7 @@ import com.x_twitter_scraper.api.models.x.users.UserRetrieveTweetsParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveVerifiedFollowersParams
 import com.x_twitter_scraper.api.services.async.x.users.FollowServiceAsync
 
-/** X data lookups (subscription required) */
+/** Look up, search, and explore user profiles and relationships */
 interface UserServiceAsync {
 
     /**
@@ -40,7 +40,7 @@ interface UserServiceAsync {
     /** X write actions (tweets, likes, follows, DMs) */
     fun follow(): FollowServiceAsync
 
-    /** Look up X user */
+    /** Get user profile with follower counts & verification */
     suspend fun retrieve(
         id: String,
         params: UserRetrieveParams = UserRetrieveParams.none(),
@@ -57,13 +57,13 @@ interface UserServiceAsync {
     suspend fun retrieve(id: String, requestOptions: RequestOptions): UserProfile =
         retrieve(id, UserRetrieveParams.none(), requestOptions)
 
-    /** Get multiple users by IDs */
+    /** Look up multiple users by IDs in one call */
     suspend fun retrieveBatch(
         params: UserRetrieveBatchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): PaginatedUsers
 
-    /** Get user followers */
+    /** List followers of a user */
     suspend fun retrieveFollowers(
         id: String,
         params: UserRetrieveFollowersParams = UserRetrieveFollowersParams.none(),
@@ -80,7 +80,7 @@ interface UserServiceAsync {
     suspend fun retrieveFollowers(id: String, requestOptions: RequestOptions): PaginatedUsers =
         retrieveFollowers(id, UserRetrieveFollowersParams.none(), requestOptions)
 
-    /** Get followers you know for a user */
+    /** List mutual followers between you and a user */
     suspend fun retrieveFollowersYouKnow(
         id: String,
         params: UserRetrieveFollowersYouKnowParams = UserRetrieveFollowersYouKnowParams.none(),
@@ -100,7 +100,7 @@ interface UserServiceAsync {
     ): PaginatedUsers =
         retrieveFollowersYouKnow(id, UserRetrieveFollowersYouKnowParams.none(), requestOptions)
 
-    /** Get users this user follows */
+    /** List accounts a user follows */
     suspend fun retrieveFollowing(
         id: String,
         params: UserRetrieveFollowingParams = UserRetrieveFollowingParams.none(),
@@ -117,7 +117,7 @@ interface UserServiceAsync {
     suspend fun retrieveFollowing(id: String, requestOptions: RequestOptions): PaginatedUsers =
         retrieveFollowing(id, UserRetrieveFollowingParams.none(), requestOptions)
 
-    /** Get tweets liked by a user */
+    /** List tweets liked by a user */
     suspend fun retrieveLikes(
         id: String,
         params: UserRetrieveLikesParams = UserRetrieveLikesParams.none(),
@@ -134,7 +134,7 @@ interface UserServiceAsync {
     suspend fun retrieveLikes(id: String, requestOptions: RequestOptions): PaginatedTweets =
         retrieveLikes(id, UserRetrieveLikesParams.none(), requestOptions)
 
-    /** Get media tweets by a user */
+    /** List media tweets posted by a user */
     suspend fun retrieveMedia(
         id: String,
         params: UserRetrieveMediaParams = UserRetrieveMediaParams.none(),
@@ -151,7 +151,7 @@ interface UserServiceAsync {
     suspend fun retrieveMedia(id: String, requestOptions: RequestOptions): PaginatedTweets =
         retrieveMedia(id, UserRetrieveMediaParams.none(), requestOptions)
 
-    /** Get tweets mentioning a user */
+    /** List tweets mentioning a user */
     suspend fun retrieveMentions(
         id: String,
         params: UserRetrieveMentionsParams = UserRetrieveMentionsParams.none(),
@@ -174,7 +174,7 @@ interface UserServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): PaginatedUsers
 
-    /** Get recent tweets by a user */
+    /** List recent tweets posted by a user */
     suspend fun retrieveTweets(
         id: String,
         params: UserRetrieveTweetsParams = UserRetrieveTweetsParams.none(),
@@ -191,7 +191,7 @@ interface UserServiceAsync {
     suspend fun retrieveTweets(id: String, requestOptions: RequestOptions): PaginatedTweets =
         retrieveTweets(id, UserRetrieveTweetsParams.none(), requestOptions)
 
-    /** Get verified followers */
+    /** List verified followers of a user */
     suspend fun retrieveVerifiedFollowers(
         id: String,
         params: UserRetrieveVerifiedFollowersParams = UserRetrieveVerifiedFollowersParams.none(),

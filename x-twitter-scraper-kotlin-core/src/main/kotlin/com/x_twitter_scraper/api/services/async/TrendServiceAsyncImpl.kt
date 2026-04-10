@@ -17,7 +17,7 @@ import com.x_twitter_scraper.api.core.prepareAsync
 import com.x_twitter_scraper.api.models.trends.TrendListParams
 import com.x_twitter_scraper.api.models.trends.TrendListResponse
 
-/** Trending topics by region */
+/** Trending topics and hashtags by region */
 class TrendServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     TrendServiceAsync {
 

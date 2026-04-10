@@ -18,7 +18,7 @@ import com.x_twitter_scraper.api.core.prepare
 import com.x_twitter_scraper.api.models.subscribe.SubscribeCreateParams
 import com.x_twitter_scraper.api.models.subscribe.SubscribeCreateResponse
 
-/** Subscription & billing */
+/** Subscription, billing, and credits */
 class SubscribeServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     SubscribeService {
 

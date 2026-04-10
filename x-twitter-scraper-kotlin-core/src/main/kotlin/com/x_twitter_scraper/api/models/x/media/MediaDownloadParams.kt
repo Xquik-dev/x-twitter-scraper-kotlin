@@ -19,7 +19,7 @@ import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
 import java.util.Collections
 import java.util.Objects
 
-/** Download tweet media */
+/** Download images & videos from tweets */
 class MediaDownloadParams
 private constructor(
     private val body: Body,

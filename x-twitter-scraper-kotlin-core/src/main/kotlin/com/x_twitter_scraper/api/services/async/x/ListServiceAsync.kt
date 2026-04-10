@@ -12,7 +12,7 @@ import com.x_twitter_scraper.api.models.x.lists.ListRetrieveFollowersParams
 import com.x_twitter_scraper.api.models.x.lists.ListRetrieveMembersParams
 import com.x_twitter_scraper.api.models.x.lists.ListRetrieveTweetsParams
 
-/** X data lookups (subscription required) */
+/** X List followers, members, and tweets */
 interface ListServiceAsync {
 
     /**
@@ -27,7 +27,7 @@ interface ListServiceAsync {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ListServiceAsync
 
-    /** Get list followers */
+    /** List followers of an X List */
     suspend fun retrieveFollowers(
         id: String,
         params: ListRetrieveFollowersParams = ListRetrieveFollowersParams.none(),
@@ -44,7 +44,7 @@ interface ListServiceAsync {
     suspend fun retrieveFollowers(id: String, requestOptions: RequestOptions): PaginatedUsers =
         retrieveFollowers(id, ListRetrieveFollowersParams.none(), requestOptions)
 
-    /** Get list members */
+    /** List members of an X List */
     suspend fun retrieveMembers(
         id: String,
         params: ListRetrieveMembersParams = ListRetrieveMembersParams.none(),
@@ -61,7 +61,7 @@ interface ListServiceAsync {
     suspend fun retrieveMembers(id: String, requestOptions: RequestOptions): PaginatedUsers =
         retrieveMembers(id, ListRetrieveMembersParams.none(), requestOptions)
 
-    /** Get list tweets */
+    /** List tweets from an X List */
     suspend fun retrieveTweets(
         id: String,
         params: ListRetrieveTweetsParams = ListRetrieveTweetsParams.none(),

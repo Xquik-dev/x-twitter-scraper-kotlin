@@ -9,7 +9,7 @@ import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.models.radar.RadarRetrieveTrendingTopicsParams
 import com.x_twitter_scraper.api.models.radar.RadarRetrieveTrendingTopicsResponse
 
-/** Tweet composition, drafts, writing styles & radar */
+/** AI tweet composition, drafts, writing styles, and radar */
 interface RadarService {
 
     /**

@@ -7,7 +7,7 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
 
-/** Look up tweet */
+/** Get tweet with full text, author, metrics & media */
 class TweetRetrieveParams
 private constructor(
     private val id: String?,
