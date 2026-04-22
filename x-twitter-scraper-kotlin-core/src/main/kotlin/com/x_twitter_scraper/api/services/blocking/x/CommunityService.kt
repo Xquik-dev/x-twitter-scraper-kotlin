@@ -59,7 +59,7 @@ interface CommunityService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CommunityDeleteResponse
 
-    /** Get community name, description & member count */
+    /** Get community name, description and member count */
     fun retrieveInfo(
         id: String,
         params: CommunityRetrieveInfoParams = CommunityRetrieveInfoParams.none(),

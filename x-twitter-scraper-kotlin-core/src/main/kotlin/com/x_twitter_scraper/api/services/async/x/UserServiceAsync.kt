@@ -40,7 +40,7 @@ interface UserServiceAsync {
     /** X write actions (tweets, likes, follows, DMs) */
     fun follow(): FollowServiceAsync
 
-    /** Get user profile with follower counts & verification */
+    /** Get user profile with follower counts and verification */
     suspend fun retrieve(
         id: String,
         params: UserRetrieveParams = UserRetrieveParams.none(),

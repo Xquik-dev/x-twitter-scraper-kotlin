@@ -59,7 +59,7 @@ interface CommunityServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CommunityDeleteResponse
 
-    /** Get community name, description & member count */
+    /** Get community name, description and member count */
     suspend fun retrieveInfo(
         id: String,
         params: CommunityRetrieveInfoParams = CommunityRetrieveInfoParams.none(),
