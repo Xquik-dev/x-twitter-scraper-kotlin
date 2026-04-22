@@ -20,16 +20,24 @@ import java.util.Objects
 class RadarRetrieveTrendingTopicsResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
+    private val hasMore: JsonField<Boolean>,
     private val items: JsonField<List<RadarItem>>,
-    private val total: JsonField<Long>,
+    private val nextCursor: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
+        @JsonProperty("hasMore") @ExcludeMissing hasMore: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("items") @ExcludeMissing items: JsonField<List<RadarItem>> = JsonMissing.of(),
-        @JsonProperty("total") @ExcludeMissing total: JsonField<Long> = JsonMissing.of(),
-    ) : this(items, total, mutableMapOf())
+        @JsonProperty("nextCursor") @ExcludeMissing nextCursor: JsonField<String> = JsonMissing.of(),
+    ) : this(hasMore, items, nextCursor, mutableMapOf())
+
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun hasMore(): Boolean = hasMore.getRequired("hasMore")
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
@@ -38,10 +46,19 @@ private constructor(
     fun items(): List<RadarItem> = items.getRequired("items")
 
     /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     * Opaque cursor for the next page (present only when hasMore is true).
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
      */
-    fun total(): Long = total.getRequired("total")
+    fun nextCursor(): String? = nextCursor.getNullable("nextCursor")
+
+    /**
+     * Returns the raw JSON value of [hasMore].
+     *
+     * Unlike [hasMore], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("hasMore") @ExcludeMissing fun _hasMore(): JsonField<Boolean> = hasMore
 
     /**
      * Returns the raw JSON value of [items].
@@ -51,11 +68,11 @@ private constructor(
     @JsonProperty("items") @ExcludeMissing fun _items(): JsonField<List<RadarItem>> = items
 
     /**
-     * Returns the raw JSON value of [total].
+     * Returns the raw JSON value of [nextCursor].
      *
-     * Unlike [total], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [nextCursor], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("total") @ExcludeMissing fun _total(): JsonField<Long> = total
+    @JsonProperty("nextCursor") @ExcludeMissing fun _nextCursor(): JsonField<String> = nextCursor
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -77,8 +94,8 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
+         * .hasMore()
          * .items()
-         * .total()
          * ```
          */
         fun builder() = Builder()
@@ -87,18 +104,30 @@ private constructor(
     /** A builder for [RadarRetrieveTrendingTopicsResponse]. */
     class Builder internal constructor() {
 
+        private var hasMore: JsonField<Boolean>? = null
         private var items: JsonField<MutableList<RadarItem>>? = null
-        private var total: JsonField<Long>? = null
+        private var nextCursor: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(
             radarRetrieveTrendingTopicsResponse: RadarRetrieveTrendingTopicsResponse
         ) = apply {
+            hasMore = radarRetrieveTrendingTopicsResponse.hasMore
             items = radarRetrieveTrendingTopicsResponse.items.map { it.toMutableList() }
-            total = radarRetrieveTrendingTopicsResponse.total
+            nextCursor = radarRetrieveTrendingTopicsResponse.nextCursor
             additionalProperties =
                 radarRetrieveTrendingTopicsResponse.additionalProperties.toMutableMap()
         }
+
+        fun hasMore(hasMore: Boolean) = hasMore(JsonField.of(hasMore))
+
+        /**
+         * Sets [Builder.hasMore] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.hasMore] with a well-typed [Boolean] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun hasMore(hasMore: JsonField<Boolean>) = apply { this.hasMore = hasMore }
 
         fun items(items: List<RadarItem>) = items(JsonField.of(items))
 
@@ -123,15 +152,17 @@ private constructor(
                 (items ?: JsonField.of(mutableListOf())).also { checkKnown("items", it).add(item) }
         }
 
-        fun total(total: Long) = total(JsonField.of(total))
+        /** Opaque cursor for the next page (present only when hasMore is true). */
+        fun nextCursor(nextCursor: String) = nextCursor(JsonField.of(nextCursor))
 
         /**
-         * Sets [Builder.total] to an arbitrary JSON value.
+         * Sets [Builder.nextCursor] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.total] with a well-typed [Long] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
+         * You should usually call [Builder.nextCursor] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun total(total: JsonField<Long>) = apply { this.total = total }
+        fun nextCursor(nextCursor: JsonField<String>) = apply { this.nextCursor = nextCursor }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -159,16 +190,17 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
+         * .hasMore()
          * .items()
-         * .total()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
          */
         fun build(): RadarRetrieveTrendingTopicsResponse =
             RadarRetrieveTrendingTopicsResponse(
+                checkRequired("hasMore", hasMore),
                 checkRequired("items", items).map { it.toImmutable() },
-                checkRequired("total", total),
+                nextCursor,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -180,8 +212,9 @@ private constructor(
             return@apply
         }
 
+        hasMore()
         items().forEach { it.validate() }
-        total()
+        nextCursor()
         validated = true
     }
 
@@ -199,8 +232,9 @@ private constructor(
      * Used for best match union deserialization.
      */
     internal fun validity(): Int =
-        (items.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
-            (if (total.asKnown() == null) 0 else 1)
+        (if (hasMore.asKnown() == null) 0 else 1) +
+            (items.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (if (nextCursor.asKnown() == null) 0 else 1)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -208,15 +242,18 @@ private constructor(
         }
 
         return other is RadarRetrieveTrendingTopicsResponse &&
+            hasMore == other.hasMore &&
             items == other.items &&
-            total == other.total &&
+            nextCursor == other.nextCursor &&
             additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(items, total, additionalProperties) }
+    private val hashCode: Int by lazy {
+        Objects.hash(hasMore, items, nextCursor, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "RadarRetrieveTrendingTopicsResponse{items=$items, total=$total, additionalProperties=$additionalProperties}"
+        "RadarRetrieveTrendingTopicsResponse{hasMore=$hasMore, items=$items, nextCursor=$nextCursor, additionalProperties=$additionalProperties}"
 }
