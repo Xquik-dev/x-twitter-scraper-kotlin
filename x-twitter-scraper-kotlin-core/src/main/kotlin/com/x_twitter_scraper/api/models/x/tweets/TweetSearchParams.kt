@@ -12,7 +12,7 @@ import com.x_twitter_scraper.api.core.http.QueryParams
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
 import java.util.Objects
 
-/** Search tweets with X query operators & pagination */
+/** Search tweets with X query operators and pagination */
 class TweetSearchParams
 private constructor(
     private val q: String,

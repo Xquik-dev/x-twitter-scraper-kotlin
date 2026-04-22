@@ -50,7 +50,7 @@ interface TweetServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): TweetCreateResponse
 
-    /** Get tweet with full text, author, metrics & media */
+    /** Get tweet with full text, author, metrics and media */
     suspend fun retrieve(
         id: String,
         params: TweetRetrieveParams = TweetRetrieveParams.none(),
@@ -171,7 +171,7 @@ interface TweetServiceAsync {
     suspend fun getThread(id: String, requestOptions: RequestOptions): PaginatedTweets =
         getThread(id, TweetGetThreadParams.none(), requestOptions)
 
-    /** Search tweets with X query operators & pagination */
+    /** Search tweets with X query operators and pagination */
     suspend fun search(
         params: TweetSearchParams,
         requestOptions: RequestOptions = RequestOptions.none(),

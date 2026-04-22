@@ -24,7 +24,7 @@ interface TrendServiceAsync {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): TrendServiceAsync
 
-    /** Get trending hashtags & topics by region (alias) */
+    /** Get trending hashtags and topics by region (alias) */
     suspend fun list(
         params: TrendListParams = TrendListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),

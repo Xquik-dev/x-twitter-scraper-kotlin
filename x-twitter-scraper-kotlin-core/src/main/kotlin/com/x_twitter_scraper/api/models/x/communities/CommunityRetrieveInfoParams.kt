@@ -7,7 +7,7 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
 
-/** Get community name, description & member count */
+/** Get community name, description and member count */
 class CommunityRetrieveInfoParams
 private constructor(
     private val id: String?,

@@ -7,7 +7,7 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
 
-/** Get user profile with follower counts & verification */
+/** Get user profile with follower counts and verification */
 class UserRetrieveParams
 private constructor(
     private val id: String?,
