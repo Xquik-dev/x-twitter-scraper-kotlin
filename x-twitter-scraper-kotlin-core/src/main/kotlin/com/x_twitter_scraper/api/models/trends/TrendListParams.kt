@@ -7,7 +7,7 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
 
-/** Get trending hashtags & topics by region (alias) */
+/** Get trending hashtags and topics by region (alias) */
 class TrendListParams
 private constructor(
     private val count: Long?,

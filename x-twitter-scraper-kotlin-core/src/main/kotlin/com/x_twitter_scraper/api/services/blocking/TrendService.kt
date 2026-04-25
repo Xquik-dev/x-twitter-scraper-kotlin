@@ -24,7 +24,7 @@ interface TrendService {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): TrendService
 
-    /** Get trending hashtags & topics by region (alias) */
+    /** Get trending hashtags and topics by region (alias) */
     fun list(
         params: TrendListParams = TrendListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
