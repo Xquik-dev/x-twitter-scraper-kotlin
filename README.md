@@ -288,25 +288,21 @@ To access this data, prefix any HTTP method call on a client or service with `wi
 ```kotlin
 import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
-import com.x_twitter_scraper.api.models.PaginatedTweets
-import com.x_twitter_scraper.api.models.x.tweets.TweetSearchParams
+import com.x_twitter_scraper.api.models.account.AccountRetrieveParams
+import com.x_twitter_scraper.api.models.account.AccountRetrieveResponse
 
-val params: TweetSearchParams = TweetSearchParams.builder()
-    .q("from:elonmusk")
-    .limit(10L)
-    .build()
-val paginatedTweets: HttpResponseFor<PaginatedTweets> = client.x().tweets().withRawResponse().search(params)
+val account: HttpResponseFor<AccountRetrieveResponse> = client.account().withRawResponse().retrieve()
 
-val statusCode: Int = paginatedTweets.statusCode()
-val headers: Headers = paginatedTweets.headers()
+val statusCode: Int = account.statusCode()
+val headers: Headers = account.headers()
 ```
 
 You can still deserialize the response into an instance of a Kotlin class if needed:
 
 ```kotlin
-import com.x_twitter_scraper.api.models.PaginatedTweets
+import com.x_twitter_scraper.api.models.account.AccountRetrieveResponse
 
-val parsedPaginatedTweets: PaginatedTweets = paginatedTweets.parse()
+val parsedAccount: AccountRetrieveResponse = account.parse()
 ```
 
 ## Error handling
@@ -404,11 +400,9 @@ Requests time out after 1 minute by default.
 To set a custom timeout, configure the method call using the `timeout` method:
 
 ```kotlin
-import com.x_twitter_scraper.api.models.PaginatedTweets
+import com.x_twitter_scraper.api.models.account.AccountRetrieveResponse
 
-val paginatedTweets: PaginatedTweets = client.x().tweets().search(
-  params, RequestOptions.builder().timeout(Duration.ofSeconds(30)).build()
-)
+val account: AccountRetrieveResponse = client.account().retrieve(RequestOptions.builder().timeout(Duration.ofSeconds(30)).build())
 ```
 
 Or configure the default for all method calls at the client level:
