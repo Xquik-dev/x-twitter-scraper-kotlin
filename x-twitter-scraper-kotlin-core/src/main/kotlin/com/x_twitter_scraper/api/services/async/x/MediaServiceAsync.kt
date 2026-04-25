@@ -26,7 +26,7 @@ interface MediaServiceAsync {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): MediaServiceAsync
 
-    /** Download images and videos from tweets */
+    /** Download images & videos from tweets */
     suspend fun download(
         params: MediaDownloadParams = MediaDownloadParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),

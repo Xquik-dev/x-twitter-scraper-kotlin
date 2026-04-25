@@ -12,7 +12,7 @@ import com.x_twitter_scraper.api.core.http.QueryParams
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
 import java.util.Objects
 
-/** Search tweets with X query operators and pagination */
+/** Search tweets with X query operators & pagination */
 class TweetSearchParams
 private constructor(
     private val q: String,
@@ -34,13 +34,13 @@ private constructor(
     /** Max tweets to return (server paginates internally). Omit for single page (~20). */
     fun limit(): Long? = limit
 
-    /** Sort order — Latest (chronological) or Top (engagement-ranked) */
+    /** Sort order - Latest (chronological) or Top (engagement-ranked) */
     fun queryType(): QueryType? = queryType
 
-    /** ISO 8601 timestamp — only return tweets after this time */
+    /** ISO 8601 timestamp - only return tweets after this time */
     fun sinceTime(): String? = sinceTime
 
-    /** ISO 8601 timestamp — only return tweets before this time */
+    /** ISO 8601 timestamp - only return tweets before this time */
     fun untilTime(): String? = untilTime
 
     /** Additional headers to send with the request. */
@@ -103,13 +103,13 @@ private constructor(
          */
         fun limit(limit: Long) = limit(limit as Long?)
 
-        /** Sort order — Latest (chronological) or Top (engagement-ranked) */
+        /** Sort order - Latest (chronological) or Top (engagement-ranked) */
         fun queryType(queryType: QueryType?) = apply { this.queryType = queryType }
 
-        /** ISO 8601 timestamp — only return tweets after this time */
+        /** ISO 8601 timestamp - only return tweets after this time */
         fun sinceTime(sinceTime: String?) = apply { this.sinceTime = sinceTime }
 
-        /** ISO 8601 timestamp — only return tweets before this time */
+        /** ISO 8601 timestamp - only return tweets before this time */
         fun untilTime(untilTime: String?) = apply { this.untilTime = untilTime }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -250,7 +250,7 @@ private constructor(
             }
             .build()
 
-    /** Sort order — Latest (chronological) or Top (engagement-ranked) */
+    /** Sort order - Latest (chronological) or Top (engagement-ranked) */
     class QueryType @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**

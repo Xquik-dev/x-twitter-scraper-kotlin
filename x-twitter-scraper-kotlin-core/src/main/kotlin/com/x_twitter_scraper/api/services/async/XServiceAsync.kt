@@ -103,7 +103,7 @@ interface XServiceAsync {
     suspend fun getNotifications(requestOptions: RequestOptions): XGetNotificationsResponse =
         getNotifications(XGetNotificationsParams.none(), requestOptions)
 
-    /** Get trending hashtags and topics from X by region */
+    /** Get trending hashtags & topics from X by region */
     suspend fun getTrends(
         params: XGetTrendsParams = XGetTrendsParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),

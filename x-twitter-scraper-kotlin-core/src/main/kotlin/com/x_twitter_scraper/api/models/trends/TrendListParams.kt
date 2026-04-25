@@ -7,7 +7,7 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
 
-/** Get trending hashtags and topics by region (alias) */
+/** Get trending hashtags & topics by region (alias) */
 class TrendListParams
 private constructor(
     private val count: Long?,
@@ -16,10 +16,10 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** Number of trending topics to return (1-50, default 30) */
+    /** Number of trending topics returned (1-50, default 30) */
     fun count(): Long? = count
 
-    /** Region WOEID (1=Worldwide, 23424977=US, 23424975=UK, 23424969=Turkey) */
+    /** Region Yahoo WOEID code (1=Worldwide, 23424977=US, 23424975=UK, 23424969=Turkey) */
     fun woeid(): Long? = woeid
 
     /** Additional headers to send with the request. */
@@ -53,7 +53,7 @@ private constructor(
             additionalQueryParams = trendListParams.additionalQueryParams.toBuilder()
         }
 
-        /** Number of trending topics to return (1-50, default 30) */
+        /** Number of trending topics returned (1-50, default 30) */
         fun count(count: Long?) = apply { this.count = count }
 
         /**
@@ -63,7 +63,7 @@ private constructor(
          */
         fun count(count: Long) = count(count as Long?)
 
-        /** Region WOEID (1=Worldwide, 23424977=US, 23424975=UK, 23424969=Turkey) */
+        /** Region Yahoo WOEID code (1=Worldwide, 23424977=US, 23424975=UK, 23424969=Turkey) */
         fun woeid(woeid: Long?) = apply { this.woeid = woeid }
 
         /**
