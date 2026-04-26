@@ -1,9 +1,9 @@
-# X Twitter Scraper Kotlin API Library
+# Xquik API Library
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.x_twitter_scraper.api/x-twitter-scraper-kotlin)](https://central.sonatype.com/artifact/com.x_twitter_scraper.api/x-twitter-scraper-kotlin/0.3.0)
 [![javadoc](https://javadoc.io/badge2/com.x_twitter_scraper.api/x-twitter-scraper-kotlin/0.3.0/javadoc.svg)](https://javadoc.io/doc/com.x_twitter_scraper.api/x-twitter-scraper-kotlin/0.3.0)
 
-The X Twitter Scraper Kotlin SDK provides convenient access to the [X Twitter Scraper REST API](https://xquik.com) from applications written in Kotlin.
+The Xquik SDK provides convenient access to the [X Twitter Scraper REST API](https://xquik.com) from applications written in Kotlin.
 
 The X Twitter Scraper Kotlin SDK is similar to the X Twitter Scraper Java SDK but with minor differences that make it more ergonomic for use in Kotlin, such as nullable values instead of `Optional`, `Sequence` instead of `Stream`, and suspend functions instead of `CompletableFuture`.
 
