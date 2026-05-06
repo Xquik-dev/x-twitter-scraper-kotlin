@@ -21,7 +21,7 @@ import com.x_twitter_scraper.api.models.x.media.MediaDownloadResponse
 import com.x_twitter_scraper.api.models.x.media.MediaUploadParams
 import com.x_twitter_scraper.api.models.x.media.MediaUploadResponse
 
-/** Media upload & download */
+/** Media upload and download */
 class MediaServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     MediaService {
 

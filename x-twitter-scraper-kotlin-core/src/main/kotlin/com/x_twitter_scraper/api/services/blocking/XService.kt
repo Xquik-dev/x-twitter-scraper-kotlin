@@ -25,7 +25,6 @@ import com.x_twitter_scraper.api.services.blocking.x.ProfileService
 import com.x_twitter_scraper.api.services.blocking.x.TweetService
 import com.x_twitter_scraper.api.services.blocking.x.UserService
 
-/** X data lookups (subscription required) */
 interface XService {
 
     /**
@@ -42,15 +41,15 @@ interface XService {
 
     fun tweets(): TweetService
 
-    /** X data lookups (subscription required) */
+    /** Look up, search, and explore user profiles and relationships */
     fun users(): UserService
 
-    /** X data lookups (subscription required) */
+    /** Look up, search, and explore user profiles and relationships */
     fun followers(): FollowerService
 
     fun dm(): DmService
 
-    /** Media upload & download */
+    /** Media upload and download */
     fun media(): MediaService
 
     /** X write actions (tweets, likes, follows, DMs) */
@@ -61,10 +60,10 @@ interface XService {
     /** Connected X account management */
     fun accounts(): AccountService
 
-    /** X data lookups (subscription required) */
+    /** Look up, search, and analyze individual tweets */
     fun bookmarks(): BookmarkService
 
-    /** X data lookups (subscription required) */
+    /** X List followers, members, and tweets */
     fun lists(): ListService
 
     /** Retrieve the full content of an X Article (long-form post) by tweet ID. */
@@ -104,7 +103,7 @@ interface XService {
     fun getNotifications(requestOptions: RequestOptions): XGetNotificationsResponse =
         getNotifications(XGetNotificationsParams.none(), requestOptions)
 
-    /** Get trending topics */
+    /** Get trending hashtags and topics from X by region */
     fun getTrends(
         params: XGetTrendsParams = XGetTrendsParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -126,15 +125,15 @@ interface XService {
 
         fun tweets(): TweetService.WithRawResponse
 
-        /** X data lookups (subscription required) */
+        /** Look up, search, and explore user profiles and relationships */
         fun users(): UserService.WithRawResponse
 
-        /** X data lookups (subscription required) */
+        /** Look up, search, and explore user profiles and relationships */
         fun followers(): FollowerService.WithRawResponse
 
         fun dm(): DmService.WithRawResponse
 
-        /** Media upload & download */
+        /** Media upload and download */
         fun media(): MediaService.WithRawResponse
 
         /** X write actions (tweets, likes, follows, DMs) */
@@ -145,10 +144,10 @@ interface XService {
         /** Connected X account management */
         fun accounts(): AccountService.WithRawResponse
 
-        /** X data lookups (subscription required) */
+        /** Look up, search, and analyze individual tweets */
         fun bookmarks(): BookmarkService.WithRawResponse
 
-        /** X data lookups (subscription required) */
+        /** X List followers, members, and tweets */
         fun lists(): ListService.WithRawResponse
 
         /**

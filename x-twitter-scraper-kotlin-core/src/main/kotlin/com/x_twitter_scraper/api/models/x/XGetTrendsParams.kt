@@ -7,12 +7,20 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
 
-/** Get trending topics */
+/** Get trending hashtags and topics from X by region */
 class XGetTrendsParams
 private constructor(
+    private val count: Long?,
+    private val woeid: Long?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
+
+    /** Number of trending topics to return (1-50, default 30) */
+    fun count(): Long? = count
+
+    /** Region WOEID (1=Worldwide, 23424977=US, 23424975=UK, 23424969=Turkey) */
+    fun woeid(): Long? = woeid
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -33,13 +41,37 @@ private constructor(
     /** A builder for [XGetTrendsParams]. */
     class Builder internal constructor() {
 
+        private var count: Long? = null
+        private var woeid: Long? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(xGetTrendsParams: XGetTrendsParams) = apply {
+            count = xGetTrendsParams.count
+            woeid = xGetTrendsParams.woeid
             additionalHeaders = xGetTrendsParams.additionalHeaders.toBuilder()
             additionalQueryParams = xGetTrendsParams.additionalQueryParams.toBuilder()
         }
+
+        /** Number of trending topics to return (1-50, default 30) */
+        fun count(count: Long?) = apply { this.count = count }
+
+        /**
+         * Alias for [Builder.count].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun count(count: Long) = count(count as Long?)
+
+        /** Region WOEID (1=Worldwide, 23424977=US, 23424975=UK, 23424969=Turkey) */
+        fun woeid(woeid: Long?) = apply { this.woeid = woeid }
+
+        /**
+         * Alias for [Builder.woeid].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun woeid(woeid: Long) = woeid(woeid as Long?)
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -145,12 +177,19 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          */
         fun build(): XGetTrendsParams =
-            XGetTrendsParams(additionalHeaders.build(), additionalQueryParams.build())
+            XGetTrendsParams(count, woeid, additionalHeaders.build(), additionalQueryParams.build())
     }
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                count?.let { put("count", it.toString()) }
+                woeid?.let { put("woeid", it.toString()) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -158,12 +197,15 @@ private constructor(
         }
 
         return other is XGetTrendsParams &&
+            count == other.count &&
+            woeid == other.woeid &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = Objects.hash(additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int =
+        Objects.hash(count, woeid, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "XGetTrendsParams{additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "XGetTrendsParams{count=$count, woeid=$woeid, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -7,7 +7,7 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
 
-/** Get users who retweeted a tweet */
+/** List users who retweeted a tweet */
 class TweetGetRetweetersParams
 private constructor(
     private val id: String?,

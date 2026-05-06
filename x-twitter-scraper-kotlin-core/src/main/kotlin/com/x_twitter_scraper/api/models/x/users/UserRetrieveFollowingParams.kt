@@ -7,7 +7,7 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
 
-/** Get users this user follows */
+/** List accounts a user follows */
 class UserRetrieveFollowingParams
 private constructor(
     private val id: String?,

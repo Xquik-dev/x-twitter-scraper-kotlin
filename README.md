@@ -2,9 +2,10 @@
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg?url=https%3A%2F%2Fgithub.com%2FXquik-dev%2Fx-twitter-scraper-kotlin)](https://deepwiki.com/Xquik-dev/x-twitter-scraper-kotlin)
 
-> Maven Central publication is pending. Build from source until the
-> `com.x_twitter_scraper.api:x-twitter-scraper-kotlin` artifact resolves in
-> Maven Central.
+[![Maven Central](https://img.shields.io/maven-central/v/com.x_twitter_scraper.api/x-twitter-scraper-kotlin)](https://central.sonatype.com/artifact/com.x_twitter_scraper.api/x-twitter-scraper-kotlin/0.4.0)
+[![javadoc](https://javadoc.io/badge2/com.x_twitter_scraper.api/x-twitter-scraper-kotlin/0.4.0/javadoc.svg)](https://javadoc.io/doc/com.x_twitter_scraper.api/x-twitter-scraper-kotlin/0.4.0)
+
+<!-- x-release-please-end -->
 
 The X Twitter Scraper Kotlin SDK provides convenient access to the [X Twitter Scraper REST API](https://xquik.com) from applications written in Kotlin.
 
@@ -12,30 +13,28 @@ The X Twitter Scraper Kotlin SDK is similar to the X Twitter Scraper Java SDK bu
 
 It is generated with [Stainless](https://www.stainless.com/).
 
-The REST API documentation can be found on [xquik.com](https://xquik.com). Generated KDocs can be built locally from source.
+<!-- x-release-please-start-version -->
+
+The REST API documentation can be found on [xquik.com](https://xquik.com). KDocs are available on [javadoc.io](https://javadoc.io/doc/com.x_twitter_scraper.api/x-twitter-scraper-kotlin/0.4.0).
+
+<!-- x-release-please-end -->
 
 ## Installation
 
-Maven Central publication is pending. Until registry metadata is live, use a source build instead of Gradle or Maven dependency coordinates.
+### Gradle
 
-### Source Build
-
-```bash
-git clone https://github.com/Xquik-dev/x-twitter-scraper-kotlin.git
-cd x-twitter-scraper-kotlin
-./gradlew build
+```kotlin
+implementation("com.x_twitter_scraper.api:x-twitter-scraper-kotlin:0.4.0")
 ```
 
-### Local Maven Testing
+### Maven
 
-```bash
-./gradlew publishToMavenLocal -PpublishLocal
-```
-
-Before restoring Maven Central badges or dependency snippets, verify:
-
-```bash
-curl -f https://repo1.maven.org/maven2/com/x_twitter_scraper/api/x-twitter-scraper-kotlin/maven-metadata.xml
+```xml
+<dependency>
+  <groupId>com.x_twitter_scraper.api</groupId>
+  <artifactId>x-twitter-scraper-kotlin</artifactId>
+  <version>0.4.0</version>
+</dependency>
 ```
 
 ## Requirements
@@ -82,7 +81,6 @@ import com.x_twitter_scraper.api.client.okhttp.XTwitterScraperOkHttpClient
 
 val client: XTwitterScraperClient = XTwitterScraperOkHttpClient.builder()
     .apiKey("My API Key")
-    .bearerToken("My Bearer Token")
     .build()
 ```
 
@@ -550,21 +548,6 @@ val params: TweetSearchParams = TweetSearchParams.builder()
 ```
 
 These can be accessed on the built object later using the `_additionalHeaders()`, `_additionalQueryParams()`, and `_additionalBodyProperties()` methods.
-
-To set undocumented parameters on _nested_ headers, query params, or body classes, call the `putAdditionalProperty` method on the nested class:
-
-```kotlin
-import com.x_twitter_scraper.api.core.JsonValue
-import com.x_twitter_scraper.api.models.integrations.IntegrationCreateParams
-
-val params: IntegrationCreateParams = IntegrationCreateParams.builder()
-    .config(IntegrationCreateParams.Config.builder()
-        .putAdditionalProperty("secretProperty", JsonValue.from("42"))
-        .build())
-    .build()
-```
-
-These properties can be accessed on the nested built object later using the `_additionalProperties()` method.
 
 To set a documented parameter or property to an undocumented or not yet supported _value_, pass a [`JsonValue`](x-twitter-scraper-kotlin-core/src/main/kotlin/com/x_twitter_scraper/api/core/Values.kt) object to its setter:
 

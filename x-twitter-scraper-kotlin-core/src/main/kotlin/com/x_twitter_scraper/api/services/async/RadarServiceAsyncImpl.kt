@@ -17,7 +17,7 @@ import com.x_twitter_scraper.api.core.prepareAsync
 import com.x_twitter_scraper.api.models.radar.RadarRetrieveTrendingTopicsParams
 import com.x_twitter_scraper.api.models.radar.RadarRetrieveTrendingTopicsResponse
 
-/** Tweet composition, drafts, writing styles & radar */
+/** AI tweet composition, drafts, writing styles, and radar */
 class RadarServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     RadarServiceAsync {
 

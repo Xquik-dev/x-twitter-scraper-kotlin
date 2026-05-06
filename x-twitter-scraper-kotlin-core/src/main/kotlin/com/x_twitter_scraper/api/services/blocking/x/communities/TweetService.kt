@@ -10,7 +10,7 @@ import com.x_twitter_scraper.api.models.PaginatedTweets
 import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListByCommunityParams
 import com.x_twitter_scraper.api.models.x.communities.tweets.TweetListParams
 
-/** X data lookups (subscription required) */
+/** X Community info, members, and tweets */
 interface TweetService {
 
     /**
@@ -25,13 +25,13 @@ interface TweetService {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): TweetService
 
-    /** Search tweets across all communities */
+    /** List tweets across all communities */
     fun list(
         params: TweetListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): PaginatedTweets
 
-    /** Get community tweets */
+    /** List tweets posted in a community */
     fun listByCommunity(
         id: String,
         params: TweetListByCommunityParams = TweetListByCommunityParams.none(),

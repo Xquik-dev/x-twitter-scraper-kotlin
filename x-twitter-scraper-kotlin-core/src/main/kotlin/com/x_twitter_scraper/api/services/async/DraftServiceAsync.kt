@@ -14,7 +14,7 @@ import com.x_twitter_scraper.api.models.drafts.DraftListParams
 import com.x_twitter_scraper.api.models.drafts.DraftListResponse
 import com.x_twitter_scraper.api.models.drafts.DraftRetrieveParams
 
-/** Tweet composition, drafts, writing styles & radar */
+/** AI tweet composition, drafts, writing styles, and radar */
 interface DraftServiceAsync {
 
     /**

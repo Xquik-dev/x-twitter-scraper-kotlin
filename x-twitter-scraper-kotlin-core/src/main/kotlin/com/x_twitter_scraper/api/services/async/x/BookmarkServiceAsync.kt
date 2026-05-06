@@ -11,7 +11,7 @@ import com.x_twitter_scraper.api.models.x.bookmarks.BookmarkListParams
 import com.x_twitter_scraper.api.models.x.bookmarks.BookmarkRetrieveFoldersParams
 import com.x_twitter_scraper.api.models.x.bookmarks.BookmarkRetrieveFoldersResponse
 
-/** X data lookups (subscription required) */
+/** Look up, search, and analyze individual tweets */
 interface BookmarkServiceAsync {
 
     /**

@@ -4,7 +4,6 @@ package com.x_twitter_scraper.api.services.blocking
 
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
-import com.x_twitter_scraper.api.core.SecurityOptions
 import com.x_twitter_scraper.api.core.checkRequired
 import com.x_twitter_scraper.api.core.handlers.errorBodyHandler
 import com.x_twitter_scraper.api.core.handlers.errorHandler
@@ -83,7 +82,7 @@ class ApiKeyServiceImpl internal constructor(private val clientOptions: ClientOp
                     .addPathSegments("api-keys")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
-                    .prepare(clientOptions, params, SecurityOptions.builder().apiKey(true).build())
+                    .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
@@ -110,7 +109,7 @@ class ApiKeyServiceImpl internal constructor(private val clientOptions: ClientOp
                     .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("api-keys")
                     .build()
-                    .prepare(clientOptions, params, SecurityOptions.builder().apiKey(true).build())
+                    .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
@@ -141,7 +140,7 @@ class ApiKeyServiceImpl internal constructor(private val clientOptions: ClientOp
                     .addPathSegments("api-keys", params._pathParam(0))
                     .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
-                    .prepare(clientOptions, params, SecurityOptions.builder().apiKey(true).build())
+                    .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {

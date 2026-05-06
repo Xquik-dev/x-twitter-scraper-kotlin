@@ -21,7 +21,7 @@ import com.x_twitter_scraper.api.models.x.lists.ListRetrieveFollowersParams
 import com.x_twitter_scraper.api.models.x.lists.ListRetrieveMembersParams
 import com.x_twitter_scraper.api.models.x.lists.ListRetrieveTweetsParams
 
-/** X data lookups (subscription required) */
+/** X List followers, members, and tweets */
 class ListServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     ListServiceAsync {
 

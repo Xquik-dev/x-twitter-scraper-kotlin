@@ -7,7 +7,7 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
 
-/** Get tweets liked by a user */
+/** List tweets liked by a user */
 class UserRetrieveLikesParams
 private constructor(
     private val id: String?,

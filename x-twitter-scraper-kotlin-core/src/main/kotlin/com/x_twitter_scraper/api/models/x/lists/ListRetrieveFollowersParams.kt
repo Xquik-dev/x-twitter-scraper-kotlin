@@ -7,7 +7,7 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
 
-/** Get list followers */
+/** List followers of an X List */
 class ListRetrieveFollowersParams
 private constructor(
     private val id: String?,

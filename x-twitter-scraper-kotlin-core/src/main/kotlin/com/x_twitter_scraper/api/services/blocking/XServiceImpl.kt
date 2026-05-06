@@ -44,7 +44,6 @@ import com.x_twitter_scraper.api.services.blocking.x.TweetServiceImpl
 import com.x_twitter_scraper.api.services.blocking.x.UserService
 import com.x_twitter_scraper.api.services.blocking.x.UserServiceImpl
 
-/** X data lookups (subscription required) */
 class XServiceImpl internal constructor(private val clientOptions: ClientOptions) : XService {
 
     private val withRawResponse: XService.WithRawResponse by lazy {
@@ -78,15 +77,15 @@ class XServiceImpl internal constructor(private val clientOptions: ClientOptions
 
     override fun tweets(): TweetService = tweets
 
-    /** X data lookups (subscription required) */
+    /** Look up, search, and explore user profiles and relationships */
     override fun users(): UserService = users
 
-    /** X data lookups (subscription required) */
+    /** Look up, search, and explore user profiles and relationships */
     override fun followers(): FollowerService = followers
 
     override fun dm(): DmService = dm
 
-    /** Media upload & download */
+    /** Media upload and download */
     override fun media(): MediaService = media
 
     /** X write actions (tweets, likes, follows, DMs) */
@@ -97,10 +96,10 @@ class XServiceImpl internal constructor(private val clientOptions: ClientOptions
     /** Connected X account management */
     override fun accounts(): AccountService = accounts
 
-    /** X data lookups (subscription required) */
+    /** Look up, search, and analyze individual tweets */
     override fun bookmarks(): BookmarkService = bookmarks
 
-    /** X data lookups (subscription required) */
+    /** X List followers, members, and tweets */
     override fun lists(): ListService = lists
 
     override fun getArticle(
@@ -184,15 +183,15 @@ class XServiceImpl internal constructor(private val clientOptions: ClientOptions
 
         override fun tweets(): TweetService.WithRawResponse = tweets
 
-        /** X data lookups (subscription required) */
+        /** Look up, search, and explore user profiles and relationships */
         override fun users(): UserService.WithRawResponse = users
 
-        /** X data lookups (subscription required) */
+        /** Look up, search, and explore user profiles and relationships */
         override fun followers(): FollowerService.WithRawResponse = followers
 
         override fun dm(): DmService.WithRawResponse = dm
 
-        /** Media upload & download */
+        /** Media upload and download */
         override fun media(): MediaService.WithRawResponse = media
 
         /** X write actions (tweets, likes, follows, DMs) */
@@ -203,10 +202,10 @@ class XServiceImpl internal constructor(private val clientOptions: ClientOptions
         /** Connected X account management */
         override fun accounts(): AccountService.WithRawResponse = accounts
 
-        /** X data lookups (subscription required) */
+        /** Look up, search, and analyze individual tweets */
         override fun bookmarks(): BookmarkService.WithRawResponse = bookmarks
 
-        /** X data lookups (subscription required) */
+        /** X List followers, members, and tweets */
         override fun lists(): ListService.WithRawResponse = lists
 
         private val getArticleHandler: Handler<XGetArticleResponse> =
