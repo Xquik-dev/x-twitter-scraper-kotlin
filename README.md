@@ -2,10 +2,9 @@
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg?url=https%3A%2F%2Fgithub.com%2FXquik-dev%2Fx-twitter-scraper-kotlin)](https://deepwiki.com/Xquik-dev/x-twitter-scraper-kotlin)
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.x_twitter_scraper.api/x-twitter-scraper-kotlin)](https://central.sonatype.com/artifact/com.x_twitter_scraper.api/x-twitter-scraper-kotlin/0.4.0)
-[![javadoc](https://javadoc.io/badge2/com.x_twitter_scraper.api/x-twitter-scraper-kotlin/0.4.0/javadoc.svg)](https://javadoc.io/doc/com.x_twitter_scraper.api/x-twitter-scraper-kotlin/0.4.0)
-
-<!-- x-release-please-end -->
+> Maven Central publication is pending. Build from source until the
+> `com.x_twitter_scraper.api:x-twitter-scraper-kotlin` artifact resolves in
+> Maven Central.
 
 The X Twitter Scraper Kotlin SDK provides convenient access to the [X Twitter Scraper REST API](https://xquik.com) from applications written in Kotlin.
 
@@ -13,28 +12,22 @@ The X Twitter Scraper Kotlin SDK is similar to the X Twitter Scraper Java SDK bu
 
 It is generated with [Stainless](https://www.stainless.com/).
 
-<!-- x-release-please-start-version -->
-
-The REST API documentation can be found on [xquik.com](https://xquik.com). KDocs are available on [javadoc.io](https://javadoc.io/doc/com.x_twitter_scraper.api/x-twitter-scraper-kotlin/0.4.0).
-
-<!-- x-release-please-end -->
+The REST API documentation can be found on [xquik.com](https://xquik.com). Generated KDocs can be built locally from source.
 
 ## Installation
 
-### Gradle
+### Source Build
 
-```kotlin
-implementation("com.x_twitter_scraper.api:x-twitter-scraper-kotlin:0.4.0")
+```bash
+git clone https://github.com/Xquik-dev/x-twitter-scraper-kotlin.git
+cd x-twitter-scraper-kotlin
+./gradlew build
 ```
 
-### Maven
+### Local Maven Testing
 
-```xml
-<dependency>
-  <groupId>com.x_twitter_scraper.api</groupId>
-  <artifactId>x-twitter-scraper-kotlin</artifactId>
-  <version>0.4.0</version>
-</dependency>
+```bash
+./gradlew publishToMavenLocal -PpublishLocal
 ```
 
 ## Requirements
