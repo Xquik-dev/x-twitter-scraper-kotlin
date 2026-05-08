@@ -1,4 +1,4 @@
-# X Twitter Scraper Kotlin API Library
+# X (Twitter) Scraper Kotlin SDK: Tweet Search, Profile Tweets, Followers & Posting
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg?url=https%3A%2F%2Fgithub.com%2FXquik-dev%2Fx-twitter-scraper-kotlin)](https://deepwiki.com/Xquik-dev/x-twitter-scraper-kotlin)
 <a href="https://nothumansearch.ai/site/xquik.com" target="_blank" rel="noopener"><img src="https://nothumansearch.ai/badge/xquik.com.svg" alt="NHS Agentic Readiness Score" height="28"></a>
@@ -7,9 +7,9 @@
 > `com.x_twitter_scraper.api:x-twitter-scraper-kotlin` artifact resolves in
 > Maven Central.
 
-The X Twitter Scraper Kotlin SDK provides convenient access to the [X Twitter Scraper REST API](https://xquik.com) from applications written in Kotlin.
+The Xquik Kotlin SDK is a Twitter API SDK and X API alternative for tweet search, advanced Twitter search queries, profile tweets, user lookup, follower export, media download, media upload, monitoring, webhooks, and posting automation.
 
-The X Twitter Scraper Kotlin SDK is similar to the X Twitter Scraper Java SDK but with minor differences that make it more ergonomic for use in Kotlin, such as nullable values instead of `Optional`, `Sequence` instead of `Stream`, and suspend functions instead of `CompletableFuture`.
+Use it from Kotlin services to get tweets from profiles, search tweets by keyword or operator query, send tweets, post replies, like, repost, follow, DM, run giveaway draws, and automate X workflows. It is similar to the X Twitter Scraper Java SDK but with Kotlin ergonomics such as nullable values instead of `Optional`, `Sequence` instead of `Stream`, and suspend functions instead of `CompletableFuture`.
 
 It is generated with [Stainless](https://www.stainless.com/).
 
