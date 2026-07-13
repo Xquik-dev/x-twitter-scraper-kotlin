@@ -254,9 +254,10 @@ private constructor(
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
-        private val createdAt: JsonField<String>,
         private val receiverId: JsonField<String>,
         private val senderId: JsonField<String>,
+        private val createdAt: JsonField<String>,
+        private val mediaUrl: JsonField<String>,
         private val text: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -264,17 +265,20 @@ private constructor(
         @JsonCreator
         private constructor(
             @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("createdAt")
-            @ExcludeMissing
-            createdAt: JsonField<String> = JsonMissing.of(),
             @JsonProperty("receiverId")
             @ExcludeMissing
             receiverId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("senderId")
             @ExcludeMissing
             senderId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("createdAt")
+            @ExcludeMissing
+            createdAt: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("mediaUrl")
+            @ExcludeMissing
+            mediaUrl: JsonField<String> = JsonMissing.of(),
             @JsonProperty("text") @ExcludeMissing text: JsonField<String> = JsonMissing.of(),
-        ) : this(id, createdAt, receiverId, senderId, text, mutableMapOf())
+        ) : this(id, receiverId, senderId, createdAt, mediaUrl, text, mutableMapOf())
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
@@ -284,22 +288,33 @@ private constructor(
         fun id(): String = id.getRequired("id")
 
         /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+         *   value).
+         */
+        fun receiverId(): String = receiverId.getRequired("receiverId")
+
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+         *   value).
+         */
+        fun senderId(): String = senderId.getRequired("senderId")
+
+        /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
         fun createdAt(): String? = createdAt.getNullable("createdAt")
 
         /**
+         * URL of attached media (image, GIF, or video). Omitted when the message has no media
+         * attachment.
+         *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
-        fun receiverId(): String? = receiverId.getNullable("receiverId")
-
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
-        fun senderId(): String? = senderId.getNullable("senderId")
+        fun mediaUrl(): String? = mediaUrl.getNullable("mediaUrl")
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
@@ -313,13 +328,6 @@ private constructor(
          * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
-
-        /**
-         * Returns the raw JSON value of [createdAt].
-         *
-         * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("createdAt") @ExcludeMissing fun _createdAt(): JsonField<String> = createdAt
 
         /**
          * Returns the raw JSON value of [receiverId].
@@ -336,6 +344,20 @@ private constructor(
          * Unlike [senderId], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("senderId") @ExcludeMissing fun _senderId(): JsonField<String> = senderId
+
+        /**
+         * Returns the raw JSON value of [createdAt].
+         *
+         * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("createdAt") @ExcludeMissing fun _createdAt(): JsonField<String> = createdAt
+
+        /**
+         * Returns the raw JSON value of [mediaUrl].
+         *
+         * Unlike [mediaUrl], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("mediaUrl") @ExcludeMissing fun _mediaUrl(): JsonField<String> = mediaUrl
 
         /**
          * Returns the raw JSON value of [text].
@@ -364,6 +386,8 @@ private constructor(
              * The following fields are required:
              * ```kotlin
              * .id()
+             * .receiverId()
+             * .senderId()
              * ```
              */
             fun builder() = Builder()
@@ -373,17 +397,19 @@ private constructor(
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
+            private var receiverId: JsonField<String>? = null
+            private var senderId: JsonField<String>? = null
             private var createdAt: JsonField<String> = JsonMissing.of()
-            private var receiverId: JsonField<String> = JsonMissing.of()
-            private var senderId: JsonField<String> = JsonMissing.of()
+            private var mediaUrl: JsonField<String> = JsonMissing.of()
             private var text: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(message: Message) = apply {
                 id = message.id
-                createdAt = message.createdAt
                 receiverId = message.receiverId
                 senderId = message.senderId
+                createdAt = message.createdAt
+                mediaUrl = message.mediaUrl
                 text = message.text
                 additionalProperties = message.additionalProperties.toMutableMap()
             }
@@ -398,17 +424,6 @@ private constructor(
              * value.
              */
             fun id(id: JsonField<String>) = apply { this.id = id }
-
-            fun createdAt(createdAt: String) = createdAt(JsonField.of(createdAt))
-
-            /**
-             * Sets [Builder.createdAt] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.createdAt] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun createdAt(createdAt: JsonField<String>) = apply { this.createdAt = createdAt }
 
             fun receiverId(receiverId: String) = receiverId(JsonField.of(receiverId))
 
@@ -431,6 +446,32 @@ private constructor(
              * supported value.
              */
             fun senderId(senderId: JsonField<String>) = apply { this.senderId = senderId }
+
+            fun createdAt(createdAt: String) = createdAt(JsonField.of(createdAt))
+
+            /**
+             * Sets [Builder.createdAt] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.createdAt] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun createdAt(createdAt: JsonField<String>) = apply { this.createdAt = createdAt }
+
+            /**
+             * URL of attached media (image, GIF, or video). Omitted when the message has no media
+             * attachment.
+             */
+            fun mediaUrl(mediaUrl: String) = mediaUrl(JsonField.of(mediaUrl))
+
+            /**
+             * Sets [Builder.mediaUrl] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.mediaUrl] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun mediaUrl(mediaUrl: JsonField<String>) = apply { this.mediaUrl = mediaUrl }
 
             fun text(text: String) = text(JsonField.of(text))
 
@@ -470,6 +511,8 @@ private constructor(
              * The following fields are required:
              * ```kotlin
              * .id()
+             * .receiverId()
+             * .senderId()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
@@ -477,9 +520,10 @@ private constructor(
             fun build(): Message =
                 Message(
                     checkRequired("id", id),
+                    checkRequired("receiverId", receiverId),
+                    checkRequired("senderId", senderId),
                     createdAt,
-                    receiverId,
-                    senderId,
+                    mediaUrl,
                     text,
                     additionalProperties.toMutableMap(),
                 )
@@ -502,9 +546,10 @@ private constructor(
             }
 
             id()
-            createdAt()
             receiverId()
             senderId()
+            createdAt()
+            mediaUrl()
             text()
             validated = true
         }
@@ -525,9 +570,10 @@ private constructor(
          */
         internal fun validity(): Int =
             (if (id.asKnown() == null) 0 else 1) +
-                (if (createdAt.asKnown() == null) 0 else 1) +
                 (if (receiverId.asKnown() == null) 0 else 1) +
                 (if (senderId.asKnown() == null) 0 else 1) +
+                (if (createdAt.asKnown() == null) 0 else 1) +
+                (if (mediaUrl.asKnown() == null) 0 else 1) +
                 (if (text.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {
@@ -537,21 +583,22 @@ private constructor(
 
             return other is Message &&
                 id == other.id &&
-                createdAt == other.createdAt &&
                 receiverId == other.receiverId &&
                 senderId == other.senderId &&
+                createdAt == other.createdAt &&
+                mediaUrl == other.mediaUrl &&
                 text == other.text &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(id, createdAt, receiverId, senderId, text, additionalProperties)
+            Objects.hash(id, receiverId, senderId, createdAt, mediaUrl, text, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Message{id=$id, createdAt=$createdAt, receiverId=$receiverId, senderId=$senderId, text=$text, additionalProperties=$additionalProperties}"
+            "Message{id=$id, receiverId=$receiverId, senderId=$senderId, createdAt=$createdAt, mediaUrl=$mediaUrl, text=$text, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

@@ -11,7 +11,7 @@ import java.util.Objects
 class ExtractionRetrieveParams
 private constructor(
     private val id: String?,
-    private val after: String?,
+    private val cursor: String?,
     private val limit: Long?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -19,8 +19,8 @@ private constructor(
 
     fun id(): String? = id
 
-    /** Cursor for keyset pagination */
-    fun after(): String? = after
+    /** Cursor for keyset pagination from prior response next_cursor */
+    fun cursor(): String? = cursor
 
     /** Maximum number of results to return (1-1000, default 100) */
     fun limit(): Long? = limit
@@ -45,14 +45,14 @@ private constructor(
     class Builder internal constructor() {
 
         private var id: String? = null
-        private var after: String? = null
+        private var cursor: String? = null
         private var limit: Long? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(extractionRetrieveParams: ExtractionRetrieveParams) = apply {
             id = extractionRetrieveParams.id
-            after = extractionRetrieveParams.after
+            cursor = extractionRetrieveParams.cursor
             limit = extractionRetrieveParams.limit
             additionalHeaders = extractionRetrieveParams.additionalHeaders.toBuilder()
             additionalQueryParams = extractionRetrieveParams.additionalQueryParams.toBuilder()
@@ -60,8 +60,8 @@ private constructor(
 
         fun id(id: String?) = apply { this.id = id }
 
-        /** Cursor for keyset pagination */
-        fun after(after: String?) = apply { this.after = after }
+        /** Cursor for keyset pagination from prior response next_cursor */
+        fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
         /** Maximum number of results to return (1-1000, default 100) */
         fun limit(limit: Long?) = apply { this.limit = limit }
@@ -179,7 +179,7 @@ private constructor(
         fun build(): ExtractionRetrieveParams =
             ExtractionRetrieveParams(
                 id,
-                after,
+                cursor,
                 limit,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -197,7 +197,7 @@ private constructor(
     override fun _queryParams(): QueryParams =
         QueryParams.builder()
             .apply {
-                after?.let { put("after", it) }
+                cursor?.let { put("cursor", it) }
                 limit?.let { put("limit", it.toString()) }
                 putAll(additionalQueryParams)
             }
@@ -210,15 +210,15 @@ private constructor(
 
         return other is ExtractionRetrieveParams &&
             id == other.id &&
-            after == other.after &&
+            cursor == other.cursor &&
             limit == other.limit &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(id, after, limit, additionalHeaders, additionalQueryParams)
+        Objects.hash(id, cursor, limit, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "ExtractionRetrieveParams{id=$id, after=$after, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "ExtractionRetrieveParams{id=$id, cursor=$cursor, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

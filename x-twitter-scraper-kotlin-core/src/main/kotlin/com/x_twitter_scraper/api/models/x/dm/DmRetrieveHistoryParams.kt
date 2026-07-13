@@ -3,6 +3,7 @@
 package com.x_twitter_scraper.api.models.x.dm
 
 import com.x_twitter_scraper.api.core.Params
+import com.x_twitter_scraper.api.core.checkRequired
 import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
@@ -11,6 +12,7 @@ import java.util.Objects
 class DmRetrieveHistoryParams
 private constructor(
     private val userId: String?,
+    private val account: String,
     private val cursor: String?,
     private val maxId: String?,
     private val additionalHeaders: Headers,
@@ -18,6 +20,12 @@ private constructor(
 ) : Params {
 
     fun userId(): String? = userId
+
+    /**
+     * X handle (without the `@` prefix) of the connected X account used to read the conversation.
+     * The account must be a participant in the conversation.
+     */
+    fun account(): String = account
 
     /** Pagination cursor for DM history */
     fun cursor(): String? = cursor
@@ -35,9 +43,14 @@ private constructor(
 
     companion object {
 
-        fun none(): DmRetrieveHistoryParams = builder().build()
-
-        /** Returns a mutable builder for constructing an instance of [DmRetrieveHistoryParams]. */
+        /**
+         * Returns a mutable builder for constructing an instance of [DmRetrieveHistoryParams].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .account()
+         * ```
+         */
         fun builder() = Builder()
     }
 
@@ -45,6 +58,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var userId: String? = null
+        private var account: String? = null
         private var cursor: String? = null
         private var maxId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -52,6 +66,7 @@ private constructor(
 
         internal fun from(dmRetrieveHistoryParams: DmRetrieveHistoryParams) = apply {
             userId = dmRetrieveHistoryParams.userId
+            account = dmRetrieveHistoryParams.account
             cursor = dmRetrieveHistoryParams.cursor
             maxId = dmRetrieveHistoryParams.maxId
             additionalHeaders = dmRetrieveHistoryParams.additionalHeaders.toBuilder()
@@ -59,6 +74,12 @@ private constructor(
         }
 
         fun userId(userId: String?) = apply { this.userId = userId }
+
+        /**
+         * X handle (without the `@` prefix) of the connected X account used to read the
+         * conversation. The account must be a participant in the conversation.
+         */
+        fun account(account: String) = apply { this.account = account }
 
         /** Pagination cursor for DM history */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
@@ -168,10 +189,18 @@ private constructor(
          * Returns an immutable instance of [DmRetrieveHistoryParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .account()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): DmRetrieveHistoryParams =
             DmRetrieveHistoryParams(
                 userId,
+                checkRequired("account", account),
                 cursor,
                 maxId,
                 additionalHeaders.build(),
@@ -190,6 +219,7 @@ private constructor(
     override fun _queryParams(): QueryParams =
         QueryParams.builder()
             .apply {
+                put("account", account)
                 cursor?.let { put("cursor", it) }
                 maxId?.let { put("maxId", it) }
                 putAll(additionalQueryParams)
@@ -203,6 +233,7 @@ private constructor(
 
         return other is DmRetrieveHistoryParams &&
             userId == other.userId &&
+            account == other.account &&
             cursor == other.cursor &&
             maxId == other.maxId &&
             additionalHeaders == other.additionalHeaders &&
@@ -210,8 +241,8 @@ private constructor(
     }
 
     override fun hashCode(): Int =
-        Objects.hash(userId, cursor, maxId, additionalHeaders, additionalQueryParams)
+        Objects.hash(userId, account, cursor, maxId, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "DmRetrieveHistoryParams{userId=$userId, cursor=$cursor, maxId=$maxId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "DmRetrieveHistoryParams{userId=$userId, account=$account, cursor=$cursor, maxId=$maxId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -443,16 +443,6 @@ private constructor(
             // We replace after all the default headers to allow end-users to overwrite them.
             headers.replaceAll(this.headers.build())
             queryParams.replaceAll(this.queryParams.build())
-            apiKey?.let {
-                if (!it.isEmpty()) {
-                    headers.replace("X-Api-Key", it)
-                }
-            }
-            bearerToken?.let {
-                if (!it.isEmpty()) {
-                    headers.replace("Authorization", "Bearer $it")
-                }
-            }
 
             return ClientOptions(
                 httpClient,
@@ -498,5 +488,24 @@ private constructor(
     fun close() {
         httpClient.close()
         sleeper.close()
+    }
+
+    internal fun securityHeaders(security: SecurityOptions): Headers {
+        val headers = Headers.builder()
+        if (security.apiKey) {
+            apiKey?.let {
+                if (!it.isEmpty()) {
+                    headers.replace("x-api-key", it)
+                }
+            }
+        }
+        if (security.oauthBearer) {
+            bearerToken?.let {
+                if (!it.isEmpty()) {
+                    headers.replace("Authorization", "Bearer $it")
+                }
+            }
+        }
+        return headers.build()
     }
 }

@@ -12,7 +12,11 @@ internal class TrendServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun list() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val trendServiceAsync = client.trends()
 
         val trends = trendServiceAsync.list(TrendListParams.builder().count(1L).woeid(0L).build())

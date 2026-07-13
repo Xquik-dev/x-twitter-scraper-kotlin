@@ -15,6 +15,8 @@ import com.x_twitter_scraper.api.models.webhooks.WebhookListDeliveriesParams
 import com.x_twitter_scraper.api.models.webhooks.WebhookListDeliveriesResponse
 import com.x_twitter_scraper.api.models.webhooks.WebhookListParams
 import com.x_twitter_scraper.api.models.webhooks.WebhookListResponse
+import com.x_twitter_scraper.api.models.webhooks.WebhookResumeParams
+import com.x_twitter_scraper.api.models.webhooks.WebhookResumeResponse
 import com.x_twitter_scraper.api.models.webhooks.WebhookTestParams
 import com.x_twitter_scraper.api.models.webhooks.WebhookTestResponse
 import com.x_twitter_scraper.api.models.webhooks.WebhookUpdateParams
@@ -101,6 +103,23 @@ interface WebhookService {
     /** @see listDeliveries */
     fun listDeliveries(id: String, requestOptions: RequestOptions): WebhookListDeliveriesResponse =
         listDeliveries(id, WebhookListDeliveriesParams.none(), requestOptions)
+
+    /** Test and resume webhook endpoint */
+    fun resume(
+        id: String,
+        params: WebhookResumeParams = WebhookResumeParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): WebhookResumeResponse = resume(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see resume */
+    fun resume(
+        params: WebhookResumeParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): WebhookResumeResponse
+
+    /** @see resume */
+    fun resume(id: String, requestOptions: RequestOptions): WebhookResumeResponse =
+        resume(id, WebhookResumeParams.none(), requestOptions)
 
     /** Test webhook endpoint */
     fun test(
@@ -230,6 +249,33 @@ interface WebhookService {
             requestOptions: RequestOptions,
         ): HttpResponseFor<WebhookListDeliveriesResponse> =
             listDeliveries(id, WebhookListDeliveriesParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /webhooks/{id}/resume`, but is otherwise the same
+         * as [WebhookService.resume].
+         */
+        @MustBeClosed
+        fun resume(
+            id: String,
+            params: WebhookResumeParams = WebhookResumeParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<WebhookResumeResponse> =
+            resume(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see resume */
+        @MustBeClosed
+        fun resume(
+            params: WebhookResumeParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<WebhookResumeResponse>
+
+        /** @see resume */
+        @MustBeClosed
+        fun resume(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<WebhookResumeResponse> =
+            resume(id, WebhookResumeParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /webhooks/{id}/test`, but is otherwise the same as

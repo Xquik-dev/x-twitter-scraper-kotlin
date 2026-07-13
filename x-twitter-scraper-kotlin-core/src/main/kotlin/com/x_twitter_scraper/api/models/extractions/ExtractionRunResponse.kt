@@ -257,6 +257,8 @@ private constructor(
 
             val COMMUNITY_SEARCH = of("community_search")
 
+            val FAVORITERS = of("favoriters")
+
             val FOLLOWER_EXPLORER = of("follower_explorer")
 
             val FOLLOWING_EXPLORER = of("following_explorer")
@@ -285,6 +287,10 @@ private constructor(
 
             val TWEET_SEARCH_EXTRACTOR = of("tweet_search_extractor")
 
+            val USER_LIKES = of("user_likes")
+
+            val USER_MEDIA = of("user_media")
+
             val VERIFIED_FOLLOWER_EXPLORER = of("verified_follower_explorer")
 
             fun of(value: String) = ToolType(JsonField.of(value))
@@ -297,6 +303,7 @@ private constructor(
             COMMUNITY_MODERATOR_EXPLORER,
             COMMUNITY_POST_EXTRACTOR,
             COMMUNITY_SEARCH,
+            FAVORITERS,
             FOLLOWER_EXPLORER,
             FOLLOWING_EXPLORER,
             LIST_FOLLOWER_EXPLORER,
@@ -311,6 +318,8 @@ private constructor(
             SPACE_EXPLORER,
             THREAD_EXTRACTOR,
             TWEET_SEARCH_EXTRACTOR,
+            USER_LIKES,
+            USER_MEDIA,
             VERIFIED_FOLLOWER_EXPLORER,
         }
 
@@ -329,6 +338,7 @@ private constructor(
             COMMUNITY_MODERATOR_EXPLORER,
             COMMUNITY_POST_EXTRACTOR,
             COMMUNITY_SEARCH,
+            FAVORITERS,
             FOLLOWER_EXPLORER,
             FOLLOWING_EXPLORER,
             LIST_FOLLOWER_EXPLORER,
@@ -343,6 +353,8 @@ private constructor(
             SPACE_EXPLORER,
             THREAD_EXTRACTOR,
             TWEET_SEARCH_EXTRACTOR,
+            USER_LIKES,
+            USER_MEDIA,
             VERIFIED_FOLLOWER_EXPLORER,
             /** An enum member indicating that [ToolType] was instantiated with an unknown value. */
             _UNKNOWN,
@@ -362,6 +374,7 @@ private constructor(
                 COMMUNITY_MODERATOR_EXPLORER -> Value.COMMUNITY_MODERATOR_EXPLORER
                 COMMUNITY_POST_EXTRACTOR -> Value.COMMUNITY_POST_EXTRACTOR
                 COMMUNITY_SEARCH -> Value.COMMUNITY_SEARCH
+                FAVORITERS -> Value.FAVORITERS
                 FOLLOWER_EXPLORER -> Value.FOLLOWER_EXPLORER
                 FOLLOWING_EXPLORER -> Value.FOLLOWING_EXPLORER
                 LIST_FOLLOWER_EXPLORER -> Value.LIST_FOLLOWER_EXPLORER
@@ -376,6 +389,8 @@ private constructor(
                 SPACE_EXPLORER -> Value.SPACE_EXPLORER
                 THREAD_EXTRACTOR -> Value.THREAD_EXTRACTOR
                 TWEET_SEARCH_EXTRACTOR -> Value.TWEET_SEARCH_EXTRACTOR
+                USER_LIKES -> Value.USER_LIKES
+                USER_MEDIA -> Value.USER_MEDIA
                 VERIFIED_FOLLOWER_EXPLORER -> Value.VERIFIED_FOLLOWER_EXPLORER
                 else -> Value._UNKNOWN
             }
@@ -396,6 +411,7 @@ private constructor(
                 COMMUNITY_MODERATOR_EXPLORER -> Known.COMMUNITY_MODERATOR_EXPLORER
                 COMMUNITY_POST_EXTRACTOR -> Known.COMMUNITY_POST_EXTRACTOR
                 COMMUNITY_SEARCH -> Known.COMMUNITY_SEARCH
+                FAVORITERS -> Known.FAVORITERS
                 FOLLOWER_EXPLORER -> Known.FOLLOWER_EXPLORER
                 FOLLOWING_EXPLORER -> Known.FOLLOWING_EXPLORER
                 LIST_FOLLOWER_EXPLORER -> Known.LIST_FOLLOWER_EXPLORER
@@ -410,6 +426,8 @@ private constructor(
                 SPACE_EXPLORER -> Known.SPACE_EXPLORER
                 THREAD_EXTRACTOR -> Known.THREAD_EXTRACTOR
                 TWEET_SEARCH_EXTRACTOR -> Known.TWEET_SEARCH_EXTRACTOR
+                USER_LIKES -> Known.USER_LIKES
+                USER_MEDIA -> Known.USER_MEDIA
                 VERIFIED_FOLLOWER_EXPLORER -> Known.VERIFIED_FOLLOWER_EXPLORER
                 else -> throw XTwitterScraperInvalidDataException("Unknown ToolType: $value")
             }

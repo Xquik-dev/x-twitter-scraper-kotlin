@@ -7,7 +7,10 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
 
-/** Retrieve the full content of an X Article (long-form post) by tweet ID. */
+/**
+ * Retrieve the full content of an X Article (long-form post) by numeric tweet ID. Returns
+ * article_not_found when the tweet is valid but is not an X Article.
+ */
 class XGetArticleParams
 private constructor(
     private val tweetId: String?,

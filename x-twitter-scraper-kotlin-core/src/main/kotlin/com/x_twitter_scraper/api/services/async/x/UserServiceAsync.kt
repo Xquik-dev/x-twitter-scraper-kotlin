@@ -9,7 +9,10 @@ import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.models.PaginatedTweets
 import com.x_twitter_scraper.api.models.PaginatedUsers
 import com.x_twitter_scraper.api.models.UserProfile
+import com.x_twitter_scraper.api.models.x.users.UserRemoveFollowerParams
+import com.x_twitter_scraper.api.models.x.users.UserRemoveFollowerResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveBatchParams
+import com.x_twitter_scraper.api.models.x.users.UserRetrieveBatchResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveFollowersParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveFollowersYouKnowParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveFollowingParams
@@ -17,12 +20,12 @@ import com.x_twitter_scraper.api.models.x.users.UserRetrieveLikesParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveMediaParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveMentionsParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveParams
+import com.x_twitter_scraper.api.models.x.users.UserRetrieveRepliesParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveSearchParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveTweetsParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveVerifiedFollowersParams
 import com.x_twitter_scraper.api.services.async.x.users.FollowServiceAsync
 
-/** Look up, search, and explore user profiles and relationships */
 interface UserServiceAsync {
 
     /**
@@ -57,11 +60,25 @@ interface UserServiceAsync {
     suspend fun retrieve(id: String, requestOptions: RequestOptions): UserProfile =
         retrieve(id, UserRetrieveParams.none(), requestOptions)
 
+    /** Remove follower */
+    suspend fun removeFollower(
+        id: String,
+        params: UserRemoveFollowerParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): UserRemoveFollowerResponse =
+        removeFollower(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see removeFollower */
+    suspend fun removeFollower(
+        params: UserRemoveFollowerParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): UserRemoveFollowerResponse
+
     /** Look up multiple users by IDs in one call */
     suspend fun retrieveBatch(
         params: UserRetrieveBatchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): PaginatedUsers
+    ): UserRetrieveBatchResponse
 
     /** List followers of a user */
     suspend fun retrieveFollowers(
@@ -168,6 +185,23 @@ interface UserServiceAsync {
     suspend fun retrieveMentions(id: String, requestOptions: RequestOptions): PaginatedTweets =
         retrieveMentions(id, UserRetrieveMentionsParams.none(), requestOptions)
 
+    /** Returns the user's timeline with replies included by default. */
+    suspend fun retrieveReplies(
+        id: String,
+        params: UserRetrieveRepliesParams = UserRetrieveRepliesParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): PaginatedTweets = retrieveReplies(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see retrieveReplies */
+    suspend fun retrieveReplies(
+        params: UserRetrieveRepliesParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): PaginatedTweets
+
+    /** @see retrieveReplies */
+    suspend fun retrieveReplies(id: String, requestOptions: RequestOptions): PaginatedTweets =
+        retrieveReplies(id, UserRetrieveRepliesParams.none(), requestOptions)
+
     /** Search users by name or username */
     suspend fun retrieveSearch(
         params: UserRetrieveSearchParams,
@@ -251,6 +285,25 @@ interface UserServiceAsync {
         ): HttpResponseFor<UserProfile> = retrieve(id, UserRetrieveParams.none(), requestOptions)
 
         /**
+         * Returns a raw HTTP response for `post /x/users/{id}/remove-follower`, but is otherwise
+         * the same as [UserServiceAsync.removeFollower].
+         */
+        @MustBeClosed
+        suspend fun removeFollower(
+            id: String,
+            params: UserRemoveFollowerParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<UserRemoveFollowerResponse> =
+            removeFollower(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see removeFollower */
+        @MustBeClosed
+        suspend fun removeFollower(
+            params: UserRemoveFollowerParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<UserRemoveFollowerResponse>
+
+        /**
          * Returns a raw HTTP response for `get /x/users/batch`, but is otherwise the same as
          * [UserServiceAsync.retrieveBatch].
          */
@@ -258,7 +311,7 @@ interface UserServiceAsync {
         suspend fun retrieveBatch(
             params: UserRetrieveBatchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<PaginatedUsers>
+        ): HttpResponseFor<UserRetrieveBatchResponse>
 
         /**
          * Returns a raw HTTP response for `get /x/users/{id}/followers`, but is otherwise the same
@@ -421,6 +474,33 @@ interface UserServiceAsync {
             requestOptions: RequestOptions,
         ): HttpResponseFor<PaginatedTweets> =
             retrieveMentions(id, UserRetrieveMentionsParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get /x/users/{id}/replies`, but is otherwise the same as
+         * [UserServiceAsync.retrieveReplies].
+         */
+        @MustBeClosed
+        suspend fun retrieveReplies(
+            id: String,
+            params: UserRetrieveRepliesParams = UserRetrieveRepliesParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<PaginatedTweets> =
+            retrieveReplies(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see retrieveReplies */
+        @MustBeClosed
+        suspend fun retrieveReplies(
+            params: UserRetrieveRepliesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<PaginatedTweets>
+
+        /** @see retrieveReplies */
+        @MustBeClosed
+        suspend fun retrieveReplies(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<PaginatedTweets> =
+            retrieveReplies(id, UserRetrieveRepliesParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /x/users/search`, but is otherwise the same as

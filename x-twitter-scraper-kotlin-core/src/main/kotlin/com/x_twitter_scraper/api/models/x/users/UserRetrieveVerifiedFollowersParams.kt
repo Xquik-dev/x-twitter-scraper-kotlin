@@ -12,6 +12,7 @@ class UserRetrieveVerifiedFollowersParams
 private constructor(
     private val id: String?,
     private val cursor: String?,
+    private val pageSize: Long?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -20,6 +21,14 @@ private constructor(
 
     /** Pagination cursor for verified followers */
     fun cursor(): String? = cursor
+
+    /**
+     * Maximum user profiles requested from this page (20-200, default 200). The response can
+     * contain fewer profiles because the source returned fewer or remaining credits cover fewer
+     * results. Keep requesting next_cursor while has_next_page is true. The deprecated limit and
+     * count aliases remain accepted.
+     */
+    fun pageSize(): Long? = pageSize
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -45,6 +54,7 @@ private constructor(
 
         private var id: String? = null
         private var cursor: String? = null
+        private var pageSize: Long? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -53,6 +63,7 @@ private constructor(
         ) = apply {
             id = userRetrieveVerifiedFollowersParams.id
             cursor = userRetrieveVerifiedFollowersParams.cursor
+            pageSize = userRetrieveVerifiedFollowersParams.pageSize
             additionalHeaders = userRetrieveVerifiedFollowersParams.additionalHeaders.toBuilder()
             additionalQueryParams =
                 userRetrieveVerifiedFollowersParams.additionalQueryParams.toBuilder()
@@ -62,6 +73,21 @@ private constructor(
 
         /** Pagination cursor for verified followers */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
+
+        /**
+         * Maximum user profiles requested from this page (20-200, default 200). The response can
+         * contain fewer profiles because the source returned fewer or remaining credits cover fewer
+         * results. Keep requesting next_cursor while has_next_page is true. The deprecated limit
+         * and count aliases remain accepted.
+         */
+        fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
+
+        /**
+         * Alias for [Builder.pageSize].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun pageSize(pageSize: Long) = pageSize(pageSize as Long?)
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -170,6 +196,7 @@ private constructor(
             UserRetrieveVerifiedFollowersParams(
                 id,
                 cursor,
+                pageSize,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -187,6 +214,7 @@ private constructor(
         QueryParams.builder()
             .apply {
                 cursor?.let { put("cursor", it) }
+                pageSize?.let { put("pageSize", it.toString()) }
                 putAll(additionalQueryParams)
             }
             .build()
@@ -199,13 +227,14 @@ private constructor(
         return other is UserRetrieveVerifiedFollowersParams &&
             id == other.id &&
             cursor == other.cursor &&
+            pageSize == other.pageSize &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(id, cursor, additionalHeaders, additionalQueryParams)
+        Objects.hash(id, cursor, pageSize, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "UserRetrieveVerifiedFollowersParams{id=$id, cursor=$cursor, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "UserRetrieveVerifiedFollowersParams{id=$id, cursor=$cursor, pageSize=$pageSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

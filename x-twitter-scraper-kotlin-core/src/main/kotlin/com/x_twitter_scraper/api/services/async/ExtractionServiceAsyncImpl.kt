@@ -26,7 +26,7 @@ import com.x_twitter_scraper.api.models.extractions.ExtractionRetrieveResponse
 import com.x_twitter_scraper.api.models.extractions.ExtractionRunParams
 import com.x_twitter_scraper.api.models.extractions.ExtractionRunResponse
 
-/** Bulk data extraction (20 tool types) */
+/** Bulk data extraction (23 tool types) */
 class ExtractionServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     ExtractionServiceAsync {
 

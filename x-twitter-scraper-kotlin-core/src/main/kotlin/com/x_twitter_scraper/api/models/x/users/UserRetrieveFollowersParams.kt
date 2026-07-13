@@ -11,7 +11,9 @@ import java.util.Objects
 class UserRetrieveFollowersParams
 private constructor(
     private val id: String?,
+    private val after: String?,
     private val cursor: String?,
+    private val limit: Long?,
     private val pageSize: Long?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -19,10 +21,21 @@ private constructor(
 
     fun id(): String? = id
 
+    /** Legacy cursor alias. Prefer cursor. */
+    fun after(): String? = after
+
     /** Pagination cursor for followers list */
     fun cursor(): String? = cursor
 
-    /** Items per page (20-200, default 200) */
+    /** Legacy integer page size alias for following lists. Prefer pageSize. */
+    fun limit(): Long? = limit
+
+    /**
+     * Maximum user profiles requested from this page (20-200, default 200). The response can
+     * contain fewer profiles because the source returned fewer or remaining credits cover fewer
+     * results. Keep requesting next_cursor while has_next_page is true. The deprecated limit and
+     * count aliases remain accepted.
+     */
     fun pageSize(): Long? = pageSize
 
     /** Additional headers to send with the request. */
@@ -47,14 +60,18 @@ private constructor(
     class Builder internal constructor() {
 
         private var id: String? = null
+        private var after: String? = null
         private var cursor: String? = null
+        private var limit: Long? = null
         private var pageSize: Long? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(userRetrieveFollowersParams: UserRetrieveFollowersParams) = apply {
             id = userRetrieveFollowersParams.id
+            after = userRetrieveFollowersParams.after
             cursor = userRetrieveFollowersParams.cursor
+            limit = userRetrieveFollowersParams.limit
             pageSize = userRetrieveFollowersParams.pageSize
             additionalHeaders = userRetrieveFollowersParams.additionalHeaders.toBuilder()
             additionalQueryParams = userRetrieveFollowersParams.additionalQueryParams.toBuilder()
@@ -62,10 +79,28 @@ private constructor(
 
         fun id(id: String?) = apply { this.id = id }
 
+        /** Legacy cursor alias. Prefer cursor. */
+        fun after(after: String?) = apply { this.after = after }
+
         /** Pagination cursor for followers list */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
-        /** Items per page (20-200, default 200) */
+        /** Legacy integer page size alias for following lists. Prefer pageSize. */
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /**
+         * Alias for [Builder.limit].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun limit(limit: Long) = limit(limit as Long?)
+
+        /**
+         * Maximum user profiles requested from this page (20-200, default 200). The response can
+         * contain fewer profiles because the source returned fewer or remaining credits cover fewer
+         * results. Keep requesting next_cursor while has_next_page is true. The deprecated limit
+         * and count aliases remain accepted.
+         */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
         /**
@@ -181,7 +216,9 @@ private constructor(
         fun build(): UserRetrieveFollowersParams =
             UserRetrieveFollowersParams(
                 id,
+                after,
                 cursor,
+                limit,
                 pageSize,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -199,7 +236,9 @@ private constructor(
     override fun _queryParams(): QueryParams =
         QueryParams.builder()
             .apply {
+                after?.let { put("after", it) }
                 cursor?.let { put("cursor", it) }
+                limit?.let { put("limit", it.toString()) }
                 pageSize?.let { put("pageSize", it.toString()) }
                 putAll(additionalQueryParams)
             }
@@ -212,15 +251,17 @@ private constructor(
 
         return other is UserRetrieveFollowersParams &&
             id == other.id &&
+            after == other.after &&
             cursor == other.cursor &&
+            limit == other.limit &&
             pageSize == other.pageSize &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(id, cursor, pageSize, additionalHeaders, additionalQueryParams)
+        Objects.hash(id, after, cursor, limit, pageSize, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "UserRetrieveFollowersParams{id=$id, cursor=$cursor, pageSize=$pageSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "UserRetrieveFollowersParams{id=$id, after=$after, cursor=$cursor, limit=$limit, pageSize=$pageSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
