@@ -14,7 +14,6 @@ import com.x_twitter_scraper.api.core.checkKnown
 import com.x_twitter_scraper.api.core.checkRequired
 import com.x_twitter_scraper.api.core.toImmutable
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
-import com.x_twitter_scraper.api.models.x.tweets.TweetAuthor
 import java.util.Collections
 import java.util.Objects
 
@@ -22,14 +21,14 @@ class XGetArticleResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val article: JsonField<Article>,
-    private val author: JsonField<TweetAuthor>,
+    private val author: JsonField<Author>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
         @JsonProperty("article") @ExcludeMissing article: JsonField<Article> = JsonMissing.of(),
-        @JsonProperty("author") @ExcludeMissing author: JsonField<TweetAuthor> = JsonMissing.of(),
+        @JsonProperty("author") @ExcludeMissing author: JsonField<Author> = JsonMissing.of(),
     ) : this(article, author, mutableMapOf())
 
     /**
@@ -39,12 +38,12 @@ private constructor(
     fun article(): Article = article.getRequired("article")
 
     /**
-     * Author of a tweet with follower count and verification status.
+     * X Article author profile fields returned when available.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
-    fun author(): TweetAuthor? = author.getNullable("author")
+    fun author(): Author? = author.getNullable("author")
 
     /**
      * Returns the raw JSON value of [article].
@@ -58,7 +57,7 @@ private constructor(
      *
      * Unlike [author], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("author") @ExcludeMissing fun _author(): JsonField<TweetAuthor> = author
+    @JsonProperty("author") @ExcludeMissing fun _author(): JsonField<Author> = author
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -89,7 +88,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var article: JsonField<Article>? = null
-        private var author: JsonField<TweetAuthor> = JsonMissing.of()
+        private var author: JsonField<Author> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(xGetArticleResponse: XGetArticleResponse) = apply {
@@ -108,17 +107,16 @@ private constructor(
          */
         fun article(article: JsonField<Article>) = apply { this.article = article }
 
-        /** Author of a tweet with follower count and verification status. */
-        fun author(author: TweetAuthor) = author(JsonField.of(author))
+        /** X Article author profile fields returned when available. */
+        fun author(author: Author) = author(JsonField.of(author))
 
         /**
          * Sets [Builder.author] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.author] with a well-typed [TweetAuthor] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
+         * You should usually call [Builder.author] with a well-typed [Author] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun author(author: JsonField<TweetAuthor>) = apply { this.author = author }
+        fun author(author: JsonField<Author>) = apply { this.author = author }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -198,6 +196,7 @@ private constructor(
     class Article
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
+        private val bodyText: JsonField<String>,
         private val contents: JsonField<List<Content>>,
         private val coverImageUrl: JsonField<String>,
         private val createdAt: JsonField<String>,
@@ -212,6 +211,9 @@ private constructor(
 
         @JsonCreator
         private constructor(
+            @JsonProperty("bodyText")
+            @ExcludeMissing
+            bodyText: JsonField<String> = JsonMissing.of(),
             @JsonProperty("contents")
             @ExcludeMissing
             contents: JsonField<List<Content>> = JsonMissing.of(),
@@ -236,6 +238,7 @@ private constructor(
             @JsonProperty("title") @ExcludeMissing title: JsonField<String> = JsonMissing.of(),
             @JsonProperty("viewCount") @ExcludeMissing viewCount: JsonField<Long> = JsonMissing.of(),
         ) : this(
+            bodyText,
             contents,
             coverImageUrl,
             createdAt,
@@ -247,6 +250,14 @@ private constructor(
             viewCount,
             mutableMapOf(),
         )
+
+        /**
+         * Plain text joined from all article blocks
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun bodyText(): String? = bodyText.getNullable("bodyText")
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
@@ -301,6 +312,13 @@ private constructor(
          *   (e.g. if the server responded with an unexpected value).
          */
         fun viewCount(): Long? = viewCount.getNullable("viewCount")
+
+        /**
+         * Returns the raw JSON value of [bodyText].
+         *
+         * Unlike [bodyText], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("bodyText") @ExcludeMissing fun _bodyText(): JsonField<String> = bodyText
 
         /**
          * Returns the raw JSON value of [contents].
@@ -393,6 +411,7 @@ private constructor(
         /** A builder for [Article]. */
         class Builder internal constructor() {
 
+            private var bodyText: JsonField<String> = JsonMissing.of()
             private var contents: JsonField<MutableList<Content>>? = null
             private var coverImageUrl: JsonField<String> = JsonMissing.of()
             private var createdAt: JsonField<String> = JsonMissing.of()
@@ -405,6 +424,7 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(article: Article) = apply {
+                bodyText = article.bodyText
                 contents = article.contents.map { it.toMutableList() }
                 coverImageUrl = article.coverImageUrl
                 createdAt = article.createdAt
@@ -416,6 +436,18 @@ private constructor(
                 viewCount = article.viewCount
                 additionalProperties = article.additionalProperties.toMutableMap()
             }
+
+            /** Plain text joined from all article blocks */
+            fun bodyText(bodyText: String) = bodyText(JsonField.of(bodyText))
+
+            /**
+             * Sets [Builder.bodyText] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.bodyText] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun bodyText(bodyText: JsonField<String>) = apply { this.bodyText = bodyText }
 
             fun contents(contents: List<Content>) = contents(JsonField.of(contents))
 
@@ -560,6 +592,7 @@ private constructor(
              */
             fun build(): Article =
                 Article(
+                    bodyText,
                     (contents ?: JsonMissing.of()).map { it.toImmutable() },
                     coverImageUrl,
                     createdAt,
@@ -589,6 +622,7 @@ private constructor(
                 return@apply
             }
 
+            bodyText()
             contents()?.forEach { it.validate() }
             coverImageUrl()
             createdAt()
@@ -616,7 +650,8 @@ private constructor(
          * Used for best match union deserialization.
          */
         internal fun validity(): Int =
-            (contents.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (if (bodyText.asKnown() == null) 0 else 1) +
+                (contents.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
                 (if (coverImageUrl.asKnown() == null) 0 else 1) +
                 (if (createdAt.asKnown() == null) 0 else 1) +
                 (if (likeCount.asKnown() == null) 0 else 1) +
@@ -630,6 +665,8 @@ private constructor(
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val height: JsonField<Long>,
+            private val inlineStyleRanges: JsonField<List<InlineStyleRange>>,
+            private val previewUrl: JsonField<String>,
             private val text: JsonField<String>,
             private val type: JsonField<String>,
             private val url: JsonField<String>,
@@ -640,11 +677,17 @@ private constructor(
             @JsonCreator
             private constructor(
                 @JsonProperty("height") @ExcludeMissing height: JsonField<Long> = JsonMissing.of(),
+                @JsonProperty("inlineStyleRanges")
+                @ExcludeMissing
+                inlineStyleRanges: JsonField<List<InlineStyleRange>> = JsonMissing.of(),
+                @JsonProperty("previewUrl")
+                @ExcludeMissing
+                previewUrl: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("text") @ExcludeMissing text: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("type") @ExcludeMissing type: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("width") @ExcludeMissing width: JsonField<Long> = JsonMissing.of(),
-            ) : this(height, text, type, url, width, mutableMapOf())
+            ) : this(height, inlineStyleRanges, previewUrl, text, type, url, width, mutableMapOf())
 
             /**
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
@@ -653,14 +696,32 @@ private constructor(
             fun height(): Long? = height.getNullable("height")
 
             /**
+             * Inline text formatting ranges
+             *
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun inlineStyleRanges(): List<InlineStyleRange>? =
+                inlineStyleRanges.getNullable("inlineStyleRanges")
+
+            /**
+             * Preview image URL for media blocks
+             *
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun previewUrl(): String? = previewUrl.getNullable("previewUrl")
+
+            /**
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
              *   (e.g. if the server responded with an unexpected value).
              */
             fun text(): String? = text.getNullable("text")
 
             /**
-             * Block type: unstyled, header-one, header-two, header-three, unordered-list-item,
-             * ordered-list-item, image, gif, divider
+             * Block type: paragraph, header-one, header-two, header-three, header-four,
+             * header-five, header-six, unordered-list-item, ordered-list-item, blockquote,
+             * code-block, media, divider
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
              *   (e.g. if the server responded with an unexpected value).
@@ -668,7 +729,7 @@ private constructor(
             fun type(): String? = type.getNullable("type")
 
             /**
-             * Media URL for image/gif blocks
+             * Media URL for media blocks
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
              *   (e.g. if the server responded with an unexpected value).
@@ -687,6 +748,26 @@ private constructor(
              * Unlike [height], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("height") @ExcludeMissing fun _height(): JsonField<Long> = height
+
+            /**
+             * Returns the raw JSON value of [inlineStyleRanges].
+             *
+             * Unlike [inlineStyleRanges], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("inlineStyleRanges")
+            @ExcludeMissing
+            fun _inlineStyleRanges(): JsonField<List<InlineStyleRange>> = inlineStyleRanges
+
+            /**
+             * Returns the raw JSON value of [previewUrl].
+             *
+             * Unlike [previewUrl], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("previewUrl")
+            @ExcludeMissing
+            fun _previewUrl(): JsonField<String> = previewUrl
 
             /**
              * Returns the raw JSON value of [text].
@@ -738,6 +819,8 @@ private constructor(
             class Builder internal constructor() {
 
                 private var height: JsonField<Long> = JsonMissing.of()
+                private var inlineStyleRanges: JsonField<MutableList<InlineStyleRange>>? = null
+                private var previewUrl: JsonField<String> = JsonMissing.of()
                 private var text: JsonField<String> = JsonMissing.of()
                 private var type: JsonField<String> = JsonMissing.of()
                 private var url: JsonField<String> = JsonMissing.of()
@@ -746,6 +829,8 @@ private constructor(
 
                 internal fun from(content: Content) = apply {
                     height = content.height
+                    inlineStyleRanges = content.inlineStyleRanges.map { it.toMutableList() }
+                    previewUrl = content.previewUrl
                     text = content.text
                     type = content.type
                     url = content.url
@@ -764,6 +849,48 @@ private constructor(
                  */
                 fun height(height: JsonField<Long>) = apply { this.height = height }
 
+                /** Inline text formatting ranges */
+                fun inlineStyleRanges(inlineStyleRanges: List<InlineStyleRange>) =
+                    inlineStyleRanges(JsonField.of(inlineStyleRanges))
+
+                /**
+                 * Sets [Builder.inlineStyleRanges] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.inlineStyleRanges] with a well-typed
+                 * `List<InlineStyleRange>` value instead. This method is primarily for setting the
+                 * field to an undocumented or not yet supported value.
+                 */
+                fun inlineStyleRanges(inlineStyleRanges: JsonField<List<InlineStyleRange>>) =
+                    apply {
+                        this.inlineStyleRanges = inlineStyleRanges.map { it.toMutableList() }
+                    }
+
+                /**
+                 * Adds a single [InlineStyleRange] to [inlineStyleRanges].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addInlineStyleRange(inlineStyleRange: InlineStyleRange) = apply {
+                    inlineStyleRanges =
+                        (inlineStyleRanges ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("inlineStyleRanges", it).add(inlineStyleRange)
+                        }
+                }
+
+                /** Preview image URL for media blocks */
+                fun previewUrl(previewUrl: String) = previewUrl(JsonField.of(previewUrl))
+
+                /**
+                 * Sets [Builder.previewUrl] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.previewUrl] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun previewUrl(previewUrl: JsonField<String>) = apply {
+                    this.previewUrl = previewUrl
+                }
+
                 fun text(text: String) = text(JsonField.of(text))
 
                 /**
@@ -776,8 +903,9 @@ private constructor(
                 fun text(text: JsonField<String>) = apply { this.text = text }
 
                 /**
-                 * Block type: unstyled, header-one, header-two, header-three, unordered-list-item,
-                 * ordered-list-item, image, gif, divider
+                 * Block type: paragraph, header-one, header-two, header-three, header-four,
+                 * header-five, header-six, unordered-list-item, ordered-list-item, blockquote,
+                 * code-block, media, divider
                  */
                 fun type(type: String) = type(JsonField.of(type))
 
@@ -790,7 +918,7 @@ private constructor(
                  */
                 fun type(type: JsonField<String>) = apply { this.type = type }
 
-                /** Media URL for image/gif blocks */
+                /** Media URL for media blocks */
                 fun url(url: String) = url(JsonField.of(url))
 
                 /**
@@ -841,7 +969,16 @@ private constructor(
                  * Further updates to this [Builder] will not mutate the returned instance.
                  */
                 fun build(): Content =
-                    Content(height, text, type, url, width, additionalProperties.toMutableMap())
+                    Content(
+                        height,
+                        (inlineStyleRanges ?: JsonMissing.of()).map { it.toImmutable() },
+                        previewUrl,
+                        text,
+                        type,
+                        url,
+                        width,
+                        additionalProperties.toMutableMap(),
+                    )
             }
 
             private var validated: Boolean = false
@@ -862,6 +999,8 @@ private constructor(
                 }
 
                 height()
+                inlineStyleRanges()?.forEach { it.validate() }
+                previewUrl()
                 text()
                 type()
                 url()
@@ -885,10 +1024,239 @@ private constructor(
              */
             internal fun validity(): Int =
                 (if (height.asKnown() == null) 0 else 1) +
+                    (inlineStyleRanges.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+                    (if (previewUrl.asKnown() == null) 0 else 1) +
                     (if (text.asKnown() == null) 0 else 1) +
                     (if (type.asKnown() == null) 0 else 1) +
                     (if (url.asKnown() == null) 0 else 1) +
                     (if (width.asKnown() == null) 0 else 1)
+
+            class InlineStyleRange
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+            private constructor(
+                private val length: JsonField<Long>,
+                private val offset: JsonField<Long>,
+                private val style: JsonField<String>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
+            ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("length")
+                    @ExcludeMissing
+                    length: JsonField<Long> = JsonMissing.of(),
+                    @JsonProperty("offset")
+                    @ExcludeMissing
+                    offset: JsonField<Long> = JsonMissing.of(),
+                    @JsonProperty("style")
+                    @ExcludeMissing
+                    style: JsonField<String> = JsonMissing.of(),
+                ) : this(length, offset, style, mutableMapOf())
+
+                /**
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type (e.g. if the server responded with an unexpected value).
+                 */
+                fun length(): Long? = length.getNullable("length")
+
+                /**
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type (e.g. if the server responded with an unexpected value).
+                 */
+                fun offset(): Long? = offset.getNullable("offset")
+
+                /**
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type (e.g. if the server responded with an unexpected value).
+                 */
+                fun style(): String? = style.getNullable("style")
+
+                /**
+                 * Returns the raw JSON value of [length].
+                 *
+                 * Unlike [length], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("length") @ExcludeMissing fun _length(): JsonField<Long> = length
+
+                /**
+                 * Returns the raw JSON value of [offset].
+                 *
+                 * Unlike [offset], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("offset") @ExcludeMissing fun _offset(): JsonField<Long> = offset
+
+                /**
+                 * Returns the raw JSON value of [style].
+                 *
+                 * Unlike [style], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("style") @ExcludeMissing fun _style(): JsonField<String> = style
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /**
+                     * Returns a mutable builder for constructing an instance of [InlineStyleRange].
+                     */
+                    fun builder() = Builder()
+                }
+
+                /** A builder for [InlineStyleRange]. */
+                class Builder internal constructor() {
+
+                    private var length: JsonField<Long> = JsonMissing.of()
+                    private var offset: JsonField<Long> = JsonMissing.of()
+                    private var style: JsonField<String> = JsonMissing.of()
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    internal fun from(inlineStyleRange: InlineStyleRange) = apply {
+                        length = inlineStyleRange.length
+                        offset = inlineStyleRange.offset
+                        style = inlineStyleRange.style
+                        additionalProperties = inlineStyleRange.additionalProperties.toMutableMap()
+                    }
+
+                    fun length(length: Long) = length(JsonField.of(length))
+
+                    /**
+                     * Sets [Builder.length] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.length] with a well-typed [Long] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
+                    fun length(length: JsonField<Long>) = apply { this.length = length }
+
+                    fun offset(offset: Long) = offset(JsonField.of(offset))
+
+                    /**
+                     * Sets [Builder.offset] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.offset] with a well-typed [Long] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
+                    fun offset(offset: JsonField<Long>) = apply { this.offset = offset }
+
+                    fun style(style: String) = style(JsonField.of(style))
+
+                    /**
+                     * Sets [Builder.style] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.style] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
+                    fun style(style: JsonField<String>) = apply { this.style = style }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [InlineStyleRange].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
+                    fun build(): InlineStyleRange =
+                        InlineStyleRange(length, offset, style, additionalProperties.toMutableMap())
+                }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws XTwitterScraperInvalidDataException if any value type in this object
+                 *   doesn't match its expected type.
+                 */
+                fun validate(): InlineStyleRange = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    length()
+                    offset()
+                    style()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: XTwitterScraperInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                internal fun validity(): Int =
+                    (if (length.asKnown() == null) 0 else 1) +
+                        (if (offset.asKnown() == null) 0 else 1) +
+                        (if (style.asKnown() == null) 0 else 1)
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is InlineStyleRange &&
+                        length == other.length &&
+                        offset == other.offset &&
+                        style == other.style &&
+                        additionalProperties == other.additionalProperties
+                }
+
+                private val hashCode: Int by lazy {
+                    Objects.hash(length, offset, style, additionalProperties)
+                }
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() =
+                    "InlineStyleRange{length=$length, offset=$offset, style=$style, additionalProperties=$additionalProperties}"
+            }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -897,6 +1265,8 @@ private constructor(
 
                 return other is Content &&
                     height == other.height &&
+                    inlineStyleRanges == other.inlineStyleRanges &&
+                    previewUrl == other.previewUrl &&
                     text == other.text &&
                     type == other.type &&
                     url == other.url &&
@@ -905,13 +1275,22 @@ private constructor(
             }
 
             private val hashCode: Int by lazy {
-                Objects.hash(height, text, type, url, width, additionalProperties)
+                Objects.hash(
+                    height,
+                    inlineStyleRanges,
+                    previewUrl,
+                    text,
+                    type,
+                    url,
+                    width,
+                    additionalProperties,
+                )
             }
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Content{height=$height, text=$text, type=$type, url=$url, width=$width, additionalProperties=$additionalProperties}"
+                "Content{height=$height, inlineStyleRanges=$inlineStyleRanges, previewUrl=$previewUrl, text=$text, type=$type, url=$url, width=$width, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
@@ -920,6 +1299,7 @@ private constructor(
             }
 
             return other is Article &&
+                bodyText == other.bodyText &&
                 contents == other.contents &&
                 coverImageUrl == other.coverImageUrl &&
                 createdAt == other.createdAt &&
@@ -934,6 +1314,7 @@ private constructor(
 
         private val hashCode: Int by lazy {
             Objects.hash(
+                bodyText,
                 contents,
                 coverImageUrl,
                 createdAt,
@@ -950,7 +1331,880 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Article{contents=$contents, coverImageUrl=$coverImageUrl, createdAt=$createdAt, likeCount=$likeCount, previewText=$previewText, quoteCount=$quoteCount, replyCount=$replyCount, title=$title, viewCount=$viewCount, additionalProperties=$additionalProperties}"
+            "Article{bodyText=$bodyText, contents=$contents, coverImageUrl=$coverImageUrl, createdAt=$createdAt, likeCount=$likeCount, previewText=$previewText, quoteCount=$quoteCount, replyCount=$replyCount, title=$title, viewCount=$viewCount, additionalProperties=$additionalProperties}"
+    }
+
+    /** X Article author profile fields returned when available. */
+    class Author
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
+        private val id: JsonField<String>,
+        private val name: JsonField<String>,
+        private val username: JsonField<String>,
+        private val canDm: JsonField<Boolean>,
+        private val createdAt: JsonField<String>,
+        private val description: JsonField<String>,
+        private val favouritesCount: JsonField<Long>,
+        private val followersCount: JsonField<Long>,
+        private val followingCount: JsonField<Long>,
+        private val isBlueVerified: JsonField<Boolean>,
+        private val isTranslator: JsonField<Boolean>,
+        private val isVerified: JsonField<Boolean>,
+        private val location: JsonField<String>,
+        private val mediaCount: JsonField<Long>,
+        private val profileBannerUrl: JsonField<String>,
+        private val profilePicture: JsonField<String>,
+        private val protected: JsonField<Boolean>,
+        private val statusesCount: JsonField<Long>,
+        private val url: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("username")
+            @ExcludeMissing
+            username: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("canDm") @ExcludeMissing canDm: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("createdAt")
+            @ExcludeMissing
+            createdAt: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("description")
+            @ExcludeMissing
+            description: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("favouritesCount")
+            @ExcludeMissing
+            favouritesCount: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("followersCount")
+            @ExcludeMissing
+            followersCount: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("followingCount")
+            @ExcludeMissing
+            followingCount: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("isBlueVerified")
+            @ExcludeMissing
+            isBlueVerified: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("isTranslator")
+            @ExcludeMissing
+            isTranslator: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("isVerified")
+            @ExcludeMissing
+            isVerified: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("location")
+            @ExcludeMissing
+            location: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("mediaCount")
+            @ExcludeMissing
+            mediaCount: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("profileBannerUrl")
+            @ExcludeMissing
+            profileBannerUrl: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("profilePicture")
+            @ExcludeMissing
+            profilePicture: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("protected")
+            @ExcludeMissing
+            protected: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("statusesCount")
+            @ExcludeMissing
+            statusesCount: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of(),
+        ) : this(
+            id,
+            name,
+            username,
+            canDm,
+            createdAt,
+            description,
+            favouritesCount,
+            followersCount,
+            followingCount,
+            isBlueVerified,
+            isTranslator,
+            isVerified,
+            location,
+            mediaCount,
+            profileBannerUrl,
+            profilePicture,
+            protected,
+            statusesCount,
+            url,
+            mutableMapOf(),
+        )
+
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+         *   value).
+         */
+        fun id(): String = id.getRequired("id")
+
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+         *   value).
+         */
+        fun name(): String = name.getRequired("name")
+
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+         *   value).
+         */
+        fun username(): String = username.getRequired("username")
+
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun canDm(): Boolean? = canDm.getNullable("canDm")
+
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun createdAt(): String? = createdAt.getNullable("createdAt")
+
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun description(): String? = description.getNullable("description")
+
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun favouritesCount(): Long? = favouritesCount.getNullable("favouritesCount")
+
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun followersCount(): Long? = followersCount.getNullable("followersCount")
+
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun followingCount(): Long? = followingCount.getNullable("followingCount")
+
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun isBlueVerified(): Boolean? = isBlueVerified.getNullable("isBlueVerified")
+
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun isTranslator(): Boolean? = isTranslator.getNullable("isTranslator")
+
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun isVerified(): Boolean? = isVerified.getNullable("isVerified")
+
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun location(): String? = location.getNullable("location")
+
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun mediaCount(): Long? = mediaCount.getNullable("mediaCount")
+
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun profileBannerUrl(): String? = profileBannerUrl.getNullable("profileBannerUrl")
+
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun profilePicture(): String? = profilePicture.getNullable("profilePicture")
+
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun protected(): Boolean? = protected.getNullable("protected")
+
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun statusesCount(): Long? = statusesCount.getNullable("statusesCount")
+
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
+         *   (e.g. if the server responded with an unexpected value).
+         */
+        fun url(): String? = url.getNullable("url")
+
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        /**
+         * Returns the raw JSON value of [name].
+         *
+         * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+        /**
+         * Returns the raw JSON value of [username].
+         *
+         * Unlike [username], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("username") @ExcludeMissing fun _username(): JsonField<String> = username
+
+        /**
+         * Returns the raw JSON value of [canDm].
+         *
+         * Unlike [canDm], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("canDm") @ExcludeMissing fun _canDm(): JsonField<Boolean> = canDm
+
+        /**
+         * Returns the raw JSON value of [createdAt].
+         *
+         * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("createdAt") @ExcludeMissing fun _createdAt(): JsonField<String> = createdAt
+
+        /**
+         * Returns the raw JSON value of [description].
+         *
+         * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("description")
+        @ExcludeMissing
+        fun _description(): JsonField<String> = description
+
+        /**
+         * Returns the raw JSON value of [favouritesCount].
+         *
+         * Unlike [favouritesCount], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("favouritesCount")
+        @ExcludeMissing
+        fun _favouritesCount(): JsonField<Long> = favouritesCount
+
+        /**
+         * Returns the raw JSON value of [followersCount].
+         *
+         * Unlike [followersCount], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("followersCount")
+        @ExcludeMissing
+        fun _followersCount(): JsonField<Long> = followersCount
+
+        /**
+         * Returns the raw JSON value of [followingCount].
+         *
+         * Unlike [followingCount], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("followingCount")
+        @ExcludeMissing
+        fun _followingCount(): JsonField<Long> = followingCount
+
+        /**
+         * Returns the raw JSON value of [isBlueVerified].
+         *
+         * Unlike [isBlueVerified], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("isBlueVerified")
+        @ExcludeMissing
+        fun _isBlueVerified(): JsonField<Boolean> = isBlueVerified
+
+        /**
+         * Returns the raw JSON value of [isTranslator].
+         *
+         * Unlike [isTranslator], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("isTranslator")
+        @ExcludeMissing
+        fun _isTranslator(): JsonField<Boolean> = isTranslator
+
+        /**
+         * Returns the raw JSON value of [isVerified].
+         *
+         * Unlike [isVerified], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("isVerified")
+        @ExcludeMissing
+        fun _isVerified(): JsonField<Boolean> = isVerified
+
+        /**
+         * Returns the raw JSON value of [location].
+         *
+         * Unlike [location], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("location") @ExcludeMissing fun _location(): JsonField<String> = location
+
+        /**
+         * Returns the raw JSON value of [mediaCount].
+         *
+         * Unlike [mediaCount], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("mediaCount") @ExcludeMissing fun _mediaCount(): JsonField<Long> = mediaCount
+
+        /**
+         * Returns the raw JSON value of [profileBannerUrl].
+         *
+         * Unlike [profileBannerUrl], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("profileBannerUrl")
+        @ExcludeMissing
+        fun _profileBannerUrl(): JsonField<String> = profileBannerUrl
+
+        /**
+         * Returns the raw JSON value of [profilePicture].
+         *
+         * Unlike [profilePicture], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("profilePicture")
+        @ExcludeMissing
+        fun _profilePicture(): JsonField<String> = profilePicture
+
+        /**
+         * Returns the raw JSON value of [protected].
+         *
+         * Unlike [protected], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("protected") @ExcludeMissing fun _protected(): JsonField<Boolean> = protected
+
+        /**
+         * Returns the raw JSON value of [statusesCount].
+         *
+         * Unlike [statusesCount], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("statusesCount")
+        @ExcludeMissing
+        fun _statusesCount(): JsonField<Long> = statusesCount
+
+        /**
+         * Returns the raw JSON value of [url].
+         *
+         * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [Author].
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .id()
+             * .name()
+             * .username()
+             * ```
+             */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [Author]. */
+        class Builder internal constructor() {
+
+            private var id: JsonField<String>? = null
+            private var name: JsonField<String>? = null
+            private var username: JsonField<String>? = null
+            private var canDm: JsonField<Boolean> = JsonMissing.of()
+            private var createdAt: JsonField<String> = JsonMissing.of()
+            private var description: JsonField<String> = JsonMissing.of()
+            private var favouritesCount: JsonField<Long> = JsonMissing.of()
+            private var followersCount: JsonField<Long> = JsonMissing.of()
+            private var followingCount: JsonField<Long> = JsonMissing.of()
+            private var isBlueVerified: JsonField<Boolean> = JsonMissing.of()
+            private var isTranslator: JsonField<Boolean> = JsonMissing.of()
+            private var isVerified: JsonField<Boolean> = JsonMissing.of()
+            private var location: JsonField<String> = JsonMissing.of()
+            private var mediaCount: JsonField<Long> = JsonMissing.of()
+            private var profileBannerUrl: JsonField<String> = JsonMissing.of()
+            private var profilePicture: JsonField<String> = JsonMissing.of()
+            private var protected: JsonField<Boolean> = JsonMissing.of()
+            private var statusesCount: JsonField<Long> = JsonMissing.of()
+            private var url: JsonField<String> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(author: Author) = apply {
+                id = author.id
+                name = author.name
+                username = author.username
+                canDm = author.canDm
+                createdAt = author.createdAt
+                description = author.description
+                favouritesCount = author.favouritesCount
+                followersCount = author.followersCount
+                followingCount = author.followingCount
+                isBlueVerified = author.isBlueVerified
+                isTranslator = author.isTranslator
+                isVerified = author.isVerified
+                location = author.location
+                mediaCount = author.mediaCount
+                profileBannerUrl = author.profileBannerUrl
+                profilePicture = author.profilePicture
+                protected = author.protected
+                statusesCount = author.statusesCount
+                url = author.url
+                additionalProperties = author.additionalProperties.toMutableMap()
+            }
+
+            fun id(id: String) = id(JsonField.of(id))
+
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun id(id: JsonField<String>) = apply { this.id = id }
+
+            fun name(name: String) = name(JsonField.of(name))
+
+            /**
+             * Sets [Builder.name] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.name] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun name(name: JsonField<String>) = apply { this.name = name }
+
+            fun username(username: String) = username(JsonField.of(username))
+
+            /**
+             * Sets [Builder.username] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.username] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun username(username: JsonField<String>) = apply { this.username = username }
+
+            fun canDm(canDm: Boolean) = canDm(JsonField.of(canDm))
+
+            /**
+             * Sets [Builder.canDm] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.canDm] with a well-typed [Boolean] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun canDm(canDm: JsonField<Boolean>) = apply { this.canDm = canDm }
+
+            fun createdAt(createdAt: String) = createdAt(JsonField.of(createdAt))
+
+            /**
+             * Sets [Builder.createdAt] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.createdAt] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun createdAt(createdAt: JsonField<String>) = apply { this.createdAt = createdAt }
+
+            fun description(description: String) = description(JsonField.of(description))
+
+            /**
+             * Sets [Builder.description] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.description] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun description(description: JsonField<String>) = apply {
+                this.description = description
+            }
+
+            fun favouritesCount(favouritesCount: Long) =
+                favouritesCount(JsonField.of(favouritesCount))
+
+            /**
+             * Sets [Builder.favouritesCount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.favouritesCount] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun favouritesCount(favouritesCount: JsonField<Long>) = apply {
+                this.favouritesCount = favouritesCount
+            }
+
+            fun followersCount(followersCount: Long) = followersCount(JsonField.of(followersCount))
+
+            /**
+             * Sets [Builder.followersCount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.followersCount] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun followersCount(followersCount: JsonField<Long>) = apply {
+                this.followersCount = followersCount
+            }
+
+            fun followingCount(followingCount: Long) = followingCount(JsonField.of(followingCount))
+
+            /**
+             * Sets [Builder.followingCount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.followingCount] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun followingCount(followingCount: JsonField<Long>) = apply {
+                this.followingCount = followingCount
+            }
+
+            fun isBlueVerified(isBlueVerified: Boolean) =
+                isBlueVerified(JsonField.of(isBlueVerified))
+
+            /**
+             * Sets [Builder.isBlueVerified] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.isBlueVerified] with a well-typed [Boolean] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun isBlueVerified(isBlueVerified: JsonField<Boolean>) = apply {
+                this.isBlueVerified = isBlueVerified
+            }
+
+            fun isTranslator(isTranslator: Boolean) = isTranslator(JsonField.of(isTranslator))
+
+            /**
+             * Sets [Builder.isTranslator] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.isTranslator] with a well-typed [Boolean] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun isTranslator(isTranslator: JsonField<Boolean>) = apply {
+                this.isTranslator = isTranslator
+            }
+
+            fun isVerified(isVerified: Boolean) = isVerified(JsonField.of(isVerified))
+
+            /**
+             * Sets [Builder.isVerified] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.isVerified] with a well-typed [Boolean] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun isVerified(isVerified: JsonField<Boolean>) = apply { this.isVerified = isVerified }
+
+            fun location(location: String) = location(JsonField.of(location))
+
+            /**
+             * Sets [Builder.location] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.location] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun location(location: JsonField<String>) = apply { this.location = location }
+
+            fun mediaCount(mediaCount: Long) = mediaCount(JsonField.of(mediaCount))
+
+            /**
+             * Sets [Builder.mediaCount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.mediaCount] with a well-typed [Long] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun mediaCount(mediaCount: JsonField<Long>) = apply { this.mediaCount = mediaCount }
+
+            fun profileBannerUrl(profileBannerUrl: String) =
+                profileBannerUrl(JsonField.of(profileBannerUrl))
+
+            /**
+             * Sets [Builder.profileBannerUrl] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.profileBannerUrl] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun profileBannerUrl(profileBannerUrl: JsonField<String>) = apply {
+                this.profileBannerUrl = profileBannerUrl
+            }
+
+            fun profilePicture(profilePicture: String) =
+                profilePicture(JsonField.of(profilePicture))
+
+            /**
+             * Sets [Builder.profilePicture] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.profilePicture] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun profilePicture(profilePicture: JsonField<String>) = apply {
+                this.profilePicture = profilePicture
+            }
+
+            fun protected(protected: Boolean) = protected(JsonField.of(protected))
+
+            /**
+             * Sets [Builder.protected] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.protected] with a well-typed [Boolean] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun protected(protected: JsonField<Boolean>) = apply { this.protected = protected }
+
+            fun statusesCount(statusesCount: Long) = statusesCount(JsonField.of(statusesCount))
+
+            /**
+             * Sets [Builder.statusesCount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.statusesCount] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun statusesCount(statusesCount: JsonField<Long>) = apply {
+                this.statusesCount = statusesCount
+            }
+
+            fun url(url: String) = url(JsonField.of(url))
+
+            /**
+             * Sets [Builder.url] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.url] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun url(url: JsonField<String>) = apply { this.url = url }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Author].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .id()
+             * .name()
+             * .username()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): Author =
+                Author(
+                    checkRequired("id", id),
+                    checkRequired("name", name),
+                    checkRequired("username", username),
+                    canDm,
+                    createdAt,
+                    description,
+                    favouritesCount,
+                    followersCount,
+                    followingCount,
+                    isBlueVerified,
+                    isTranslator,
+                    isVerified,
+                    location,
+                    mediaCount,
+                    profileBannerUrl,
+                    profilePicture,
+                    protected,
+                    statusesCount,
+                    url,
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+         *   match its expected type.
+         */
+        fun validate(): Author = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            name()
+            username()
+            canDm()
+            createdAt()
+            description()
+            favouritesCount()
+            followersCount()
+            followingCount()
+            isBlueVerified()
+            isTranslator()
+            isVerified()
+            location()
+            mediaCount()
+            profileBannerUrl()
+            profilePicture()
+            protected()
+            statusesCount()
+            url()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: XTwitterScraperInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            (if (id.asKnown() == null) 0 else 1) +
+                (if (name.asKnown() == null) 0 else 1) +
+                (if (username.asKnown() == null) 0 else 1) +
+                (if (canDm.asKnown() == null) 0 else 1) +
+                (if (createdAt.asKnown() == null) 0 else 1) +
+                (if (description.asKnown() == null) 0 else 1) +
+                (if (favouritesCount.asKnown() == null) 0 else 1) +
+                (if (followersCount.asKnown() == null) 0 else 1) +
+                (if (followingCount.asKnown() == null) 0 else 1) +
+                (if (isBlueVerified.asKnown() == null) 0 else 1) +
+                (if (isTranslator.asKnown() == null) 0 else 1) +
+                (if (isVerified.asKnown() == null) 0 else 1) +
+                (if (location.asKnown() == null) 0 else 1) +
+                (if (mediaCount.asKnown() == null) 0 else 1) +
+                (if (profileBannerUrl.asKnown() == null) 0 else 1) +
+                (if (profilePicture.asKnown() == null) 0 else 1) +
+                (if (protected.asKnown() == null) 0 else 1) +
+                (if (statusesCount.asKnown() == null) 0 else 1) +
+                (if (url.asKnown() == null) 0 else 1)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Author &&
+                id == other.id &&
+                name == other.name &&
+                username == other.username &&
+                canDm == other.canDm &&
+                createdAt == other.createdAt &&
+                description == other.description &&
+                favouritesCount == other.favouritesCount &&
+                followersCount == other.followersCount &&
+                followingCount == other.followingCount &&
+                isBlueVerified == other.isBlueVerified &&
+                isTranslator == other.isTranslator &&
+                isVerified == other.isVerified &&
+                location == other.location &&
+                mediaCount == other.mediaCount &&
+                profileBannerUrl == other.profileBannerUrl &&
+                profilePicture == other.profilePicture &&
+                protected == other.protected &&
+                statusesCount == other.statusesCount &&
+                url == other.url &&
+                additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                name,
+                username,
+                canDm,
+                createdAt,
+                description,
+                favouritesCount,
+                followersCount,
+                followingCount,
+                isBlueVerified,
+                isTranslator,
+                isVerified,
+                location,
+                mediaCount,
+                profileBannerUrl,
+                profilePicture,
+                protected,
+                statusesCount,
+                url,
+                additionalProperties,
+            )
+        }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Author{id=$id, name=$name, username=$username, canDm=$canDm, createdAt=$createdAt, description=$description, favouritesCount=$favouritesCount, followersCount=$followersCount, followingCount=$followingCount, isBlueVerified=$isBlueVerified, isTranslator=$isTranslator, isVerified=$isVerified, location=$location, mediaCount=$mediaCount, profileBannerUrl=$profileBannerUrl, profilePicture=$profilePicture, protected=$protected, statusesCount=$statusesCount, url=$url, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

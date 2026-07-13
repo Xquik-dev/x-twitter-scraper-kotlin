@@ -3,6 +3,7 @@
 package com.x_twitter_scraper.api.services.async.x
 
 import com.x_twitter_scraper.api.client.okhttp.XTwitterScraperOkHttpClientAsync
+import com.x_twitter_scraper.api.models.x.users.UserRemoveFollowerParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveBatchParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveFollowersParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveFollowersYouKnowParams
@@ -10,9 +11,11 @@ import com.x_twitter_scraper.api.models.x.users.UserRetrieveFollowingParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveLikesParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveMediaParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveMentionsParams
+import com.x_twitter_scraper.api.models.x.users.UserRetrieveRepliesParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveSearchParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveTweetsParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveVerifiedFollowersParams
+import java.time.LocalDate
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
@@ -21,7 +24,11 @@ internal class UserServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun retrieve() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val userServiceAsync = client.x().users()
 
         val userProfile = userServiceAsync.retrieve("id")
@@ -31,25 +38,57 @@ internal class UserServiceAsyncTest {
 
     @Disabled("Mock server tests are disabled")
     @Test
-    suspend fun retrieveBatch() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+    suspend fun removeFollower() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val userServiceAsync = client.x().users()
 
-        val paginatedUsers =
+        val response =
+            userServiceAsync.removeFollower(
+                UserRemoveFollowerParams.builder().id("id").account("@elonmusk").build()
+            )
+
+        response.validate()
+    }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
+    suspend fun retrieveBatch() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val userServiceAsync = client.x().users()
+
+        val response =
             userServiceAsync.retrieveBatch(UserRetrieveBatchParams.builder().ids("ids").build())
 
-        paginatedUsers.validate()
+        response.validate()
     }
 
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun retrieveFollowers() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val userServiceAsync = client.x().users()
 
         val paginatedUsers =
             userServiceAsync.retrieveFollowers(
-                UserRetrieveFollowersParams.builder().id("id").cursor("cursor").pageSize(0L).build()
+                UserRetrieveFollowersParams.builder()
+                    .id("id")
+                    .after("after")
+                    .cursor("cursor")
+                    .limit(0L)
+                    .pageSize(20L)
+                    .build()
             )
 
         paginatedUsers.validate()
@@ -58,12 +97,20 @@ internal class UserServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun retrieveFollowersYouKnow() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val userServiceAsync = client.x().users()
 
         val paginatedUsers =
             userServiceAsync.retrieveFollowersYouKnow(
-                UserRetrieveFollowersYouKnowParams.builder().id("id").cursor("cursor").build()
+                UserRetrieveFollowersYouKnowParams.builder()
+                    .id("id")
+                    .cursor("cursor")
+                    .pageSize(20L)
+                    .build()
             )
 
         paginatedUsers.validate()
@@ -72,12 +119,22 @@ internal class UserServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun retrieveFollowing() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val userServiceAsync = client.x().users()
 
         val paginatedUsers =
             userServiceAsync.retrieveFollowing(
-                UserRetrieveFollowingParams.builder().id("id").cursor("cursor").pageSize(0L).build()
+                UserRetrieveFollowingParams.builder()
+                    .id("id")
+                    .after("after")
+                    .cursor("cursor")
+                    .limit(0L)
+                    .pageSize(20L)
+                    .build()
             )
 
         paginatedUsers.validate()
@@ -86,12 +143,45 @@ internal class UserServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun retrieveLikes() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val userServiceAsync = client.x().users()
 
         val paginatedTweets =
             userServiceAsync.retrieveLikes(
-                UserRetrieveLikesParams.builder().id("id").cursor("cursor").build()
+                UserRetrieveLikesParams.builder()
+                    .id("id")
+                    .anyWords("anyWords")
+                    .cashtags("cashtags")
+                    .conversationId("conversationId")
+                    .cursor("cursor")
+                    .exactPhrase("exactPhrase")
+                    .excludeWords("excludeWords")
+                    .fromUser("fromUser")
+                    .hashtags("hashtags")
+                    .inReplyToTweetId("inReplyToTweetId")
+                    .language("language")
+                    .mediaType(UserRetrieveLikesParams.MediaType.IMAGES)
+                    .mentioning("mentioning")
+                    .minFaves(0L)
+                    .minQuotes(0L)
+                    .minReplies(0L)
+                    .minRetweets(0L)
+                    .pageSize(1L)
+                    .quotes(UserRetrieveLikesParams.Quotes.INCLUDE)
+                    .quotesOfTweetId("quotesOfTweetId")
+                    .replies(UserRetrieveLikesParams.Replies.INCLUDE)
+                    .retweets(UserRetrieveLikesParams.Retweets.INCLUDE)
+                    .retweetsOfTweetId("retweetsOfTweetId")
+                    .sinceDate(LocalDate.parse("2019-12-27"))
+                    .toUser("toUser")
+                    .untilDate(LocalDate.parse("2019-12-27"))
+                    .url("url")
+                    .verifiedOnly(true)
+                    .build()
             )
 
         paginatedTweets.validate()
@@ -100,12 +190,45 @@ internal class UserServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun retrieveMedia() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val userServiceAsync = client.x().users()
 
         val paginatedTweets =
             userServiceAsync.retrieveMedia(
-                UserRetrieveMediaParams.builder().id("id").cursor("cursor").build()
+                UserRetrieveMediaParams.builder()
+                    .id("id")
+                    .anyWords("anyWords")
+                    .cashtags("cashtags")
+                    .conversationId("conversationId")
+                    .cursor("cursor")
+                    .exactPhrase("exactPhrase")
+                    .excludeWords("excludeWords")
+                    .fromUser("fromUser")
+                    .hashtags("hashtags")
+                    .inReplyToTweetId("inReplyToTweetId")
+                    .language("language")
+                    .mediaType(UserRetrieveMediaParams.MediaType.IMAGES)
+                    .mentioning("mentioning")
+                    .minFaves(0L)
+                    .minQuotes(0L)
+                    .minReplies(0L)
+                    .minRetweets(0L)
+                    .pageSize(1L)
+                    .quotes(UserRetrieveMediaParams.Quotes.INCLUDE)
+                    .quotesOfTweetId("quotesOfTweetId")
+                    .replies(UserRetrieveMediaParams.Replies.INCLUDE)
+                    .retweets(UserRetrieveMediaParams.Retweets.INCLUDE)
+                    .retweetsOfTweetId("retweetsOfTweetId")
+                    .sinceDate(LocalDate.parse("2019-12-27"))
+                    .toUser("toUser")
+                    .untilDate(LocalDate.parse("2019-12-27"))
+                    .url("url")
+                    .verifiedOnly(true)
+                    .build()
             )
 
         paginatedTweets.validate()
@@ -114,16 +237,94 @@ internal class UserServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun retrieveMentions() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val userServiceAsync = client.x().users()
 
         val paginatedTweets =
             userServiceAsync.retrieveMentions(
                 UserRetrieveMentionsParams.builder()
                     .id("id")
+                    .anyWords("anyWords")
+                    .cashtags("cashtags")
+                    .conversationId("conversationId")
                     .cursor("cursor")
+                    .exactPhrase("exactPhrase")
+                    .excludeWords("excludeWords")
+                    .fromUser("fromUser")
+                    .hashtags("hashtags")
+                    .inReplyToTweetId("inReplyToTweetId")
+                    .language("language")
+                    .mediaType(UserRetrieveMentionsParams.MediaType.IMAGES)
+                    .mentioning("mentioning")
+                    .minFaves(0L)
+                    .minQuotes(0L)
+                    .minReplies(0L)
+                    .minRetweets(0L)
+                    .pageSize(1L)
+                    .quotes(UserRetrieveMentionsParams.Quotes.INCLUDE)
+                    .quotesOfTweetId("quotesOfTweetId")
+                    .replies(UserRetrieveMentionsParams.Replies.INCLUDE)
+                    .retweets(UserRetrieveMentionsParams.Retweets.INCLUDE)
+                    .retweetsOfTweetId("retweetsOfTweetId")
+                    .sinceDate(LocalDate.parse("2019-12-27"))
                     .sinceTime("sinceTime")
+                    .toUser("toUser")
+                    .untilDate(LocalDate.parse("2019-12-27"))
                     .untilTime("untilTime")
+                    .url("url")
+                    .verifiedOnly(true)
+                    .build()
+            )
+
+        paginatedTweets.validate()
+    }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
+    suspend fun retrieveReplies() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val userServiceAsync = client.x().users()
+
+        val paginatedTweets =
+            userServiceAsync.retrieveReplies(
+                UserRetrieveRepliesParams.builder()
+                    .id("id")
+                    .anyWords("anyWords")
+                    .cashtags("cashtags")
+                    .conversationId("conversationId")
+                    .cursor("cursor")
+                    .exactPhrase("exactPhrase")
+                    .excludeWords("excludeWords")
+                    .fromUser("fromUser")
+                    .hashtags("hashtags")
+                    .includeParentTweet(true)
+                    .inReplyToTweetId("inReplyToTweetId")
+                    .language("language")
+                    .mediaType(UserRetrieveRepliesParams.MediaType.IMAGES)
+                    .mentioning("mentioning")
+                    .minFaves(0L)
+                    .minQuotes(0L)
+                    .minReplies(0L)
+                    .minRetweets(0L)
+                    .pageSize(1L)
+                    .quotes(UserRetrieveRepliesParams.Quotes.INCLUDE)
+                    .quotesOfTweetId("quotesOfTweetId")
+                    .replies(UserRetrieveRepliesParams.Replies.INCLUDE)
+                    .retweets(UserRetrieveRepliesParams.Retweets.INCLUDE)
+                    .retweetsOfTweetId("retweetsOfTweetId")
+                    .sinceDate(LocalDate.parse("2019-12-27"))
+                    .toUser("toUser")
+                    .untilDate(LocalDate.parse("2019-12-27"))
+                    .url("url")
+                    .verifiedOnly(true)
                     .build()
             )
 
@@ -133,7 +334,11 @@ internal class UserServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun retrieveSearch() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val userServiceAsync = client.x().users()
 
         val paginatedUsers =
@@ -147,16 +352,46 @@ internal class UserServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun retrieveTweets() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val userServiceAsync = client.x().users()
 
         val paginatedTweets =
             userServiceAsync.retrieveTweets(
                 UserRetrieveTweetsParams.builder()
                     .id("id")
+                    .anyWords("anyWords")
+                    .cashtags("cashtags")
+                    .conversationId("conversationId")
                     .cursor("cursor")
+                    .exactPhrase("exactPhrase")
+                    .excludeWords("excludeWords")
+                    .fromUser("fromUser")
+                    .hashtags("hashtags")
                     .includeParentTweet(true)
                     .includeReplies(true)
+                    .inReplyToTweetId("inReplyToTweetId")
+                    .language("language")
+                    .mediaType(UserRetrieveTweetsParams.MediaType.IMAGES)
+                    .mentioning("mentioning")
+                    .minFaves(0L)
+                    .minQuotes(0L)
+                    .minReplies(0L)
+                    .minRetweets(0L)
+                    .pageSize(1L)
+                    .quotes(UserRetrieveTweetsParams.Quotes.INCLUDE)
+                    .quotesOfTweetId("quotesOfTweetId")
+                    .replies(UserRetrieveTweetsParams.Replies.INCLUDE)
+                    .retweets(UserRetrieveTweetsParams.Retweets.INCLUDE)
+                    .retweetsOfTweetId("retweetsOfTweetId")
+                    .sinceDate(LocalDate.parse("2019-12-27"))
+                    .toUser("toUser")
+                    .untilDate(LocalDate.parse("2019-12-27"))
+                    .url("url")
+                    .verifiedOnly(true)
                     .build()
             )
 
@@ -166,12 +401,20 @@ internal class UserServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun retrieveVerifiedFollowers() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val userServiceAsync = client.x().users()
 
         val paginatedUsers =
             userServiceAsync.retrieveVerifiedFollowers(
-                UserRetrieveVerifiedFollowersParams.builder().id("id").cursor("cursor").build()
+                UserRetrieveVerifiedFollowersParams.builder()
+                    .id("id")
+                    .cursor("cursor")
+                    .pageSize(20L)
+                    .build()
             )
 
         paginatedUsers.validate()

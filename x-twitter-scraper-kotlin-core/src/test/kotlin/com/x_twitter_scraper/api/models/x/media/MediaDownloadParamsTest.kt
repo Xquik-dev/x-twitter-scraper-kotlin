@@ -10,9 +10,11 @@ internal class MediaDownloadParamsTest {
     @Test
     fun create() {
         MediaDownloadParams.builder()
+            .tweetId("1234567890")
             .addTweetId("1234567890")
             .addTweetId("1234567891")
             .tweetInput("https://x.com/elonmusk/status/1234567890")
+            .tweetUrl("https://x.com/elonmusk/status/1234567890")
             .build()
     }
 
@@ -20,15 +22,19 @@ internal class MediaDownloadParamsTest {
     fun body() {
         val params =
             MediaDownloadParams.builder()
+                .tweetId("1234567890")
                 .addTweetId("1234567890")
                 .addTweetId("1234567891")
                 .tweetInput("https://x.com/elonmusk/status/1234567890")
+                .tweetUrl("https://x.com/elonmusk/status/1234567890")
                 .build()
 
         val body = params._body()
 
+        assertThat(body.tweetId()).isEqualTo("1234567890")
         assertThat(body.tweetIds()).containsExactly("1234567890", "1234567891")
         assertThat(body.tweetInput()).isEqualTo("https://x.com/elonmusk/status/1234567890")
+        assertThat(body.tweetUrl()).isEqualTo("https://x.com/elonmusk/status/1234567890")
     }
 
     @Test

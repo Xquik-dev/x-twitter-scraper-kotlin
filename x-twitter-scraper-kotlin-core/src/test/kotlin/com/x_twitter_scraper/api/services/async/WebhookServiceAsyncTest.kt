@@ -14,7 +14,11 @@ internal class WebhookServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun create() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val webhookServiceAsync = client.webhooks()
 
         val webhook =
@@ -32,7 +36,11 @@ internal class WebhookServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun update() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val webhookServiceAsync = client.webhooks()
 
         val webhook =
@@ -51,7 +59,11 @@ internal class WebhookServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun list() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val webhookServiceAsync = client.webhooks()
 
         val webhooks = webhookServiceAsync.list()
@@ -62,7 +74,11 @@ internal class WebhookServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun deactivate() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val webhookServiceAsync = client.webhooks()
 
         val response = webhookServiceAsync.deactivate("id")
@@ -73,7 +89,11 @@ internal class WebhookServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun listDeliveries() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val webhookServiceAsync = client.webhooks()
 
         val response = webhookServiceAsync.listDeliveries("id")
@@ -83,8 +103,27 @@ internal class WebhookServiceAsyncTest {
 
     @Disabled("Mock server tests are disabled")
     @Test
+    suspend fun resume() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val webhookServiceAsync = client.webhooks()
+
+        val response = webhookServiceAsync.resume("id")
+
+        response.validate()
+    }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
     suspend fun test() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val webhookServiceAsync = client.webhooks()
 
         val response = webhookServiceAsync.test("id")

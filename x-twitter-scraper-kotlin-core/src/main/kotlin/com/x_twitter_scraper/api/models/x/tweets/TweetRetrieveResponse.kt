@@ -30,7 +30,8 @@ private constructor(
     ) : this(tweet, author, mutableMapOf())
 
     /**
-     * Full tweet with text, engagement metrics, media, and metadata.
+     * Full tweet with text, engagement metrics, media, and metadata. A zero metric can mean X did
+     * not report the count.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -38,7 +39,8 @@ private constructor(
     fun tweet(): TweetDetail = tweet.getRequired("tweet")
 
     /**
-     * Author of a tweet with follower count and verification status.
+     * Tweet author profile. The lookup route always includes follower count and verification state.
+     * Other profile fields appear when available.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
@@ -97,7 +99,10 @@ private constructor(
             additionalProperties = tweetRetrieveResponse.additionalProperties.toMutableMap()
         }
 
-        /** Full tweet with text, engagement metrics, media, and metadata. */
+        /**
+         * Full tweet with text, engagement metrics, media, and metadata. A zero metric can mean X
+         * did not report the count.
+         */
         fun tweet(tweet: TweetDetail) = tweet(JsonField.of(tweet))
 
         /**
@@ -109,7 +114,10 @@ private constructor(
          */
         fun tweet(tweet: JsonField<TweetDetail>) = apply { this.tweet = tweet }
 
-        /** Author of a tweet with follower count and verification status. */
+        /**
+         * Tweet author profile. The lookup route always includes follower count and verification
+         * state. Other profile fields appear when available.
+         */
         fun author(author: TweetAuthor) = author(JsonField.of(author))
 
         /**

@@ -19,7 +19,7 @@ private constructor(
     /** Pagination cursor for timeline */
     fun cursor(): String? = cursor
 
-    /** Comma-separated tweet IDs to exclude from results */
+    /** Comma-separated tweet IDs to exclude from results. Empty entries are ignored. */
     fun seenTweetIds(): String? = seenTweetIds
 
     /** Additional headers to send with the request. */
@@ -56,7 +56,7 @@ private constructor(
         /** Pagination cursor for timeline */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
-        /** Comma-separated tweet IDs to exclude from results */
+        /** Comma-separated tweet IDs to exclude from results. Empty entries are ignored. */
         fun seenTweetIds(seenTweetIds: String?) = apply { this.seenTweetIds = seenTweetIds }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {

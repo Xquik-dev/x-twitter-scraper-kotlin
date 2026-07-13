@@ -21,7 +21,11 @@ import com.x_twitter_scraper.api.models.EventType
 import java.util.Collections
 import java.util.Objects
 
-/** Create monitor */
+/**
+ * Creates an instant monitor. Monitors are unlimited. Active monitors check every 1 second and cost
+ * 21 credits per hour. Events and webhook deliveries are included. Creation requires available
+ * credits for the first hourly charge and username lookup.
+ */
 class MonitorCreateParams
 private constructor(
     private val body: Body,

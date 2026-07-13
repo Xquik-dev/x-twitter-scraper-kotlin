@@ -5,9 +5,13 @@ package com.x_twitter_scraper.api.services.async
 import com.google.errorprone.annotations.MustBeClosed
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
+import com.x_twitter_scraper.api.core.http.HttpResponse
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
+import com.x_twitter_scraper.api.models.credits.CreditRedirectTopupCheckoutParams
 import com.x_twitter_scraper.api.models.credits.CreditRetrieveBalanceParams
 import com.x_twitter_scraper.api.models.credits.CreditRetrieveBalanceResponse
+import com.x_twitter_scraper.api.models.credits.CreditRetrieveTopupStatusParams
+import com.x_twitter_scraper.api.models.credits.CreditRetrieveTopupStatusResponse
 import com.x_twitter_scraper.api.models.credits.CreditTopupBalanceParams
 import com.x_twitter_scraper.api.models.credits.CreditTopupBalanceResponse
 
@@ -26,6 +30,12 @@ interface CreditServiceAsync {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): CreditServiceAsync
 
+    /** Redirect to an active top-up payment page */
+    suspend fun redirectTopupCheckout(
+        params: CreditRedirectTopupCheckoutParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    )
+
     /** Get credits balance */
     suspend fun retrieveBalance(
         params: CreditRetrieveBalanceParams = CreditRetrieveBalanceParams.none(),
@@ -36,7 +46,16 @@ interface CreditServiceAsync {
     suspend fun retrieveBalance(requestOptions: RequestOptions): CreditRetrieveBalanceResponse =
         retrieveBalance(CreditRetrieveBalanceParams.none(), requestOptions)
 
-    /** Top up credits balance */
+    /** Get top-up billing status */
+    suspend fun retrieveTopupStatus(
+        params: CreditRetrieveTopupStatusParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CreditRetrieveTopupStatusResponse
+
+    /**
+     * Create a Stripe Checkout session only after the user confirms. The request never completes
+     * payment or adds credits by itself.
+     */
     suspend fun topupBalance(
         params: CreditTopupBalanceParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -57,6 +76,16 @@ interface CreditServiceAsync {
         ): CreditServiceAsync.WithRawResponse
 
         /**
+         * Returns a raw HTTP response for `get /credits/topup/redirect`, but is otherwise the same
+         * as [CreditServiceAsync.redirectTopupCheckout].
+         */
+        @MustBeClosed
+        suspend fun redirectTopupCheckout(
+            params: CreditRedirectTopupCheckoutParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
+
+        /**
          * Returns a raw HTTP response for `get /credits`, but is otherwise the same as
          * [CreditServiceAsync.retrieveBalance].
          */
@@ -72,6 +101,16 @@ interface CreditServiceAsync {
             requestOptions: RequestOptions
         ): HttpResponseFor<CreditRetrieveBalanceResponse> =
             retrieveBalance(CreditRetrieveBalanceParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get /credits/topup/status`, but is otherwise the same as
+         * [CreditServiceAsync.retrieveTopupStatus].
+         */
+        @MustBeClosed
+        suspend fun retrieveTopupStatus(
+            params: CreditRetrieveTopupStatusParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CreditRetrieveTopupStatusResponse>
 
         /**
          * Returns a raw HTTP response for `post /credits/topup`, but is otherwise the same as

@@ -114,7 +114,7 @@ interface CommunityServiceAsync {
     suspend fun retrieveModerators(id: String, requestOptions: RequestOptions): PaginatedUsers =
         retrieveModerators(id, CommunityRetrieveModeratorsParams.none(), requestOptions)
 
-    /** Search for communities by keyword */
+    /** Returns tweets, not community records. Requires a Community ID. */
     suspend fun retrieveSearch(
         params: CommunityRetrieveSearchParams,
         requestOptions: RequestOptions = RequestOptions.none(),

@@ -24,10 +24,14 @@ internal class DrawServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun retrieve() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val drawServiceAsync = client.draws()
 
-        val draw = drawServiceAsync.retrieve("id")
+        val draw = drawServiceAsync.retrieve("f4bd00a2-7b4e-4e59-8e1b-72e2c9f12345")
 
         draw.validate()
     }
@@ -35,10 +39,15 @@ internal class DrawServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun list() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val drawServiceAsync = client.draws()
 
-        val draws = drawServiceAsync.list(DrawListParams.builder().after("after").limit(1L).build())
+        val draws =
+            drawServiceAsync.list(DrawListParams.builder().cursor("cursor").limit(1L).build())
 
         draws.validate()
     }
@@ -49,6 +58,7 @@ internal class DrawServiceAsyncTest {
             XTwitterScraperOkHttpClientAsync.builder()
                 .baseUrl(wmRuntimeInfo.httpBaseUrl)
                 .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
                 .build()
         val drawServiceAsync = client.draws()
         stubFor(get(anyUrl()).willReturn(ok().withBody("abc")))
@@ -56,7 +66,7 @@ internal class DrawServiceAsyncTest {
         val response =
             drawServiceAsync.export(
                 DrawExportParams.builder()
-                    .id("id")
+                    .id("f4bd00a2-7b4e-4e59-8e1b-72e2c9f12345")
                     .format(DrawExportParams.Format.CSV)
                     .type(DrawExportParams.Type.WINNERS)
                     .build()
@@ -68,7 +78,11 @@ internal class DrawServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun run() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val drawServiceAsync = client.draws()
 
         val response =

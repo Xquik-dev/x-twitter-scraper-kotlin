@@ -25,7 +25,7 @@ interface TweetServiceAsync {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): TweetServiceAsync
 
-    /** List tweets across all communities */
+    /** Requires a Community ID and keyword query. */
     suspend fun list(
         params: TweetListParams,
         requestOptions: RequestOptions = RequestOptions.none(),

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.x_twitter_scraper.api.core.Enum
 import com.x_twitter_scraper.api.core.JsonField
 import com.x_twitter_scraper.api.core.Params
+import com.x_twitter_scraper.api.core.checkRequired
 import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
@@ -15,7 +16,7 @@ import java.util.Objects
 class ExtractionExportResultsParams
 private constructor(
     private val id: String?,
-    private val format: Format?,
+    private val format: Format,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -23,7 +24,7 @@ private constructor(
     fun id(): String? = id
 
     /** Export file format */
-    fun format(): Format? = format
+    fun format(): Format = format
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -35,11 +36,14 @@ private constructor(
 
     companion object {
 
-        fun none(): ExtractionExportResultsParams = builder().build()
-
         /**
          * Returns a mutable builder for constructing an instance of
          * [ExtractionExportResultsParams].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .format()
+         * ```
          */
         fun builder() = Builder()
     }
@@ -62,7 +66,7 @@ private constructor(
         fun id(id: String?) = apply { this.id = id }
 
         /** Export file format */
-        fun format(format: Format?) = apply { this.format = format }
+        fun format(format: Format) = apply { this.format = format }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -166,11 +170,18 @@ private constructor(
          * Returns an immutable instance of [ExtractionExportResultsParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .format()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): ExtractionExportResultsParams =
             ExtractionExportResultsParams(
                 id,
-                format,
+                checkRequired("format", format),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -187,7 +198,7 @@ private constructor(
     override fun _queryParams(): QueryParams =
         QueryParams.builder()
             .apply {
-                format?.let { put("format", it.toString()) }
+                put("format", format.toString())
                 putAll(additionalQueryParams)
             }
             .build()

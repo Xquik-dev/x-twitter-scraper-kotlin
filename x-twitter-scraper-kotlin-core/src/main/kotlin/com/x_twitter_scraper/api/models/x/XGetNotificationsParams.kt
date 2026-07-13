@@ -23,7 +23,7 @@ private constructor(
     /** Pagination cursor for notifications */
     fun cursor(): String? = cursor
 
-    /** Notification type filter */
+    /** Notification type filter. Unrecognized values fall back to All. */
     fun type(): Type? = type
 
     /** Additional headers to send with the request. */
@@ -60,7 +60,7 @@ private constructor(
         /** Pagination cursor for notifications */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
-        /** Notification type filter */
+        /** Notification type filter. Unrecognized values fall back to All. */
         fun type(type: Type?) = apply { this.type = type }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -186,7 +186,7 @@ private constructor(
             }
             .build()
 
-    /** Notification type filter */
+    /** Notification type filter. Unrecognized values fall back to All. */
     class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
