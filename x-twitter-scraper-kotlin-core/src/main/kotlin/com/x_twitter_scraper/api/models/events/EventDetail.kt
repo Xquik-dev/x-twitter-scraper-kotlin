@@ -52,7 +52,7 @@ private constructor(
     fun id(): String = id.getRequired("id")
 
     /**
-     * Event payload — shape varies by event type (JSON)
+     * Event payload - shape varies by event type (JSON)
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -205,7 +205,7 @@ private constructor(
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
-        /** Event payload — shape varies by event type (JSON) */
+        /** Event payload - shape varies by event type (JSON) */
         fun data(data: Data) = data(JsonField.of(data))
 
         /**
@@ -322,6 +322,14 @@ private constructor(
 
     private var validated: Boolean = false
 
+    /**
+     * Validates that the types of all values in this object match their expected types recursively.
+     *
+     * This method is _not_ forwards compatible with new types from the API for existing fields.
+     *
+     * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't match
+     *   its expected type.
+     */
     fun validate(): EventDetail = apply {
         if (validated) {
             return@apply
@@ -359,7 +367,7 @@ private constructor(
             (if (username.asKnown() == null) 0 else 1) +
             (if (xEventId.asKnown() == null) 0 else 1)
 
-    /** Event payload — shape varies by event type (JSON) */
+    /** Event payload - shape varies by event type (JSON) */
     class Data
     @JsonCreator
     private constructor(
@@ -417,6 +425,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+         *   match its expected type.
+         */
         fun validate(): Data = apply {
             if (validated) {
                 return@apply

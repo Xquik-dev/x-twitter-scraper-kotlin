@@ -1,37 +1,32 @@
-# X (Twitter) Scraper Kotlin SDK: Tweet Search, Profile Tweets, Followers & Posting
+# Xquik API Library
 
-> **Xquik is an independent third-party service.** Not affiliated with X Corp.
-> "Twitter" and "X" are trademarks of X Corp.
+[![Maven Central](https://img.shields.io/maven-central/v/com.x_twitter_scraper.api/x-twitter-scraper-kotlin)](https://central.sonatype.com/artifact/com.x_twitter_scraper.api/x-twitter-scraper-kotlin/0.3.0)
+[![javadoc](https://javadoc.io/badge2/com.x_twitter_scraper.api/x-twitter-scraper-kotlin/0.3.0/javadoc.svg)](https://javadoc.io/doc/com.x_twitter_scraper.api/x-twitter-scraper-kotlin/0.3.0)
 
-[![Ask DeepWiki](https://deepwiki.com/badge.svg?url=https%3A%2F%2Fgithub.com%2FXquik-dev%2Fx-twitter-scraper-kotlin)](https://deepwiki.com/Xquik-dev/x-twitter-scraper-kotlin)
-[![Skills.sh x-twitter-scraper Skill](https://skills.sh/b/xquik-dev/x-twitter-scraper)](https://skills.sh/xquik-dev/x-twitter-scraper)
+The Xquik SDK provides convenient access to the [X Twitter Scraper REST API](https://xquik.com) from applications written in Kotlin.
 
-> Maven Central publication is pending. Build from source until the
-> `com.x_twitter_scraper.api:x-twitter-scraper-kotlin` artifact resolves in
-> Maven Central.
-
-The Xquik Kotlin SDK is a Twitter API SDK and X API alternative for tweet search, advanced Twitter search queries, profile tweets, user lookup, follower export, media download, media upload, monitoring, webhooks, and posting automation.
-
-Use it from Kotlin services to get tweets from profiles, search tweets by keyword or operator query, send tweets, post replies, like, repost, follow, DM, run giveaway draws, and automate X workflows. It is similar to the X Twitter Scraper Java SDK but with Kotlin ergonomics such as nullable values instead of `Optional`, `Sequence` instead of `Stream`, and suspend functions instead of `CompletableFuture`.
+The X Twitter Scraper Kotlin SDK is similar to the X Twitter Scraper Java SDK but with minor differences that make it more ergonomic for use in Kotlin, such as nullable values instead of `Optional`, `Sequence` instead of `Stream`, and suspend functions instead of `CompletableFuture`.
 
 It is generated with [Stainless](https://www.stainless.com/).
 
-The REST API documentation can be found on [xquik.com](https://xquik.com). Generated KDocs can be built locally from source.
+The REST API documentation can be found on [xquik.com](https://xquik.com). KDocs are available on [javadoc.io](https://javadoc.io/doc/com.x_twitter_scraper.api/x-twitter-scraper-kotlin/0.3.0).
 
 ## Installation
 
-### Source Build
+### Gradle
 
-```bash
-git clone https://github.com/Xquik-dev/x-twitter-scraper-kotlin.git
-cd x-twitter-scraper-kotlin
-./gradlew build
+```kotlin
+implementation("com.x_twitter_scraper.api:x-twitter-scraper-kotlin:0.3.0")
 ```
 
-### Local Maven Testing
+### Maven
 
-```bash
-./gradlew publishToMavenLocal -PpublishLocal
+```xml
+<dependency>
+  <groupId>com.x_twitter_scraper.api</groupId>
+  <artifactId>x-twitter-scraper-kotlin</artifactId>
+  <version>0.3.0</version>
+</dependency>
 ```
 
 ## Requirements
@@ -293,25 +288,21 @@ To access this data, prefix any HTTP method call on a client or service with `wi
 ```kotlin
 import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
-import com.x_twitter_scraper.api.models.PaginatedTweets
-import com.x_twitter_scraper.api.models.x.tweets.TweetSearchParams
+import com.x_twitter_scraper.api.models.account.AccountRetrieveParams
+import com.x_twitter_scraper.api.models.account.AccountRetrieveResponse
 
-val params: TweetSearchParams = TweetSearchParams.builder()
-    .q("from:elonmusk")
-    .limit(10L)
-    .build()
-val paginatedTweets: HttpResponseFor<PaginatedTweets> = client.x().tweets().withRawResponse().search(params)
+val account: HttpResponseFor<AccountRetrieveResponse> = client.account().withRawResponse().retrieve()
 
-val statusCode: Int = paginatedTweets.statusCode()
-val headers: Headers = paginatedTweets.headers()
+val statusCode: Int = account.statusCode()
+val headers: Headers = account.headers()
 ```
 
 You can still deserialize the response into an instance of a Kotlin class if needed:
 
 ```kotlin
-import com.x_twitter_scraper.api.models.PaginatedTweets
+import com.x_twitter_scraper.api.models.account.AccountRetrieveResponse
 
-val parsedPaginatedTweets: PaginatedTweets = paginatedTweets.parse()
+val parsedAccount: AccountRetrieveResponse = account.parse()
 ```
 
 ## Error handling
@@ -341,8 +332,6 @@ The SDK throws custom unchecked exception types:
 
 ## Logging
 
-The SDK uses the standard [OkHttp logging interceptor](https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor).
-
 Enable logging by setting the `X_TWITTER_SCRAPER_LOG` environment variable to `info`:
 
 ```sh
@@ -353,6 +342,19 @@ Or to `debug` for more verbose logging:
 
 ```sh
 export X_TWITTER_SCRAPER_LOG=debug
+```
+
+Or configure the client manually using the `logLevel` method:
+
+```kotlin
+import com.x_twitter_scraper.api.client.XTwitterScraperClient
+import com.x_twitter_scraper.api.client.okhttp.XTwitterScraperOkHttpClient
+import com.x_twitter_scraper.api.core.LogLevel
+
+val client: XTwitterScraperClient = XTwitterScraperOkHttpClient.builder()
+    .fromEnv()
+    .logLevel(LogLevel.INFO)
+    .build()
 ```
 
 ## ProGuard and R8
@@ -409,11 +411,9 @@ Requests time out after 1 minute by default.
 To set a custom timeout, configure the method call using the `timeout` method:
 
 ```kotlin
-import com.x_twitter_scraper.api.models.PaginatedTweets
+import com.x_twitter_scraper.api.models.account.AccountRetrieveResponse
 
-val paginatedTweets: PaginatedTweets = client.x().tweets().search(
-  params, RequestOptions.builder().timeout(Duration.ofSeconds(30)).build()
-)
+val account: AccountRetrieveResponse = client.account().retrieve(RequestOptions.builder().timeout(Duration.ofSeconds(30)).build())
 ```
 
 Or configure the default for all method calls at the client level:
@@ -446,6 +446,21 @@ val client: XTwitterScraperClient = XTwitterScraperOkHttpClient.builder()
         "https://example.com", 8080
       )
     ))
+    .build()
+```
+
+If the proxy responds with `407 Proxy Authentication Required`, supply credentials by also configuring `proxyAuthenticator`:
+
+```kotlin
+import com.x_twitter_scraper.api.client.XTwitterScraperClient
+import com.x_twitter_scraper.api.client.okhttp.XTwitterScraperOkHttpClient
+import com.x_twitter_scraper.api.core.http.ProxyAuthenticator
+
+val client: XTwitterScraperClient = XTwitterScraperOkHttpClient.builder()
+    .fromEnv()
+    .proxy(...)
+    // Or a custom implementation of `ProxyAuthenticator`.
+    .proxyAuthenticator(ProxyAuthenticator.basic("username", "password"))
     .build()
 ```
 
@@ -654,7 +669,9 @@ In rare cases, the API may return a response that doesn't match the expected typ
 
 By default, the SDK will not throw an exception in this case. It will throw [`XTwitterScraperInvalidDataException`](x-twitter-scraper-kotlin-core/src/main/kotlin/com/x_twitter_scraper/api/errors/XTwitterScraperInvalidDataException.kt) only if you directly access the property.
 
-If you would prefer to check that the response is completely well-typed upfront, then either call `validate()`:
+Validating the response is _not_ forwards compatible with new types from the API for existing fields.
+
+If you would still prefer to check that the response is completely well-typed upfront, then either call `validate()`:
 
 ```kotlin
 import com.x_twitter_scraper.api.models.PaginatedTweets
@@ -722,4 +739,4 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/Xquik-dev/x-twitter-scraper-kotlin/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/x-twitter-scraper-kotlin/issues) with questions, bugs, or suggestions.

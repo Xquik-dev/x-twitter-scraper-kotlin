@@ -126,6 +126,14 @@ private constructor(
 
     private var validated: Boolean = false
 
+    /**
+     * Validates that the types of all values in this object match their expected types recursively.
+     *
+     * This method is _not_ forwards compatible with new types from the API for existing fields.
+     *
+     * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't match
+     *   its expected type.
+     */
     fun validate(): Error = apply {
         if (validated) {
             return@apply
@@ -204,6 +212,8 @@ private constructor(
 
             val UNAUTHENTICATED = of("unauthenticated")
 
+            val UNSUPPORTED_FIELD = of("unsupported_field")
+
             val USER_NOT_FOUND = of("user_not_found")
 
             val WEBHOOK_INACTIVE = of("webhook_inactive")
@@ -239,6 +249,7 @@ private constructor(
             SUBSCRIPTION_INACTIVE,
             TWEET_NOT_FOUND,
             UNAUTHENTICATED,
+            UNSUPPORTED_FIELD,
             USER_NOT_FOUND,
             WEBHOOK_INACTIVE,
             X_API_RATE_LIMITED,
@@ -276,6 +287,7 @@ private constructor(
             SUBSCRIPTION_INACTIVE,
             TWEET_NOT_FOUND,
             UNAUTHENTICATED,
+            UNSUPPORTED_FIELD,
             USER_NOT_FOUND,
             WEBHOOK_INACTIVE,
             X_API_RATE_LIMITED,
@@ -316,6 +328,7 @@ private constructor(
                 SUBSCRIPTION_INACTIVE -> Value.SUBSCRIPTION_INACTIVE
                 TWEET_NOT_FOUND -> Value.TWEET_NOT_FOUND
                 UNAUTHENTICATED -> Value.UNAUTHENTICATED
+                UNSUPPORTED_FIELD -> Value.UNSUPPORTED_FIELD
                 USER_NOT_FOUND -> Value.USER_NOT_FOUND
                 WEBHOOK_INACTIVE -> Value.WEBHOOK_INACTIVE
                 X_API_RATE_LIMITED -> Value.X_API_RATE_LIMITED
@@ -355,6 +368,7 @@ private constructor(
                 SUBSCRIPTION_INACTIVE -> Known.SUBSCRIPTION_INACTIVE
                 TWEET_NOT_FOUND -> Known.TWEET_NOT_FOUND
                 UNAUTHENTICATED -> Known.UNAUTHENTICATED
+                UNSUPPORTED_FIELD -> Known.UNSUPPORTED_FIELD
                 USER_NOT_FOUND -> Known.USER_NOT_FOUND
                 WEBHOOK_INACTIVE -> Known.WEBHOOK_INACTIVE
                 X_API_RATE_LIMITED -> Known.X_API_RATE_LIMITED
@@ -378,6 +392,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+         *   match its expected type.
+         */
         fun validate(): InnerError = apply {
             if (validated) {
                 return@apply

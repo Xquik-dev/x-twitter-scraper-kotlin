@@ -12,6 +12,7 @@ class ListRetrieveMembersParams
 private constructor(
     private val id: String?,
     private val cursor: String?,
+    private val pageSize: Long?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -20,6 +21,9 @@ private constructor(
 
     /** Pagination cursor for list members */
     fun cursor(): String? = cursor
+
+    /** Members per page (20-200, default 20) */
+    fun pageSize(): Long? = pageSize
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -44,12 +48,14 @@ private constructor(
 
         private var id: String? = null
         private var cursor: String? = null
+        private var pageSize: Long? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(listRetrieveMembersParams: ListRetrieveMembersParams) = apply {
             id = listRetrieveMembersParams.id
             cursor = listRetrieveMembersParams.cursor
+            pageSize = listRetrieveMembersParams.pageSize
             additionalHeaders = listRetrieveMembersParams.additionalHeaders.toBuilder()
             additionalQueryParams = listRetrieveMembersParams.additionalQueryParams.toBuilder()
         }
@@ -58,6 +64,16 @@ private constructor(
 
         /** Pagination cursor for list members */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
+
+        /** Members per page (20-200, default 20) */
+        fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
+
+        /**
+         * Alias for [Builder.pageSize].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun pageSize(pageSize: Long) = pageSize(pageSize as Long?)
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -166,6 +182,7 @@ private constructor(
             ListRetrieveMembersParams(
                 id,
                 cursor,
+                pageSize,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -183,6 +200,7 @@ private constructor(
         QueryParams.builder()
             .apply {
                 cursor?.let { put("cursor", it) }
+                pageSize?.let { put("pageSize", it.toString()) }
                 putAll(additionalQueryParams)
             }
             .build()
@@ -195,13 +213,14 @@ private constructor(
         return other is ListRetrieveMembersParams &&
             id == other.id &&
             cursor == other.cursor &&
+            pageSize == other.pageSize &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(id, cursor, additionalHeaders, additionalQueryParams)
+        Objects.hash(id, cursor, pageSize, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "ListRetrieveMembersParams{id=$id, cursor=$cursor, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "ListRetrieveMembersParams{id=$id, cursor=$cursor, pageSize=$pageSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

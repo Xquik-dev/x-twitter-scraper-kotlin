@@ -34,13 +34,13 @@ private constructor(
     /** Max tweets to return (server paginates internally). Omit for single page (~20). */
     fun limit(): Long? = limit
 
-    /** Sort order — Latest (chronological) or Top (engagement-ranked) */
+    /** Sort order - Latest (chronological) or Top (engagement-ranked) */
     fun queryType(): QueryType? = queryType
 
-    /** ISO 8601 timestamp — only return tweets after this time */
+    /** ISO 8601 timestamp - only return tweets after this time */
     fun sinceTime(): String? = sinceTime
 
-    /** ISO 8601 timestamp — only return tweets before this time */
+    /** ISO 8601 timestamp - only return tweets before this time */
     fun untilTime(): String? = untilTime
 
     /** Additional headers to send with the request. */
@@ -103,13 +103,13 @@ private constructor(
          */
         fun limit(limit: Long) = limit(limit as Long?)
 
-        /** Sort order — Latest (chronological) or Top (engagement-ranked) */
+        /** Sort order - Latest (chronological) or Top (engagement-ranked) */
         fun queryType(queryType: QueryType?) = apply { this.queryType = queryType }
 
-        /** ISO 8601 timestamp — only return tweets after this time */
+        /** ISO 8601 timestamp - only return tweets after this time */
         fun sinceTime(sinceTime: String?) = apply { this.sinceTime = sinceTime }
 
-        /** ISO 8601 timestamp — only return tweets before this time */
+        /** ISO 8601 timestamp - only return tweets before this time */
         fun untilTime(untilTime: String?) = apply { this.untilTime = untilTime }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -250,7 +250,7 @@ private constructor(
             }
             .build()
 
-    /** Sort order — Latest (chronological) or Top (engagement-ranked) */
+    /** Sort order - Latest (chronological) or Top (engagement-ranked) */
     class QueryType @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
@@ -341,6 +341,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+         *   match its expected type.
+         */
         fun validate(): QueryType = apply {
             if (validated) {
                 return@apply

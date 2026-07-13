@@ -1,32 +1,5 @@
 # Changelog
 
-## 0.4.0 (2026-04-25)
-
-Full Changelog: [v0.3.0...v0.4.0](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.3.0...v0.4.0)
-
-### Features
-
-* **api:** api update ([84bb6b5](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/84bb6b57e8e9c55153c73feab1a0bc2cd49d72fa))
-* **api:** api update ([5821da4](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/5821da4388684547744c9c8d20e9ef0d5eb46bc7))
-* **api:** api update ([e8fa9a8](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/e8fa9a8af76f09923a3a4ee2a840920fba68bb28))
-* **api:** api update ([6ccf621](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/6ccf621bbc4928f93b6e1fb9bc175cbd2d6bfeb1))
-
-
-### Bug Fixes
-
-* escape ampersand in OpenAPI summaries for C# XML docs ([05daa0f](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/05daa0fbe01669f2d2fa48c4b5ee3b15a2229cb2))
-
-
-### Chores
-
-* sync OpenAPI spec ([29f11ac](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/29f11acb8c3731ec2dde83bd859371179de705d6))
-* wire production_repo for all targets ([d8ccd0a](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/d8ccd0a31351328b69b9afed129c640d4720ac24))
-
-
-### Documentation
-
-* add Contributor Covenant 2.1 Code of Conduct ([#2192](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/2192)) ([5b5de80](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/5b5de80476afcf2bce31ad3b786c55a46184ad84))
-
 ## 0.3.0 (2026-04-08)
 
 Full Changelog: [v0.2.0...v0.3.0](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.2.0...v0.3.0)

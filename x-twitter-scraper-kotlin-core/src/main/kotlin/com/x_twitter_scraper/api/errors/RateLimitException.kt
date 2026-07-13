@@ -5,10 +5,14 @@ package com.x_twitter_scraper.api.errors
 import com.x_twitter_scraper.api.core.JsonValue
 import com.x_twitter_scraper.api.core.checkRequired
 import com.x_twitter_scraper.api.core.http.Headers
+import com.x_twitter_scraper.api.core.jsonMapper
 
 class RateLimitException
 private constructor(private val headers: Headers, private val body: JsonValue, cause: Throwable?) :
-    XTwitterScraperServiceException("429: $body", cause) {
+    XTwitterScraperServiceException(
+        "429: ${if (body.isMissing()) "Unknown" else jsonMapper().writeValueAsString(body)}",
+        cause,
+    ) {
 
     override fun statusCode(): Int = 429
 
