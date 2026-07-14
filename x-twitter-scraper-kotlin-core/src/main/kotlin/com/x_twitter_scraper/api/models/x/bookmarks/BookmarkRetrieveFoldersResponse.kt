@@ -241,7 +241,7 @@ private constructor(
      * Used for best match union deserialization.
      */
     internal fun validity(): Int =
-        (folders.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+        (folders.asKnown()?.sumOf { it.validity() } ?: 0) +
             (if (hasNextPage.asKnown() == null) 0 else 1) +
             (if (nextCursor.asKnown() == null) 0 else 1)
 

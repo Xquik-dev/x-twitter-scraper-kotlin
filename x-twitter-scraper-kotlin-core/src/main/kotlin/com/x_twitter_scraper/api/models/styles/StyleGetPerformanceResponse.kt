@@ -230,7 +230,7 @@ private constructor(
      */
     internal fun validity(): Int =
         (if (tweetCount.asKnown() == null) 0 else 1) +
-            (tweets.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (tweets.asKnown()?.sumOf { it.validity() } ?: 0) +
             (if (xUsername.asKnown() == null) 0 else 1)
 
     class Tweet
@@ -262,7 +262,9 @@ private constructor(
             @JsonProperty("retweetCount")
             @ExcludeMissing
             retweetCount: JsonField<Long> = JsonMissing.of(),
-            @JsonProperty("viewCount") @ExcludeMissing viewCount: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("viewCount")
+            @ExcludeMissing
+            viewCount: JsonField<Long> = JsonMissing.of(),
         ) : this(
             id,
             text,

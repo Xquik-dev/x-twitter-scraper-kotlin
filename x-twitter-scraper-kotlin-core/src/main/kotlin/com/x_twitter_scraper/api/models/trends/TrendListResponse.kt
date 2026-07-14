@@ -229,7 +229,7 @@ private constructor(
      */
     internal fun validity(): Int =
         (if (total.asKnown() == null) 0 else 1) +
-            (trends.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (trends.asKnown()?.sumOf { it.validity() } ?: 0) +
             (if (woeid.asKnown() == null) 0 else 1)
 
     class Trend

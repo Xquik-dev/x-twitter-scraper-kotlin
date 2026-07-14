@@ -30,7 +30,9 @@ private constructor(
     private constructor(
         @JsonProperty("events") @ExcludeMissing events: JsonField<List<Event>> = JsonMissing.of(),
         @JsonProperty("hasMore") @ExcludeMissing hasMore: JsonField<Boolean> = JsonMissing.of(),
-        @JsonProperty("nextCursor") @ExcludeMissing nextCursor: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("nextCursor")
+        @ExcludeMissing
+        nextCursor: JsonField<String> = JsonMissing.of(),
     ) : this(events, hasMore, nextCursor, mutableMapOf())
 
     /**
@@ -227,7 +229,7 @@ private constructor(
      * Used for best match union deserialization.
      */
     internal fun validity(): Int =
-        (events.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+        (events.asKnown()?.sumOf { it.validity() } ?: 0) +
             (if (hasMore.asKnown() == null) 0 else 1) +
             (if (nextCursor.asKnown() == null) 0 else 1)
 

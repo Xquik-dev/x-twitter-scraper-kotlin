@@ -743,7 +743,7 @@ private constructor(
             (if (isNoteTweet.asKnown() == null) 0 else 1) +
             (if (isQuoteStatus.asKnown() == null) 0 else 1) +
             (if (isReply.asKnown() == null) 0 else 1) +
-            (media.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (media.asKnown()?.sumOf { it.validity() } ?: 0) +
             (quotedTweet.asKnown()?.validity() ?: 0) +
             (if (source.asKnown() == null) 0 else 1)
 
@@ -827,8 +827,9 @@ private constructor(
          *
          * Used for best match union deserialization.
          */
-        internal fun validity(): Int =
-            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+        internal fun validity(): Int = additionalProperties.count { (_, value) ->
+            !value.isNull() && !value.isMissing()
+        }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -1261,8 +1262,9 @@ private constructor(
          *
          * Used for best match union deserialization.
          */
-        internal fun validity(): Int =
-            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+        internal fun validity(): Int = additionalProperties.count { (_, value) ->
+            !value.isNull() && !value.isMissing()
+        }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {

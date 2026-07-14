@@ -664,7 +664,7 @@ private constructor(
                 (if (moderatorCount.asKnown() == null) 0 else 1) +
                 (if (name.asKnown() == null) 0 else 1) +
                 (primaryTopic.asKnown()?.validity() ?: 0) +
-                (rules.asKnown()?.sumOf { it.validity().toInt() } ?: 0)
+                (rules.asKnown()?.sumOf { it.validity() } ?: 0)
 
         /** Primary topic */
         class PrimaryTopic

@@ -310,7 +310,7 @@ private constructor(
      */
     internal fun validity(): Int =
         (if (createdAt.asKnown() == null) 0 else 1) +
-            (messages.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (messages.asKnown()?.sumOf { it.validity() } ?: 0) +
             (if (publicId.asKnown() == null) 0 else 1) +
             (if (status.asKnown() == null) 0 else 1) +
             (if (subject.asKnown() == null) 0 else 1) +

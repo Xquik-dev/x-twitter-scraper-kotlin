@@ -226,7 +226,9 @@ private constructor(
             @ExcludeMissing
             replyCount: JsonField<Long> = JsonMissing.of(),
             @JsonProperty("title") @ExcludeMissing title: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("viewCount") @ExcludeMissing viewCount: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("viewCount")
+            @ExcludeMissing
+            viewCount: JsonField<Long> = JsonMissing.of(),
         ) : this(
             contents,
             coverImageUrl,
@@ -599,7 +601,7 @@ private constructor(
          * Used for best match union deserialization.
          */
         internal fun validity(): Int =
-            (contents.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (contents.asKnown()?.sumOf { it.validity() } ?: 0) +
                 (if (coverImageUrl.asKnown() == null) 0 else 1) +
                 (if (createdAt.asKnown() == null) 0 else 1) +
                 (if (likeCount.asKnown() == null) 0 else 1) +

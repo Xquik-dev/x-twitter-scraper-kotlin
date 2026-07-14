@@ -308,7 +308,7 @@ private constructor(
     internal fun validity(): Int =
         (if (id.asKnown() == null) 0 else 1) +
             (if (createdAt.asKnown() == null) 0 else 1) +
-            (eventTypes.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (eventTypes.asKnown()?.sumOf { it.validity() } ?: 0) +
             (if (isActive.asKnown() == null) 0 else 1) +
             (if (url.asKnown() == null) 0 else 1)
 

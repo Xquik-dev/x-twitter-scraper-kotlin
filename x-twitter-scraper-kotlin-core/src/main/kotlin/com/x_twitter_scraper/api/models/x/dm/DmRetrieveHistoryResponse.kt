@@ -239,7 +239,7 @@ private constructor(
      */
     internal fun validity(): Int =
         (if (hasNextPage.asKnown() == null) 0 else 1) +
-            (messages.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (messages.asKnown()?.sumOf { it.validity() } ?: 0) +
             (if (nextCursor.asKnown() == null) 0 else 1)
 
     class Message
