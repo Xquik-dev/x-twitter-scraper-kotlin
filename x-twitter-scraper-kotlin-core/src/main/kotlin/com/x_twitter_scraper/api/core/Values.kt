@@ -24,7 +24,6 @@ import com.fasterxml.jackson.databind.node.JsonNodeType.OBJECT
 import com.fasterxml.jackson.databind.node.JsonNodeType.POJO
 import com.fasterxml.jackson.databind.node.JsonNodeType.STRING
 import com.fasterxml.jackson.databind.ser.std.NullSerializer
-import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
 import java.io.InputStream
 import java.util.*
@@ -249,7 +248,7 @@ sealed class JsonField<out T : Any> {
 @JsonDeserialize(using = JsonValue.Deserializer::class)
 sealed class JsonValue : JsonField<Nothing>() {
 
-    inline fun <reified R : Any> convert(): R? = convert(jacksonTypeRef())
+    inline fun <reified R : Any> convert(): R? = convert(object : TypeReference<R>() {})
 
     fun <R : Any> convert(type: TypeReference<R>): R? = JSON_MAPPER.convertValue(this, type)
 
