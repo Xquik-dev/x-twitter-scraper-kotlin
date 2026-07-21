@@ -22,7 +22,11 @@ internal class LikeServiceAsyncTest {
 
         val like =
             likeServiceAsync.create(
-                LikeCreateParams.builder().id("id").account("@elonmusk").build()
+                LikeCreateParams.builder()
+                    .id("id")
+                    .idempotencyKey("Idempotency-Key")
+                    .account("@elonmusk")
+                    .build()
             )
 
         like.validate()
@@ -40,7 +44,11 @@ internal class LikeServiceAsyncTest {
 
         val like =
             likeServiceAsync.delete(
-                LikeDeleteParams.builder().id("id").account("@elonmusk").build()
+                LikeDeleteParams.builder()
+                    .id("id")
+                    .idempotencyKey("Idempotency-Key")
+                    .account("@elonmusk")
+                    .build()
             )
 
         like.validate()

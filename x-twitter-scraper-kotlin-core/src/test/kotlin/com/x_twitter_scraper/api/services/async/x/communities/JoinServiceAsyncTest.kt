@@ -22,7 +22,11 @@ internal class JoinServiceAsyncTest {
 
         val join =
             joinServiceAsync.create(
-                JoinCreateParams.builder().id("id").account("@elonmusk").build()
+                JoinCreateParams.builder()
+                    .id("id")
+                    .idempotencyKey("Idempotency-Key")
+                    .account("@elonmusk")
+                    .build()
             )
 
         join.validate()
@@ -40,7 +44,11 @@ internal class JoinServiceAsyncTest {
 
         val response =
             joinServiceAsync.deleteAll(
-                JoinDeleteAllParams.builder().id("id").account("@elonmusk").build()
+                JoinDeleteAllParams.builder()
+                    .id("id")
+                    .idempotencyKey("Idempotency-Key")
+                    .account("@elonmusk")
+                    .build()
             )
 
         response.validate()

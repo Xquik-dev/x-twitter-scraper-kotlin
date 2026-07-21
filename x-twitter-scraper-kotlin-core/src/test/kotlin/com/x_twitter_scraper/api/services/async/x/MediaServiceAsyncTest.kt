@@ -47,6 +47,7 @@ internal class MediaServiceAsyncTest {
         val response =
             mediaServiceAsync.upload(
                 MediaUploadParams.builder()
+                    .idempotencyKey("Idempotency-Key")
                     .account("@elonmusk")
                     .url("https://example.com/image.png")
                     .build()

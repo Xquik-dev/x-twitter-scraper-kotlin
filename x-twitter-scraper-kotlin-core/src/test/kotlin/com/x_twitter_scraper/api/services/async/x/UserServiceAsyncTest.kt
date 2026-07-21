@@ -48,7 +48,11 @@ internal class UserServiceAsyncTest {
 
         val response =
             userServiceAsync.removeFollower(
-                UserRemoveFollowerParams.builder().id("id").account("@elonmusk").build()
+                UserRemoveFollowerParams.builder()
+                    .id("id")
+                    .idempotencyKey("Idempotency-Key")
+                    .account("@elonmusk")
+                    .build()
             )
 
         response.validate()

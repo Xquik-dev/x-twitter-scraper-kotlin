@@ -7,7 +7,11 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
 
-/** List users who liked a tweet */
+/**
+ * Returns liker profiles that X makes visible for the post. X can withhold liker identities even
+ * when the post reports likes. In that case this endpoint returns 424 `favoriters_unavailable`
+ * instead of a misleading empty success.
+ */
 class TweetGetFavoritersParams
 private constructor(
     private val id: String?,

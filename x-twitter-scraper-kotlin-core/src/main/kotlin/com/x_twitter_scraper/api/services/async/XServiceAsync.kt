@@ -53,7 +53,6 @@ interface XServiceAsync {
 
     fun dm(): DmServiceAsync
 
-    /** Media upload and download */
     fun media(): MediaServiceAsync
 
     /** X write actions (tweets, likes, follows, DMs) */
@@ -145,7 +144,6 @@ interface XServiceAsync {
 
         fun dm(): DmServiceAsync.WithRawResponse
 
-        /** Media upload and download */
         fun media(): MediaServiceAsync.WithRawResponse
 
         /** X write actions (tweets, likes, follows, DMs) */

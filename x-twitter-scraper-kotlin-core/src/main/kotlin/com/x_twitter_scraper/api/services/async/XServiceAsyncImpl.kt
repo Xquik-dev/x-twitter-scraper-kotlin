@@ -102,7 +102,6 @@ class XServiceAsyncImpl internal constructor(private val clientOptions: ClientOp
 
     override fun dm(): DmServiceAsync = dm
 
-    /** Media upload and download */
     override fun media(): MediaServiceAsync = media
 
     /** X write actions (tweets, likes, follows, DMs) */
@@ -223,7 +222,6 @@ class XServiceAsyncImpl internal constructor(private val clientOptions: ClientOp
 
         override fun dm(): DmServiceAsync.WithRawResponse = dm
 
-        /** Media upload and download */
         override fun media(): MediaServiceAsync.WithRawResponse = media
 
         /** X write actions (tweets, likes, follows, DMs) */
