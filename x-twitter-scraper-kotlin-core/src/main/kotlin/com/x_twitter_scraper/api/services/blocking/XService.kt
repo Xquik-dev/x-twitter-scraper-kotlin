@@ -53,7 +53,6 @@ interface XService {
 
     fun dm(): DmService
 
-    /** Media upload and download */
     fun media(): MediaService
 
     /** X write actions (tweets, likes, follows, DMs) */
@@ -145,7 +144,6 @@ interface XService {
 
         fun dm(): DmService.WithRawResponse
 
-        /** Media upload and download */
         fun media(): MediaService.WithRawResponse
 
         /** X write actions (tweets, likes, follows, DMs) */

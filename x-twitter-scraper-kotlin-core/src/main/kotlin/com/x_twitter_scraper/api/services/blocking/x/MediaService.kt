@@ -11,7 +11,6 @@ import com.x_twitter_scraper.api.models.x.media.MediaDownloadResponse
 import com.x_twitter_scraper.api.models.x.media.MediaUploadParams
 import com.x_twitter_scraper.api.models.x.media.MediaUploadResponse
 
-/** Media upload and download */
 interface MediaService {
 
     /**

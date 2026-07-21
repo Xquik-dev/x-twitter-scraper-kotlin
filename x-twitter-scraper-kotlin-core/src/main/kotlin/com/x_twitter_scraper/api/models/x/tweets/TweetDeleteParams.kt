@@ -22,12 +22,15 @@ import java.util.Objects
 class TweetDeleteParams
 private constructor(
     private val id: String?,
+    private val idempotencyKey: String,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun id(): String? = id
+
+    fun idempotencyKey(): String = idempotencyKey
 
     /**
      * X account identifier (@username or account ID)
@@ -61,6 +64,7 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
+         * .idempotencyKey()
          * .account()
          * ```
          */
@@ -71,18 +75,22 @@ private constructor(
     class Builder internal constructor() {
 
         private var id: String? = null
+        private var idempotencyKey: String? = null
         private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(tweetDeleteParams: TweetDeleteParams) = apply {
             id = tweetDeleteParams.id
+            idempotencyKey = tweetDeleteParams.idempotencyKey
             body = tweetDeleteParams.body.toBuilder()
             additionalHeaders = tweetDeleteParams.additionalHeaders.toBuilder()
             additionalQueryParams = tweetDeleteParams.additionalQueryParams.toBuilder()
         }
 
         fun id(id: String?) = apply { this.id = id }
+
+        fun idempotencyKey(idempotencyKey: String) = apply { this.idempotencyKey = idempotencyKey }
 
         /**
          * Sets the entire request body.
@@ -228,6 +236,7 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
+         * .idempotencyKey()
          * .account()
          * ```
          *
@@ -236,6 +245,7 @@ private constructor(
         fun build(): TweetDeleteParams =
             TweetDeleteParams(
                 id,
+                checkRequired("idempotencyKey", idempotencyKey),
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -250,7 +260,13 @@ private constructor(
             else -> ""
         }
 
-    override fun _headers(): Headers = additionalHeaders
+    override fun _headers(): Headers =
+        Headers.builder()
+            .apply {
+                put("Idempotency-Key", idempotencyKey)
+                putAll(additionalHeaders)
+            }
+            .build()
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
@@ -427,13 +443,15 @@ private constructor(
 
         return other is TweetDeleteParams &&
             id == other.id &&
+            idempotencyKey == other.idempotencyKey &&
             body == other.body &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = Objects.hash(id, body, additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int =
+        Objects.hash(id, idempotencyKey, body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "TweetDeleteParams{id=$id, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "TweetDeleteParams{id=$id, idempotencyKey=$idempotencyKey, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -31,8 +31,8 @@ internal class TweetServiceAsyncTest {
         val tweet =
             tweetServiceAsync.create(
                 TweetCreateParams.builder()
+                    .idempotencyKey("Idempotency-Key")
                     .account("@elonmusk")
-                    .attachmentUrl("https://x.com/elonmusk/status/1234567890")
                     .communityId("1500000000000000000")
                     .isNoteTweet(false)
                     .addMedia("https://example.com/video.mp4")
@@ -86,7 +86,11 @@ internal class TweetServiceAsyncTest {
 
         val tweet =
             tweetServiceAsync.delete(
-                TweetDeleteParams.builder().id("id").account("@elonmusk").build()
+                TweetDeleteParams.builder()
+                    .id("id")
+                    .idempotencyKey("Idempotency-Key")
+                    .account("@elonmusk")
+                    .build()
             )
 
         tweet.validate()

@@ -12,16 +12,39 @@ internal class TicketReplyResponseTest {
     @Test
     fun create() {
         val ticketReplyResponse =
-            TicketReplyResponse.builder().publicId("tkt_a1b2c3d4e5f6a1b2c3d4e5f6").build()
+            TicketReplyResponse.builder()
+                .addAttachment(
+                    TicketReplyResponse.Attachment.builder()
+                        .publicId("att_a1b2c3d4e5f6a1b2c3d4e5f6")
+                        .status(TicketReplyResponse.Attachment.Status.PENDING)
+                        .build()
+                )
+                .publicId("publicId")
+                .build()
 
-        assertThat(ticketReplyResponse.publicId()).isEqualTo("tkt_a1b2c3d4e5f6a1b2c3d4e5f6")
+        assertThat(ticketReplyResponse.attachments())
+            .containsExactly(
+                TicketReplyResponse.Attachment.builder()
+                    .publicId("att_a1b2c3d4e5f6a1b2c3d4e5f6")
+                    .status(TicketReplyResponse.Attachment.Status.PENDING)
+                    .build()
+            )
+        assertThat(ticketReplyResponse.publicId()).isEqualTo("publicId")
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
         val ticketReplyResponse =
-            TicketReplyResponse.builder().publicId("tkt_a1b2c3d4e5f6a1b2c3d4e5f6").build()
+            TicketReplyResponse.builder()
+                .addAttachment(
+                    TicketReplyResponse.Attachment.builder()
+                        .publicId("att_a1b2c3d4e5f6a1b2c3d4e5f6")
+                        .status(TicketReplyResponse.Attachment.Status.PENDING)
+                        .build()
+                )
+                .publicId("publicId")
+                .build()
 
         val roundtrippedTicketReplyResponse =
             jsonMapper.readValue(
