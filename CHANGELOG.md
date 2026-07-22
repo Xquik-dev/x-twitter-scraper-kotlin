@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.5.1 (2026-07-22)
+
+Full Changelog: [v0.5.0...v0.5.1](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.5.0...v0.5.1)
+
+### Bug Fixes
+
+* keep generated Kotlin SDK buildable ([a2ff651](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/a2ff6517753db2724fbdbdd3b98a76171f222c39))
+
+
+### Chores
+
+* sync generated SDK contracts ([f7fed90](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/f7fed908413d584ecc71021805b29ea3e33e9806))
+* verify final public contract ([aa88fd9](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/aa88fd95dfe37e0c974761b60fbf285a21b0d6e6))
+
 ## 0.5.0 (2026-07-22)
 
 Full Changelog: [v0.4.1...v0.5.0](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.4.1...v0.5.0)
