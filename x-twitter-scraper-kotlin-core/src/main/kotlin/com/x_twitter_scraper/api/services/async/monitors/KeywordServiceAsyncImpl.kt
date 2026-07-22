@@ -27,7 +27,7 @@ import com.x_twitter_scraper.api.models.monitors.keywords.KeywordRetrieveRespons
 import com.x_twitter_scraper.api.models.monitors.keywords.KeywordUpdateParams
 import com.x_twitter_scraper.api.models.monitors.keywords.KeywordUpdateResponse
 
-/** Real-time X account monitoring */
+/** X account monitoring with 1-second checks */
 class KeywordServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     KeywordServiceAsync {
 

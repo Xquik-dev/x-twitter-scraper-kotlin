@@ -24,11 +24,49 @@ interface ComposeServiceAsync {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ComposeServiceAsync
 
-    /** Compose, refine, or score a tweet */
+    /**
+     * Run one step of Xquik's three-step writing workflow. Compose returns questions and editorial
+     * rules. Refine returns goal-specific guidance. Score applies deterministic text checks. It
+     * does not predict reach or expose X ranking weights.
+     */
     suspend fun create(
         params: ComposeCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ComposeCreateResponse
+
+    /** @see create */
+    suspend fun create(
+        body: ComposeCreateParams.Body,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ComposeCreateResponse =
+        create(ComposeCreateParams.builder().body(body).build(), requestOptions)
+
+    /** @see create */
+    suspend fun create(
+        composePrepareRequest: ComposeCreateParams.Body.ComposePrepareRequest,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ComposeCreateResponse =
+        create(
+            ComposeCreateParams.Body.ofComposePrepareRequest(composePrepareRequest),
+            requestOptions,
+        )
+
+    /** @see create */
+    suspend fun create(
+        composeRefineRequest: ComposeCreateParams.Body.ComposeRefineRequest,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ComposeCreateResponse =
+        create(
+            ComposeCreateParams.Body.ofComposeRefineRequest(composeRefineRequest),
+            requestOptions,
+        )
+
+    /** @see create */
+    suspend fun create(
+        composeScoreRequest: ComposeCreateParams.Body.ComposeScoreRequest,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ComposeCreateResponse =
+        create(ComposeCreateParams.Body.ofComposeScoreRequest(composeScoreRequest), requestOptions)
 
     /**
      * A view of [ComposeServiceAsync] that provides access to raw HTTP responses for each method.
@@ -53,5 +91,46 @@ interface ComposeServiceAsync {
             params: ComposeCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ComposeCreateResponse>
+
+        /** @see create */
+        @MustBeClosed
+        suspend fun create(
+            body: ComposeCreateParams.Body,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ComposeCreateResponse> =
+            create(ComposeCreateParams.builder().body(body).build(), requestOptions)
+
+        /** @see create */
+        @MustBeClosed
+        suspend fun create(
+            composePrepareRequest: ComposeCreateParams.Body.ComposePrepareRequest,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ComposeCreateResponse> =
+            create(
+                ComposeCreateParams.Body.ofComposePrepareRequest(composePrepareRequest),
+                requestOptions,
+            )
+
+        /** @see create */
+        @MustBeClosed
+        suspend fun create(
+            composeRefineRequest: ComposeCreateParams.Body.ComposeRefineRequest,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ComposeCreateResponse> =
+            create(
+                ComposeCreateParams.Body.ofComposeRefineRequest(composeRefineRequest),
+                requestOptions,
+            )
+
+        /** @see create */
+        @MustBeClosed
+        suspend fun create(
+            composeScoreRequest: ComposeCreateParams.Body.ComposeScoreRequest,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ComposeCreateResponse> =
+            create(
+                ComposeCreateParams.Body.ofComposeScoreRequest(composeScoreRequest),
+                requestOptions,
+            )
     }
 }
