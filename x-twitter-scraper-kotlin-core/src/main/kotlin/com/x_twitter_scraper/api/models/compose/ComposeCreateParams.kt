@@ -1810,7 +1810,9 @@ private constructor(
 
                 /** Accepted for backward compatibility. Text checks ignore this field. */
                 @Deprecated("Ignored. Remove this field. Use hasLink for a separate link card.")
-                fun hasMedia(hasMedia: Boolean) = hasMedia(JsonField.of(hasMedia))
+                fun hasMedia(hasMedia: Boolean) = apply {
+                    this.hasMedia = JsonField.of(hasMedia)
+                }
 
                 /**
                  * Sets [Builder.hasMedia] to an arbitrary JSON value.
@@ -1890,7 +1892,7 @@ private constructor(
                     }
                 }
                 hasLink()
-                hasMedia()
+                hasMedia.getNullable("hasMedia")
                 validated = true
             }
 

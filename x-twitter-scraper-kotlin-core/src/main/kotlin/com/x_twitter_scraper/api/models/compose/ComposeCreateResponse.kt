@@ -964,16 +964,16 @@ private constructor(
          * Used for best match union deserialization.
          */
         internal fun validity(): Int =
-            (contentRules.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
-                (engagementMultipliers.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (contentRules.asKnown()?.sumOf { it.validity() } ?: 0) +
+                (engagementMultipliers.asKnown()?.sumOf { it.validity() } ?: 0) +
                 (if (engagementVelocity.asKnown() == null) 0 else 1) +
                 (followUpQuestions.asKnown()?.size ?: 0) +
                 (if (intentUrl.asKnown() == null) 0 else 1) +
                 (if (nextStep.asKnown() == null) 0 else 1) +
-                (scorerWeights.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+                (scorerWeights.asKnown()?.sumOf { it.validity() } ?: 0) +
                 (if (source.asKnown() == null) 0 else 1) +
                 (topPenalties.asKnown()?.size ?: 0) +
-                (savedStyles.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+                (savedStyles.asKnown()?.sumOf { it.validity() } ?: 0) +
                 (if (styleNote.asKnown() == null) 0 else 1) +
                 (styleTweets.asKnown()?.size ?: 0)
 
@@ -1156,7 +1156,9 @@ private constructor(
                 @JsonProperty("action")
                 @ExcludeMissing
                 action: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("multiplier") @ExcludeMissing multiplier: JsonValue = JsonMissing.of(),
+                @JsonProperty("multiplier")
+                @ExcludeMissing
+                multiplier: JsonValue = JsonMissing.of(),
             ) : this(action, multiplier, mutableMapOf())
 
             /**
@@ -1901,7 +1903,9 @@ private constructor(
             @JsonProperty("intentUrl")
             @ExcludeMissing
             intentUrl: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("nextStep") @ExcludeMissing nextStep: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("nextStep")
+            @ExcludeMissing
+            nextStep: JsonField<String> = JsonMissing.of(),
         ) : this(compositionGuidance, examplePatterns, intentUrl, nextStep, mutableMapOf())
 
         /**
@@ -2178,7 +2182,7 @@ private constructor(
          */
         internal fun validity(): Int =
             (compositionGuidance.asKnown()?.size ?: 0) +
-                (examplePatterns.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+                (examplePatterns.asKnown()?.sumOf { it.validity() } ?: 0) +
                 (if (intentUrl.asKnown() == null) 0 else 1) +
                 (if (nextStep.asKnown() == null) 0 else 1)
 
@@ -2820,7 +2824,7 @@ private constructor(
          * Used for best match union deserialization.
          */
         internal fun validity(): Int =
-            (checklist.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (checklist.asKnown()?.sumOf { it.validity() } ?: 0) +
                 (if (nextStep.asKnown() == null) 0 else 1) +
                 (if (passed.asKnown() == null) 0 else 1) +
                 (if (passedCount.asKnown() == null) 0 else 1) +

@@ -3,6 +3,7 @@
 package com.xquik.consumer.proguard
 
 import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.x_twitter_scraper.api.client.XTwitterScraperClientImpl
 import com.x_twitter_scraper.api.client.okhttp.XTwitterScraperOkHttpClient
 import com.x_twitter_scraper.api.core.ClientOptions
@@ -14,8 +15,8 @@ import com.x_twitter_scraper.api.core.http.HttpRequest
 import com.x_twitter_scraper.api.core.http.HttpResponse
 import com.x_twitter_scraper.api.core.jsonMapper
 import com.x_twitter_scraper.api.models.EventType
-import com.x_twitter_scraper.api.models.x.tweets.TweetAuthor
 import com.x_twitter_scraper.api.models.compose.ComposeCreateResponse
+import com.x_twitter_scraper.api.models.x.tweets.TweetAuthor
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 
@@ -35,6 +36,7 @@ internal class ProGuardCompatibilityTest {
             test.productionDeserialization()
             test.jsonValueConversion()
             test.tweetAuthorRoundtrip()
+            test.composeCreateResponseRoundtrip()
             test.eventTypeRoundtrip()
         }
     }
@@ -116,7 +118,6 @@ internal class ProGuardCompatibilityTest {
         }
     }
 
-    @Test
     fun composeCreateResponseRoundtrip() {
         val jsonMapper = jsonMapper()
         val composeCreateResponse =
@@ -363,7 +364,9 @@ internal class ProGuardCompatibilityTest {
                 jacksonTypeRef<ComposeCreateResponse>(),
             )
 
-        assertThat(roundtrippedComposeCreateResponse).isEqualTo(composeCreateResponse)
+        check(roundtrippedComposeCreateResponse == composeCreateResponse) {
+            "ComposeCreateResponse roundtrip changed"
+        }
     }
 
     fun eventTypeRoundtrip() {
