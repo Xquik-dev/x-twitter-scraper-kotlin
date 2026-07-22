@@ -1700,7 +1700,8 @@ private constructor(
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
              *   (e.g. if the server responded with an unexpected value).
              */
-            @Deprecated("deprecated") fun hasMedia(): Boolean? = hasMedia.getNullable("hasMedia")
+            @Deprecated("Ignored. Remove this field. Use hasLink for a separate link card.")
+            fun hasMedia(): Boolean? = hasMedia.getNullable("hasMedia")
 
             /**
              * Returns the raw JSON value of [draft].
@@ -1722,7 +1723,7 @@ private constructor(
              * Unlike [hasMedia], this method doesn't throw if the JSON field has an unexpected
              * type.
              */
-            @Deprecated("deprecated")
+            @Deprecated("Ignored. Remove this field. Use hasLink for a separate link card.")
             @JsonProperty("hasMedia")
             @ExcludeMissing
             fun _hasMedia(): JsonField<Boolean> = hasMedia
@@ -1808,7 +1809,7 @@ private constructor(
                 fun hasLink(hasLink: JsonField<Boolean>) = apply { this.hasLink = hasLink }
 
                 /** Accepted for backward compatibility. Text checks ignore this field. */
-                @Deprecated("deprecated")
+                @Deprecated("Ignored. Remove this field. Use hasLink for a separate link card.")
                 fun hasMedia(hasMedia: Boolean) = hasMedia(JsonField.of(hasMedia))
 
                 /**
@@ -1818,7 +1819,7 @@ private constructor(
                  * instead. This method is primarily for setting the field to an undocumented or not
                  * yet supported value.
                  */
-                @Deprecated("deprecated")
+                @Deprecated("Ignored. Remove this field. Use hasLink for a separate link card.")
                 fun hasMedia(hasMedia: JsonField<Boolean>) = apply { this.hasMedia = hasMedia }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
