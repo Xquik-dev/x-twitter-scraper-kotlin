@@ -1,5 +1,45 @@
 # Changelog
 
+## 0.5.0 (2026-07-22)
+
+Full Changelog: [v0.4.1...v0.5.0](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.4.1...v0.5.0)
+
+### Features
+
+* **api:** api update ([84bb6b5](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/84bb6b57e8e9c55153c73feab1a0bc2cd49d72fa))
+* **api:** api update ([5821da4](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/5821da4388684547744c9c8d20e9ef0d5eb46bc7))
+* **api:** api update ([e8fa9a8](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/e8fa9a8af76f09923a3a4ee2a840920fba68bb28))
+* **api:** api update ([6ccf621](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/6ccf621bbc4928f93b6e1fb9bc175cbd2d6bfeb1))
+* **api:** api update ([c2c8111](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/c2c811164e84cb26e6ee87c2ef74cf61d9024bbc))
+* **api:** api update ([54f12e5](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/54f12e55dc3f68400e664e0e35033684e2f16416))
+* **api:** propagate durable write actions ([c499ffe](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/c499ffeb726686279da1ab2f0471277cb4211182))
+* **api:** propagate production write-action contract ([897d4e7](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/897d4e7bb54ba7da8b02f0a091fcfbd4c95289e6))
+* **stlc:** configurable CI runner and private-production-repo support in workflow templates ([09c00b1](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/09c00b1accc595886d209b2ebd201d9fc3ed725e))
+
+
+### Bug Fixes
+
+* escape ampersand in OpenAPI summaries for C# XML docs ([05daa0f](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/05daa0fbe01669f2d2fa48c4b5ee3b15a2229cb2))
+* reconcile generated SDK with release hardening ([96a85a2](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/96a85a262d314e8d55c7d7d92eee15b62ab84c75))
+
+
+### Chores
+
+* add FUNDING.yml pointing to xquik.com ([15bb5bb](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/15bb5bb900d240700b05d0fc317614b63fa8f165))
+* merge main into release branch ([b1cdcd5](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/b1cdcd585ea1769c26fc321660c2855313529703))
+* quiet Gradle cache cleanup warnings ([c6dbe09](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/c6dbe097e4ad8ff17bc9e79489494a147dadcce8))
+* sync OpenAPI spec ([29f11ac](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/29f11acb8c3731ec2dde83bd859371179de705d6))
+* sync repo ([f4c02e0](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/f4c02e0fcfabe815559933c8578d81330d0843ac))
+* update Gradle actions for Node 24 ([7279992](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/7279992e7359e760d72687d0e59402b56803cfe5))
+* wire production_repo for all targets ([d8ccd0a](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/d8ccd0a31351328b69b9afed129c640d4720ac24))
+
+
+### Documentation
+
+* add Contributor Covenant 2.1 Code of Conduct ([#2192](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/2192)) ([5b5de80](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/5b5de80476afcf2bce31ad3b786c55a46184ad84))
+* add DeepWiki badge ([16d59b2](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/16d59b2ee8f442e33f52d9e8b9278d06c9e27537))
+* mark Maven publication pending ([ffbec89](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/ffbec89b4e5001c3cf70b345d2d165f5e50fcedb))
+
 ## 0.4.1 (2026-07-14)
 
 Full Changelog: [v0.4.0...v0.4.1](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.4.0...v0.4.1)
