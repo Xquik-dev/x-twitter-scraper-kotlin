@@ -14,20 +14,20 @@ internal class ErrorTest {
         val error =
             Error.builder()
                 .error(Error.InnerError.LegacyErrorCode.INVALID_INPUT)
-                .message("message")
-                .reason("reason")
-                .retryAfter(1L)
-                .retryAfterMs(1L)
+                .message("Invalid input. Check the request body.")
+                .reason("temporary_issue")
+                .retryAfter(60L)
+                .retryAfterMs(60000L)
                 .build()
 
         assertThat(error.error())
             .isEqualTo(
                 Error.InnerError.ofLegacyErrorCode(Error.InnerError.LegacyErrorCode.INVALID_INPUT)
             )
-        assertThat(error.message()).isEqualTo("message")
-        assertThat(error.reason()).isEqualTo("reason")
-        assertThat(error.retryAfter()).isEqualTo(1L)
-        assertThat(error.retryAfterMs()).isEqualTo(1L)
+        assertThat(error.message()).isEqualTo("Invalid input. Check the request body.")
+        assertThat(error.reason()).isEqualTo("temporary_issue")
+        assertThat(error.retryAfter()).isEqualTo(60L)
+        assertThat(error.retryAfterMs()).isEqualTo(60000L)
     }
 
     @Test
@@ -36,10 +36,10 @@ internal class ErrorTest {
         val error =
             Error.builder()
                 .error(Error.InnerError.LegacyErrorCode.INVALID_INPUT)
-                .message("message")
-                .reason("reason")
-                .retryAfter(1L)
-                .retryAfterMs(1L)
+                .message("Invalid input. Check the request body.")
+                .reason("temporary_issue")
+                .retryAfter(60L)
+                .retryAfterMs(60000L)
                 .build()
 
         val roundtrippedError =

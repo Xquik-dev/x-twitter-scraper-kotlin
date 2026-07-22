@@ -576,6 +576,7 @@ private constructor(
                 (if (createdAt.asKnown() == null) 0 else 1) +
                 (if (sender.asKnown() == null) 0 else 1)
 
+        /** Downloadable image or video attached to a support message. */
         class Attachment
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
@@ -611,6 +612,8 @@ private constructor(
             ) : this(contentType, filename, kind, publicId, sizeBytes, status, url, mutableMapOf())
 
             /**
+             * Validated media type.
+             *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
              *   or is unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -625,6 +628,8 @@ private constructor(
             fun filename(): String = filename.getRequired("filename")
 
             /**
+             * Attachment media class.
+             *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
              *   or is unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -646,6 +651,8 @@ private constructor(
             fun sizeBytes(): Long = sizeBytes.getRequired("sizeBytes")
 
             /**
+             * Storage processing state.
+             *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
              *   or is unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -768,6 +775,7 @@ private constructor(
                     additionalProperties = attachment.additionalProperties.toMutableMap()
                 }
 
+                /** Validated media type. */
                 fun contentType(contentType: ContentType) = contentType(JsonField.of(contentType))
 
                 /**
@@ -792,6 +800,7 @@ private constructor(
                  */
                 fun filename(filename: JsonField<String>) = apply { this.filename = filename }
 
+                /** Attachment media class. */
                 fun kind(kind: Kind) = kind(JsonField.of(kind))
 
                 /**
@@ -825,6 +834,7 @@ private constructor(
                  */
                 fun sizeBytes(sizeBytes: JsonField<Long>) = apply { this.sizeBytes = sizeBytes }
 
+                /** Storage processing state. */
                 fun status(status: Status) = status(JsonField.of(status))
 
                 /**
@@ -950,6 +960,7 @@ private constructor(
                     (status.asKnown()?.validity() ?: 0) +
                     (if (url.asKnown() == null) 0 else 1)
 
+            /** Validated media type. */
             class ContentType
             @JsonCreator
             private constructor(private val value: JsonField<String>) : Enum {
@@ -1122,6 +1133,7 @@ private constructor(
                 override fun toString() = value.toString()
             }
 
+            /** Attachment media class. */
             class Kind @JsonCreator private constructor(private val value: JsonField<String>) :
                 Enum {
 
@@ -1261,6 +1273,7 @@ private constructor(
                 override fun toString() = value.toString()
             }
 
+            /** Storage processing state. */
             class Status @JsonCreator private constructor(private val value: JsonField<String>) :
                 Enum {
 

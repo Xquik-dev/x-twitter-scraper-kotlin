@@ -74,7 +74,7 @@ private constructor(
     /** Hashtags separated by spaces, commas, or lines. */
     fun hashtags(): String? = hashtags
 
-    /** Include parent tweet for replies */
+    /** Include each reply's parent tweet. */
     fun includeParentTweet(): Boolean? = includeParentTweet
 
     /** Only replies to this tweet ID. */
@@ -254,7 +254,7 @@ private constructor(
         /** Hashtags separated by spaces, commas, or lines. */
         fun hashtags(hashtags: String?) = apply { this.hashtags = hashtags }
 
-        /** Include parent tweet for replies */
+        /** Include each reply's parent tweet. */
         fun includeParentTweet(includeParentTweet: Boolean?) = apply {
             this.includeParentTweet = includeParentTweet
         }
