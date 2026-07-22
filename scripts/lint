@@ -4,6 +4,8 @@ set -e
 
 cd "$(dirname "$0")/.."
 
+bash ./bin/check-release-workflow
+
 if command -v ktfmt &> /dev/null; then
     echo "==> Checking ktfmt"
     ./scripts/format --dry-run --set-exit-if-changed
