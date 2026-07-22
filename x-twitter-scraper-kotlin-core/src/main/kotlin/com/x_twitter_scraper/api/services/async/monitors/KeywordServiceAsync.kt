@@ -17,7 +17,7 @@ import com.x_twitter_scraper.api.models.monitors.keywords.KeywordRetrieveRespons
 import com.x_twitter_scraper.api.models.monitors.keywords.KeywordUpdateParams
 import com.x_twitter_scraper.api.models.monitors.keywords.KeywordUpdateResponse
 
-/** Real-time X account monitoring */
+/** X account monitoring with 1-second checks */
 interface KeywordServiceAsync {
 
     /**
@@ -33,9 +33,9 @@ interface KeywordServiceAsync {
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): KeywordServiceAsync
 
     /**
-     * Creates an instant keyword monitor. Keyword monitors are unlimited. Active monitors check
-     * every 1 second and cost 21 credits per hour. Events and webhook deliveries are included.
-     * Creation requires available credits for the first hourly charge.
+     * Creates a keyword monitor. Keyword monitors are unlimited. Active monitors check every 1
+     * second and cost 21 credits per hour. Events and webhook deliveries are included. Creation
+     * requires available credits for the first hourly charge.
      */
     suspend fun create(
         params: KeywordCreateParams,

@@ -17,7 +17,7 @@ import com.x_twitter_scraper.api.models.monitors.MonitorRetrieveParams
 import com.x_twitter_scraper.api.models.monitors.MonitorUpdateParams
 import com.x_twitter_scraper.api.services.blocking.monitors.KeywordService
 
-/** Real-time X account monitoring */
+/** X account monitoring with 1-second checks */
 interface MonitorService {
 
     /**
@@ -32,11 +32,11 @@ interface MonitorService {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): MonitorService
 
-    /** Real-time X account monitoring */
+    /** X account monitoring with 1-second checks */
     fun keywords(): KeywordService
 
     /**
-     * Creates an instant monitor. Monitors are unlimited. Active monitors check every 1 second and
+     * Creates an account monitor. Monitors are unlimited. Active monitors check every 1 second and
      * cost 21 credits per hour. Events and webhook deliveries are included. Creation requires
      * available credits for the first hourly charge and username lookup.
      */
@@ -116,7 +116,7 @@ interface MonitorService {
          */
         fun withOptions(modifier: (ClientOptions.Builder) -> Unit): MonitorService.WithRawResponse
 
-        /** Real-time X account monitoring */
+        /** X account monitoring with 1-second checks */
         fun keywords(): KeywordService.WithRawResponse
 
         /**

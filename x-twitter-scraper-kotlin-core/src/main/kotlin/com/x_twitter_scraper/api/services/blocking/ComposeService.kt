@@ -24,11 +24,49 @@ interface ComposeService {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ComposeService
 
-    /** Compose, refine, or score a tweet */
+    /**
+     * Run one step of Xquik's three-step writing workflow. Compose returns questions and editorial
+     * rules. Refine returns goal-specific guidance. Score applies deterministic text checks. It
+     * does not predict reach or expose X ranking weights.
+     */
     fun create(
         params: ComposeCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ComposeCreateResponse
+
+    /** @see create */
+    fun create(
+        body: ComposeCreateParams.Body,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ComposeCreateResponse =
+        create(ComposeCreateParams.builder().body(body).build(), requestOptions)
+
+    /** @see create */
+    fun create(
+        composePrepareRequest: ComposeCreateParams.Body.ComposePrepareRequest,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ComposeCreateResponse =
+        create(
+            ComposeCreateParams.Body.ofComposePrepareRequest(composePrepareRequest),
+            requestOptions,
+        )
+
+    /** @see create */
+    fun create(
+        composeRefineRequest: ComposeCreateParams.Body.ComposeRefineRequest,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ComposeCreateResponse =
+        create(
+            ComposeCreateParams.Body.ofComposeRefineRequest(composeRefineRequest),
+            requestOptions,
+        )
+
+    /** @see create */
+    fun create(
+        composeScoreRequest: ComposeCreateParams.Body.ComposeScoreRequest,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ComposeCreateResponse =
+        create(ComposeCreateParams.Body.ofComposeScoreRequest(composeScoreRequest), requestOptions)
 
     /** A view of [ComposeService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -49,5 +87,46 @@ interface ComposeService {
             params: ComposeCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ComposeCreateResponse>
+
+        /** @see create */
+        @MustBeClosed
+        fun create(
+            body: ComposeCreateParams.Body,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ComposeCreateResponse> =
+            create(ComposeCreateParams.builder().body(body).build(), requestOptions)
+
+        /** @see create */
+        @MustBeClosed
+        fun create(
+            composePrepareRequest: ComposeCreateParams.Body.ComposePrepareRequest,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ComposeCreateResponse> =
+            create(
+                ComposeCreateParams.Body.ofComposePrepareRequest(composePrepareRequest),
+                requestOptions,
+            )
+
+        /** @see create */
+        @MustBeClosed
+        fun create(
+            composeRefineRequest: ComposeCreateParams.Body.ComposeRefineRequest,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ComposeCreateResponse> =
+            create(
+                ComposeCreateParams.Body.ofComposeRefineRequest(composeRefineRequest),
+                requestOptions,
+            )
+
+        /** @see create */
+        @MustBeClosed
+        fun create(
+            composeScoreRequest: ComposeCreateParams.Body.ComposeScoreRequest,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ComposeCreateResponse> =
+            create(
+                ComposeCreateParams.Body.ofComposeScoreRequest(composeScoreRequest),
+                requestOptions,
+            )
     }
 }
