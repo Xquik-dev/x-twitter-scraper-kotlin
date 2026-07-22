@@ -236,7 +236,9 @@ private constructor(
             @ExcludeMissing
             replyCount: JsonField<Long> = JsonMissing.of(),
             @JsonProperty("title") @ExcludeMissing title: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("viewCount") @ExcludeMissing viewCount: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("viewCount")
+            @ExcludeMissing
+            viewCount: JsonField<Long> = JsonMissing.of(),
         ) : this(
             bodyText,
             contents,
@@ -651,7 +653,7 @@ private constructor(
          */
         internal fun validity(): Int =
             (if (bodyText.asKnown() == null) 0 else 1) +
-                (contents.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+                (contents.asKnown()?.sumOf { it.validity() } ?: 0) +
                 (if (coverImageUrl.asKnown() == null) 0 else 1) +
                 (if (createdAt.asKnown() == null) 0 else 1) +
                 (if (likeCount.asKnown() == null) 0 else 1) +
@@ -1024,7 +1026,7 @@ private constructor(
              */
             internal fun validity(): Int =
                 (if (height.asKnown() == null) 0 else 1) +
-                    (inlineStyleRanges.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+                    (inlineStyleRanges.asKnown()?.sumOf { it.validity() } ?: 0) +
                     (if (previewUrl.asKnown() == null) 0 else 1) +
                     (if (text.asKnown() == null) 0 else 1) +
                     (if (type.asKnown() == null) 0 else 1) +

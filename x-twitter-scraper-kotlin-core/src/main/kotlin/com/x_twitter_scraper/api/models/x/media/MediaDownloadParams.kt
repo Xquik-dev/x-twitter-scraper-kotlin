@@ -338,7 +338,9 @@ private constructor(
             @JsonProperty("tweetInput")
             @ExcludeMissing
             tweetInput: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("tweetUrl") @ExcludeMissing tweetUrl: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("tweetUrl")
+            @ExcludeMissing
+            tweetUrl: JsonField<String> = JsonMissing.of(),
         ) : this(tweetId, tweetIds, tweetInput, tweetUrl, mutableMapOf())
 
         /**

@@ -251,7 +251,7 @@ private constructor(
     internal fun validity(): Int =
         (if (hasNextPage.asKnown() == null) 0 else 1) +
             (if (nextCursor.asKnown() == null) 0 else 1) +
-            (notifications.asKnown()?.sumOf { it.validity().toInt() } ?: 0)
+            (notifications.asKnown()?.sumOf { it.validity() } ?: 0)
 
     class Notification
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)

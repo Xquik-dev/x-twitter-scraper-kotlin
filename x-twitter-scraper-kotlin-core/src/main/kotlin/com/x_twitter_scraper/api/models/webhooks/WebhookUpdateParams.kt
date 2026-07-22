@@ -517,7 +517,7 @@ private constructor(
          * Used for best match union deserialization.
          */
         internal fun validity(): Int =
-            (eventTypes.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (eventTypes.asKnown()?.sumOf { it.validity() } ?: 0) +
                 (if (isActive.asKnown() == null) 0 else 1) +
                 (if (url.asKnown() == null) 0 else 1)
 

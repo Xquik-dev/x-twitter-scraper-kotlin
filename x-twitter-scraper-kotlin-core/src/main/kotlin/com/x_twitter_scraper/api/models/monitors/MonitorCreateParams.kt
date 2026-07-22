@@ -299,7 +299,9 @@ private constructor(
             @JsonProperty("eventTypes")
             @ExcludeMissing
             eventTypes: JsonField<List<EventType>> = JsonMissing.of(),
-            @JsonProperty("username") @ExcludeMissing username: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("username")
+            @ExcludeMissing
+            username: JsonField<String> = JsonMissing.of(),
         ) : this(eventTypes, username, mutableMapOf())
 
         /**
@@ -489,7 +491,7 @@ private constructor(
          * Used for best match union deserialization.
          */
         internal fun validity(): Int =
-            (eventTypes.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (eventTypes.asKnown()?.sumOf { it.validity() } ?: 0) +
                 (if (username.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {

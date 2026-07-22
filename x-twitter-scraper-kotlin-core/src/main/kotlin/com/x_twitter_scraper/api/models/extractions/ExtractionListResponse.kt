@@ -32,7 +32,9 @@ private constructor(
         @ExcludeMissing
         extractions: JsonField<List<ExtractionJob>> = JsonMissing.of(),
         @JsonProperty("hasMore") @ExcludeMissing hasMore: JsonField<Boolean> = JsonMissing.of(),
-        @JsonProperty("nextCursor") @ExcludeMissing nextCursor: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("nextCursor")
+        @ExcludeMissing
+        nextCursor: JsonField<String> = JsonMissing.of(),
     ) : this(extractions, hasMore, nextCursor, mutableMapOf())
 
     /**
@@ -239,7 +241,7 @@ private constructor(
      * Used for best match union deserialization.
      */
     internal fun validity(): Int =
-        (extractions.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+        (extractions.asKnown()?.sumOf { it.validity() } ?: 0) +
             (if (hasMore.asKnown() == null) 0 else 1) +
             (if (nextCursor.asKnown() == null) 0 else 1)
 

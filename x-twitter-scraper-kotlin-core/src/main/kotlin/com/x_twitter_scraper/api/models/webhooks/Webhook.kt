@@ -457,7 +457,7 @@ private constructor(
             (if (consecutiveFailures.asKnown() == null) 0 else 1) +
             (if (createdAt.asKnown() == null) 0 else 1) +
             (deliveryStatus.asKnown()?.validity() ?: 0) +
-            (eventTypes.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (eventTypes.asKnown()?.sumOf { it.validity() } ?: 0) +
             (if (failureHardCap.asKnown() == null) 0 else 1) +
             (if (isActive.asKnown() == null) 0 else 1) +
             (if (url.asKnown() == null) 0 else 1)

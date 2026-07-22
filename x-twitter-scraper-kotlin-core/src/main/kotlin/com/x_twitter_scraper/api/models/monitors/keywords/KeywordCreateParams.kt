@@ -489,7 +489,7 @@ private constructor(
          * Used for best match union deserialization.
          */
         internal fun validity(): Int =
-            (eventTypes.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (eventTypes.asKnown()?.sumOf { it.validity() } ?: 0) +
                 (if (query.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {

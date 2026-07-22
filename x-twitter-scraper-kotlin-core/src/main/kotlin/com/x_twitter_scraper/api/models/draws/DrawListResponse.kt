@@ -32,7 +32,9 @@ private constructor(
         @ExcludeMissing
         draws: JsonField<List<DrawListItem>> = JsonMissing.of(),
         @JsonProperty("hasMore") @ExcludeMissing hasMore: JsonField<Boolean> = JsonMissing.of(),
-        @JsonProperty("nextCursor") @ExcludeMissing nextCursor: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("nextCursor")
+        @ExcludeMissing
+        nextCursor: JsonField<String> = JsonMissing.of(),
     ) : this(draws, hasMore, nextCursor, mutableMapOf())
 
     /**
@@ -235,7 +237,7 @@ private constructor(
      * Used for best match union deserialization.
      */
     internal fun validity(): Int =
-        (draws.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+        (draws.asKnown()?.sumOf { it.validity() } ?: 0) +
             (if (hasMore.asKnown() == null) 0 else 1) +
             (if (nextCursor.asKnown() == null) 0 else 1)
 

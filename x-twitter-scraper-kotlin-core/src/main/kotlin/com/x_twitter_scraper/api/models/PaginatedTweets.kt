@@ -254,7 +254,7 @@ private constructor(
     internal fun validity(): Int =
         (if (hasNextPage.asKnown() == null) 0 else 1) +
             (if (nextCursor.asKnown() == null) 0 else 1) +
-            (tweets.asKnown()?.sumOf { it.validity().toInt() } ?: 0)
+            (tweets.asKnown()?.sumOf { it.validity() } ?: 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

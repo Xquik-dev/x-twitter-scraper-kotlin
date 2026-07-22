@@ -175,7 +175,7 @@ private constructor(
      *
      * Used for best match union deserialization.
      */
-    internal fun validity(): Int = (accounts.asKnown()?.sumOf { it.validity().toInt() } ?: 0)
+    internal fun validity(): Int = (accounts.asKnown()?.sumOf { it.validity() } ?: 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

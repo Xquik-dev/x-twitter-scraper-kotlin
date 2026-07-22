@@ -209,8 +209,7 @@ private constructor(
      * Used for best match union deserialization.
      */
     internal fun validity(): Int =
-        (monitors.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
-            (if (total.asKnown() == null) 0 else 1)
+        (monitors.asKnown()?.sumOf { it.validity() } ?: 0) + (if (total.asKnown() == null) 0 else 1)
 
     /** Keyword monitor that tracks matching public X activity. */
     class Monitor
@@ -566,7 +565,7 @@ private constructor(
         internal fun validity(): Int =
             (if (id.asKnown() == null) 0 else 1) +
                 (if (createdAt.asKnown() == null) 0 else 1) +
-                (eventTypes.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+                (eventTypes.asKnown()?.sumOf { it.validity() } ?: 0) +
                 (if (isActive.asKnown() == null) 0 else 1) +
                 (if (nextBillingAt.asKnown() == null) 0 else 1) +
                 (if (query.asKnown() == null) 0 else 1)

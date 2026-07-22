@@ -210,7 +210,7 @@ private constructor(
      * Used for best match union deserialization.
      */
     internal fun validity(): Int =
-        (attachments.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+        (attachments.asKnown()?.sumOf { it.validity() } ?: 0) +
             (if (publicId.asKnown() == null) 0 else 1)
 
     /** Attachment identifier and initial processing state. */

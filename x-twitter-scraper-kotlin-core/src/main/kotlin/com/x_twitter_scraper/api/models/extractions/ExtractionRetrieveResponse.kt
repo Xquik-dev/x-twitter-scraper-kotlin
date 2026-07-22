@@ -34,7 +34,9 @@ private constructor(
         @JsonProperty("results")
         @ExcludeMissing
         results: JsonField<List<Result>> = JsonMissing.of(),
-        @JsonProperty("nextCursor") @ExcludeMissing nextCursor: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("nextCursor")
+        @ExcludeMissing
+        nextCursor: JsonField<String> = JsonMissing.of(),
     ) : this(hasMore, job, results, nextCursor, mutableMapOf())
 
     /**
@@ -273,7 +275,7 @@ private constructor(
     internal fun validity(): Int =
         (if (hasMore.asKnown() == null) 0 else 1) +
             (job.asKnown()?.validity() ?: 0) +
-            (results.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (results.asKnown()?.sumOf { it.validity() } ?: 0) +
             (if (nextCursor.asKnown() == null) 0 else 1)
 
     /** Extraction job metadata - shape varies by tool type (JSON) */
@@ -365,8 +367,9 @@ private constructor(
          *
          * Used for best match union deserialization.
          */
-        internal fun validity(): Int =
-            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+        internal fun validity(): Int = additionalProperties.count { (_, value) ->
+            !value.isNull() && !value.isMissing()
+        }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -471,8 +474,9 @@ private constructor(
          *
          * Used for best match union deserialization.
          */
-        internal fun validity(): Int =
-            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+        internal fun validity(): Int = additionalProperties.count { (_, value) ->
+            !value.isNull() && !value.isMissing()
+        }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
