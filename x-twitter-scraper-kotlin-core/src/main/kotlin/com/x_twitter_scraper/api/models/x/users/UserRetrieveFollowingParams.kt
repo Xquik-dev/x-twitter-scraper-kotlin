@@ -21,7 +21,7 @@ private constructor(
 
     fun id(): String? = id
 
-    /** Legacy cursor alias. Prefer cursor. */
+    /** Deprecated following cursor alias. Prefer cursor. */
     fun after(): String? = after
 
     /** Pagination cursor for following list */
@@ -79,7 +79,7 @@ private constructor(
 
         fun id(id: String?) = apply { this.id = id }
 
-        /** Legacy cursor alias. Prefer cursor. */
+        /** Deprecated following cursor alias. Prefer cursor. */
         fun after(after: String?) = apply { this.after = after }
 
         /** Pagination cursor for following list */

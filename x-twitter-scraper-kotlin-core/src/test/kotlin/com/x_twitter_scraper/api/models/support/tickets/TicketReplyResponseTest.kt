@@ -19,7 +19,7 @@ internal class TicketReplyResponseTest {
                         .status(TicketReplyResponse.Attachment.Status.PENDING)
                         .build()
                 )
-                .publicId("publicId")
+                .publicId("tkt_a1b2c3d4e5f6a1b2c3d4e5f6")
                 .build()
 
         assertThat(ticketReplyResponse.attachments())
@@ -29,7 +29,7 @@ internal class TicketReplyResponseTest {
                     .status(TicketReplyResponse.Attachment.Status.PENDING)
                     .build()
             )
-        assertThat(ticketReplyResponse.publicId()).isEqualTo("publicId")
+        assertThat(ticketReplyResponse.publicId()).isEqualTo("tkt_a1b2c3d4e5f6a1b2c3d4e5f6")
     }
 
     @Test
@@ -43,7 +43,7 @@ internal class TicketReplyResponseTest {
                         .status(TicketReplyResponse.Attachment.Status.PENDING)
                         .build()
                 )
-                .publicId("publicId")
+                .publicId("tkt_a1b2c3d4e5f6a1b2c3d4e5f6")
                 .build()
 
         val roundtrippedTicketReplyResponse =

@@ -35,16 +35,16 @@ private constructor(
     ) : this(attachments, publicId, mutableMapOf())
 
     /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun attachments(): List<Attachment>? = attachments.getNullable("attachments")
+    fun attachments(): List<Attachment> = attachments.getRequired("attachments")
 
     /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun publicId(): String? = publicId.getNullable("publicId")
+    fun publicId(): String = publicId.getRequired("publicId")
 
     /**
      * Returns the raw JSON value of [attachments].
@@ -76,7 +76,15 @@ private constructor(
 
     companion object {
 
-        /** Returns a mutable builder for constructing an instance of [TicketCreateResponse]. */
+        /**
+         * Returns a mutable builder for constructing an instance of [TicketCreateResponse].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .attachments()
+         * .publicId()
+         * ```
+         */
         fun builder() = Builder()
     }
 
@@ -84,7 +92,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var attachments: JsonField<MutableList<Attachment>>? = null
-        private var publicId: JsonField<String> = JsonMissing.of()
+        private var publicId: JsonField<String>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(ticketCreateResponse: TicketCreateResponse) = apply {
@@ -151,11 +159,19 @@ private constructor(
          * Returns an immutable instance of [TicketCreateResponse].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .attachments()
+         * .publicId()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): TicketCreateResponse =
             TicketCreateResponse(
-                (attachments ?: JsonMissing.of()).map { it.toImmutable() },
-                publicId,
+                checkRequired("attachments", attachments).map { it.toImmutable() },
+                checkRequired("publicId", publicId),
                 additionalProperties.toMutableMap(),
             )
     }
@@ -175,7 +191,7 @@ private constructor(
             return@apply
         }
 
-        attachments()?.forEach { it.validate() }
+        attachments().forEach { it.validate() }
         publicId()
         validated = true
     }
@@ -197,6 +213,7 @@ private constructor(
         (attachments.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
             (if (publicId.asKnown() == null) 0 else 1)
 
+    /** Attachment identifier and initial processing state. */
     class Attachment
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
