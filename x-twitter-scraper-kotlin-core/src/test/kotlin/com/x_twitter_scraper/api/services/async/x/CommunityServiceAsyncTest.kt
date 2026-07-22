@@ -16,12 +16,17 @@ internal class CommunityServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun create() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val communityServiceAsync = client.x().communities()
 
         val community =
             communityServiceAsync.create(
                 CommunityCreateParams.builder()
+                    .idempotencyKey("Idempotency-Key")
                     .account("@elonmusk")
                     .name("Example Name")
                     .description("A community for Tesla enthusiasts")
@@ -34,13 +39,18 @@ internal class CommunityServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun delete() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val communityServiceAsync = client.x().communities()
 
         val community =
             communityServiceAsync.delete(
                 CommunityDeleteParams.builder()
                     .id("id")
+                    .idempotencyKey("Idempotency-Key")
                     .account("@elonmusk")
                     .communityName("Tesla Fans")
                     .build()
@@ -52,7 +62,11 @@ internal class CommunityServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun retrieveInfo() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val communityServiceAsync = client.x().communities()
 
         val response = communityServiceAsync.retrieveInfo("id")
@@ -63,12 +77,20 @@ internal class CommunityServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun retrieveMembers() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val communityServiceAsync = client.x().communities()
 
         val paginatedUsers =
             communityServiceAsync.retrieveMembers(
-                CommunityRetrieveMembersParams.builder().id("id").cursor("cursor").build()
+                CommunityRetrieveMembersParams.builder()
+                    .id("id")
+                    .cursor("cursor")
+                    .pageSize(20L)
+                    .build()
             )
 
         paginatedUsers.validate()
@@ -77,7 +99,11 @@ internal class CommunityServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun retrieveModerators() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val communityServiceAsync = client.x().communities()
 
         val paginatedUsers =
@@ -91,15 +117,21 @@ internal class CommunityServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun retrieveSearch() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val communityServiceAsync = client.x().communities()
 
         val paginatedTweets =
             communityServiceAsync.retrieveSearch(
                 CommunityRetrieveSearchParams.builder()
+                    .communityId("321669910225")
                     .q("q")
                     .cursor("cursor")
-                    .queryType("queryType")
+                    .pageSize(1L)
+                    .queryType(CommunityRetrieveSearchParams.QueryType.LATEST)
                     .build()
             )
 

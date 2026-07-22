@@ -24,12 +24,15 @@ import java.util.Objects
 class DmSendParams
 private constructor(
     private val userId: String?,
+    private val idempotencyKey: String,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun userId(): String? = userId
+
+    fun idempotencyKey(): String = idempotencyKey
 
     /**
      * X account (@username or ID) sending the DM
@@ -46,16 +49,12 @@ private constructor(
     fun text(): String = body.text()
 
     /**
+     * Optional array containing exactly 1 uploaded media ID.
+     *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
     fun mediaIds(): List<String>? = body.mediaIds()
-
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
-     */
-    fun replyToMessageId(): String? = body.replyToMessageId()
 
     /**
      * Returns the raw JSON value of [account].
@@ -78,14 +77,6 @@ private constructor(
      */
     fun _mediaIds(): JsonField<List<String>> = body._mediaIds()
 
-    /**
-     * Returns the raw JSON value of [replyToMessageId].
-     *
-     * Unlike [replyToMessageId], this method doesn't throw if the JSON field has an unexpected
-     * type.
-     */
-    fun _replyToMessageId(): JsonField<String> = body._replyToMessageId()
-
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     /** Additional headers to send with the request. */
@@ -103,6 +94,7 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
+         * .idempotencyKey()
          * .account()
          * .text()
          * ```
@@ -114,18 +106,22 @@ private constructor(
     class Builder internal constructor() {
 
         private var userId: String? = null
+        private var idempotencyKey: String? = null
         private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(dmSendParams: DmSendParams) = apply {
             userId = dmSendParams.userId
+            idempotencyKey = dmSendParams.idempotencyKey
             body = dmSendParams.body.toBuilder()
             additionalHeaders = dmSendParams.additionalHeaders.toBuilder()
             additionalQueryParams = dmSendParams.additionalQueryParams.toBuilder()
         }
 
         fun userId(userId: String?) = apply { this.userId = userId }
+
+        fun idempotencyKey(idempotencyKey: String) = apply { this.idempotencyKey = idempotencyKey }
 
         /**
          * Sets the entire request body.
@@ -135,7 +131,6 @@ private constructor(
          * - [account]
          * - [text]
          * - [mediaIds]
-         * - [replyToMessageId]
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
@@ -160,6 +155,7 @@ private constructor(
          */
         fun text(text: JsonField<String>) = apply { body.text(text) }
 
+        /** Optional array containing exactly 1 uploaded media ID. */
         fun mediaIds(mediaIds: List<String>) = apply { body.mediaIds(mediaIds) }
 
         /**
@@ -177,21 +173,6 @@ private constructor(
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
         fun addMediaId(mediaId: String) = apply { body.addMediaId(mediaId) }
-
-        fun replyToMessageId(replyToMessageId: String) = apply {
-            body.replyToMessageId(replyToMessageId)
-        }
-
-        /**
-         * Sets [Builder.replyToMessageId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.replyToMessageId] with a well-typed [String] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun replyToMessageId(replyToMessageId: JsonField<String>) = apply {
-            body.replyToMessageId(replyToMessageId)
-        }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -317,6 +298,7 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
+         * .idempotencyKey()
          * .account()
          * .text()
          * ```
@@ -326,6 +308,7 @@ private constructor(
         fun build(): DmSendParams =
             DmSendParams(
                 userId,
+                checkRequired("idempotencyKey", idempotencyKey),
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -340,7 +323,13 @@ private constructor(
             else -> ""
         }
 
-    override fun _headers(): Headers = additionalHeaders
+    override fun _headers(): Headers =
+        Headers.builder()
+            .apply {
+                put("Idempotency-Key", idempotencyKey)
+                putAll(additionalHeaders)
+            }
+            .build()
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
@@ -350,7 +339,6 @@ private constructor(
         private val account: JsonField<String>,
         private val text: JsonField<String>,
         private val mediaIds: JsonField<List<String>>,
-        private val replyToMessageId: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -361,10 +349,7 @@ private constructor(
             @JsonProperty("media_ids")
             @ExcludeMissing
             mediaIds: JsonField<List<String>> = JsonMissing.of(),
-            @JsonProperty("reply_to_message_id")
-            @ExcludeMissing
-            replyToMessageId: JsonField<String> = JsonMissing.of(),
-        ) : this(account, text, mediaIds, replyToMessageId, mutableMapOf())
+        ) : this(account, text, mediaIds, mutableMapOf())
 
         /**
          * X account (@username or ID) sending the DM
@@ -383,16 +368,12 @@ private constructor(
         fun text(): String = text.getRequired("text")
 
         /**
+         * Optional array containing exactly 1 uploaded media ID.
+         *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
          *   (e.g. if the server responded with an unexpected value).
          */
         fun mediaIds(): List<String>? = mediaIds.getNullable("media_ids")
-
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
-        fun replyToMessageId(): String? = replyToMessageId.getNullable("reply_to_message_id")
 
         /**
          * Returns the raw JSON value of [account].
@@ -416,16 +397,6 @@ private constructor(
         @JsonProperty("media_ids")
         @ExcludeMissing
         fun _mediaIds(): JsonField<List<String>> = mediaIds
-
-        /**
-         * Returns the raw JSON value of [replyToMessageId].
-         *
-         * Unlike [replyToMessageId], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("reply_to_message_id")
-        @ExcludeMissing
-        fun _replyToMessageId(): JsonField<String> = replyToMessageId
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -459,14 +430,12 @@ private constructor(
             private var account: JsonField<String>? = null
             private var text: JsonField<String>? = null
             private var mediaIds: JsonField<MutableList<String>>? = null
-            private var replyToMessageId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(body: Body) = apply {
                 account = body.account
                 text = body.text
                 mediaIds = body.mediaIds.map { it.toMutableList() }
-                replyToMessageId = body.replyToMessageId
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
@@ -493,6 +462,7 @@ private constructor(
              */
             fun text(text: JsonField<String>) = apply { this.text = text }
 
+            /** Optional array containing exactly 1 uploaded media ID. */
             fun mediaIds(mediaIds: List<String>) = mediaIds(JsonField.of(mediaIds))
 
             /**
@@ -516,20 +486,6 @@ private constructor(
                     (mediaIds ?: JsonField.of(mutableListOf())).also {
                         checkKnown("mediaIds", it).add(mediaId)
                     }
-            }
-
-            fun replyToMessageId(replyToMessageId: String) =
-                replyToMessageId(JsonField.of(replyToMessageId))
-
-            /**
-             * Sets [Builder.replyToMessageId] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.replyToMessageId] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun replyToMessageId(replyToMessageId: JsonField<String>) = apply {
-                this.replyToMessageId = replyToMessageId
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -569,13 +525,21 @@ private constructor(
                     checkRequired("account", account),
                     checkRequired("text", text),
                     (mediaIds ?: JsonMissing.of()).map { it.toImmutable() },
-                    replyToMessageId,
                     additionalProperties.toMutableMap(),
                 )
         }
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+         *   match its expected type.
+         */
         fun validate(): Body = apply {
             if (validated) {
                 return@apply
@@ -584,7 +548,6 @@ private constructor(
             account()
             text()
             mediaIds()
-            replyToMessageId()
             validated = true
         }
 
@@ -605,8 +568,7 @@ private constructor(
         internal fun validity(): Int =
             (if (account.asKnown() == null) 0 else 1) +
                 (if (text.asKnown() == null) 0 else 1) +
-                (mediaIds.asKnown()?.size ?: 0) +
-                (if (replyToMessageId.asKnown() == null) 0 else 1)
+                (mediaIds.asKnown()?.size ?: 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -617,18 +579,17 @@ private constructor(
                 account == other.account &&
                 text == other.text &&
                 mediaIds == other.mediaIds &&
-                replyToMessageId == other.replyToMessageId &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(account, text, mediaIds, replyToMessageId, additionalProperties)
+            Objects.hash(account, text, mediaIds, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{account=$account, text=$text, mediaIds=$mediaIds, replyToMessageId=$replyToMessageId, additionalProperties=$additionalProperties}"
+            "Body{account=$account, text=$text, mediaIds=$mediaIds, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -638,14 +599,15 @@ private constructor(
 
         return other is DmSendParams &&
             userId == other.userId &&
+            idempotencyKey == other.idempotencyKey &&
             body == other.body &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(userId, body, additionalHeaders, additionalQueryParams)
+        Objects.hash(userId, idempotencyKey, body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "DmSendParams{userId=$userId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "DmSendParams{userId=$userId, idempotencyKey=$idempotencyKey, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

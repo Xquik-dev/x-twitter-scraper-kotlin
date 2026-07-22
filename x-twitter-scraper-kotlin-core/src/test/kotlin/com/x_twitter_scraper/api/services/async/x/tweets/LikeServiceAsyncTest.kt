@@ -13,12 +13,20 @@ internal class LikeServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun create() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val likeServiceAsync = client.x().tweets().like()
 
         val like =
             likeServiceAsync.create(
-                LikeCreateParams.builder().id("id").account("@elonmusk").build()
+                LikeCreateParams.builder()
+                    .id("id")
+                    .idempotencyKey("Idempotency-Key")
+                    .account("@elonmusk")
+                    .build()
             )
 
         like.validate()
@@ -27,12 +35,20 @@ internal class LikeServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun delete() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val likeServiceAsync = client.x().tweets().like()
 
         val like =
             likeServiceAsync.delete(
-                LikeDeleteParams.builder().id("id").account("@elonmusk").build()
+                LikeDeleteParams.builder()
+                    .id("id")
+                    .idempotencyKey("Idempotency-Key")
+                    .account("@elonmusk")
+                    .build()
             )
 
         like.validate()

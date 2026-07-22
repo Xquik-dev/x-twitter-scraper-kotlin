@@ -13,12 +13,20 @@ internal class RetweetServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun create() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val retweetServiceAsync = client.x().tweets().retweet()
 
         val retweet =
             retweetServiceAsync.create(
-                RetweetCreateParams.builder().id("id").account("@elonmusk").build()
+                RetweetCreateParams.builder()
+                    .id("id")
+                    .idempotencyKey("Idempotency-Key")
+                    .account("@elonmusk")
+                    .build()
             )
 
         retweet.validate()
@@ -27,12 +35,20 @@ internal class RetweetServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun delete() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val retweetServiceAsync = client.x().tweets().retweet()
 
         val retweet =
             retweetServiceAsync.delete(
-                RetweetDeleteParams.builder().id("id").account("@elonmusk").build()
+                RetweetDeleteParams.builder()
+                    .id("id")
+                    .idempotencyKey("Idempotency-Key")
+                    .account("@elonmusk")
+                    .build()
             )
 
         retweet.validate()

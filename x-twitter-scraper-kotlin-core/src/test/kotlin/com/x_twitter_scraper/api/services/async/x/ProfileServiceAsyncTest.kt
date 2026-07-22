@@ -14,12 +14,17 @@ internal class ProfileServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun update() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val profileServiceAsync = client.x().profile()
 
         val profile =
             profileServiceAsync.update(
                 ProfileUpdateParams.builder()
+                    .idempotencyKey("Idempotency-Key")
                     .account("@elonmusk")
                     .description("description_value")
                     .location("location_value")
@@ -34,14 +39,19 @@ internal class ProfileServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun updateAvatar() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val profileServiceAsync = client.x().profile()
 
         val response =
             profileServiceAsync.updateAvatar(
                 ProfileUpdateAvatarParams.builder()
+                    .idempotencyKey("Idempotency-Key")
                     .account("@elonmusk")
-                    .file("Example data".byteInputStream())
+                    .url("https://example.com/avatar.png")
                     .build()
             )
 
@@ -51,14 +61,19 @@ internal class ProfileServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun updateBanner() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val profileServiceAsync = client.x().profile()
 
         val response =
             profileServiceAsync.updateBanner(
                 ProfileUpdateBannerParams.builder()
+                    .idempotencyKey("Idempotency-Key")
                     .account("@elonmusk")
-                    .file("Example data".byteInputStream())
+                    .url("https://example.com/banner.png")
                     .build()
             )
 

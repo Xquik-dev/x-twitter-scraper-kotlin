@@ -17,12 +17,7 @@ import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 
-/**
- * Sanitized X account summary returned by connect and reauth. Includes an optional `loginCountry`
- * field surfaced only when the declared proxy region had no Driver capacity and the login fell back
- * to a single US consumer device for this one-time action. Future activity continues to use the
- * selected `proxy_country`; the field is omitted on normal logins.
- */
+/** Sanitized X account summary returned by connect and reauth. */
 class AccountReauthResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
@@ -32,7 +27,6 @@ private constructor(
     private val status: JsonField<String>,
     private val xUserId: JsonField<String>,
     private val xUsername: JsonField<String>,
-    private val loginCountry: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -46,10 +40,7 @@ private constructor(
         @JsonProperty("status") @ExcludeMissing status: JsonField<String> = JsonMissing.of(),
         @JsonProperty("xUserId") @ExcludeMissing xUserId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("xUsername") @ExcludeMissing xUsername: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("loginCountry")
-        @ExcludeMissing
-        loginCountry: JsonField<String> = JsonMissing.of(),
-    ) : this(id, createdAt, health, status, xUserId, xUsername, loginCountry, mutableMapOf())
+    ) : this(id, createdAt, health, status, xUserId, xUsername, mutableMapOf())
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
@@ -86,16 +77,6 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun xUsername(): String = xUsername.getRequired("xUsername")
-
-    /**
-     * ISO-3166-1 alpha-2 country code of the Driver consumer device used for this login. Present
-     * only when the US fallback was triggered because Driver had no capacity in the declared
-     * region. Omitted otherwise.
-     *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
-     */
-    fun loginCountry(): String? = loginCountry.getNullable("loginCountry")
 
     /**
      * Returns the raw JSON value of [id].
@@ -141,15 +122,6 @@ private constructor(
      */
     @JsonProperty("xUsername") @ExcludeMissing fun _xUsername(): JsonField<String> = xUsername
 
-    /**
-     * Returns the raw JSON value of [loginCountry].
-     *
-     * Unlike [loginCountry], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("loginCountry")
-    @ExcludeMissing
-    fun _loginCountry(): JsonField<String> = loginCountry
-
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -189,7 +161,6 @@ private constructor(
         private var status: JsonField<String>? = null
         private var xUserId: JsonField<String>? = null
         private var xUsername: JsonField<String>? = null
-        private var loginCountry: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(accountReauthResponse: AccountReauthResponse) = apply {
@@ -199,7 +170,6 @@ private constructor(
             status = accountReauthResponse.status
             xUserId = accountReauthResponse.xUserId
             xUsername = accountReauthResponse.xUsername
-            loginCountry = accountReauthResponse.loginCountry
             additionalProperties = accountReauthResponse.additionalProperties.toMutableMap()
         }
 
@@ -265,24 +235,6 @@ private constructor(
          */
         fun xUsername(xUsername: JsonField<String>) = apply { this.xUsername = xUsername }
 
-        /**
-         * ISO-3166-1 alpha-2 country code of the Driver consumer device used for this login.
-         * Present only when the US fallback was triggered because Driver had no capacity in the
-         * declared region. Omitted otherwise.
-         */
-        fun loginCountry(loginCountry: String) = loginCountry(JsonField.of(loginCountry))
-
-        /**
-         * Sets [Builder.loginCountry] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.loginCountry] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun loginCountry(loginCountry: JsonField<String>) = apply {
-            this.loginCountry = loginCountry
-        }
-
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -327,13 +279,20 @@ private constructor(
                 checkRequired("status", status),
                 checkRequired("xUserId", xUserId),
                 checkRequired("xUsername", xUsername),
-                loginCountry,
                 additionalProperties.toMutableMap(),
             )
     }
 
     private var validated: Boolean = false
 
+    /**
+     * Validates that the types of all values in this object match their expected types recursively.
+     *
+     * This method is _not_ forwards compatible with new types from the API for existing fields.
+     *
+     * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't match
+     *   its expected type.
+     */
     fun validate(): AccountReauthResponse = apply {
         if (validated) {
             return@apply
@@ -345,7 +304,6 @@ private constructor(
         status()
         xUserId()
         xUsername()
-        loginCountry()
         validated = true
     }
 
@@ -368,8 +326,7 @@ private constructor(
             (health.asKnown()?.validity() ?: 0) +
             (if (status.asKnown() == null) 0 else 1) +
             (if (xUserId.asKnown() == null) 0 else 1) +
-            (if (xUsername.asKnown() == null) 0 else 1) +
-            (if (loginCountry.asKnown() == null) 0 else 1)
+            (if (xUsername.asKnown() == null) 0 else 1)
 
     class Health @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
@@ -483,6 +440,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+         *   match its expected type.
+         */
         fun validate(): Health = apply {
             if (validated) {
                 return@apply
@@ -533,25 +499,15 @@ private constructor(
             status == other.status &&
             xUserId == other.xUserId &&
             xUsername == other.xUsername &&
-            loginCountry == other.loginCountry &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(
-            id,
-            createdAt,
-            health,
-            status,
-            xUserId,
-            xUsername,
-            loginCountry,
-            additionalProperties,
-        )
+        Objects.hash(id, createdAt, health, status, xUserId, xUsername, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "AccountReauthResponse{id=$id, createdAt=$createdAt, health=$health, status=$status, xUserId=$xUserId, xUsername=$xUsername, loginCountry=$loginCountry, additionalProperties=$additionalProperties}"
+        "AccountReauthResponse{id=$id, createdAt=$createdAt, health=$health, status=$status, xUserId=$xUserId, xUsername=$xUsername, additionalProperties=$additionalProperties}"
 }

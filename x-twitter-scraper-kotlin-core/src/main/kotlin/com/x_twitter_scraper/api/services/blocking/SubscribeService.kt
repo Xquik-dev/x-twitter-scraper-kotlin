@@ -24,7 +24,10 @@ interface SubscribeService {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): SubscribeService
 
-    /** Get checkout or billing URL */
+    /**
+     * Create a subscription checkout or billing-management URL only after the user confirms. The
+     * request never completes payment by itself.
+     */
     fun create(
         params: SubscribeCreateParams = SubscribeCreateParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),

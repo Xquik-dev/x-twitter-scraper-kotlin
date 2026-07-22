@@ -17,7 +17,7 @@ import com.x_twitter_scraper.api.models.extractions.ExtractionRetrieveResponse
 import com.x_twitter_scraper.api.models.extractions.ExtractionRunParams
 import com.x_twitter_scraper.api.models.extractions.ExtractionRunResponse
 
-/** Bulk data extraction (20 tool types) */
+/** Bulk data extraction (23 tool types) */
 interface ExtractionService {
 
     /**
@@ -69,7 +69,7 @@ interface ExtractionService {
     @MustBeClosed
     fun exportResults(
         id: String,
-        params: ExtractionExportResultsParams = ExtractionExportResultsParams.none(),
+        params: ExtractionExportResultsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): HttpResponse = exportResults(params.toBuilder().id(id).build(), requestOptions)
 
@@ -79,11 +79,6 @@ interface ExtractionService {
         params: ExtractionExportResultsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): HttpResponse
-
-    /** @see exportResults */
-    @MustBeClosed
-    fun exportResults(id: String, requestOptions: RequestOptions): HttpResponse =
-        exportResults(id, ExtractionExportResultsParams.none(), requestOptions)
 
     /** Run extraction */
     fun run(
@@ -162,7 +157,7 @@ interface ExtractionService {
         @MustBeClosed
         fun exportResults(
             id: String,
-            params: ExtractionExportResultsParams = ExtractionExportResultsParams.none(),
+            params: ExtractionExportResultsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse = exportResults(params.toBuilder().id(id).build(), requestOptions)
 
@@ -172,11 +167,6 @@ interface ExtractionService {
             params: ExtractionExportResultsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse
-
-        /** @see exportResults */
-        @MustBeClosed
-        fun exportResults(id: String, requestOptions: RequestOptions): HttpResponse =
-            exportResults(id, ExtractionExportResultsParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /extractions`, but is otherwise the same as

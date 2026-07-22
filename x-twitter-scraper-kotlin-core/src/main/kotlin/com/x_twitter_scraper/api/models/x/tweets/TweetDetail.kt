@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.x_twitter_scraper.api.core.Enum
 import com.x_twitter_scraper.api.core.ExcludeMissing
 import com.x_twitter_scraper.api.core.JsonField
 import com.x_twitter_scraper.api.core.JsonMissing
@@ -15,10 +14,16 @@ import com.x_twitter_scraper.api.core.checkKnown
 import com.x_twitter_scraper.api.core.checkRequired
 import com.x_twitter_scraper.api.core.toImmutable
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
+import com.x_twitter_scraper.api.models.ContentDisclosure
+import com.x_twitter_scraper.api.models.EmbeddedTweet
+import com.x_twitter_scraper.api.models.TweetMedia
 import java.util.Collections
 import java.util.Objects
 
-/** Full tweet with text, engagement metrics, media, and metadata. */
+/**
+ * Full tweet with text, engagement metrics, media, and metadata. A zero metric can mean X did not
+ * report the count.
+ */
 class TweetDetail
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
@@ -30,15 +35,26 @@ private constructor(
     private val retweetCount: JsonField<Long>,
     private val text: JsonField<String>,
     private val viewCount: JsonField<Long>,
+    private val author: JsonField<TweetAuthor>,
+    private val contentDisclosure: JsonField<ContentDisclosure>,
     private val conversationId: JsonField<String>,
     private val createdAt: JsonField<String>,
+    private val displayTextRange: JsonField<List<Long>>,
     private val entities: JsonField<Entities>,
+    private val inReplyToId: JsonField<String>,
+    private val inReplyToUserId: JsonField<String>,
+    private val inReplyToUsername: JsonField<String>,
+    private val isLimitedReply: JsonField<Boolean>,
     private val isNoteTweet: JsonField<Boolean>,
     private val isQuoteStatus: JsonField<Boolean>,
     private val isReply: JsonField<Boolean>,
-    private val media: JsonField<List<Media>>,
-    private val quotedTweet: JsonField<QuotedTweet>,
+    private val lang: JsonField<String>,
+    private val media: JsonField<List<TweetMedia>>,
+    private val quotedTweet: JsonField<EmbeddedTweet>,
+    private val retweetedTweet: JsonField<EmbeddedTweet>,
     private val source: JsonField<String>,
+    private val type: JsonField<String>,
+    private val url: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -56,11 +72,30 @@ private constructor(
         retweetCount: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("text") @ExcludeMissing text: JsonField<String> = JsonMissing.of(),
         @JsonProperty("viewCount") @ExcludeMissing viewCount: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("author") @ExcludeMissing author: JsonField<TweetAuthor> = JsonMissing.of(),
+        @JsonProperty("contentDisclosure")
+        @ExcludeMissing
+        contentDisclosure: JsonField<ContentDisclosure> = JsonMissing.of(),
         @JsonProperty("conversationId")
         @ExcludeMissing
         conversationId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("createdAt") @ExcludeMissing createdAt: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("displayTextRange")
+        @ExcludeMissing
+        displayTextRange: JsonField<List<Long>> = JsonMissing.of(),
         @JsonProperty("entities") @ExcludeMissing entities: JsonField<Entities> = JsonMissing.of(),
+        @JsonProperty("inReplyToId")
+        @ExcludeMissing
+        inReplyToId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("inReplyToUserId")
+        @ExcludeMissing
+        inReplyToUserId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("inReplyToUsername")
+        @ExcludeMissing
+        inReplyToUsername: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("isLimitedReply")
+        @ExcludeMissing
+        isLimitedReply: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("isNoteTweet")
         @ExcludeMissing
         isNoteTweet: JsonField<Boolean> = JsonMissing.of(),
@@ -68,11 +103,19 @@ private constructor(
         @ExcludeMissing
         isQuoteStatus: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("isReply") @ExcludeMissing isReply: JsonField<Boolean> = JsonMissing.of(),
-        @JsonProperty("media") @ExcludeMissing media: JsonField<List<Media>> = JsonMissing.of(),
+        @JsonProperty("lang") @ExcludeMissing lang: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("media")
+        @ExcludeMissing
+        media: JsonField<List<TweetMedia>> = JsonMissing.of(),
         @JsonProperty("quoted_tweet")
         @ExcludeMissing
-        quotedTweet: JsonField<QuotedTweet> = JsonMissing.of(),
+        quotedTweet: JsonField<EmbeddedTweet> = JsonMissing.of(),
+        @JsonProperty("retweeted_tweet")
+        @ExcludeMissing
+        retweetedTweet: JsonField<EmbeddedTweet> = JsonMissing.of(),
         @JsonProperty("source") @ExcludeMissing source: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("type") @ExcludeMissing type: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of(),
     ) : this(
         id,
         bookmarkCount,
@@ -82,15 +125,26 @@ private constructor(
         retweetCount,
         text,
         viewCount,
+        author,
+        contentDisclosure,
         conversationId,
         createdAt,
+        displayTextRange,
         entities,
+        inReplyToId,
+        inReplyToUserId,
+        inReplyToUsername,
+        isLimitedReply,
         isNoteTweet,
         isQuoteStatus,
         isReply,
+        lang,
         media,
         quotedTweet,
+        retweetedTweet,
         source,
+        type,
+        url,
         mutableMapOf(),
     )
 
@@ -143,6 +197,24 @@ private constructor(
     fun viewCount(): Long = viewCount.getRequired("viewCount")
 
     /**
+     * Tweet author profile. The lookup route always includes follower count and verification state.
+     * Other profile fields appear when available.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun author(): TweetAuthor? = author.getNullable("author")
+
+    /**
+     * Content disclosure metadata shown by X when a tweet is labeled as paid partnership content or
+     * AI-generated media.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun contentDisclosure(): ContentDisclosure? = contentDisclosure.getNullable("contentDisclosure")
+
+    /**
      * ID of the root tweet in the conversation thread
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -157,12 +229,52 @@ private constructor(
     fun createdAt(): String? = createdAt.getNullable("createdAt")
 
     /**
+     * Start and end offsets for rendered tweet text
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun displayTextRange(): List<Long>? = displayTextRange.getNullable("displayTextRange")
+
+    /**
      * Parsed entities from the tweet text (URLs, mentions, hashtags, media)
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
     fun entities(): Entities? = entities.getNullable("entities")
+
+    /**
+     * Tweet ID being replied to
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun inReplyToId(): String? = inReplyToId.getNullable("inReplyToId")
+
+    /**
+     * User ID being replied to
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun inReplyToUserId(): String? = inReplyToUserId.getNullable("inReplyToUserId")
+
+    /**
+     * Username being replied to
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun inReplyToUsername(): String? = inReplyToUsername.getNullable("inReplyToUsername")
+
+    /**
+     * Whether replies are limited for this tweet
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun isLimitedReply(): Boolean? = isLimitedReply.getNullable("isLimitedReply")
 
     /**
      * Whether this is a Note Tweet (long-form post, up to 25,000 characters)
@@ -189,20 +301,40 @@ private constructor(
     fun isReply(): Boolean? = isReply.getNullable("isReply")
 
     /**
+     * Tweet language code
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun lang(): String? = lang.getNullable("lang")
+
+    /**
      * Attached media items, omitted when the tweet has no media
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
-    fun media(): List<Media>? = media.getNullable("media")
+    fun media(): List<TweetMedia>? = media.getNullable("media")
 
     /**
-     * The quoted tweet object, present when isQuoteStatus is true
+     * Quoted or retweeted tweet context. Every object includes id, text, and engagement metrics. A
+     * zero metric can mean X did not report the count. Author, media, and conversation fields
+     * appear when available.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
-    fun quotedTweet(): QuotedTweet? = quotedTweet.getNullable("quoted_tweet")
+    fun quotedTweet(): EmbeddedTweet? = quotedTweet.getNullable("quoted_tweet")
+
+    /**
+     * Quoted or retweeted tweet context. Every object includes id, text, and engagement metrics. A
+     * zero metric can mean X did not report the count. Author, media, and conversation fields
+     * appear when available.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun retweetedTweet(): EmbeddedTweet? = retweetedTweet.getNullable("retweeted_tweet")
 
     /**
      * Client application used to post this tweet
@@ -211,6 +343,22 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun source(): String? = source.getNullable("source")
+
+    /**
+     * Tweet result type
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun type(): String? = type.getNullable("type")
+
+    /**
+     * Tweet permalink URL
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun url(): String? = url.getNullable("url")
 
     /**
      * Returns the raw JSON value of [id].
@@ -273,6 +421,23 @@ private constructor(
     @JsonProperty("viewCount") @ExcludeMissing fun _viewCount(): JsonField<Long> = viewCount
 
     /**
+     * Returns the raw JSON value of [author].
+     *
+     * Unlike [author], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("author") @ExcludeMissing fun _author(): JsonField<TweetAuthor> = author
+
+    /**
+     * Returns the raw JSON value of [contentDisclosure].
+     *
+     * Unlike [contentDisclosure], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("contentDisclosure")
+    @ExcludeMissing
+    fun _contentDisclosure(): JsonField<ContentDisclosure> = contentDisclosure
+
+    /**
      * Returns the raw JSON value of [conversationId].
      *
      * Unlike [conversationId], this method doesn't throw if the JSON field has an unexpected type.
@@ -289,11 +454,56 @@ private constructor(
     @JsonProperty("createdAt") @ExcludeMissing fun _createdAt(): JsonField<String> = createdAt
 
     /**
+     * Returns the raw JSON value of [displayTextRange].
+     *
+     * Unlike [displayTextRange], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("displayTextRange")
+    @ExcludeMissing
+    fun _displayTextRange(): JsonField<List<Long>> = displayTextRange
+
+    /**
      * Returns the raw JSON value of [entities].
      *
      * Unlike [entities], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("entities") @ExcludeMissing fun _entities(): JsonField<Entities> = entities
+
+    /**
+     * Returns the raw JSON value of [inReplyToId].
+     *
+     * Unlike [inReplyToId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("inReplyToId") @ExcludeMissing fun _inReplyToId(): JsonField<String> = inReplyToId
+
+    /**
+     * Returns the raw JSON value of [inReplyToUserId].
+     *
+     * Unlike [inReplyToUserId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("inReplyToUserId")
+    @ExcludeMissing
+    fun _inReplyToUserId(): JsonField<String> = inReplyToUserId
+
+    /**
+     * Returns the raw JSON value of [inReplyToUsername].
+     *
+     * Unlike [inReplyToUsername], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("inReplyToUsername")
+    @ExcludeMissing
+    fun _inReplyToUsername(): JsonField<String> = inReplyToUsername
+
+    /**
+     * Returns the raw JSON value of [isLimitedReply].
+     *
+     * Unlike [isLimitedReply], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("isLimitedReply")
+    @ExcludeMissing
+    fun _isLimitedReply(): JsonField<Boolean> = isLimitedReply
 
     /**
      * Returns the raw JSON value of [isNoteTweet].
@@ -321,11 +531,18 @@ private constructor(
     @JsonProperty("isReply") @ExcludeMissing fun _isReply(): JsonField<Boolean> = isReply
 
     /**
+     * Returns the raw JSON value of [lang].
+     *
+     * Unlike [lang], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("lang") @ExcludeMissing fun _lang(): JsonField<String> = lang
+
+    /**
      * Returns the raw JSON value of [media].
      *
      * Unlike [media], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("media") @ExcludeMissing fun _media(): JsonField<List<Media>> = media
+    @JsonProperty("media") @ExcludeMissing fun _media(): JsonField<List<TweetMedia>> = media
 
     /**
      * Returns the raw JSON value of [quotedTweet].
@@ -334,7 +551,16 @@ private constructor(
      */
     @JsonProperty("quoted_tweet")
     @ExcludeMissing
-    fun _quotedTweet(): JsonField<QuotedTweet> = quotedTweet
+    fun _quotedTweet(): JsonField<EmbeddedTweet> = quotedTweet
+
+    /**
+     * Returns the raw JSON value of [retweetedTweet].
+     *
+     * Unlike [retweetedTweet], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("retweeted_tweet")
+    @ExcludeMissing
+    fun _retweetedTweet(): JsonField<EmbeddedTweet> = retweetedTweet
 
     /**
      * Returns the raw JSON value of [source].
@@ -342,6 +568,20 @@ private constructor(
      * Unlike [source], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("source") @ExcludeMissing fun _source(): JsonField<String> = source
+
+    /**
+     * Returns the raw JSON value of [type].
+     *
+     * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<String> = type
+
+    /**
+     * Returns the raw JSON value of [url].
+     *
+     * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -386,15 +626,26 @@ private constructor(
         private var retweetCount: JsonField<Long>? = null
         private var text: JsonField<String>? = null
         private var viewCount: JsonField<Long>? = null
+        private var author: JsonField<TweetAuthor> = JsonMissing.of()
+        private var contentDisclosure: JsonField<ContentDisclosure> = JsonMissing.of()
         private var conversationId: JsonField<String> = JsonMissing.of()
         private var createdAt: JsonField<String> = JsonMissing.of()
+        private var displayTextRange: JsonField<MutableList<Long>>? = null
         private var entities: JsonField<Entities> = JsonMissing.of()
+        private var inReplyToId: JsonField<String> = JsonMissing.of()
+        private var inReplyToUserId: JsonField<String> = JsonMissing.of()
+        private var inReplyToUsername: JsonField<String> = JsonMissing.of()
+        private var isLimitedReply: JsonField<Boolean> = JsonMissing.of()
         private var isNoteTweet: JsonField<Boolean> = JsonMissing.of()
         private var isQuoteStatus: JsonField<Boolean> = JsonMissing.of()
         private var isReply: JsonField<Boolean> = JsonMissing.of()
-        private var media: JsonField<MutableList<Media>>? = null
-        private var quotedTweet: JsonField<QuotedTweet> = JsonMissing.of()
+        private var lang: JsonField<String> = JsonMissing.of()
+        private var media: JsonField<MutableList<TweetMedia>>? = null
+        private var quotedTweet: JsonField<EmbeddedTweet> = JsonMissing.of()
+        private var retweetedTweet: JsonField<EmbeddedTweet> = JsonMissing.of()
         private var source: JsonField<String> = JsonMissing.of()
+        private var type: JsonField<String> = JsonMissing.of()
+        private var url: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(tweetDetail: TweetDetail) = apply {
@@ -406,15 +657,26 @@ private constructor(
             retweetCount = tweetDetail.retweetCount
             text = tweetDetail.text
             viewCount = tweetDetail.viewCount
+            author = tweetDetail.author
+            contentDisclosure = tweetDetail.contentDisclosure
             conversationId = tweetDetail.conversationId
             createdAt = tweetDetail.createdAt
+            displayTextRange = tweetDetail.displayTextRange.map { it.toMutableList() }
             entities = tweetDetail.entities
+            inReplyToId = tweetDetail.inReplyToId
+            inReplyToUserId = tweetDetail.inReplyToUserId
+            inReplyToUsername = tweetDetail.inReplyToUsername
+            isLimitedReply = tweetDetail.isLimitedReply
             isNoteTweet = tweetDetail.isNoteTweet
             isQuoteStatus = tweetDetail.isQuoteStatus
             isReply = tweetDetail.isReply
+            lang = tweetDetail.lang
             media = tweetDetail.media.map { it.toMutableList() }
             quotedTweet = tweetDetail.quotedTweet
+            retweetedTweet = tweetDetail.retweetedTweet
             source = tweetDetail.source
+            type = tweetDetail.type
+            url = tweetDetail.url
             additionalProperties = tweetDetail.additionalProperties.toMutableMap()
         }
 
@@ -502,6 +764,39 @@ private constructor(
          */
         fun viewCount(viewCount: JsonField<Long>) = apply { this.viewCount = viewCount }
 
+        /**
+         * Tweet author profile. The lookup route always includes follower count and verification
+         * state. Other profile fields appear when available.
+         */
+        fun author(author: TweetAuthor) = author(JsonField.of(author))
+
+        /**
+         * Sets [Builder.author] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.author] with a well-typed [TweetAuthor] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun author(author: JsonField<TweetAuthor>) = apply { this.author = author }
+
+        /**
+         * Content disclosure metadata shown by X when a tweet is labeled as paid partnership
+         * content or AI-generated media.
+         */
+        fun contentDisclosure(contentDisclosure: ContentDisclosure) =
+            contentDisclosure(JsonField.of(contentDisclosure))
+
+        /**
+         * Sets [Builder.contentDisclosure] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.contentDisclosure] with a well-typed [ContentDisclosure]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
+        fun contentDisclosure(contentDisclosure: JsonField<ContentDisclosure>) = apply {
+            this.contentDisclosure = contentDisclosure
+        }
+
         /** ID of the root tweet in the conversation thread */
         fun conversationId(conversationId: String) = conversationId(JsonField.of(conversationId))
 
@@ -527,6 +822,33 @@ private constructor(
          */
         fun createdAt(createdAt: JsonField<String>) = apply { this.createdAt = createdAt }
 
+        /** Start and end offsets for rendered tweet text */
+        fun displayTextRange(displayTextRange: List<Long>) =
+            displayTextRange(JsonField.of(displayTextRange))
+
+        /**
+         * Sets [Builder.displayTextRange] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.displayTextRange] with a well-typed `List<Long>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun displayTextRange(displayTextRange: JsonField<List<Long>>) = apply {
+            this.displayTextRange = displayTextRange.map { it.toMutableList() }
+        }
+
+        /**
+         * Adds a single [Long] to [Builder.displayTextRange].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addDisplayTextRange(displayTextRange: Long) = apply {
+            this.displayTextRange =
+                (this.displayTextRange ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("displayTextRange", it).add(displayTextRange)
+                }
+        }
+
         /** Parsed entities from the tweet text (URLs, mentions, hashtags, media) */
         fun entities(entities: Entities) = entities(JsonField.of(entities))
 
@@ -538,6 +860,62 @@ private constructor(
          * value.
          */
         fun entities(entities: JsonField<Entities>) = apply { this.entities = entities }
+
+        /** Tweet ID being replied to */
+        fun inReplyToId(inReplyToId: String) = inReplyToId(JsonField.of(inReplyToId))
+
+        /**
+         * Sets [Builder.inReplyToId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.inReplyToId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun inReplyToId(inReplyToId: JsonField<String>) = apply { this.inReplyToId = inReplyToId }
+
+        /** User ID being replied to */
+        fun inReplyToUserId(inReplyToUserId: String) =
+            inReplyToUserId(JsonField.of(inReplyToUserId))
+
+        /**
+         * Sets [Builder.inReplyToUserId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.inReplyToUserId] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun inReplyToUserId(inReplyToUserId: JsonField<String>) = apply {
+            this.inReplyToUserId = inReplyToUserId
+        }
+
+        /** Username being replied to */
+        fun inReplyToUsername(inReplyToUsername: String) =
+            inReplyToUsername(JsonField.of(inReplyToUsername))
+
+        /**
+         * Sets [Builder.inReplyToUsername] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.inReplyToUsername] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun inReplyToUsername(inReplyToUsername: JsonField<String>) = apply {
+            this.inReplyToUsername = inReplyToUsername
+        }
+
+        /** Whether replies are limited for this tweet */
+        fun isLimitedReply(isLimitedReply: Boolean) = isLimitedReply(JsonField.of(isLimitedReply))
+
+        /**
+         * Sets [Builder.isLimitedReply] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.isLimitedReply] with a well-typed [Boolean] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun isLimitedReply(isLimitedReply: JsonField<Boolean>) = apply {
+            this.isLimitedReply = isLimitedReply
+        }
 
         /** Whether this is a Note Tweet (long-form post, up to 25,000 characters) */
         fun isNoteTweet(isNoteTweet: Boolean) = isNoteTweet(JsonField.of(isNoteTweet))
@@ -576,44 +954,78 @@ private constructor(
          */
         fun isReply(isReply: JsonField<Boolean>) = apply { this.isReply = isReply }
 
+        /** Tweet language code */
+        fun lang(lang: String) = lang(JsonField.of(lang))
+
+        /**
+         * Sets [Builder.lang] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.lang] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun lang(lang: JsonField<String>) = apply { this.lang = lang }
+
         /** Attached media items, omitted when the tweet has no media */
-        fun media(media: List<Media>) = media(JsonField.of(media))
+        fun media(media: List<TweetMedia>) = media(JsonField.of(media))
 
         /**
          * Sets [Builder.media] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.media] with a well-typed `List<Media>` value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
+         * You should usually call [Builder.media] with a well-typed `List<TweetMedia>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun media(media: JsonField<List<Media>>) = apply {
+        fun media(media: JsonField<List<TweetMedia>>) = apply {
             this.media = media.map { it.toMutableList() }
         }
 
         /**
-         * Adds a single [Media] to [Builder.media].
+         * Adds a single [TweetMedia] to [Builder.media].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addMedia(media: Media) = apply {
+        fun addMedia(media: TweetMedia) = apply {
             this.media =
                 (this.media ?: JsonField.of(mutableListOf())).also {
                     checkKnown("media", it).add(media)
                 }
         }
 
-        /** The quoted tweet object, present when isQuoteStatus is true */
-        fun quotedTweet(quotedTweet: QuotedTweet) = quotedTweet(JsonField.of(quotedTweet))
+        /**
+         * Quoted or retweeted tweet context. Every object includes id, text, and engagement
+         * metrics. A zero metric can mean X did not report the count. Author, media, and
+         * conversation fields appear when available.
+         */
+        fun quotedTweet(quotedTweet: EmbeddedTweet) = quotedTweet(JsonField.of(quotedTweet))
 
         /**
          * Sets [Builder.quotedTweet] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.quotedTweet] with a well-typed [QuotedTweet] value
+         * You should usually call [Builder.quotedTweet] with a well-typed [EmbeddedTweet] value
          * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun quotedTweet(quotedTweet: JsonField<QuotedTweet>) = apply {
+        fun quotedTweet(quotedTweet: JsonField<EmbeddedTweet>) = apply {
             this.quotedTweet = quotedTweet
+        }
+
+        /**
+         * Quoted or retweeted tweet context. Every object includes id, text, and engagement
+         * metrics. A zero metric can mean X did not report the count. Author, media, and
+         * conversation fields appear when available.
+         */
+        fun retweetedTweet(retweetedTweet: EmbeddedTweet) =
+            retweetedTweet(JsonField.of(retweetedTweet))
+
+        /**
+         * Sets [Builder.retweetedTweet] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.retweetedTweet] with a well-typed [EmbeddedTweet] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun retweetedTweet(retweetedTweet: JsonField<EmbeddedTweet>) = apply {
+            this.retweetedTweet = retweetedTweet
         }
 
         /** Client application used to post this tweet */
@@ -626,6 +1038,28 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun source(source: JsonField<String>) = apply { this.source = source }
+
+        /** Tweet result type */
+        fun type(type: String) = type(JsonField.of(type))
+
+        /**
+         * Sets [Builder.type] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.type] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun type(type: JsonField<String>) = apply { this.type = type }
+
+        /** Tweet permalink URL */
+        fun url(url: String) = url(JsonField.of(url))
+
+        /**
+         * Sets [Builder.url] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.url] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun url(url: JsonField<String>) = apply { this.url = url }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -675,21 +1109,40 @@ private constructor(
                 checkRequired("retweetCount", retweetCount),
                 checkRequired("text", text),
                 checkRequired("viewCount", viewCount),
+                author,
+                contentDisclosure,
                 conversationId,
                 createdAt,
+                (displayTextRange ?: JsonMissing.of()).map { it.toImmutable() },
                 entities,
+                inReplyToId,
+                inReplyToUserId,
+                inReplyToUsername,
+                isLimitedReply,
                 isNoteTweet,
                 isQuoteStatus,
                 isReply,
+                lang,
                 (media ?: JsonMissing.of()).map { it.toImmutable() },
                 quotedTweet,
+                retweetedTweet,
                 source,
+                type,
+                url,
                 additionalProperties.toMutableMap(),
             )
     }
 
     private var validated: Boolean = false
 
+    /**
+     * Validates that the types of all values in this object match their expected types recursively.
+     *
+     * This method is _not_ forwards compatible with new types from the API for existing fields.
+     *
+     * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't match
+     *   its expected type.
+     */
     fun validate(): TweetDetail = apply {
         if (validated) {
             return@apply
@@ -703,15 +1156,26 @@ private constructor(
         retweetCount()
         text()
         viewCount()
+        author()?.validate()
+        contentDisclosure()?.validate()
         conversationId()
         createdAt()
+        displayTextRange()
         entities()?.validate()
+        inReplyToId()
+        inReplyToUserId()
+        inReplyToUsername()
+        isLimitedReply()
         isNoteTweet()
         isQuoteStatus()
         isReply()
+        lang()
         media()?.forEach { it.validate() }
         quotedTweet()?.validate()
+        retweetedTweet()?.validate()
         source()
+        type()
+        url()
         validated = true
     }
 
@@ -737,15 +1201,26 @@ private constructor(
             (if (retweetCount.asKnown() == null) 0 else 1) +
             (if (text.asKnown() == null) 0 else 1) +
             (if (viewCount.asKnown() == null) 0 else 1) +
+            (author.asKnown()?.validity() ?: 0) +
+            (contentDisclosure.asKnown()?.validity() ?: 0) +
             (if (conversationId.asKnown() == null) 0 else 1) +
             (if (createdAt.asKnown() == null) 0 else 1) +
+            (displayTextRange.asKnown()?.size ?: 0) +
             (entities.asKnown()?.validity() ?: 0) +
+            (if (inReplyToId.asKnown() == null) 0 else 1) +
+            (if (inReplyToUserId.asKnown() == null) 0 else 1) +
+            (if (inReplyToUsername.asKnown() == null) 0 else 1) +
+            (if (isLimitedReply.asKnown() == null) 0 else 1) +
             (if (isNoteTweet.asKnown() == null) 0 else 1) +
             (if (isQuoteStatus.asKnown() == null) 0 else 1) +
             (if (isReply.asKnown() == null) 0 else 1) +
+            (if (lang.asKnown() == null) 0 else 1) +
             (media.asKnown()?.sumOf { it.validity() } ?: 0) +
             (quotedTweet.asKnown()?.validity() ?: 0) +
-            (if (source.asKnown() == null) 0 else 1)
+            (retweetedTweet.asKnown()?.validity() ?: 0) +
+            (if (source.asKnown() == null) 0 else 1) +
+            (if (type.asKnown() == null) 0 else 1) +
+            (if (url.asKnown() == null) 0 else 1)
 
     /** Parsed entities from the tweet text (URLs, mentions, hashtags, media) */
     class Entities
@@ -805,6 +1280,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+         *   match its expected type.
+         */
         fun validate(): Entities = apply {
             if (validated) {
                 return@apply
@@ -846,441 +1330,6 @@ private constructor(
         override fun toString() = "Entities{additionalProperties=$additionalProperties}"
     }
 
-    class Media
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val mediaUrl: JsonField<String>,
-        private val type: JsonField<Type>,
-        private val url: JsonField<String>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("mediaUrl")
-            @ExcludeMissing
-            mediaUrl: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
-            @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of(),
-        ) : this(mediaUrl, type, url, mutableMapOf())
-
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
-        fun mediaUrl(): String? = mediaUrl.getNullable("mediaUrl")
-
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
-        fun type(): Type? = type.getNullable("type")
-
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
-        fun url(): String? = url.getNullable("url")
-
-        /**
-         * Returns the raw JSON value of [mediaUrl].
-         *
-         * Unlike [mediaUrl], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("mediaUrl") @ExcludeMissing fun _mediaUrl(): JsonField<String> = mediaUrl
-
-        /**
-         * Returns the raw JSON value of [type].
-         *
-         * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
-
-        /**
-         * Returns the raw JSON value of [url].
-         *
-         * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [Media]. */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [Media]. */
-        class Builder internal constructor() {
-
-            private var mediaUrl: JsonField<String> = JsonMissing.of()
-            private var type: JsonField<Type> = JsonMissing.of()
-            private var url: JsonField<String> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(media: Media) = apply {
-                mediaUrl = media.mediaUrl
-                type = media.type
-                url = media.url
-                additionalProperties = media.additionalProperties.toMutableMap()
-            }
-
-            fun mediaUrl(mediaUrl: String) = mediaUrl(JsonField.of(mediaUrl))
-
-            /**
-             * Sets [Builder.mediaUrl] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.mediaUrl] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun mediaUrl(mediaUrl: JsonField<String>) = apply { this.mediaUrl = mediaUrl }
-
-            fun type(type: Type) = type(JsonField.of(type))
-
-            /**
-             * Sets [Builder.type] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.type] with a well-typed [Type] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
-            fun type(type: JsonField<Type>) = apply { this.type = type }
-
-            fun url(url: String) = url(JsonField.of(url))
-
-            /**
-             * Sets [Builder.url] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.url] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
-            fun url(url: JsonField<String>) = apply { this.url = url }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Media].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): Media = Media(mediaUrl, type, url, additionalProperties.toMutableMap())
-        }
-
-        private var validated: Boolean = false
-
-        fun validate(): Media = apply {
-            if (validated) {
-                return@apply
-            }
-
-            mediaUrl()
-            type()?.validate()
-            url()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        internal fun validity(): Int =
-            (if (mediaUrl.asKnown() == null) 0 else 1) +
-                (type.asKnown()?.validity() ?: 0) +
-                (if (url.asKnown() == null) 0 else 1)
-
-        class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
-
-            /**
-             * Returns this class instance's raw value.
-             *
-             * This is usually only useful if this instance was deserialized from data that doesn't
-             * match any known member, and you want to know that value. For example, if the SDK is
-             * on an older version than the API, then the API may respond with new members that the
-             * SDK is unaware of.
-             */
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-            companion object {
-
-                val PHOTO = of("photo")
-
-                val VIDEO = of("video")
-
-                val ANIMATED_GIF = of("animated_gif")
-
-                fun of(value: String) = Type(JsonField.of(value))
-            }
-
-            /** An enum containing [Type]'s known values. */
-            enum class Known {
-                PHOTO,
-                VIDEO,
-                ANIMATED_GIF,
-            }
-
-            /**
-             * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
-             *
-             * An instance of [Type] can contain an unknown value in a couple of cases:
-             * - It was deserialized from data that doesn't match any known member. For example, if
-             *   the SDK is on an older version than the API, then the API may respond with new
-             *   members that the SDK is unaware of.
-             * - It was constructed with an arbitrary value using the [of] method.
-             */
-            enum class Value {
-                PHOTO,
-                VIDEO,
-                ANIMATED_GIF,
-                /** An enum member indicating that [Type] was instantiated with an unknown value. */
-                _UNKNOWN,
-            }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value, or
-             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-             *
-             * Use the [known] method instead if you're certain the value is always known or if you
-             * want to throw for the unknown case.
-             */
-            fun value(): Value =
-                when (this) {
-                    PHOTO -> Value.PHOTO
-                    VIDEO -> Value.VIDEO
-                    ANIMATED_GIF -> Value.ANIMATED_GIF
-                    else -> Value._UNKNOWN
-                }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value.
-             *
-             * Use the [value] method instead if you're uncertain the value is always known and
-             * don't want to throw for the unknown case.
-             *
-             * @throws XTwitterScraperInvalidDataException if this class instance's value is a not a
-             *   known member.
-             */
-            fun known(): Known =
-                when (this) {
-                    PHOTO -> Known.PHOTO
-                    VIDEO -> Known.VIDEO
-                    ANIMATED_GIF -> Known.ANIMATED_GIF
-                    else -> throw XTwitterScraperInvalidDataException("Unknown Type: $value")
-                }
-
-            /**
-             * Returns this class instance's primitive wire representation.
-             *
-             * This differs from the [toString] method because that method is primarily for
-             * debugging and generally doesn't throw.
-             *
-             * @throws XTwitterScraperInvalidDataException if this class instance's value does not
-             *   have the expected primitive type.
-             */
-            fun asString(): String =
-                _value().asString()
-                    ?: throw XTwitterScraperInvalidDataException("Value is not a String")
-
-            private var validated: Boolean = false
-
-            fun validate(): Type = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                known()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: XTwitterScraperInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Type && value == other.value
-            }
-
-            override fun hashCode() = value.hashCode()
-
-            override fun toString() = value.toString()
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Media &&
-                mediaUrl == other.mediaUrl &&
-                type == other.type &&
-                url == other.url &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(mediaUrl, type, url, additionalProperties)
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Media{mediaUrl=$mediaUrl, type=$type, url=$url, additionalProperties=$additionalProperties}"
-    }
-
-    /** The quoted tweet object, present when isQuoteStatus is true */
-    class QuotedTweet
-    @JsonCreator
-    private constructor(
-        @com.fasterxml.jackson.annotation.JsonValue
-        private val additionalProperties: Map<String, JsonValue>
-    ) {
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [QuotedTweet]. */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [QuotedTweet]. */
-        class Builder internal constructor() {
-
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(quotedTweet: QuotedTweet) = apply {
-                additionalProperties = quotedTweet.additionalProperties.toMutableMap()
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [QuotedTweet].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): QuotedTweet = QuotedTweet(additionalProperties.toImmutable())
-        }
-
-        private var validated: Boolean = false
-
-        fun validate(): QuotedTweet = apply {
-            if (validated) {
-                return@apply
-            }
-
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        internal fun validity(): Int = additionalProperties.count { (_, value) ->
-            !value.isNull() && !value.isMissing()
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is QuotedTweet && additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() = "QuotedTweet{additionalProperties=$additionalProperties}"
-    }
-
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
@@ -1295,15 +1344,26 @@ private constructor(
             retweetCount == other.retweetCount &&
             text == other.text &&
             viewCount == other.viewCount &&
+            author == other.author &&
+            contentDisclosure == other.contentDisclosure &&
             conversationId == other.conversationId &&
             createdAt == other.createdAt &&
+            displayTextRange == other.displayTextRange &&
             entities == other.entities &&
+            inReplyToId == other.inReplyToId &&
+            inReplyToUserId == other.inReplyToUserId &&
+            inReplyToUsername == other.inReplyToUsername &&
+            isLimitedReply == other.isLimitedReply &&
             isNoteTweet == other.isNoteTweet &&
             isQuoteStatus == other.isQuoteStatus &&
             isReply == other.isReply &&
+            lang == other.lang &&
             media == other.media &&
             quotedTweet == other.quotedTweet &&
+            retweetedTweet == other.retweetedTweet &&
             source == other.source &&
+            type == other.type &&
+            url == other.url &&
             additionalProperties == other.additionalProperties
     }
 
@@ -1317,15 +1377,26 @@ private constructor(
             retweetCount,
             text,
             viewCount,
+            author,
+            contentDisclosure,
             conversationId,
             createdAt,
+            displayTextRange,
             entities,
+            inReplyToId,
+            inReplyToUserId,
+            inReplyToUsername,
+            isLimitedReply,
             isNoteTweet,
             isQuoteStatus,
             isReply,
+            lang,
             media,
             quotedTweet,
+            retweetedTweet,
             source,
+            type,
+            url,
             additionalProperties,
         )
     }
@@ -1333,5 +1404,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "TweetDetail{id=$id, bookmarkCount=$bookmarkCount, likeCount=$likeCount, quoteCount=$quoteCount, replyCount=$replyCount, retweetCount=$retweetCount, text=$text, viewCount=$viewCount, conversationId=$conversationId, createdAt=$createdAt, entities=$entities, isNoteTweet=$isNoteTweet, isQuoteStatus=$isQuoteStatus, isReply=$isReply, media=$media, quotedTweet=$quotedTweet, source=$source, additionalProperties=$additionalProperties}"
+        "TweetDetail{id=$id, bookmarkCount=$bookmarkCount, likeCount=$likeCount, quoteCount=$quoteCount, replyCount=$replyCount, retweetCount=$retweetCount, text=$text, viewCount=$viewCount, author=$author, contentDisclosure=$contentDisclosure, conversationId=$conversationId, createdAt=$createdAt, displayTextRange=$displayTextRange, entities=$entities, inReplyToId=$inReplyToId, inReplyToUserId=$inReplyToUserId, inReplyToUsername=$inReplyToUsername, isLimitedReply=$isLimitedReply, isNoteTweet=$isNoteTweet, isQuoteStatus=$isQuoteStatus, isReply=$isReply, lang=$lang, media=$media, quotedTweet=$quotedTweet, retweetedTweet=$retweetedTweet, source=$source, type=$type, url=$url, additionalProperties=$additionalProperties}"
 }

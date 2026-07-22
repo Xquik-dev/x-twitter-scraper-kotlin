@@ -14,6 +14,7 @@ import com.x_twitter_scraper.api.models.x.XGetNotificationsParams
 import com.x_twitter_scraper.api.models.x.XGetNotificationsResponse
 import com.x_twitter_scraper.api.models.x.XGetTrendsParams
 import com.x_twitter_scraper.api.models.x.XGetTrendsResponse
+import com.x_twitter_scraper.api.services.blocking.x.AccountConnectionChallengeService
 import com.x_twitter_scraper.api.services.blocking.x.AccountService
 import com.x_twitter_scraper.api.services.blocking.x.BookmarkService
 import com.x_twitter_scraper.api.services.blocking.x.CommunityService
@@ -24,6 +25,7 @@ import com.x_twitter_scraper.api.services.blocking.x.MediaService
 import com.x_twitter_scraper.api.services.blocking.x.ProfileService
 import com.x_twitter_scraper.api.services.blocking.x.TweetService
 import com.x_twitter_scraper.api.services.blocking.x.UserService
+import com.x_twitter_scraper.api.services.blocking.x.WriteActionService
 
 interface XService {
 
@@ -39,9 +41,11 @@ interface XService {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): XService
 
+    /** X write actions (tweets, likes, follows, DMs) */
+    fun writeActions(): WriteActionService
+
     fun tweets(): TweetService
 
-    /** Look up, search, and explore user profiles and relationships */
     fun users(): UserService
 
     /** Look up, search, and explore user profiles and relationships */
@@ -49,7 +53,6 @@ interface XService {
 
     fun dm(): DmService
 
-    /** Media upload and download */
     fun media(): MediaService
 
     /** X write actions (tweets, likes, follows, DMs) */
@@ -60,13 +63,19 @@ interface XService {
     /** Connected X account management */
     fun accounts(): AccountService
 
+    /** Connected X account management */
+    fun accountConnectionChallenges(): AccountConnectionChallengeService
+
     /** Look up, search, and analyze individual tweets */
     fun bookmarks(): BookmarkService
 
     /** X List followers, members, and tweets */
     fun lists(): ListService
 
-    /** Retrieve the full content of an X Article (long-form post) by tweet ID. */
+    /**
+     * Retrieve the full content of an X Article (long-form post) by numeric tweet ID. Returns
+     * article_not_found when the tweet is valid but is not an X Article.
+     */
     fun getArticle(
         tweetId: String,
         params: XGetArticleParams = XGetArticleParams.none(),
@@ -123,9 +132,11 @@ interface XService {
          */
         fun withOptions(modifier: (ClientOptions.Builder) -> Unit): XService.WithRawResponse
 
+        /** X write actions (tweets, likes, follows, DMs) */
+        fun writeActions(): WriteActionService.WithRawResponse
+
         fun tweets(): TweetService.WithRawResponse
 
-        /** Look up, search, and explore user profiles and relationships */
         fun users(): UserService.WithRawResponse
 
         /** Look up, search, and explore user profiles and relationships */
@@ -133,7 +144,6 @@ interface XService {
 
         fun dm(): DmService.WithRawResponse
 
-        /** Media upload and download */
         fun media(): MediaService.WithRawResponse
 
         /** X write actions (tweets, likes, follows, DMs) */
@@ -143,6 +153,9 @@ interface XService {
 
         /** Connected X account management */
         fun accounts(): AccountService.WithRawResponse
+
+        /** Connected X account management */
+        fun accountConnectionChallenges(): AccountConnectionChallengeService.WithRawResponse
 
         /** Look up, search, and analyze individual tweets */
         fun bookmarks(): BookmarkService.WithRawResponse

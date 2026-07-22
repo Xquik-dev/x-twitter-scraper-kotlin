@@ -13,7 +13,11 @@ internal class EventServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun retrieve() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val eventServiceAsync = client.events()
 
         val eventDetail = eventServiceAsync.retrieve("id")
@@ -24,13 +28,17 @@ internal class EventServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun list() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val eventServiceAsync = client.events()
 
         val events =
             eventServiceAsync.list(
                 EventListParams.builder()
-                    .after("after")
+                    .cursor("cursor")
                     .eventType(EventType.TWEET_NEW)
                     .limit(1L)
                     .monitorId("monitorId")

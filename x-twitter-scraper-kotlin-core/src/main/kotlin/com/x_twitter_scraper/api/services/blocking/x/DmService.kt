@@ -28,7 +28,7 @@ interface DmService {
     /** Get DM conversation history */
     fun retrieveHistory(
         userId: String,
-        params: DmRetrieveHistoryParams = DmRetrieveHistoryParams.none(),
+        params: DmRetrieveHistoryParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): DmRetrieveHistoryResponse =
         retrieveHistory(params.toBuilder().userId(userId).build(), requestOptions)
@@ -38,10 +38,6 @@ interface DmService {
         params: DmRetrieveHistoryParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): DmRetrieveHistoryResponse
-
-    /** @see retrieveHistory */
-    fun retrieveHistory(userId: String, requestOptions: RequestOptions): DmRetrieveHistoryResponse =
-        retrieveHistory(userId, DmRetrieveHistoryParams.none(), requestOptions)
 
     /** Send direct message */
     fun send(
@@ -73,7 +69,7 @@ interface DmService {
         @MustBeClosed
         fun retrieveHistory(
             userId: String,
-            params: DmRetrieveHistoryParams = DmRetrieveHistoryParams.none(),
+            params: DmRetrieveHistoryParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<DmRetrieveHistoryResponse> =
             retrieveHistory(params.toBuilder().userId(userId).build(), requestOptions)
@@ -84,14 +80,6 @@ interface DmService {
             params: DmRetrieveHistoryParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<DmRetrieveHistoryResponse>
-
-        /** @see retrieveHistory */
-        @MustBeClosed
-        fun retrieveHistory(
-            userId: String,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<DmRetrieveHistoryResponse> =
-            retrieveHistory(userId, DmRetrieveHistoryParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /x/dm/{userId}`, but is otherwise the same as

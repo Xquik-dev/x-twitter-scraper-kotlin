@@ -28,7 +28,7 @@ interface DmServiceAsync {
     /** Get DM conversation history */
     suspend fun retrieveHistory(
         userId: String,
-        params: DmRetrieveHistoryParams = DmRetrieveHistoryParams.none(),
+        params: DmRetrieveHistoryParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): DmRetrieveHistoryResponse =
         retrieveHistory(params.toBuilder().userId(userId).build(), requestOptions)
@@ -38,13 +38,6 @@ interface DmServiceAsync {
         params: DmRetrieveHistoryParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): DmRetrieveHistoryResponse
-
-    /** @see retrieveHistory */
-    suspend fun retrieveHistory(
-        userId: String,
-        requestOptions: RequestOptions,
-    ): DmRetrieveHistoryResponse =
-        retrieveHistory(userId, DmRetrieveHistoryParams.none(), requestOptions)
 
     /** Send direct message */
     suspend fun send(
@@ -76,7 +69,7 @@ interface DmServiceAsync {
         @MustBeClosed
         suspend fun retrieveHistory(
             userId: String,
-            params: DmRetrieveHistoryParams = DmRetrieveHistoryParams.none(),
+            params: DmRetrieveHistoryParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<DmRetrieveHistoryResponse> =
             retrieveHistory(params.toBuilder().userId(userId).build(), requestOptions)
@@ -87,14 +80,6 @@ interface DmServiceAsync {
             params: DmRetrieveHistoryParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<DmRetrieveHistoryResponse>
-
-        /** @see retrieveHistory */
-        @MustBeClosed
-        suspend fun retrieveHistory(
-            userId: String,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<DmRetrieveHistoryResponse> =
-            retrieveHistory(userId, DmRetrieveHistoryParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /x/dm/{userId}`, but is otherwise the same as

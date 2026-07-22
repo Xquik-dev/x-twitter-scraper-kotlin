@@ -22,12 +22,15 @@ import java.util.Objects
 class CommunityDeleteParams
 private constructor(
     private val id: String?,
+    private val idempotencyKey: String,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun id(): String? = id
+
+    fun idempotencyKey(): String = idempotencyKey
 
     /**
      * X account (@username or ID) deleting the community
@@ -76,6 +79,7 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
+         * .idempotencyKey()
          * .account()
          * .communityName()
          * ```
@@ -87,18 +91,22 @@ private constructor(
     class Builder internal constructor() {
 
         private var id: String? = null
+        private var idempotencyKey: String? = null
         private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(communityDeleteParams: CommunityDeleteParams) = apply {
             id = communityDeleteParams.id
+            idempotencyKey = communityDeleteParams.idempotencyKey
             body = communityDeleteParams.body.toBuilder()
             additionalHeaders = communityDeleteParams.additionalHeaders.toBuilder()
             additionalQueryParams = communityDeleteParams.additionalQueryParams.toBuilder()
         }
 
         fun id(id: String?) = apply { this.id = id }
+
+        fun idempotencyKey(idempotencyKey: String) = apply { this.idempotencyKey = idempotencyKey }
 
         /**
          * Sets the entire request body.
@@ -259,6 +267,7 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
+         * .idempotencyKey()
          * .account()
          * .communityName()
          * ```
@@ -268,6 +277,7 @@ private constructor(
         fun build(): CommunityDeleteParams =
             CommunityDeleteParams(
                 id,
+                checkRequired("idempotencyKey", idempotencyKey),
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -282,7 +292,13 @@ private constructor(
             else -> ""
         }
 
-    override fun _headers(): Headers = additionalHeaders
+    override fun _headers(): Headers =
+        Headers.builder()
+            .apply {
+                put("Idempotency-Key", idempotencyKey)
+                putAll(additionalHeaders)
+            }
+            .build()
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
@@ -444,6 +460,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+         *   match its expected type.
+         */
         fun validate(): Body = apply {
             if (validated) {
                 return@apply
@@ -500,13 +525,15 @@ private constructor(
 
         return other is CommunityDeleteParams &&
             id == other.id &&
+            idempotencyKey == other.idempotencyKey &&
             body == other.body &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = Objects.hash(id, body, additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int =
+        Objects.hash(id, idempotencyKey, body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "CommunityDeleteParams{id=$id, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "CommunityDeleteParams{id=$id, idempotencyKey=$idempotencyKey, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

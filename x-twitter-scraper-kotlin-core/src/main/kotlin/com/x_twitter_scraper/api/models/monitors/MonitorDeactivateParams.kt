@@ -9,7 +9,7 @@ import com.x_twitter_scraper.api.core.http.QueryParams
 import com.x_twitter_scraper.api.core.toImmutable
 import java.util.Objects
 
-/** Deactivate monitor */
+/** Delete monitor */
 class MonitorDeactivateParams
 private constructor(
     private val id: String?,

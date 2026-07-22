@@ -13,28 +13,44 @@ internal class JoinServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun create() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val joinServiceAsync = client.x().communities().join()
 
-        val communityActionResult =
+        val join =
             joinServiceAsync.create(
-                JoinCreateParams.builder().id("id").account("@elonmusk").build()
+                JoinCreateParams.builder()
+                    .id("id")
+                    .idempotencyKey("Idempotency-Key")
+                    .account("@elonmusk")
+                    .build()
             )
 
-        communityActionResult.validate()
+        join.validate()
     }
 
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun deleteAll() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val joinServiceAsync = client.x().communities().join()
 
-        val communityActionResult =
+        val response =
             joinServiceAsync.deleteAll(
-                JoinDeleteAllParams.builder().id("id").account("@elonmusk").build()
+                JoinDeleteAllParams.builder()
+                    .id("id")
+                    .idempotencyKey("Idempotency-Key")
+                    .account("@elonmusk")
+                    .build()
             )
 
-        communityActionResult.validate()
+        response.validate()
     }
 }

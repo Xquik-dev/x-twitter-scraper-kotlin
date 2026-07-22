@@ -25,7 +25,7 @@ interface TweetService {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): TweetService
 
-    /** List tweets across all communities */
+    /** Requires a Community ID and keyword query. */
     fun list(
         params: TweetListParams,
         requestOptions: RequestOptions = RequestOptions.none(),

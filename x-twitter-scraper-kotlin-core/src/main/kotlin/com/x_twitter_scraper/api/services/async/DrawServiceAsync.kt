@@ -61,7 +61,7 @@ interface DrawServiceAsync {
     @MustBeClosed
     suspend fun export(
         id: String,
-        params: DrawExportParams = DrawExportParams.none(),
+        params: DrawExportParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): HttpResponse = export(params.toBuilder().id(id).build(), requestOptions)
 
@@ -72,12 +72,11 @@ interface DrawServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): HttpResponse
 
-    /** @see export */
-    @MustBeClosed
-    suspend fun export(id: String, requestOptions: RequestOptions): HttpResponse =
-        export(id, DrawExportParams.none(), requestOptions)
-
-    /** Run giveaway draw */
+    /**
+     * Runs a giveaway draw from a source tweet. The draw first checks the minimum credits needed to
+     * inspect the source tweet and at least one candidate. Remaining credits cap how many replies
+     * and retweeters can be inspected before filters and winner selection run.
+     */
     suspend fun run(
         params: DrawRunParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -142,7 +141,7 @@ interface DrawServiceAsync {
         @MustBeClosed
         suspend fun export(
             id: String,
-            params: DrawExportParams = DrawExportParams.none(),
+            params: DrawExportParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse = export(params.toBuilder().id(id).build(), requestOptions)
 
@@ -152,11 +151,6 @@ interface DrawServiceAsync {
             params: DrawExportParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse
-
-        /** @see export */
-        @MustBeClosed
-        suspend fun export(id: String, requestOptions: RequestOptions): HttpResponse =
-            export(id, DrawExportParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /draws`, but is otherwise the same as

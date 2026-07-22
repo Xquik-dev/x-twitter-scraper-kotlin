@@ -13,15 +13,21 @@ internal class MediaServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun download() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val mediaServiceAsync = client.x().media()
 
         val response =
             mediaServiceAsync.download(
                 MediaDownloadParams.builder()
+                    .tweetId("1234567890")
                     .addTweetId("1234567890")
                     .addTweetId("1234567891")
                     .tweetInput("https://x.com/elonmusk/status/1234567890")
+                    .tweetUrl("https://x.com/elonmusk/status/1234567890")
                     .build()
             )
 
@@ -31,15 +37,19 @@ internal class MediaServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun upload() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val mediaServiceAsync = client.x().media()
 
         val response =
             mediaServiceAsync.upload(
                 MediaUploadParams.builder()
+                    .idempotencyKey("Idempotency-Key")
                     .account("@elonmusk")
-                    .file("Example data".byteInputStream())
-                    .isLongVideo(true)
+                    .url("https://example.com/image.png")
                     .build()
             )
 

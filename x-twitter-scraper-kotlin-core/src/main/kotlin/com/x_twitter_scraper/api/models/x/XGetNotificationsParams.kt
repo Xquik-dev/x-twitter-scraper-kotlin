@@ -23,7 +23,7 @@ private constructor(
     /** Pagination cursor for notifications */
     fun cursor(): String? = cursor
 
-    /** Notification type filter */
+    /** Notification type filter. Unrecognized values fall back to All. */
     fun type(): Type? = type
 
     /** Additional headers to send with the request. */
@@ -60,7 +60,7 @@ private constructor(
         /** Pagination cursor for notifications */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
-        /** Notification type filter */
+        /** Notification type filter. Unrecognized values fall back to All. */
         fun type(type: Type?) = apply { this.type = type }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -186,7 +186,7 @@ private constructor(
             }
             .build()
 
-    /** Notification type filter */
+    /** Notification type filter. Unrecognized values fall back to All. */
     class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
@@ -281,6 +281,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+         *   match its expected type.
+         */
         fun validate(): Type = apply {
             if (validated) {
                 return@apply

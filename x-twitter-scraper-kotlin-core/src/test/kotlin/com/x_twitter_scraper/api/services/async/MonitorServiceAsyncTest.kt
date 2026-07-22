@@ -14,7 +14,11 @@ internal class MonitorServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun create() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val monitorServiceAsync = client.monitors()
 
         val monitor =
@@ -32,7 +36,11 @@ internal class MonitorServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun retrieve() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val monitorServiceAsync = client.monitors()
 
         val monitor = monitorServiceAsync.retrieve("id")
@@ -43,7 +51,11 @@ internal class MonitorServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun update() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val monitorServiceAsync = client.monitors()
 
         val monitor =
@@ -61,7 +73,11 @@ internal class MonitorServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun list() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val monitorServiceAsync = client.monitors()
 
         val monitors = monitorServiceAsync.list()
@@ -72,7 +88,11 @@ internal class MonitorServiceAsyncTest {
     @Disabled("Mock server tests are disabled")
     @Test
     suspend fun deactivate() {
-        val client = XTwitterScraperOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
         val monitorServiceAsync = client.monitors()
 
         val response = monitorServiceAsync.deactivate("id")

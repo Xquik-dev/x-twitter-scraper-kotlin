@@ -86,7 +86,11 @@ interface TweetServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): TweetDeleteResponse
 
-    /** List users who liked a tweet */
+    /**
+     * Returns liker profiles that X makes visible for the post. X can withhold liker identities
+     * even when the post reports likes. In that case this endpoint returns 424
+     * `favoriters_unavailable` instead of a misleading empty success.
+     */
     suspend fun getFavoriters(
         id: String,
         params: TweetGetFavoritersParams = TweetGetFavoritersParams.none(),
@@ -120,7 +124,12 @@ interface TweetServiceAsync {
     suspend fun getQuotes(id: String, requestOptions: RequestOptions): PaginatedTweets =
         getQuotes(id, TweetGetQuotesParams.none(), requestOptions)
 
-    /** List replies to a tweet */
+    /**
+     * Returns visible replies. For an unfiltered first page, Xquik compares a terminal page with
+     * the post's reported reply count. If the page is visibly incomplete, the endpoint returns 424
+     * `replies_incomplete` instead of presenting partial coverage as complete. Use tweet search
+     * with a `conversation_id:{id}` query as the broader fallback.
+     */
     suspend fun getReplies(
         id: String,
         params: TweetGetRepliesParams = TweetGetRepliesParams.none(),
@@ -171,7 +180,7 @@ interface TweetServiceAsync {
     suspend fun getThread(id: String, requestOptions: RequestOptions): PaginatedTweets =
         getThread(id, TweetGetThreadParams.none(), requestOptions)
 
-    /** Search tweets with X query operators and pagination */
+    /** Search tweets by query, Tweet ID, X status URL, or account date window */
     suspend fun search(
         params: TweetSearchParams,
         requestOptions: RequestOptions = RequestOptions.none(),

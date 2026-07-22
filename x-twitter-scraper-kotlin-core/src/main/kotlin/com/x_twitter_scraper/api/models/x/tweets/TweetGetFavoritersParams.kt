@@ -7,11 +7,16 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
 
-/** List users who liked a tweet */
+/**
+ * Returns liker profiles that X makes visible for the post. X can withhold liker identities even
+ * when the post reports likes. In that case this endpoint returns 424 `favoriters_unavailable`
+ * instead of a misleading empty success.
+ */
 class TweetGetFavoritersParams
 private constructor(
     private val id: String?,
     private val cursor: String?,
+    private val pageSize: Long?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -20,6 +25,14 @@ private constructor(
 
     /** Pagination cursor for favoriters */
     fun cursor(): String? = cursor
+
+    /**
+     * Maximum user profiles requested from this page (20-200, default 200). The response can
+     * contain fewer profiles because the source returned fewer or remaining credits cover fewer
+     * results. Keep requesting next_cursor while has_next_page is true. The deprecated limit and
+     * count aliases remain accepted.
+     */
+    fun pageSize(): Long? = pageSize
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -42,12 +55,14 @@ private constructor(
 
         private var id: String? = null
         private var cursor: String? = null
+        private var pageSize: Long? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(tweetGetFavoritersParams: TweetGetFavoritersParams) = apply {
             id = tweetGetFavoritersParams.id
             cursor = tweetGetFavoritersParams.cursor
+            pageSize = tweetGetFavoritersParams.pageSize
             additionalHeaders = tweetGetFavoritersParams.additionalHeaders.toBuilder()
             additionalQueryParams = tweetGetFavoritersParams.additionalQueryParams.toBuilder()
         }
@@ -56,6 +71,21 @@ private constructor(
 
         /** Pagination cursor for favoriters */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
+
+        /**
+         * Maximum user profiles requested from this page (20-200, default 200). The response can
+         * contain fewer profiles because the source returned fewer or remaining credits cover fewer
+         * results. Keep requesting next_cursor while has_next_page is true. The deprecated limit
+         * and count aliases remain accepted.
+         */
+        fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
+
+        /**
+         * Alias for [Builder.pageSize].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun pageSize(pageSize: Long) = pageSize(pageSize as Long?)
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -164,6 +194,7 @@ private constructor(
             TweetGetFavoritersParams(
                 id,
                 cursor,
+                pageSize,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -181,6 +212,7 @@ private constructor(
         QueryParams.builder()
             .apply {
                 cursor?.let { put("cursor", it) }
+                pageSize?.let { put("pageSize", it.toString()) }
                 putAll(additionalQueryParams)
             }
             .build()
@@ -193,13 +225,14 @@ private constructor(
         return other is TweetGetFavoritersParams &&
             id == other.id &&
             cursor == other.cursor &&
+            pageSize == other.pageSize &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(id, cursor, additionalHeaders, additionalQueryParams)
+        Objects.hash(id, cursor, pageSize, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "TweetGetFavoritersParams{id=$id, cursor=$cursor, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "TweetGetFavoritersParams{id=$id, cursor=$cursor, pageSize=$pageSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

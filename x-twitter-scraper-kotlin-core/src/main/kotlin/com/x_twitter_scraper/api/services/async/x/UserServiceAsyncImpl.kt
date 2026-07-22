@@ -13,12 +13,16 @@ import com.x_twitter_scraper.api.core.http.HttpRequest
 import com.x_twitter_scraper.api.core.http.HttpResponse
 import com.x_twitter_scraper.api.core.http.HttpResponse.Handler
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
+import com.x_twitter_scraper.api.core.http.json
 import com.x_twitter_scraper.api.core.http.parseable
 import com.x_twitter_scraper.api.core.prepareAsync
 import com.x_twitter_scraper.api.models.PaginatedTweets
 import com.x_twitter_scraper.api.models.PaginatedUsers
 import com.x_twitter_scraper.api.models.UserProfile
+import com.x_twitter_scraper.api.models.x.users.UserRemoveFollowerParams
+import com.x_twitter_scraper.api.models.x.users.UserRemoveFollowerResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveBatchParams
+import com.x_twitter_scraper.api.models.x.users.UserRetrieveBatchResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveFollowersParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveFollowersYouKnowParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveFollowingParams
@@ -26,13 +30,13 @@ import com.x_twitter_scraper.api.models.x.users.UserRetrieveLikesParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveMediaParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveMentionsParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveParams
+import com.x_twitter_scraper.api.models.x.users.UserRetrieveRepliesParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveSearchParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveTweetsParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveVerifiedFollowersParams
 import com.x_twitter_scraper.api.services.async.x.users.FollowServiceAsync
 import com.x_twitter_scraper.api.services.async.x.users.FollowServiceAsyncImpl
 
-/** Look up, search, and explore user profiles and relationships */
 class UserServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     UserServiceAsync {
 
@@ -57,10 +61,17 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
         // get /x/users/{id}
         withRawResponse().retrieve(params, requestOptions).parse()
 
+    override suspend fun removeFollower(
+        params: UserRemoveFollowerParams,
+        requestOptions: RequestOptions,
+    ): UserRemoveFollowerResponse =
+        // post /x/users/{id}/remove-follower
+        withRawResponse().removeFollower(params, requestOptions).parse()
+
     override suspend fun retrieveBatch(
         params: UserRetrieveBatchParams,
         requestOptions: RequestOptions,
-    ): PaginatedUsers =
+    ): UserRetrieveBatchResponse =
         // get /x/users/batch
         withRawResponse().retrieveBatch(params, requestOptions).parse()
 
@@ -105,6 +116,13 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
     ): PaginatedTweets =
         // get /x/users/{id}/mentions
         withRawResponse().retrieveMentions(params, requestOptions).parse()
+
+    override suspend fun retrieveReplies(
+        params: UserRetrieveRepliesParams,
+        requestOptions: RequestOptions,
+    ): PaginatedTweets =
+        // get /x/users/{id}/replies
+        withRawResponse().retrieveReplies(params, requestOptions).parse()
 
     override suspend fun retrieveSearch(
         params: UserRetrieveSearchParams,
@@ -177,13 +195,44 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
             }
         }
 
-        private val retrieveBatchHandler: Handler<PaginatedUsers> =
-            jsonHandler<PaginatedUsers>(clientOptions.jsonMapper)
+        private val removeFollowerHandler: Handler<UserRemoveFollowerResponse> =
+            jsonHandler<UserRemoveFollowerResponse>(clientOptions.jsonMapper)
+
+        override suspend fun removeFollower(
+            params: UserRemoveFollowerParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<UserRemoveFollowerResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("x", "users", params._pathParam(0), "remove-follower")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { removeFollowerHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val retrieveBatchHandler: Handler<UserRetrieveBatchResponse> =
+            jsonHandler<UserRetrieveBatchResponse>(clientOptions.jsonMapper)
 
         override suspend fun retrieveBatch(
             params: UserRetrieveBatchParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<PaginatedUsers> {
+        ): HttpResponseFor<UserRetrieveBatchResponse> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -376,6 +425,36 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
             return errorHandler.handle(response).parseable {
                 response
                     .use { retrieveMentionsHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val retrieveRepliesHandler: Handler<PaginatedTweets> =
+            jsonHandler<PaginatedTweets>(clientOptions.jsonMapper)
+
+        override suspend fun retrieveReplies(
+            params: UserRetrieveRepliesParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<PaginatedTweets> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("x", "users", params._pathParam(0), "replies")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { retrieveRepliesHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()

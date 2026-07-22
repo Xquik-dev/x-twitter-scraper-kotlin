@@ -12,6 +12,7 @@ class CommunityRetrieveMembersParams
 private constructor(
     private val id: String?,
     private val cursor: String?,
+    private val pageSize: Long?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -20,6 +21,13 @@ private constructor(
 
     /** Pagination cursor */
     fun cursor(): String? = cursor
+
+    /**
+     * Items per page (20-200, default 20). This is an upper bound for paid authenticated calls:
+     * remaining credits can reduce the returned page size, and zero affordable results returns 402
+     * insufficient_credits.
+     */
+    fun pageSize(): Long? = pageSize
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -45,12 +53,14 @@ private constructor(
 
         private var id: String? = null
         private var cursor: String? = null
+        private var pageSize: Long? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(communityRetrieveMembersParams: CommunityRetrieveMembersParams) = apply {
             id = communityRetrieveMembersParams.id
             cursor = communityRetrieveMembersParams.cursor
+            pageSize = communityRetrieveMembersParams.pageSize
             additionalHeaders = communityRetrieveMembersParams.additionalHeaders.toBuilder()
             additionalQueryParams = communityRetrieveMembersParams.additionalQueryParams.toBuilder()
         }
@@ -59,6 +69,20 @@ private constructor(
 
         /** Pagination cursor */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
+
+        /**
+         * Items per page (20-200, default 20). This is an upper bound for paid authenticated calls:
+         * remaining credits can reduce the returned page size, and zero affordable results returns
+         * 402 insufficient_credits.
+         */
+        fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
+
+        /**
+         * Alias for [Builder.pageSize].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun pageSize(pageSize: Long) = pageSize(pageSize as Long?)
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -167,6 +191,7 @@ private constructor(
             CommunityRetrieveMembersParams(
                 id,
                 cursor,
+                pageSize,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -184,6 +209,7 @@ private constructor(
         QueryParams.builder()
             .apply {
                 cursor?.let { put("cursor", it) }
+                pageSize?.let { put("pageSize", it.toString()) }
                 putAll(additionalQueryParams)
             }
             .build()
@@ -196,13 +222,14 @@ private constructor(
         return other is CommunityRetrieveMembersParams &&
             id == other.id &&
             cursor == other.cursor &&
+            pageSize == other.pageSize &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(id, cursor, additionalHeaders, additionalQueryParams)
+        Objects.hash(id, cursor, pageSize, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "CommunityRetrieveMembersParams{id=$id, cursor=$cursor, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "CommunityRetrieveMembersParams{id=$id, cursor=$cursor, pageSize=$pageSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
