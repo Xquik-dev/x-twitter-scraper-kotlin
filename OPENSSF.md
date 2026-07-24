@@ -38,7 +38,7 @@ No OpenSSF-defined ineligibility applies.
 
 The raw report keeps untouched generated-source coverage visible.
 
-Exclusions require the exact Stainless marker within the source header.
+Exclusions use the repository-owned, provider-neutral generated-source header prefix.
 
 Maintained runtime exceptions remain inside the enforced coverage gate.
 
