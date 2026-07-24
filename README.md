@@ -20,6 +20,12 @@ Use it as a typed X API or Twitter API alternative.
 
 <!-- x-release-please-end -->
 
+## Choose the Kotlin SDK
+
+Choose this client for Kotlin services using coroutines and typed builders.
+Suspending methods integrate with structured concurrency.
+Choose the Java SDK for Java-first codebases.
+
 ## Common X Data Tasks
 
 These questions map customer language to exact routes and Kotlin services.
