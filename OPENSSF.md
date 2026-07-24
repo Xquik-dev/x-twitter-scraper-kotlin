@@ -37,7 +37,7 @@ No OpenSSF-defined ineligibility applies.
 
 The raw report keeps untouched generated-source coverage visible.
 
-Exclusions require the exact Stainless source marker.
+Exclusions require the exact Stainless marker within the source header.
 
 Maintained runtime exceptions remain inside the enforced coverage gate.
 
@@ -55,7 +55,7 @@ The 2026-07-23 evidence run produced these results:
 
 | Evidence | Result |
 | --- | --- |
-| Functional tests | 1,207 tests across 282 suites; 0 failures, errors, or skips |
+| Functional tests | 1,204 tests across 282 suites; 0 failures, errors, or skips |
 | Maintained coverage | 1,120/1,230 lines (91.06%); 406/504 branches (80.56%) |
 | Raw coverage | 34,671/88,473 lines (39.19%); 5,094/24,796 branches (20.54%) |
 | Dynamic analysis | Jazzer completed 3,651,892 runs without findings |
