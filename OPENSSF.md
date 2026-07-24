@@ -4,7 +4,7 @@ This register tracks the Gold assessment for this repository.
 
 The official entry is [bestpractices.dev project 13736][badge].
 
-Assessment date: 2026-07-23.
+Assessment date: 2026-07-24.
 
 ## Eligibility
 
@@ -32,6 +32,7 @@ No OpenSSF-defined ineligibility applies.
 | Dependency review | Dependabot, OSV Scanner, and an explicit license policy |
 | Licensing gate | Pinned REUSE action checks every repository file |
 | Reproducibility | 2 isolated builds compare every public Maven artifact |
+| Release integrity | Maven Central provides OpenPGP signatures for all 15 artifacts |
 | CI | Pull requests and pushes run pinned, least-privilege workflows |
 | Two-factor authentication | The Xquik-dev organization requires 2FA |
 
@@ -59,10 +60,20 @@ The 2026-07-23 evidence run produced these results:
 | Maintained coverage | 1,120/1,230 lines (91.06%); 406/504 branches (80.56%) |
 | Raw coverage | 34,671/88,473 lines (39.19%); 5,094/24,796 branches (20.54%) |
 | Dynamic analysis | Jazzer completed 3,651,892 runs without findings |
-| Repository licensing | REUSE covered 807/807 files |
+| Repository licensing | REUSE covered 808/808 files |
 | Dependency licensing | 105 components; 0 unknown or disallowed licenses |
 | Vulnerability audit | OSV found 0 issues in 7 lockfiles and checksum metadata |
 | Reproducibility | 15 Maven artifacts matched byte-for-byte |
+
+Maven Central published `v0.5.2` from the exact release tag.
+
+All 15 public files verify with this OpenPGP fingerprint:
+
+`6965 E561 C0AC EE32 060A B961 D203 7E41 57E6 2A59`
+
+The root JAR SHA-256 is:
+
+`912278aac18d6e78b0f56e790eb3cdb387d1bf30e7b188086bc86095b9201734`
 
 ## Outstanding Gold Blockers
 
