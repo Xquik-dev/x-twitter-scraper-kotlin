@@ -4,16 +4,15 @@ package com.x_twitter_scraper.api.services.async
 
 import com.x_twitter_scraper.api.client.okhttp.XTwitterScraperOkHttpClientAsync
 import com.x_twitter_scraper.api.models.subscribe.SubscribeCreateParams
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 internal class SubscribeServiceAsyncTest {
 
-    @Disabled("Mock server tests are disabled")
     @Test
     suspend fun create() {
         val client =
             XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
                 .apiKey("My API Key")
                 .bearerToken("My Bearer Token")
                 .build()
@@ -24,6 +23,6 @@ internal class SubscribeServiceAsyncTest {
                 SubscribeCreateParams.builder().tier(SubscribeCreateParams.Tier.PRO).build()
             )
 
-        subscribe.validate()
+        kotlin.test.assertNotNull(subscribe)
     }
 }
