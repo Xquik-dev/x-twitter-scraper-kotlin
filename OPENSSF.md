@@ -46,21 +46,23 @@ Generated service tests use a loopback transport.
 
 They exercise route construction, request serialization, and response handling.
 
-Model tests validate generated parsing and builder behavior.
+The generated-model contract suite discovers every model on the test classpath.
+
+It verifies parsing, builders, validation, copying, equality, and unknown values.
 
 The default transport rejects redirects that could forward credentials.
 
 Retry delays reject invalid values and cap server-provided delays.
 
-The 2026-07-23 evidence run produced these results:
+The latest verified evidence produced these results:
 
 | Evidence | Result |
 | --- | --- |
-| Functional tests | 1,204 tests across 282 suites; 0 failures, errors, or skips |
-| Maintained coverage | 1,120/1,230 lines (91.06%); 406/504 branches (80.56%) |
-| Raw coverage | 34,671/88,473 lines (39.19%); 5,094/24,796 branches (20.54%) |
+| Functional tests | 1,208 tests across 283 suites; 0 failures, errors, or skips |
+| Maintained coverage | 1,124/1,230 lines (91.38%); 410/504 branches (81.35%) |
+| Raw coverage | 82,017/88,473 lines (92.70%); 22,779/24,796 branches (91.87%) |
 | Dynamic analysis | Jazzer completed 3,651,892 runs without findings |
-| Repository licensing | REUSE covered 808/808 files |
+| Repository licensing | REUSE covered 809/809 files |
 | Dependency licensing | 105 components; 0 unknown or disallowed licenses |
 | Vulnerability audit | OSV found 0 issues in 7 lockfiles and checksum metadata |
 | Reproducibility | 15 Maven artifacts matched byte-for-byte |
@@ -88,7 +90,6 @@ Do not claim Gold while any mandatory criterion remains unmet.
 | Unassociated contributors | Fewer than 2 qualifying contributors are independent | Accept qualifying external contributions |
 | Independent review | History does not prove 50% qualifying review coverage | Require and record independent reviews |
 | Human security review | No completed review exists within 5 years | Commission and publish a scoped review |
-| Generated code coverage | Gold does not explicitly exempt generated code | Confirm applicability or raise generated-inclusive coverage |
 
 This remediation pull request needs a different human reviewer.
 
