@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.3 (2026-07-24)
+
+Full Changelog: [v0.5.2...v0.5.3](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.5.2...v0.5.3)
+
 ## 0.5.2 (2026-07-23)
 
 Full Changelog: [v0.5.1...v0.5.2](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.5.1...v0.5.2)
