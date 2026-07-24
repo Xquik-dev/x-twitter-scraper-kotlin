@@ -46,7 +46,7 @@ dependencies {
     testImplementation("org.mockito:mockito-core:5.23.0")
     testImplementation("org.mockito:mockito-junit-jupiter:5.23.0")
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
-    testRuntimeOnly("org.slf4j:slf4j-nop:1.7.36")
+    testRuntimeOnly("org.slf4j:slf4j-nop:2.0.18")
 }
 
 tasks.withType<Test>().configureEach {
