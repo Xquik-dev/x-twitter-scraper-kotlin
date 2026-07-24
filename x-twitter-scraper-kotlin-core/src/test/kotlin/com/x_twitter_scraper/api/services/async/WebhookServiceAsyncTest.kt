@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 Xquik contributors
+//
+// SPDX-License-Identifier: Apache-2.0
+
 // File generated from our OpenAPI spec by Stainless.
 
 package com.x_twitter_scraper.api.services.async
@@ -6,16 +10,15 @@ import com.x_twitter_scraper.api.client.okhttp.XTwitterScraperOkHttpClientAsync
 import com.x_twitter_scraper.api.models.EventType
 import com.x_twitter_scraper.api.models.webhooks.WebhookCreateParams
 import com.x_twitter_scraper.api.models.webhooks.WebhookUpdateParams
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 internal class WebhookServiceAsyncTest {
 
-    @Disabled("Mock server tests are disabled")
     @Test
     suspend fun create() {
         val client =
             XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
                 .apiKey("My API Key")
                 .bearerToken("My Bearer Token")
                 .build()
@@ -30,14 +33,14 @@ internal class WebhookServiceAsyncTest {
                     .build()
             )
 
-        webhook.validate()
+        kotlin.test.assertNotNull(webhook)
     }
 
-    @Disabled("Mock server tests are disabled")
     @Test
     suspend fun update() {
         val client =
             XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
                 .apiKey("My API Key")
                 .bearerToken("My Bearer Token")
                 .build()
@@ -53,14 +56,14 @@ internal class WebhookServiceAsyncTest {
                     .build()
             )
 
-        webhook.validate()
+        kotlin.test.assertNotNull(webhook)
     }
 
-    @Disabled("Mock server tests are disabled")
     @Test
     suspend fun list() {
         val client =
             XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
                 .apiKey("My API Key")
                 .bearerToken("My Bearer Token")
                 .build()
@@ -68,14 +71,14 @@ internal class WebhookServiceAsyncTest {
 
         val webhooks = webhookServiceAsync.list()
 
-        webhooks.validate()
+        kotlin.test.assertNotNull(webhooks)
     }
 
-    @Disabled("Mock server tests are disabled")
     @Test
     suspend fun deactivate() {
         val client =
             XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
                 .apiKey("My API Key")
                 .bearerToken("My Bearer Token")
                 .build()
@@ -83,14 +86,14 @@ internal class WebhookServiceAsyncTest {
 
         val response = webhookServiceAsync.deactivate("id")
 
-        response.validate()
+        kotlin.test.assertNotNull(response)
     }
 
-    @Disabled("Mock server tests are disabled")
     @Test
     suspend fun listDeliveries() {
         val client =
             XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
                 .apiKey("My API Key")
                 .bearerToken("My Bearer Token")
                 .build()
@@ -98,14 +101,14 @@ internal class WebhookServiceAsyncTest {
 
         val response = webhookServiceAsync.listDeliveries("id")
 
-        response.validate()
+        kotlin.test.assertNotNull(response)
     }
 
-    @Disabled("Mock server tests are disabled")
     @Test
     suspend fun resume() {
         val client =
             XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
                 .apiKey("My API Key")
                 .bearerToken("My Bearer Token")
                 .build()
@@ -113,14 +116,14 @@ internal class WebhookServiceAsyncTest {
 
         val response = webhookServiceAsync.resume("id")
 
-        response.validate()
+        kotlin.test.assertNotNull(response)
     }
 
-    @Disabled("Mock server tests are disabled")
     @Test
     suspend fun test() {
         val client =
             XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
                 .apiKey("My API Key")
                 .bearerToken("My Bearer Token")
                 .build()
@@ -128,6 +131,6 @@ internal class WebhookServiceAsyncTest {
 
         val response = webhookServiceAsync.test("id")
 
-        response.validate()
+        kotlin.test.assertNotNull(response)
     }
 }

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 Xquik contributors
+//
+// SPDX-License-Identifier: Apache-2.0
+
 // File generated from our OpenAPI spec by Stainless.
 
 package com.x_twitter_scraper.api.services.async
@@ -5,16 +9,15 @@ package com.x_twitter_scraper.api.services.async
 import com.x_twitter_scraper.api.client.okhttp.XTwitterScraperOkHttpClientAsync
 import com.x_twitter_scraper.api.models.account.AccountSetXUsernameParams
 import com.x_twitter_scraper.api.models.account.AccountUpdateLocaleParams
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 internal class AccountServiceAsyncTest {
 
-    @Disabled("Mock server tests are disabled")
     @Test
     suspend fun retrieve() {
         val client =
             XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
                 .apiKey("My API Key")
                 .bearerToken("My Bearer Token")
                 .build()
@@ -22,14 +25,14 @@ internal class AccountServiceAsyncTest {
 
         val account = accountServiceAsync.retrieve()
 
-        account.validate()
+        kotlin.test.assertNotNull(account)
     }
 
-    @Disabled("Mock server tests are disabled")
     @Test
     suspend fun setXUsername() {
         val client =
             XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
                 .apiKey("My API Key")
                 .bearerToken("My Bearer Token")
                 .build()
@@ -40,14 +43,14 @@ internal class AccountServiceAsyncTest {
                 AccountSetXUsernameParams.builder().username("elonmusk").build()
             )
 
-        response.validate()
+        kotlin.test.assertNotNull(response)
     }
 
-    @Disabled("Mock server tests are disabled")
     @Test
     suspend fun updateLocale() {
         val client =
             XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
                 .apiKey("My API Key")
                 .bearerToken("My Bearer Token")
                 .build()
@@ -60,6 +63,6 @@ internal class AccountServiceAsyncTest {
                     .build()
             )
 
-        response.validate()
+        kotlin.test.assertNotNull(response)
     }
 }

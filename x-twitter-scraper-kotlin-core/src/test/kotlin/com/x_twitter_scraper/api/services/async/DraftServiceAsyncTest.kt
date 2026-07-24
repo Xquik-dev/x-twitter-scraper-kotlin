@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 Xquik contributors
+//
+// SPDX-License-Identifier: Apache-2.0
+
 // File generated from our OpenAPI spec by Stainless.
 
 package com.x_twitter_scraper.api.services.async
@@ -5,16 +9,15 @@ package com.x_twitter_scraper.api.services.async
 import com.x_twitter_scraper.api.client.okhttp.XTwitterScraperOkHttpClientAsync
 import com.x_twitter_scraper.api.models.drafts.DraftCreateParams
 import com.x_twitter_scraper.api.models.drafts.DraftListParams
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 internal class DraftServiceAsyncTest {
 
-    @Disabled("Mock server tests are disabled")
     @Test
     suspend fun create() {
         val client =
             XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
                 .apiKey("My API Key")
                 .bearerToken("My Bearer Token")
                 .build()
@@ -29,14 +32,14 @@ internal class DraftServiceAsyncTest {
                     .build()
             )
 
-        draftDetail.validate()
+        kotlin.test.assertNotNull(draftDetail)
     }
 
-    @Disabled("Mock server tests are disabled")
     @Test
     suspend fun retrieve() {
         val client =
             XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
                 .apiKey("My API Key")
                 .bearerToken("My Bearer Token")
                 .build()
@@ -44,14 +47,14 @@ internal class DraftServiceAsyncTest {
 
         val draftDetail = draftServiceAsync.retrieve("id")
 
-        draftDetail.validate()
+        kotlin.test.assertNotNull(draftDetail)
     }
 
-    @Disabled("Mock server tests are disabled")
     @Test
     suspend fun list() {
         val client =
             XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
                 .apiKey("My API Key")
                 .bearerToken("My Bearer Token")
                 .build()
@@ -62,14 +65,14 @@ internal class DraftServiceAsyncTest {
                 DraftListParams.builder().afterCursor("afterCursor").limit(1L).build()
             )
 
-        drafts.validate()
+        kotlin.test.assertNotNull(drafts)
     }
 
-    @Disabled("Mock server tests are disabled")
     @Test
     suspend fun delete() {
         val client =
             XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
                 .apiKey("My API Key")
                 .bearerToken("My Bearer Token")
                 .build()

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 Xquik contributors
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package com.x_twitter_scraper.api.client.okhttp
 
 import com.x_twitter_scraper.api.core.RequestOptions
@@ -38,14 +42,12 @@ import okio.BufferedSink
 import okio.buffer
 import okio.sink
 
-class OkHttpClient internal constructor(private val okHttpClient: okhttp3.OkHttpClient) :
-    HttpClient {
+class OkHttpClient
+internal constructor(@JvmSynthetic internal val okHttpClient: okhttp3.OkHttpClient) : HttpClient {
 
     override fun execute(request: HttpRequest, requestOptions: RequestOptions): HttpResponse {
-        val call = newCall(request, requestOptions)
-
         return try {
-            call.execute().toHttpResponse()
+            newCall(request, requestOptions).execute().toHttpResponse()
         } catch (e: IOException) {
             throw XTwitterScraperIoException("Request failed", e)
         } finally {
@@ -57,10 +59,8 @@ class OkHttpClient internal constructor(private val okHttpClient: okhttp3.OkHttp
         request: HttpRequest,
         requestOptions: RequestOptions,
     ): HttpResponse {
-        val call = newCall(request, requestOptions)
-
         return try {
-            call.executeAsync().toHttpResponse()
+            newCall(request, requestOptions).executeAsync().toHttpResponse()
         } catch (e: IOException) {
             throw XTwitterScraperIoException("Request failed", e)
         } finally {
@@ -100,7 +100,9 @@ class OkHttpClient internal constructor(private val okHttpClient: okhttp3.OkHttp
                     }
 
                     override fun onResponse(call: Call, response: Response) {
-                        continuation.resumeWith(Result.success(response))
+                        continuation.resume(response) { _, cancelledResponse, _ ->
+                            cancelledResponse.close()
+                        }
                     }
                 }
             )
@@ -175,6 +177,13 @@ class OkHttpClient internal constructor(private val okHttpClient: okhttp3.OkHttp
                 okhttp3.OkHttpClient.Builder()
                     // `RetryingHttpClient` handles retries if the user enabled them.
                     .retryOnConnectionFailure(false)
+                    // Never forward SDK credentials through an automatic redirect.
+                    .followRedirects(false)
+                    .followSslRedirects(false)
+                    // Bound numeric retry delays before OkHttp parses them as 32-bit integers.
+                    .addNetworkInterceptor { chain ->
+                        chain.proceed(chain.request()).withBoundedRetryAfter()
+                    }
                     .connectTimeout(timeout.connect())
                     .readTimeout(timeout.read())
                     .writeTimeout(timeout.write())
@@ -351,8 +360,24 @@ private fun Response.toHttpResponse(): HttpResponse {
     }
 }
 
+private fun Response.withBoundedRetryAfter(): Response {
+    val retryAfter = header("Retry-After")?.trim() ?: return this
+    if (!retryAfter.all(Char::isDigit)) {
+        return this
+    }
+
+    val seconds = retryAfter.toLongOrNull()
+    if (seconds != null && seconds <= MAX_SERVER_RETRY_AFTER_SECONDS) {
+        return this
+    }
+
+    return newBuilder().header("Retry-After", MAX_SERVER_RETRY_AFTER_SECONDS.toString()).build()
+}
+
 private fun okhttp3.Headers.toHeaders(): Headers {
     val headersBuilder = Headers.builder()
     forEach { (name, value) -> headersBuilder.put(name, value) }
     return headersBuilder.build()
 }
+
+private const val MAX_SERVER_RETRY_AFTER_SECONDS: Long = 60
