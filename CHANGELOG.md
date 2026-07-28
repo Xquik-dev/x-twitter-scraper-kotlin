@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.5 (2026-07-28)
+
+Full Changelog: [v0.5.4...v0.5.5](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.5.4...v0.5.5)
+
+### Chores
+
+* **deps:** bump org.apache.logging.log4j:log4j-api ([#20](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/20)) ([1480447](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/14804471b57b6cf7a62d50436b55347a56819877))
+
 ## 0.5.4 (2026-07-24)
 
 Full Changelog: [v0.5.3...v0.5.4](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.5.3...v0.5.4)
