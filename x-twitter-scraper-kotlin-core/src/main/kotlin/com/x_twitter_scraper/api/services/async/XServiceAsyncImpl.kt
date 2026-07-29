@@ -27,6 +27,8 @@ import com.x_twitter_scraper.api.models.x.XGetNotificationsParams
 import com.x_twitter_scraper.api.models.x.XGetNotificationsResponse
 import com.x_twitter_scraper.api.models.x.XGetTrendsParams
 import com.x_twitter_scraper.api.models.x.XGetTrendsResponse
+import com.x_twitter_scraper.api.services.async.x.AccountConnectionAttemptServiceAsync
+import com.x_twitter_scraper.api.services.async.x.AccountConnectionAttemptServiceAsyncImpl
 import com.x_twitter_scraper.api.services.async.x.AccountConnectionChallengeServiceAsync
 import com.x_twitter_scraper.api.services.async.x.AccountConnectionChallengeServiceAsyncImpl
 import com.x_twitter_scraper.api.services.async.x.AccountServiceAsync
@@ -85,6 +87,10 @@ class XServiceAsyncImpl internal constructor(private val clientOptions: ClientOp
         AccountConnectionChallengeServiceAsyncImpl(clientOptions)
     }
 
+    private val accountConnectionAttempts: AccountConnectionAttemptServiceAsync by lazy {
+        AccountConnectionAttemptServiceAsyncImpl(clientOptions)
+    }
+
     private val bookmarks: BookmarkServiceAsync by lazy { BookmarkServiceAsyncImpl(clientOptions) }
 
     private val lists: ListServiceAsync by lazy { ListServiceAsyncImpl(clientOptions) }
@@ -119,6 +125,10 @@ class XServiceAsyncImpl internal constructor(private val clientOptions: ClientOp
     /** Connected X account management */
     override fun accountConnectionChallenges(): AccountConnectionChallengeServiceAsync =
         accountConnectionChallenges
+
+    /** Connected X account management */
+    override fun accountConnectionAttempts(): AccountConnectionAttemptServiceAsync =
+        accountConnectionAttempts
 
     /** Look up, search, and analyze individual tweets */
     override fun bookmarks(): BookmarkServiceAsync = bookmarks
@@ -201,6 +211,11 @@ class XServiceAsyncImpl internal constructor(private val clientOptions: ClientOp
             AccountConnectionChallengeServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val accountConnectionAttempts:
+            AccountConnectionAttemptServiceAsync.WithRawResponse by lazy {
+            AccountConnectionAttemptServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         private val bookmarks: BookmarkServiceAsync.WithRawResponse by lazy {
             BookmarkServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
@@ -239,6 +254,10 @@ class XServiceAsyncImpl internal constructor(private val clientOptions: ClientOp
         /** Connected X account management */
         override fun accountConnectionChallenges():
             AccountConnectionChallengeServiceAsync.WithRawResponse = accountConnectionChallenges
+
+        /** Connected X account management */
+        override fun accountConnectionAttempts():
+            AccountConnectionAttemptServiceAsync.WithRawResponse = accountConnectionAttempts
 
         /** Look up, search, and analyze individual tweets */
         override fun bookmarks(): BookmarkServiceAsync.WithRawResponse = bookmarks

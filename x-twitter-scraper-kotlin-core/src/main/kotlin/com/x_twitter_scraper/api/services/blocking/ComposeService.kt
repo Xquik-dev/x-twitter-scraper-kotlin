@@ -29,9 +29,10 @@ interface ComposeService {
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ComposeService
 
     /**
-     * Run one step of Xquik's three-step writing workflow. Compose returns questions and editorial
-     * rules. Refine returns goal-specific guidance. Score applies deterministic text checks. It
-     * does not predict reach or expose X ranking weights.
+     * Run one step of Xquik's three-step writing workflow. Compose returns questions, editorial
+     * rules, and source-specific Radar recommendations. Refine returns goal-specific guidance.
+     * Score applies deterministic text checks. It does not predict reach or expose X ranking
+     * weights.
      */
     fun create(
         params: ComposeCreateParams,
