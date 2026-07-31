@@ -352,7 +352,6 @@ private constructor(
     class AiGenerated
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
-        private val canEdit: JsonField<Boolean>,
         private val detectionSource: JsonField<String>,
         private val hasAiGeneratedMedia: JsonField<Boolean>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -360,22 +359,13 @@ private constructor(
 
         @JsonCreator
         private constructor(
-            @JsonProperty("canEdit") @ExcludeMissing canEdit: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("detectionSource")
             @ExcludeMissing
             detectionSource: JsonField<String> = JsonMissing.of(),
             @JsonProperty("hasAiGeneratedMedia")
             @ExcludeMissing
             hasAiGeneratedMedia: JsonField<Boolean> = JsonMissing.of(),
-        ) : this(canEdit, detectionSource, hasAiGeneratedMedia, mutableMapOf())
-
-        /**
-         * Whether the disclosure can be edited on X.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
-        fun canEdit(): Boolean? = canEdit.getNullable("canEdit")
+        ) : this(detectionSource, hasAiGeneratedMedia, mutableMapOf())
 
         /**
          * Source of the AI-generated media disclosure.
@@ -392,13 +382,6 @@ private constructor(
          *   (e.g. if the server responded with an unexpected value).
          */
         fun hasAiGeneratedMedia(): Boolean? = hasAiGeneratedMedia.getNullable("hasAiGeneratedMedia")
-
-        /**
-         * Returns the raw JSON value of [canEdit].
-         *
-         * Unlike [canEdit], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("canEdit") @ExcludeMissing fun _canEdit(): JsonField<Boolean> = canEdit
 
         /**
          * Returns the raw JSON value of [detectionSource].
@@ -441,29 +424,15 @@ private constructor(
         /** A builder for [AiGenerated]. */
         class Builder internal constructor() {
 
-            private var canEdit: JsonField<Boolean> = JsonMissing.of()
             private var detectionSource: JsonField<String> = JsonMissing.of()
             private var hasAiGeneratedMedia: JsonField<Boolean> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(aiGenerated: AiGenerated) = apply {
-                canEdit = aiGenerated.canEdit
                 detectionSource = aiGenerated.detectionSource
                 hasAiGeneratedMedia = aiGenerated.hasAiGeneratedMedia
                 additionalProperties = aiGenerated.additionalProperties.toMutableMap()
             }
-
-            /** Whether the disclosure can be edited on X. */
-            fun canEdit(canEdit: Boolean) = canEdit(JsonField.of(canEdit))
-
-            /**
-             * Sets [Builder.canEdit] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.canEdit] with a well-typed [Boolean] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun canEdit(canEdit: JsonField<Boolean>) = apply { this.canEdit = canEdit }
 
             /** Source of the AI-generated media disclosure. */
             fun detectionSource(detectionSource: String) =
@@ -521,7 +490,6 @@ private constructor(
              */
             fun build(): AiGenerated =
                 AiGenerated(
-                    canEdit,
                     detectionSource,
                     hasAiGeneratedMedia,
                     additionalProperties.toMutableMap(),
@@ -544,7 +512,6 @@ private constructor(
                 return@apply
             }
 
-            canEdit()
             detectionSource()
             hasAiGeneratedMedia()
             validated = true
@@ -565,8 +532,7 @@ private constructor(
          * Used for best match union deserialization.
          */
         internal fun validity(): Int =
-            (if (canEdit.asKnown() == null) 0 else 1) +
-                (if (detectionSource.asKnown() == null) 0 else 1) +
+            (if (detectionSource.asKnown() == null) 0 else 1) +
                 (if (hasAiGeneratedMedia.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {
@@ -575,20 +541,19 @@ private constructor(
             }
 
             return other is AiGenerated &&
-                canEdit == other.canEdit &&
                 detectionSource == other.detectionSource &&
                 hasAiGeneratedMedia == other.hasAiGeneratedMedia &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(canEdit, detectionSource, hasAiGeneratedMedia, additionalProperties)
+            Objects.hash(detectionSource, hasAiGeneratedMedia, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "AiGenerated{canEdit=$canEdit, detectionSource=$detectionSource, hasAiGeneratedMedia=$hasAiGeneratedMedia, additionalProperties=$additionalProperties}"
+            "AiGenerated{detectionSource=$detectionSource, hasAiGeneratedMedia=$hasAiGeneratedMedia, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
