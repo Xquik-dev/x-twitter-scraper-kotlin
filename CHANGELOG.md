@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.7.1 (2026-07-31)
+
+Full Changelog: [v0.7.0...v0.7.1](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.7.0...v0.7.1)
+
+### Bug Fixes
+
+* **release:** allow Maven publication propagation ([#31](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/31)) ([fe0a5fb](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/fe0a5fb29b74c97f2d0f89783b3e4d5e496ab191))
+
 ## 0.7.0 (2026-07-31)
 
 Full Changelog: [v0.6.1...v0.7.0](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.6.1...v0.7.0)
