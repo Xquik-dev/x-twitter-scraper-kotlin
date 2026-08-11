@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.1](https://github.com/stainless-sdks/x-twitter-scraper-kotlin/compare/v0.8.0...v0.8.1) (2026-08-11)
+
+### Features
+
+* **api:** api update ([65b66bb](https://github.com/stainless-sdks/x-twitter-scraper-kotlin/commit/65b66bb9d60560b5d3397ede885c9f4995f5dcb5))
+* **api:** clarify idempotent guest checkout replays ([1d1bdd1](https://github.com/stainless-sdks/x-twitter-scraper-kotlin/commit/1d1bdd1f0aef31147b3d33e15d366e1e0f38e0f9))
+
 ## [0.8.0](https://github.com/stainless-sdks/x-twitter-scraper-kotlin/compare/v0.7.3...v0.8.0) (2026-08-11)
 
 
