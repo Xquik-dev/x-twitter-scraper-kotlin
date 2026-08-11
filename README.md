@@ -15,8 +15,8 @@ Use it as a typed X API or Twitter API alternative.
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.xquik.api/x-twitter-scraper-kotlin)](https://central.sonatype.com/artifact/com.xquik.api/x-twitter-scraper-kotlin/0.7.2)
-[![KDocs](https://javadoc.io/badge2/com.xquik.api/x-twitter-scraper-kotlin/0.7.2/javadoc.svg)](https://javadoc.io/doc/com.xquik.api/x-twitter-scraper-kotlin/0.7.2)
+[![Maven Central](https://img.shields.io/maven-central/v/com.xquik.api/x-twitter-scraper-kotlin)](https://central.sonatype.com/artifact/com.xquik.api/x-twitter-scraper-kotlin/0.7.3)
+[![KDocs](https://javadoc.io/badge2/com.xquik.api/x-twitter-scraper-kotlin/0.7.3/javadoc.svg)](https://javadoc.io/doc/com.xquik.api/x-twitter-scraper-kotlin/0.7.3)
 
 <!-- x-release-please-end -->
 
@@ -64,7 +64,7 @@ Use [API reference](https://docs.xquik.com/api-reference/overview) for request c
 Gradle:
 
 ```kotlin
-implementation("com.xquik.api:x-twitter-scraper-kotlin:0.7.2")
+implementation("com.xquik.api:x-twitter-scraper-kotlin:0.7.3")
 ```
 
 Maven:
@@ -73,7 +73,7 @@ Maven:
 <dependency>
   <groupId>com.xquik.api</groupId>
   <artifactId>x-twitter-scraper-kotlin</artifactId>
-  <version>0.7.2</version>
+  <version>0.7.3</version>
 </dependency>
 ```
 
