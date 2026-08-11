@@ -136,15 +136,15 @@ System properties override environment variables.
 ## Search Posts
 
 ```kotlin
-import com.x_twitter_scraper.api.models.PaginatedTweets
 import com.x_twitter_scraper.api.models.x.tweets.TweetSearchParams
+import com.x_twitter_scraper.api.models.x.tweets.TweetSearchResponse
 
 val params = TweetSearchParams.builder()
     .q("from:elonmusk")
     .limit(10L)
     .build()
 
-val result: PaginatedTweets = client.x().tweets().search(params)
+val result: TweetSearchResponse = client.x().tweets().search(params)
 ```
 
 Close the client when your application stops:
@@ -158,7 +158,7 @@ client.close()
 Call `async()` to use suspending methods:
 
 ```kotlin
-val result: PaginatedTweets = client.async().x().tweets().search(params)
+val result: TweetSearchResponse = client.async().x().tweets().search(params)
 ```
 
 ## Configure Retries
