@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.8.0](https://github.com/stainless-sdks/x-twitter-scraper-kotlin/compare/v0.7.3...v0.8.0) (2026-08-11)
+
+
+### Features
+
+* **api:** api update ([35a2e75](https://github.com/stainless-sdks/x-twitter-scraper-kotlin/commit/35a2e75249544679c3d25e77e86397f4340eb2a6))
+* **api:** api update ([ffc259e](https://github.com/stainless-sdks/x-twitter-scraper-kotlin/commit/ffc259e017cf627020fe7f745230bdc3d39e6eaf))
+* **api:** update generated API surface ([82b98aa](https://github.com/stainless-sdks/x-twitter-scraper-kotlin/commit/82b98aaa6bc2b0d669ef267ab49437953bdb873e))
+
 ## 0.7.3 (2026-08-11)
 
 Full Changelog: [v0.7.2...v0.7.3](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.7.2...v0.7.3)
