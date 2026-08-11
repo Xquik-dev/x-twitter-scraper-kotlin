@@ -50,8 +50,8 @@ This library requires Java 8 or later.
 ```kotlin
 import com.x_twitter_scraper.api.client.XTwitterScraperClient
 import com.x_twitter_scraper.api.client.okhttp.XTwitterScraperOkHttpClient
-import com.x_twitter_scraper.api.models.PaginatedTweets
 import com.x_twitter_scraper.api.models.x.tweets.TweetSearchParams
+import com.x_twitter_scraper.api.models.x.tweets.TweetSearchResponse
 
 // Configures using the `xtwitterscraper.apiKey`, `xtwitterscraper.bearerToken` and `xtwitterscraper.baseUrl` system properties
 // Or configures using the `X_TWITTER_SCRAPER_API_KEY`, `X_TWITTER_SCRAPER_BEARER_TOKEN` and `X_TWITTER_SCRAPER_BASE_URL` environment variables
@@ -61,7 +61,7 @@ val params: TweetSearchParams = TweetSearchParams.builder()
     .q("from:elonmusk")
     .limit(10L)
     .build()
-val paginatedTweets: PaginatedTweets = client.x().tweets().search(params)
+val response: TweetSearchResponse = client.x().tweets().search(params)
 ```
 
 ## Client configuration
@@ -136,7 +136,7 @@ The `withOptions()` method does not affect the original client or service.
 
 To send a request to the X Twitter Scraper API, build an instance of some `Params` class and pass it to the corresponding client method. When the response is received, it will be deserialized into an instance of a Kotlin class.
 
-For example, `client.x().tweets().search(...)` should be called with an instance of `TweetSearchParams`, and it will return an instance of `PaginatedTweets`.
+For example, `client.x().tweets().search(...)` should be called with an instance of `TweetSearchParams`, and it will return an instance of `TweetSearchResponse`.
 
 ## Immutability
 
@@ -153,8 +153,8 @@ The default client is synchronous. To switch to asynchronous execution, call the
 ```kotlin
 import com.x_twitter_scraper.api.client.XTwitterScraperClient
 import com.x_twitter_scraper.api.client.okhttp.XTwitterScraperOkHttpClient
-import com.x_twitter_scraper.api.models.PaginatedTweets
 import com.x_twitter_scraper.api.models.x.tweets.TweetSearchParams
+import com.x_twitter_scraper.api.models.x.tweets.TweetSearchResponse
 
 // Configures using the `xtwitterscraper.apiKey`, `xtwitterscraper.bearerToken` and `xtwitterscraper.baseUrl` system properties
 // Or configures using the `X_TWITTER_SCRAPER_API_KEY`, `X_TWITTER_SCRAPER_BEARER_TOKEN` and `X_TWITTER_SCRAPER_BASE_URL` environment variables
@@ -164,7 +164,7 @@ val params: TweetSearchParams = TweetSearchParams.builder()
     .q("from:elonmusk")
     .limit(10L)
     .build()
-val paginatedTweets: PaginatedTweets = client.async().x().tweets().search(params)
+val response: TweetSearchResponse = client.async().x().tweets().search(params)
 ```
 
 Or create an asynchronous client from the beginning:
@@ -172,8 +172,8 @@ Or create an asynchronous client from the beginning:
 ```kotlin
 import com.x_twitter_scraper.api.client.XTwitterScraperClientAsync
 import com.x_twitter_scraper.api.client.okhttp.XTwitterScraperOkHttpClientAsync
-import com.x_twitter_scraper.api.models.PaginatedTweets
 import com.x_twitter_scraper.api.models.x.tweets.TweetSearchParams
+import com.x_twitter_scraper.api.models.x.tweets.TweetSearchResponse
 
 // Configures using the `xtwitterscraper.apiKey`, `xtwitterscraper.bearerToken` and `xtwitterscraper.baseUrl` system properties
 // Or configures using the `X_TWITTER_SCRAPER_API_KEY`, `X_TWITTER_SCRAPER_BEARER_TOKEN` and `X_TWITTER_SCRAPER_BASE_URL` environment variables
@@ -183,7 +183,7 @@ val params: TweetSearchParams = TweetSearchParams.builder()
     .q("from:elonmusk")
     .limit(10L)
     .build()
-val paginatedTweets: PaginatedTweets = client.x().tweets().search(params)
+val response: TweetSearchResponse = client.x().tweets().search(params)
 ```
 
 The asynchronous client supports the same options as the synchronous one, except most methods are [suspending](https://kotlinlang.org/docs/coroutines-guide.html).
@@ -583,7 +583,7 @@ import com.x_twitter_scraper.api.core.JsonNull
 import com.x_twitter_scraper.api.core.JsonNumber
 import com.x_twitter_scraper.api.core.JsonValue
 
-val additionalProperties: Map<String, JsonValue> = client.x().tweets().search(params)._additionalProperties()
+val additionalProperties: Map<String, JsonValue> = client.account().retrieve(params)._additionalProperties()
 val secretPropertyValue: JsonValue = additionalProperties.get("secretProperty")
 
 val result = when (secretPropertyValue) {
@@ -600,7 +600,7 @@ To access a property's raw JSON value, which may be undocumented, call its `_` p
 ```kotlin
 import com.x_twitter_scraper.api.core.JsonField
 
-val field: JsonField<Any> = client.x().tweets().search(params)._field()
+val field: JsonField<Any> = client.account().retrieve(params)._field()
 
 if (field.isMissing()) {
   // The property is absent from the JSON response
@@ -627,17 +627,17 @@ Validating the response is _not_ forwards compatible with new types from the API
 If you would still prefer to check that the response is completely well-typed upfront, then either call `validate()`:
 
 ```kotlin
-import com.x_twitter_scraper.api.models.PaginatedTweets
+import com.x_twitter_scraper.api.models.account.AccountRetrieveResponse
 
-val paginatedTweets: PaginatedTweets = client.x().tweets().search(params).validate()
+val account: AccountRetrieveResponse = client.account().retrieve(params).validate()
 ```
 
 Or configure the method call to validate the response using the `responseValidation` method:
 
 ```kotlin
-import com.x_twitter_scraper.api.models.PaginatedTweets
+import com.x_twitter_scraper.api.models.x.tweets.TweetSearchResponse
 
-val paginatedTweets: PaginatedTweets = client.x().tweets().search(
+val response: TweetSearchResponse = client.x().tweets().search(
   params, RequestOptions.builder().responseValidation(true).build()
 )
 ```

@@ -12,7 +12,21 @@ import java.util.Objects
 class UserRetrieveSearchParams
 private constructor(
     private val q: String,
+    private val bioContains: String?,
     private val cursor: String?,
+    private val hasLocation: Boolean?,
+    private val hasWebsite: Boolean?,
+    private val locationContains: String?,
+    private val maxFollowers: Long?,
+    private val maxFollowing: Long?,
+    private val maxStatuses: Long?,
+    private val minAccountAgeDays: Long?,
+    private val minFollowers: Long?,
+    private val minFollowing: Long?,
+    private val minStatuses: Long?,
+    private val usernameContains: String?,
+    private val verifiedOnly: Boolean?,
+    private val verifiedType: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -20,8 +34,50 @@ private constructor(
     /** User search query */
     fun q(): String = q
 
+    /** Match any comma-separated or line-separated bio term, ignoring case. */
+    fun bioContains(): String? = bioContains
+
     /** Pagination cursor for user search */
     fun cursor(): String? = cursor
+
+    /** Only return profiles with a location. */
+    fun hasLocation(): Boolean? = hasLocation
+
+    /** Only return profiles with a website. */
+    fun hasWebsite(): Boolean? = hasWebsite
+
+    /** Match a location substring, ignoring case. */
+    fun locationContains(): String? = locationContains
+
+    /** Maximum follower count. Missing counts pass this maximum. */
+    fun maxFollowers(): Long? = maxFollowers
+
+    /** Maximum following count. */
+    fun maxFollowing(): Long? = maxFollowing
+
+    /** Maximum post count. maxPosts is also accepted. */
+    fun maxStatuses(): Long? = maxStatuses
+
+    /** Minimum account age in whole days. */
+    fun minAccountAgeDays(): Long? = minAccountAgeDays
+
+    /** Minimum follower count. Filtering happens before billing. */
+    fun minFollowers(): Long? = minFollowers
+
+    /** Minimum following count. */
+    fun minFollowing(): Long? = minFollowing
+
+    /** Minimum post count. minPosts is also accepted. */
+    fun minStatuses(): Long? = minStatuses
+
+    /** Match a username substring, ignoring case. */
+    fun usernameContains(): String? = usernameContains
+
+    /** Only return verified profiles. */
+    fun verifiedOnly(): Boolean? = verifiedOnly
+
+    /** Match the verification type exactly, ignoring case. */
+    fun verifiedType(): String? = verifiedType
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -48,13 +104,41 @@ private constructor(
     class Builder internal constructor() {
 
         private var q: String? = null
+        private var bioContains: String? = null
         private var cursor: String? = null
+        private var hasLocation: Boolean? = null
+        private var hasWebsite: Boolean? = null
+        private var locationContains: String? = null
+        private var maxFollowers: Long? = null
+        private var maxFollowing: Long? = null
+        private var maxStatuses: Long? = null
+        private var minAccountAgeDays: Long? = null
+        private var minFollowers: Long? = null
+        private var minFollowing: Long? = null
+        private var minStatuses: Long? = null
+        private var usernameContains: String? = null
+        private var verifiedOnly: Boolean? = null
+        private var verifiedType: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(userRetrieveSearchParams: UserRetrieveSearchParams) = apply {
             q = userRetrieveSearchParams.q
+            bioContains = userRetrieveSearchParams.bioContains
             cursor = userRetrieveSearchParams.cursor
+            hasLocation = userRetrieveSearchParams.hasLocation
+            hasWebsite = userRetrieveSearchParams.hasWebsite
+            locationContains = userRetrieveSearchParams.locationContains
+            maxFollowers = userRetrieveSearchParams.maxFollowers
+            maxFollowing = userRetrieveSearchParams.maxFollowing
+            maxStatuses = userRetrieveSearchParams.maxStatuses
+            minAccountAgeDays = userRetrieveSearchParams.minAccountAgeDays
+            minFollowers = userRetrieveSearchParams.minFollowers
+            minFollowing = userRetrieveSearchParams.minFollowing
+            minStatuses = userRetrieveSearchParams.minStatuses
+            usernameContains = userRetrieveSearchParams.usernameContains
+            verifiedOnly = userRetrieveSearchParams.verifiedOnly
+            verifiedType = userRetrieveSearchParams.verifiedType
             additionalHeaders = userRetrieveSearchParams.additionalHeaders.toBuilder()
             additionalQueryParams = userRetrieveSearchParams.additionalQueryParams.toBuilder()
         }
@@ -62,8 +146,127 @@ private constructor(
         /** User search query */
         fun q(q: String) = apply { this.q = q }
 
+        /** Match any comma-separated or line-separated bio term, ignoring case. */
+        fun bioContains(bioContains: String?) = apply { this.bioContains = bioContains }
+
         /** Pagination cursor for user search */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
+
+        /** Only return profiles with a location. */
+        fun hasLocation(hasLocation: Boolean?) = apply { this.hasLocation = hasLocation }
+
+        /**
+         * Alias for [Builder.hasLocation].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun hasLocation(hasLocation: Boolean) = hasLocation(hasLocation as Boolean?)
+
+        /** Only return profiles with a website. */
+        fun hasWebsite(hasWebsite: Boolean?) = apply { this.hasWebsite = hasWebsite }
+
+        /**
+         * Alias for [Builder.hasWebsite].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun hasWebsite(hasWebsite: Boolean) = hasWebsite(hasWebsite as Boolean?)
+
+        /** Match a location substring, ignoring case. */
+        fun locationContains(locationContains: String?) = apply {
+            this.locationContains = locationContains
+        }
+
+        /** Maximum follower count. Missing counts pass this maximum. */
+        fun maxFollowers(maxFollowers: Long?) = apply { this.maxFollowers = maxFollowers }
+
+        /**
+         * Alias for [Builder.maxFollowers].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun maxFollowers(maxFollowers: Long) = maxFollowers(maxFollowers as Long?)
+
+        /** Maximum following count. */
+        fun maxFollowing(maxFollowing: Long?) = apply { this.maxFollowing = maxFollowing }
+
+        /**
+         * Alias for [Builder.maxFollowing].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun maxFollowing(maxFollowing: Long) = maxFollowing(maxFollowing as Long?)
+
+        /** Maximum post count. maxPosts is also accepted. */
+        fun maxStatuses(maxStatuses: Long?) = apply { this.maxStatuses = maxStatuses }
+
+        /**
+         * Alias for [Builder.maxStatuses].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun maxStatuses(maxStatuses: Long) = maxStatuses(maxStatuses as Long?)
+
+        /** Minimum account age in whole days. */
+        fun minAccountAgeDays(minAccountAgeDays: Long?) = apply {
+            this.minAccountAgeDays = minAccountAgeDays
+        }
+
+        /**
+         * Alias for [Builder.minAccountAgeDays].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun minAccountAgeDays(minAccountAgeDays: Long) =
+            minAccountAgeDays(minAccountAgeDays as Long?)
+
+        /** Minimum follower count. Filtering happens before billing. */
+        fun minFollowers(minFollowers: Long?) = apply { this.minFollowers = minFollowers }
+
+        /**
+         * Alias for [Builder.minFollowers].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun minFollowers(minFollowers: Long) = minFollowers(minFollowers as Long?)
+
+        /** Minimum following count. */
+        fun minFollowing(minFollowing: Long?) = apply { this.minFollowing = minFollowing }
+
+        /**
+         * Alias for [Builder.minFollowing].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun minFollowing(minFollowing: Long) = minFollowing(minFollowing as Long?)
+
+        /** Minimum post count. minPosts is also accepted. */
+        fun minStatuses(minStatuses: Long?) = apply { this.minStatuses = minStatuses }
+
+        /**
+         * Alias for [Builder.minStatuses].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun minStatuses(minStatuses: Long) = minStatuses(minStatuses as Long?)
+
+        /** Match a username substring, ignoring case. */
+        fun usernameContains(usernameContains: String?) = apply {
+            this.usernameContains = usernameContains
+        }
+
+        /** Only return verified profiles. */
+        fun verifiedOnly(verifiedOnly: Boolean?) = apply { this.verifiedOnly = verifiedOnly }
+
+        /**
+         * Alias for [Builder.verifiedOnly].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun verifiedOnly(verifiedOnly: Boolean) = verifiedOnly(verifiedOnly as Boolean?)
+
+        /** Match the verification type exactly, ignoring case. */
+        fun verifiedType(verifiedType: String?) = apply { this.verifiedType = verifiedType }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -178,7 +381,21 @@ private constructor(
         fun build(): UserRetrieveSearchParams =
             UserRetrieveSearchParams(
                 checkRequired("q", q),
+                bioContains,
                 cursor,
+                hasLocation,
+                hasWebsite,
+                locationContains,
+                maxFollowers,
+                maxFollowing,
+                maxStatuses,
+                minAccountAgeDays,
+                minFollowers,
+                minFollowing,
+                minStatuses,
+                usernameContains,
+                verifiedOnly,
+                verifiedType,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -190,7 +407,21 @@ private constructor(
         QueryParams.builder()
             .apply {
                 put("q", q)
+                bioContains?.let { put("bioContains", it) }
                 cursor?.let { put("cursor", it) }
+                hasLocation?.let { put("hasLocation", it.toString()) }
+                hasWebsite?.let { put("hasWebsite", it.toString()) }
+                locationContains?.let { put("locationContains", it) }
+                maxFollowers?.let { put("maxFollowers", it.toString()) }
+                maxFollowing?.let { put("maxFollowing", it.toString()) }
+                maxStatuses?.let { put("maxStatuses", it.toString()) }
+                minAccountAgeDays?.let { put("minAccountAgeDays", it.toString()) }
+                minFollowers?.let { put("minFollowers", it.toString()) }
+                minFollowing?.let { put("minFollowing", it.toString()) }
+                minStatuses?.let { put("minStatuses", it.toString()) }
+                usernameContains?.let { put("usernameContains", it) }
+                verifiedOnly?.let { put("verifiedOnly", it.toString()) }
+                verifiedType?.let { put("verifiedType", it) }
                 putAll(additionalQueryParams)
             }
             .build()
@@ -202,13 +433,47 @@ private constructor(
 
         return other is UserRetrieveSearchParams &&
             q == other.q &&
+            bioContains == other.bioContains &&
             cursor == other.cursor &&
+            hasLocation == other.hasLocation &&
+            hasWebsite == other.hasWebsite &&
+            locationContains == other.locationContains &&
+            maxFollowers == other.maxFollowers &&
+            maxFollowing == other.maxFollowing &&
+            maxStatuses == other.maxStatuses &&
+            minAccountAgeDays == other.minAccountAgeDays &&
+            minFollowers == other.minFollowers &&
+            minFollowing == other.minFollowing &&
+            minStatuses == other.minStatuses &&
+            usernameContains == other.usernameContains &&
+            verifiedOnly == other.verifiedOnly &&
+            verifiedType == other.verifiedType &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = Objects.hash(q, cursor, additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int =
+        Objects.hash(
+            q,
+            bioContains,
+            cursor,
+            hasLocation,
+            hasWebsite,
+            locationContains,
+            maxFollowers,
+            maxFollowing,
+            maxStatuses,
+            minAccountAgeDays,
+            minFollowers,
+            minFollowing,
+            minStatuses,
+            usernameContains,
+            verifiedOnly,
+            verifiedType,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
-        "UserRetrieveSearchParams{q=$q, cursor=$cursor, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "UserRetrieveSearchParams{q=$q, bioContains=$bioContains, cursor=$cursor, hasLocation=$hasLocation, hasWebsite=$hasWebsite, locationContains=$locationContains, maxFollowers=$maxFollowers, maxFollowing=$maxFollowing, maxStatuses=$maxStatuses, minAccountAgeDays=$minAccountAgeDays, minFollowers=$minFollowers, minFollowing=$minFollowing, minStatuses=$minStatuses, usernameContains=$usernameContains, verifiedOnly=$verifiedOnly, verifiedType=$verifiedType, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

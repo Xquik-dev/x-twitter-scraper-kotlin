@@ -600,6 +600,8 @@ private constructor(
 
                 val MONITOR_ALREADY_EXISTS = of("monitor_already_exists")
 
+                val MONITOR_PROFILE_UNAVAILABLE = of("monitor_profile_unavailable")
+
                 val NO_MEDIA = of("no_media")
 
                 val NO_CREDITS = of("no_credits")
@@ -634,6 +636,10 @@ private constructor(
 
                 val CONNECTION_CHALLENGE_INACTIVE = of("connection_challenge_inactive")
 
+                val COVERAGE_CURSOR_GONE = of("coverage_cursor_gone")
+
+                val COVERAGE_CURSOR_UNAVAILABLE = of("coverage_cursor_unavailable")
+
                 val DRAFT_NOT_FOUND = of("draft_not_found")
 
                 val FAVORITERS_UNAVAILABLE = of("favoriters_unavailable")
@@ -651,6 +657,8 @@ private constructor(
                 val IDEMPOTENCY_KEY_CONFLICT = of("idempotency_key_conflict")
 
                 val INVALID_COMMUNITY_ID = of("invalid_community_id")
+
+                val INVALID_COVERAGE_CURSOR = of("invalid_coverage_cursor")
 
                 val INVALID_IDEMPOTENCY_KEY = of("invalid_idempotency_key")
 
@@ -776,6 +784,7 @@ private constructor(
                 MISSING_PARAMS,
                 MISSING_QUERY,
                 MONITOR_ALREADY_EXISTS,
+                MONITOR_PROFILE_UNAVAILABLE,
                 NO_MEDIA,
                 NO_CREDITS,
                 NO_SUBSCRIPTION,
@@ -793,6 +802,8 @@ private constructor(
                 CHECKOUT_UNAVAILABLE,
                 CONNECTION_CHALLENGE_EXPIRED,
                 CONNECTION_CHALLENGE_INACTIVE,
+                COVERAGE_CURSOR_GONE,
+                COVERAGE_CURSOR_UNAVAILABLE,
                 DRAFT_NOT_FOUND,
                 FAVORITERS_UNAVAILABLE,
                 FORBIDDEN,
@@ -802,6 +813,7 @@ private constructor(
                 IDEMPOTENCY_CONFLICT,
                 IDEMPOTENCY_KEY_CONFLICT,
                 INVALID_COMMUNITY_ID,
+                INVALID_COVERAGE_CURSOR,
                 INVALID_IDEMPOTENCY_KEY,
                 INVALID_LIST_ID,
                 INVALID_PAYMENT_AMOUNT,
@@ -887,6 +899,7 @@ private constructor(
                 MISSING_PARAMS,
                 MISSING_QUERY,
                 MONITOR_ALREADY_EXISTS,
+                MONITOR_PROFILE_UNAVAILABLE,
                 NO_MEDIA,
                 NO_CREDITS,
                 NO_SUBSCRIPTION,
@@ -904,6 +917,8 @@ private constructor(
                 CHECKOUT_UNAVAILABLE,
                 CONNECTION_CHALLENGE_EXPIRED,
                 CONNECTION_CHALLENGE_INACTIVE,
+                COVERAGE_CURSOR_GONE,
+                COVERAGE_CURSOR_UNAVAILABLE,
                 DRAFT_NOT_FOUND,
                 FAVORITERS_UNAVAILABLE,
                 FORBIDDEN,
@@ -913,6 +928,7 @@ private constructor(
                 IDEMPOTENCY_CONFLICT,
                 IDEMPOTENCY_KEY_CONFLICT,
                 INVALID_COMMUNITY_ID,
+                INVALID_COVERAGE_CURSOR,
                 INVALID_IDEMPOTENCY_KEY,
                 INVALID_LIST_ID,
                 INVALID_PAYMENT_AMOUNT,
@@ -1002,6 +1018,7 @@ private constructor(
                     MISSING_PARAMS -> Value.MISSING_PARAMS
                     MISSING_QUERY -> Value.MISSING_QUERY
                     MONITOR_ALREADY_EXISTS -> Value.MONITOR_ALREADY_EXISTS
+                    MONITOR_PROFILE_UNAVAILABLE -> Value.MONITOR_PROFILE_UNAVAILABLE
                     NO_MEDIA -> Value.NO_MEDIA
                     NO_CREDITS -> Value.NO_CREDITS
                     NO_SUBSCRIPTION -> Value.NO_SUBSCRIPTION
@@ -1019,6 +1036,8 @@ private constructor(
                     CHECKOUT_UNAVAILABLE -> Value.CHECKOUT_UNAVAILABLE
                     CONNECTION_CHALLENGE_EXPIRED -> Value.CONNECTION_CHALLENGE_EXPIRED
                     CONNECTION_CHALLENGE_INACTIVE -> Value.CONNECTION_CHALLENGE_INACTIVE
+                    COVERAGE_CURSOR_GONE -> Value.COVERAGE_CURSOR_GONE
+                    COVERAGE_CURSOR_UNAVAILABLE -> Value.COVERAGE_CURSOR_UNAVAILABLE
                     DRAFT_NOT_FOUND -> Value.DRAFT_NOT_FOUND
                     FAVORITERS_UNAVAILABLE -> Value.FAVORITERS_UNAVAILABLE
                     FORBIDDEN -> Value.FORBIDDEN
@@ -1028,6 +1047,7 @@ private constructor(
                     IDEMPOTENCY_CONFLICT -> Value.IDEMPOTENCY_CONFLICT
                     IDEMPOTENCY_KEY_CONFLICT -> Value.IDEMPOTENCY_KEY_CONFLICT
                     INVALID_COMMUNITY_ID -> Value.INVALID_COMMUNITY_ID
+                    INVALID_COVERAGE_CURSOR -> Value.INVALID_COVERAGE_CURSOR
                     INVALID_IDEMPOTENCY_KEY -> Value.INVALID_IDEMPOTENCY_KEY
                     INVALID_LIST_ID -> Value.INVALID_LIST_ID
                     INVALID_PAYMENT_AMOUNT -> Value.INVALID_PAYMENT_AMOUNT
@@ -1115,6 +1135,7 @@ private constructor(
                     MISSING_PARAMS -> Known.MISSING_PARAMS
                     MISSING_QUERY -> Known.MISSING_QUERY
                     MONITOR_ALREADY_EXISTS -> Known.MONITOR_ALREADY_EXISTS
+                    MONITOR_PROFILE_UNAVAILABLE -> Known.MONITOR_PROFILE_UNAVAILABLE
                     NO_MEDIA -> Known.NO_MEDIA
                     NO_CREDITS -> Known.NO_CREDITS
                     NO_SUBSCRIPTION -> Known.NO_SUBSCRIPTION
@@ -1132,6 +1153,8 @@ private constructor(
                     CHECKOUT_UNAVAILABLE -> Known.CHECKOUT_UNAVAILABLE
                     CONNECTION_CHALLENGE_EXPIRED -> Known.CONNECTION_CHALLENGE_EXPIRED
                     CONNECTION_CHALLENGE_INACTIVE -> Known.CONNECTION_CHALLENGE_INACTIVE
+                    COVERAGE_CURSOR_GONE -> Known.COVERAGE_CURSOR_GONE
+                    COVERAGE_CURSOR_UNAVAILABLE -> Known.COVERAGE_CURSOR_UNAVAILABLE
                     DRAFT_NOT_FOUND -> Known.DRAFT_NOT_FOUND
                     FAVORITERS_UNAVAILABLE -> Known.FAVORITERS_UNAVAILABLE
                     FORBIDDEN -> Known.FORBIDDEN
@@ -1141,6 +1164,7 @@ private constructor(
                     IDEMPOTENCY_CONFLICT -> Known.IDEMPOTENCY_CONFLICT
                     IDEMPOTENCY_KEY_CONFLICT -> Known.IDEMPOTENCY_KEY_CONFLICT
                     INVALID_COMMUNITY_ID -> Known.INVALID_COMMUNITY_ID
+                    INVALID_COVERAGE_CURSOR -> Known.INVALID_COVERAGE_CURSOR
                     INVALID_IDEMPOTENCY_KEY -> Known.INVALID_IDEMPOTENCY_KEY
                     INVALID_LIST_ID -> Known.INVALID_LIST_ID
                     INVALID_PAYMENT_AMOUNT -> Known.INVALID_PAYMENT_AMOUNT
@@ -1545,6 +1569,8 @@ private constructor(
 
                     val MONITOR_ALREADY_EXISTS = of("monitor_already_exists")
 
+                    val MONITOR_PROFILE_UNAVAILABLE = of("monitor_profile_unavailable")
+
                     val NO_MEDIA = of("no_media")
 
                     val NO_CREDITS = of("no_credits")
@@ -1579,6 +1605,10 @@ private constructor(
 
                     val CONNECTION_CHALLENGE_INACTIVE = of("connection_challenge_inactive")
 
+                    val COVERAGE_CURSOR_GONE = of("coverage_cursor_gone")
+
+                    val COVERAGE_CURSOR_UNAVAILABLE = of("coverage_cursor_unavailable")
+
                     val DRAFT_NOT_FOUND = of("draft_not_found")
 
                     val FAVORITERS_UNAVAILABLE = of("favoriters_unavailable")
@@ -1596,6 +1626,8 @@ private constructor(
                     val IDEMPOTENCY_KEY_CONFLICT = of("idempotency_key_conflict")
 
                     val INVALID_COMMUNITY_ID = of("invalid_community_id")
+
+                    val INVALID_COVERAGE_CURSOR = of("invalid_coverage_cursor")
 
                     val INVALID_IDEMPOTENCY_KEY = of("invalid_idempotency_key")
 
@@ -1721,6 +1753,7 @@ private constructor(
                     MISSING_PARAMS,
                     MISSING_QUERY,
                     MONITOR_ALREADY_EXISTS,
+                    MONITOR_PROFILE_UNAVAILABLE,
                     NO_MEDIA,
                     NO_CREDITS,
                     NO_SUBSCRIPTION,
@@ -1738,6 +1771,8 @@ private constructor(
                     CHECKOUT_UNAVAILABLE,
                     CONNECTION_CHALLENGE_EXPIRED,
                     CONNECTION_CHALLENGE_INACTIVE,
+                    COVERAGE_CURSOR_GONE,
+                    COVERAGE_CURSOR_UNAVAILABLE,
                     DRAFT_NOT_FOUND,
                     FAVORITERS_UNAVAILABLE,
                     FORBIDDEN,
@@ -1747,6 +1782,7 @@ private constructor(
                     IDEMPOTENCY_CONFLICT,
                     IDEMPOTENCY_KEY_CONFLICT,
                     INVALID_COMMUNITY_ID,
+                    INVALID_COVERAGE_CURSOR,
                     INVALID_IDEMPOTENCY_KEY,
                     INVALID_LIST_ID,
                     INVALID_PAYMENT_AMOUNT,
@@ -1832,6 +1868,7 @@ private constructor(
                     MISSING_PARAMS,
                     MISSING_QUERY,
                     MONITOR_ALREADY_EXISTS,
+                    MONITOR_PROFILE_UNAVAILABLE,
                     NO_MEDIA,
                     NO_CREDITS,
                     NO_SUBSCRIPTION,
@@ -1849,6 +1886,8 @@ private constructor(
                     CHECKOUT_UNAVAILABLE,
                     CONNECTION_CHALLENGE_EXPIRED,
                     CONNECTION_CHALLENGE_INACTIVE,
+                    COVERAGE_CURSOR_GONE,
+                    COVERAGE_CURSOR_UNAVAILABLE,
                     DRAFT_NOT_FOUND,
                     FAVORITERS_UNAVAILABLE,
                     FORBIDDEN,
@@ -1858,6 +1897,7 @@ private constructor(
                     IDEMPOTENCY_CONFLICT,
                     IDEMPOTENCY_KEY_CONFLICT,
                     INVALID_COMMUNITY_ID,
+                    INVALID_COVERAGE_CURSOR,
                     INVALID_IDEMPOTENCY_KEY,
                     INVALID_LIST_ID,
                     INVALID_PAYMENT_AMOUNT,
@@ -1946,6 +1986,7 @@ private constructor(
                         MISSING_PARAMS -> Value.MISSING_PARAMS
                         MISSING_QUERY -> Value.MISSING_QUERY
                         MONITOR_ALREADY_EXISTS -> Value.MONITOR_ALREADY_EXISTS
+                        MONITOR_PROFILE_UNAVAILABLE -> Value.MONITOR_PROFILE_UNAVAILABLE
                         NO_MEDIA -> Value.NO_MEDIA
                         NO_CREDITS -> Value.NO_CREDITS
                         NO_SUBSCRIPTION -> Value.NO_SUBSCRIPTION
@@ -1963,6 +2004,8 @@ private constructor(
                         CHECKOUT_UNAVAILABLE -> Value.CHECKOUT_UNAVAILABLE
                         CONNECTION_CHALLENGE_EXPIRED -> Value.CONNECTION_CHALLENGE_EXPIRED
                         CONNECTION_CHALLENGE_INACTIVE -> Value.CONNECTION_CHALLENGE_INACTIVE
+                        COVERAGE_CURSOR_GONE -> Value.COVERAGE_CURSOR_GONE
+                        COVERAGE_CURSOR_UNAVAILABLE -> Value.COVERAGE_CURSOR_UNAVAILABLE
                         DRAFT_NOT_FOUND -> Value.DRAFT_NOT_FOUND
                         FAVORITERS_UNAVAILABLE -> Value.FAVORITERS_UNAVAILABLE
                         FORBIDDEN -> Value.FORBIDDEN
@@ -1972,6 +2015,7 @@ private constructor(
                         IDEMPOTENCY_CONFLICT -> Value.IDEMPOTENCY_CONFLICT
                         IDEMPOTENCY_KEY_CONFLICT -> Value.IDEMPOTENCY_KEY_CONFLICT
                         INVALID_COMMUNITY_ID -> Value.INVALID_COMMUNITY_ID
+                        INVALID_COVERAGE_CURSOR -> Value.INVALID_COVERAGE_CURSOR
                         INVALID_IDEMPOTENCY_KEY -> Value.INVALID_IDEMPOTENCY_KEY
                         INVALID_LIST_ID -> Value.INVALID_LIST_ID
                         INVALID_PAYMENT_AMOUNT -> Value.INVALID_PAYMENT_AMOUNT
@@ -2059,6 +2103,7 @@ private constructor(
                         MISSING_PARAMS -> Known.MISSING_PARAMS
                         MISSING_QUERY -> Known.MISSING_QUERY
                         MONITOR_ALREADY_EXISTS -> Known.MONITOR_ALREADY_EXISTS
+                        MONITOR_PROFILE_UNAVAILABLE -> Known.MONITOR_PROFILE_UNAVAILABLE
                         NO_MEDIA -> Known.NO_MEDIA
                         NO_CREDITS -> Known.NO_CREDITS
                         NO_SUBSCRIPTION -> Known.NO_SUBSCRIPTION
@@ -2076,6 +2121,8 @@ private constructor(
                         CHECKOUT_UNAVAILABLE -> Known.CHECKOUT_UNAVAILABLE
                         CONNECTION_CHALLENGE_EXPIRED -> Known.CONNECTION_CHALLENGE_EXPIRED
                         CONNECTION_CHALLENGE_INACTIVE -> Known.CONNECTION_CHALLENGE_INACTIVE
+                        COVERAGE_CURSOR_GONE -> Known.COVERAGE_CURSOR_GONE
+                        COVERAGE_CURSOR_UNAVAILABLE -> Known.COVERAGE_CURSOR_UNAVAILABLE
                         DRAFT_NOT_FOUND -> Known.DRAFT_NOT_FOUND
                         FAVORITERS_UNAVAILABLE -> Known.FAVORITERS_UNAVAILABLE
                         FORBIDDEN -> Known.FORBIDDEN
@@ -2085,6 +2132,7 @@ private constructor(
                         IDEMPOTENCY_CONFLICT -> Known.IDEMPOTENCY_CONFLICT
                         IDEMPOTENCY_KEY_CONFLICT -> Known.IDEMPOTENCY_KEY_CONFLICT
                         INVALID_COMMUNITY_ID -> Known.INVALID_COMMUNITY_ID
+                        INVALID_COVERAGE_CURSOR -> Known.INVALID_COVERAGE_CURSOR
                         INVALID_IDEMPOTENCY_KEY -> Known.INVALID_IDEMPOTENCY_KEY
                         INVALID_LIST_ID -> Known.INVALID_LIST_ID
                         INVALID_PAYMENT_AMOUNT -> Known.INVALID_PAYMENT_AMOUNT

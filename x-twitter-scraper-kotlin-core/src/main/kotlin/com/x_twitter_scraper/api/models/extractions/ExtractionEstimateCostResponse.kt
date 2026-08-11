@@ -380,6 +380,8 @@ private constructor(
 
             val FOLLOWING = of("following")
 
+            val COLLECTION = of("collection")
+
             val PAGINATION_CAP = of("paginationCap")
 
             val POSTS = of("posts")
@@ -401,6 +403,7 @@ private constructor(
         enum class Known {
             FOLLOWERS,
             FOLLOWING,
+            COLLECTION,
             PAGINATION_CAP,
             POSTS,
             QUOTE_COUNT,
@@ -422,6 +425,7 @@ private constructor(
         enum class Value {
             FOLLOWERS,
             FOLLOWING,
+            COLLECTION,
             PAGINATION_CAP,
             POSTS,
             QUOTE_COUNT,
@@ -444,6 +448,7 @@ private constructor(
             when (this) {
                 FOLLOWERS -> Value.FOLLOWERS
                 FOLLOWING -> Value.FOLLOWING
+                COLLECTION -> Value.COLLECTION
                 PAGINATION_CAP -> Value.PAGINATION_CAP
                 POSTS -> Value.POSTS
                 QUOTE_COUNT -> Value.QUOTE_COUNT
@@ -467,6 +472,7 @@ private constructor(
             when (this) {
                 FOLLOWERS -> Known.FOLLOWERS
                 FOLLOWING -> Known.FOLLOWING
+                COLLECTION -> Known.COLLECTION
                 PAGINATION_CAP -> Known.PAGINATION_CAP
                 POSTS -> Known.POSTS
                 QUOTE_COUNT -> Known.QUOTE_COUNT

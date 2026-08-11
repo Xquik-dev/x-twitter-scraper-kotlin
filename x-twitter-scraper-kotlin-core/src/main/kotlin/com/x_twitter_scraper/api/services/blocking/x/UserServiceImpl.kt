@@ -24,8 +24,10 @@ import com.x_twitter_scraper.api.models.x.users.UserRemoveFollowerResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveBatchParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveBatchResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveFollowersParams
+import com.x_twitter_scraper.api.models.x.users.UserRetrieveFollowersResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveFollowersYouKnowParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveFollowingParams
+import com.x_twitter_scraper.api.models.x.users.UserRetrieveFollowingResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveLikesParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveMediaParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveMentionsParams
@@ -34,6 +36,7 @@ import com.x_twitter_scraper.api.models.x.users.UserRetrieveRepliesParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveSearchParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveTweetsParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveVerifiedFollowersParams
+import com.x_twitter_scraper.api.models.x.users.UserRetrieveVerifiedFollowersResponse
 import com.x_twitter_scraper.api.services.blocking.x.users.FollowService
 import com.x_twitter_scraper.api.services.blocking.x.users.FollowServiceImpl
 
@@ -74,7 +77,7 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
     override fun retrieveFollowers(
         params: UserRetrieveFollowersParams,
         requestOptions: RequestOptions,
-    ): PaginatedUsers =
+    ): UserRetrieveFollowersResponse =
         // get /x/users/{id}/followers
         withRawResponse().retrieveFollowers(params, requestOptions).parse()
 
@@ -88,7 +91,7 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
     override fun retrieveFollowing(
         params: UserRetrieveFollowingParams,
         requestOptions: RequestOptions,
-    ): PaginatedUsers =
+    ): UserRetrieveFollowingResponse =
         // get /x/users/{id}/following
         withRawResponse().retrieveFollowing(params, requestOptions).parse()
 
@@ -137,7 +140,7 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
     override fun retrieveVerifiedFollowers(
         params: UserRetrieveVerifiedFollowersParams,
         requestOptions: RequestOptions,
-    ): PaginatedUsers =
+    ): UserRetrieveVerifiedFollowersResponse =
         // get /x/users/{id}/verified-followers
         withRawResponse().retrieveVerifiedFollowers(params, requestOptions).parse()
 
@@ -247,13 +250,13 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             }
         }
 
-        private val retrieveFollowersHandler: Handler<PaginatedUsers> =
-            jsonHandler<PaginatedUsers>(clientOptions.jsonMapper)
+        private val retrieveFollowersHandler: Handler<UserRetrieveFollowersResponse> =
+            jsonHandler<UserRetrieveFollowersResponse>(clientOptions.jsonMapper)
 
         override fun retrieveFollowers(
             params: UserRetrieveFollowersParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<PaginatedUsers> {
+        ): HttpResponseFor<UserRetrieveFollowersResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id())
@@ -307,13 +310,13 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             }
         }
 
-        private val retrieveFollowingHandler: Handler<PaginatedUsers> =
-            jsonHandler<PaginatedUsers>(clientOptions.jsonMapper)
+        private val retrieveFollowingHandler: Handler<UserRetrieveFollowingResponse> =
+            jsonHandler<UserRetrieveFollowingResponse>(clientOptions.jsonMapper)
 
         override fun retrieveFollowing(
             params: UserRetrieveFollowingParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<PaginatedUsers> {
+        ): HttpResponseFor<UserRetrieveFollowingResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id())
@@ -514,13 +517,14 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             }
         }
 
-        private val retrieveVerifiedFollowersHandler: Handler<PaginatedUsers> =
-            jsonHandler<PaginatedUsers>(clientOptions.jsonMapper)
+        private val retrieveVerifiedFollowersHandler:
+            Handler<UserRetrieveVerifiedFollowersResponse> =
+            jsonHandler<UserRetrieveVerifiedFollowersResponse>(clientOptions.jsonMapper)
 
         override fun retrieveVerifiedFollowers(
             params: UserRetrieveVerifiedFollowersParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<PaginatedUsers> {
+        ): HttpResponseFor<UserRetrieveVerifiedFollowersResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id())

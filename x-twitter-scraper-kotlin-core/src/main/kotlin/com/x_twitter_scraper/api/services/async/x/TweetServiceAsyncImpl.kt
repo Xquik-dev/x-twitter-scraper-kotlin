@@ -32,6 +32,7 @@ import com.x_twitter_scraper.api.models.x.tweets.TweetListParams
 import com.x_twitter_scraper.api.models.x.tweets.TweetRetrieveParams
 import com.x_twitter_scraper.api.models.x.tweets.TweetRetrieveResponse
 import com.x_twitter_scraper.api.models.x.tweets.TweetSearchParams
+import com.x_twitter_scraper.api.models.x.tweets.TweetSearchResponse
 import com.x_twitter_scraper.api.services.async.x.tweets.LikeServiceAsync
 import com.x_twitter_scraper.api.services.async.x.tweets.LikeServiceAsyncImpl
 import com.x_twitter_scraper.api.services.async.x.tweets.RetweetServiceAsync
@@ -125,7 +126,7 @@ class TweetServiceAsyncImpl internal constructor(private val clientOptions: Clie
     override suspend fun search(
         params: TweetSearchParams,
         requestOptions: RequestOptions,
-    ): PaginatedTweets =
+    ): TweetSearchResponse =
         // get /x/tweets/search
         withRawResponse().search(params, requestOptions).parse()
 
@@ -422,13 +423,13 @@ class TweetServiceAsyncImpl internal constructor(private val clientOptions: Clie
             }
         }
 
-        private val searchHandler: Handler<PaginatedTweets> =
-            jsonHandler<PaginatedTweets>(clientOptions.jsonMapper)
+        private val searchHandler: Handler<TweetSearchResponse> =
+            jsonHandler<TweetSearchResponse>(clientOptions.jsonMapper)
 
         override suspend fun search(
             params: TweetSearchParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<PaginatedTweets> {
+        ): HttpResponseFor<TweetSearchResponse> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
