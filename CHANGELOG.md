@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.7.2 (2026-08-11)
+
+Full Changelog: [v0.7.1...v0.7.2](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.7.1...v0.7.2)
+
+### Chores
+
+* **deps:** bump github/codeql-action/init from 4.37.2 to 4.37.6 ([#33](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/33)) ([4c00b2c](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/4c00b2cee117eecb8a21d4c81cc0c12164fc015b))
+* **deps:** bump github/codeql-action/upload-sarif ([#36](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/36)) ([ccc1714](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/ccc1714034958c4346cfb2bc2fe94719a0966f02))
+
 ## 0.7.1 (2026-07-31)
 
 Full Changelog: [v0.7.0...v0.7.1](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.7.0...v0.7.1)
