@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.7.3 (2026-08-11)
+
+Full Changelog: [v0.7.2...v0.7.3](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.7.2...v0.7.3)
+
+### Chores
+
+* **deps:** bump actions/setup-java from 5.6.0 to 5.7.0 ([#44](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/44)) ([0833e42](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/0833e42ff9d11e74f6b28e200551753381f9d05d))
+
 ## 0.7.2 (2026-08-11)
 
 Full Changelog: [v0.7.1...v0.7.2](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.7.1...v0.7.2)
