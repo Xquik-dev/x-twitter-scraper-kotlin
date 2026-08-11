@@ -20,7 +20,7 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** Cursor for keyset pagination from prior response next_cursor */
+    /** Previous nextCursor. */
     fun cursor(): String? = cursor
 
     /**
@@ -61,7 +61,7 @@ private constructor(
             additionalQueryParams = drawListParams.additionalQueryParams.toBuilder()
         }
 
-        /** Cursor for keyset pagination from prior response next_cursor */
+        /** Previous nextCursor. */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
         /**

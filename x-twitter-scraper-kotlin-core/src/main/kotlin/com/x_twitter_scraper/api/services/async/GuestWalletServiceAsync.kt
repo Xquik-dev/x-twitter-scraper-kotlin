@@ -33,10 +33,8 @@ interface GuestWalletServiceAsync {
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): GuestWalletServiceAsync
 
     /**
-     * Create a one-use Stripe-hosted checkout after the user explicitly confirms a $10-$250 USD
-     * amount. This request creates no charge by itself. The user opens checkout_url on Stripe. This
-     * endpoint returns the paid-read API key without requiring an Xquik account, email, dashboard,
-     * or Xquik web page. An idempotent replay returns the same key.
+     * Create a one-use hosted checkout after the user confirms $10-$250 USD. The request creates no
+     * charge. It returns a paid-read API key without an Xquik account. Replays return the same key.
      */
     suspend fun create(
         params: GuestWalletCreateParams,
@@ -44,9 +42,9 @@ interface GuestWalletServiceAsync {
     ): GuestWalletCreateResponse
 
     /**
-     * Poll after Stripe payment. Use usable to decide whether paid reads can run. An active wallet
-     * can remain usable while a top-up is pending. A new wallet becomes usable only after verified
-     * webhook fulfillment. Send the guest key as Authorization: Bearer.
+     * Poll after payment. Use usable to decide whether paid reads can run. An active wallet can
+     * remain usable while a top-up is pending. A new wallet becomes usable only after payment is
+     * verified. Send the guest key as Authorization: Bearer.
      */
     suspend fun retrieveStatus(
         params: GuestWalletRetrieveStatusParams = GuestWalletRetrieveStatusParams.none(),
@@ -58,9 +56,9 @@ interface GuestWalletServiceAsync {
         retrieveStatus(GuestWalletRetrieveStatusParams.none(), requestOptions)
 
     /**
-     * Create a one-use Stripe-hosted checkout for an existing paid-read guest key after the user
-     * explicitly confirms a $10-$250 USD amount. The key remains the same. This request creates no
-     * charge by itself and never redirects through an Xquik web page.
+     * Create a one-use hosted checkout after the user confirms a $10-$250 USD amount for an
+     * existing paid-read guest key. The key remains the same. This request creates no charge and
+     * never redirects through Xquik.
      */
     suspend fun topup(
         params: GuestWalletTopupParams,
