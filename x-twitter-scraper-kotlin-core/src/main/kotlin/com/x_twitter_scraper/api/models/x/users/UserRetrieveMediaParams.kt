@@ -134,7 +134,7 @@ private constructor(
     /** Minimum bookmark count threshold. */
     fun minBookmarks(): Long? = minBookmarks
 
-    /** Minimum likes threshold. */
+    /** Minimum likes threshold. minLikes is also accepted. */
     fun minFaves(): Long? = minFaves
 
     /** Minimum quote count threshold. */
@@ -447,7 +447,7 @@ private constructor(
          */
         fun minBookmarks(minBookmarks: Long) = minBookmarks(minBookmarks as Long?)
 
-        /** Minimum likes threshold. */
+        /** Minimum likes threshold. minLikes is also accepted. */
         fun minFaves(minFaves: Long?) = apply { this.minFaves = minFaves }
 
         /**

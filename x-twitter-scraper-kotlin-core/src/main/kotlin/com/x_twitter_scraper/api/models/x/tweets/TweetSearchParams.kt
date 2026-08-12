@@ -13,7 +13,10 @@ import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
 import java.time.LocalDate
 import java.util.Objects
 
-/** No-mode search maximizes coverage. */
+/**
+ * No-mode search maximizes coverage. New cursorless `Latest` sessions return rows newest-first
+ * across cursor pages. Existing cursors preserve their established ordering.
+ */
 class TweetSearchParams
 private constructor(
     private val q: String,
@@ -165,7 +168,7 @@ private constructor(
     /** Minimum bookmark count threshold. */
     fun minBookmarks(): Long? = minBookmarks
 
-    /** Minimum likes threshold. */
+    /** Minimum likes threshold. minLikes is also accepted. */
     fun minFaves(): Long? = minFaves
 
     /** Minimum quote count threshold. */
@@ -548,7 +551,7 @@ private constructor(
          */
         fun minBookmarks(minBookmarks: Long) = minBookmarks(minBookmarks as Long?)
 
-        /** Minimum likes threshold. */
+        /** Minimum likes threshold. minLikes is also accepted. */
         fun minFaves(minFaves: Long?) = apply { this.minFaves = minFaves }
 
         /**
