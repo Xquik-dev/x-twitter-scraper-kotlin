@@ -15,8 +15,8 @@ Use it as a typed X API or Twitter API alternative.
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.xquik.api/x-twitter-scraper-kotlin)](https://central.sonatype.com/artifact/com.xquik.api/x-twitter-scraper-kotlin/0.7.3)
-[![KDocs](https://javadoc.io/badge2/com.xquik.api/x-twitter-scraper-kotlin/0.7.3/javadoc.svg)](https://javadoc.io/doc/com.xquik.api/x-twitter-scraper-kotlin/0.7.3)
+[![Maven Central](https://img.shields.io/maven-central/v/com.xquik.api/x-twitter-scraper-kotlin)](https://central.sonatype.com/artifact/com.xquik.api/x-twitter-scraper-kotlin/0.9.0)
+[![KDocs](https://javadoc.io/badge2/com.xquik.api/x-twitter-scraper-kotlin/0.9.0/javadoc.svg)](https://javadoc.io/doc/com.xquik.api/x-twitter-scraper-kotlin/0.9.0)
 
 <!-- x-release-please-end -->
 
@@ -64,7 +64,7 @@ Use [API reference](https://docs.xquik.com/api-reference/overview) for request c
 Gradle:
 
 ```kotlin
-implementation("com.xquik.api:x-twitter-scraper-kotlin:0.7.3")
+implementation("com.xquik.api:x-twitter-scraper-kotlin:0.9.0")
 ```
 
 Maven:
@@ -73,7 +73,7 @@ Maven:
 <dependency>
   <groupId>com.xquik.api</groupId>
   <artifactId>x-twitter-scraper-kotlin</artifactId>
-  <version>0.7.3</version>
+  <version>0.9.0</version>
 </dependency>
 ```
 
@@ -136,15 +136,15 @@ System properties override environment variables.
 ## Search Posts
 
 ```kotlin
-import com.x_twitter_scraper.api.models.PaginatedTweets
 import com.x_twitter_scraper.api.models.x.tweets.TweetSearchParams
+import com.x_twitter_scraper.api.models.x.tweets.TweetSearchResponse
 
 val params = TweetSearchParams.builder()
     .q("from:elonmusk")
     .limit(10L)
     .build()
 
-val result: PaginatedTweets = client.x().tweets().search(params)
+val result: TweetSearchResponse = client.x().tweets().search(params)
 ```
 
 Close the client when your application stops:
@@ -158,7 +158,7 @@ client.close()
 Call `async()` to use suspending methods:
 
 ```kotlin
-val result: PaginatedTweets = client.async().x().tweets().search(params)
+val result: TweetSearchResponse = client.async().x().tweets().search(params)
 ```
 
 ## Configure Retries

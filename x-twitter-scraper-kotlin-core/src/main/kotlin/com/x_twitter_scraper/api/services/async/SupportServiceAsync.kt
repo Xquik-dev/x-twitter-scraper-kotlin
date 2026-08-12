@@ -7,6 +7,7 @@
 package com.x_twitter_scraper.api.services.async
 
 import com.x_twitter_scraper.api.core.ClientOptions
+import com.x_twitter_scraper.api.services.async.support.AttachmentServiceAsync
 import com.x_twitter_scraper.api.services.async.support.TicketServiceAsync
 
 interface SupportServiceAsync {
@@ -24,6 +25,9 @@ interface SupportServiceAsync {
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): SupportServiceAsync
 
     /** Support ticket management */
+    fun attachments(): AttachmentServiceAsync
+
+    /** Support ticket management */
     fun tickets(): TicketServiceAsync
 
     /**
@@ -39,6 +43,9 @@ interface SupportServiceAsync {
         fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): SupportServiceAsync.WithRawResponse
+
+        /** Support ticket management */
+        fun attachments(): AttachmentServiceAsync.WithRawResponse
 
         /** Support ticket management */
         fun tickets(): TicketServiceAsync.WithRawResponse

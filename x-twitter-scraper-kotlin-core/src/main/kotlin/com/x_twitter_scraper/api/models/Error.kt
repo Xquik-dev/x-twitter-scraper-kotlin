@@ -604,6 +604,8 @@ private constructor(
 
                 val MONITOR_ALREADY_EXISTS = of("monitor_already_exists")
 
+                val MONITOR_PROFILE_UNAVAILABLE = of("monitor_profile_unavailable")
+
                 val NO_MEDIA = of("no_media")
 
                 val NO_CREDITS = of("no_credits")
@@ -638,6 +640,10 @@ private constructor(
 
                 val CONNECTION_CHALLENGE_INACTIVE = of("connection_challenge_inactive")
 
+                val COVERAGE_CURSOR_GONE = of("coverage_cursor_gone")
+
+                val COVERAGE_CURSOR_UNAVAILABLE = of("coverage_cursor_unavailable")
+
                 val DRAFT_NOT_FOUND = of("draft_not_found")
 
                 val FAVORITERS_UNAVAILABLE = of("favoriters_unavailable")
@@ -656,15 +662,27 @@ private constructor(
 
                 val INVALID_COMMUNITY_ID = of("invalid_community_id")
 
+                val INVALID_COMPLETE_REPLIES_REQUEST = of("invalid_complete_replies_request")
+
+                val INVALID_COVERAGE_CURSOR = of("invalid_coverage_cursor")
+
+                val INVALID_COVERAGE_REQUEST = of("invalid_coverage_request")
+
                 val INVALID_IDEMPOTENCY_KEY = of("invalid_idempotency_key")
 
                 val INVALID_LIST_ID = of("invalid_list_id")
+
+                val INVALID_OUTPUT_OPTIONS = of("invalid_output_options")
 
                 val INVALID_PAYMENT_AMOUNT = of("invalid_payment_amount")
 
                 val INVALID_RANGE = of("invalid_range")
 
+                val INVALID_REPLY_OPTIONS = of("invalid_reply_options")
+
                 val LOGIN_RATE_LIMITED = of("login_rate_limited")
+
+                val LOGIN_SERVICE_UNAVAILABLE = of("login_service_unavailable")
 
                 val MISSING_IDEMPOTENCY_KEY = of("missing_idempotency_key")
 
@@ -685,6 +703,8 @@ private constructor(
                 val SUPPORT_REQUEST_RATE_LIMIT = of("support_request_rate_limit")
 
                 val TOO_MANY_IDS = of("too_many_ids")
+
+                val TOO_MANY_TWEETS = of("too_many_tweets")
 
                 val UNKNOWN_FIELD = of("unknown_field")
 
@@ -780,6 +800,7 @@ private constructor(
                 MISSING_PARAMS,
                 MISSING_QUERY,
                 MONITOR_ALREADY_EXISTS,
+                MONITOR_PROFILE_UNAVAILABLE,
                 NO_MEDIA,
                 NO_CREDITS,
                 NO_SUBSCRIPTION,
@@ -797,6 +818,8 @@ private constructor(
                 CHECKOUT_UNAVAILABLE,
                 CONNECTION_CHALLENGE_EXPIRED,
                 CONNECTION_CHALLENGE_INACTIVE,
+                COVERAGE_CURSOR_GONE,
+                COVERAGE_CURSOR_UNAVAILABLE,
                 DRAFT_NOT_FOUND,
                 FAVORITERS_UNAVAILABLE,
                 FORBIDDEN,
@@ -806,11 +829,17 @@ private constructor(
                 IDEMPOTENCY_CONFLICT,
                 IDEMPOTENCY_KEY_CONFLICT,
                 INVALID_COMMUNITY_ID,
+                INVALID_COMPLETE_REPLIES_REQUEST,
+                INVALID_COVERAGE_CURSOR,
+                INVALID_COVERAGE_REQUEST,
                 INVALID_IDEMPOTENCY_KEY,
                 INVALID_LIST_ID,
+                INVALID_OUTPUT_OPTIONS,
                 INVALID_PAYMENT_AMOUNT,
                 INVALID_RANGE,
+                INVALID_REPLY_OPTIONS,
                 LOGIN_RATE_LIMITED,
+                LOGIN_SERVICE_UNAVAILABLE,
                 MISSING_IDEMPOTENCY_KEY,
                 MISSING_IDS,
                 NO_CACHED_STYLE,
@@ -821,6 +850,7 @@ private constructor(
                 SUPPORT_MEDIA_RATE_LIMIT,
                 SUPPORT_REQUEST_RATE_LIMIT,
                 TOO_MANY_IDS,
+                TOO_MANY_TWEETS,
                 UNKNOWN_FIELD,
                 UNSUPPORTED_MEDIA_TYPE,
                 WEBHOOK_INACTIVE,
@@ -891,6 +921,7 @@ private constructor(
                 MISSING_PARAMS,
                 MISSING_QUERY,
                 MONITOR_ALREADY_EXISTS,
+                MONITOR_PROFILE_UNAVAILABLE,
                 NO_MEDIA,
                 NO_CREDITS,
                 NO_SUBSCRIPTION,
@@ -908,6 +939,8 @@ private constructor(
                 CHECKOUT_UNAVAILABLE,
                 CONNECTION_CHALLENGE_EXPIRED,
                 CONNECTION_CHALLENGE_INACTIVE,
+                COVERAGE_CURSOR_GONE,
+                COVERAGE_CURSOR_UNAVAILABLE,
                 DRAFT_NOT_FOUND,
                 FAVORITERS_UNAVAILABLE,
                 FORBIDDEN,
@@ -917,11 +950,17 @@ private constructor(
                 IDEMPOTENCY_CONFLICT,
                 IDEMPOTENCY_KEY_CONFLICT,
                 INVALID_COMMUNITY_ID,
+                INVALID_COMPLETE_REPLIES_REQUEST,
+                INVALID_COVERAGE_CURSOR,
+                INVALID_COVERAGE_REQUEST,
                 INVALID_IDEMPOTENCY_KEY,
                 INVALID_LIST_ID,
+                INVALID_OUTPUT_OPTIONS,
                 INVALID_PAYMENT_AMOUNT,
                 INVALID_RANGE,
+                INVALID_REPLY_OPTIONS,
                 LOGIN_RATE_LIMITED,
+                LOGIN_SERVICE_UNAVAILABLE,
                 MISSING_IDEMPOTENCY_KEY,
                 MISSING_IDS,
                 NO_CACHED_STYLE,
@@ -932,6 +971,7 @@ private constructor(
                 SUPPORT_MEDIA_RATE_LIMIT,
                 SUPPORT_REQUEST_RATE_LIMIT,
                 TOO_MANY_IDS,
+                TOO_MANY_TWEETS,
                 UNKNOWN_FIELD,
                 UNSUPPORTED_MEDIA_TYPE,
                 WEBHOOK_INACTIVE,
@@ -1006,6 +1046,7 @@ private constructor(
                     MISSING_PARAMS -> Value.MISSING_PARAMS
                     MISSING_QUERY -> Value.MISSING_QUERY
                     MONITOR_ALREADY_EXISTS -> Value.MONITOR_ALREADY_EXISTS
+                    MONITOR_PROFILE_UNAVAILABLE -> Value.MONITOR_PROFILE_UNAVAILABLE
                     NO_MEDIA -> Value.NO_MEDIA
                     NO_CREDITS -> Value.NO_CREDITS
                     NO_SUBSCRIPTION -> Value.NO_SUBSCRIPTION
@@ -1023,6 +1064,8 @@ private constructor(
                     CHECKOUT_UNAVAILABLE -> Value.CHECKOUT_UNAVAILABLE
                     CONNECTION_CHALLENGE_EXPIRED -> Value.CONNECTION_CHALLENGE_EXPIRED
                     CONNECTION_CHALLENGE_INACTIVE -> Value.CONNECTION_CHALLENGE_INACTIVE
+                    COVERAGE_CURSOR_GONE -> Value.COVERAGE_CURSOR_GONE
+                    COVERAGE_CURSOR_UNAVAILABLE -> Value.COVERAGE_CURSOR_UNAVAILABLE
                     DRAFT_NOT_FOUND -> Value.DRAFT_NOT_FOUND
                     FAVORITERS_UNAVAILABLE -> Value.FAVORITERS_UNAVAILABLE
                     FORBIDDEN -> Value.FORBIDDEN
@@ -1032,11 +1075,17 @@ private constructor(
                     IDEMPOTENCY_CONFLICT -> Value.IDEMPOTENCY_CONFLICT
                     IDEMPOTENCY_KEY_CONFLICT -> Value.IDEMPOTENCY_KEY_CONFLICT
                     INVALID_COMMUNITY_ID -> Value.INVALID_COMMUNITY_ID
+                    INVALID_COMPLETE_REPLIES_REQUEST -> Value.INVALID_COMPLETE_REPLIES_REQUEST
+                    INVALID_COVERAGE_CURSOR -> Value.INVALID_COVERAGE_CURSOR
+                    INVALID_COVERAGE_REQUEST -> Value.INVALID_COVERAGE_REQUEST
                     INVALID_IDEMPOTENCY_KEY -> Value.INVALID_IDEMPOTENCY_KEY
                     INVALID_LIST_ID -> Value.INVALID_LIST_ID
+                    INVALID_OUTPUT_OPTIONS -> Value.INVALID_OUTPUT_OPTIONS
                     INVALID_PAYMENT_AMOUNT -> Value.INVALID_PAYMENT_AMOUNT
                     INVALID_RANGE -> Value.INVALID_RANGE
+                    INVALID_REPLY_OPTIONS -> Value.INVALID_REPLY_OPTIONS
                     LOGIN_RATE_LIMITED -> Value.LOGIN_RATE_LIMITED
+                    LOGIN_SERVICE_UNAVAILABLE -> Value.LOGIN_SERVICE_UNAVAILABLE
                     MISSING_IDEMPOTENCY_KEY -> Value.MISSING_IDEMPOTENCY_KEY
                     MISSING_IDS -> Value.MISSING_IDS
                     NO_CACHED_STYLE -> Value.NO_CACHED_STYLE
@@ -1047,6 +1096,7 @@ private constructor(
                     SUPPORT_MEDIA_RATE_LIMIT -> Value.SUPPORT_MEDIA_RATE_LIMIT
                     SUPPORT_REQUEST_RATE_LIMIT -> Value.SUPPORT_REQUEST_RATE_LIMIT
                     TOO_MANY_IDS -> Value.TOO_MANY_IDS
+                    TOO_MANY_TWEETS -> Value.TOO_MANY_TWEETS
                     UNKNOWN_FIELD -> Value.UNKNOWN_FIELD
                     UNSUPPORTED_MEDIA_TYPE -> Value.UNSUPPORTED_MEDIA_TYPE
                     WEBHOOK_INACTIVE -> Value.WEBHOOK_INACTIVE
@@ -1119,6 +1169,7 @@ private constructor(
                     MISSING_PARAMS -> Known.MISSING_PARAMS
                     MISSING_QUERY -> Known.MISSING_QUERY
                     MONITOR_ALREADY_EXISTS -> Known.MONITOR_ALREADY_EXISTS
+                    MONITOR_PROFILE_UNAVAILABLE -> Known.MONITOR_PROFILE_UNAVAILABLE
                     NO_MEDIA -> Known.NO_MEDIA
                     NO_CREDITS -> Known.NO_CREDITS
                     NO_SUBSCRIPTION -> Known.NO_SUBSCRIPTION
@@ -1136,6 +1187,8 @@ private constructor(
                     CHECKOUT_UNAVAILABLE -> Known.CHECKOUT_UNAVAILABLE
                     CONNECTION_CHALLENGE_EXPIRED -> Known.CONNECTION_CHALLENGE_EXPIRED
                     CONNECTION_CHALLENGE_INACTIVE -> Known.CONNECTION_CHALLENGE_INACTIVE
+                    COVERAGE_CURSOR_GONE -> Known.COVERAGE_CURSOR_GONE
+                    COVERAGE_CURSOR_UNAVAILABLE -> Known.COVERAGE_CURSOR_UNAVAILABLE
                     DRAFT_NOT_FOUND -> Known.DRAFT_NOT_FOUND
                     FAVORITERS_UNAVAILABLE -> Known.FAVORITERS_UNAVAILABLE
                     FORBIDDEN -> Known.FORBIDDEN
@@ -1145,11 +1198,17 @@ private constructor(
                     IDEMPOTENCY_CONFLICT -> Known.IDEMPOTENCY_CONFLICT
                     IDEMPOTENCY_KEY_CONFLICT -> Known.IDEMPOTENCY_KEY_CONFLICT
                     INVALID_COMMUNITY_ID -> Known.INVALID_COMMUNITY_ID
+                    INVALID_COMPLETE_REPLIES_REQUEST -> Known.INVALID_COMPLETE_REPLIES_REQUEST
+                    INVALID_COVERAGE_CURSOR -> Known.INVALID_COVERAGE_CURSOR
+                    INVALID_COVERAGE_REQUEST -> Known.INVALID_COVERAGE_REQUEST
                     INVALID_IDEMPOTENCY_KEY -> Known.INVALID_IDEMPOTENCY_KEY
                     INVALID_LIST_ID -> Known.INVALID_LIST_ID
+                    INVALID_OUTPUT_OPTIONS -> Known.INVALID_OUTPUT_OPTIONS
                     INVALID_PAYMENT_AMOUNT -> Known.INVALID_PAYMENT_AMOUNT
                     INVALID_RANGE -> Known.INVALID_RANGE
+                    INVALID_REPLY_OPTIONS -> Known.INVALID_REPLY_OPTIONS
                     LOGIN_RATE_LIMITED -> Known.LOGIN_RATE_LIMITED
+                    LOGIN_SERVICE_UNAVAILABLE -> Known.LOGIN_SERVICE_UNAVAILABLE
                     MISSING_IDEMPOTENCY_KEY -> Known.MISSING_IDEMPOTENCY_KEY
                     MISSING_IDS -> Known.MISSING_IDS
                     NO_CACHED_STYLE -> Known.NO_CACHED_STYLE
@@ -1160,6 +1219,7 @@ private constructor(
                     SUPPORT_MEDIA_RATE_LIMIT -> Known.SUPPORT_MEDIA_RATE_LIMIT
                     SUPPORT_REQUEST_RATE_LIMIT -> Known.SUPPORT_REQUEST_RATE_LIMIT
                     TOO_MANY_IDS -> Known.TOO_MANY_IDS
+                    TOO_MANY_TWEETS -> Known.TOO_MANY_TWEETS
                     UNKNOWN_FIELD -> Known.UNKNOWN_FIELD
                     UNSUPPORTED_MEDIA_TYPE -> Known.UNSUPPORTED_MEDIA_TYPE
                     WEBHOOK_INACTIVE -> Known.WEBHOOK_INACTIVE
@@ -1549,6 +1609,8 @@ private constructor(
 
                     val MONITOR_ALREADY_EXISTS = of("monitor_already_exists")
 
+                    val MONITOR_PROFILE_UNAVAILABLE = of("monitor_profile_unavailable")
+
                     val NO_MEDIA = of("no_media")
 
                     val NO_CREDITS = of("no_credits")
@@ -1583,6 +1645,10 @@ private constructor(
 
                     val CONNECTION_CHALLENGE_INACTIVE = of("connection_challenge_inactive")
 
+                    val COVERAGE_CURSOR_GONE = of("coverage_cursor_gone")
+
+                    val COVERAGE_CURSOR_UNAVAILABLE = of("coverage_cursor_unavailable")
+
                     val DRAFT_NOT_FOUND = of("draft_not_found")
 
                     val FAVORITERS_UNAVAILABLE = of("favoriters_unavailable")
@@ -1601,15 +1667,27 @@ private constructor(
 
                     val INVALID_COMMUNITY_ID = of("invalid_community_id")
 
+                    val INVALID_COMPLETE_REPLIES_REQUEST = of("invalid_complete_replies_request")
+
+                    val INVALID_COVERAGE_CURSOR = of("invalid_coverage_cursor")
+
+                    val INVALID_COVERAGE_REQUEST = of("invalid_coverage_request")
+
                     val INVALID_IDEMPOTENCY_KEY = of("invalid_idempotency_key")
 
                     val INVALID_LIST_ID = of("invalid_list_id")
+
+                    val INVALID_OUTPUT_OPTIONS = of("invalid_output_options")
 
                     val INVALID_PAYMENT_AMOUNT = of("invalid_payment_amount")
 
                     val INVALID_RANGE = of("invalid_range")
 
+                    val INVALID_REPLY_OPTIONS = of("invalid_reply_options")
+
                     val LOGIN_RATE_LIMITED = of("login_rate_limited")
+
+                    val LOGIN_SERVICE_UNAVAILABLE = of("login_service_unavailable")
 
                     val MISSING_IDEMPOTENCY_KEY = of("missing_idempotency_key")
 
@@ -1630,6 +1708,8 @@ private constructor(
                     val SUPPORT_REQUEST_RATE_LIMIT = of("support_request_rate_limit")
 
                     val TOO_MANY_IDS = of("too_many_ids")
+
+                    val TOO_MANY_TWEETS = of("too_many_tweets")
 
                     val UNKNOWN_FIELD = of("unknown_field")
 
@@ -1725,6 +1805,7 @@ private constructor(
                     MISSING_PARAMS,
                     MISSING_QUERY,
                     MONITOR_ALREADY_EXISTS,
+                    MONITOR_PROFILE_UNAVAILABLE,
                     NO_MEDIA,
                     NO_CREDITS,
                     NO_SUBSCRIPTION,
@@ -1742,6 +1823,8 @@ private constructor(
                     CHECKOUT_UNAVAILABLE,
                     CONNECTION_CHALLENGE_EXPIRED,
                     CONNECTION_CHALLENGE_INACTIVE,
+                    COVERAGE_CURSOR_GONE,
+                    COVERAGE_CURSOR_UNAVAILABLE,
                     DRAFT_NOT_FOUND,
                     FAVORITERS_UNAVAILABLE,
                     FORBIDDEN,
@@ -1751,11 +1834,17 @@ private constructor(
                     IDEMPOTENCY_CONFLICT,
                     IDEMPOTENCY_KEY_CONFLICT,
                     INVALID_COMMUNITY_ID,
+                    INVALID_COMPLETE_REPLIES_REQUEST,
+                    INVALID_COVERAGE_CURSOR,
+                    INVALID_COVERAGE_REQUEST,
                     INVALID_IDEMPOTENCY_KEY,
                     INVALID_LIST_ID,
+                    INVALID_OUTPUT_OPTIONS,
                     INVALID_PAYMENT_AMOUNT,
                     INVALID_RANGE,
+                    INVALID_REPLY_OPTIONS,
                     LOGIN_RATE_LIMITED,
+                    LOGIN_SERVICE_UNAVAILABLE,
                     MISSING_IDEMPOTENCY_KEY,
                     MISSING_IDS,
                     NO_CACHED_STYLE,
@@ -1766,6 +1855,7 @@ private constructor(
                     SUPPORT_MEDIA_RATE_LIMIT,
                     SUPPORT_REQUEST_RATE_LIMIT,
                     TOO_MANY_IDS,
+                    TOO_MANY_TWEETS,
                     UNKNOWN_FIELD,
                     UNSUPPORTED_MEDIA_TYPE,
                     WEBHOOK_INACTIVE,
@@ -1836,6 +1926,7 @@ private constructor(
                     MISSING_PARAMS,
                     MISSING_QUERY,
                     MONITOR_ALREADY_EXISTS,
+                    MONITOR_PROFILE_UNAVAILABLE,
                     NO_MEDIA,
                     NO_CREDITS,
                     NO_SUBSCRIPTION,
@@ -1853,6 +1944,8 @@ private constructor(
                     CHECKOUT_UNAVAILABLE,
                     CONNECTION_CHALLENGE_EXPIRED,
                     CONNECTION_CHALLENGE_INACTIVE,
+                    COVERAGE_CURSOR_GONE,
+                    COVERAGE_CURSOR_UNAVAILABLE,
                     DRAFT_NOT_FOUND,
                     FAVORITERS_UNAVAILABLE,
                     FORBIDDEN,
@@ -1862,11 +1955,17 @@ private constructor(
                     IDEMPOTENCY_CONFLICT,
                     IDEMPOTENCY_KEY_CONFLICT,
                     INVALID_COMMUNITY_ID,
+                    INVALID_COMPLETE_REPLIES_REQUEST,
+                    INVALID_COVERAGE_CURSOR,
+                    INVALID_COVERAGE_REQUEST,
                     INVALID_IDEMPOTENCY_KEY,
                     INVALID_LIST_ID,
+                    INVALID_OUTPUT_OPTIONS,
                     INVALID_PAYMENT_AMOUNT,
                     INVALID_RANGE,
+                    INVALID_REPLY_OPTIONS,
                     LOGIN_RATE_LIMITED,
+                    LOGIN_SERVICE_UNAVAILABLE,
                     MISSING_IDEMPOTENCY_KEY,
                     MISSING_IDS,
                     NO_CACHED_STYLE,
@@ -1877,6 +1976,7 @@ private constructor(
                     SUPPORT_MEDIA_RATE_LIMIT,
                     SUPPORT_REQUEST_RATE_LIMIT,
                     TOO_MANY_IDS,
+                    TOO_MANY_TWEETS,
                     UNKNOWN_FIELD,
                     UNSUPPORTED_MEDIA_TYPE,
                     WEBHOOK_INACTIVE,
@@ -1950,6 +2050,7 @@ private constructor(
                         MISSING_PARAMS -> Value.MISSING_PARAMS
                         MISSING_QUERY -> Value.MISSING_QUERY
                         MONITOR_ALREADY_EXISTS -> Value.MONITOR_ALREADY_EXISTS
+                        MONITOR_PROFILE_UNAVAILABLE -> Value.MONITOR_PROFILE_UNAVAILABLE
                         NO_MEDIA -> Value.NO_MEDIA
                         NO_CREDITS -> Value.NO_CREDITS
                         NO_SUBSCRIPTION -> Value.NO_SUBSCRIPTION
@@ -1967,6 +2068,8 @@ private constructor(
                         CHECKOUT_UNAVAILABLE -> Value.CHECKOUT_UNAVAILABLE
                         CONNECTION_CHALLENGE_EXPIRED -> Value.CONNECTION_CHALLENGE_EXPIRED
                         CONNECTION_CHALLENGE_INACTIVE -> Value.CONNECTION_CHALLENGE_INACTIVE
+                        COVERAGE_CURSOR_GONE -> Value.COVERAGE_CURSOR_GONE
+                        COVERAGE_CURSOR_UNAVAILABLE -> Value.COVERAGE_CURSOR_UNAVAILABLE
                         DRAFT_NOT_FOUND -> Value.DRAFT_NOT_FOUND
                         FAVORITERS_UNAVAILABLE -> Value.FAVORITERS_UNAVAILABLE
                         FORBIDDEN -> Value.FORBIDDEN
@@ -1976,11 +2079,17 @@ private constructor(
                         IDEMPOTENCY_CONFLICT -> Value.IDEMPOTENCY_CONFLICT
                         IDEMPOTENCY_KEY_CONFLICT -> Value.IDEMPOTENCY_KEY_CONFLICT
                         INVALID_COMMUNITY_ID -> Value.INVALID_COMMUNITY_ID
+                        INVALID_COMPLETE_REPLIES_REQUEST -> Value.INVALID_COMPLETE_REPLIES_REQUEST
+                        INVALID_COVERAGE_CURSOR -> Value.INVALID_COVERAGE_CURSOR
+                        INVALID_COVERAGE_REQUEST -> Value.INVALID_COVERAGE_REQUEST
                         INVALID_IDEMPOTENCY_KEY -> Value.INVALID_IDEMPOTENCY_KEY
                         INVALID_LIST_ID -> Value.INVALID_LIST_ID
+                        INVALID_OUTPUT_OPTIONS -> Value.INVALID_OUTPUT_OPTIONS
                         INVALID_PAYMENT_AMOUNT -> Value.INVALID_PAYMENT_AMOUNT
                         INVALID_RANGE -> Value.INVALID_RANGE
+                        INVALID_REPLY_OPTIONS -> Value.INVALID_REPLY_OPTIONS
                         LOGIN_RATE_LIMITED -> Value.LOGIN_RATE_LIMITED
+                        LOGIN_SERVICE_UNAVAILABLE -> Value.LOGIN_SERVICE_UNAVAILABLE
                         MISSING_IDEMPOTENCY_KEY -> Value.MISSING_IDEMPOTENCY_KEY
                         MISSING_IDS -> Value.MISSING_IDS
                         NO_CACHED_STYLE -> Value.NO_CACHED_STYLE
@@ -1991,6 +2100,7 @@ private constructor(
                         SUPPORT_MEDIA_RATE_LIMIT -> Value.SUPPORT_MEDIA_RATE_LIMIT
                         SUPPORT_REQUEST_RATE_LIMIT -> Value.SUPPORT_REQUEST_RATE_LIMIT
                         TOO_MANY_IDS -> Value.TOO_MANY_IDS
+                        TOO_MANY_TWEETS -> Value.TOO_MANY_TWEETS
                         UNKNOWN_FIELD -> Value.UNKNOWN_FIELD
                         UNSUPPORTED_MEDIA_TYPE -> Value.UNSUPPORTED_MEDIA_TYPE
                         WEBHOOK_INACTIVE -> Value.WEBHOOK_INACTIVE
@@ -2063,6 +2173,7 @@ private constructor(
                         MISSING_PARAMS -> Known.MISSING_PARAMS
                         MISSING_QUERY -> Known.MISSING_QUERY
                         MONITOR_ALREADY_EXISTS -> Known.MONITOR_ALREADY_EXISTS
+                        MONITOR_PROFILE_UNAVAILABLE -> Known.MONITOR_PROFILE_UNAVAILABLE
                         NO_MEDIA -> Known.NO_MEDIA
                         NO_CREDITS -> Known.NO_CREDITS
                         NO_SUBSCRIPTION -> Known.NO_SUBSCRIPTION
@@ -2080,6 +2191,8 @@ private constructor(
                         CHECKOUT_UNAVAILABLE -> Known.CHECKOUT_UNAVAILABLE
                         CONNECTION_CHALLENGE_EXPIRED -> Known.CONNECTION_CHALLENGE_EXPIRED
                         CONNECTION_CHALLENGE_INACTIVE -> Known.CONNECTION_CHALLENGE_INACTIVE
+                        COVERAGE_CURSOR_GONE -> Known.COVERAGE_CURSOR_GONE
+                        COVERAGE_CURSOR_UNAVAILABLE -> Known.COVERAGE_CURSOR_UNAVAILABLE
                         DRAFT_NOT_FOUND -> Known.DRAFT_NOT_FOUND
                         FAVORITERS_UNAVAILABLE -> Known.FAVORITERS_UNAVAILABLE
                         FORBIDDEN -> Known.FORBIDDEN
@@ -2089,11 +2202,17 @@ private constructor(
                         IDEMPOTENCY_CONFLICT -> Known.IDEMPOTENCY_CONFLICT
                         IDEMPOTENCY_KEY_CONFLICT -> Known.IDEMPOTENCY_KEY_CONFLICT
                         INVALID_COMMUNITY_ID -> Known.INVALID_COMMUNITY_ID
+                        INVALID_COMPLETE_REPLIES_REQUEST -> Known.INVALID_COMPLETE_REPLIES_REQUEST
+                        INVALID_COVERAGE_CURSOR -> Known.INVALID_COVERAGE_CURSOR
+                        INVALID_COVERAGE_REQUEST -> Known.INVALID_COVERAGE_REQUEST
                         INVALID_IDEMPOTENCY_KEY -> Known.INVALID_IDEMPOTENCY_KEY
                         INVALID_LIST_ID -> Known.INVALID_LIST_ID
+                        INVALID_OUTPUT_OPTIONS -> Known.INVALID_OUTPUT_OPTIONS
                         INVALID_PAYMENT_AMOUNT -> Known.INVALID_PAYMENT_AMOUNT
                         INVALID_RANGE -> Known.INVALID_RANGE
+                        INVALID_REPLY_OPTIONS -> Known.INVALID_REPLY_OPTIONS
                         LOGIN_RATE_LIMITED -> Known.LOGIN_RATE_LIMITED
+                        LOGIN_SERVICE_UNAVAILABLE -> Known.LOGIN_SERVICE_UNAVAILABLE
                         MISSING_IDEMPOTENCY_KEY -> Known.MISSING_IDEMPOTENCY_KEY
                         MISSING_IDS -> Known.MISSING_IDS
                         NO_CACHED_STYLE -> Known.NO_CACHED_STYLE
@@ -2104,6 +2223,7 @@ private constructor(
                         SUPPORT_MEDIA_RATE_LIMIT -> Known.SUPPORT_MEDIA_RATE_LIMIT
                         SUPPORT_REQUEST_RATE_LIMIT -> Known.SUPPORT_REQUEST_RATE_LIMIT
                         TOO_MANY_IDS -> Known.TOO_MANY_IDS
+                        TOO_MANY_TWEETS -> Known.TOO_MANY_TWEETS
                         UNKNOWN_FIELD -> Known.UNKNOWN_FIELD
                         UNSUPPORTED_MEDIA_TYPE -> Known.UNSUPPORTED_MEDIA_TYPE
                         WEBHOOK_INACTIVE -> Known.WEBHOOK_INACTIVE

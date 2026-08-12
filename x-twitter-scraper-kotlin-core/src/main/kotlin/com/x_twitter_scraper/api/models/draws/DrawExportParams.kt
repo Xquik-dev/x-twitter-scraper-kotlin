@@ -28,7 +28,10 @@ private constructor(
 
     fun id(): String? = id
 
-    /** Export output format */
+    /**
+     * Export output format. PDF entry exports include up to 10,000 rows. Other entry formats
+     * include up to 100,000 rows.
+     */
     fun format(): Format = format
 
     /** Export winners or all entries */
@@ -74,7 +77,10 @@ private constructor(
 
         fun id(id: String?) = apply { this.id = id }
 
-        /** Export output format */
+        /**
+         * Export output format. PDF entry exports include up to 10,000 rows. Other entry formats
+         * include up to 100,000 rows.
+         */
         fun format(format: Format) = apply { this.format = format }
 
         /** Export winners or all entries */
@@ -217,7 +223,10 @@ private constructor(
             }
             .build()
 
-    /** Export output format */
+    /**
+     * Export output format. PDF entry exports include up to 10,000 rows. Other entry formats
+     * include up to 100,000 rows.
+     */
     class Format @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
