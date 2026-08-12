@@ -185,7 +185,10 @@ interface TweetServiceAsync {
     suspend fun getThread(id: String, requestOptions: RequestOptions): PaginatedTweets =
         getThread(id, TweetGetThreadParams.none(), requestOptions)
 
-    /** No-mode search maximizes coverage. */
+    /**
+     * No-mode search maximizes coverage. New cursorless `Latest` sessions return rows newest-first
+     * across cursor pages. Existing cursors preserve their established ordering.
+     */
     suspend fun search(
         params: TweetSearchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
