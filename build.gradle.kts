@@ -8,7 +8,7 @@ repositories {
 
 allprojects {
     group = "com.x_twitter_scraper.api"
-    version = "0.7.3" // x-release-please-version
+    version = "0.9.0" // x-release-please-version
 }
 
 subprojects {
