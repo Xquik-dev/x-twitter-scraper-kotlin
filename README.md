@@ -3,7 +3,7 @@
 <!-- x-release-please-start-version -->
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.x_twitter_scraper.api/x-twitter-scraper-kotlin)](https://central.sonatype.com/artifact/com.x_twitter_scraper.api/x-twitter-scraper-kotlin/0.9.0)
-[![javadoc](https://javadoc.io/badge2/com.x_twitter_scraper.api/x-twitter-scraper-kotlin/0.9.0/javadoc.svg)](https://javadoc.io/doc/com.x_twitter_scraper.api/x-twitter-scraper-kotlin/0.9.0)
+[![javadoc](https://javadoc.io/badge2/com.x_twitter_scraper.api/x-twitter-scraper-kotlin/javadoc.svg)](https://javadoc.io/doc/com.x_twitter_scraper.api/x-twitter-scraper-kotlin/0.9.0)
 
 <!-- x-release-please-end -->
 
