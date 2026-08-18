@@ -53,8 +53,6 @@ These questions map customer language to exact routes and Kotlin services.
 | How do I send media or update a profile? | `POST /x/media`, `PATCH /x/profile` | `client.x().media()`, `client.x().profile()` |
 | How do I manage connected X accounts? | `GET /x/accounts`, `POST /x/accounts` | `client.x().accounts()` |
 
-Use [KDocs](https://javadoc.io/doc/com.xquik.api/x-twitter-scraper-kotlin) for typed methods.
-
 Use [API reference](https://docs.xquik.com/api-reference/overview) for request contracts.
 
 ## Install
