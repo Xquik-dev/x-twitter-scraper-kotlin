@@ -206,3 +206,8 @@ Binary endpoints return `HttpResponse`. Close each response after reading it.
 [Apache License 2.0](LICENSE)
 
 Xquik is an independent third-party service. Not affiliated with X Corp. "Twitter" and "X" are trademarks of X Corp.
+
+
+## Compile the Kotlin README quickstart offline
+
+Documentation reference and guidelines for #15.
