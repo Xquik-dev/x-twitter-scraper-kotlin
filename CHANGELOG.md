@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.9.1 (2026-08-18)
+
+Full Changelog: [v0.9.0...v0.9.1](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.9.0...v0.9.1)
+
+### Build System
+
+* update Gradle and patch SDK dependency vulnerabilities ([#48](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/48)) ([9f4d0ae](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/9f4d0aed60db936ede86ec6b55cc451df5b325fd))
+
 ## 0.9.0 (2026-08-12)
 
 Full Changelog: [v0.7.3...v0.9.0](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.7.3...v0.9.0)
