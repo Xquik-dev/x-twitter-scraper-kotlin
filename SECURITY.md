@@ -23,11 +23,8 @@ Exclude secrets, personal data, and data from unrelated accounts.
 
 ## Response Process
 
-We aim to acknowledge reports within 3 business days.
-
-We aim to complete initial triage within 7 business days.
-
-We provide updates at least every 14 days during active remediation.
+Maintainers acknowledge reports within 3 business days and complete initial triage within 7.
+During active remediation, maintainers update reporters at least every 14 days.
 
 Validated reports receive a severity assessment and disclosure plan.
 

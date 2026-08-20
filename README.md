@@ -4,9 +4,7 @@
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/13736/badge)](https://www.bestpractices.dev/projects/13736)
 
 Use the Xquik Kotlin SDK for Twitter search, timelines, profiles & followers.
-
 Manage media, webhooks & X automation with typed Kotlin methods.
-
 It provides a Twitter API alternative through documented Xquik REST routes.
 
 [API reference](https://docs.xquik.com/api-reference/overview) ·
@@ -15,23 +13,21 @@ It provides a Twitter API alternative through documented Xquik REST routes.
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.xquik.api/x-twitter-scraper-kotlin)](https://central.sonatype.com/artifact/com.xquik.api/x-twitter-scraper-kotlin/0.9.1)
-[![KDocs](https://javadoc.io/badge2/com.xquik.api/x-twitter-scraper-kotlin/0.9.1/javadoc.svg)](https://javadoc.io/doc/com.xquik.api/x-twitter-scraper-kotlin/0.9.1)
+[![Maven Central](https://img.shields.io/maven-central/v/com.xquik.api/x-twitter-scraper-kotlin)](https://central.sonatype.com/artifact/com.xquik.api/x-twitter-scraper-kotlin/0.9.2)
+[![KDocs](https://javadoc.io/badge2/com.xquik.api/x-twitter-scraper-kotlin/0.9.2/javadoc.svg)](https://javadoc.io/doc/com.xquik.api/x-twitter-scraper-kotlin/0.9.2)
 
 <!-- x-release-please-end -->
 
-## Choose the Kotlin SDK
+## Kotlin or Java
 
-Choose this client for Kotlin coroutines, structured concurrency & typed builders.
+Use this client for Kotlin coroutines, structured concurrency & typed builders.
 Use the Java SDK for Java-first codebases.
 
 ## Common Twitter & X Tasks
 
-Map each task to its REST route and Kotlin service.
-
 | Task | REST Route | Kotlin Service |
 | --- | --- | --- |
-| Search tweets without the X API | `GET /x/tweets/search` | `client.x().tweets()` |
+| Run an advanced Twitter search | `GET /x/tweets/search` | `client.x().tweets()` |
 | Retrieve tweets, threads, replies, or quotes | `GET /x/tweets/{id}`, `GET /x/tweets/{id}/thread` | `client.x().tweets()` |
 | Search X or Twitter users | `GET /x/users/search` | `client.x().users()` |
 | Scrape an X profile timeline | `GET /x/users/{id}/tweets` | `client.x().users()` |
@@ -52,8 +48,6 @@ Map each task to its REST route and Kotlin service.
 | Send media or update a profile | `POST /x/media`, `PATCH /x/profile` | `client.x().media()`, `client.x().profile()` |
 | Manage connected X accounts | `GET /x/accounts`, `POST /x/accounts` | `client.x().accounts()` |
 
-Use [API reference](https://docs.xquik.com/api-reference/overview) for request contracts.
-
 ## Install
 
 <!-- x-release-please-start-version -->
@@ -61,7 +55,7 @@ Use [API reference](https://docs.xquik.com/api-reference/overview) for request c
 Gradle:
 
 ```kotlin
-implementation("com.xquik.api:x-twitter-scraper-kotlin:0.9.1")
+implementation("com.xquik.api:x-twitter-scraper-kotlin:0.9.2")
 ```
 
 Maven:
@@ -70,7 +64,7 @@ Maven:
 <dependency>
   <groupId>com.xquik.api</groupId>
   <artifactId>x-twitter-scraper-kotlin</artifactId>
-  <version>0.9.1</version>
+  <version>0.9.2</version>
 </dependency>
 ```
 
@@ -104,7 +98,7 @@ export X_TWITTER_SCRAPER_API_KEY="your-api-key"
 
 OAuth users can set `X_TWITTER_SCRAPER_BEARER_TOKEN` instead.
 
-Create 1 client and reuse it:
+Create one client and reuse it:
 
 ```kotlin
 import com.x_twitter_scraper.api.client.XTwitterScraperClient
@@ -113,7 +107,7 @@ import com.x_twitter_scraper.api.client.okhttp.XTwitterScraperOkHttpClient
 val client: XTwitterScraperClient = XTwitterScraperOkHttpClient.fromEnv()
 ```
 
-You can also pass credentials directly:
+Pass credentials directly when environment variables do not fit:
 
 ```kotlin
 val client: XTwitterScraperClient = XTwitterScraperOkHttpClient.builder()
@@ -131,7 +125,7 @@ Supported client settings:
 
 System properties override environment variables.
 
-## Search Posts
+## Search Tweets
 
 ```kotlin
 import com.x_twitter_scraper.api.models.x.tweets.TweetSearchParams
@@ -170,7 +164,7 @@ val client: XTwitterScraperClient = XTwitterScraperOkHttpClient.builder()
     .build()
 ```
 
-Xquik may still return a successful HTTP response with a structured API error.
+The API may return a successful HTTP response with a structured error.
 Handle the documented error code from the response body.
 
 ## Read Raw Responses

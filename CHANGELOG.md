@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.9.2 (2026-08-21)
+
+Full Changelog: [v0.9.1...v0.9.2](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.9.1...v0.9.2)
+
+### Documentation
+
+* tighten Kotlin SDK guidance and release evidence
+
 ## 0.9.1 (2026-08-18)
 
 Full Changelog: [v0.9.0...v0.9.1](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.9.0...v0.9.1)
