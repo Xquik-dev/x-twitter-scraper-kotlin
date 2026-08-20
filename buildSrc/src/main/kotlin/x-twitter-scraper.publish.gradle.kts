@@ -48,7 +48,7 @@ configure<MavenPublishBaseExtension> {
     pom {
         name.set("Xquik Kotlin SDK")
         description.set(
-            "Kotlin SDK for the Xquik REST API. Xquik is an independent third-party service. " +
+            "Kotlin SDK for Twitter search, followers, webhooks & X automation through Xquik. " +
                 "Not affiliated with X Corp. \"Twitter\" and \"X\" are trademarks of X Corp."
         )
         url.set("https://xquik.com")
