@@ -32,38 +32,29 @@ This active, released Kotlin SDK meets the OpenSSF eligibility rules.
 | CI | Pull requests and pushes run pinned, least-privilege workflows |
 | Two-factor authentication | The Xquik-dev organization requires 2FA |
 
-The raw report keeps untouched generated-source coverage visible.
+The maintained-source gate uses the provider-neutral generated header.
+The raw report keeps excluded sources visible.
 
-Exclusions use the repository-owned, provider-neutral generated-source header prefix.
+Loopback service tests cover routes, serialization, and response handling.
 
-Maintained runtime exceptions remain inside the enforced coverage gate.
-
-Generated service tests use a loopback transport.
-
-They exercise route construction, request serialization, and response handling.
-
-The generated-model contract suite discovers every model on the test classpath.
-
-It verifies parsing, builders, validation, copying, equality, and unknown values.
+The contract suite checks every generated model, including unknown values.
 
 The default transport rejects redirects that could forward credentials.
 
 Retry delays reject invalid values and cap server-provided delays.
 
-The latest verified evidence produced these results:
-
 | Evidence | Result |
 | --- | --- |
-| Functional tests | 1,402 tests across 329 suites; 0 failures, errors, or skips |
+| Functional tests | 1,405 tests across 329 suites; 0 failures, errors, or skips |
 | Maintained coverage | 1,128/1,230 lines (91.71%); 410/504 branches (81.35%) |
 | Raw coverage | 103,368/107,366 lines (96.28%); 28,397/31,076 branches (91.38%) |
-| Dynamic analysis | Jazzer completed 3,574,610 runs without findings |
+| Dynamic analysis | Jazzer completed 3,431,150 runs without findings |
 | Repository licensing | REUSE covered 839/839 files |
 | Dependency licensing | 106 components; 0 unknown or disallowed licenses |
 | Vulnerability audit | OSV found 0 issues in 7 lockfiles and checksum metadata |
 | Reproducibility | 15 Maven artifacts matched byte-for-byte |
 
-Maven Central published `v0.9.1` from commit `0a2ceaa43f30f200734c4584ff854a058c69af62` and its exact tag.
+Maven Central published `v0.9.2` from commit `5421bc2769a5a027485c402b6bad45d9cda704ef` and its exact tag.
 
 All 15 public files verify with this OpenPGP fingerprint:
 
@@ -71,7 +62,7 @@ All 15 public files verify with this OpenPGP fingerprint:
 
 The root JAR SHA-256 is:
 
-`6681a1529ef1e95fc28bbc6ef28fdfdfb3fd29e72ba3acb07e7e495876f0530c`
+`fa72055cbf4698ee196aead8d8f5ffcde3ee58c91ca5ca7fc52070038aca5da0`
 
 ## Outstanding Gold Blockers
 
