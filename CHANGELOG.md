@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.9.3 (2026-08-21)
+
+Full Changelog: [v0.9.2...v0.9.3](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.9.2...v0.9.3)
+
+### Documentation
+
+* point KDocs at the published core module
+
 ## 0.9.2 (2026-08-21)
 
 Full Changelog: [v0.9.1...v0.9.2](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.9.1...v0.9.2)

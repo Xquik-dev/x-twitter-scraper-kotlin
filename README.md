@@ -3,18 +3,17 @@
 [![CI](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/actions/workflows/ci.yml/badge.svg)](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/actions/workflows/ci.yml)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/13736/badge)](https://www.bestpractices.dev/projects/13736)
 
-Use the Xquik Kotlin SDK for Twitter search, timelines, profiles & followers.
-Manage media, webhooks & X automation with typed Kotlin methods.
-It provides a Twitter API alternative through documented Xquik REST routes.
+Search Twitter, read timelines, fetch profiles & export followers with Xquik.
+Use typed Kotlin methods for media, webhooks & X automation.
 
 [API reference](https://docs.xquik.com/api-reference/overview) ·
 [Authentication](https://xquik.com/auth.md) ·
-[KDocs](https://javadoc.io/doc/com.xquik.api/x-twitter-scraper-kotlin)
+[KDocs](https://javadoc.io/doc/com.xquik.api/x-twitter-scraper-kotlin-core)
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.xquik.api/x-twitter-scraper-kotlin)](https://central.sonatype.com/artifact/com.xquik.api/x-twitter-scraper-kotlin/0.9.2)
-[![KDocs](https://javadoc.io/badge2/com.xquik.api/x-twitter-scraper-kotlin/0.9.2/javadoc.svg)](https://javadoc.io/doc/com.xquik.api/x-twitter-scraper-kotlin/0.9.2)
+[![Maven Central](https://img.shields.io/maven-central/v/com.xquik.api/x-twitter-scraper-kotlin)](https://central.sonatype.com/artifact/com.xquik.api/x-twitter-scraper-kotlin/0.9.3)
+[![KDocs](https://javadoc.io/badge2/com.xquik.api/x-twitter-scraper-kotlin-core/0.9.3/javadoc.svg)](https://javadoc.io/doc/com.xquik.api/x-twitter-scraper-kotlin-core/0.9.3)
 
 <!-- x-release-please-end -->
 
@@ -55,7 +54,7 @@ Use the Java SDK for Java-first codebases.
 Gradle:
 
 ```kotlin
-implementation("com.xquik.api:x-twitter-scraper-kotlin:0.9.2")
+implementation("com.xquik.api:x-twitter-scraper-kotlin:0.9.3")
 ```
 
 Maven:
@@ -64,7 +63,7 @@ Maven:
 <dependency>
   <groupId>com.xquik.api</groupId>
   <artifactId>x-twitter-scraper-kotlin</artifactId>
-  <version>0.9.2</version>
+  <version>0.9.3</version>
 </dependency>
 ```
 
