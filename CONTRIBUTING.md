@@ -51,7 +51,7 @@ Run every gate before requesting review:
 ./scripts/test
 ./scripts/coverage
 OSV_SCANNER_BIN=/path/to/osv-scanner ./scripts/audit
-reuse lint
+uvx --from reuse==5.1.1 reuse lint
 ./scripts/check-reproducible
 ```
 

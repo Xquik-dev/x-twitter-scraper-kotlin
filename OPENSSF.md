@@ -8,11 +8,7 @@ Assessment date: 2026-07-24.
 
 ## Eligibility
 
-This public Kotlin SDK is active and released.
-
-It is eligible for the OpenSSF Best Practices badge.
-
-No OpenSSF-defined ineligibility applies.
+This active, released Kotlin SDK meets the OpenSSF eligibility rules.
 
 ## Verified Technical Controls
 
@@ -61,13 +57,13 @@ The latest verified evidence produced these results:
 | Functional tests | 1,402 tests across 329 suites; 0 failures, errors, or skips |
 | Maintained coverage | 1,128/1,230 lines (91.71%); 410/504 branches (81.35%) |
 | Raw coverage | 103,368/107,366 lines (96.28%); 28,397/31,076 branches (91.38%) |
-| Dynamic analysis | Jazzer completed 3,519,238 runs without findings |
+| Dynamic analysis | Jazzer completed 3,574,610 runs without findings |
 | Repository licensing | REUSE covered 839/839 files |
 | Dependency licensing | 106 components; 0 unknown or disallowed licenses |
 | Vulnerability audit | OSV found 0 issues in 7 lockfiles and checksum metadata |
 | Reproducibility | 15 Maven artifacts matched byte-for-byte |
 
-Maven Central published `v0.5.2` from the exact release tag.
+Maven Central published `v0.9.1` from commit `0a2ceaa43f30f200734c4584ff854a058c69af62` and its exact tag.
 
 All 15 public files verify with this OpenPGP fingerprint:
 
@@ -75,7 +71,7 @@ All 15 public files verify with this OpenPGP fingerprint:
 
 The root JAR SHA-256 is:
 
-`912278aac18d6e78b0f56e790eb3cdb387d1bf30e7b188086bc86095b9201734`
+`6681a1529ef1e95fc28bbc6ef28fdfdfb3fd29e72ba3acb07e7e495876f0530c`
 
 ## Outstanding Gold Blockers
 
@@ -102,7 +98,7 @@ Run these evidence commands before releases:
 ./scripts/test
 ./scripts/coverage
 ./scripts/audit
-reuse lint
+uvx --from reuse==5.1.1 reuse lint
 ./scripts/check-reproducible
 ```
 
