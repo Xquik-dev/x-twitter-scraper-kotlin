@@ -1,5 +1,55 @@
 # Changelog
 
+## 0.10.0 (2026-08-20)
+
+Full Changelog: [v0.9.3...v0.10.0](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.9.3...v0.10.0)
+
+### Features
+
+* **api:** align reply extraction contracts ([#29](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/29)) ([91e7009](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/91e70090ac1c16f90a81b5a8c2c2cb2ef5250940))
+* **api:** api update ([84bb6b5](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/84bb6b57e8e9c55153c73feab1a0bc2cd49d72fa))
+* **api:** api update ([5821da4](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/5821da4388684547744c9c8d20e9ef0d5eb46bc7))
+* **api:** api update ([e8fa9a8](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/e8fa9a8af76f09923a3a4ee2a840920fba68bb28))
+* **api:** api update ([6ccf621](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/6ccf621bbc4928f93b6e1fb9bc175cbd2d6bfeb1))
+* **api:** api update ([c2c8111](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/c2c811164e84cb26e6ee87c2ef74cf61d9024bbc))
+* **api:** api update ([54f12e5](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/54f12e55dc3f68400e664e0e35033684e2f16416))
+
+
+### Bug Fixes
+
+* escape ampersand in OpenAPI summaries for C# XML docs ([05daa0f](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/05daa0fbe01669f2d2fa48c4b5ee3b15a2229cb2))
+* **release:** allow Maven publication propagation ([#31](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/31)) ([fe0a5fb](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/fe0a5fb29b74c97f2d0f89783b3e4d5e496ab191))
+
+
+### Chores
+
+* add FUNDING.yml pointing to xquik.com ([15bb5bb](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/15bb5bb900d240700b05d0fc317614b63fa8f165))
+* **deps:** bump actions/setup-java from 5.6.0 to 5.7.0 ([#44](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/44)) ([0833e42](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/0833e42ff9d11e74f6b28e200551753381f9d05d))
+* **deps:** bump github/codeql-action/init from 4.37.2 to 4.37.6 ([#33](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/33)) ([4c00b2c](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/4c00b2cee117eecb8a21d4c81cc0c12164fc015b))
+* **deps:** bump github/codeql-action/upload-sarif ([#36](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/36)) ([ccc1714](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/ccc1714034958c4346cfb2bc2fe94719a0966f02))
+* **deps:** bump org.apache.logging.log4j:log4j-api ([#20](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/20)) ([1480447](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/14804471b57b6cf7a62d50436b55347a56819877))
+* merge main into release branch ([b1cdcd5](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/b1cdcd585ea1769c26fc321660c2855313529703))
+* quiet Gradle cache cleanup warnings ([c6dbe09](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/c6dbe097e4ad8ff17bc9e79489494a147dadcce8))
+* sync OpenAPI spec ([29f11ac](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/29f11acb8c3731ec2dde83bd859371179de705d6))
+* update Gradle actions for Node 24 ([7279992](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/7279992e7359e760d72687d0e59402b56803cfe5))
+* wire production_repo for all targets ([d8ccd0a](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/d8ccd0a31351328b69b9afed129c640d4720ac24))
+
+
+### Documentation
+
+* add Contributor Covenant 2.1 Code of Conduct ([#2192](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/2192)) ([5b5de80](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/5b5de80476afcf2bce31ad3b786c55a46184ad84))
+* add DeepWiki badge ([16d59b2](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/16d59b2ee8f442e33f52d9e8b9278d06c9e27537))
+* fix Kotlin KDocs link ([#52](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/52)) ([80d6ddf](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/80d6ddfcea9f5a791f929f9a4b7ba9f996b6114d))
+* map common X data tasks ([#12](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/12)) ([62064ba](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/62064ba72a08b95917a09845e126b5cd3cf5d22e))
+* mark Maven publication pending ([ffbec89](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/ffbec89b4e5001c3cf70b345d2d165f5e50fcedb))
+* refine Kotlin SDK copy ([#51](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/51)) ([5421bc2](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/5421bc2769a5a027485c402b6bad45d9cda704ef))
+* refine public Kotlin SDK text ([#50](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/50)) ([f39d27b](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/f39d27b50edc3f7e4cb34bd1465786739928539c))
+
+
+### Build System
+
+* update Gradle and patch SDK dependency vulnerabilities ([#48](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/48)) ([9f4d0ae](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/9f4d0aed60db936ede86ec6b55cc451df5b325fd))
+
 ## 0.9.3 (2026-08-21)
 
 Full Changelog: [v0.9.2...v0.9.3](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.9.2...v0.9.3)
