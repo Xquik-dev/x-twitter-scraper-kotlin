@@ -58,12 +58,12 @@ The latest verified evidence produced these results:
 
 | Evidence | Result |
 | --- | --- |
-| Functional tests | 1,208 tests across 283 suites; 0 failures, errors, or skips |
-| Maintained coverage | 1,124/1,230 lines (91.38%); 410/504 branches (81.35%) |
-| Raw coverage | 82,017/88,473 lines (92.70%); 22,779/24,796 branches (91.87%) |
-| Dynamic analysis | Jazzer completed 3,651,892 runs without findings |
-| Repository licensing | REUSE covered 809/809 files |
-| Dependency licensing | 105 components; 0 unknown or disallowed licenses |
+| Functional tests | 1,402 tests across 329 suites; 0 failures, errors, or skips |
+| Maintained coverage | 1,128/1,230 lines (91.71%); 410/504 branches (81.35%) |
+| Raw coverage | 103,368/107,366 lines (96.28%); 28,397/31,076 branches (91.38%) |
+| Dynamic analysis | Jazzer completed 3,519,238 runs without findings |
+| Repository licensing | REUSE covered 839/839 files |
+| Dependency licensing | 106 components; 0 unknown or disallowed licenses |
 | Vulnerability audit | OSV found 0 issues in 7 lockfiles and checksum metadata |
 | Reproducibility | 15 Maven artifacts matched byte-for-byte |
 
@@ -91,7 +91,7 @@ Do not claim Gold while any mandatory criterion remains unmet.
 | Independent review | History does not prove 50% qualifying review coverage | Require and record independent reviews |
 | Human security review | No completed review exists within 5 years | Commission and publish a scoped review |
 
-This remediation pull request needs a different human reviewer.
+Gold eligibility still requires review by a different human.
 
 ## Maintenance
 

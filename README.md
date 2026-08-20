@@ -1,13 +1,13 @@
-# X (Twitter) Scraper Kotlin SDK: Tweet Search, Timelines, Followers & Posting
+# Xquik Kotlin SDK: Twitter Search, Followers & X Automation
 
 [![CI](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/actions/workflows/ci.yml/badge.svg)](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/actions/workflows/ci.yml)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/13736/badge)](https://www.bestpractices.dev/projects/13736)
 
-Use Xquik's typed Kotlin client for X data and confirmed actions.
+Use the Xquik Kotlin SDK for Twitter search, timelines, profiles & followers.
 
-It supports tweet search, timeline extraction, follower exports, monitoring, and posting.
+Manage media, webhooks & X automation with typed Kotlin methods.
 
-Use it as a typed X API or Twitter API alternative.
+It provides a Twitter API alternative through documented Xquik REST routes.
 
 [API reference](https://docs.xquik.com/api-reference/overview) ·
 [Authentication](https://xquik.com/auth.md) ·
@@ -22,36 +22,35 @@ Use it as a typed X API or Twitter API alternative.
 
 ## Choose the Kotlin SDK
 
-Choose this client for Kotlin services using coroutines and typed builders.
-Suspending methods integrate with structured concurrency.
-Choose the Java SDK for Java-first codebases.
+Choose this client for Kotlin coroutines, structured concurrency & typed builders.
+Use the Java SDK for Java-first codebases.
 
-## Common X Data Tasks
+## Common Twitter & X Tasks
 
-These questions map customer language to exact routes and Kotlin services.
+Map each task to its REST route and Kotlin service.
 
-| Customer Question | REST Route | Kotlin Service |
+| Task | REST Route | Kotlin Service |
 | --- | --- | --- |
-| How do I search tweets without the X API? | `GET /x/tweets/search` | `client.x().tweets()` |
-| How do I retrieve tweets, threads, replies, or quotes? | `GET /x/tweets/{id}`, `GET /x/tweets/{id}/thread` | `client.x().tweets()` |
-| How do I search X or Twitter users? | `GET /x/users/search` | `client.x().users()` |
-| How do I scrape an X profile timeline? | `GET /x/users/{id}/tweets` | `client.x().users()` |
-| How do I export X followers? | `GET /x/users/{id}/followers` | `client.x().users()` |
-| How do I export X following accounts? | `GET /x/users/{id}/following` | `client.x().users()` |
-| How do I collect verified followers? | `GET /x/users/{id}/verified-followers` | `client.x().users()` |
-| How do I collect mentions, likes, replies, or media? | `GET /x/users/{id}/mentions`, `GET /x/users/{id}/likes` | `client.x().users()` |
-| How do I extract my X home timeline? | `GET /x/timeline` | `client.x()` |
-| How do I extract list tweets, members, or followers? | `GET /x/lists/{id}/tweets`, `GET /x/lists/{id}/members` | `client.x().lists()` |
-| How do I search communities and collect their tweets? | `GET /x/communities/search`, `GET /x/communities/{id}/tweets` | `client.x().communities()` |
-| How do I read bookmarks and bookmark folders? | `GET /x/bookmarks`, `GET /x/bookmarks/folders` | `client.x().bookmarks()` |
-| How do I read notifications or direct messages? | `GET /x/notifications`, `GET /x/dm/{userId}/history` | `client.x()`, `client.x().dm()` |
-| How do I discover X trends? | `GET /x/trends` | `client.x().getTrends()` |
-| How do I export large X datasets? | `POST /extractions` | `client.extractions()` |
-| How do I monitor tweet keywords or accounts? | `POST /monitors/keywords`, `POST /monitors` | `client.monitors()` |
-| How do I receive signed event deliveries? | `POST /webhooks` | `client.webhooks()` |
-| How do I post, like, retweet, or follow? | `POST /x/tweets`, `POST /x/users/{id}/follow` | `client.x().tweets()`, `client.x().users()` |
-| How do I send media or update a profile? | `POST /x/media`, `PATCH /x/profile` | `client.x().media()`, `client.x().profile()` |
-| How do I manage connected X accounts? | `GET /x/accounts`, `POST /x/accounts` | `client.x().accounts()` |
+| Search tweets without the X API | `GET /x/tweets/search` | `client.x().tweets()` |
+| Retrieve tweets, threads, replies, or quotes | `GET /x/tweets/{id}`, `GET /x/tweets/{id}/thread` | `client.x().tweets()` |
+| Search X or Twitter users | `GET /x/users/search` | `client.x().users()` |
+| Scrape an X profile timeline | `GET /x/users/{id}/tweets` | `client.x().users()` |
+| Export X followers | `GET /x/users/{id}/followers` | `client.x().users()` |
+| Export X following accounts | `GET /x/users/{id}/following` | `client.x().users()` |
+| Collect verified followers | `GET /x/users/{id}/verified-followers` | `client.x().users()` |
+| Collect mentions, likes, replies, or media | `GET /x/users/{id}/mentions`, `GET /x/users/{id}/likes` | `client.x().users()` |
+| Extract an X home timeline | `GET /x/timeline` | `client.x()` |
+| Extract list tweets, members, or followers | `GET /x/lists/{id}/tweets`, `GET /x/lists/{id}/members` | `client.x().lists()` |
+| Search communities and collect their tweets | `GET /x/communities/search`, `GET /x/communities/{id}/tweets` | `client.x().communities()` |
+| Read bookmarks and bookmark folders | `GET /x/bookmarks`, `GET /x/bookmarks/folders` | `client.x().bookmarks()` |
+| Read notifications or direct messages | `GET /x/notifications`, `GET /x/dm/{userId}/history` | `client.x()`, `client.x().dm()` |
+| Discover X trends | `GET /x/trends` | `client.x().getTrends()` |
+| Export large X datasets | `POST /extractions` | `client.extractions()` |
+| Monitor tweet keywords or accounts | `POST /monitors/keywords`, `POST /monitors` | `client.monitors()` |
+| Receive signed event deliveries | `POST /webhooks` | `client.webhooks()` |
+| Post, like, retweet, or follow | `POST /x/tweets`, `POST /x/users/{id}/follow` | `client.x().tweets()`, `client.x().users()` |
+| Send media or update a profile | `POST /x/media`, `PATCH /x/profile` | `client.x().media()`, `client.x().profile()` |
+| Manage connected X accounts | `GET /x/accounts`, `POST /x/accounts` | `client.x().accounts()` |
 
 Use [API reference](https://docs.xquik.com/api-reference/overview) for request contracts.
 
@@ -81,11 +80,12 @@ Maven:
 
 Every Maven Central file has a detached OpenPGP signature.
 
-Verify the main Kotlin artifact:
+Set `VERSION` to the release version. Then verify the main artifact:
 
 ```sh
-artifact="x-twitter-scraper-kotlin-0.5.2.jar"
-base="https://repo.maven.apache.org/maven2/com/xquik/api/x-twitter-scraper-kotlin/0.5.2"
+version=VERSION
+artifact="x-twitter-scraper-kotlin-$version.jar"
+base="https://repo.maven.apache.org/maven2/com/xquik/api/x-twitter-scraper-kotlin/$version"
 curl --fail --location --remote-name "$base/$artifact"
 curl --fail --location --remote-name "$base/$artifact.asc"
 gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 0xD2037E4157E62A59
