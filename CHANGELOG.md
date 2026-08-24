@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.9.4 (2026-08-24)
+
+Full Changelog: [v0.9.3...v0.9.4](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.9.3...v0.9.4)
+
+### Documentation
+
+* enforce source LOC reduction ([#54](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/54)) ([975934f](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/975934fe69f18f53e80f8ae51c52dbb43ad2da69))
+
 ## 0.9.3 (2026-08-21)
 
 Full Changelog: [v0.9.2...v0.9.3](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.9.2...v0.9.3)
