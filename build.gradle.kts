@@ -36,7 +36,7 @@ licenseReport {
 
 allprojects {
     group = "com.xquik.api"
-    version = "0.9.3" // x-release-please-version
+    version = "0.9.4" // x-release-please-version
 
     dependencyLocking {
         lockAllConfigurations()
