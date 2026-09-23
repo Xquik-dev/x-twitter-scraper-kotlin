@@ -12,8 +12,8 @@ Use typed Kotlin methods for media, webhooks & X automation.
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.xquik.api/x-twitter-scraper-kotlin)](https://central.sonatype.com/artifact/com.xquik.api/x-twitter-scraper-kotlin/0.9.3)
-[![KDocs](https://javadoc.io/badge2/com.xquik.api/x-twitter-scraper-kotlin-core/0.9.3/javadoc.svg)](https://javadoc.io/doc/com.xquik.api/x-twitter-scraper-kotlin-core/0.9.3)
+[![Maven Central](https://img.shields.io/maven-central/v/com.xquik.api/x-twitter-scraper-kotlin)](https://central.sonatype.com/artifact/com.xquik.api/x-twitter-scraper-kotlin/0.9.4)
+[![KDocs](https://javadoc.io/badge2/com.xquik.api/x-twitter-scraper-kotlin-core/0.9.4/javadoc.svg)](https://javadoc.io/doc/com.xquik.api/x-twitter-scraper-kotlin-core/0.9.4)
 
 <!-- x-release-please-end -->
 
@@ -54,7 +54,7 @@ Use the Java SDK for Java-first codebases.
 Gradle:
 
 ```kotlin
-implementation("com.xquik.api:x-twitter-scraper-kotlin:0.9.3")
+implementation("com.xquik.api:x-twitter-scraper-kotlin:0.9.4")
 ```
 
 Maven:
@@ -63,7 +63,7 @@ Maven:
 <dependency>
   <groupId>com.xquik.api</groupId>
   <artifactId>x-twitter-scraper-kotlin</artifactId>
-  <version>0.9.3</version>
+  <version>0.9.4</version>
 </dependency>
 ```
 
