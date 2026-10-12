@@ -1,0 +1,99 @@
+#!/usr/bin/env bash
+
+# SPDX-FileCopyrightText: 2026 Xquik contributors
+#
+# SPDX-License-Identifier: Apache-2.0
+
+# Runs every repository check in order and stops at the first failure.
+
+set -euo pipefail
+
+cd -- "$(dirname -- "$0")/.."
+
+fail() {
+    printf 'bin/check-local: %s\n' "$1" >&2
+    exit 1
+}
+
+jdk_major_version() {
+    sed -n 's/^JAVA_VERSION="\([0-9]*\).*/\1/p' "$1/release" 2>/dev/null || true
+}
+
+require_jdk() {
+    local variable="$1"
+    local version="$2"
+    local java_home="${!variable:-}"
+    if [[ -z "$java_home" || "$(jdk_major_version "$java_home")" != "$version" ]]; then
+        fail "Set $variable to a JDK $version home, then rerun bin/check-local."
+    fi
+}
+
+run_check() {
+    local name="$1"
+    local advice="$2"
+    shift 2
+    printf '==> %s\n' "$name"
+    if ! "$@"; then
+        fail "$name failed. $advice"
+    fi
+}
+
+check_licensing() {
+    if command -v reuse >/dev/null 2>&1; then
+        reuse lint
+    else
+        uvx --from reuse==5.1.1 reuse lint
+    fi
+}
+
+require_jdk JAVA_HOME 26
+require_jdk SHRINKER_JAVA_HOME 25
+command -v shellcheck >/dev/null 2>&1 ||
+    fail "Install shellcheck, then rerun bin/check-local."
+
+run_check "Java and Kotlin formatting" \
+    "Run ./scripts/format and commit the result." \
+    ./scripts/lint
+
+run_check "Shell scripts" \
+    "Fix the shellcheck findings above." \
+    shellcheck bin/* scripts/*
+
+if command -v reuse >/dev/null 2>&1 || command -v uvx >/dev/null 2>&1; then
+    run_check "Repository licensing" \
+        "Add the SPDX data that reuse lint lists above." \
+        check_licensing
+else
+    printf '==> Skipping repository licensing: install reuse or uv to run it.\n'
+fi
+
+run_check "Build" \
+    "Fix the compiler errors above." \
+    ./scripts/build
+
+run_check "Tests" \
+    "Fix the failing or skipped tests above." \
+    ./scripts/test
+
+run_check "Coverage" \
+    "Add tests until maintained code has 90% line and 80% branch coverage." \
+    ./scripts/coverage
+
+run_check "Retry header fuzzing" \
+    "Fix the retry header parsing for the input Jazzer printed above." \
+    env JAZZER_FUZZ=1 ./gradlew \
+    :x-twitter-scraper-kotlin-core:test \
+    --tests '*RetryAfterFuzzTest' \
+    --rerun \
+    --no-build-cache \
+    --no-configuration-cache
+
+run_check "Dependency licenses and vulnerabilities" \
+    "Upgrade or replace the dependencies listed above." \
+    ./scripts/audit
+
+run_check "Reproducible Maven artifacts" \
+    "Remove the build input that differs between the two builds above." \
+    ./scripts/check-reproducible
+
+printf 'All checks passed.\n'

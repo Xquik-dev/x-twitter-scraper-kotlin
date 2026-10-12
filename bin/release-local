@@ -1,0 +1,149 @@
+#!/usr/bin/env bash
+
+# SPDX-FileCopyrightText: 2026 Xquik contributors
+#
+# SPDX-License-Identifier: Apache-2.0
+
+# Publishes the version in build.gradle.kts to Maven Central from this
+# machine, then tags it and creates the GitHub release.
+
+set -euo pipefail
+
+cd -- "$(dirname -- "$0")/.."
+
+artifact="x-twitter-scraper-kotlin"
+maven_base_url="https://repo.maven.apache.org/maven2/com/xquik/api/$artifact"
+signing_key_id="D2037E4157E62A59"
+central_token_service="xquik-sonatype-central-token"
+signing_password_service="xquik-maven-gpg-signing-password"
+
+fail() {
+    printf 'bin/release-local: %s\n' "$1" >&2
+    exit 1
+}
+
+step() {
+    printf '==> %s\n' "$1"
+}
+
+keychain_has() {
+    security find-generic-password -s "$1" >/dev/null 2>&1
+}
+
+publish_to_maven_central() {
+    local central_username central_password signing_password signing_key
+
+    central_username="$(
+        security find-generic-password -s "$central_token_service" |
+            sed -n 's/^[[:space:]]*"acct"<blob>="\(.*\)"$/\1/p'
+    )"
+    central_password="$(security find-generic-password -s "$central_token_service" -w)"
+    if [[ -z "$central_username" || -z "$central_password" ]]; then
+        fail "Keychain item $central_token_service needs the token username as its account and the token password as its secret."
+    fi
+
+    signing_password="$(security find-generic-password -s "$signing_password_service" -w)"
+    signing_key="$(
+        printf '%s' "$signing_password" |
+            gpg --batch --pinentry-mode loopback --passphrase-fd 0 \
+                --armor --export-secret-keys "$signing_key_id"
+    )" || fail "GPG could not export key $signing_key_id. Check the passphrase in Keychain item $signing_password_service."
+    [[ -n "$signing_key" ]] || fail "GPG returned no secret key for $signing_key_id."
+
+    ORG_GRADLE_PROJECT_mavenCentralUsername="$central_username" \
+        ORG_GRADLE_PROJECT_mavenCentralPassword="$central_password" \
+        ORG_GRADLE_PROJECT_signingInMemoryKey="$signing_key" \
+        ORG_GRADLE_PROJECT_signingInMemoryKeyPassword="$signing_password" \
+        ./gradlew publishAndReleaseToMavenCentral \
+        -Pkotlin.compiler.execution.strategy=in-process \
+        --no-build-cache \
+        --no-configuration-cache \
+        --no-daemon
+}
+
+step "Checking that main is clean and matches origin/main"
+git fetch --quiet origin main || fail "Could not fetch origin. Check your GitHub access and retry."
+[[ -z "$(git status --porcelain)" ]] || fail "Commit or remove your local changes first."
+[[ "$(git symbolic-ref --quiet --short HEAD || true)" == "main" ]] || fail "Switch to main first."
+[[ "$(git rev-parse HEAD)" == "$(git rev-parse origin/main)" ]] ||
+    fail "Run git pull --ff-only so main matches origin/main."
+
+step "Reading the version from build.gradle.kts"
+version="$(sed -n 's/^[[:space:]]*version = "\([^"]*\)".*/\1/p' build.gradle.kts | head -n 1)"
+[[ -n "$version" ]] || fail "Could not read the version from build.gradle.kts."
+tag="v$version"
+
+step "Checking that tag $tag is not on origin yet"
+remote_tag="$(git ls-remote --tags origin "refs/tags/$tag")" ||
+    fail "Could not list tags on origin. Check your GitHub access and retry."
+[[ -z "$remote_tag" ]] || fail "Tag $tag already exists on origin. Bump the version first."
+
+step "Reading the $version notes from CHANGELOG.md"
+release_notes="$(
+    awk -v version="$version" '
+        /^## / {
+            if (found) exit
+            found = index($0, "## " version " ") == 1 || index($0, "## [" version "]") == 1
+        }
+        found { print }
+    ' CHANGELOG.md
+)"
+[[ -n "$release_notes" ]] || fail "Add a ## $version section to CHANGELOG.md first."
+gh auth status >/dev/null 2>&1 || fail "Run gh auth login first."
+
+step "Checking whether Maven Central already has $version"
+maven_status="$(
+    curl --silent --show-error --head --output /dev/null --write-out '%{http_code}' \
+        --proto '=https' --tlsv1.2 --connect-timeout 10 --max-time 30 \
+        "$maven_base_url/$version/$artifact-$version.pom"
+)" || fail "Could not reach Maven Central. Check your network and retry."
+case "$maven_status" in
+    200) already_published=true ;;
+    404) already_published=false ;;
+    *) fail "Maven Central returned HTTP $maven_status. Retry later." ;;
+esac
+
+if [[ "$already_published" == false ]]; then
+    step "Checking the Keychain items and the GPG signing key"
+    keychain_has "$central_token_service" ||
+        fail "Keychain item $central_token_service is missing. Add it with: security add-generic-password -s $central_token_service -a <token username> -w"
+    keychain_has "$signing_password_service" ||
+        fail "Keychain item $signing_password_service is missing. Add it with: security add-generic-password -s $signing_password_service -a $USER -w"
+    gpg --batch --list-secret-keys "$signing_key_id" >/dev/null 2>&1 ||
+        fail "Import GPG secret key $signing_key_id into your keyring first."
+fi
+
+step "Running bin/check-local"
+bin/check-local
+
+step "Auditing dependencies for known vulnerabilities"
+scripts/audit || fail "Fix the dependency findings above before you release."
+
+step "Building the Maven artifacts"
+./gradlew publishAllPublicationsToLocalFileSystemRepository \
+    -PpublishLocal \
+    --no-build-cache \
+    --no-configuration-cache
+
+if [[ "$already_published" == true ]]; then
+    step "Skipping the upload: Maven Central already has $artifact $version"
+else
+    step "Uploading $version to Maven Central"
+    publish_to_maven_central
+fi
+
+step "Creating and pushing tag $tag"
+if git rev-parse --quiet --verify "refs/tags/$tag" >/dev/null; then
+    [[ "$(git rev-parse "$tag^{commit}")" == "$(git rev-parse HEAD)" ]] ||
+        fail "Local tag $tag points at another commit. Remove it with git tag -d $tag and rerun."
+else
+    git tag --annotate "$tag" --message "$tag"
+fi
+git push origin "refs/tags/$tag"
+
+step "Creating GitHub release $tag"
+printf '%s\n' "$release_notes" |
+    gh release create "$tag" --verify-tag --title "$tag" --notes-file -
+
+printf 'Released %s. Run bin/verify-release-signature %s once Maven Central shows it.\n' \
+    "$tag" "$tag"

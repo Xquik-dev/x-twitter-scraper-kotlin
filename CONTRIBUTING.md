@@ -6,7 +6,9 @@ Follow the shared [Xquik contribution policy][contribution-policy].
 
 ## Set Up
 
-Install JDK 26, JDK 25, `curl`, `tar`, and `unzip`.
+Install JDK 26, JDK 25, `curl`, `tar`, `unzip`, and `shellcheck`.
+
+Install `reuse` or `uv` to include the licensing check.
 
 Use JDK 26 as `JAVA_HOME`.
 
@@ -47,15 +49,19 @@ Run focused tests while editing.
 Run every gate before requesting review:
 
 ```sh
-./scripts/lint
-./scripts/test
-./scripts/coverage
-OSV_SCANNER_BIN=/path/to/osv-scanner ./scripts/audit
-uvx --from reuse==5.1.1 reuse lint
-./scripts/check-reproducible
+bin/check-local
 ```
 
+It runs formatting, shellcheck, REUSE, build, tests, coverage, fuzzing, the
+dependency audit, and the reproducibility check, in that order.
+
+It stops at the first failure and says what to fix.
+
+GitHub runs no checks for this repository, so this run is the gate.
+
 The audit script downloads a verified OSV Scanner when needed.
+
+Set `OSV_SCANNER_BIN` to use an OSV Scanner you already have.
 
 Maintained-source line coverage must remain at least 90%.
 
@@ -84,9 +90,23 @@ Follow [SECURITY.md](SECURITY.md) for private reporting.
 
 ## Releases
 
-Publish an immutable `v*` release after its commit reaches `main`.
+Maintainers release from their own machine with `bin/release-local`.
 
-Verify the tag, changelog, audit, licensing, and reproducible artifacts.
+Land the version bump and its CHANGELOG section on `main` first.
+
+The script stops unless `main` is clean and matches `origin/main`.
+
+It stops if the version's `v*` tag already exists on GitHub.
+
+It runs `bin/check-local` and the dependency audit, then builds the artifacts.
+
+It signs and uploads them to Maven Central, unless that version is already there.
+
+It reads the Central Portal token and the signing key passphrase from the macOS Keychain.
+
+Then it pushes the annotated `v*` tag and creates the GitHub release.
+
+Run `bin/verify-release-signature v<version>` once Maven Central shows the release.
 
 [contribution-policy]: https://github.com/Xquik-dev/.github/blob/main/CONTRIBUTING.md
 [good-first-issues]: https://github.com/Xquik-dev/x-twitter-scraper-kotlin/labels/good%20first%20issue

@@ -1,6 +1,5 @@
 # Xquik Kotlin SDK: Twitter Search, Followers & X Automation
 
-[![CI](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/actions/workflows/ci.yml/badge.svg)](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/actions/workflows/ci.yml)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/13736/badge)](https://www.bestpractices.dev/projects/13736)
 
 Search Twitter, read timelines, fetch profiles & export followers with Xquik.

@@ -22,14 +22,14 @@ This active, released Kotlin SDK meets the OpenSSF eligibility rules.
 | Functional tests | `./scripts/test` rejects failures, errors, and skips |
 | Line coverage | `./scripts/coverage` enforces 90% |
 | Branch coverage | `./scripts/coverage` enforces 80% |
-| Static analysis | Compiler checks, formatting checks, and CodeQL |
+| Static analysis | Compiler checks, formatting checks, and shellcheck |
 | Dynamic analysis | Jazzer fuzzes untrusted retry headers for 30 seconds |
 | Dependency integrity | Lockfiles and SHA-256 verification metadata |
-| Dependency review | Dependabot, OSV Scanner, and an explicit license policy |
-| Licensing gate | Pinned REUSE action checks every repository file |
+| Dependency review | OSV Scanner and an explicit license policy |
+| Licensing gate | REUSE lint checks every repository file |
 | Reproducibility | 2 isolated builds compare every public Maven artifact |
 | Release integrity | Maven Central provides OpenPGP signatures for all 15 artifacts |
-| CI | Pull requests and pushes run pinned, least-privilege workflows |
+| Local gates | `bin/check-local` runs every gate before review and release |
 | Two-factor authentication | The Xquik-dev organization requires 2FA |
 
 The maintained-source gate uses the provider-neutral generated header.
@@ -82,16 +82,13 @@ Gold eligibility still requires review by a different human.
 
 ## Maintenance
 
-Run these evidence commands before releases:
+Run every evidence check before releases:
 
 ```sh
-./scripts/lint
-./scripts/test
-./scripts/coverage
-./scripts/audit
-uvx --from reuse==5.1.1 reuse lint
-./scripts/check-reproducible
+bin/check-local
 ```
+
+`bin/release-local` runs it again before it publishes.
 
 Reassess the register before every major release.
 
