@@ -59,6 +59,9 @@ It stops at the first failure and says what to fix.
 
 GitHub runs no checks for this repository, so this run is the gate.
 
+When the tree is clean and the commit is on GitHub, it posts the result as the
+`xquik-local-checks` commit status. Pass `--no-status` to skip that.
+
 The audit script downloads a verified OSV Scanner when needed.
 
 Set `OSV_SCANNER_BIN` to use an OSV Scanner you already have.

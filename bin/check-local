@@ -5,15 +5,31 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # Runs every repository check in order and stops at the first failure.
+# Posts the result to GitHub as the xquik-local-checks commit status.
+# Pass --no-status to skip the commit status.
 
 set -euo pipefail
 
 cd -- "$(dirname -- "$0")/.."
 
+repository="Xquik-dev/x-twitter-scraper-kotlin"
+status_context="xquik-local-checks"
+post_status=true
+status_sha=""
+current_check=""
+passed_checks=()
+
 fail() {
     printf 'bin/check-local: %s\n' "$1" >&2
     exit 1
 }
+
+for argument in "$@"; do
+    case "$argument" in
+        --no-status) post_status=false ;;
+        *) fail "Unknown option $argument. The only option is --no-status." ;;
+    esac
+done
 
 jdk_major_version() {
     sed -n 's/^JAVA_VERSION="\([0-9]*\).*/\1/p' "$1/release" 2>/dev/null || true
@@ -28,14 +44,48 @@ require_jdk() {
     fi
 }
 
+skip_status() {
+    printf '==> Not posting the %s status: %s.\n' "$status_context" "$1"
+    post_status=false
+}
+
+send_status() {
+    gh api "repos/$repository/statuses/$status_sha" --silent \
+        -f state="$1" \
+        -f context="$status_context" \
+        -f description="${2:0:139}" ||
+        printf '==> Could not post the %s status to GitHub.\n' "$status_context" >&2
+}
+
+join_passed_checks() {
+    local IFS=","
+    printf '%s' "${passed_checks[*]}" | sed 's/,/, /g'
+}
+
+report_status() {
+    local exit_status="$?"
+    trap - EXIT
+    if [[ "$exit_status" == 0 ]]; then
+        send_status success "$(join_passed_checks) passed"
+    elif [[ -n "$current_check" ]]; then
+        send_status failure "$current_check failed after ${#passed_checks[@]} passing checks"
+    else
+        send_status failure "bin/check-local stopped before it finished"
+    fi
+    exit "$exit_status"
+}
+
 run_check() {
     local name="$1"
     local advice="$2"
     shift 2
+    current_check="$name"
     printf '==> %s\n' "$name"
     if ! "$@"; then
         fail "$name failed. $advice"
     fi
+    passed_checks+=("$name")
+    current_check=""
 }
 
 check_licensing() {
@@ -46,25 +96,47 @@ check_licensing() {
     fi
 }
 
+count_tests() {
+    find . -path '*/build/test-results/test/TEST-*.xml' -type f \
+        -exec sed -n 's/^<testsuite .* tests="\([0-9][0-9]*\)".*/\1/p' {} + |
+        awk '{ total += $1 } END { print total + 0 }'
+}
+
 require_jdk JAVA_HOME 26
 require_jdk SHRINKER_JAVA_HOME 25
 command -v shellcheck >/dev/null 2>&1 ||
     fail "Install shellcheck, then rerun bin/check-local."
 
-run_check "Java and Kotlin formatting" \
+if [[ "$post_status" == true ]]; then
+    status_sha="$(git rev-parse HEAD)"
+    if ! command -v gh >/dev/null 2>&1; then
+        skip_status "the GitHub CLI is not installed"
+    elif [[ -n "$(git status --porcelain)" ]]; then
+        skip_status "the working tree has uncommitted changes"
+    elif ! gh api "repos/$repository/commits/$status_sha" --silent >/dev/null 2>&1; then
+        skip_status "commit ${status_sha:0:12} is not on GitHub yet"
+    else
+        printf '==> Posting the %s status to commit %s\n' "$status_context" "${status_sha:0:12}"
+        trap report_status EXIT
+        trap 'exit 130' INT TERM
+        send_status pending "Running local checks"
+    fi
+fi
+
+run_check "Formatting" \
     "Run ./scripts/format and commit the result." \
     ./scripts/lint
 
-run_check "Shell scripts" \
+run_check "Shellcheck" \
     "Fix the shellcheck findings above." \
     shellcheck bin/* scripts/*
 
 if command -v reuse >/dev/null 2>&1 || command -v uvx >/dev/null 2>&1; then
-    run_check "Repository licensing" \
+    run_check "REUSE" \
         "Add the SPDX data that reuse lint lists above." \
         check_licensing
 else
-    printf '==> Skipping repository licensing: install reuse or uv to run it.\n'
+    printf '==> Skipping REUSE: install reuse or uv to run it.\n'
 fi
 
 run_check "Build" \
@@ -74,12 +146,13 @@ run_check "Build" \
 run_check "Tests" \
     "Fix the failing or skipped tests above." \
     ./scripts/test
+passed_checks[${#passed_checks[@]} - 1]="Tests ($(count_tests) passed)"
 
 run_check "Coverage" \
     "Add tests until maintained code has 90% line and 80% branch coverage." \
     ./scripts/coverage
 
-run_check "Retry header fuzzing" \
+run_check "Fuzzing" \
     "Fix the retry header parsing for the input Jazzer printed above." \
     env JAZZER_FUZZ=1 ./gradlew \
     :x-twitter-scraper-kotlin-core:test \
@@ -88,11 +161,11 @@ run_check "Retry header fuzzing" \
     --no-build-cache \
     --no-configuration-cache
 
-run_check "Dependency licenses and vulnerabilities" \
+run_check "Dependency audit" \
     "Upgrade or replace the dependencies listed above." \
     ./scripts/audit
 
-run_check "Reproducible Maven artifacts" \
+run_check "Reproducible build" \
     "Remove the build input that differs between the two builds above." \
     ./scripts/check-reproducible
 
