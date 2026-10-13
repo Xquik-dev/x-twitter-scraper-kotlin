@@ -86,7 +86,7 @@ Full Changelog: [v0.7.3...v0.9.0](https://github.com/Xquik-dev/x-twitter-scraper
 
 ### Documentation
 
-* add Contributor Covenant 2.1 Code of Conduct ([#2192](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/2192)) ([5b5de80](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/5b5de80476afcf2bce31ad3b786c55a46184ad84))
+* add Contributor Covenant 2.1 Code of Conduct ([5b5de80](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/5b5de80476afcf2bce31ad3b786c55a46184ad84))
 * add DeepWiki badge ([16d59b2](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/16d59b2ee8f442e33f52d9e8b9278d06c9e27537))
 * map common X data tasks ([#12](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/12)) ([62064ba](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/62064ba72a08b95917a09845e126b5cd3cf5d22e))
 * mark Maven publication pending ([ffbec89](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/ffbec89b4e5001c3cf70b345d2d165f5e50fcedb))
@@ -227,7 +227,7 @@ Full Changelog: [v0.4.1...v0.5.0](https://github.com/Xquik-dev/x-twitter-scraper
 
 ### Documentation
 
-* add Contributor Covenant 2.1 Code of Conduct ([#2192](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/2192)) ([5b5de80](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/5b5de80476afcf2bce31ad3b786c55a46184ad84))
+* add Contributor Covenant 2.1 Code of Conduct ([5b5de80](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/5b5de80476afcf2bce31ad3b786c55a46184ad84))
 * add DeepWiki badge ([16d59b2](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/16d59b2ee8f442e33f52d9e8b9278d06c9e27537))
 * mark Maven publication pending ([ffbec89](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/ffbec89b4e5001c3cf70b345d2d165f5e50fcedb))
 
@@ -267,7 +267,7 @@ Full Changelog: [v0.3.0...v0.4.0](https://github.com/Xquik-dev/x-twitter-scraper
 
 ### Documentation
 
-* add Contributor Covenant 2.1 Code of Conduct ([#2192](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/2192)) ([5b5de80](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/5b5de80476afcf2bce31ad3b786c55a46184ad84))
+* add Contributor Covenant 2.1 Code of Conduct ([5b5de80](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/5b5de80476afcf2bce31ad3b786c55a46184ad84))
 
 ## 0.3.0 (2026-04-08)
 
