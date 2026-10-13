@@ -4,7 +4,7 @@ This register tracks the Gold assessment for this repository.
 
 The official entry is [bestpractices.dev project 13736][badge].
 
-Assessment date: 2026-07-24.
+The assessment date is 2026-07-24.
 
 ## Eligibility
 
@@ -15,21 +15,23 @@ This active, released Kotlin SDK meets the OpenSSF eligibility rules.
 | Area | Evidence |
 | --- | --- |
 | License | Apache-2.0 and REUSE 3.3 metadata |
-| Contribution process | DCO sign-off and independent review rules |
+| Contribution process | DCO sign-off and `bin/check-local` before every merge |
 | Governance | Public roles, decisions, releases, and continuity policy |
 | Security reporting | Private reporting, response targets, boundaries, and threat model |
 | Runtime compatibility | Java 8 bytecode with JDK 26 tests |
 | Functional tests | `./scripts/test` rejects failures, errors, and skips |
 | Line coverage | `./scripts/coverage` enforces 90% |
 | Branch coverage | `./scripts/coverage` enforces 80% |
-| Static analysis | Compiler checks, formatting checks, and CodeQL |
+| Static analysis | Compiler checks, formatting checks, ShellCheck, and local CodeQL security-extended queries |
 | Dynamic analysis | Jazzer fuzzes untrusted retry headers for 30 seconds |
 | Dependency integrity | Lockfiles and SHA-256 verification metadata |
-| Dependency review | Dependabot, OSV Scanner, and an explicit license policy |
-| Licensing gate | Pinned REUSE action checks every repository file |
+| Dependency review | OSV Scanner at every severity, reviewed exceptions, and an explicit license policy |
+| Licensing gate | REUSE 6.2.0 checks every repository file on every run |
 | Reproducibility | 2 isolated builds compare every public Maven artifact |
 | Release integrity | Maven Central provides OpenPGP signatures for all 15 artifacts |
-| CI | Pull requests and pushes run pinned, least-privilege workflows |
+| Local gates | `bin/check-local` runs every gate before review, merge, and release |
+| Script tests | 51 tests run the check, audit, CodeQL, signature, and release scripts with fake commands |
+| Release process | `bin/release-local` publishes from a maintained local machine |
 | Two-factor authentication | The Xquik-dev organization requires 2FA |
 
 The maintained-source gate uses the provider-neutral generated header.
@@ -45,22 +47,22 @@ Retry delays reject invalid values and cap server-provided delays.
 
 | Evidence | Result |
 | --- | --- |
-| Functional tests | 1,405 tests across 329 suites; 0 failures, errors, or skips |
-| Maintained coverage | 1,128/1,230 lines (91.71%); 410/504 branches (81.35%) |
-| Raw coverage | 103,368/107,366 lines (96.28%); 28,397/31,076 branches (91.38%) |
+| Functional tests | 1,405 tests across 329 suites with 0 failures, errors, or skips |
+| Maintained coverage | 1,128/1,230 lines (91.71%) and 410/504 branches (81.35%) |
+| Raw coverage | 103,368/107,366 lines (96.28%) and 28,397/31,076 branches (91.38%) |
 | Dynamic analysis | Jazzer completed 3,431,150 runs without findings |
 | Repository licensing | REUSE covered 839/839 files |
-| Dependency licensing | 106 components; 0 unknown or disallowed licenses |
+| Dependency licensing | 106 components with 0 unknown or disallowed licenses |
 | Vulnerability audit | OSV found 0 issues in 7 lockfiles and checksum metadata |
 | Reproducibility | 15 Maven artifacts matched byte-for-byte |
 
 Maven Central published `v0.9.2` from commit `5421bc2769a5a027485c402b6bad45d9cda704ef` and its exact tag.
 
-All 15 public files verify with this OpenPGP fingerprint:
+All 15 public files verify with this OpenPGP fingerprint.
 
 `6965 E561 C0AC EE32 060A B961 D203 7E41 57E6 2A59`
 
-The root JAR SHA-256 is:
+The root JAR SHA-256 follows.
 
 `fa72055cbf4698ee196aead8d8f5ffcde3ee58c91ca5ca7fc52070038aca5da0`
 
@@ -82,16 +84,13 @@ Gold eligibility still requires review by a different human.
 
 ## Maintenance
 
-Run these evidence commands before releases:
+Run every evidence check before releases.
 
 ```sh
-./scripts/lint
-./scripts/test
-./scripts/coverage
-./scripts/audit
-uvx --from reuse==5.1.1 reuse lint
-./scripts/check-reproducible
+bin/check-local
 ```
+
+`bin/release-local` runs the same checks before it publishes.
 
 Reassess the register before every major release.
 
