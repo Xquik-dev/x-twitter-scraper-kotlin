@@ -19,7 +19,12 @@ import java.util.UUID
 
 internal inline fun <reified T> json(jsonMapper: JsonMapper, value: T): HttpRequestBody =
     object : HttpRequestBody {
-        private val bytes: ByteArray by lazy { jsonMapper.writeValueAsBytes(value) }
+        // A plain Lazy field, not `by lazy`. CodeQL cannot read a delegated property in an
+        // anonymous object of a generic function, so it would scan this file only in part.
+        private val lazyBytes: Lazy<ByteArray> = lazy { jsonMapper.writeValueAsBytes(value) }
+
+        private val bytes: ByteArray
+            get() = lazyBytes.value
 
         override fun writeTo(outputStream: OutputStream) = outputStream.write(bytes)
 
