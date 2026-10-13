@@ -30,7 +30,7 @@ This active, released Kotlin SDK meets the OpenSSF eligibility rules.
 | Reproducibility | 2 isolated builds compare every public Maven artifact |
 | Release integrity | Maven Central provides OpenPGP signatures for all 15 artifacts |
 | Local gates | `bin/check-local` runs every gate before review, merge, and release |
-| Script tests | 51 tests run the check, audit, CodeQL, signature, and release scripts with fake commands |
+| Script tests | 54 tests run the check, audit, CodeQL, signature, and release scripts with fake commands |
 | Release process | `bin/release-local` publishes from a maintained local machine |
 | Two-factor authentication | The Xquik-dev organization requires 2FA |
 
