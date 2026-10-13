@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+
+# SPDX-FileCopyrightText: 2026 Xquik contributors
+#
+# SPDX-License-Identifier: Apache-2.0
+
+# Runs the CodeQL java-kotlin security-extended suite on a copy of the tracked
+# sources. Any finding fails the run.
+
+set -euo pipefail
+
+cd -- "$(dirname -- "$0")/.."
+
+# CodeQL's Kotlin extractor rejects pre-release compilers, so the copy builds
+# with the latest stable Kotlin plugin, as the removed CodeQL workflow did.
+prerelease_kotlin="2.4.20-Beta2"
+stable_kotlin="2.4.10"
+query_suite="codeql/java-queries:codeql-suites/java-security-extended.qls"
+
+for tool in codeql jq perl; do
+    if ! command -v "$tool" >/dev/null 2>&1; then
+        printf 'Install %s, then rerun scripts/codeql.\n' "$tool" >&2
+        exit 1
+    fi
+done
+
+codeql_workspace="$(mktemp -d "${TMPDIR:-/tmp}/xquik-kotlin-codeql.XXXXXX")"
+trap 'rm -rf -- "$codeql_workspace"' EXIT
+source_root="$codeql_workspace/source"
+database="$codeql_workspace/database"
+results="$codeql_workspace/results.sarif"
+
+echo "==> Copying tracked sources"
+mkdir -p "$source_root"
+git ls-files -z | tar --null -T - -cf - | tar -xf - -C "$source_root"
+(
+    cd "$source_root"
+    perl -pi -e "s/\\Q$prerelease_kotlin\\E/$stable_kotlin/g" \
+        buildSrc/build.gradle.kts ./*/gradle.lockfile
+)
+
+echo "==> Building the CodeQL database"
+codeql database create "$database" \
+    --language=java-kotlin \
+    --source-root="$source_root" \
+    --threads=0 \
+    --command="./gradlew clean classes --write-verification-metadata sha256 --no-daemon --no-build-cache --no-configuration-cache -Pkotlin.compiler.execution.strategy=in-process"
+
+echo "==> Running $query_suite"
+codeql database analyze "$database" "$query_suite" \
+    --download \
+    --threads=0 \
+    --format=sarif-latest \
+    --output="$results"
+
+finding_count="$(jq '[.runs[].results[]] | length' "$results")"
+if (( finding_count > 0 )); then
+    jq -r '
+        .runs[].results[]
+        | .locations[0].physicalLocation as $location
+        | "\(.ruleId) \($location.artifactLocation.uri):\($location.region.startLine) \(.message.text | split("\n")[0])"
+    ' "$results" >&2
+    printf 'CodeQL found %d issues.\n' "$finding_count" >&2
+    exit 1
+fi
+
+echo "CodeQL found no issues."

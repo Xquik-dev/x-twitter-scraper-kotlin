@@ -68,6 +68,92 @@ else
 fi
 
 echo "==> Auditing locked dependencies"
-"$scanner" scan source --recursive .
+scan_report="$audit_workspace/osv-scanner.json"
+scan_status=0
+"$scanner" scan source --recursive --format json . >"$scan_report" || scan_status=$?
+if (( scan_status > 1 )); then
+    printf 'OSV Scanner stopped with exit code %d.\n' "$scan_status" >&2
+    exit 1
+fi
+
+# A finding blocks unless it is development-only, has no fixed version, and
+# audit-exceptions.json lists it with a reason and a recheck date at most 30
+# days out. Findings in the published modules' runtime classpaths always block.
+if ! jq -e 'type == "array"' audit-exceptions.json >/dev/null 2>&1; then
+    echo "audit-exceptions.json must hold a JSON array." >&2
+    exit 1
+fi
+published_modules=(
+    x-twitter-scraper-kotlin
+    x-twitter-scraper-kotlin-client-okhttp
+    x-twitter-scraper-kotlin-core
+)
+runtime_packages="$(
+    for module in "${published_modules[@]}"; do
+        awk -F '[:=]' 'NF >= 4 && $NF ~ /(^|,)runtimeClasspath(,|$)/ { print $1 ":" $2 }' \
+            "$module/gradle.lockfile"
+    done | sort -u | jq -R . | jq -s -c .
+)"
+today="$(date -u +%F)"
+latest_recheck="$(date -u -v+30d +%F 2>/dev/null || date -u -d '+30 days' +%F)"
+
+verdicts="$(
+    jq -r \
+        --arg root "$PWD/" \
+        --arg today "$today" \
+        --arg latest "$latest_recheck" \
+        --argjson runtime "$runtime_packages" \
+        --slurpfile exceptions audit-exceptions.json \
+        '
+        [
+            .results[]
+            | (.source.path | ltrimstr($root)) as $path
+            | .packages[]
+            | .package as $package
+            | .vulnerabilities as $records
+            | .groups[]
+            | (.ids + .aliases) as $names
+            | ([$records[] | select(.id | IN($names[])) | .affected[]?
+                | select(.package.name == $package.name)
+                | .ranges[]?.events[]? | .fixed // empty] | unique) as $fixed
+            | ([$exceptions[0][]
+                | select(.package == $package.name and (.id | IN($names[])))] | first) as $exception
+            | {
+                finding: "\(.ids[0]) \($package.name)@\($package.version)",
+                path: $path,
+                verdict: (
+                    if ($package.name | IN($runtime[])) then
+                        "blocked: shipped runtime dependency"
+                    elif ($fixed | length) > 0 then
+                        "blocked: fixed in \($fixed | join(", "))"
+                    elif $exception == null then
+                        "blocked: not listed in audit-exceptions.json"
+                    elif ($exception.reason | IN("build-time only", "peer dependency provided by the host") | not) then
+                        "blocked: the exception reason must be build-time only or peer dependency provided by the host"
+                    elif ($exception.path | type) != "string" or $exception.path == "" then
+                        "blocked: the exception needs the package path"
+                    elif ($exception.recheck | type) != "string" or $exception.recheck <= $today then
+                        "blocked: the exception was due for a recheck on \($exception.recheck)"
+                    elif $exception.recheck > $latest then
+                        "blocked: the exception recheck date is more than 30 days out"
+                    else
+                        "allowed until \($exception.recheck): \($exception.reason)"
+                    end
+                )
+            }
+        ]
+        | group_by(.finding)[]
+        | "\(.[0].verdict)\t\(.[0].finding)\t\(map(.path) | unique | join(", "))"
+        ' "$scan_report"
+)"
+
+if [[ -n "$verdicts" ]]; then
+    printf '%s\n' "$verdicts" | awk -F '\t' '{ printf "%s %s (in %s)\n", $2, $1, $3 }'
+fi
+blocked_count="$(printf '%s\n' "$verdicts" | grep -c '^blocked' || true)"
+if (( blocked_count > 0 )); then
+    printf '%d dependency findings block the audit.\n' "$blocked_count" >&2
+    exit 1
+fi
 
 echo "Dependency licenses and vulnerabilities passed policy."

@@ -6,7 +6,7 @@ Follow the shared [Xquik contribution policy][contribution-policy].
 
 ## Set Up
 
-Install JDK 26, JDK 25, `curl`, `tar`, `unzip`, and `shellcheck`.
+Install JDK 26, JDK 25, `curl`, `tar`, `unzip`, `shellcheck`, `jq`, and the CodeQL CLI.
 
 Install `reuse` or `uv` to include the licensing check.
 
@@ -52,8 +52,10 @@ Run every gate before requesting review:
 bin/check-local
 ```
 
-It runs formatting, shellcheck, REUSE, build, tests, coverage, fuzzing, the
-dependency audit, and the reproducibility check, in that order.
+It runs formatting, shellcheck, REUSE, build, CodeQL, tests, coverage, fuzzing,
+the dependency audit, and the reproducibility check, in that order.
+
+CodeQL runs the java-kotlin security-extended suite, and any finding fails.
 
 It stops at the first failure and says what to fix.
 
@@ -65,6 +67,17 @@ When the tree is clean and the commit is on GitHub, it posts the result as the
 The audit script downloads a verified OSV Scanner when needed.
 
 Set `OSV_SCANNER_BIN` to use an OSV Scanner you already have.
+
+Any finding in a published module's runtime classpath fails the audit.
+
+A development-only finding fails too when a fixed version exists.
+
+An unfixable development-only finding passes only when `audit-exceptions.json`
+lists it with `id`, `package`, `path`, `reason`, and `recheck`.
+
+The reason is "build-time only" or "peer dependency provided by the host".
+
+The recheck date is at most 30 days out, and the finding blocks again on that date.
 
 Maintained-source line coverage must remain at least 90%.
 

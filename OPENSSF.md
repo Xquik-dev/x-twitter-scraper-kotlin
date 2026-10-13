@@ -22,10 +22,10 @@ This active, released Kotlin SDK meets the OpenSSF eligibility rules.
 | Functional tests | `./scripts/test` rejects failures, errors, and skips |
 | Line coverage | `./scripts/coverage` enforces 90% |
 | Branch coverage | `./scripts/coverage` enforces 80% |
-| Static analysis | Compiler checks, formatting checks, and shellcheck |
+| Static analysis | Compiler checks, formatting checks, shellcheck, and CodeQL security-extended |
 | Dynamic analysis | Jazzer fuzzes untrusted retry headers for 30 seconds |
 | Dependency integrity | Lockfiles and SHA-256 verification metadata |
-| Dependency review | OSV Scanner and an explicit license policy |
+| Dependency review | OSV Scanner, reviewed `audit-exceptions.json` entries, and an explicit license policy |
 | Licensing gate | REUSE lint checks every repository file |
 | Reproducibility | 2 isolated builds compare every public Maven artifact |
 | Release integrity | Maven Central provides OpenPGP signatures for all 15 artifacts |

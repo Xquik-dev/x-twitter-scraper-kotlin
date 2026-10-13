@@ -5,8 +5,10 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # Runs every repository check in order and stops at the first failure.
-# Posts the result to GitHub as the xquik-local-checks commit status.
-# Pass --no-status to skip the commit status.
+# Posts the result to GitHub as the xquik-local-checks commit status, using
+# the gh login of whoever runs it: the owner's login on the release machine.
+# The status says success only after every mandatory check passed, and its
+# text names only the checks that ran. Pass --no-status to skip posting.
 
 set -euo pipefail
 
@@ -18,6 +20,7 @@ post_status=true
 status_sha=""
 current_check=""
 passed_checks=()
+skipped_checks=()
 
 fail() {
     printf 'bin/check-local: %s\n' "$1" >&2
@@ -57,18 +60,31 @@ send_status() {
         printf '==> Could not post the %s status to GitHub.\n' "$status_context" >&2
 }
 
-join_passed_checks() {
+join_checks() {
     local IFS=","
-    printf '%s' "${passed_checks[*]}" | sed 's/,/, /g'
+    printf '%s' "$*" | sed 's/,/, /g'
+}
+
+success_description() {
+    local description
+    description="$(join_checks "${passed_checks[@]}") passed"
+    if (( ${#skipped_checks[@]} > 0 )); then
+        description="$description; $(join_checks "${skipped_checks[@]}") skipped"
+    fi
+    printf '%s' "$description"
 }
 
 report_status() {
     local exit_status="$?"
     trap - EXIT
     if [[ "$exit_status" == 0 ]]; then
-        send_status success "$(join_passed_checks) passed"
+        send_status success "$(success_description)"
     elif [[ -n "$current_check" ]]; then
-        send_status failure "$current_check failed after ${#passed_checks[@]} passing checks"
+        if (( ${#passed_checks[@]} > 0 )); then
+            send_status failure "$current_check failed after $(join_checks "${passed_checks[@]}") passed"
+        else
+            send_status failure "$current_check failed"
+        fi
     else
         send_status failure "bin/check-local stopped before it finished"
     fi
@@ -105,7 +121,11 @@ count_tests() {
 require_jdk JAVA_HOME 26
 require_jdk SHRINKER_JAVA_HOME 25
 command -v shellcheck >/dev/null 2>&1 ||
-    fail "Install shellcheck, then rerun bin/check-local."
+    fail "Install shellcheck with brew install shellcheck, then rerun bin/check-local."
+command -v jq >/dev/null 2>&1 ||
+    fail "Install jq with brew install jq, then rerun bin/check-local."
+command -v codeql >/dev/null 2>&1 ||
+    fail "Install the CodeQL CLI with brew install --cask codeql, then rerun bin/check-local."
 
 if [[ "$post_status" == true ]]; then
     status_sha="$(git rev-parse HEAD)"
@@ -123,7 +143,7 @@ if [[ "$post_status" == true ]]; then
     fi
 fi
 
-run_check "Formatting" \
+run_check "Format" \
     "Run ./scripts/format and commit the result." \
     ./scripts/lint
 
@@ -137,11 +157,16 @@ if command -v reuse >/dev/null 2>&1 || command -v uvx >/dev/null 2>&1; then
         check_licensing
 else
     printf '==> Skipping REUSE: install reuse or uv to run it.\n'
+    skipped_checks+=("REUSE")
 fi
 
 run_check "Build" \
     "Fix the compiler errors above." \
     ./scripts/build
+
+run_check "CodeQL" \
+    "Fix the CodeQL findings above." \
+    ./scripts/codeql
 
 run_check "Tests" \
     "Fix the failing or skipped tests above." \
@@ -161,8 +186,8 @@ run_check "Fuzzing" \
     --no-build-cache \
     --no-configuration-cache
 
-run_check "Dependency audit" \
-    "Upgrade or replace the dependencies listed above." \
+run_check "Audit" \
+    "Upgrade the dependencies listed above. Only unfixable build-time findings go in audit-exceptions.json." \
     ./scripts/audit
 
 run_check "Reproducible build" \
