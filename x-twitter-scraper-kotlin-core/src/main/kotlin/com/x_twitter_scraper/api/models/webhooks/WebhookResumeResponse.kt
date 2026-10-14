@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.models.webhooks
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -37,13 +35,13 @@ private constructor(
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun statusCode(): Long = statusCode.getRequired("statusCode")
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun success(): Boolean = success.getRequired("success")
 
@@ -51,7 +49,7 @@ private constructor(
      * Webhook endpoint registered to receive event deliveries.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun webhook(): Webhook = webhook.getRequired("webhook")
 
@@ -120,33 +118,18 @@ private constructor(
 
         fun statusCode(statusCode: Long) = statusCode(JsonField.of(statusCode))
 
-        /**
-         * Sets [Builder.statusCode] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.statusCode] with a well-typed [Long] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.statusCode] to an arbitrary JSON value. */
         fun statusCode(statusCode: JsonField<Long>) = apply { this.statusCode = statusCode }
 
         fun success(success: Boolean) = success(JsonField.of(success))
 
-        /**
-         * Sets [Builder.success] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.success] with a well-typed [Boolean] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.success] to an arbitrary JSON value. */
         fun success(success: JsonField<Boolean>) = apply { this.success = success }
 
         /** Webhook endpoint registered to receive event deliveries. */
         fun webhook(webhook: Webhook) = webhook(JsonField.of(webhook))
 
-        /**
-         * Sets [Builder.webhook] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.webhook] with a well-typed [Webhook] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.webhook] to an arbitrary JSON value. */
         fun webhook(webhook: JsonField<Webhook>) = apply { this.webhook = webhook }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -220,11 +203,6 @@ private constructor(
             false
         }
 
-    /**
-     * Returns a score indicating how many valid values are contained in this object recursively.
-     *
-     * Used for best match union deserialization.
-     */
     internal fun validity(): Int =
         (if (statusCode.asKnown() == null) 0 else 1) +
             (if (success.asKnown() == null) 0 else 1) +

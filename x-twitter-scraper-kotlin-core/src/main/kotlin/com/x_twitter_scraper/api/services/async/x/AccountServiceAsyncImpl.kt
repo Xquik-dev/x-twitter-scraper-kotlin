@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.services.async.x
 
 import com.x_twitter_scraper.api.core.ClientOptions
@@ -49,44 +47,32 @@ class AccountServiceAsyncImpl internal constructor(private val clientOptions: Cl
     override suspend fun create(
         params: AccountCreateParams,
         requestOptions: RequestOptions,
-    ): AccountCreateResponse =
-        // post /x/accounts
-        withRawResponse().create(params, requestOptions).parse()
+    ): AccountCreateResponse = withRawResponse().create(params, requestOptions).parse()
 
     override suspend fun retrieve(
         params: AccountRetrieveParams,
         requestOptions: RequestOptions,
-    ): XAccountDetail =
-        // get /x/accounts/{id}
-        withRawResponse().retrieve(params, requestOptions).parse()
+    ): XAccountDetail = withRawResponse().retrieve(params, requestOptions).parse()
 
     override suspend fun list(
         params: AccountListParams,
         requestOptions: RequestOptions,
-    ): AccountListResponse =
-        // get /x/accounts
-        withRawResponse().list(params, requestOptions).parse()
+    ): AccountListResponse = withRawResponse().list(params, requestOptions).parse()
 
     override suspend fun delete(
         params: AccountDeleteParams,
         requestOptions: RequestOptions,
-    ): AccountDeleteResponse =
-        // delete /x/accounts/{id}
-        withRawResponse().delete(params, requestOptions).parse()
+    ): AccountDeleteResponse = withRawResponse().delete(params, requestOptions).parse()
 
     override suspend fun bulkRetry(
         params: AccountBulkRetryParams,
         requestOptions: RequestOptions,
-    ): AccountBulkRetryResponse =
-        // post /x/accounts/bulk-retry
-        withRawResponse().bulkRetry(params, requestOptions).parse()
+    ): AccountBulkRetryResponse = withRawResponse().bulkRetry(params, requestOptions).parse()
 
     override suspend fun reauth(
         params: AccountReauthParams,
         requestOptions: RequestOptions,
-    ): AccountReauthResponse =
-        // post /x/accounts/{id}/reauth
-        withRawResponse().reauth(params, requestOptions).parse()
+    ): AccountReauthResponse = withRawResponse().reauth(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         AccountServiceAsync.WithRawResponse {
@@ -136,8 +122,6 @@ class AccountServiceAsyncImpl internal constructor(private val clientOptions: Cl
             params: AccountRetrieveParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<XAccountDetail> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
@@ -193,8 +177,6 @@ class AccountServiceAsyncImpl internal constructor(private val clientOptions: Cl
             params: AccountDeleteParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<AccountDeleteResponse> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
@@ -252,8 +234,6 @@ class AccountServiceAsyncImpl internal constructor(private val clientOptions: Cl
             params: AccountReauthParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<AccountReauthResponse> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()

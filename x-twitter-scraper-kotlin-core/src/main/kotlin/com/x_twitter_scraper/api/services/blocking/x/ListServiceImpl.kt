@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.services.blocking.x
 
 import com.x_twitter_scraper.api.core.ClientOptions
@@ -40,23 +38,17 @@ class ListServiceImpl internal constructor(private val clientOptions: ClientOpti
     override fun retrieveFollowers(
         params: ListRetrieveFollowersParams,
         requestOptions: RequestOptions,
-    ): PaginatedUsers =
-        // get /x/lists/{id}/followers
-        withRawResponse().retrieveFollowers(params, requestOptions).parse()
+    ): PaginatedUsers = withRawResponse().retrieveFollowers(params, requestOptions).parse()
 
     override fun retrieveMembers(
         params: ListRetrieveMembersParams,
         requestOptions: RequestOptions,
-    ): PaginatedUsers =
-        // get /x/lists/{id}/members
-        withRawResponse().retrieveMembers(params, requestOptions).parse()
+    ): PaginatedUsers = withRawResponse().retrieveMembers(params, requestOptions).parse()
 
     override fun retrieveTweets(
         params: ListRetrieveTweetsParams,
         requestOptions: RequestOptions,
-    ): PaginatedTweets =
-        // get /x/lists/{id}/tweets
-        withRawResponse().retrieveTweets(params, requestOptions).parse()
+    ): PaginatedTweets = withRawResponse().retrieveTweets(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         ListService.WithRawResponse {
@@ -76,8 +68,6 @@ class ListServiceImpl internal constructor(private val clientOptions: ClientOpti
             params: ListRetrieveFollowersParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<PaginatedUsers> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
@@ -106,8 +96,6 @@ class ListServiceImpl internal constructor(private val clientOptions: ClientOpti
             params: ListRetrieveMembersParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<PaginatedUsers> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
@@ -136,8 +124,6 @@ class ListServiceImpl internal constructor(private val clientOptions: ClientOpti
             params: ListRetrieveTweetsParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<PaginatedTweets> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()

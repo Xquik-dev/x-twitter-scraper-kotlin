@@ -119,8 +119,6 @@ sealed class JsonField<out T : Any> {
                     try {
                         JsonValue.from(it)
                     } catch (e: IllegalArgumentException) {
-                        // The known value is a list, but not all items are convertible to
-                        // `JsonValue`.
                         return null
                     }
                 }
@@ -146,8 +144,6 @@ sealed class JsonField<out T : Any> {
                             try {
                                 JsonValue.from(value)
                             } catch (e: IllegalArgumentException) {
-                                // The known value is a map, but not all values are convertible to
-                                // `JsonValue`.
                                 return null
                             }
 
@@ -304,35 +300,6 @@ sealed class JsonValue : JsonField<Nothing>() {
 
         /**
          * Converts the given [value] to a [JsonValue].
-         *
-         * This method works best on primitive types, [List] values, [Map] values, and nested
-         * combinations of these. For example:
-         * ```kotlin
-         * // Create primitive JSON values
-         * val nullValue: JsonValue = JsonValue.from(null)
-         * val booleanValue: JsonValue = JsonValue.from(true)
-         * val numberValue: JsonValue = JsonValue.from(42)
-         * val stringValue: JsonValue = JsonValue.from("Hello World!")
-         *
-         * // Create a JSON array value equivalent to `["Hello", "World"]`
-         * val arrayValue: JsonValue = JsonValue.from(listOf("Hello", "World"))
-         *
-         * // Create a JSON object value equivalent to `{ "a": 1, "b": 2 }`
-         * val objectValue: JsonValue = JsonValue.from(mapOf(
-         *   "a" to 1,
-         *   "b" to 2,
-         * ))
-         *
-         * // Create an arbitrarily nested JSON equivalent to:
-         * // {
-         * //   "a": [1, 2],
-         * //   "b": [3, 4]
-         * // }
-         * val complexValue: JsonValue = JsonValue.from(mapOf(
-         *   "a" to listOf(1, 2),
-         *   "b" to listOf(3, 4),
-         * ))
-         * ```
          *
          * @throws IllegalArgumentException if [value] is not JSON serializable.
          */

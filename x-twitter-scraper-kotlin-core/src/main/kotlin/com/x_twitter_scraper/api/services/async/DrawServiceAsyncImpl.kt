@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.services.async
 
 import com.x_twitter_scraper.api.core.ClientOptions
@@ -44,30 +42,22 @@ class DrawServiceAsyncImpl internal constructor(private val clientOptions: Clien
     override suspend fun retrieve(
         params: DrawRetrieveParams,
         requestOptions: RequestOptions,
-    ): DrawRetrieveResponse =
-        // get /draws/{id}
-        withRawResponse().retrieve(params, requestOptions).parse()
+    ): DrawRetrieveResponse = withRawResponse().retrieve(params, requestOptions).parse()
 
     override suspend fun list(
         params: DrawListParams,
         requestOptions: RequestOptions,
-    ): DrawListResponse =
-        // get /draws
-        withRawResponse().list(params, requestOptions).parse()
+    ): DrawListResponse = withRawResponse().list(params, requestOptions).parse()
 
     override suspend fun export(
         params: DrawExportParams,
         requestOptions: RequestOptions,
-    ): HttpResponse =
-        // get /draws/{id}/export
-        withRawResponse().export(params, requestOptions)
+    ): HttpResponse = withRawResponse().export(params, requestOptions)
 
     override suspend fun run(
         params: DrawRunParams,
         requestOptions: RequestOptions,
-    ): DrawRunResponse =
-        // post /draws
-        withRawResponse().run(params, requestOptions).parse()
+    ): DrawRunResponse = withRawResponse().run(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         DrawServiceAsync.WithRawResponse {
@@ -89,8 +79,6 @@ class DrawServiceAsyncImpl internal constructor(private val clientOptions: Clien
             params: DrawRetrieveParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<DrawRetrieveResponse> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
@@ -143,8 +131,6 @@ class DrawServiceAsyncImpl internal constructor(private val clientOptions: Clien
             params: DrawExportParams,
             requestOptions: RequestOptions,
         ): HttpResponse {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()

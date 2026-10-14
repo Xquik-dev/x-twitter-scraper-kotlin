@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.services.async
 
 import com.x_twitter_scraper.api.core.ClientOptions
@@ -44,26 +42,19 @@ class DraftServiceAsyncImpl internal constructor(private val clientOptions: Clie
     override suspend fun create(
         params: DraftCreateParams,
         requestOptions: RequestOptions,
-    ): DraftDetail =
-        // post /drafts
-        withRawResponse().create(params, requestOptions).parse()
+    ): DraftDetail = withRawResponse().create(params, requestOptions).parse()
 
     override suspend fun retrieve(
         params: DraftRetrieveParams,
         requestOptions: RequestOptions,
-    ): DraftDetail =
-        // get /drafts/{id}
-        withRawResponse().retrieve(params, requestOptions).parse()
+    ): DraftDetail = withRawResponse().retrieve(params, requestOptions).parse()
 
     override suspend fun list(
         params: DraftListParams,
         requestOptions: RequestOptions,
-    ): DraftListResponse =
-        // get /drafts
-        withRawResponse().list(params, requestOptions).parse()
+    ): DraftListResponse = withRawResponse().list(params, requestOptions).parse()
 
     override suspend fun delete(params: DraftDeleteParams, requestOptions: RequestOptions) {
-        // delete /drafts/{id}
         withRawResponse().delete(params, requestOptions)
     }
 
@@ -115,8 +106,6 @@ class DraftServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: DraftRetrieveParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<DraftDetail> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
@@ -171,8 +160,6 @@ class DraftServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: DraftDeleteParams,
             requestOptions: RequestOptions,
         ): HttpResponse {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()

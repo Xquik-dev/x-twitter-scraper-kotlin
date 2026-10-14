@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.models.guestwallets
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -41,7 +39,7 @@ private constructor(
      * USD cents accepted for this checkout.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun amountMinor(): Long = body.amountMinor()
 
@@ -50,9 +48,6 @@ private constructor(
      * ```kotlin
      * JsonValue.from("usd")
      * ```
-     *
-     * However, this method can be useful for debugging and logging (e.g. if the server responded
-     * with an unexpected value).
      */
     fun _currency(): JsonValue = body._currency()
 
@@ -104,39 +99,22 @@ private constructor(
 
         fun idempotencyKey(idempotencyKey: String) = apply { this.idempotencyKey = idempotencyKey }
 
-        /**
-         * Sets the entire request body.
-         *
-         * This is generally only useful if you are already constructing the body separately.
-         * Otherwise, it's more convenient to use the top-level setters instead:
-         * - [amountMinor]
-         * - [currency]
-         */
+        /** Sets the entire request body. */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
         /** USD cents accepted for this checkout. */
         fun amountMinor(amountMinor: Long) = apply { body.amountMinor(amountMinor) }
 
-        /**
-         * Sets [Builder.amountMinor] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.amountMinor] with a well-typed [Long] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
+        /** Sets [Builder.amountMinor] to an arbitrary JSON value. */
         fun amountMinor(amountMinor: JsonField<Long>) = apply { body.amountMinor(amountMinor) }
 
         /**
          * Sets the field to an arbitrary JSON value.
          *
-         * It is usually unnecessary to call this method because the field defaults to the
-         * following:
+         * Defaults to the following:
          * ```kotlin
          * JsonValue.from("usd")
          * ```
-         *
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
          */
         fun currency(currency: JsonValue) = apply { body.currency(currency) }
 
@@ -312,8 +290,7 @@ private constructor(
          * USD cents accepted for this checkout.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun amountMinor(): Long = amountMinor.getRequired("amount_minor")
 
@@ -322,9 +299,6 @@ private constructor(
          * ```kotlin
          * JsonValue.from("usd")
          * ```
-         *
-         * However, this method can be useful for debugging and logging (e.g. if the server
-         * responded with an unexpected value).
          */
         @JsonProperty("currency") @ExcludeMissing fun _currency(): JsonValue = currency
 
@@ -378,26 +352,16 @@ private constructor(
             /** USD cents accepted for this checkout. */
             fun amountMinor(amountMinor: Long) = amountMinor(JsonField.of(amountMinor))
 
-            /**
-             * Sets [Builder.amountMinor] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.amountMinor] with a well-typed [Long] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.amountMinor] to an arbitrary JSON value. */
             fun amountMinor(amountMinor: JsonField<Long>) = apply { this.amountMinor = amountMinor }
 
             /**
              * Sets the field to an arbitrary JSON value.
              *
-             * It is usually unnecessary to call this method because the field defaults to the
-             * following:
+             * Defaults to the following:
              * ```kotlin
              * JsonValue.from("usd")
              * ```
-             *
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
              */
             fun currency(currency: JsonValue) = apply { this.currency = currency }
 
@@ -473,12 +437,6 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int =
             (if (amountMinor.asKnown() == null) 0 else 1) +
                 currency.let { if (it == JsonValue.from("usd")) 1 else 0 }

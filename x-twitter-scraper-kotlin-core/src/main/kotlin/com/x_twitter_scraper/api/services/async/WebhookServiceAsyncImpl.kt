@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.services.async
 
 import com.x_twitter_scraper.api.core.ClientOptions
@@ -51,51 +49,38 @@ class WebhookServiceAsyncImpl internal constructor(private val clientOptions: Cl
     override suspend fun create(
         params: WebhookCreateParams,
         requestOptions: RequestOptions,
-    ): WebhookCreateResponse =
-        // post /webhooks
-        withRawResponse().create(params, requestOptions).parse()
+    ): WebhookCreateResponse = withRawResponse().create(params, requestOptions).parse()
 
     override suspend fun update(
         params: WebhookUpdateParams,
         requestOptions: RequestOptions,
-    ): Webhook =
-        // patch /webhooks/{id}
-        withRawResponse().update(params, requestOptions).parse()
+    ): Webhook = withRawResponse().update(params, requestOptions).parse()
 
     override suspend fun list(
         params: WebhookListParams,
         requestOptions: RequestOptions,
-    ): WebhookListResponse =
-        // get /webhooks
-        withRawResponse().list(params, requestOptions).parse()
+    ): WebhookListResponse = withRawResponse().list(params, requestOptions).parse()
 
     override suspend fun deactivate(
         params: WebhookDeactivateParams,
         requestOptions: RequestOptions,
-    ): WebhookDeactivateResponse =
-        // delete /webhooks/{id}
-        withRawResponse().deactivate(params, requestOptions).parse()
+    ): WebhookDeactivateResponse = withRawResponse().deactivate(params, requestOptions).parse()
 
     override suspend fun listDeliveries(
         params: WebhookListDeliveriesParams,
         requestOptions: RequestOptions,
     ): WebhookListDeliveriesResponse =
-        // get /webhooks/{id}/deliveries
         withRawResponse().listDeliveries(params, requestOptions).parse()
 
     override suspend fun resume(
         params: WebhookResumeParams,
         requestOptions: RequestOptions,
-    ): WebhookResumeResponse =
-        // post /webhooks/{id}/resume
-        withRawResponse().resume(params, requestOptions).parse()
+    ): WebhookResumeResponse = withRawResponse().resume(params, requestOptions).parse()
 
     override suspend fun test(
         params: WebhookTestParams,
         requestOptions: RequestOptions,
-    ): WebhookTestResponse =
-        // post /webhooks/{id}/test
-        withRawResponse().test(params, requestOptions).parse()
+    ): WebhookTestResponse = withRawResponse().test(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         WebhookServiceAsync.WithRawResponse {
@@ -144,8 +129,6 @@ class WebhookServiceAsyncImpl internal constructor(private val clientOptions: Cl
             params: WebhookUpdateParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Webhook> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
@@ -202,8 +185,6 @@ class WebhookServiceAsyncImpl internal constructor(private val clientOptions: Cl
             params: WebhookDeactivateParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<WebhookDeactivateResponse> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
@@ -233,8 +214,6 @@ class WebhookServiceAsyncImpl internal constructor(private val clientOptions: Cl
             params: WebhookListDeliveriesParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<WebhookListDeliveriesResponse> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
@@ -263,8 +242,6 @@ class WebhookServiceAsyncImpl internal constructor(private val clientOptions: Cl
             params: WebhookResumeParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<WebhookResumeResponse> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
@@ -294,8 +271,6 @@ class WebhookServiceAsyncImpl internal constructor(private val clientOptions: Cl
             params: WebhookTestParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<WebhookTestResponse> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()

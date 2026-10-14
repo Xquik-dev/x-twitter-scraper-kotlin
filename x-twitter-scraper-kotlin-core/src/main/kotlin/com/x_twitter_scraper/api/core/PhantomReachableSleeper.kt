@@ -6,11 +6,6 @@ package com.x_twitter_scraper.api.core
 
 import java.time.Duration
 
-/**
- * A delegating wrapper around a [Sleeper] that closes it once it's only phantom reachable.
- *
- * This class ensures the [Sleeper] is closed even if the user forgets to do it.
- */
 internal class PhantomReachableSleeper(private val sleeper: Sleeper) : Sleeper {
 
     init {

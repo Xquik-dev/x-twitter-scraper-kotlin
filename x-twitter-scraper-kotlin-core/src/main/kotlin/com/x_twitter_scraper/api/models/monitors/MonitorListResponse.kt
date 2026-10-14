@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.models.monitors
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -39,13 +37,13 @@ private constructor(
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun monitors(): List<Monitor> = monitors.getRequired("monitors")
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun total(): Long = total.getRequired("total")
 
@@ -104,13 +102,7 @@ private constructor(
 
         fun monitors(monitors: List<Monitor>) = monitors(JsonField.of(monitors))
 
-        /**
-         * Sets [Builder.monitors] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.monitors] with a well-typed `List<Monitor>` value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
+        /** Sets [Builder.monitors] to an arbitrary JSON value. */
         fun monitors(monitors: JsonField<List<Monitor>>) = apply {
             this.monitors = monitors.map { it.toMutableList() }
         }
@@ -129,12 +121,7 @@ private constructor(
 
         fun total(total: Long) = total(JsonField.of(total))
 
-        /**
-         * Sets [Builder.total] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.total] with a well-typed [Long] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.total] to an arbitrary JSON value. */
         fun total(total: JsonField<Long>) = apply { this.total = total }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -205,11 +192,6 @@ private constructor(
             false
         }
 
-    /**
-     * Returns a score indicating how many valid values are contained in this object recursively.
-     *
-     * Used for best match union deserialization.
-     */
     internal fun validity(): Int =
         (monitors.asKnown()?.sumOf { it.validity() } ?: 0) + (if (total.asKnown() == null) 0 else 1)
 

@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.services.async.x
 
 import com.x_twitter_scraper.api.core.ClientOptions
@@ -39,15 +37,12 @@ class BookmarkServiceAsyncImpl internal constructor(private val clientOptions: C
     override suspend fun list(
         params: BookmarkListParams,
         requestOptions: RequestOptions,
-    ): PaginatedTweets =
-        // get /x/bookmarks
-        withRawResponse().list(params, requestOptions).parse()
+    ): PaginatedTweets = withRawResponse().list(params, requestOptions).parse()
 
     override suspend fun retrieveFolders(
         params: BookmarkRetrieveFoldersParams,
         requestOptions: RequestOptions,
     ): BookmarkRetrieveFoldersResponse =
-        // get /x/bookmarks/folders
         withRawResponse().retrieveFolders(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :

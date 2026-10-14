@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.models.monitors.keywords
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -41,13 +39,13 @@ private constructor(
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun monitors(): List<Monitor> = monitors.getRequired("monitors")
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun total(): Long = total.getRequired("total")
 
@@ -106,13 +104,7 @@ private constructor(
 
         fun monitors(monitors: List<Monitor>) = monitors(JsonField.of(monitors))
 
-        /**
-         * Sets [Builder.monitors] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.monitors] with a well-typed `List<Monitor>` value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
+        /** Sets [Builder.monitors] to an arbitrary JSON value. */
         fun monitors(monitors: JsonField<List<Monitor>>) = apply {
             this.monitors = monitors.map { it.toMutableList() }
         }
@@ -131,12 +123,7 @@ private constructor(
 
         fun total(total: Long) = total(JsonField.of(total))
 
-        /**
-         * Sets [Builder.total] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.total] with a well-typed [Long] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.total] to an arbitrary JSON value. */
         fun total(total: JsonField<Long>) = apply { this.total = total }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -207,11 +194,6 @@ private constructor(
             false
         }
 
-    /**
-     * Returns a score indicating how many valid values are contained in this object recursively.
-     *
-     * Used for best match union deserialization.
-     */
     internal fun validity(): Int =
         (monitors.asKnown()?.sumOf { it.validity() } ?: 0) + (if (total.asKnown() == null) 0 else 1)
 
@@ -248,15 +230,13 @@ private constructor(
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun id(): String = id.getRequired("id")
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun createdAt(): OffsetDateTime = createdAt.getRequired("createdAt")
 
@@ -264,15 +244,13 @@ private constructor(
          * Array of event types to subscribe to.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun eventTypes(): List<EventType> = eventTypes.getRequired("eventTypes")
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun isActive(): Boolean = isActive.getRequired("isActive")
 
@@ -280,15 +258,13 @@ private constructor(
          * Next hourly credit charge time for this keyword query monitor.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun nextBillingAt(): OffsetDateTime = nextBillingAt.getRequired("nextBillingAt")
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun query(): String = query.getRequired("query")
 
@@ -394,24 +370,12 @@ private constructor(
 
             fun id(id: String) = id(JsonField.of(id))
 
-            /**
-             * Sets [Builder.id] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.id] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
+            /** Sets [Builder.id] to an arbitrary JSON value. */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
 
-            /**
-             * Sets [Builder.createdAt] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.createdAt] to an arbitrary JSON value. */
             fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
                 this.createdAt = createdAt
             }
@@ -419,13 +383,7 @@ private constructor(
             /** Array of event types to subscribe to. */
             fun eventTypes(eventTypes: List<EventType>) = eventTypes(JsonField.of(eventTypes))
 
-            /**
-             * Sets [Builder.eventTypes] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.eventTypes] with a well-typed `List<EventType>`
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
-             */
+            /** Sets [Builder.eventTypes] to an arbitrary JSON value. */
             fun eventTypes(eventTypes: JsonField<List<EventType>>) = apply {
                 this.eventTypes = eventTypes.map { it.toMutableList() }
             }
@@ -444,39 +402,21 @@ private constructor(
 
             fun isActive(isActive: Boolean) = isActive(JsonField.of(isActive))
 
-            /**
-             * Sets [Builder.isActive] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.isActive] with a well-typed [Boolean] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.isActive] to an arbitrary JSON value. */
             fun isActive(isActive: JsonField<Boolean>) = apply { this.isActive = isActive }
 
             /** Next hourly credit charge time for this keyword query monitor. */
             fun nextBillingAt(nextBillingAt: OffsetDateTime) =
                 nextBillingAt(JsonField.of(nextBillingAt))
 
-            /**
-             * Sets [Builder.nextBillingAt] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.nextBillingAt] with a well-typed [OffsetDateTime]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
-             */
+            /** Sets [Builder.nextBillingAt] to an arbitrary JSON value. */
             fun nextBillingAt(nextBillingAt: JsonField<OffsetDateTime>) = apply {
                 this.nextBillingAt = nextBillingAt
             }
 
             fun query(query: String) = query(JsonField.of(query))
 
-            /**
-             * Sets [Builder.query] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.query] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.query] to an arbitrary JSON value. */
             fun query(query: JsonField<String>) = apply { this.query = query }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -560,12 +500,6 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int =
             (if (id.asKnown() == null) 0 else 1) +
                 (if (createdAt.asKnown() == null) 0 else 1) +

@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.models.x.accounts
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -37,23 +35,21 @@ private constructor(
      * Updated account password
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun password(): String = body.password()
 
     /**
      * Email for the X account (updates stored email)
      *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun email(): String? = body.email()
 
     /**
      * Replacement Authenticator App TOTP secret. Omit it to reuse the saved secret.
      *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun totpSecret(): String? = body.totpSecret()
 
@@ -118,49 +114,25 @@ private constructor(
 
         fun id(id: String?) = apply { this.id = id }
 
-        /**
-         * Sets the entire request body.
-         *
-         * This is generally only useful if you are already constructing the body separately.
-         * Otherwise, it's more convenient to use the top-level setters instead:
-         * - [password]
-         * - [email]
-         * - [totpSecret]
-         */
+        /** Sets the entire request body. */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
         /** Updated account password */
         fun password(password: String) = apply { body.password(password) }
 
-        /**
-         * Sets [Builder.password] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.password] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.password] to an arbitrary JSON value. */
         fun password(password: JsonField<String>) = apply { body.password(password) }
 
         /** Email for the X account (updates stored email) */
         fun email(email: String) = apply { body.email(email) }
 
-        /**
-         * Sets [Builder.email] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.email] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.email] to an arbitrary JSON value. */
         fun email(email: JsonField<String>) = apply { body.email(email) }
 
         /** Replacement Authenticator App TOTP secret. Omit it to reuse the saved secret. */
         fun totpSecret(totpSecret: String) = apply { body.totpSecret(totpSecret) }
 
-        /**
-         * Sets [Builder.totpSecret] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.totpSecret] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
+        /** Sets [Builder.totpSecret] to an arbitrary JSON value. */
         fun totpSecret(totpSecret: JsonField<String>) = apply { body.totpSecret(totpSecret) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
@@ -337,24 +309,21 @@ private constructor(
          * Updated account password
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun password(): String = password.getRequired("password")
 
         /**
          * Email for the X account (updates stored email)
          *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
         fun email(): String? = email.getNullable("email")
 
         /**
          * Replacement Authenticator App TOTP secret. Omit it to reuse the saved secret.
          *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
         fun totpSecret(): String? = totpSecret.getNullable("totp_secret")
 
@@ -424,37 +393,19 @@ private constructor(
             /** Updated account password */
             fun password(password: String) = password(JsonField.of(password))
 
-            /**
-             * Sets [Builder.password] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.password] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.password] to an arbitrary JSON value. */
             fun password(password: JsonField<String>) = apply { this.password = password }
 
             /** Email for the X account (updates stored email) */
             fun email(email: String) = email(JsonField.of(email))
 
-            /**
-             * Sets [Builder.email] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.email] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.email] to an arbitrary JSON value. */
             fun email(email: JsonField<String>) = apply { this.email = email }
 
             /** Replacement Authenticator App TOTP secret. Omit it to reuse the saved secret. */
             fun totpSecret(totpSecret: String) = totpSecret(JsonField.of(totpSecret))
 
-            /**
-             * Sets [Builder.totpSecret] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.totpSecret] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.totpSecret] to an arbitrary JSON value. */
             fun totpSecret(totpSecret: JsonField<String>) = apply { this.totpSecret = totpSecret }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -527,12 +478,6 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int =
             (if (password.asKnown() == null) 0 else 1) +
                 (if (email.asKnown() == null) 0 else 1) +

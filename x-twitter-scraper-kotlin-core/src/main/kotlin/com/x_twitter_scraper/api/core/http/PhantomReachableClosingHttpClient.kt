@@ -7,11 +7,6 @@ package com.x_twitter_scraper.api.core.http
 import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.closeWhenPhantomReachable
 
-/**
- * A delegating wrapper around an `HttpClient` that closes it once it's only phantom reachable.
- *
- * This class ensures the `HttpClient` is closed even if the user forgets to close it.
- */
 internal class PhantomReachableClosingHttpClient(private val httpClient: HttpClient) : HttpClient {
     init {
         closeWhenPhantomReachable(this, httpClient)

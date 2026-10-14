@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.services.async.x
 
 import com.x_twitter_scraper.api.core.ClientOptions
@@ -38,9 +36,7 @@ class WriteActionServiceAsyncImpl internal constructor(private val clientOptions
     override suspend fun retrieve(
         params: WriteActionRetrieveParams,
         requestOptions: RequestOptions,
-    ): WriteActionRetrieveResponse =
-        // get /x/write-actions/{id}
-        withRawResponse().retrieve(params, requestOptions).parse()
+    ): WriteActionRetrieveResponse = withRawResponse().retrieve(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         WriteActionServiceAsync.WithRawResponse {
@@ -62,8 +58,6 @@ class WriteActionServiceAsyncImpl internal constructor(private val clientOptions
             params: WriteActionRetrieveParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<WriteActionRetrieveResponse> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()

@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.services.async
 
 import com.x_twitter_scraper.api.core.ClientOptions
@@ -53,37 +51,27 @@ class MonitorServiceAsyncImpl internal constructor(private val clientOptions: Cl
     override suspend fun create(
         params: MonitorCreateParams,
         requestOptions: RequestOptions,
-    ): MonitorCreateResponse =
-        // post /monitors
-        withRawResponse().create(params, requestOptions).parse()
+    ): MonitorCreateResponse = withRawResponse().create(params, requestOptions).parse()
 
     override suspend fun retrieve(
         params: MonitorRetrieveParams,
         requestOptions: RequestOptions,
-    ): Monitor =
-        // get /monitors/{id}
-        withRawResponse().retrieve(params, requestOptions).parse()
+    ): Monitor = withRawResponse().retrieve(params, requestOptions).parse()
 
     override suspend fun update(
         params: MonitorUpdateParams,
         requestOptions: RequestOptions,
-    ): Monitor =
-        // patch /monitors/{id}
-        withRawResponse().update(params, requestOptions).parse()
+    ): Monitor = withRawResponse().update(params, requestOptions).parse()
 
     override suspend fun list(
         params: MonitorListParams,
         requestOptions: RequestOptions,
-    ): MonitorListResponse =
-        // get /monitors
-        withRawResponse().list(params, requestOptions).parse()
+    ): MonitorListResponse = withRawResponse().list(params, requestOptions).parse()
 
     override suspend fun deactivate(
         params: MonitorDeactivateParams,
         requestOptions: RequestOptions,
-    ): MonitorDeactivateResponse =
-        // delete /monitors/{id}
-        withRawResponse().deactivate(params, requestOptions).parse()
+    ): MonitorDeactivateResponse = withRawResponse().deactivate(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         MonitorServiceAsync.WithRawResponse {
@@ -140,8 +128,6 @@ class MonitorServiceAsyncImpl internal constructor(private val clientOptions: Cl
             params: MonitorRetrieveParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Monitor> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
@@ -169,8 +155,6 @@ class MonitorServiceAsyncImpl internal constructor(private val clientOptions: Cl
             params: MonitorUpdateParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Monitor> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
@@ -227,8 +211,6 @@ class MonitorServiceAsyncImpl internal constructor(private val clientOptions: Cl
             params: MonitorDeactivateParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<MonitorDeactivateResponse> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()

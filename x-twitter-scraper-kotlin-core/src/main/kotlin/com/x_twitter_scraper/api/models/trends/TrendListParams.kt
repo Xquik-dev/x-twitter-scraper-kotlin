@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.models.trends
 
 import com.x_twitter_scraper.api.core.Params
@@ -60,21 +58,13 @@ private constructor(
         /** Number of trending topics returned (1-50, default 30) */
         fun count(count: Long?) = apply { this.count = count }
 
-        /**
-         * Alias for [Builder.count].
-         *
-         * This unboxed primitive overload exists for backwards compatibility.
-         */
+        /** Alias for [Builder.count]. */
         fun count(count: Long) = count(count as Long?)
 
         /** Region Yahoo WOEID code (1=Worldwide, 23424977=US, 23424975=UK, 23424969=Turkey) */
         fun woeid(woeid: Long?) = apply { this.woeid = woeid }
 
-        /**
-         * Alias for [Builder.woeid].
-         *
-         * This unboxed primitive overload exists for backwards compatibility.
-         */
+        /** Alias for [Builder.woeid]. */
         fun woeid(woeid: Long) = woeid(woeid as Long?)
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {

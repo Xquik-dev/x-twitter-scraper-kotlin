@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.models.radar
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -41,21 +39,20 @@ private constructor(
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun hasMore(): Boolean = hasMore.getRequired("hasMore")
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun items(): List<RadarItem> = items.getRequired("items")
 
     /**
      * Opaque cursor for the next page (present only when hasMore is true).
      *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun nextCursor(): String? = nextCursor.getNullable("nextCursor")
 
@@ -127,23 +124,12 @@ private constructor(
 
         fun hasMore(hasMore: Boolean) = hasMore(JsonField.of(hasMore))
 
-        /**
-         * Sets [Builder.hasMore] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.hasMore] with a well-typed [Boolean] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.hasMore] to an arbitrary JSON value. */
         fun hasMore(hasMore: JsonField<Boolean>) = apply { this.hasMore = hasMore }
 
         fun items(items: List<RadarItem>) = items(JsonField.of(items))
 
-        /**
-         * Sets [Builder.items] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.items] with a well-typed `List<RadarItem>` value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
+        /** Sets [Builder.items] to an arbitrary JSON value. */
         fun items(items: JsonField<List<RadarItem>>) = apply {
             this.items = items.map { it.toMutableList() }
         }
@@ -161,13 +147,7 @@ private constructor(
         /** Opaque cursor for the next page (present only when hasMore is true). */
         fun nextCursor(nextCursor: String) = nextCursor(JsonField.of(nextCursor))
 
-        /**
-         * Sets [Builder.nextCursor] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.nextCursor] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
+        /** Sets [Builder.nextCursor] to an arbitrary JSON value. */
         fun nextCursor(nextCursor: JsonField<String>) = apply { this.nextCursor = nextCursor }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -240,11 +220,6 @@ private constructor(
             false
         }
 
-    /**
-     * Returns a score indicating how many valid values are contained in this object recursively.
-     *
-     * Used for best match union deserialization.
-     */
     internal fun validity(): Int =
         (if (hasMore.asKnown() == null) 0 else 1) +
             (items.asKnown()?.sumOf { it.validity() } ?: 0) +

@@ -6,11 +6,7 @@ package com.x_twitter_scraper.api.core
 
 import java.time.Duration
 
-/**
- * An interface for delaying execution for a specified amount of time.
- *
- * Useful for testing and cleaning up resources.
- */
+/** An interface for delaying execution for a specified amount of time. */
 interface Sleeper : AutoCloseable {
 
     /** Synchronously pauses execution for the given [duration]. */

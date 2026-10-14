@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.services.async
 
 import com.x_twitter_scraper.api.core.ClientOptions
@@ -46,7 +44,6 @@ class CreditServiceAsyncImpl internal constructor(private val clientOptions: Cli
         params: CreditRedirectTopupCheckoutParams,
         requestOptions: RequestOptions,
     ) {
-        // get /credits/topup/redirect
         withRawResponse().redirectTopupCheckout(params, requestOptions)
     }
 
@@ -54,22 +51,18 @@ class CreditServiceAsyncImpl internal constructor(private val clientOptions: Cli
         params: CreditRetrieveBalanceParams,
         requestOptions: RequestOptions,
     ): CreditRetrieveBalanceResponse =
-        // get /credits
         withRawResponse().retrieveBalance(params, requestOptions).parse()
 
     override suspend fun retrieveTopupStatus(
         params: CreditRetrieveTopupStatusParams,
         requestOptions: RequestOptions,
     ): CreditRetrieveTopupStatusResponse =
-        // get /credits/topup/status
         withRawResponse().retrieveTopupStatus(params, requestOptions).parse()
 
     override suspend fun topupBalance(
         params: CreditTopupBalanceParams,
         requestOptions: RequestOptions,
-    ): CreditTopupBalanceResponse =
-        // post /credits/topup
-        withRawResponse().topupBalance(params, requestOptions).parse()
+    ): CreditTopupBalanceResponse = withRawResponse().topupBalance(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         CreditServiceAsync.WithRawResponse {

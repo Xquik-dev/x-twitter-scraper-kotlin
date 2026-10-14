@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.core
 
 import com.fasterxml.jackson.databind.json.JsonMapper
@@ -23,8 +21,6 @@ private constructor(
     /**
      * The HTTP client to use in the SDK.
      *
-     * Use the one published in `x-twitter-scraper-kotlin-client-okhttp` or implement your own.
-     *
      * This class takes ownership of the client and closes it when closed.
      */
     val httpClient: HttpClient,
@@ -32,21 +28,18 @@ private constructor(
      * Whether to throw an exception if any of the Jackson versions detected at runtime are
      * incompatible with the SDK's minimum supported Jackson version (2.13.4).
      *
-     * Defaults to true. Use extreme caution when disabling this option. There is no guarantee that
-     * the SDK will work correctly when using an incompatible Jackson version.
+     * Defaults to true. There is no guarantee that the SDK will work correctly when using an
+     * incompatible Jackson version.
      */
     val checkJacksonVersionCompatibility: Boolean,
     /**
      * The Jackson JSON mapper to use for serializing and deserializing JSON.
      *
-     * Defaults to [com.x_twitter_scraper.api.core.jsonMapper]. The default is usually sufficient
-     * and rarely needs to be overridden.
+     * Defaults to [com.x_twitter_scraper.api.core.jsonMapper].
      */
     val jsonMapper: JsonMapper,
     /**
      * The interface to use for delaying execution, like during retries.
-     *
-     * This is primarily useful for using fake delays in tests.
      *
      * Defaults to real execution delays.
      *
@@ -55,8 +48,6 @@ private constructor(
     val sleeper: Sleeper,
     /**
      * The clock to use for operations that require timing, like retries.
-     *
-     * This is primarily useful for using a fake clock in tests.
      *
      * Defaults to [Clock.systemUTC].
      */
@@ -88,7 +79,7 @@ private constructor(
      * between requests.
      *
      * Only the following error types are retried:
-     * - Connection errors (for example, due to a network connectivity problem)
+     * - Connection errors
      * - 408 Request Timeout
      * - 409 Conflict
      * - 429 Rate Limit
@@ -187,8 +178,6 @@ private constructor(
         /**
          * The HTTP client to use in the SDK.
          *
-         * Use the one published in `x-twitter-scraper-kotlin-client-okhttp` or implement your own.
-         *
          * This class takes ownership of the client and closes it when closed.
          */
         fun httpClient(httpClient: HttpClient) = apply {
@@ -199,8 +188,8 @@ private constructor(
          * Whether to throw an exception if any of the Jackson versions detected at runtime are
          * incompatible with the SDK's minimum supported Jackson version (2.13.4).
          *
-         * Defaults to true. Use extreme caution when disabling this option. There is no guarantee
-         * that the SDK will work correctly when using an incompatible Jackson version.
+         * Defaults to true. There is no guarantee that the SDK will work correctly when using an
+         * incompatible Jackson version.
          */
         fun checkJacksonVersionCompatibility(checkJacksonVersionCompatibility: Boolean) = apply {
             this.checkJacksonVersionCompatibility = checkJacksonVersionCompatibility
@@ -209,15 +198,12 @@ private constructor(
         /**
          * The Jackson JSON mapper to use for serializing and deserializing JSON.
          *
-         * Defaults to [com.x_twitter_scraper.api.core.jsonMapper]. The default is usually
-         * sufficient and rarely needs to be overridden.
+         * Defaults to [com.x_twitter_scraper.api.core.jsonMapper].
          */
         fun jsonMapper(jsonMapper: JsonMapper) = apply { this.jsonMapper = jsonMapper }
 
         /**
          * The interface to use for delaying execution, like during retries.
-         *
-         * This is primarily useful for using fake delays in tests.
          *
          * Defaults to real execution delays.
          *
@@ -227,8 +213,6 @@ private constructor(
 
         /**
          * The clock to use for operations that require timing, like retries.
-         *
-         * This is primarily useful for using a fake clock in tests.
          *
          * Defaults to [Clock.systemUTC].
          */
@@ -266,8 +250,6 @@ private constructor(
          * Sets the maximum time allowed for a complete HTTP call, not including retries.
          *
          * See [Timeout.request] for more details.
-         *
-         * For fine-grained control, pass a [Timeout] object.
          */
         fun timeout(timeout: Duration) = timeout(Timeout.builder().request(timeout).build())
 
@@ -276,7 +258,7 @@ private constructor(
          * between requests.
          *
          * Only the following error types are retried:
-         * - Connection errors (for example, due to a network connectivity problem)
+         * - Connection errors
          * - 408 Request Timeout
          * - 409 Conflict
          * - 429 Rate Limit
@@ -444,7 +426,6 @@ private constructor(
             headers.put("X-Stainless-Runtime", "JRE")
             headers.put("X-Stainless-Runtime-Version", getJavaVersion())
             headers.put("X-Stainless-Kotlin-Version", KotlinVersion.CURRENT.toString())
-            // We replace after all the default headers to allow end-users to overwrite them.
             headers.replaceAll(this.headers.build())
             queryParams.replaceAll(this.queryParams.build())
 
@@ -479,16 +460,7 @@ private constructor(
         }
     }
 
-    /**
-     * Closes these client options, relinquishing any underlying resources.
-     *
-     * This is purposefully not inherited from [AutoCloseable] because the client options are
-     * long-lived and usually should not be synchronously closed via try-with-resources.
-     *
-     * It's also usually not necessary to call this method at all. the default client automatically
-     * releases threads and connections if they remain idle, but if you are writing an application
-     * that needs to aggressively release unused resources, then you may call this method.
-     */
+    /** Closes these client options, relinquishing any underlying resources. */
     fun close() {
         httpClient.close()
         sleeper.close()

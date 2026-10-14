@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.services.async.x
 
 import com.x_twitter_scraper.api.core.ClientOptions
@@ -41,23 +39,17 @@ class ListServiceAsyncImpl internal constructor(private val clientOptions: Clien
     override suspend fun retrieveFollowers(
         params: ListRetrieveFollowersParams,
         requestOptions: RequestOptions,
-    ): PaginatedUsers =
-        // get /x/lists/{id}/followers
-        withRawResponse().retrieveFollowers(params, requestOptions).parse()
+    ): PaginatedUsers = withRawResponse().retrieveFollowers(params, requestOptions).parse()
 
     override suspend fun retrieveMembers(
         params: ListRetrieveMembersParams,
         requestOptions: RequestOptions,
-    ): PaginatedUsers =
-        // get /x/lists/{id}/members
-        withRawResponse().retrieveMembers(params, requestOptions).parse()
+    ): PaginatedUsers = withRawResponse().retrieveMembers(params, requestOptions).parse()
 
     override suspend fun retrieveTweets(
         params: ListRetrieveTweetsParams,
         requestOptions: RequestOptions,
-    ): PaginatedTweets =
-        // get /x/lists/{id}/tweets
-        withRawResponse().retrieveTweets(params, requestOptions).parse()
+    ): PaginatedTweets = withRawResponse().retrieveTweets(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         ListServiceAsync.WithRawResponse {
@@ -79,8 +71,6 @@ class ListServiceAsyncImpl internal constructor(private val clientOptions: Clien
             params: ListRetrieveFollowersParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<PaginatedUsers> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
@@ -109,8 +99,6 @@ class ListServiceAsyncImpl internal constructor(private val clientOptions: Clien
             params: ListRetrieveMembersParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<PaginatedUsers> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
@@ -139,8 +127,6 @@ class ListServiceAsyncImpl internal constructor(private val clientOptions: Clien
             params: ListRetrieveTweetsParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<PaginatedTweets> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()

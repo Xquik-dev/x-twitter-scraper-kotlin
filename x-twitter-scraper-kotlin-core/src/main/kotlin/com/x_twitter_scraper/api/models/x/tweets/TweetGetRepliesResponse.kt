@@ -1,5 +1,3 @@
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.models.x.tweets
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -63,35 +61,33 @@ private constructor(
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun hasNextPage(): Boolean = hasNextPage.getRequired("has_next_page")
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun nextCursor(): String = nextCursor.getRequired("next_cursor")
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun tweets(): List<SearchTweet> = tweets.getRequired("tweets")
 
     /**
      * Evidence for direct-reply coverage and collector behavior.
      *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun diagnostic(): Diagnostic? = diagnostic.getNullable("diagnostic")
 
     /**
      * Nested replies. Excluded from direct coverage.
      *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun nestedReplies(): List<SearchTweet>? = nestedReplies.getNullable("nested_replies")
 
@@ -184,35 +180,17 @@ private constructor(
 
         fun hasNextPage(hasNextPage: Boolean) = hasNextPage(JsonField.of(hasNextPage))
 
-        /**
-         * Sets [Builder.hasNextPage] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.hasNextPage] with a well-typed [Boolean] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
+        /** Sets [Builder.hasNextPage] to an arbitrary JSON value. */
         fun hasNextPage(hasNextPage: JsonField<Boolean>) = apply { this.hasNextPage = hasNextPage }
 
         fun nextCursor(nextCursor: String) = nextCursor(JsonField.of(nextCursor))
 
-        /**
-         * Sets [Builder.nextCursor] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.nextCursor] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
+        /** Sets [Builder.nextCursor] to an arbitrary JSON value. */
         fun nextCursor(nextCursor: JsonField<String>) = apply { this.nextCursor = nextCursor }
 
         fun tweets(tweets: List<SearchTweet>) = tweets(JsonField.of(tweets))
 
-        /**
-         * Sets [Builder.tweets] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.tweets] with a well-typed `List<SearchTweet>` value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
+        /** Sets [Builder.tweets] to an arbitrary JSON value. */
         fun tweets(tweets: JsonField<List<SearchTweet>>) = apply {
             this.tweets = tweets.map { it.toMutableList() }
         }
@@ -232,26 +210,14 @@ private constructor(
         /** Evidence for direct-reply coverage and collector behavior. */
         fun diagnostic(diagnostic: Diagnostic) = diagnostic(JsonField.of(diagnostic))
 
-        /**
-         * Sets [Builder.diagnostic] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.diagnostic] with a well-typed [Diagnostic] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
+        /** Sets [Builder.diagnostic] to an arbitrary JSON value. */
         fun diagnostic(diagnostic: JsonField<Diagnostic>) = apply { this.diagnostic = diagnostic }
 
         /** Nested replies. Excluded from direct coverage. */
         fun nestedReplies(nestedReplies: List<SearchTweet>) =
             nestedReplies(JsonField.of(nestedReplies))
 
-        /**
-         * Sets [Builder.nestedReplies] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.nestedReplies] with a well-typed `List<SearchTweet>`
-         * value instead. This method is primarily for setting the field to an undocumented or not
-         * yet supported value.
-         */
+        /** Sets [Builder.nestedReplies] to an arbitrary JSON value. */
         fun nestedReplies(nestedReplies: JsonField<List<SearchTweet>>) = apply {
             this.nestedReplies = nestedReplies.map { it.toMutableList() }
         }
@@ -343,11 +309,6 @@ private constructor(
             false
         }
 
-    /**
-     * Returns a score indicating how many valid values are contained in this object recursively.
-     *
-     * Used for best match union deserialization.
-     */
     internal fun validity(): Int =
         (if (hasNextPage.asKnown() == null) 0 else 1) +
             (if (nextCursor.asKnown() == null) 0 else 1) +
@@ -462,8 +423,7 @@ private constructor(
          * Whether coverage met the target without truncation.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun complete(): Boolean = complete.getRequired("complete")
 
@@ -471,8 +431,7 @@ private constructor(
          * Unique direct replies as a percentage of the reported count.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun coveragePercentage(): Double = coveragePercentage.getRequired("coveragePercentage")
 
@@ -480,8 +439,7 @@ private constructor(
          * Cursor requests that failed.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun cursorFailures(): Long = cursorFailures.getRequired("cursorFailures")
 
@@ -489,8 +447,7 @@ private constructor(
          * Duplicate tweet IDs removed across pages and strategies.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun duplicateCount(): Long = duplicateCount.getRequired("duplicateCount")
 
@@ -498,8 +455,7 @@ private constructor(
          * Empty pages rejected because they did not make progress.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun emptyFalseProgressPages(): Long =
             emptyFalseProgressPages.getRequired("emptyFalseProgressPages")
@@ -508,8 +464,7 @@ private constructor(
          * Malformed response items rejected.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun malformedCount(): Long = malformedCount.getRequired("malformedCount")
 
@@ -517,8 +472,7 @@ private constructor(
          * Expected response modules or fields missing from X.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun missingResponseModulesOrFields(): List<String> =
             missingResponseModulesOrFields.getRequired("missingResponseModulesOrFields")
@@ -527,8 +481,7 @@ private constructor(
          * Unique nested replies kept outside direct coverage.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun nestedReplyCount(): Long = nestedReplyCount.getRequired("nestedReplyCount")
 
@@ -536,8 +489,7 @@ private constructor(
          * Total pages attempted across all strategies.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun pagesAttempted(): Long = pagesAttempted.getRequired("pagesAttempted")
 
@@ -545,8 +497,7 @@ private constructor(
          * Recommended next action when coverage is incomplete.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun recommendedFallback(): String = recommendedFallback.getRequired("recommendedFallback")
 
@@ -554,8 +505,7 @@ private constructor(
          * Repeated cursors rejected to prevent loops.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun repeatedCursorCount(): Long = repeatedCursorCount.getRequired("repeatedCursorCount")
 
@@ -563,8 +513,7 @@ private constructor(
          * Reply count reported on the source post.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun reportedReplyCount(): Long = reportedReplyCount.getRequired("reportedReplyCount")
 
@@ -572,8 +521,7 @@ private constructor(
          * Whether the requested row limit truncated safe results.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun responseTruncated(): Boolean = responseTruncated.getRequired("responseTruncated")
 
@@ -581,8 +529,7 @@ private constructor(
          * Field-presence counts across the collected direct replies.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun richness(): Richness = richness.getRequired("richness")
 
@@ -590,8 +537,7 @@ private constructor(
          * Per-strategy pagination and contribution evidence.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun strategiesAttempted(): List<StrategiesAttempted> =
             strategiesAttempted.getRequired("strategiesAttempted")
@@ -600,8 +546,7 @@ private constructor(
          * Minimum direct replies required for the coverage target.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun targetDirectReplies(): Long = targetDirectReplies.getRequired("targetDirectReplies")
 
@@ -609,8 +554,7 @@ private constructor(
          * Unique replies whose parent ID equals the source post ID.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun uniqueDirectReplies(): Long = uniqueDirectReplies.getRequired("uniqueDirectReplies")
 
@@ -618,8 +562,7 @@ private constructor(
          * Tweets rejected because they belonged elsewhere.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun unrelatedCount(): Long = unrelatedCount.getRequired("unrelatedCount")
 
@@ -889,26 +832,14 @@ private constructor(
             /** Whether coverage met the target without truncation. */
             fun complete(complete: Boolean) = complete(JsonField.of(complete))
 
-            /**
-             * Sets [Builder.complete] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.complete] with a well-typed [Boolean] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.complete] to an arbitrary JSON value. */
             fun complete(complete: JsonField<Boolean>) = apply { this.complete = complete }
 
             /** Unique direct replies as a percentage of the reported count. */
             fun coveragePercentage(coveragePercentage: Double) =
                 coveragePercentage(JsonField.of(coveragePercentage))
 
-            /**
-             * Sets [Builder.coveragePercentage] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.coveragePercentage] with a well-typed [Double] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.coveragePercentage] to an arbitrary JSON value. */
             fun coveragePercentage(coveragePercentage: JsonField<Double>) = apply {
                 this.coveragePercentage = coveragePercentage
             }
@@ -916,13 +847,7 @@ private constructor(
             /** Cursor requests that failed. */
             fun cursorFailures(cursorFailures: Long) = cursorFailures(JsonField.of(cursorFailures))
 
-            /**
-             * Sets [Builder.cursorFailures] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.cursorFailures] with a well-typed [Long] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.cursorFailures] to an arbitrary JSON value. */
             fun cursorFailures(cursorFailures: JsonField<Long>) = apply {
                 this.cursorFailures = cursorFailures
             }
@@ -930,13 +855,7 @@ private constructor(
             /** Duplicate tweet IDs removed across pages and strategies. */
             fun duplicateCount(duplicateCount: Long) = duplicateCount(JsonField.of(duplicateCount))
 
-            /**
-             * Sets [Builder.duplicateCount] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.duplicateCount] with a well-typed [Long] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.duplicateCount] to an arbitrary JSON value. */
             fun duplicateCount(duplicateCount: JsonField<Long>) = apply {
                 this.duplicateCount = duplicateCount
             }
@@ -945,13 +864,7 @@ private constructor(
             fun emptyFalseProgressPages(emptyFalseProgressPages: Long) =
                 emptyFalseProgressPages(JsonField.of(emptyFalseProgressPages))
 
-            /**
-             * Sets [Builder.emptyFalseProgressPages] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.emptyFalseProgressPages] with a well-typed [Long]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
-             */
+            /** Sets [Builder.emptyFalseProgressPages] to an arbitrary JSON value. */
             fun emptyFalseProgressPages(emptyFalseProgressPages: JsonField<Long>) = apply {
                 this.emptyFalseProgressPages = emptyFalseProgressPages
             }
@@ -959,13 +872,7 @@ private constructor(
             /** Malformed response items rejected. */
             fun malformedCount(malformedCount: Long) = malformedCount(JsonField.of(malformedCount))
 
-            /**
-             * Sets [Builder.malformedCount] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.malformedCount] with a well-typed [Long] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.malformedCount] to an arbitrary JSON value. */
             fun malformedCount(malformedCount: JsonField<Long>) = apply {
                 this.malformedCount = malformedCount
             }
@@ -974,13 +881,7 @@ private constructor(
             fun missingResponseModulesOrFields(missingResponseModulesOrFields: List<String>) =
                 missingResponseModulesOrFields(JsonField.of(missingResponseModulesOrFields))
 
-            /**
-             * Sets [Builder.missingResponseModulesOrFields] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.missingResponseModulesOrFields] with a well-typed
-             * `List<String>` value instead. This method is primarily for setting the field to an
-             * undocumented or not yet supported value.
-             */
+            /** Sets [Builder.missingResponseModulesOrFields] to an arbitrary JSON value. */
             fun missingResponseModulesOrFields(
                 missingResponseModulesOrFields: JsonField<List<String>>
             ) = apply {
@@ -1006,13 +907,7 @@ private constructor(
             fun nestedReplyCount(nestedReplyCount: Long) =
                 nestedReplyCount(JsonField.of(nestedReplyCount))
 
-            /**
-             * Sets [Builder.nestedReplyCount] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.nestedReplyCount] with a well-typed [Long] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.nestedReplyCount] to an arbitrary JSON value. */
             fun nestedReplyCount(nestedReplyCount: JsonField<Long>) = apply {
                 this.nestedReplyCount = nestedReplyCount
             }
@@ -1020,13 +915,7 @@ private constructor(
             /** Total pages attempted across all strategies. */
             fun pagesAttempted(pagesAttempted: Long) = pagesAttempted(JsonField.of(pagesAttempted))
 
-            /**
-             * Sets [Builder.pagesAttempted] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.pagesAttempted] with a well-typed [Long] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.pagesAttempted] to an arbitrary JSON value. */
             fun pagesAttempted(pagesAttempted: JsonField<Long>) = apply {
                 this.pagesAttempted = pagesAttempted
             }
@@ -1035,13 +924,7 @@ private constructor(
             fun recommendedFallback(recommendedFallback: String) =
                 recommendedFallback(JsonField.of(recommendedFallback))
 
-            /**
-             * Sets [Builder.recommendedFallback] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.recommendedFallback] with a well-typed [String]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
-             */
+            /** Sets [Builder.recommendedFallback] to an arbitrary JSON value. */
             fun recommendedFallback(recommendedFallback: JsonField<String>) = apply {
                 this.recommendedFallback = recommendedFallback
             }
@@ -1050,13 +933,7 @@ private constructor(
             fun repeatedCursorCount(repeatedCursorCount: Long) =
                 repeatedCursorCount(JsonField.of(repeatedCursorCount))
 
-            /**
-             * Sets [Builder.repeatedCursorCount] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.repeatedCursorCount] with a well-typed [Long] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.repeatedCursorCount] to an arbitrary JSON value. */
             fun repeatedCursorCount(repeatedCursorCount: JsonField<Long>) = apply {
                 this.repeatedCursorCount = repeatedCursorCount
             }
@@ -1065,13 +942,7 @@ private constructor(
             fun reportedReplyCount(reportedReplyCount: Long) =
                 reportedReplyCount(JsonField.of(reportedReplyCount))
 
-            /**
-             * Sets [Builder.reportedReplyCount] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.reportedReplyCount] with a well-typed [Long] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.reportedReplyCount] to an arbitrary JSON value. */
             fun reportedReplyCount(reportedReplyCount: JsonField<Long>) = apply {
                 this.reportedReplyCount = reportedReplyCount
             }
@@ -1080,13 +951,7 @@ private constructor(
             fun responseTruncated(responseTruncated: Boolean) =
                 responseTruncated(JsonField.of(responseTruncated))
 
-            /**
-             * Sets [Builder.responseTruncated] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.responseTruncated] with a well-typed [Boolean] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.responseTruncated] to an arbitrary JSON value. */
             fun responseTruncated(responseTruncated: JsonField<Boolean>) = apply {
                 this.responseTruncated = responseTruncated
             }
@@ -1094,26 +959,14 @@ private constructor(
             /** Field-presence counts across the collected direct replies. */
             fun richness(richness: Richness) = richness(JsonField.of(richness))
 
-            /**
-             * Sets [Builder.richness] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.richness] with a well-typed [Richness] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.richness] to an arbitrary JSON value. */
             fun richness(richness: JsonField<Richness>) = apply { this.richness = richness }
 
             /** Per-strategy pagination and contribution evidence. */
             fun strategiesAttempted(strategiesAttempted: List<StrategiesAttempted>) =
                 strategiesAttempted(JsonField.of(strategiesAttempted))
 
-            /**
-             * Sets [Builder.strategiesAttempted] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.strategiesAttempted] with a well-typed
-             * `List<StrategiesAttempted>` value instead. This method is primarily for setting the
-             * field to an undocumented or not yet supported value.
-             */
+            /** Sets [Builder.strategiesAttempted] to an arbitrary JSON value. */
             fun strategiesAttempted(strategiesAttempted: JsonField<List<StrategiesAttempted>>) =
                 apply {
                     this.strategiesAttempted = strategiesAttempted.map { it.toMutableList() }
@@ -1135,13 +988,7 @@ private constructor(
             fun targetDirectReplies(targetDirectReplies: Long) =
                 targetDirectReplies(JsonField.of(targetDirectReplies))
 
-            /**
-             * Sets [Builder.targetDirectReplies] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.targetDirectReplies] with a well-typed [Long] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.targetDirectReplies] to an arbitrary JSON value. */
             fun targetDirectReplies(targetDirectReplies: JsonField<Long>) = apply {
                 this.targetDirectReplies = targetDirectReplies
             }
@@ -1150,13 +997,7 @@ private constructor(
             fun uniqueDirectReplies(uniqueDirectReplies: Long) =
                 uniqueDirectReplies(JsonField.of(uniqueDirectReplies))
 
-            /**
-             * Sets [Builder.uniqueDirectReplies] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.uniqueDirectReplies] with a well-typed [Long] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.uniqueDirectReplies] to an arbitrary JSON value. */
             fun uniqueDirectReplies(uniqueDirectReplies: JsonField<Long>) = apply {
                 this.uniqueDirectReplies = uniqueDirectReplies
             }
@@ -1164,13 +1005,7 @@ private constructor(
             /** Tweets rejected because they belonged elsewhere. */
             fun unrelatedCount(unrelatedCount: Long) = unrelatedCount(JsonField.of(unrelatedCount))
 
-            /**
-             * Sets [Builder.unrelatedCount] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.unrelatedCount] with a well-typed [Long] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.unrelatedCount] to an arbitrary JSON value. */
             fun unrelatedCount(unrelatedCount: JsonField<Long>) = apply {
                 this.unrelatedCount = unrelatedCount
             }
@@ -1295,12 +1130,6 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int =
             (if (complete.asKnown() == null) 0 else 1) +
                 (if (coveragePercentage.asKnown() == null) 0 else 1) +
@@ -1393,8 +1222,7 @@ private constructor(
              * Replies with article content.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             *   or is unexpectedly missing or null.
              */
             fun article(): Long = article.getRequired("article")
 
@@ -1402,8 +1230,7 @@ private constructor(
              * Replies with author details.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             *   or is unexpectedly missing or null.
              */
             fun author(): Long = author.getRequired("author")
 
@@ -1411,8 +1238,7 @@ private constructor(
              * Replies with card metadata.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             *   or is unexpectedly missing or null.
              */
             fun card(): Long = card.getRequired("card")
 
@@ -1420,8 +1246,7 @@ private constructor(
              * Replies with community-note data.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             *   or is unexpectedly missing or null.
              */
             fun communityNote(): Long = communityNote.getRequired("communityNote")
 
@@ -1429,8 +1254,7 @@ private constructor(
              * Replies with a creation timestamp.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             *   or is unexpectedly missing or null.
              */
             fun createdAt(): Long = createdAt.getRequired("createdAt")
 
@@ -1438,8 +1262,7 @@ private constructor(
              * Replies with engagement counts.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             *   or is unexpectedly missing or null.
              */
             fun engagementCounts(): Long = engagementCounts.getRequired("engagementCounts")
 
@@ -1447,8 +1270,7 @@ private constructor(
              * Replies with entity metadata.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             *   or is unexpectedly missing or null.
              */
             fun entities(): Long = entities.getRequired("entities")
 
@@ -1456,8 +1278,7 @@ private constructor(
              * Replies with a language value.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             *   or is unexpectedly missing or null.
              */
             fun language(): Long = language.getRequired("language")
 
@@ -1465,8 +1286,7 @@ private constructor(
              * Replies with media metadata.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             *   or is unexpectedly missing or null.
              */
             fun media(): Long = media.getRequired("media")
 
@@ -1474,8 +1294,7 @@ private constructor(
              * Replies with quoted or reposted tweet data.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             *   or is unexpectedly missing or null.
              */
             fun quotedOrRepostedTweet(): Long =
                 quotedOrRepostedTweet.getRequired("quotedOrRepostedTweet")
@@ -1484,8 +1303,7 @@ private constructor(
              * Replies with text.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             *   or is unexpectedly missing or null.
              */
             fun text(): Long = text.getRequired("text")
 
@@ -1493,8 +1311,7 @@ private constructor(
              * Total unique direct replies evaluated for richness.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             *   or is unexpectedly missing or null.
              */
             fun totalReplies(): Long = totalReplies.getRequired("totalReplies")
 
@@ -1502,8 +1319,7 @@ private constructor(
              * Replies with a canonical URL.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             *   or is unexpectedly missing or null.
              */
             fun url(): Long = url.getRequired("url")
 
@@ -1688,49 +1504,25 @@ private constructor(
                 /** Replies with article content. */
                 fun article(article: Long) = article(JsonField.of(article))
 
-                /**
-                 * Sets [Builder.article] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.article] with a well-typed [Long] value instead.
-                 * This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
-                 */
+                /** Sets [Builder.article] to an arbitrary JSON value. */
                 fun article(article: JsonField<Long>) = apply { this.article = article }
 
                 /** Replies with author details. */
                 fun author(author: Long) = author(JsonField.of(author))
 
-                /**
-                 * Sets [Builder.author] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.author] with a well-typed [Long] value instead.
-                 * This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
-                 */
+                /** Sets [Builder.author] to an arbitrary JSON value. */
                 fun author(author: JsonField<Long>) = apply { this.author = author }
 
                 /** Replies with card metadata. */
                 fun card(card: Long) = card(JsonField.of(card))
 
-                /**
-                 * Sets [Builder.card] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.card] with a well-typed [Long] value instead.
-                 * This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
-                 */
+                /** Sets [Builder.card] to an arbitrary JSON value. */
                 fun card(card: JsonField<Long>) = apply { this.card = card }
 
                 /** Replies with community-note data. */
                 fun communityNote(communityNote: Long) = communityNote(JsonField.of(communityNote))
 
-                /**
-                 * Sets [Builder.communityNote] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.communityNote] with a well-typed [Long] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
+                /** Sets [Builder.communityNote] to an arbitrary JSON value. */
                 fun communityNote(communityNote: JsonField<Long>) = apply {
                     this.communityNote = communityNote
                 }
@@ -1738,26 +1530,14 @@ private constructor(
                 /** Replies with a creation timestamp. */
                 fun createdAt(createdAt: Long) = createdAt(JsonField.of(createdAt))
 
-                /**
-                 * Sets [Builder.createdAt] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.createdAt] with a well-typed [Long] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
+                /** Sets [Builder.createdAt] to an arbitrary JSON value. */
                 fun createdAt(createdAt: JsonField<Long>) = apply { this.createdAt = createdAt }
 
                 /** Replies with engagement counts. */
                 fun engagementCounts(engagementCounts: Long) =
                     engagementCounts(JsonField.of(engagementCounts))
 
-                /**
-                 * Sets [Builder.engagementCounts] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.engagementCounts] with a well-typed [Long] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
+                /** Sets [Builder.engagementCounts] to an arbitrary JSON value. */
                 fun engagementCounts(engagementCounts: JsonField<Long>) = apply {
                     this.engagementCounts = engagementCounts
                 }
@@ -1765,50 +1545,26 @@ private constructor(
                 /** Replies with entity metadata. */
                 fun entities(entities: Long) = entities(JsonField.of(entities))
 
-                /**
-                 * Sets [Builder.entities] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.entities] with a well-typed [Long] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
+                /** Sets [Builder.entities] to an arbitrary JSON value. */
                 fun entities(entities: JsonField<Long>) = apply { this.entities = entities }
 
                 /** Replies with a language value. */
                 fun language(language: Long) = language(JsonField.of(language))
 
-                /**
-                 * Sets [Builder.language] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.language] with a well-typed [Long] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
+                /** Sets [Builder.language] to an arbitrary JSON value. */
                 fun language(language: JsonField<Long>) = apply { this.language = language }
 
                 /** Replies with media metadata. */
                 fun media(media: Long) = media(JsonField.of(media))
 
-                /**
-                 * Sets [Builder.media] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.media] with a well-typed [Long] value instead.
-                 * This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
-                 */
+                /** Sets [Builder.media] to an arbitrary JSON value. */
                 fun media(media: JsonField<Long>) = apply { this.media = media }
 
                 /** Replies with quoted or reposted tweet data. */
                 fun quotedOrRepostedTweet(quotedOrRepostedTweet: Long) =
                     quotedOrRepostedTweet(JsonField.of(quotedOrRepostedTweet))
 
-                /**
-                 * Sets [Builder.quotedOrRepostedTweet] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.quotedOrRepostedTweet] with a well-typed [Long]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
-                 */
+                /** Sets [Builder.quotedOrRepostedTweet] to an arbitrary JSON value. */
                 fun quotedOrRepostedTweet(quotedOrRepostedTweet: JsonField<Long>) = apply {
                     this.quotedOrRepostedTweet = quotedOrRepostedTweet
                 }
@@ -1816,25 +1572,13 @@ private constructor(
                 /** Replies with text. */
                 fun text(text: Long) = text(JsonField.of(text))
 
-                /**
-                 * Sets [Builder.text] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.text] with a well-typed [Long] value instead.
-                 * This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
-                 */
+                /** Sets [Builder.text] to an arbitrary JSON value. */
                 fun text(text: JsonField<Long>) = apply { this.text = text }
 
                 /** Total unique direct replies evaluated for richness. */
                 fun totalReplies(totalReplies: Long) = totalReplies(JsonField.of(totalReplies))
 
-                /**
-                 * Sets [Builder.totalReplies] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.totalReplies] with a well-typed [Long] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
+                /** Sets [Builder.totalReplies] to an arbitrary JSON value. */
                 fun totalReplies(totalReplies: JsonField<Long>) = apply {
                     this.totalReplies = totalReplies
                 }
@@ -1842,13 +1586,7 @@ private constructor(
                 /** Replies with a canonical URL. */
                 fun url(url: Long) = url(JsonField.of(url))
 
-                /**
-                 * Sets [Builder.url] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.url] with a well-typed [Long] value instead.
-                 * This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
-                 */
+                /** Sets [Builder.url] to an arbitrary JSON value. */
                 fun url(url: JsonField<Long>) = apply { this.url = url }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1957,12 +1695,6 @@ private constructor(
                     false
                 }
 
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
             internal fun validity(): Int =
                 (if (article.asKnown() == null) 0 else 1) +
                     (if (author.asKnown() == null) 0 else 1) +
@@ -2062,36 +1794,31 @@ private constructor(
 
             /**
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             *   or is unexpectedly missing or null.
              */
             fun name(): String = name.getRequired("name")
 
             /**
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             *   or is unexpectedly missing or null.
              */
             fun newDirectReplies(): Long = newDirectReplies.getRequired("newDirectReplies")
 
             /**
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             *   or is unexpectedly missing or null.
              */
             fun newNestedReplies(): Long = newNestedReplies.getRequired("newNestedReplies")
 
             /**
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             *   or is unexpectedly missing or null.
              */
             fun pagesAttempted(): Long = pagesAttempted.getRequired("pagesAttempted")
 
             /**
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             *   or is unexpectedly missing or null.
              */
             fun stopReason(): StopReason = stopReason.getRequired("stopReason")
 
@@ -2192,25 +1919,13 @@ private constructor(
 
                 fun name(name: String) = name(JsonField.of(name))
 
-                /**
-                 * Sets [Builder.name] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.name] with a well-typed [String] value instead.
-                 * This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
-                 */
+                /** Sets [Builder.name] to an arbitrary JSON value. */
                 fun name(name: JsonField<String>) = apply { this.name = name }
 
                 fun newDirectReplies(newDirectReplies: Long) =
                     newDirectReplies(JsonField.of(newDirectReplies))
 
-                /**
-                 * Sets [Builder.newDirectReplies] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.newDirectReplies] with a well-typed [Long] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
+                /** Sets [Builder.newDirectReplies] to an arbitrary JSON value. */
                 fun newDirectReplies(newDirectReplies: JsonField<Long>) = apply {
                     this.newDirectReplies = newDirectReplies
                 }
@@ -2218,13 +1933,7 @@ private constructor(
                 fun newNestedReplies(newNestedReplies: Long) =
                     newNestedReplies(JsonField.of(newNestedReplies))
 
-                /**
-                 * Sets [Builder.newNestedReplies] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.newNestedReplies] with a well-typed [Long] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
+                /** Sets [Builder.newNestedReplies] to an arbitrary JSON value. */
                 fun newNestedReplies(newNestedReplies: JsonField<Long>) = apply {
                     this.newNestedReplies = newNestedReplies
                 }
@@ -2232,26 +1941,14 @@ private constructor(
                 fun pagesAttempted(pagesAttempted: Long) =
                     pagesAttempted(JsonField.of(pagesAttempted))
 
-                /**
-                 * Sets [Builder.pagesAttempted] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.pagesAttempted] with a well-typed [Long] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
+                /** Sets [Builder.pagesAttempted] to an arbitrary JSON value. */
                 fun pagesAttempted(pagesAttempted: JsonField<Long>) = apply {
                     this.pagesAttempted = pagesAttempted
                 }
 
                 fun stopReason(stopReason: StopReason) = stopReason(JsonField.of(stopReason))
 
-                /**
-                 * Sets [Builder.stopReason] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.stopReason] with a well-typed [StopReason] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
+                /** Sets [Builder.stopReason] to an arbitrary JSON value. */
                 fun stopReason(stopReason: JsonField<StopReason>) = apply {
                     this.stopReason = stopReason
                 }
@@ -2338,12 +2035,6 @@ private constructor(
                     false
                 }
 
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
             internal fun validity(): Int =
                 (if (name.asKnown() == null) 0 else 1) +
                     (if (newDirectReplies.asKnown() == null) 0 else 1) +
@@ -2355,14 +2046,7 @@ private constructor(
             @JsonCreator
             private constructor(private val value: JsonField<String>) : Enum {
 
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
+                /** Returns this class instance's raw value. */
                 @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 companion object {
@@ -2422,9 +2106,6 @@ private constructor(
                 /**
                  * Returns an enum member corresponding to this class instance's value, or
                  * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
                  */
                 fun value(): Value =
                     when (this) {
@@ -2440,9 +2121,6 @@ private constructor(
 
                 /**
                  * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
                  *
                  * @throws XTwitterScraperInvalidDataException if this class instance's value is a
                  *   not a known member.
@@ -2462,9 +2140,6 @@ private constructor(
 
                 /**
                  * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
                  *
                  * @throws XTwitterScraperInvalidDataException if this class instance's value does
                  *   not have the expected primitive type.
@@ -2502,12 +2177,6 @@ private constructor(
                         false
                     }
 
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
                 internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
                 override fun equals(other: Any?): Boolean {

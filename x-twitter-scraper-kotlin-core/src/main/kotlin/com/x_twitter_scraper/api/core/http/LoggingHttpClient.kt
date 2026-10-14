@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.core.http
 
 import com.x_twitter_scraper.api.core.LogLevel
@@ -38,8 +36,6 @@ private constructor(
     val redactedHeaders: SortedSet<String>,
     /**
      * The clock to use for measuring request and response durations.
-     *
-     * This is primarily useful for using a fake clock in tests.
      *
      * Defaults to [Clock.systemUTC].
      */
@@ -213,8 +209,6 @@ private constructor(
         /**
          * The clock to use for measuring request and response durations.
          *
-         * This is primarily useful for using a fake clock in tests.
-         *
          * Defaults to [Clock.systemUTC].
          */
         fun clock(clock: Clock) = apply { this.clock = clock }
@@ -249,12 +243,6 @@ private constructor(
     }
 }
 
-/**
- * An [HttpRequestBody] wrapper that delegates to [body] while also logging line by line as it's
- * written.
- *
- * The logging occurs in a streaming manner with minimal buffering.
- */
 private class LoggingHttpRequestBody(
     private val method: HttpMethod,
     private val body: HttpRequestBody,
@@ -280,13 +268,6 @@ private class LoggingHttpRequestBody(
     override fun close() = body.close()
 }
 
-/**
- * An [OutputStream] wrapper that delegates to [outputStream] while also logging bytes line by line
- * as it's written to.
- *
- * The written content is assumed to be in the given [charset] and the logging occurs in a streaming
- * manner with minimal buffering.
- */
 private class LoggingOutputStream(private val outputStream: OutputStream, charset: Charset?) :
     OutputStream() {
 
@@ -306,7 +287,6 @@ private class LoggingOutputStream(private val outputStream: OutputStream, charse
         }
     }
 
-    /** Prints any currently buffered content. */
     override fun flush() {
         buffer.flush()
         outputStream.flush()
@@ -315,12 +295,6 @@ private class LoggingOutputStream(private val outputStream: OutputStream, charse
     override fun close() = outputStream.close()
 }
 
-/**
- * An [HttpResponse] wrapper that delegates to [response] while also logging line-by-line as it's
- * read.
- *
- * The logging occurs in a streaming manner with minimal buffering.
- */
 private class LoggingHttpResponse(private val response: HttpResponse) : HttpResponse {
 
     private val loggingBody: Lazy<InputStream> = lazy {
@@ -344,13 +318,6 @@ private class LoggingHttpResponse(private val response: HttpResponse) : HttpResp
     }
 }
 
-/**
- * An [InputStream] wrapper that delegates to [inputStream] while also logging bytes line by line as
- * it's read.
- *
- * The contents of [inputStream] are assumed to be in the given [charset] and the logging occurs in
- * a streaming manner with minimal buffering.
- */
 private class LoggingInputStream(private val inputStream: InputStream, charset: Charset?) :
     InputStream() {
 
@@ -407,13 +374,6 @@ private class LoggingInputStream(private val inputStream: InputStream, charset: 
     }
 }
 
-/**
- * A byte buffer that prints line by line, using the given [charset], as bytes are written to it.
- *
- * When [charset] is `null`, the buffer performs an upfront check to detect binary content. If
- * non-whitespace ISO control characters are found in the first [PROBABLY_UTF8_CODE_POINT_LIMIT]
- * code points, body logging is suppressed entirely.
- */
 private class LoggingBuffer(charset: Charset?) {
 
     private val charset = charset ?: StandardCharsets.UTF_8
@@ -426,19 +386,8 @@ private class LoggingBuffer(charset: Charset?) {
     private var writeCount = 0
     private val buffer = ByteArrayOutputStream(128)
 
-    /**
-     * Whether logging has been suppressed because the content doesn't appear to be readable text.
-     *
-     * This is only set when [charset] is `null` and the content fails the [isProbablyUtf8] check.
-     */
     private var suppressed = false
 
-    /**
-     * Bytes accumulated for the [isProbablyUtf8] check before any lines are printed.
-     *
-     * Once the check passes (or [charset] is non-null), this is set to `null` and bytes flow
-     * directly to [buffer].
-     */
     private var prefetchBuffer: ByteArrayOutputStream? =
         if (charset != null) null else ByteArrayOutputStream(128)
 
@@ -446,8 +395,6 @@ private class LoggingBuffer(charset: Charset?) {
 
     fun write(b: Int) {
         if (writeCount == 0) {
-            // Print a newline before we start printing anything to separate the printed content
-            // from previous content.
             System.err.println()
         }
 
@@ -460,11 +407,9 @@ private class LoggingBuffer(charset: Charset?) {
         val prefetch = prefetchBuffer
         if (prefetch != null) {
             prefetch.write(b)
-            // Continue accumulating until we have enough bytes to decide.
             if (prefetch.size() < PROBABLY_UTF8_BYTE_LIMIT && b != '\n'.code) {
                 return
             }
-            // We have enough bytes. Check if the content is probably UTF-8.
             prefetchBuffer = null
             val bytes = prefetch.toByteArray()
             if (!isProbablyUtf8(bytes)) {
@@ -472,7 +417,6 @@ private class LoggingBuffer(charset: Charset?) {
                 System.err.println("(binary body omitted)")
                 return
             }
-            // Content looks like UTF-8. Feed the accumulated bytes into the normal buffer.
             for (byte in bytes) {
                 writeToBuffer(byte.toInt() and 0xFF)
             }
@@ -491,14 +435,11 @@ private class LoggingBuffer(charset: Charset?) {
         buffer.write(b)
     }
 
-    /** Prints any currently buffered content. */
     fun flush() {
         if (suppressed) {
             return
         }
 
-        // If we still have a prefetch buffer when flush is called (body was shorter than the
-        // limit), run the check now.
         val prefetch = prefetchBuffer
         if (prefetch != null) {
             prefetchBuffer = null
@@ -531,21 +472,10 @@ private class LoggingBuffer(charset: Charset?) {
     }
 }
 
-/** The maximum number of code points to sample when checking if content is probably UTF-8. */
 private const val PROBABLY_UTF8_CODE_POINT_LIMIT = 64
 
-/**
- * The maximum number of bytes to accumulate before running the [isProbablyUtf8] check. UTF-8 code
- * points are at most 4 bytes, so this accommodates [PROBABLY_UTF8_CODE_POINT_LIMIT] code points.
- */
 private const val PROBABLY_UTF8_BYTE_LIMIT = PROBABLY_UTF8_CODE_POINT_LIMIT * 4
 
-/**
- * Returns `true` if the given [bytes] probably contain human-readable UTF-8 text.
- *
- * Decodes up to [PROBABLY_UTF8_CODE_POINT_LIMIT] code points and returns `false` if any
- * non-whitespace ISO control characters are found, or if the bytes are not valid UTF-8.
- */
 private fun isProbablyUtf8(bytes: ByteArray): Boolean {
     try {
         val decoder =
@@ -569,7 +499,6 @@ private fun isProbablyUtf8(bytes: ByteArray): Boolean {
     }
 }
 
-/** Returns the [Charset] in the given [contentType] string, or `null` if unspecified. */
 private fun parseCharset(contentType: String?): Charset? =
     contentType
         ?.split(";")
@@ -581,7 +510,6 @@ private fun parseCharset(contentType: String?): Charset? =
         ?.removeSurrounding("\"")
         ?.let { runCatching { charset(it) }.getOrNull() }
 
-/** Formats the [Duration] into a string like "1m 40s 467ms". */
 private fun Duration.format(): String =
     toKotlinDuration().toComponents { days, hours, minutes, seconds, nanoseconds ->
         buildString {

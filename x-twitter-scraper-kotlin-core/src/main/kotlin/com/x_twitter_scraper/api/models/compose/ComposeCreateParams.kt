@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.models.compose
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -256,24 +254,6 @@ private constructor(
         /**
          * Maps this instance's current variant to a value of type [T] using the given [visitor].
          *
-         * Note that this method is _not_ forwards compatible with new variants from the API, unless
-         * [visitor] overrides [Visitor.unknown]. To handle variants not known to this version of
-         * the SDK gracefully, consider overriding [Visitor.unknown]:
-         * ```kotlin
-         * import com.x_twitter_scraper.api.core.JsonValue
-         *
-         * val result: String? = body.accept(object : Body.Visitor<String?> {
-         *     override fun visitComposePrepareRequest(composePrepareRequest: ComposePrepareRequest): String? = composePrepareRequest.toString()
-         *
-         *     // ...
-         *
-         *     override fun unknown(json: JsonValue?): String? {
-         *         // Or inspect the `json`.
-         *         return null
-         *     }
-         * })
-         * ```
-         *
          * @throws XTwitterScraperInvalidDataException if [Visitor.unknown] is not overridden in
          *   [visitor] and the current variant is unknown.
          */
@@ -335,12 +315,6 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int =
             accept(
                 object : Visitor<Int> {
@@ -409,8 +383,7 @@ private constructor(
              * Maps an unknown variant of [Body] to a value of type [T].
              *
              * An instance of [Body] can contain an unknown variant if it was deserialized from data
-             * that doesn't match any known variant. For example, if the SDK is on an older version
-             * than the API, then the API may respond with new variants that the SDK is unaware of.
+             * that doesn't match any known variant.
              *
              * @throws XTwitterScraperInvalidDataException in the default implementation.
              */
@@ -440,13 +413,8 @@ private constructor(
                         .allMaxBy { it.validity() }
                         .toList()
                 return when (bestMatches.size) {
-                    // This can happen if what we're deserializing is completely incompatible with
-                    // all the possible variants (e.g. deserializing from boolean).
                     0 -> Body(_json = json)
                     1 -> bestMatches.single()
-                    // If there's more than one match with the highest validity, then use the first
-                    // completely valid match, or simply the first match if none are completely
-                    // valid.
                     else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
                 }
             }
@@ -497,9 +465,6 @@ private constructor(
              * ```kotlin
              * JsonValue.from("compose")
              * ```
-             *
-             * However, this method can be useful for debugging and logging (e.g. if the server
-             * responded with an unexpected value).
              */
             @JsonProperty("step") @ExcludeMissing fun _step(): JsonValue = step
 
@@ -507,24 +472,21 @@ private constructor(
              * Subject for the post.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             *   or is unexpectedly missing or null.
              */
             fun topic(): String = topic.getRequired("topic")
 
             /**
              * Editorial goal used to order the rules and questions.
              *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   (e.g. if the server responded with an unexpected value).
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
              */
             fun goal(): Goal? = goal.getNullable("goal")
 
             /**
              * Username from a style analysis saved to this account.
              *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   (e.g. if the server responded with an unexpected value).
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
              */
             fun styleUsername(): String? = styleUsername.getNullable("styleUsername")
 
@@ -598,52 +560,30 @@ private constructor(
                 /**
                  * Sets the field to an arbitrary JSON value.
                  *
-                 * It is usually unnecessary to call this method because the field defaults to the
-                 * following:
+                 * Defaults to the following:
                  * ```kotlin
                  * JsonValue.from("compose")
                  * ```
-                 *
-                 * This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
                  */
                 fun step(step: JsonValue) = apply { this.step = step }
 
                 /** Subject for the post. */
                 fun topic(topic: String) = topic(JsonField.of(topic))
 
-                /**
-                 * Sets [Builder.topic] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.topic] with a well-typed [String] value instead.
-                 * This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
-                 */
+                /** Sets [Builder.topic] to an arbitrary JSON value. */
                 fun topic(topic: JsonField<String>) = apply { this.topic = topic }
 
                 /** Editorial goal used to order the rules and questions. */
                 fun goal(goal: Goal) = goal(JsonField.of(goal))
 
-                /**
-                 * Sets [Builder.goal] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.goal] with a well-typed [Goal] value instead.
-                 * This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
-                 */
+                /** Sets [Builder.goal] to an arbitrary JSON value. */
                 fun goal(goal: JsonField<Goal>) = apply { this.goal = goal }
 
                 /** Username from a style analysis saved to this account. */
                 fun styleUsername(styleUsername: String) =
                     styleUsername(JsonField.of(styleUsername))
 
-                /**
-                 * Sets [Builder.styleUsername] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.styleUsername] with a well-typed [String] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
+                /** Sets [Builder.styleUsername] to an arbitrary JSON value. */
                 fun styleUsername(styleUsername: JsonField<String>) = apply {
                     this.styleUsername = styleUsername
                 }
@@ -728,12 +668,6 @@ private constructor(
                     false
                 }
 
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
             internal fun validity(): Int =
                 step.let { if (it == JsonValue.from("compose")) 1 else 0 } +
                     (if (topic.asKnown() == null) 0 else 1) +
@@ -744,14 +678,7 @@ private constructor(
             class Goal @JsonCreator private constructor(private val value: JsonField<String>) :
                 Enum {
 
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
+                /** Returns this class instance's raw value. */
                 @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 companion object {
@@ -798,9 +725,6 @@ private constructor(
                 /**
                  * Returns an enum member corresponding to this class instance's value, or
                  * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
                  */
                 fun value(): Value =
                     when (this) {
@@ -813,9 +737,6 @@ private constructor(
 
                 /**
                  * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
                  *
                  * @throws XTwitterScraperInvalidDataException if this class instance's value is a
                  *   not a known member.
@@ -831,9 +752,6 @@ private constructor(
 
                 /**
                  * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
                  *
                  * @throws XTwitterScraperInvalidDataException if this class instance's value does
                  *   not have the expected primitive type.
@@ -871,12 +789,6 @@ private constructor(
                         false
                     }
 
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
                 internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
                 override fun equals(other: Any?): Boolean {
@@ -958,8 +870,7 @@ private constructor(
              * Editorial goal for the guidance.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             *   or is unexpectedly missing or null.
              */
             fun goal(): Goal = goal.getRequired("goal")
 
@@ -968,9 +879,6 @@ private constructor(
              * ```kotlin
              * JsonValue.from("refine")
              * ```
-             *
-             * However, this method can be useful for debugging and logging (e.g. if the server
-             * responded with an unexpected value).
              */
             @JsonProperty("step") @ExcludeMissing fun _step(): JsonValue = step
 
@@ -978,8 +886,7 @@ private constructor(
              * Requested writing tone.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             *   or is unexpectedly missing or null.
              */
             fun tone(): String = tone.getRequired("tone")
 
@@ -987,32 +894,28 @@ private constructor(
              * Subject for the post.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             *   or is unexpectedly missing or null.
              */
             fun topic(): String = topic.getRequired("topic")
 
             /**
              * Audience, constraints, sources, or other writing context.
              *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   (e.g. if the server responded with an unexpected value).
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
              */
             fun additionalContext(): String? = additionalContext.getNullable("additionalContext")
 
             /**
              * Specific action the draft should request.
              *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   (e.g. if the server responded with an unexpected value).
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
              */
             fun callToAction(): String? = callToAction.getNullable("callToAction")
 
             /**
              * Planned media type.
              *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   (e.g. if the server responded with an unexpected value).
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
              */
             fun mediaType(): MediaType? = mediaType.getNullable("mediaType")
 
@@ -1120,64 +1023,36 @@ private constructor(
                 /** Editorial goal for the guidance. */
                 fun goal(goal: Goal) = goal(JsonField.of(goal))
 
-                /**
-                 * Sets [Builder.goal] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.goal] with a well-typed [Goal] value instead.
-                 * This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
-                 */
+                /** Sets [Builder.goal] to an arbitrary JSON value. */
                 fun goal(goal: JsonField<Goal>) = apply { this.goal = goal }
 
                 /**
                  * Sets the field to an arbitrary JSON value.
                  *
-                 * It is usually unnecessary to call this method because the field defaults to the
-                 * following:
+                 * Defaults to the following:
                  * ```kotlin
                  * JsonValue.from("refine")
                  * ```
-                 *
-                 * This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
                  */
                 fun step(step: JsonValue) = apply { this.step = step }
 
                 /** Requested writing tone. */
                 fun tone(tone: String) = tone(JsonField.of(tone))
 
-                /**
-                 * Sets [Builder.tone] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.tone] with a well-typed [String] value instead.
-                 * This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
-                 */
+                /** Sets [Builder.tone] to an arbitrary JSON value. */
                 fun tone(tone: JsonField<String>) = apply { this.tone = tone }
 
                 /** Subject for the post. */
                 fun topic(topic: String) = topic(JsonField.of(topic))
 
-                /**
-                 * Sets [Builder.topic] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.topic] with a well-typed [String] value instead.
-                 * This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
-                 */
+                /** Sets [Builder.topic] to an arbitrary JSON value. */
                 fun topic(topic: JsonField<String>) = apply { this.topic = topic }
 
                 /** Audience, constraints, sources, or other writing context. */
                 fun additionalContext(additionalContext: String) =
                     additionalContext(JsonField.of(additionalContext))
 
-                /**
-                 * Sets [Builder.additionalContext] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.additionalContext] with a well-typed [String]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
-                 */
+                /** Sets [Builder.additionalContext] to an arbitrary JSON value. */
                 fun additionalContext(additionalContext: JsonField<String>) = apply {
                     this.additionalContext = additionalContext
                 }
@@ -1185,13 +1060,7 @@ private constructor(
                 /** Specific action the draft should request. */
                 fun callToAction(callToAction: String) = callToAction(JsonField.of(callToAction))
 
-                /**
-                 * Sets [Builder.callToAction] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.callToAction] with a well-typed [String] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
+                /** Sets [Builder.callToAction] to an arbitrary JSON value. */
                 fun callToAction(callToAction: JsonField<String>) = apply {
                     this.callToAction = callToAction
                 }
@@ -1199,13 +1068,7 @@ private constructor(
                 /** Planned media type. */
                 fun mediaType(mediaType: MediaType) = mediaType(JsonField.of(mediaType))
 
-                /**
-                 * Sets [Builder.mediaType] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.mediaType] with a well-typed [MediaType] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
+                /** Sets [Builder.mediaType] to an arbitrary JSON value. */
                 fun mediaType(mediaType: JsonField<MediaType>) = apply {
                     this.mediaType = mediaType
                 }
@@ -1298,12 +1161,6 @@ private constructor(
                     false
                 }
 
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
             internal fun validity(): Int =
                 (goal.asKnown()?.validity() ?: 0) +
                     step.let { if (it == JsonValue.from("refine")) 1 else 0 } +
@@ -1317,14 +1174,7 @@ private constructor(
             class Goal @JsonCreator private constructor(private val value: JsonField<String>) :
                 Enum {
 
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
+                /** Returns this class instance's raw value. */
                 @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 companion object {
@@ -1371,9 +1221,6 @@ private constructor(
                 /**
                  * Returns an enum member corresponding to this class instance's value, or
                  * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
                  */
                 fun value(): Value =
                     when (this) {
@@ -1386,9 +1233,6 @@ private constructor(
 
                 /**
                  * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
                  *
                  * @throws XTwitterScraperInvalidDataException if this class instance's value is a
                  *   not a known member.
@@ -1404,9 +1248,6 @@ private constructor(
 
                 /**
                  * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
                  *
                  * @throws XTwitterScraperInvalidDataException if this class instance's value does
                  *   not have the expected primitive type.
@@ -1444,12 +1285,6 @@ private constructor(
                         false
                     }
 
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
                 internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
                 override fun equals(other: Any?): Boolean {
@@ -1469,14 +1304,7 @@ private constructor(
             class MediaType @JsonCreator private constructor(private val value: JsonField<String>) :
                 Enum {
 
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
+                /** Returns this class instance's raw value. */
                 @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
                 companion object {
@@ -1520,9 +1348,6 @@ private constructor(
                 /**
                  * Returns an enum member corresponding to this class instance's value, or
                  * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
                  */
                 fun value(): Value =
                     when (this) {
@@ -1534,9 +1359,6 @@ private constructor(
 
                 /**
                  * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
                  *
                  * @throws XTwitterScraperInvalidDataException if this class instance's value is a
                  *   not a known member.
@@ -1552,9 +1374,6 @@ private constructor(
 
                 /**
                  * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
                  *
                  * @throws XTwitterScraperInvalidDataException if this class instance's value does
                  *   not have the expected primitive type.
@@ -1592,12 +1411,6 @@ private constructor(
                         false
                     }
 
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
                 internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
                 override fun equals(other: Any?): Boolean {
@@ -1674,8 +1487,7 @@ private constructor(
              * Full post text for deterministic editorial checks.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             *   or is unexpectedly missing or null.
              */
             fun draft(): String = draft.getRequired("draft")
 
@@ -1684,25 +1496,20 @@ private constructor(
              * ```kotlin
              * JsonValue.from("score")
              * ```
-             *
-             * However, this method can be useful for debugging and logging (e.g. if the server
-             * responded with an unexpected value).
              */
             @JsonProperty("step") @ExcludeMissing fun _step(): JsonValue = step
 
             /**
              * True when a separate link card is attached.
              *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   (e.g. if the server responded with an unexpected value).
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
              */
             fun hasLink(): Boolean? = hasLink.getNullable("hasLink")
 
             /**
              * Accepted for backward compatibility. Text checks ignore this field.
              *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   (e.g. if the server responded with an unexpected value).
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
              */
             @Deprecated("Ignored. Remove this field. Use hasLink for a separate link card.")
             fun hasMedia(): Boolean? = hasMedia.getNullable("hasMedia")
@@ -1777,39 +1584,23 @@ private constructor(
                 /** Full post text for deterministic editorial checks. */
                 fun draft(draft: String) = draft(JsonField.of(draft))
 
-                /**
-                 * Sets [Builder.draft] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.draft] with a well-typed [String] value instead.
-                 * This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
-                 */
+                /** Sets [Builder.draft] to an arbitrary JSON value. */
                 fun draft(draft: JsonField<String>) = apply { this.draft = draft }
 
                 /**
                  * Sets the field to an arbitrary JSON value.
                  *
-                 * It is usually unnecessary to call this method because the field defaults to the
-                 * following:
+                 * Defaults to the following:
                  * ```kotlin
                  * JsonValue.from("score")
                  * ```
-                 *
-                 * This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
                  */
                 fun step(step: JsonValue) = apply { this.step = step }
 
                 /** True when a separate link card is attached. */
                 fun hasLink(hasLink: Boolean) = hasLink(JsonField.of(hasLink))
 
-                /**
-                 * Sets [Builder.hasLink] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.hasLink] with a well-typed [Boolean] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
+                /** Sets [Builder.hasLink] to an arbitrary JSON value. */
                 fun hasLink(hasLink: JsonField<Boolean>) = apply { this.hasLink = hasLink }
 
                 /** Accepted for backward compatibility. Text checks ignore this field. */
@@ -1818,13 +1609,7 @@ private constructor(
                     this.hasMedia = JsonField.of(hasMedia)
                 }
 
-                /**
-                 * Sets [Builder.hasMedia] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.hasMedia] with a well-typed [Boolean] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
+                /** Sets [Builder.hasMedia] to an arbitrary JSON value. */
                 @Deprecated("Ignored. Remove this field. Use hasLink for a separate link card.")
                 fun hasMedia(hasMedia: JsonField<Boolean>) = apply { this.hasMedia = hasMedia }
 
@@ -1908,12 +1693,6 @@ private constructor(
                     false
                 }
 
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
             internal fun validity(): Int =
                 (if (draft.asKnown() == null) 0 else 1) +
                     step.let { if (it == JsonValue.from("score")) 1 else 0 } +

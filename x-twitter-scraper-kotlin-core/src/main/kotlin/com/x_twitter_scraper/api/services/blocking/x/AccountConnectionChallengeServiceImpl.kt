@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.services.blocking.x
 
 import com.x_twitter_scraper.api.core.ClientOptions
@@ -43,7 +41,6 @@ internal constructor(private val clientOptions: ClientOptions) : AccountConnecti
         params: AccountConnectionChallengeSubmitParams,
         requestOptions: RequestOptions,
     ): AccountConnectionChallengeSubmitResponse =
-        // post /x/account-connection-challenges/{id}/submit
         withRawResponse().submit(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -66,8 +63,6 @@ internal constructor(private val clientOptions: ClientOptions) : AccountConnecti
             params: AccountConnectionChallengeSubmitParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<AccountConnectionChallengeSubmitResponse> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()

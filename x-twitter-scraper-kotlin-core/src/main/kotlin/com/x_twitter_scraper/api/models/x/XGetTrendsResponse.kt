@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.models.x
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -39,19 +37,19 @@ private constructor(
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun count(): Long = count.getRequired("count")
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun trends(): List<Trend> = trends.getRequired("trends")
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun woeid(): Long = woeid.getRequired("woeid")
 
@@ -120,23 +118,12 @@ private constructor(
 
         fun count(count: Long) = count(JsonField.of(count))
 
-        /**
-         * Sets [Builder.count] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.count] with a well-typed [Long] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.count] to an arbitrary JSON value. */
         fun count(count: JsonField<Long>) = apply { this.count = count }
 
         fun trends(trends: List<Trend>) = trends(JsonField.of(trends))
 
-        /**
-         * Sets [Builder.trends] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.trends] with a well-typed `List<Trend>` value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
+        /** Sets [Builder.trends] to an arbitrary JSON value. */
         fun trends(trends: JsonField<List<Trend>>) = apply {
             this.trends = trends.map { it.toMutableList() }
         }
@@ -155,12 +142,7 @@ private constructor(
 
         fun woeid(woeid: Long) = woeid(JsonField.of(woeid))
 
-        /**
-         * Sets [Builder.woeid] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.woeid] with a well-typed [Long] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.woeid] to an arbitrary JSON value. */
         fun woeid(woeid: JsonField<Long>) = apply { this.woeid = woeid }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -234,11 +216,6 @@ private constructor(
             false
         }
 
-    /**
-     * Returns a score indicating how many valid values are contained in this object recursively.
-     *
-     * Used for best match union deserialization.
-     */
     internal fun validity(): Int =
         (if (count.asKnown() == null) 0 else 1) +
             (trends.asKnown()?.sumOf { it.validity() } ?: 0) +
@@ -276,50 +253,37 @@ private constructor(
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun name(): String = name.getRequired("name")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun description(): String? = description.getNullable("description")
 
         /**
          * Promotion identifier from X. Null for organic trends.
          *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
         fun promotedContent(): String? = promotedContent.getNullable("promotedContent")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun query(): String? = query.getNullable("query")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun rank(): Long? = rank.getNullable("rank")
 
         /**
          * Approximate public post volume when X supplies it.
          *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
         fun tweetVolume(): Long? = tweetVolume.getNullable("tweetVolume")
 
         /**
          * X search URL for the trend.
          *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
         fun url(): String? = url.getNullable("url")
 
@@ -429,24 +393,12 @@ private constructor(
 
             fun name(name: String) = name(JsonField.of(name))
 
-            /**
-             * Sets [Builder.name] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.name] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
+            /** Sets [Builder.name] to an arbitrary JSON value. */
             fun name(name: JsonField<String>) = apply { this.name = name }
 
             fun description(description: String) = description(JsonField.of(description))
 
-            /**
-             * Sets [Builder.description] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.description] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.description] to an arbitrary JSON value. */
             fun description(description: JsonField<String>) = apply {
                 this.description = description
             }
@@ -455,68 +407,34 @@ private constructor(
             fun promotedContent(promotedContent: String?) =
                 promotedContent(JsonField.ofNullable(promotedContent))
 
-            /**
-             * Sets [Builder.promotedContent] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.promotedContent] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.promotedContent] to an arbitrary JSON value. */
             fun promotedContent(promotedContent: JsonField<String>) = apply {
                 this.promotedContent = promotedContent
             }
 
             fun query(query: String) = query(JsonField.of(query))
 
-            /**
-             * Sets [Builder.query] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.query] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.query] to an arbitrary JSON value. */
             fun query(query: JsonField<String>) = apply { this.query = query }
 
             fun rank(rank: Long) = rank(JsonField.of(rank))
 
-            /**
-             * Sets [Builder.rank] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.rank] with a well-typed [Long] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
+            /** Sets [Builder.rank] to an arbitrary JSON value. */
             fun rank(rank: JsonField<Long>) = apply { this.rank = rank }
 
             /** Approximate public post volume when X supplies it. */
             fun tweetVolume(tweetVolume: Long?) = tweetVolume(JsonField.ofNullable(tweetVolume))
 
-            /**
-             * Alias for [Builder.tweetVolume].
-             *
-             * This unboxed primitive overload exists for backwards compatibility.
-             */
+            /** Alias for [Builder.tweetVolume]. */
             fun tweetVolume(tweetVolume: Long) = tweetVolume(tweetVolume as Long?)
 
-            /**
-             * Sets [Builder.tweetVolume] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.tweetVolume] with a well-typed [Long] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.tweetVolume] to an arbitrary JSON value. */
             fun tweetVolume(tweetVolume: JsonField<Long>) = apply { this.tweetVolume = tweetVolume }
 
             /** X search URL for the trend. */
             fun url(url: String) = url(JsonField.of(url))
 
-            /**
-             * Sets [Builder.url] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.url] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
+            /** Sets [Builder.url] to an arbitrary JSON value. */
             fun url(url: JsonField<String>) = apply { this.url = url }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -597,12 +515,6 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int =
             (if (name.asKnown() == null) 0 else 1) +
                 (if (description.asKnown() == null) 0 else 1) +
