@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.services.blocking.x
 
 import com.x_twitter_scraper.api.core.ClientOptions
@@ -61,44 +59,33 @@ class CommunityServiceImpl internal constructor(private val clientOptions: Clien
     override fun create(
         params: CommunityCreateParams,
         requestOptions: RequestOptions,
-    ): CommunityCreateResponse =
-        // post /x/communities
-        withRawResponse().create(params, requestOptions).parse()
+    ): CommunityCreateResponse = withRawResponse().create(params, requestOptions).parse()
 
     override fun delete(
         params: CommunityDeleteParams,
         requestOptions: RequestOptions,
-    ): CommunityDeleteResponse =
-        // delete /x/communities/{id}
-        withRawResponse().delete(params, requestOptions).parse()
+    ): CommunityDeleteResponse = withRawResponse().delete(params, requestOptions).parse()
 
     override fun retrieveInfo(
         params: CommunityRetrieveInfoParams,
         requestOptions: RequestOptions,
     ): CommunityRetrieveInfoResponse =
-        // get /x/communities/{id}/info
         withRawResponse().retrieveInfo(params, requestOptions).parse()
 
     override fun retrieveMembers(
         params: CommunityRetrieveMembersParams,
         requestOptions: RequestOptions,
-    ): PaginatedUsers =
-        // get /x/communities/{id}/members
-        withRawResponse().retrieveMembers(params, requestOptions).parse()
+    ): PaginatedUsers = withRawResponse().retrieveMembers(params, requestOptions).parse()
 
     override fun retrieveModerators(
         params: CommunityRetrieveModeratorsParams,
         requestOptions: RequestOptions,
-    ): PaginatedUsers =
-        // get /x/communities/{id}/moderators
-        withRawResponse().retrieveModerators(params, requestOptions).parse()
+    ): PaginatedUsers = withRawResponse().retrieveModerators(params, requestOptions).parse()
 
     override fun retrieveSearch(
         params: CommunityRetrieveSearchParams,
         requestOptions: RequestOptions,
-    ): PaginatedTweets =
-        // get /x/communities/search
-        withRawResponse().retrieveSearch(params, requestOptions).parse()
+    ): PaginatedTweets = withRawResponse().retrieveSearch(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         CommunityService.WithRawResponse {
@@ -162,8 +149,6 @@ class CommunityServiceImpl internal constructor(private val clientOptions: Clien
             params: CommunityDeleteParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<CommunityDeleteResponse> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
@@ -193,8 +178,6 @@ class CommunityServiceImpl internal constructor(private val clientOptions: Clien
             params: CommunityRetrieveInfoParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<CommunityRetrieveInfoResponse> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
@@ -223,8 +206,6 @@ class CommunityServiceImpl internal constructor(private val clientOptions: Clien
             params: CommunityRetrieveMembersParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<PaginatedUsers> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
@@ -253,8 +234,6 @@ class CommunityServiceImpl internal constructor(private val clientOptions: Clien
             params: CommunityRetrieveModeratorsParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<PaginatedUsers> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()

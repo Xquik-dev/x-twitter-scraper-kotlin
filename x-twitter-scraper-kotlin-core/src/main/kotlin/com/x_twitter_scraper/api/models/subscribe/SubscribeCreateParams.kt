@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.models.subscribe
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -36,8 +34,7 @@ private constructor(
     /**
      * Subscription tier to pre-select.
      *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun tier(): Tier? = body.tier()
 
@@ -79,24 +76,13 @@ private constructor(
             additionalQueryParams = subscribeCreateParams.additionalQueryParams.toBuilder()
         }
 
-        /**
-         * Sets the entire request body.
-         *
-         * This is generally only useful if you are already constructing the body separately.
-         * Otherwise, it's more convenient to use the top-level setters instead:
-         * - [tier]
-         */
+        /** Sets the entire request body. */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
         /** Subscription tier to pre-select. */
         fun tier(tier: Tier) = apply { body.tier(tier) }
 
-        /**
-         * Sets [Builder.tier] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.tier] with a well-typed [Tier] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.tier] to an arbitrary JSON value. */
         fun tier(tier: JsonField<Tier>) = apply { body.tier(tier) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
@@ -250,8 +236,7 @@ private constructor(
         /**
          * Subscription tier to pre-select.
          *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
         fun tier(): Tier? = tier.getNullable("tier")
 
@@ -294,13 +279,7 @@ private constructor(
             /** Subscription tier to pre-select. */
             fun tier(tier: Tier) = tier(JsonField.of(tier))
 
-            /**
-             * Sets [Builder.tier] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.tier] with a well-typed [Tier] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
+            /** Sets [Builder.tier] to an arbitrary JSON value. */
             fun tier(tier: JsonField<Tier>) = apply { this.tier = tier }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -358,12 +337,6 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int = (tier.asKnown()?.validity() ?: 0)
 
         override fun equals(other: Any?): Boolean {
@@ -386,14 +359,7 @@ private constructor(
     /** Subscription tier to pre-select. */
     class Tier @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
-        /**
-         * Returns this class instance's raw value.
-         *
-         * This is usually only useful if this instance was deserialized from data that doesn't
-         * match any known member, and you want to know that value. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new members that the SDK is
-         * unaware of.
-         */
+        /** Returns this class instance's raw value. */
         @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
         companion object {
@@ -434,9 +400,6 @@ private constructor(
         /**
          * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
          * if the class was instantiated with an unknown value.
-         *
-         * Use the [known] method instead if you're certain the value is always known or if you want
-         * to throw for the unknown case.
          */
         fun value(): Value =
             when (this) {
@@ -448,9 +411,6 @@ private constructor(
 
         /**
          * Returns an enum member corresponding to this class instance's value.
-         *
-         * Use the [value] method instead if you're uncertain the value is always known and don't
-         * want to throw for the unknown case.
          *
          * @throws XTwitterScraperInvalidDataException if this class instance's value is a not a
          *   known member.
@@ -465,9 +425,6 @@ private constructor(
 
         /**
          * Returns this class instance's primitive wire representation.
-         *
-         * This differs from the [toString] method because that method is primarily for debugging
-         * and generally doesn't throw.
          *
          * @throws XTwitterScraperInvalidDataException if this class instance's value does not have
          *   the expected primitive type.
@@ -504,12 +461,6 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {

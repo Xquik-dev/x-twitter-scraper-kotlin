@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.services.async.x.tweets
 
 import com.x_twitter_scraper.api.core.ClientOptions
@@ -41,16 +39,12 @@ class LikeServiceAsyncImpl internal constructor(private val clientOptions: Clien
     override suspend fun create(
         params: LikeCreateParams,
         requestOptions: RequestOptions,
-    ): LikeCreateResponse =
-        // post /x/tweets/{id}/like
-        withRawResponse().create(params, requestOptions).parse()
+    ): LikeCreateResponse = withRawResponse().create(params, requestOptions).parse()
 
     override suspend fun delete(
         params: LikeDeleteParams,
         requestOptions: RequestOptions,
-    ): LikeDeleteResponse =
-        // delete /x/tweets/{id}/like
-        withRawResponse().delete(params, requestOptions).parse()
+    ): LikeDeleteResponse = withRawResponse().delete(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         LikeServiceAsync.WithRawResponse {
@@ -72,8 +66,6 @@ class LikeServiceAsyncImpl internal constructor(private val clientOptions: Clien
             params: LikeCreateParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<LikeCreateResponse> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
@@ -103,8 +95,6 @@ class LikeServiceAsyncImpl internal constructor(private val clientOptions: Clien
             params: LikeDeleteParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<LikeDeleteResponse> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()

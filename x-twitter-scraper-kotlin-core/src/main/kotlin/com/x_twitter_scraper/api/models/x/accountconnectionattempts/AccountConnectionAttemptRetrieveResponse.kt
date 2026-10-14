@@ -1,5 +1,3 @@
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.models.x.accountconnectionattempts
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -81,24 +79,6 @@ private constructor(
     /**
      * Maps this instance's current variant to a value of type [T] using the given [visitor].
      *
-     * Note that this method is _not_ forwards compatible with new variants from the API, unless
-     * [visitor] overrides [Visitor.unknown]. To handle variants not known to this version of the
-     * SDK gracefully, consider overriding [Visitor.unknown]:
-     * ```kotlin
-     * import com.x_twitter_scraper.api.core.JsonValue
-     *
-     * val result: String? = accountConnectionAttemptRetrieveResponse.accept(object : AccountConnectionAttemptRetrieveResponse.Visitor<String?> {
-     *     override fun visitPending(pending: Pending): String? = pending.toString()
-     *
-     *     // ...
-     *
-     *     override fun unknown(json: JsonValue?): String? {
-     *         // Or inspect the `json`.
-     *         return null
-     *     }
-     * })
-     * ```
-     *
      * @throws XTwitterScraperInvalidDataException if [Visitor.unknown] is not overridden in
      *   [visitor] and the current variant is unknown.
      */
@@ -156,11 +136,6 @@ private constructor(
             false
         }
 
-    /**
-     * Returns a score indicating how many valid values are contained in this object recursively.
-     *
-     * Used for best match union deserialization.
-     */
     internal fun validity(): Int =
         accept(
             object : Visitor<Int> {
@@ -249,9 +224,7 @@ private constructor(
          * [T].
          *
          * An instance of [AccountConnectionAttemptRetrieveResponse] can contain an unknown variant
-         * if it was deserialized from data that doesn't match any known variant. For example, if
-         * the SDK is on an older version than the API, then the API may respond with new variants
-         * that the SDK is unaware of.
+         * if it was deserialized from data that doesn't match any known variant.
          *
          * @throws XTwitterScraperInvalidDataException in the default implementation.
          */
@@ -348,8 +321,7 @@ private constructor(
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun id(): String = id.getRequired("id")
 
@@ -358,16 +330,12 @@ private constructor(
          * ```kotlin
          * JsonValue.from("x_account_connection_attempt")
          * ```
-         *
-         * However, this method can be useful for debugging and logging (e.g. if the server
-         * responded with an unexpected value).
          */
         @JsonProperty("object") @ExcludeMissing fun _object_(): JsonValue = object_
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun pollAfterMs(): Long = pollAfterMs.getRequired("pollAfterMs")
 
@@ -376,9 +344,6 @@ private constructor(
          * ```kotlin
          * JsonValue.from("pending")
          * ```
-         *
-         * However, this method can be useful for debugging and logging (e.g. if the server
-         * responded with an unexpected value).
          */
         @JsonProperty("status") @ExcludeMissing fun _status(): JsonValue = status
 
@@ -443,51 +408,31 @@ private constructor(
 
             fun id(id: String) = id(JsonField.of(id))
 
-            /**
-             * Sets [Builder.id] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.id] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
+            /** Sets [Builder.id] to an arbitrary JSON value. */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             /**
              * Sets the field to an arbitrary JSON value.
              *
-             * It is usually unnecessary to call this method because the field defaults to the
-             * following:
+             * Defaults to the following:
              * ```kotlin
              * JsonValue.from("x_account_connection_attempt")
              * ```
-             *
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
              */
             fun object_(object_: JsonValue) = apply { this.object_ = object_ }
 
             fun pollAfterMs(pollAfterMs: Long) = pollAfterMs(JsonField.of(pollAfterMs))
 
-            /**
-             * Sets [Builder.pollAfterMs] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.pollAfterMs] with a well-typed [Long] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.pollAfterMs] to an arbitrary JSON value. */
             fun pollAfterMs(pollAfterMs: JsonField<Long>) = apply { this.pollAfterMs = pollAfterMs }
 
             /**
              * Sets the field to an arbitrary JSON value.
              *
-             * It is usually unnecessary to call this method because the field defaults to the
-             * following:
+             * Defaults to the following:
              * ```kotlin
              * JsonValue.from("pending")
              * ```
-             *
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
              */
             fun status(status: JsonValue) = apply { this.status = status }
 
@@ -572,12 +517,6 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int =
             (if (id.asKnown() == null) 0 else 1) +
                 object_.let { if (it == JsonValue.from("x_account_connection_attempt")) 1 else 0 } +
@@ -626,8 +565,7 @@ private constructor(
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun id(): String = id.getRequired("id")
 
@@ -636,9 +574,6 @@ private constructor(
          * ```kotlin
          * JsonValue.from("x_account_connection_attempt")
          * ```
-         *
-         * However, this method can be useful for debugging and logging (e.g. if the server
-         * responded with an unexpected value).
          */
         @JsonProperty("object") @ExcludeMissing fun _object_(): JsonValue = object_
 
@@ -647,9 +582,6 @@ private constructor(
          * ```kotlin
          * JsonValue.from("success")
          * ```
-         *
-         * However, this method can be useful for debugging and logging (e.g. if the server
-         * responded with an unexpected value).
          */
         @JsonProperty("status") @ExcludeMissing fun _status(): JsonValue = status
 
@@ -702,40 +634,26 @@ private constructor(
 
             fun id(id: String) = id(JsonField.of(id))
 
-            /**
-             * Sets [Builder.id] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.id] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
+            /** Sets [Builder.id] to an arbitrary JSON value. */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             /**
              * Sets the field to an arbitrary JSON value.
              *
-             * It is usually unnecessary to call this method because the field defaults to the
-             * following:
+             * Defaults to the following:
              * ```kotlin
              * JsonValue.from("x_account_connection_attempt")
              * ```
-             *
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
              */
             fun object_(object_: JsonValue) = apply { this.object_ = object_ }
 
             /**
              * Sets the field to an arbitrary JSON value.
              *
-             * It is usually unnecessary to call this method because the field defaults to the
-             * following:
+             * Defaults to the following:
              * ```kotlin
              * JsonValue.from("success")
              * ```
-             *
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
              */
             fun status(status: JsonValue) = apply { this.status = status }
 
@@ -817,12 +735,6 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int =
             (if (id.asKnown() == null) 0 else 1) +
                 object_.let { if (it == JsonValue.from("x_account_connection_attempt")) 1 else 0 } +
@@ -877,15 +789,13 @@ private constructor(
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun id(): String = id.getRequired("id")
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun error(): String = error.getRequired("error")
 
@@ -894,16 +804,12 @@ private constructor(
          * ```kotlin
          * JsonValue.from("x_account_connection_attempt")
          * ```
-         *
-         * However, this method can be useful for debugging and logging (e.g. if the server
-         * responded with an unexpected value).
          */
         @JsonProperty("object") @ExcludeMissing fun _object_(): JsonValue = object_
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun retryable(): Boolean = retryable.getRequired("retryable")
 
@@ -912,16 +818,10 @@ private constructor(
          * ```kotlin
          * JsonValue.from("failed")
          * ```
-         *
-         * However, this method can be useful for debugging and logging (e.g. if the server
-         * responded with an unexpected value).
          */
         @JsonProperty("status") @ExcludeMissing fun _status(): JsonValue = status
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun reason(): String? = reason.getNullable("reason")
 
         /**
@@ -1002,74 +902,42 @@ private constructor(
 
             fun id(id: String) = id(JsonField.of(id))
 
-            /**
-             * Sets [Builder.id] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.id] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
+            /** Sets [Builder.id] to an arbitrary JSON value. */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             fun error(error: String) = error(JsonField.of(error))
 
-            /**
-             * Sets [Builder.error] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.error] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.error] to an arbitrary JSON value. */
             fun error(error: JsonField<String>) = apply { this.error = error }
 
             /**
              * Sets the field to an arbitrary JSON value.
              *
-             * It is usually unnecessary to call this method because the field defaults to the
-             * following:
+             * Defaults to the following:
              * ```kotlin
              * JsonValue.from("x_account_connection_attempt")
              * ```
-             *
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
              */
             fun object_(object_: JsonValue) = apply { this.object_ = object_ }
 
             fun retryable(retryable: Boolean) = retryable(JsonField.of(retryable))
 
-            /**
-             * Sets [Builder.retryable] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.retryable] with a well-typed [Boolean] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.retryable] to an arbitrary JSON value. */
             fun retryable(retryable: JsonField<Boolean>) = apply { this.retryable = retryable }
 
             /**
              * Sets the field to an arbitrary JSON value.
              *
-             * It is usually unnecessary to call this method because the field defaults to the
-             * following:
+             * Defaults to the following:
              * ```kotlin
              * JsonValue.from("failed")
              * ```
-             *
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
              */
             fun status(status: JsonValue) = apply { this.status = status }
 
             fun reason(reason: String) = reason(JsonField.of(reason))
 
-            /**
-             * Sets [Builder.reason] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.reason] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.reason] to an arbitrary JSON value. */
             fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1158,12 +1026,6 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int =
             (if (id.asKnown() == null) 0 else 1) +
                 (if (error.asKnown() == null) 0 else 1) +
@@ -1229,22 +1091,19 @@ private constructor(
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun id(): String = id.getRequired("id")
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun expiresAt(): OffsetDateTime = expiresAt.getRequired("expiresAt")
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun message(): String = message.getRequired("message")
 
@@ -1253,9 +1112,6 @@ private constructor(
          * ```kotlin
          * JsonValue.from("x_account_connection_challenge")
          * ```
-         *
-         * However, this method can be useful for debugging and logging (e.g. if the server
-         * responded with an unexpected value).
          */
         @JsonProperty("object") @ExcludeMissing fun _object_(): JsonValue = object_
 
@@ -1264,16 +1120,12 @@ private constructor(
          * ```kotlin
          * JsonValue.from("requires_email_code")
          * ```
-         *
-         * However, this method can be useful for debugging and logging (e.g. if the server
-         * responded with an unexpected value).
          */
         @JsonProperty("status") @ExcludeMissing fun _status(): JsonValue = status
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun username(): String = username.getRequired("username")
 
@@ -1358,76 +1210,44 @@ private constructor(
 
             fun id(id: String) = id(JsonField.of(id))
 
-            /**
-             * Sets [Builder.id] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.id] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
+            /** Sets [Builder.id] to an arbitrary JSON value. */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             fun expiresAt(expiresAt: OffsetDateTime) = expiresAt(JsonField.of(expiresAt))
 
-            /**
-             * Sets [Builder.expiresAt] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.expiresAt] with a well-typed [OffsetDateTime] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.expiresAt] to an arbitrary JSON value. */
             fun expiresAt(expiresAt: JsonField<OffsetDateTime>) = apply {
                 this.expiresAt = expiresAt
             }
 
             fun message(message: String) = message(JsonField.of(message))
 
-            /**
-             * Sets [Builder.message] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.message] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.message] to an arbitrary JSON value. */
             fun message(message: JsonField<String>) = apply { this.message = message }
 
             /**
              * Sets the field to an arbitrary JSON value.
              *
-             * It is usually unnecessary to call this method because the field defaults to the
-             * following:
+             * Defaults to the following:
              * ```kotlin
              * JsonValue.from("x_account_connection_challenge")
              * ```
-             *
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
              */
             fun object_(object_: JsonValue) = apply { this.object_ = object_ }
 
             /**
              * Sets the field to an arbitrary JSON value.
              *
-             * It is usually unnecessary to call this method because the field defaults to the
-             * following:
+             * Defaults to the following:
              * ```kotlin
              * JsonValue.from("requires_email_code")
              * ```
-             *
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
              */
             fun status(status: JsonValue) = apply { this.status = status }
 
             fun username(username: String) = username(JsonField.of(username))
 
-            /**
-             * Sets [Builder.username] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.username] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.username] to an arbitrary JSON value. */
             fun username(username: JsonField<String>) = apply { this.username = username }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1517,12 +1337,6 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int =
             (if (id.asKnown() == null) 0 else 1) +
                 (if (expiresAt.asKnown() == null) 0 else 1) +

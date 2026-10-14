@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.models.draws
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -41,13 +39,13 @@ private constructor(
      * Full giveaway draw with tweet metrics, entries, and timing.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun draw(): DrawDetail = draw.getRequired("draw")
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun winners(): List<Winner> = winners.getRequired("winners")
 
@@ -107,23 +105,12 @@ private constructor(
         /** Full giveaway draw with tweet metrics, entries, and timing. */
         fun draw(draw: DrawDetail) = draw(JsonField.of(draw))
 
-        /**
-         * Sets [Builder.draw] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.draw] with a well-typed [DrawDetail] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.draw] to an arbitrary JSON value. */
         fun draw(draw: JsonField<DrawDetail>) = apply { this.draw = draw }
 
         fun winners(winners: List<Winner>) = winners(JsonField.of(winners))
 
-        /**
-         * Sets [Builder.winners] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.winners] with a well-typed `List<Winner>` value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
+        /** Sets [Builder.winners] to an arbitrary JSON value. */
         fun winners(winners: JsonField<List<Winner>>) = apply {
             this.winners = winners.map { it.toMutableList() }
         }
@@ -208,11 +195,6 @@ private constructor(
             false
         }
 
-    /**
-     * Returns a score indicating how many valid values are contained in this object recursively.
-     *
-     * Used for best match union deserialization.
-     */
     internal fun validity(): Int =
         (draw.asKnown()?.validity() ?: 0) + (winners.asKnown()?.sumOf { it.validity() } ?: 0)
 

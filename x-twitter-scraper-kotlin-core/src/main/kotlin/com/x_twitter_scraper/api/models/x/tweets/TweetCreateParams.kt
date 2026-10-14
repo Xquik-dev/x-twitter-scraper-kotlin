@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.models.x.tweets
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -39,20 +37,14 @@ private constructor(
      * X account (@username or account ID)
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun account(): String = body.account()
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun communityId(): String? = body.communityId()
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun isNoteTweet(): Boolean? = body.isNoteTweet()
 
     /**
@@ -60,22 +52,17 @@ private constructor(
      * 100 MB. Each URL must be publicly reachable. Attached media adds 2 credits per started MB
      * across all files.
      *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun media(): List<String>? = body.media()
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun replyToTweetId(): String? = body.replyToTweetId()
 
     /**
      * Tweet text (optional when media is provided)
      *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun text(): String? = body.text()
 
@@ -162,51 +149,23 @@ private constructor(
 
         fun idempotencyKey(idempotencyKey: String) = apply { this.idempotencyKey = idempotencyKey }
 
-        /**
-         * Sets the entire request body.
-         *
-         * This is generally only useful if you are already constructing the body separately.
-         * Otherwise, it's more convenient to use the top-level setters instead:
-         * - [account]
-         * - [communityId]
-         * - [isNoteTweet]
-         * - [media]
-         * - [replyToTweetId]
-         * - etc.
-         */
+        /** Sets the entire request body. */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
         /** X account (@username or account ID) */
         fun account(account: String) = apply { body.account(account) }
 
-        /**
-         * Sets [Builder.account] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.account] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.account] to an arbitrary JSON value. */
         fun account(account: JsonField<String>) = apply { body.account(account) }
 
         fun communityId(communityId: String) = apply { body.communityId(communityId) }
 
-        /**
-         * Sets [Builder.communityId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.communityId] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
+        /** Sets [Builder.communityId] to an arbitrary JSON value. */
         fun communityId(communityId: JsonField<String>) = apply { body.communityId(communityId) }
 
         fun isNoteTweet(isNoteTweet: Boolean) = apply { body.isNoteTweet(isNoteTweet) }
 
-        /**
-         * Sets [Builder.isNoteTweet] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.isNoteTweet] with a well-typed [Boolean] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
+        /** Sets [Builder.isNoteTweet] to an arbitrary JSON value. */
         fun isNoteTweet(isNoteTweet: JsonField<Boolean>) = apply { body.isNoteTweet(isNoteTweet) }
 
         /**
@@ -216,13 +175,7 @@ private constructor(
          */
         fun media(media: List<String>) = apply { body.media(media) }
 
-        /**
-         * Sets [Builder.media] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.media] with a well-typed `List<String>` value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
+        /** Sets [Builder.media] to an arbitrary JSON value. */
         fun media(media: JsonField<List<String>>) = apply { body.media(media) }
 
         /**
@@ -234,13 +187,7 @@ private constructor(
 
         fun replyToTweetId(replyToTweetId: String) = apply { body.replyToTweetId(replyToTweetId) }
 
-        /**
-         * Sets [Builder.replyToTweetId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.replyToTweetId] with a well-typed [String] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
+        /** Sets [Builder.replyToTweetId] to an arbitrary JSON value. */
         fun replyToTweetId(replyToTweetId: JsonField<String>) = apply {
             body.replyToTweetId(replyToTweetId)
         }
@@ -248,12 +195,7 @@ private constructor(
         /** Tweet text (optional when media is provided) */
         fun text(text: String) = apply { body.text(text) }
 
-        /**
-         * Sets [Builder.text] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.text] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.text] to an arbitrary JSON value. */
         fun text(text: JsonField<String>) = apply { body.text(text) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
@@ -441,21 +383,14 @@ private constructor(
          * X account (@username or account ID)
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun account(): String = account.getRequired("account")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun communityId(): String? = communityId.getNullable("community_id")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun isNoteTweet(): Boolean? = isNoteTweet.getNullable("is_note_tweet")
 
         /**
@@ -463,22 +398,17 @@ private constructor(
          * to 100 MB. Each URL must be publicly reachable. Attached media adds 2 credits per started
          * MB across all files.
          *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
         fun media(): List<String>? = media.getNullable("media")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun replyToTweetId(): String? = replyToTweetId.getNullable("reply_to_tweet_id")
 
         /**
          * Tweet text (optional when media is provided)
          *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
         fun text(): String? = text.getNullable("text")
 
@@ -580,37 +510,19 @@ private constructor(
             /** X account (@username or account ID) */
             fun account(account: String) = account(JsonField.of(account))
 
-            /**
-             * Sets [Builder.account] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.account] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.account] to an arbitrary JSON value. */
             fun account(account: JsonField<String>) = apply { this.account = account }
 
             fun communityId(communityId: String) = communityId(JsonField.of(communityId))
 
-            /**
-             * Sets [Builder.communityId] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.communityId] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.communityId] to an arbitrary JSON value. */
             fun communityId(communityId: JsonField<String>) = apply {
                 this.communityId = communityId
             }
 
             fun isNoteTweet(isNoteTweet: Boolean) = isNoteTweet(JsonField.of(isNoteTweet))
 
-            /**
-             * Sets [Builder.isNoteTweet] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.isNoteTweet] with a well-typed [Boolean] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.isNoteTweet] to an arbitrary JSON value. */
             fun isNoteTweet(isNoteTweet: JsonField<Boolean>) = apply {
                 this.isNoteTweet = isNoteTweet
             }
@@ -622,13 +534,7 @@ private constructor(
              */
             fun media(media: List<String>) = media(JsonField.of(media))
 
-            /**
-             * Sets [Builder.media] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.media] with a well-typed `List<String>` value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.media] to an arbitrary JSON value. */
             fun media(media: JsonField<List<String>>) = apply {
                 this.media = media.map { it.toMutableList() }
             }
@@ -648,13 +554,7 @@ private constructor(
             fun replyToTweetId(replyToTweetId: String) =
                 replyToTweetId(JsonField.of(replyToTweetId))
 
-            /**
-             * Sets [Builder.replyToTweetId] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.replyToTweetId] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.replyToTweetId] to an arbitrary JSON value. */
             fun replyToTweetId(replyToTweetId: JsonField<String>) = apply {
                 this.replyToTweetId = replyToTweetId
             }
@@ -662,13 +562,7 @@ private constructor(
             /** Tweet text (optional when media is provided) */
             fun text(text: String) = text(JsonField.of(text))
 
-            /**
-             * Sets [Builder.text] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.text] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
+            /** Sets [Builder.text] to an arbitrary JSON value. */
             fun text(text: JsonField<String>) = apply { this.text = text }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -747,12 +641,6 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int =
             (if (account.asKnown() == null) 0 else 1) +
                 (if (communityId.asKnown() == null) 0 else 1) +

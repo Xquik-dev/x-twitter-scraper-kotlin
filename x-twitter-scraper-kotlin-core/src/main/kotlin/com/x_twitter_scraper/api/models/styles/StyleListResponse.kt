@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.models.styles
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -37,7 +35,7 @@ private constructor(
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun styles(): List<StyleProfileSummary> = styles.getRequired("styles")
 
@@ -88,13 +86,7 @@ private constructor(
 
         fun styles(styles: List<StyleProfileSummary>) = styles(JsonField.of(styles))
 
-        /**
-         * Sets [Builder.styles] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.styles] with a well-typed `List<StyleProfileSummary>`
-         * value instead. This method is primarily for setting the field to an undocumented or not
-         * yet supported value.
-         */
+        /** Sets [Builder.styles] to an arbitrary JSON value. */
         fun styles(styles: JsonField<List<StyleProfileSummary>>) = apply {
             this.styles = styles.map { it.toMutableList() }
         }
@@ -176,11 +168,6 @@ private constructor(
             false
         }
 
-    /**
-     * Returns a score indicating how many valid values are contained in this object recursively.
-     *
-     * Used for best match union deserialization.
-     */
     internal fun validity(): Int = (styles.asKnown()?.sumOf { it.validity() } ?: 0)
 
     override fun equals(other: Any?): Boolean {

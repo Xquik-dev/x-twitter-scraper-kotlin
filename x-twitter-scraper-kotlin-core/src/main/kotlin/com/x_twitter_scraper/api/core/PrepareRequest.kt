@@ -23,7 +23,4 @@ internal suspend fun HttpRequest.prepareAsync(
     clientOptions: ClientOptions,
     params: Params,
     security: SecurityOptions = SecurityOptions.all(),
-) =
-    // This async version exists to make it easier to add async specific preparation logic in the
-    // future.
-    prepare(clientOptions, params, security)
+) = prepare(clientOptions, params, security)

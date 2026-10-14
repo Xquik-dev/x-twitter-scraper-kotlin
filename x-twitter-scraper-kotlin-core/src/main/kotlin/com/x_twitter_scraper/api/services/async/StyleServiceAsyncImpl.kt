@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.services.async
 
 import com.x_twitter_scraper.api.core.ClientOptions
@@ -49,48 +47,36 @@ class StyleServiceAsyncImpl internal constructor(private val clientOptions: Clie
     override suspend fun retrieve(
         params: StyleRetrieveParams,
         requestOptions: RequestOptions,
-    ): StyleProfile =
-        // get /styles/{id}
-        withRawResponse().retrieve(params, requestOptions).parse()
+    ): StyleProfile = withRawResponse().retrieve(params, requestOptions).parse()
 
     override suspend fun update(
         params: StyleUpdateParams,
         requestOptions: RequestOptions,
-    ): StyleProfile =
-        // put /styles/{id}
-        withRawResponse().update(params, requestOptions).parse()
+    ): StyleProfile = withRawResponse().update(params, requestOptions).parse()
 
     override suspend fun list(
         params: StyleListParams,
         requestOptions: RequestOptions,
-    ): StyleListResponse =
-        // get /styles
-        withRawResponse().list(params, requestOptions).parse()
+    ): StyleListResponse = withRawResponse().list(params, requestOptions).parse()
 
     override suspend fun delete(params: StyleDeleteParams, requestOptions: RequestOptions) {
-        // delete /styles/{id}
         withRawResponse().delete(params, requestOptions)
     }
 
     override suspend fun analyze(
         params: StyleAnalyzeParams,
         requestOptions: RequestOptions,
-    ): StyleProfile =
-        // post /styles
-        withRawResponse().analyze(params, requestOptions).parse()
+    ): StyleProfile = withRawResponse().analyze(params, requestOptions).parse()
 
     override suspend fun compare(
         params: StyleCompareParams,
         requestOptions: RequestOptions,
-    ): StyleCompareResponse =
-        // get /styles/compare
-        withRawResponse().compare(params, requestOptions).parse()
+    ): StyleCompareResponse = withRawResponse().compare(params, requestOptions).parse()
 
     override suspend fun getPerformance(
         params: StyleGetPerformanceParams,
         requestOptions: RequestOptions,
     ): StyleGetPerformanceResponse =
-        // get /styles/{id}/performance
         withRawResponse().getPerformance(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -113,8 +99,6 @@ class StyleServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: StyleRetrieveParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<StyleProfile> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
@@ -143,8 +127,6 @@ class StyleServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: StyleUpdateParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<StyleProfile> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
@@ -200,8 +182,6 @@ class StyleServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: StyleDeleteParams,
             requestOptions: RequestOptions,
         ): HttpResponse {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
@@ -280,8 +260,6 @@ class StyleServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: StyleGetPerformanceParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<StyleGetPerformanceResponse> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()

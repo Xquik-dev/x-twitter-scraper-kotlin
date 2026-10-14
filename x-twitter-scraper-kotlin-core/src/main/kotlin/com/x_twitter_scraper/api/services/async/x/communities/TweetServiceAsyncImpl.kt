@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.services.async.x.communities
 
 import com.x_twitter_scraper.api.core.ClientOptions
@@ -39,16 +37,12 @@ class TweetServiceAsyncImpl internal constructor(private val clientOptions: Clie
     override suspend fun list(
         params: TweetListParams,
         requestOptions: RequestOptions,
-    ): PaginatedTweets =
-        // get /x/communities/tweets
-        withRawResponse().list(params, requestOptions).parse()
+    ): PaginatedTweets = withRawResponse().list(params, requestOptions).parse()
 
     override suspend fun listByCommunity(
         params: TweetListByCommunityParams,
         requestOptions: RequestOptions,
-    ): PaginatedTweets =
-        // get /x/communities/{id}/tweets
-        withRawResponse().listByCommunity(params, requestOptions).parse()
+    ): PaginatedTweets = withRawResponse().listByCommunity(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         TweetServiceAsync.WithRawResponse {
@@ -97,8 +91,6 @@ class TweetServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: TweetListByCommunityParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<PaginatedTweets> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()

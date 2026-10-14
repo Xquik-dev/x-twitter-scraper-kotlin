@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.models.guestwallets
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -40,7 +38,7 @@ private constructor(
      * USD amount in cents. Accepted range is $10-$250.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun amountMinor(): Long = amountMinor.getRequired("amount_minor")
 
@@ -49,9 +47,6 @@ private constructor(
      * ```kotlin
      * JsonValue.from("usd")
      * ```
-     *
-     * However, this method can be useful for debugging and logging (e.g. if the server responded
-     * with an unexpected value).
      */
     @JsonProperty("currency") @ExcludeMissing fun _currency(): JsonValue = currency
 
@@ -103,26 +98,16 @@ private constructor(
         /** USD amount in cents. Accepted range is $10-$250. */
         fun amountMinor(amountMinor: Long) = amountMinor(JsonField.of(amountMinor))
 
-        /**
-         * Sets [Builder.amountMinor] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.amountMinor] with a well-typed [Long] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
+        /** Sets [Builder.amountMinor] to an arbitrary JSON value. */
         fun amountMinor(amountMinor: JsonField<Long>) = apply { this.amountMinor = amountMinor }
 
         /**
          * Sets the field to an arbitrary JSON value.
          *
-         * It is usually unnecessary to call this method because the field defaults to the
-         * following:
+         * Defaults to the following:
          * ```kotlin
          * JsonValue.from("usd")
          * ```
-         *
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
          */
         fun currency(currency: JsonValue) = apply { this.currency = currency }
 
@@ -197,11 +182,6 @@ private constructor(
             false
         }
 
-    /**
-     * Returns a score indicating how many valid values are contained in this object recursively.
-     *
-     * Used for best match union deserialization.
-     */
     internal fun validity(): Int =
         (if (amountMinor.asKnown() == null) 0 else 1) +
             currency.let { if (it == JsonValue.from("usd")) 1 else 0 }

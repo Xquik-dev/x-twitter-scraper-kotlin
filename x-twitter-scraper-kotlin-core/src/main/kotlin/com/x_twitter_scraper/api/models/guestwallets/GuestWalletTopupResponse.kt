@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.models.guestwallets
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -104,9 +102,6 @@ private constructor(
      * ```kotlin
      * JsonValue.from(false)
      * ```
-     *
-     * However, this method can be useful for debugging and logging (e.g. if the server responded
-     * with an unexpected value).
      */
     @JsonProperty("account_required")
     @ExcludeMissing
@@ -116,7 +111,7 @@ private constructor(
      * Confirmed USD amount for a guest wallet purchase.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun amount(): GuestWalletAmount = amount.getRequired("amount")
 
@@ -124,7 +119,7 @@ private constructor(
      * Hosted checkout URL for user interaction.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun checkoutUrl(): String = checkoutUrl.getRequired("checkout_url")
 
@@ -132,7 +127,7 @@ private constructor(
      * Credits granted after verified payment.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun credits(): String = credits.getRequired("credits")
 
@@ -140,7 +135,7 @@ private constructor(
      * Time when the pending checkout expires.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun expiresAt(): OffsetDateTime = expiresAt.getRequired("expires_at")
 
@@ -148,7 +143,7 @@ private constructor(
      * Hosted checkout and status polling instructions.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun instructions(): String = instructions.getRequired("instructions")
 
@@ -159,9 +154,6 @@ private constructor(
      * ```kotlin
      * JsonValue.from(2)
      * ```
-     *
-     * However, this method can be useful for debugging and logging (e.g. if the server responded
-     * with an unexpected value).
      */
     @JsonProperty("poll_after_seconds")
     @ExcludeMissing
@@ -169,7 +161,7 @@ private constructor(
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun purchaseId(): String = purchaseId.getRequired("purchase_id")
 
@@ -178,9 +170,6 @@ private constructor(
      * ```kotlin
      * JsonValue.from(true)
      * ```
-     *
-     * However, this method can be useful for debugging and logging (e.g. if the server responded
-     * with an unexpected value).
      */
     @JsonProperty("requires_user_interaction")
     @ExcludeMissing
@@ -188,7 +177,7 @@ private constructor(
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun status(): Status = status.getRequired("status")
 
@@ -197,15 +186,12 @@ private constructor(
      * ```kotlin
      * JsonValue.from("https://xquik.com/api/v1/guest-wallets/status")
      * ```
-     *
-     * However, this method can be useful for debugging and logging (e.g. if the server responded
-     * with an unexpected value).
      */
     @JsonProperty("status_url") @ExcludeMissing fun _statusUrl(): JsonValue = statusUrl
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun walletId(): String = walletId.getRequired("wallet_id")
 
@@ -213,21 +199,14 @@ private constructor(
      * Paid-read bearer credential returned only by initial creation. Store it as a secret. Never
      * place it in a URL or log.
      *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun apiKey(): String? = apiKey.getNullable("api_key")
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun authorization(): Authorization? = authorization.getNullable("authorization")
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun credentialNotice(): CredentialNotice? = credentialNotice.getNullable("credential_notice")
 
     /**
@@ -393,14 +372,10 @@ private constructor(
         /**
          * Sets the field to an arbitrary JSON value.
          *
-         * It is usually unnecessary to call this method because the field defaults to the
-         * following:
+         * Defaults to the following:
          * ```kotlin
          * JsonValue.from(false)
          * ```
-         *
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
          */
         fun accountRequired(accountRequired: JsonValue) = apply {
             this.accountRequired = accountRequired
@@ -409,60 +384,31 @@ private constructor(
         /** Confirmed USD amount for a guest wallet purchase. */
         fun amount(amount: GuestWalletAmount) = amount(JsonField.of(amount))
 
-        /**
-         * Sets [Builder.amount] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.amount] with a well-typed [GuestWalletAmount] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
+        /** Sets [Builder.amount] to an arbitrary JSON value. */
         fun amount(amount: JsonField<GuestWalletAmount>) = apply { this.amount = amount }
 
         /** Hosted checkout URL for user interaction. */
         fun checkoutUrl(checkoutUrl: String) = checkoutUrl(JsonField.of(checkoutUrl))
 
-        /**
-         * Sets [Builder.checkoutUrl] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.checkoutUrl] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
+        /** Sets [Builder.checkoutUrl] to an arbitrary JSON value. */
         fun checkoutUrl(checkoutUrl: JsonField<String>) = apply { this.checkoutUrl = checkoutUrl }
 
         /** Credits granted after verified payment. */
         fun credits(credits: String) = credits(JsonField.of(credits))
 
-        /**
-         * Sets [Builder.credits] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.credits] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.credits] to an arbitrary JSON value. */
         fun credits(credits: JsonField<String>) = apply { this.credits = credits }
 
         /** Time when the pending checkout expires. */
         fun expiresAt(expiresAt: OffsetDateTime) = expiresAt(JsonField.of(expiresAt))
 
-        /**
-         * Sets [Builder.expiresAt] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.expiresAt] with a well-typed [OffsetDateTime] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
+        /** Sets [Builder.expiresAt] to an arbitrary JSON value. */
         fun expiresAt(expiresAt: JsonField<OffsetDateTime>) = apply { this.expiresAt = expiresAt }
 
         /** Hosted checkout and status polling instructions. */
         fun instructions(instructions: String) = instructions(JsonField.of(instructions))
 
-        /**
-         * Sets [Builder.instructions] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.instructions] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
+        /** Sets [Builder.instructions] to an arbitrary JSON value. */
         fun instructions(instructions: JsonField<String>) = apply {
             this.instructions = instructions
         }
@@ -470,14 +416,10 @@ private constructor(
         /**
          * Sets the field to an arbitrary JSON value.
          *
-         * It is usually unnecessary to call this method because the field defaults to the
-         * following:
+         * Defaults to the following:
          * ```kotlin
          * JsonValue.from(2)
          * ```
-         *
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
          */
         fun pollAfterSeconds(pollAfterSeconds: JsonValue) = apply {
             this.pollAfterSeconds = pollAfterSeconds
@@ -485,26 +427,16 @@ private constructor(
 
         fun purchaseId(purchaseId: String) = purchaseId(JsonField.of(purchaseId))
 
-        /**
-         * Sets [Builder.purchaseId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.purchaseId] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
+        /** Sets [Builder.purchaseId] to an arbitrary JSON value. */
         fun purchaseId(purchaseId: JsonField<String>) = apply { this.purchaseId = purchaseId }
 
         /**
          * Sets the field to an arbitrary JSON value.
          *
-         * It is usually unnecessary to call this method because the field defaults to the
-         * following:
+         * Defaults to the following:
          * ```kotlin
          * JsonValue.from(true)
          * ```
-         *
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
          */
         fun requiresUserInteraction(requiresUserInteraction: JsonValue) = apply {
             this.requiresUserInteraction = requiresUserInteraction
@@ -512,36 +444,22 @@ private constructor(
 
         fun status(status: Status) = status(JsonField.of(status))
 
-        /**
-         * Sets [Builder.status] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.status] with a well-typed [Status] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.status] to an arbitrary JSON value. */
         fun status(status: JsonField<Status>) = apply { this.status = status }
 
         /**
          * Sets the field to an arbitrary JSON value.
          *
-         * It is usually unnecessary to call this method because the field defaults to the
-         * following:
+         * Defaults to the following:
          * ```kotlin
          * JsonValue.from("https://xquik.com/api/v1/guest-wallets/status")
          * ```
-         *
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
          */
         fun statusUrl(statusUrl: JsonValue) = apply { this.statusUrl = statusUrl }
 
         fun walletId(walletId: String) = walletId(JsonField.of(walletId))
 
-        /**
-         * Sets [Builder.walletId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.walletId] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.walletId] to an arbitrary JSON value. */
         fun walletId(walletId: JsonField<String>) = apply { this.walletId = walletId }
 
         /**
@@ -550,23 +468,12 @@ private constructor(
          */
         fun apiKey(apiKey: String) = apiKey(JsonField.of(apiKey))
 
-        /**
-         * Sets [Builder.apiKey] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.apiKey] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.apiKey] to an arbitrary JSON value. */
         fun apiKey(apiKey: JsonField<String>) = apply { this.apiKey = apiKey }
 
         fun authorization(authorization: Authorization) = authorization(JsonField.of(authorization))
 
-        /**
-         * Sets [Builder.authorization] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.authorization] with a well-typed [Authorization] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
+        /** Sets [Builder.authorization] to an arbitrary JSON value. */
         fun authorization(authorization: JsonField<Authorization>) = apply {
             this.authorization = authorization
         }
@@ -574,13 +481,7 @@ private constructor(
         fun credentialNotice(credentialNotice: CredentialNotice) =
             credentialNotice(JsonField.of(credentialNotice))
 
-        /**
-         * Sets [Builder.credentialNotice] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.credentialNotice] with a well-typed [CredentialNotice]
-         * value instead. This method is primarily for setting the field to an undocumented or not
-         * yet supported value.
-         */
+        /** Sets [Builder.credentialNotice] to an arbitrary JSON value. */
         fun credentialNotice(credentialNotice: JsonField<CredentialNotice>) = apply {
             this.credentialNotice = credentialNotice
         }
@@ -707,11 +608,6 @@ private constructor(
             false
         }
 
-    /**
-     * Returns a score indicating how many valid values are contained in this object recursively.
-     *
-     * Used for best match union deserialization.
-     */
     internal fun validity(): Int =
         accountRequired.let { if (it == JsonValue.from(false)) 1 else 0 } +
             (amount.asKnown()?.validity() ?: 0) +
@@ -733,14 +629,7 @@ private constructor(
 
     class Status @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
-        /**
-         * Returns this class instance's raw value.
-         *
-         * This is usually only useful if this instance was deserialized from data that doesn't
-         * match any known member, and you want to know that value. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new members that the SDK is
-         * unaware of.
-         */
+        /** Returns this class instance's raw value. */
         @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
         companion object {
@@ -797,9 +686,6 @@ private constructor(
         /**
          * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
          * if the class was instantiated with an unknown value.
-         *
-         * Use the [known] method instead if you're certain the value is always known or if you want
-         * to throw for the unknown case.
          */
         fun value(): Value =
             when (this) {
@@ -815,9 +701,6 @@ private constructor(
 
         /**
          * Returns an enum member corresponding to this class instance's value.
-         *
-         * Use the [value] method instead if you're uncertain the value is always known and don't
-         * want to throw for the unknown case.
          *
          * @throws XTwitterScraperInvalidDataException if this class instance's value is a not a
          *   known member.
@@ -836,9 +719,6 @@ private constructor(
 
         /**
          * Returns this class instance's primitive wire representation.
-         *
-         * This differs from the [toString] method because that method is primarily for debugging
-         * and generally doesn't throw.
          *
          * @throws XTwitterScraperInvalidDataException if this class instance's value does not have
          *   the expected primitive type.
@@ -875,12 +755,6 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
@@ -912,15 +786,13 @@ private constructor(
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun header(): Header = header.getRequired("header")
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun scheme(): Scheme = scheme.getRequired("scheme")
 
@@ -979,24 +851,12 @@ private constructor(
 
             fun header(header: Header) = header(JsonField.of(header))
 
-            /**
-             * Sets [Builder.header] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.header] with a well-typed [Header] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.header] to an arbitrary JSON value. */
             fun header(header: JsonField<Header>) = apply { this.header = header }
 
             fun scheme(scheme: Scheme) = scheme(JsonField.of(scheme))
 
-            /**
-             * Sets [Builder.scheme] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.scheme] with a well-typed [Scheme] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.scheme] to an arbitrary JSON value. */
             fun scheme(scheme: JsonField<Scheme>) = apply { this.scheme = scheme }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1068,25 +928,12 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int =
             (header.asKnown()?.validity() ?: 0) + (scheme.asKnown()?.validity() ?: 0)
 
         class Header @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
-            /**
-             * Returns this class instance's raw value.
-             *
-             * This is usually only useful if this instance was deserialized from data that doesn't
-             * match any known member, and you want to know that value. For example, if the SDK is
-             * on an older version than the API, then the API may respond with new members that the
-             * SDK is unaware of.
-             */
+            /** Returns this class instance's raw value. */
             @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
             companion object {
@@ -1121,9 +968,6 @@ private constructor(
             /**
              * Returns an enum member corresponding to this class instance's value, or
              * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-             *
-             * Use the [known] method instead if you're certain the value is always known or if you
-             * want to throw for the unknown case.
              */
             fun value(): Value =
                 when (this) {
@@ -1133,9 +977,6 @@ private constructor(
 
             /**
              * Returns an enum member corresponding to this class instance's value.
-             *
-             * Use the [value] method instead if you're uncertain the value is always known and
-             * don't want to throw for the unknown case.
              *
              * @throws XTwitterScraperInvalidDataException if this class instance's value is a not a
              *   known member.
@@ -1148,9 +989,6 @@ private constructor(
 
             /**
              * Returns this class instance's primitive wire representation.
-             *
-             * This differs from the [toString] method because that method is primarily for
-             * debugging and generally doesn't throw.
              *
              * @throws XTwitterScraperInvalidDataException if this class instance's value does not
              *   have the expected primitive type.
@@ -1188,12 +1026,6 @@ private constructor(
                     false
                 }
 
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
             internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
@@ -1211,14 +1043,7 @@ private constructor(
 
         class Scheme @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
-            /**
-             * Returns this class instance's raw value.
-             *
-             * This is usually only useful if this instance was deserialized from data that doesn't
-             * match any known member, and you want to know that value. For example, if the SDK is
-             * on an older version than the API, then the API may respond with new members that the
-             * SDK is unaware of.
-             */
+            /** Returns this class instance's raw value. */
             @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
             companion object {
@@ -1253,9 +1078,6 @@ private constructor(
             /**
              * Returns an enum member corresponding to this class instance's value, or
              * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-             *
-             * Use the [known] method instead if you're certain the value is always known or if you
-             * want to throw for the unknown case.
              */
             fun value(): Value =
                 when (this) {
@@ -1265,9 +1087,6 @@ private constructor(
 
             /**
              * Returns an enum member corresponding to this class instance's value.
-             *
-             * Use the [value] method instead if you're uncertain the value is always known and
-             * don't want to throw for the unknown case.
              *
              * @throws XTwitterScraperInvalidDataException if this class instance's value is a not a
              *   known member.
@@ -1280,9 +1099,6 @@ private constructor(
 
             /**
              * Returns this class instance's primitive wire representation.
-             *
-             * This differs from the [toString] method because that method is primarily for
-             * debugging and generally doesn't throw.
              *
              * @throws XTwitterScraperInvalidDataException if this class instance's value does not
              *   have the expected primitive type.
@@ -1320,12 +1136,6 @@ private constructor(
                     false
                 }
 
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
             internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
@@ -1363,14 +1173,7 @@ private constructor(
     class CredentialNotice @JsonCreator private constructor(private val value: JsonField<String>) :
         Enum {
 
-        /**
-         * Returns this class instance's raw value.
-         *
-         * This is usually only useful if this instance was deserialized from data that doesn't
-         * match any known member, and you want to know that value. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new members that the SDK is
-         * unaware of.
-         */
+        /** Returns this class instance's raw value. */
         @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
         companion object {
@@ -1409,9 +1212,6 @@ private constructor(
         /**
          * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
          * if the class was instantiated with an unknown value.
-         *
-         * Use the [known] method instead if you're certain the value is always known or if you want
-         * to throw for the unknown case.
          */
         fun value(): Value =
             when (this) {
@@ -1423,9 +1223,6 @@ private constructor(
 
         /**
          * Returns an enum member corresponding to this class instance's value.
-         *
-         * Use the [value] method instead if you're uncertain the value is always known and don't
-         * want to throw for the unknown case.
          *
          * @throws XTwitterScraperInvalidDataException if this class instance's value is a not a
          *   known member.
@@ -1441,9 +1238,6 @@ private constructor(
 
         /**
          * Returns this class instance's primitive wire representation.
-         *
-         * This differs from the [toString] method because that method is primarily for debugging
-         * and generally doesn't throw.
          *
          * @throws XTwitterScraperInvalidDataException if this class instance's value does not have
          *   the expected primitive type.
@@ -1480,12 +1274,6 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {

@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.models.x.dm
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -42,21 +40,20 @@ private constructor(
      * X account (@username or ID) sending the DM
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun account(): String = body.account()
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun text(): String = body.text()
 
     /**
      * Optional array containing exactly 1 uploaded media ID.
      *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun mediaIds(): List<String>? = body.mediaIds()
 
@@ -127,48 +124,24 @@ private constructor(
 
         fun idempotencyKey(idempotencyKey: String) = apply { this.idempotencyKey = idempotencyKey }
 
-        /**
-         * Sets the entire request body.
-         *
-         * This is generally only useful if you are already constructing the body separately.
-         * Otherwise, it's more convenient to use the top-level setters instead:
-         * - [account]
-         * - [text]
-         * - [mediaIds]
-         */
+        /** Sets the entire request body. */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
         /** X account (@username or ID) sending the DM */
         fun account(account: String) = apply { body.account(account) }
 
-        /**
-         * Sets [Builder.account] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.account] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.account] to an arbitrary JSON value. */
         fun account(account: JsonField<String>) = apply { body.account(account) }
 
         fun text(text: String) = apply { body.text(text) }
 
-        /**
-         * Sets [Builder.text] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.text] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.text] to an arbitrary JSON value. */
         fun text(text: JsonField<String>) = apply { body.text(text) }
 
         /** Optional array containing exactly 1 uploaded media ID. */
         fun mediaIds(mediaIds: List<String>) = apply { body.mediaIds(mediaIds) }
 
-        /**
-         * Sets [Builder.mediaIds] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.mediaIds] with a well-typed `List<String>` value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
+        /** Sets [Builder.mediaIds] to an arbitrary JSON value. */
         fun mediaIds(mediaIds: JsonField<List<String>>) = apply { body.mediaIds(mediaIds) }
 
         /**
@@ -359,23 +332,20 @@ private constructor(
          * X account (@username or ID) sending the DM
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun account(): String = account.getRequired("account")
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun text(): String = text.getRequired("text")
 
         /**
          * Optional array containing exactly 1 uploaded media ID.
          *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
         fun mediaIds(): List<String>? = mediaIds.getNullable("media_ids")
 
@@ -446,36 +416,18 @@ private constructor(
             /** X account (@username or ID) sending the DM */
             fun account(account: String) = account(JsonField.of(account))
 
-            /**
-             * Sets [Builder.account] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.account] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.account] to an arbitrary JSON value. */
             fun account(account: JsonField<String>) = apply { this.account = account }
 
             fun text(text: String) = text(JsonField.of(text))
 
-            /**
-             * Sets [Builder.text] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.text] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
+            /** Sets [Builder.text] to an arbitrary JSON value. */
             fun text(text: JsonField<String>) = apply { this.text = text }
 
             /** Optional array containing exactly 1 uploaded media ID. */
             fun mediaIds(mediaIds: List<String>) = mediaIds(JsonField.of(mediaIds))
 
-            /**
-             * Sets [Builder.mediaIds] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.mediaIds] with a well-typed `List<String>` value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.mediaIds] to an arbitrary JSON value. */
             fun mediaIds(mediaIds: JsonField<List<String>>) = apply {
                 this.mediaIds = mediaIds.map { it.toMutableList() }
             }
@@ -563,12 +515,6 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int =
             (if (account.asKnown() == null) 0 else 1) +
                 (if (text.asKnown() == null) 0 else 1) +

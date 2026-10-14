@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.models.x.tweets
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -206,21 +204,20 @@ private constructor(
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun id(): String = id.getRequired("id")
 
     /**
      * Connected account selected for the write.
      *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun account(): Account? = account.getNullable("account")
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun action(): Action = action.getRequired("action")
 
@@ -229,27 +226,26 @@ private constructor(
      * Pending or failed writes are not charged.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun billing(): Billing = billing.getRequired("billing")
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun charged(): Boolean = charged.getRequired("charged")
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun chargedCredits(): String = chargedCredits.getRequired("chargedCredits")
 
     /**
      * Exact follow-up an API client or agent should perform.
      *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun nextAction(): NextAction? = nextAction.getNullable("nextAction")
 
@@ -258,31 +254,24 @@ private constructor(
      * ```kotlin
      * JsonValue.from("x_write_action")
      * ```
-     *
-     * However, this method can be useful for debugging and logging (e.g. if the server responded
-     * with an unexpected value).
      */
     @JsonProperty("object") @ExcludeMissing fun _object_(): JsonValue = object_
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun pollAfterMs(): Long? = pollAfterMs.getNullable("pollAfterMs")
 
     /**
      * Stable fingerprint and sanitized payload for replay checks.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun request(): Request = request.getRequired("request")
 
     /**
      * Confirmed result produced by the write, when available.
      *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun result(): Result? = result.getNullable("result")
 
@@ -290,7 +279,7 @@ private constructor(
      * True only when a new attempt can reasonably succeed.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun retryable(): Boolean = retryable.getRequired("retryable")
 
@@ -298,214 +287,166 @@ private constructor(
      * True only when no write was dispatched and a new idempotency key may be used.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun safeToRetry(): Boolean = safeToRetry.getRequired("safeToRetry")
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun sendDispatched(): Boolean = sendDispatched.getRequired("sendDispatched")
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun status(): Status = status.getRequired("status")
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun statusUrl(): String = statusUrl.getRequired("statusUrl")
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun success(): Boolean = success.getRequired("success")
 
     /**
      * Existing X resource targeted by the write, when applicable.
      *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun target(): Target? = target.getNullable("target")
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun targetId(): String? = targetId.getNullable("targetId")
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun terminal(): Boolean = terminal.getRequired("terminal")
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     *   unexpectedly missing or null.
      */
     fun writeActionId(): String = writeActionId.getRequired("writeActionId")
 
     /**
      * Compatibility field for a confirmed community ID.
      *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun communityId(): String? = communityId.getNullable("communityId")
 
     /**
      * Confirmed community name when available.
      *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun communityName(): String? = communityName.getNullable("communityName")
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun completedAt(): OffsetDateTime? = completedAt.getNullable("completedAt")
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun confirmationAttempts(): Long? = confirmationAttempts.getNullable("confirmationAttempts")
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun confirmationCheckedAt(): OffsetDateTime? =
         confirmationCheckedAt.getNullable("confirmationCheckedAt")
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun confirmedAt(): OffsetDateTime? = confirmedAt.getNullable("confirmedAt")
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun createdAt(): OffsetDateTime? = createdAt.getNullable("createdAt")
 
     /**
      * Structured recovery context for a failed write.
      *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun details(): Details? = details.getNullable("details")
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun error(): String? = error.getNullable("error")
 
     /**
      * Deadline for resolving a non-terminal write. This is not the Idempotency-Key retention
      * deadline.
      *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun expiresAt(): OffsetDateTime? = expiresAt.getNullable("expiresAt")
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun idempotent(): Boolean? = idempotent.getNullable("idempotent")
 
     /**
      * Media count, kind, size, and billing details when used.
      *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun media(): Media? = media.getNullable("media")
 
     /**
      * Compatibility field for a confirmed media upload ID.
      *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun mediaId(): String? = mediaId.getNullable("mediaId")
 
     /**
      * Public media URL when the upload creates one.
      *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun mediaUrl(): String? = mediaUrl.getNullable("mediaUrl")
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun message(): String? = message.getNullable("message")
 
     /**
      * Compatibility field for a confirmed direct message ID.
      *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun messageId(): String? = messageId.getNullable("messageId")
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun requestHash(): String? = requestHash.getNullable("requestHash")
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun requestId(): String? = requestId.getNullable("requestId")
 
     /**
      * Compatibility result ID for other write actions.
      *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun resultId(): String? = resultId.getNullable("resultId")
 
     /**
      * Dispatch timestamp when the write reached execution.
      *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun sendDispatchedAt(): OffsetDateTime? = sendDispatchedAt.getNullable("sendDispatchedAt")
 
     /**
      * Compatibility field for a confirmed tweet result ID.
      *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun tweetId(): String? = tweetId.getNullable("tweetId")
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun updatedAt(): OffsetDateTime? = updatedAt.getNullable("updatedAt")
 
     /**
@@ -974,33 +915,18 @@ private constructor(
 
         fun id(id: String) = id(JsonField.of(id))
 
-        /**
-         * Sets [Builder.id] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.id] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.id] to an arbitrary JSON value. */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
         /** Connected account selected for the write. */
         fun account(account: Account?) = account(JsonField.ofNullable(account))
 
-        /**
-         * Sets [Builder.account] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.account] with a well-typed [Account] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.account] to an arbitrary JSON value. */
         fun account(account: JsonField<Account>) = apply { this.account = account }
 
         fun action(action: Action) = action(JsonField.of(action))
 
-        /**
-         * Sets [Builder.action] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.action] with a well-typed [Action] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.action] to an arbitrary JSON value. */
         fun action(action: JsonField<Action>) = apply { this.action = action }
 
         /**
@@ -1009,33 +935,17 @@ private constructor(
          */
         fun billing(billing: Billing) = billing(JsonField.of(billing))
 
-        /**
-         * Sets [Builder.billing] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.billing] with a well-typed [Billing] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.billing] to an arbitrary JSON value. */
         fun billing(billing: JsonField<Billing>) = apply { this.billing = billing }
 
         fun charged(charged: Boolean) = charged(JsonField.of(charged))
 
-        /**
-         * Sets [Builder.charged] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.charged] with a well-typed [Boolean] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.charged] to an arbitrary JSON value. */
         fun charged(charged: JsonField<Boolean>) = apply { this.charged = charged }
 
         fun chargedCredits(chargedCredits: String) = chargedCredits(JsonField.of(chargedCredits))
 
-        /**
-         * Sets [Builder.chargedCredits] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.chargedCredits] with a well-typed [String] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
+        /** Sets [Builder.chargedCredits] to an arbitrary JSON value. */
         fun chargedCredits(chargedCredits: JsonField<String>) = apply {
             this.chargedCredits = chargedCredits
         }
@@ -1043,178 +953,92 @@ private constructor(
         /** Exact follow-up an API client or agent should perform. */
         fun nextAction(nextAction: NextAction?) = nextAction(JsonField.ofNullable(nextAction))
 
-        /**
-         * Sets [Builder.nextAction] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.nextAction] with a well-typed [NextAction] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
+        /** Sets [Builder.nextAction] to an arbitrary JSON value. */
         fun nextAction(nextAction: JsonField<NextAction>) = apply { this.nextAction = nextAction }
 
         /**
          * Sets the field to an arbitrary JSON value.
          *
-         * It is usually unnecessary to call this method because the field defaults to the
-         * following:
+         * Defaults to the following:
          * ```kotlin
          * JsonValue.from("x_write_action")
          * ```
-         *
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
          */
         fun object_(object_: JsonValue) = apply { this.object_ = object_ }
 
         fun pollAfterMs(pollAfterMs: Long?) = pollAfterMs(JsonField.ofNullable(pollAfterMs))
 
-        /**
-         * Alias for [Builder.pollAfterMs].
-         *
-         * This unboxed primitive overload exists for backwards compatibility.
-         */
+        /** Alias for [Builder.pollAfterMs]. */
         fun pollAfterMs(pollAfterMs: Long) = pollAfterMs(pollAfterMs as Long?)
 
-        /**
-         * Sets [Builder.pollAfterMs] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.pollAfterMs] with a well-typed [Long] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
+        /** Sets [Builder.pollAfterMs] to an arbitrary JSON value. */
         fun pollAfterMs(pollAfterMs: JsonField<Long>) = apply { this.pollAfterMs = pollAfterMs }
 
         /** Stable fingerprint and sanitized payload for replay checks. */
         fun request(request: Request) = request(JsonField.of(request))
 
-        /**
-         * Sets [Builder.request] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.request] with a well-typed [Request] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.request] to an arbitrary JSON value. */
         fun request(request: JsonField<Request>) = apply { this.request = request }
 
         /** Confirmed result produced by the write, when available. */
         fun result(result: Result?) = result(JsonField.ofNullable(result))
 
-        /**
-         * Sets [Builder.result] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.result] with a well-typed [Result] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.result] to an arbitrary JSON value. */
         fun result(result: JsonField<Result>) = apply { this.result = result }
 
         /** True only when a new attempt can reasonably succeed. */
         fun retryable(retryable: Boolean) = retryable(JsonField.of(retryable))
 
-        /**
-         * Sets [Builder.retryable] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.retryable] with a well-typed [Boolean] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
+        /** Sets [Builder.retryable] to an arbitrary JSON value. */
         fun retryable(retryable: JsonField<Boolean>) = apply { this.retryable = retryable }
 
         /** True only when no write was dispatched and a new idempotency key may be used. */
         fun safeToRetry(safeToRetry: Boolean) = safeToRetry(JsonField.of(safeToRetry))
 
-        /**
-         * Sets [Builder.safeToRetry] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.safeToRetry] with a well-typed [Boolean] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
+        /** Sets [Builder.safeToRetry] to an arbitrary JSON value. */
         fun safeToRetry(safeToRetry: JsonField<Boolean>) = apply { this.safeToRetry = safeToRetry }
 
         fun sendDispatched(sendDispatched: Boolean) = sendDispatched(JsonField.of(sendDispatched))
 
-        /**
-         * Sets [Builder.sendDispatched] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.sendDispatched] with a well-typed [Boolean] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
+        /** Sets [Builder.sendDispatched] to an arbitrary JSON value. */
         fun sendDispatched(sendDispatched: JsonField<Boolean>) = apply {
             this.sendDispatched = sendDispatched
         }
 
         fun status(status: Status) = status(JsonField.of(status))
 
-        /**
-         * Sets [Builder.status] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.status] with a well-typed [Status] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.status] to an arbitrary JSON value. */
         fun status(status: JsonField<Status>) = apply { this.status = status }
 
         fun statusUrl(statusUrl: String) = statusUrl(JsonField.of(statusUrl))
 
-        /**
-         * Sets [Builder.statusUrl] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.statusUrl] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
+        /** Sets [Builder.statusUrl] to an arbitrary JSON value. */
         fun statusUrl(statusUrl: JsonField<String>) = apply { this.statusUrl = statusUrl }
 
         fun success(success: Boolean) = success(JsonField.of(success))
 
-        /**
-         * Sets [Builder.success] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.success] with a well-typed [Boolean] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.success] to an arbitrary JSON value. */
         fun success(success: JsonField<Boolean>) = apply { this.success = success }
 
         /** Existing X resource targeted by the write, when applicable. */
         fun target(target: Target?) = target(JsonField.ofNullable(target))
 
-        /**
-         * Sets [Builder.target] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.target] with a well-typed [Target] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.target] to an arbitrary JSON value. */
         fun target(target: JsonField<Target>) = apply { this.target = target }
 
         fun targetId(targetId: String?) = targetId(JsonField.ofNullable(targetId))
 
-        /**
-         * Sets [Builder.targetId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.targetId] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.targetId] to an arbitrary JSON value. */
         fun targetId(targetId: JsonField<String>) = apply { this.targetId = targetId }
 
         fun terminal(terminal: Boolean) = terminal(JsonField.of(terminal))
 
-        /**
-         * Sets [Builder.terminal] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.terminal] with a well-typed [Boolean] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
+        /** Sets [Builder.terminal] to an arbitrary JSON value. */
         fun terminal(terminal: JsonField<Boolean>) = apply { this.terminal = terminal }
 
         fun writeActionId(writeActionId: String) = writeActionId(JsonField.of(writeActionId))
 
-        /**
-         * Sets [Builder.writeActionId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.writeActionId] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
+        /** Sets [Builder.writeActionId] to an arbitrary JSON value. */
         fun writeActionId(writeActionId: JsonField<String>) = apply {
             this.writeActionId = writeActionId
         }
@@ -1222,38 +1046,20 @@ private constructor(
         /** Compatibility field for a confirmed community ID. */
         fun communityId(communityId: String) = communityId(JsonField.of(communityId))
 
-        /**
-         * Sets [Builder.communityId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.communityId] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
+        /** Sets [Builder.communityId] to an arbitrary JSON value. */
         fun communityId(communityId: JsonField<String>) = apply { this.communityId = communityId }
 
         /** Confirmed community name when available. */
         fun communityName(communityName: String) = communityName(JsonField.of(communityName))
 
-        /**
-         * Sets [Builder.communityName] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.communityName] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
+        /** Sets [Builder.communityName] to an arbitrary JSON value. */
         fun communityName(communityName: JsonField<String>) = apply {
             this.communityName = communityName
         }
 
         fun completedAt(completedAt: OffsetDateTime) = completedAt(JsonField.of(completedAt))
 
-        /**
-         * Sets [Builder.completedAt] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.completedAt] with a well-typed [OffsetDateTime] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
+        /** Sets [Builder.completedAt] to an arbitrary JSON value. */
         fun completedAt(completedAt: JsonField<OffsetDateTime>) = apply {
             this.completedAt = completedAt
         }
@@ -1261,13 +1067,7 @@ private constructor(
         fun confirmationAttempts(confirmationAttempts: Long) =
             confirmationAttempts(JsonField.of(confirmationAttempts))
 
-        /**
-         * Sets [Builder.confirmationAttempts] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.confirmationAttempts] with a well-typed [Long] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
+        /** Sets [Builder.confirmationAttempts] to an arbitrary JSON value. */
         fun confirmationAttempts(confirmationAttempts: JsonField<Long>) = apply {
             this.confirmationAttempts = confirmationAttempts
         }
@@ -1275,60 +1075,32 @@ private constructor(
         fun confirmationCheckedAt(confirmationCheckedAt: OffsetDateTime) =
             confirmationCheckedAt(JsonField.of(confirmationCheckedAt))
 
-        /**
-         * Sets [Builder.confirmationCheckedAt] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.confirmationCheckedAt] with a well-typed
-         * [OffsetDateTime] value instead. This method is primarily for setting the field to an
-         * undocumented or not yet supported value.
-         */
+        /** Sets [Builder.confirmationCheckedAt] to an arbitrary JSON value. */
         fun confirmationCheckedAt(confirmationCheckedAt: JsonField<OffsetDateTime>) = apply {
             this.confirmationCheckedAt = confirmationCheckedAt
         }
 
         fun confirmedAt(confirmedAt: OffsetDateTime) = confirmedAt(JsonField.of(confirmedAt))
 
-        /**
-         * Sets [Builder.confirmedAt] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.confirmedAt] with a well-typed [OffsetDateTime] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
+        /** Sets [Builder.confirmedAt] to an arbitrary JSON value. */
         fun confirmedAt(confirmedAt: JsonField<OffsetDateTime>) = apply {
             this.confirmedAt = confirmedAt
         }
 
         fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
 
-        /**
-         * Sets [Builder.createdAt] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
+        /** Sets [Builder.createdAt] to an arbitrary JSON value. */
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
         /** Structured recovery context for a failed write. */
         fun details(details: Details) = details(JsonField.of(details))
 
-        /**
-         * Sets [Builder.details] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.details] with a well-typed [Details] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.details] to an arbitrary JSON value. */
         fun details(details: JsonField<Details>) = apply { this.details = details }
 
         fun error(error: String) = error(JsonField.of(error))
 
-        /**
-         * Sets [Builder.error] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.error] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.error] to an arbitrary JSON value. */
         fun error(error: JsonField<String>) = apply { this.error = error }
 
         /**
@@ -1337,125 +1109,64 @@ private constructor(
          */
         fun expiresAt(expiresAt: OffsetDateTime) = expiresAt(JsonField.of(expiresAt))
 
-        /**
-         * Sets [Builder.expiresAt] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.expiresAt] with a well-typed [OffsetDateTime] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
+        /** Sets [Builder.expiresAt] to an arbitrary JSON value. */
         fun expiresAt(expiresAt: JsonField<OffsetDateTime>) = apply { this.expiresAt = expiresAt }
 
         fun idempotent(idempotent: Boolean) = idempotent(JsonField.of(idempotent))
 
-        /**
-         * Sets [Builder.idempotent] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.idempotent] with a well-typed [Boolean] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
+        /** Sets [Builder.idempotent] to an arbitrary JSON value. */
         fun idempotent(idempotent: JsonField<Boolean>) = apply { this.idempotent = idempotent }
 
         /** Media count, kind, size, and billing details when used. */
         fun media(media: Media) = media(JsonField.of(media))
 
-        /**
-         * Sets [Builder.media] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.media] with a well-typed [Media] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.media] to an arbitrary JSON value. */
         fun media(media: JsonField<Media>) = apply { this.media = media }
 
         /** Compatibility field for a confirmed media upload ID. */
         fun mediaId(mediaId: String) = mediaId(JsonField.of(mediaId))
 
-        /**
-         * Sets [Builder.mediaId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.mediaId] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.mediaId] to an arbitrary JSON value. */
         fun mediaId(mediaId: JsonField<String>) = apply { this.mediaId = mediaId }
 
         /** Public media URL when the upload creates one. */
         fun mediaUrl(mediaUrl: String) = mediaUrl(JsonField.of(mediaUrl))
 
-        /**
-         * Sets [Builder.mediaUrl] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.mediaUrl] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.mediaUrl] to an arbitrary JSON value. */
         fun mediaUrl(mediaUrl: JsonField<String>) = apply { this.mediaUrl = mediaUrl }
 
         fun message(message: String) = message(JsonField.of(message))
 
-        /**
-         * Sets [Builder.message] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.message] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.message] to an arbitrary JSON value. */
         fun message(message: JsonField<String>) = apply { this.message = message }
 
         /** Compatibility field for a confirmed direct message ID. */
         fun messageId(messageId: String) = messageId(JsonField.of(messageId))
 
-        /**
-         * Sets [Builder.messageId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.messageId] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
+        /** Sets [Builder.messageId] to an arbitrary JSON value. */
         fun messageId(messageId: JsonField<String>) = apply { this.messageId = messageId }
 
         fun requestHash(requestHash: String) = requestHash(JsonField.of(requestHash))
 
-        /**
-         * Sets [Builder.requestHash] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.requestHash] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
+        /** Sets [Builder.requestHash] to an arbitrary JSON value. */
         fun requestHash(requestHash: JsonField<String>) = apply { this.requestHash = requestHash }
 
         fun requestId(requestId: String) = requestId(JsonField.of(requestId))
 
-        /**
-         * Sets [Builder.requestId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.requestId] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
+        /** Sets [Builder.requestId] to an arbitrary JSON value. */
         fun requestId(requestId: JsonField<String>) = apply { this.requestId = requestId }
 
         /** Compatibility result ID for other write actions. */
         fun resultId(resultId: String) = resultId(JsonField.of(resultId))
 
-        /**
-         * Sets [Builder.resultId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.resultId] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.resultId] to an arbitrary JSON value. */
         fun resultId(resultId: JsonField<String>) = apply { this.resultId = resultId }
 
         /** Dispatch timestamp when the write reached execution. */
         fun sendDispatchedAt(sendDispatchedAt: OffsetDateTime) =
             sendDispatchedAt(JsonField.of(sendDispatchedAt))
 
-        /**
-         * Sets [Builder.sendDispatchedAt] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.sendDispatchedAt] with a well-typed [OffsetDateTime]
-         * value instead. This method is primarily for setting the field to an undocumented or not
-         * yet supported value.
-         */
+        /** Sets [Builder.sendDispatchedAt] to an arbitrary JSON value. */
         fun sendDispatchedAt(sendDispatchedAt: JsonField<OffsetDateTime>) = apply {
             this.sendDispatchedAt = sendDispatchedAt
         }
@@ -1463,23 +1174,12 @@ private constructor(
         /** Compatibility field for a confirmed tweet result ID. */
         fun tweetId(tweetId: String) = tweetId(JsonField.of(tweetId))
 
-        /**
-         * Sets [Builder.tweetId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.tweetId] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
+        /** Sets [Builder.tweetId] to an arbitrary JSON value. */
         fun tweetId(tweetId: JsonField<String>) = apply { this.tweetId = tweetId }
 
         fun updatedAt(updatedAt: OffsetDateTime) = updatedAt(JsonField.of(updatedAt))
 
-        /**
-         * Sets [Builder.updatedAt] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.updatedAt] with a well-typed [OffsetDateTime] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
+        /** Sets [Builder.updatedAt] to an arbitrary JSON value. */
         fun updatedAt(updatedAt: JsonField<OffsetDateTime>) = apply { this.updatedAt = updatedAt }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1654,11 +1354,6 @@ private constructor(
             false
         }
 
-    /**
-     * Returns a score indicating how many valid values are contained in this object recursively.
-     *
-     * Used for best match union deserialization.
-     */
     internal fun validity(): Int =
         (if (id.asKnown() == null) 0 else 1) +
             (account.asKnown()?.validity() ?: 0) +
@@ -1723,15 +1418,13 @@ private constructor(
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun id(): String = id.getRequired("id")
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun username(): String = username.getRequired("username")
 
@@ -1790,24 +1483,12 @@ private constructor(
 
             fun id(id: String) = id(JsonField.of(id))
 
-            /**
-             * Sets [Builder.id] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.id] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
+            /** Sets [Builder.id] to an arbitrary JSON value. */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             fun username(username: String) = username(JsonField.of(username))
 
-            /**
-             * Sets [Builder.username] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.username] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.username] to an arbitrary JSON value. */
             fun username(username: JsonField<String>) = apply { this.username = username }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1879,12 +1560,6 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int =
             (if (id.asKnown() == null) 0 else 1) + (if (username.asKnown() == null) 0 else 1)
 
@@ -1909,14 +1584,7 @@ private constructor(
 
     class Action @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
-        /**
-         * Returns this class instance's raw value.
-         *
-         * This is usually only useful if this instance was deserialized from data that doesn't
-         * match any known member, and you want to know that value. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new members that the SDK is
-         * unaware of.
-         */
+        /** Returns this class instance's raw value. */
         @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
         companion object {
@@ -2017,9 +1685,6 @@ private constructor(
         /**
          * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
          * if the class was instantiated with an unknown value.
-         *
-         * Use the [known] method instead if you're certain the value is always known or if you want
-         * to throw for the unknown case.
          */
         fun value(): Value =
             when (this) {
@@ -2046,9 +1711,6 @@ private constructor(
 
         /**
          * Returns an enum member corresponding to this class instance's value.
-         *
-         * Use the [value] method instead if you're uncertain the value is always known and don't
-         * want to throw for the unknown case.
          *
          * @throws XTwitterScraperInvalidDataException if this class instance's value is a not a
          *   known member.
@@ -2078,9 +1740,6 @@ private constructor(
 
         /**
          * Returns this class instance's primitive wire representation.
-         *
-         * This differs from the [toString] method because that method is primarily for debugging
-         * and generally doesn't throw.
          *
          * @throws XTwitterScraperInvalidDataException if this class instance's value does not have
          *   the expected primitive type.
@@ -2117,12 +1776,6 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
@@ -2166,29 +1819,25 @@ private constructor(
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun charged(): Boolean = charged.getRequired("charged")
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun chargedCredits(): String = chargedCredits.getRequired("chargedCredits")
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun plannedCredits(): String = plannedCredits.getRequired("plannedCredits")
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun status(): Status = status.getRequired("status")
 
@@ -2273,25 +1922,13 @@ private constructor(
 
             fun charged(charged: Boolean) = charged(JsonField.of(charged))
 
-            /**
-             * Sets [Builder.charged] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.charged] with a well-typed [Boolean] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.charged] to an arbitrary JSON value. */
             fun charged(charged: JsonField<Boolean>) = apply { this.charged = charged }
 
             fun chargedCredits(chargedCredits: String) =
                 chargedCredits(JsonField.of(chargedCredits))
 
-            /**
-             * Sets [Builder.chargedCredits] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.chargedCredits] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.chargedCredits] to an arbitrary JSON value. */
             fun chargedCredits(chargedCredits: JsonField<String>) = apply {
                 this.chargedCredits = chargedCredits
             }
@@ -2299,26 +1936,14 @@ private constructor(
             fun plannedCredits(plannedCredits: String) =
                 plannedCredits(JsonField.of(plannedCredits))
 
-            /**
-             * Sets [Builder.plannedCredits] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.plannedCredits] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.plannedCredits] to an arbitrary JSON value. */
             fun plannedCredits(plannedCredits: JsonField<String>) = apply {
                 this.plannedCredits = plannedCredits
             }
 
             fun status(status: Status) = status(JsonField.of(status))
 
-            /**
-             * Sets [Builder.status] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.status] with a well-typed [Status] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.status] to an arbitrary JSON value. */
             fun status(status: JsonField<Status>) = apply { this.status = status }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -2396,12 +2021,6 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int =
             (if (charged.asKnown() == null) 0 else 1) +
                 (if (chargedCredits.asKnown() == null) 0 else 1) +
@@ -2410,14 +2029,7 @@ private constructor(
 
         class Status @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
-            /**
-             * Returns this class instance's raw value.
-             *
-             * This is usually only useful if this instance was deserialized from data that doesn't
-             * match any known member, and you want to know that value. For example, if the SDK is
-             * on an older version than the API, then the API may respond with new members that the
-             * SDK is unaware of.
-             */
+            /** Returns this class instance's raw value. */
             @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
             companion object {
@@ -2468,9 +2080,6 @@ private constructor(
             /**
              * Returns an enum member corresponding to this class instance's value, or
              * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-             *
-             * Use the [known] method instead if you're certain the value is always known or if you
-             * want to throw for the unknown case.
              */
             fun value(): Value =
                 when (this) {
@@ -2484,9 +2093,6 @@ private constructor(
 
             /**
              * Returns an enum member corresponding to this class instance's value.
-             *
-             * Use the [value] method instead if you're uncertain the value is always known and
-             * don't want to throw for the unknown case.
              *
              * @throws XTwitterScraperInvalidDataException if this class instance's value is a not a
              *   known member.
@@ -2503,9 +2109,6 @@ private constructor(
 
             /**
              * Returns this class instance's primitive wire representation.
-             *
-             * This differs from the [toString] method because that method is primarily for
-             * debugging and generally doesn't throw.
              *
              * @throws XTwitterScraperInvalidDataException if this class instance's value does not
              *   have the expected primitive type.
@@ -2543,12 +2146,6 @@ private constructor(
                     false
                 }
 
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
             internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
@@ -2610,28 +2207,18 @@ private constructor(
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun type(): Type = type.getRequired("type")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun afterMs(): Long? = afterMs.getNullable("afterMs")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun requiresNewIdempotencyKey(): Boolean? =
             requiresNewIdempotencyKey.getNullable("requiresNewIdempotencyKey")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun url(): String? = url.getNullable("url")
 
         /**
@@ -2709,49 +2296,25 @@ private constructor(
 
             fun type(type: Type) = type(JsonField.of(type))
 
-            /**
-             * Sets [Builder.type] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.type] with a well-typed [Type] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
+            /** Sets [Builder.type] to an arbitrary JSON value. */
             fun type(type: JsonField<Type>) = apply { this.type = type }
 
             fun afterMs(afterMs: Long) = afterMs(JsonField.of(afterMs))
 
-            /**
-             * Sets [Builder.afterMs] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.afterMs] with a well-typed [Long] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.afterMs] to an arbitrary JSON value. */
             fun afterMs(afterMs: JsonField<Long>) = apply { this.afterMs = afterMs }
 
             fun requiresNewIdempotencyKey(requiresNewIdempotencyKey: Boolean) =
                 requiresNewIdempotencyKey(JsonField.of(requiresNewIdempotencyKey))
 
-            /**
-             * Sets [Builder.requiresNewIdempotencyKey] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.requiresNewIdempotencyKey] with a well-typed
-             * [Boolean] value instead. This method is primarily for setting the field to an
-             * undocumented or not yet supported value.
-             */
+            /** Sets [Builder.requiresNewIdempotencyKey] to an arbitrary JSON value. */
             fun requiresNewIdempotencyKey(requiresNewIdempotencyKey: JsonField<Boolean>) = apply {
                 this.requiresNewIdempotencyKey = requiresNewIdempotencyKey
             }
 
             fun url(url: String) = url(JsonField.of(url))
 
-            /**
-             * Sets [Builder.url] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.url] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
+            /** Sets [Builder.url] to an arbitrary JSON value. */
             fun url(url: JsonField<String>) = apply { this.url = url }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -2826,12 +2389,6 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int =
             (type.asKnown()?.validity() ?: 0) +
                 (if (afterMs.asKnown() == null) 0 else 1) +
@@ -2840,14 +2397,7 @@ private constructor(
 
         class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
-            /**
-             * Returns this class instance's raw value.
-             *
-             * This is usually only useful if this instance was deserialized from data that doesn't
-             * match any known member, and you want to know that value. For example, if the SDK is
-             * on an older version than the API, then the API may respond with new members that the
-             * SDK is unaware of.
-             */
+            /** Returns this class instance's raw value. */
             @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
             companion object {
@@ -2892,9 +2442,6 @@ private constructor(
             /**
              * Returns an enum member corresponding to this class instance's value, or
              * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-             *
-             * Use the [known] method instead if you're certain the value is always known or if you
-             * want to throw for the unknown case.
              */
             fun value(): Value =
                 when (this) {
@@ -2907,9 +2454,6 @@ private constructor(
 
             /**
              * Returns an enum member corresponding to this class instance's value.
-             *
-             * Use the [value] method instead if you're uncertain the value is always known and
-             * don't want to throw for the unknown case.
              *
              * @throws XTwitterScraperInvalidDataException if this class instance's value is a not a
              *   known member.
@@ -2925,9 +2469,6 @@ private constructor(
 
             /**
              * Returns this class instance's primitive wire representation.
-             *
-             * This differs from the [toString] method because that method is primarily for
-             * debugging and generally doesn't throw.
              *
              * @throws XTwitterScraperInvalidDataException if this class instance's value does not
              *   have the expected primitive type.
@@ -2965,12 +2506,6 @@ private constructor(
                     false
                 }
 
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
             internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
@@ -3027,16 +2562,14 @@ private constructor(
         /**
          * Stable hash of account, action, target, and payload.
          *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
         fun hash(): String? = hash.getNullable("hash")
 
         /**
          * Exact sanitized payload dispatched for this action.
          *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
         fun payload(): Payload? = payload.getNullable("payload")
 
@@ -3096,25 +2629,13 @@ private constructor(
             /** Stable hash of account, action, target, and payload. */
             fun hash(hash: String?) = hash(JsonField.ofNullable(hash))
 
-            /**
-             * Sets [Builder.hash] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.hash] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
+            /** Sets [Builder.hash] to an arbitrary JSON value. */
             fun hash(hash: JsonField<String>) = apply { this.hash = hash }
 
             /** Exact sanitized payload dispatched for this action. */
             fun payload(payload: Payload?) = payload(JsonField.ofNullable(payload))
 
-            /**
-             * Sets [Builder.payload] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.payload] with a well-typed [Payload] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.payload] to an arbitrary JSON value. */
             fun payload(payload: JsonField<Payload>) = apply { this.payload = payload }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -3186,12 +2707,6 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int =
             (if (hash.asKnown() == null) 0 else 1) + (payload.asKnown()?.validity() ?: 0)
 
@@ -3282,12 +2797,6 @@ private constructor(
                     false
                 }
 
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
             internal fun validity(): Int = additionalProperties.count { (_, value) ->
                 !value.isNull() && !value.isMissing()
             }
@@ -3343,22 +2852,13 @@ private constructor(
             @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
         ) : this(id, state, type, mutableMapOf())
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun id(): String? = id.getNullable("id")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun state(): String? = state.getNullable("state")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-         *   (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun type(): Type? = type.getNullable("type")
 
         /**
@@ -3417,35 +2917,17 @@ private constructor(
 
             fun id(id: String) = id(JsonField.of(id))
 
-            /**
-             * Sets [Builder.id] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.id] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
+            /** Sets [Builder.id] to an arbitrary JSON value. */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             fun state(state: String) = state(JsonField.of(state))
 
-            /**
-             * Sets [Builder.state] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.state] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
+            /** Sets [Builder.state] to an arbitrary JSON value. */
             fun state(state: JsonField<String>) = apply { this.state = state }
 
             fun type(type: Type) = type(JsonField.of(type))
 
-            /**
-             * Sets [Builder.type] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.type] with a well-typed [Type] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
+            /** Sets [Builder.type] to an arbitrary JSON value. */
             fun type(type: JsonField<Type>) = apply { this.type = type }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -3505,12 +2987,6 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int =
             (if (id.asKnown() == null) 0 else 1) +
                 (if (state.asKnown() == null) 0 else 1) +
@@ -3518,14 +2994,7 @@ private constructor(
 
         class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
-            /**
-             * Returns this class instance's raw value.
-             *
-             * This is usually only useful if this instance was deserialized from data that doesn't
-             * match any known member, and you want to know that value. For example, if the SDK is
-             * on an older version than the API, then the API may respond with new members that the
-             * SDK is unaware of.
-             */
+            /** Returns this class instance's raw value. */
             @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
             companion object {
@@ -3574,9 +3043,6 @@ private constructor(
             /**
              * Returns an enum member corresponding to this class instance's value, or
              * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-             *
-             * Use the [known] method instead if you're certain the value is always known or if you
-             * want to throw for the unknown case.
              */
             fun value(): Value =
                 when (this) {
@@ -3590,9 +3056,6 @@ private constructor(
 
             /**
              * Returns an enum member corresponding to this class instance's value.
-             *
-             * Use the [value] method instead if you're uncertain the value is always known and
-             * don't want to throw for the unknown case.
              *
              * @throws XTwitterScraperInvalidDataException if this class instance's value is a not a
              *   known member.
@@ -3609,9 +3072,6 @@ private constructor(
 
             /**
              * Returns this class instance's primitive wire representation.
-             *
-             * This differs from the [toString] method because that method is primarily for
-             * debugging and generally doesn't throw.
              *
              * @throws XTwitterScraperInvalidDataException if this class instance's value does not
              *   have the expected primitive type.
@@ -3649,12 +3109,6 @@ private constructor(
                     false
                 }
 
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
             internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
@@ -3692,14 +3146,7 @@ private constructor(
 
     class Status @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
-        /**
-         * Returns this class instance's raw value.
-         *
-         * This is usually only useful if this instance was deserialized from data that doesn't
-         * match any known member, and you want to know that value. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new members that the SDK is
-         * unaware of.
-         */
+        /** Returns this class instance's raw value. */
         @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
         companion object {
@@ -3752,9 +3199,6 @@ private constructor(
         /**
          * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
          * if the class was instantiated with an unknown value.
-         *
-         * Use the [known] method instead if you're certain the value is always known or if you want
-         * to throw for the unknown case.
          */
         fun value(): Value =
             when (this) {
@@ -3769,9 +3213,6 @@ private constructor(
 
         /**
          * Returns an enum member corresponding to this class instance's value.
-         *
-         * Use the [value] method instead if you're uncertain the value is always known and don't
-         * want to throw for the unknown case.
          *
          * @throws XTwitterScraperInvalidDataException if this class instance's value is a not a
          *   known member.
@@ -3789,9 +3230,6 @@ private constructor(
 
         /**
          * Returns this class instance's primitive wire representation.
-         *
-         * This differs from the [toString] method because that method is primarily for debugging
-         * and generally doesn't throw.
          *
          * @throws XTwitterScraperInvalidDataException if this class instance's value does not have
          *   the expected primitive type.
@@ -3828,12 +3266,6 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
@@ -3866,15 +3298,13 @@ private constructor(
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun id(): String = id.getRequired("id")
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-         *   value).
+         *   is unexpectedly missing or null.
          */
         fun type(): Type = type.getRequired("type")
 
@@ -3933,24 +3363,12 @@ private constructor(
 
             fun id(id: String) = id(JsonField.of(id))
 
-            /**
-             * Sets [Builder.id] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.id] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
+            /** Sets [Builder.id] to an arbitrary JSON value. */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             fun type(type: Type) = type(JsonField.of(type))
 
-            /**
-             * Sets [Builder.type] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.type] with a well-typed [Type] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
+            /** Sets [Builder.type] to an arbitrary JSON value. */
             fun type(type: JsonField<Type>) = apply { this.type = type }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -4022,25 +3440,12 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int =
             (if (id.asKnown() == null) 0 else 1) + (type.asKnown()?.validity() ?: 0)
 
         class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
-            /**
-             * Returns this class instance's raw value.
-             *
-             * This is usually only useful if this instance was deserialized from data that doesn't
-             * match any known member, and you want to know that value. For example, if the SDK is
-             * on an older version than the API, then the API may respond with new members that the
-             * SDK is unaware of.
-             */
+            /** Returns this class instance's raw value. */
             @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
             companion object {
@@ -4081,9 +3486,6 @@ private constructor(
             /**
              * Returns an enum member corresponding to this class instance's value, or
              * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-             *
-             * Use the [known] method instead if you're certain the value is always known or if you
-             * want to throw for the unknown case.
              */
             fun value(): Value =
                 when (this) {
@@ -4095,9 +3497,6 @@ private constructor(
 
             /**
              * Returns an enum member corresponding to this class instance's value.
-             *
-             * Use the [value] method instead if you're uncertain the value is always known and
-             * don't want to throw for the unknown case.
              *
              * @throws XTwitterScraperInvalidDataException if this class instance's value is a not a
              *   known member.
@@ -4112,9 +3511,6 @@ private constructor(
 
             /**
              * Returns this class instance's primitive wire representation.
-             *
-             * This differs from the [toString] method because that method is primarily for
-             * debugging and generally doesn't throw.
              *
              * @throws XTwitterScraperInvalidDataException if this class instance's value does not
              *   have the expected primitive type.
@@ -4152,12 +3548,6 @@ private constructor(
                     false
                 }
 
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
             internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
@@ -4275,12 +3665,6 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int = additionalProperties.count { (_, value) ->
             !value.isNull() && !value.isMissing()
         }
@@ -4383,12 +3767,6 @@ private constructor(
                 false
             }
 
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
         internal fun validity(): Int = additionalProperties.count { (_, value) ->
             !value.isNull() && !value.isMissing()
         }

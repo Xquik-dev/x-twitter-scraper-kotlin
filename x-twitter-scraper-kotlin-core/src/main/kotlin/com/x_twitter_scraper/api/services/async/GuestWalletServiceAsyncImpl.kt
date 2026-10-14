@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.services.async
 
 import com.x_twitter_scraper.api.core.ClientOptions
@@ -43,23 +41,18 @@ class GuestWalletServiceAsyncImpl internal constructor(private val clientOptions
     override suspend fun create(
         params: GuestWalletCreateParams,
         requestOptions: RequestOptions,
-    ): GuestWalletCreateResponse =
-        // post /guest-wallets
-        withRawResponse().create(params, requestOptions).parse()
+    ): GuestWalletCreateResponse = withRawResponse().create(params, requestOptions).parse()
 
     override suspend fun retrieveStatus(
         params: GuestWalletRetrieveStatusParams,
         requestOptions: RequestOptions,
     ): GuestWalletRetrieveStatusResponse =
-        // get /guest-wallets/status
         withRawResponse().retrieveStatus(params, requestOptions).parse()
 
     override suspend fun topup(
         params: GuestWalletTopupParams,
         requestOptions: RequestOptions,
-    ): GuestWalletTopupResponse =
-        // post /guest-wallets/topups
-        withRawResponse().topup(params, requestOptions).parse()
+    ): GuestWalletTopupResponse = withRawResponse().topup(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         GuestWalletServiceAsync.WithRawResponse {

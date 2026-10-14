@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.core.http
 
 import com.x_twitter_scraper.api.core.DefaultSleeper
@@ -36,7 +34,6 @@ private constructor(
     override fun execute(request: HttpRequest, requestOptions: RequestOptions): HttpResponse {
         var modifiedRequest = maybeAddIdempotencyHeader(request)
 
-        // Don't send the current retry count in the headers if the caller set their own value.
         val shouldSendRetryCount =
             !modifiedRequest.headers.names().contains("X-Stainless-Retry-Count")
 
@@ -68,7 +65,6 @@ private constructor(
                 }
 
             val backoffDuration = getRetryBackoffDuration(retries, response)
-            // All responses must be closed, so close the failed one before retrying.
             response?.close()
             sleeper.sleep(backoffDuration)
         }
@@ -80,7 +76,6 @@ private constructor(
     ): HttpResponse {
         var modifiedRequest = maybeAddIdempotencyHeader(request)
 
-        // Don't send the current retry count in the headers if the caller set their own value.
         val shouldSendRetryCount =
             !modifiedRequest.headers.names().contains("X-Stainless-Retry-Count")
 
@@ -112,7 +107,6 @@ private constructor(
                 }
 
             val backoffDuration = getRetryBackoffDuration(retries, response)
-            // All responses must be closed, so close the failed one before retrying.
             response?.close()
             sleeper.sleepAsync(backoffDuration)
         }
@@ -123,10 +117,7 @@ private constructor(
         sleeper.close()
     }
 
-    private fun isRetryable(request: HttpRequest): Boolean =
-        // Some requests, such as when a request body is being streamed, cannot be retried because
-        // the body data aren't available on subsequent attempts.
-        request.body?.repeatable() ?: true
+    private fun isRetryable(request: HttpRequest): Boolean = request.body?.repeatable() ?: true
 
     private fun setRetryCountHeader(request: HttpRequest, retries: Int): HttpRequest =
         request.toBuilder().replaceHeaders("X-Stainless-Retry-Count", retries.toString()).build()
@@ -138,44 +129,31 @@ private constructor(
             return request
         }
 
-        return request
-            .toBuilder()
-            // Set a header to uniquely identify the request when retried
-            .putHeader(idempotencyHeader, idempotencyKey())
-            .build()
+        return request.toBuilder().putHeader(idempotencyHeader, idempotencyKey()).build()
     }
 
     private fun shouldRetry(response: HttpResponse): Boolean {
-        // Note: this is not a standard header
         val shouldRetryHeader = response.headers().values("X-Should-Retry").getOrNull(0)
         val statusCode = response.statusCode()
 
         return when {
-            // If the server explicitly says whether to retry, obey
             shouldRetryHeader == "true" -> true
             shouldRetryHeader == "false" -> false
 
-            // Retry on request timeouts
             statusCode == 408 -> true
-            // Retry on lock timeouts
             statusCode == 409 -> true
-            // Retry on rate limits
             statusCode == 429 -> true
-            // Retry internal errors
             statusCode >= 500 -> true
             else -> false
         }
     }
 
     private fun shouldRetry(throwable: Throwable): Boolean =
-        // Only retry known retryable exceptions, other exceptions are not intended to be retried.
         throwable is IOException ||
             throwable is XTwitterScraperIoException ||
             throwable is XTwitterScraperRetryableException
 
     private fun getRetryBackoffDuration(retries: Int, response: HttpResponse?): Duration {
-        // About the Retry-After header:
-        // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After
         response?.headers()?.let { headers ->
             val retryAfterMs =
                 headers.values("Retry-After-Ms").getOrNull(0)?.let {
@@ -194,10 +172,8 @@ private constructor(
             }
         }
 
-        // Apply exponential backoff, but not more than the max.
         val backoffSeconds = min(0.5 * 2.0.pow(retries - 1), 8.0)
 
-        // Apply some jitter
         val jitter = 1.0 - 0.25 * ThreadLocalRandom.current().nextDouble()
 
         return Duration.ofNanos((TimeUnit.SECONDS.toNanos(1) * backoffSeconds * jitter).toLong())

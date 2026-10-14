@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.services.async.x.users
 
 import com.x_twitter_scraper.api.core.ClientOptions
@@ -41,16 +39,12 @@ class FollowServiceAsyncImpl internal constructor(private val clientOptions: Cli
     override suspend fun create(
         params: FollowCreateParams,
         requestOptions: RequestOptions,
-    ): FollowCreateResponse =
-        // post /x/users/{id}/follow
-        withRawResponse().create(params, requestOptions).parse()
+    ): FollowCreateResponse = withRawResponse().create(params, requestOptions).parse()
 
     override suspend fun deleteAll(
         params: FollowDeleteAllParams,
         requestOptions: RequestOptions,
-    ): FollowDeleteAllResponse =
-        // delete /x/users/{id}/follow
-        withRawResponse().deleteAll(params, requestOptions).parse()
+    ): FollowDeleteAllResponse = withRawResponse().deleteAll(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         FollowServiceAsync.WithRawResponse {
@@ -72,8 +66,6 @@ class FollowServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: FollowCreateParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<FollowCreateResponse> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
@@ -103,8 +95,6 @@ class FollowServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: FollowDeleteAllParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<FollowDeleteAllResponse> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
             checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()

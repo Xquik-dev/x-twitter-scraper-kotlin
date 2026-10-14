@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-// File generated from our OpenAPI spec.
-
 package com.x_twitter_scraper.api.services.async
 
 import com.x_twitter_scraper.api.core.ClientOptions
@@ -38,9 +36,7 @@ class ComposeServiceAsyncImpl internal constructor(private val clientOptions: Cl
     override suspend fun create(
         params: ComposeCreateParams,
         requestOptions: RequestOptions,
-    ): ComposeCreateResponse =
-        // post /compose
-        withRawResponse().create(params, requestOptions).parse()
+    ): ComposeCreateResponse = withRawResponse().create(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         ComposeServiceAsync.WithRawResponse {
