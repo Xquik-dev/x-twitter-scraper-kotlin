@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.9.4 (2026-10-02)
+
+Full Changelog: [v0.9.3...v0.9.4](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.9.3...v0.9.4)
+
+### Maintenance
+
+* Update dependencies & build tools.
+* Compare full-source coverage with fresh parent reports.
+
 ## 0.9.3 (2026-08-21)
 
 Full Changelog: [v0.9.2...v0.9.3](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.9.2...v0.9.3)
