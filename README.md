@@ -92,7 +92,7 @@ gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 0xD2037E4157E62A59
 gpg --verify "$artifact.asc" "$artifact"
 ```
 
-Confirm fingerprint `6965 E561 C0AC EE32 060A B961 D203 7E41 57E6 2A59`.
+Confirm the fingerprint `6965 E561 C0AC EE32 060A B961 D203 7E41 57E6 2A59`.
 
 ## Authenticate
 
