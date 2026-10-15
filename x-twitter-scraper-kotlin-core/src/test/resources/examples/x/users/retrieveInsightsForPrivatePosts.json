@@ -1,0 +1,22 @@
+{
+  "insights": {
+    "userId": "11348282",
+    "userName": "NASA",
+    "followers": 92376187,
+    "following": 115,
+    "posts": 74336,
+    "accountAgeDays": 6858,
+    "postsPrivate": true,
+    "sample": {
+      "posts": 0,
+      "oldestAt": null,
+      "newestAt": null
+    },
+    "averages": null,
+    "engagementRate": null,
+    "engagementPerView": null,
+    "postsPerDay": null,
+    "topPostId": null
+  },
+  "message": "This account's posts are private, so the report has its counts only."
+}
