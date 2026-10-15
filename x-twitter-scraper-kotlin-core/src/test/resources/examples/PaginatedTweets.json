@@ -26,34 +26,8 @@
         ]
       },
       "entities": {
-        "hashtags": [
-          {
-            "indices": [
-              1
-            ],
-            "tag": {
-              "id": "U21hcnRUYWc6VFNMQQ==",
-              "info": {
-                "info": {
-                  "active": true,
-                  "name": "Tesla Inc",
-                  "ticker": "TSLA"
-                }
-              }
-            },
-            "text": "string"
-          }
-        ],
-        "urls": [
-          {
-            "display_url": "string",
-            "expanded_url": "string",
-            "indices": [
-              1
-            ],
-            "url": "string"
-          }
-        ],
+        "hashtags": [],
+        "urls": [],
         "user_mentions": [
           {
             "id_str": "12415722",
@@ -228,44 +202,9 @@
         ]
       },
       "entities": {
-        "hashtags": [
-          {
-            "indices": [
-              1
-            ],
-            "tag": {
-              "id": "U21hcnRUYWc6VFNMQQ==",
-              "info": {
-                "info": {
-                  "active": true,
-                  "name": "Tesla Inc",
-                  "ticker": "TSLA"
-                }
-              }
-            },
-            "text": "string"
-          }
-        ],
-        "urls": [
-          {
-            "display_url": "string",
-            "expanded_url": "string",
-            "indices": [
-              1
-            ],
-            "url": "string"
-          }
-        ],
-        "user_mentions": [
-          {
-            "id_str": "string",
-            "indices": [
-              1
-            ],
-            "name": "string",
-            "screen_name": "string"
-          }
-        ]
+        "hashtags": [],
+        "urls": [],
+        "user_mentions": []
       },
       "isNoteTweet": false,
       "isPinned": false,
