@@ -477,10 +477,7 @@ private constructor(
      */
     fun coordinates(): Coordinates? = coordinates.getNullable("coordinates")
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun createdAt(): String? = createdAt.getNullable("createdAt")
 
     /**
@@ -605,10 +602,7 @@ private constructor(
     /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun isRetweet(): Boolean? = isRetweet.getNullable("isRetweet")
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun isTranslatable(): Boolean? = isTranslatable.getNullable("isTranslatable")
 
     /**
@@ -661,10 +655,7 @@ private constructor(
      */
     fun place(): Place? = place.getNullable("place")
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun possiblySensitive(): Boolean? = possiblySensitive.getNullable("possiblySensitive")
 
     /**
@@ -777,10 +768,7 @@ private constructor(
      */
     fun tombstone(): Tombstone? = tombstone.getNullable("tombstone")
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun type(): String? = type.getNullable("type")
 
     /**
@@ -804,10 +792,7 @@ private constructor(
      */
     fun url(): String? = url.getNullable("url")
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun viewState(): String? = viewState.getNullable("viewState")
 
     /**
@@ -1712,7 +1697,6 @@ private constructor(
             this.coordinates = coordinates
         }
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun createdAt(createdAt: String) = createdAt(JsonField.of(createdAt))
 
         /** Sets [Builder.createdAt] to an arbitrary JSON value. */
@@ -1869,7 +1853,6 @@ private constructor(
         /** Sets [Builder.isRetweet] to an arbitrary JSON value. */
         fun isRetweet(isRetweet: JsonField<Boolean>) = apply { this.isRetweet = isRetweet }
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun isTranslatable(isTranslatable: Boolean) = isTranslatable(JsonField.of(isTranslatable))
 
         /** Sets [Builder.isTranslatable] to an arbitrary JSON value. */
@@ -1956,7 +1939,6 @@ private constructor(
         /** Sets [Builder.place] to an arbitrary JSON value. */
         fun place(place: JsonField<Place>) = apply { this.place = place }
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun possiblySensitive(possiblySensitive: Boolean) =
             possiblySensitive(JsonField.of(possiblySensitive))
 
@@ -2115,7 +2097,6 @@ private constructor(
         /** Sets [Builder.tombstone] to an arbitrary JSON value. */
         fun tombstone(tombstone: JsonField<Tombstone>) = apply { this.tombstone = tombstone }
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun type(type: String) = type(JsonField.of(type))
 
         /** Sets [Builder.type] to an arbitrary JSON value. */
@@ -2157,7 +2138,6 @@ private constructor(
         /** Sets [Builder.url] to an arbitrary JSON value. */
         fun url(url: JsonField<String>) = apply { this.url = url }
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun viewState(viewState: String) = viewState(JsonField.of(viewState))
 
         /** Sets [Builder.viewState] to an arbitrary JSON value. */
@@ -2483,10 +2463,7 @@ private constructor(
             mutableMapOf(),
         )
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun id(): String? = id.getNullable("id")
 
         /**
@@ -2496,10 +2473,7 @@ private constructor(
          */
         fun coverMedia(): CoverMedia? = coverMedia.getNullable("coverMedia")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun coverMediaUrl(): String? = coverMediaUrl.getNullable("coverMediaUrl")
 
         /**
@@ -2516,16 +2490,10 @@ private constructor(
          */
         fun metadata(): Metadata? = metadata.getNullable("metadata")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun previewText(): String? = previewText.getNullable("previewText")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun title(): String? = title.getNullable("title")
 
         /**
@@ -2628,9 +2596,6 @@ private constructor(
                 additionalProperties = article.additionalProperties.toMutableMap()
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun id(id: String) = id(JsonField.of(id))
 
             /** Sets [Builder.id] to an arbitrary JSON value. */
@@ -2644,9 +2609,6 @@ private constructor(
                 this.coverMedia = coverMedia
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun coverMediaUrl(coverMediaUrl: String) = coverMediaUrl(JsonField.of(coverMediaUrl))
 
             /** Sets [Builder.coverMediaUrl] to an arbitrary JSON value. */
@@ -2669,9 +2631,6 @@ private constructor(
             /** Sets [Builder.metadata] to an arbitrary JSON value. */
             fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun previewText(previewText: String) = previewText(JsonField.of(previewText))
 
             /** Sets [Builder.previewText] to an arbitrary JSON value. */
@@ -2679,9 +2638,6 @@ private constructor(
                 this.previewText = previewText
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun title(title: String) = title(JsonField.of(title))
 
             /** Sets [Builder.title] to an arbitrary JSON value. */
@@ -3351,22 +3307,13 @@ private constructor(
             mutableMapOf(),
         )
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun id(): String? = id.getNullable("id")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun bindingValues(): BindingValues? = bindingValues.getNullable("bindingValues")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun name(): String? = name.getNullable("name")
 
         /**
@@ -3376,10 +3323,7 @@ private constructor(
          */
         fun platform(): Platform? = platform.getNullable("platform")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun url(): String? = url.getNullable("url")
 
         /**
@@ -3492,17 +3436,11 @@ private constructor(
                 additionalProperties = card.additionalProperties.toMutableMap()
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun id(id: String) = id(JsonField.of(id))
 
             /** Sets [Builder.id] to an arbitrary JSON value. */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun bindingValues(bindingValues: BindingValues) =
                 bindingValues(JsonField.of(bindingValues))
 
@@ -3511,9 +3449,6 @@ private constructor(
                 this.bindingValues = bindingValues
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun name(name: String) = name(JsonField.of(name))
 
             /** Sets [Builder.name] to an arbitrary JSON value. */
@@ -3525,9 +3460,6 @@ private constructor(
             /** Sets [Builder.platform] to an arbitrary JSON value. */
             fun platform(platform: JsonField<Platform>) = apply { this.platform = platform }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun url(url: String) = url(JsonField.of(url))
 
             /** Sets [Builder.url] to an arbitrary JSON value. */
@@ -4453,22 +4385,13 @@ private constructor(
             mutableMapOf(),
         )
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun id(): String? = id.getNullable("id")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun destinationUrl(): String? = destinationUrl.getNullable("destinationUrl")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun footer(): String? = footer.getNullable("footer")
 
         /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
@@ -4484,28 +4407,16 @@ private constructor(
          */
         fun metadata(): Metadata? = metadata.getNullable("metadata")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun shortTitle(): String? = shortTitle.getNullable("shortTitle")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun subtitle(): String? = subtitle.getNullable("subtitle")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun title(): String? = title.getNullable("title")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun visualStyle(): String? = visualStyle.getNullable("visualStyle")
 
         /**
@@ -4635,17 +4546,11 @@ private constructor(
                 additionalProperties = communityNote.additionalProperties.toMutableMap()
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun id(id: String) = id(JsonField.of(id))
 
             /** Sets [Builder.id] to an arbitrary JSON value. */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun destinationUrl(destinationUrl: String) =
                 destinationUrl(JsonField.of(destinationUrl))
 
@@ -4654,9 +4559,6 @@ private constructor(
                 this.destinationUrl = destinationUrl
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun footer(footer: String) = footer(JsonField.of(footer))
 
             /** Sets [Builder.footer] to an arbitrary JSON value. */
@@ -4681,33 +4583,21 @@ private constructor(
             /** Sets [Builder.metadata] to an arbitrary JSON value. */
             fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun shortTitle(shortTitle: String) = shortTitle(JsonField.of(shortTitle))
 
             /** Sets [Builder.shortTitle] to an arbitrary JSON value. */
             fun shortTitle(shortTitle: JsonField<String>) = apply { this.shortTitle = shortTitle }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun subtitle(subtitle: String) = subtitle(JsonField.of(subtitle))
 
             /** Sets [Builder.subtitle] to an arbitrary JSON value. */
             fun subtitle(subtitle: JsonField<String>) = apply { this.subtitle = subtitle }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun title(title: String) = title(JsonField.of(title))
 
             /** Sets [Builder.title] to an arbitrary JSON value. */
             fun title(title: JsonField<String>) = apply { this.title = title }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun visualStyle(visualStyle: String) = visualStyle(JsonField.of(visualStyle))
 
             /** Sets [Builder.visualStyle] to an arbitrary JSON value. */
@@ -5613,16 +5503,10 @@ private constructor(
             initialTweetId: JsonField<String> = JsonMissing.of(),
         ) : this(editTweetIds, editableUntilMsecs, initialTweetId, mutableMapOf())
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun editTweetIds(): List<String>? = editTweetIds.getNullable("editTweetIds")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun editableUntilMsecs(): String? = editableUntilMsecs.getNullable("editableUntilMsecs")
 
         /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
@@ -5691,9 +5575,6 @@ private constructor(
                 additionalProperties = edit.additionalProperties.toMutableMap()
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun editTweetIds(editTweetIds: List<String>) = editTweetIds(JsonField.of(editTweetIds))
 
             /** Sets [Builder.editTweetIds] to an arbitrary JSON value. */
@@ -5713,9 +5594,6 @@ private constructor(
                     }
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun editableUntilMsecs(editableUntilMsecs: String) =
                 editableUntilMsecs(JsonField.of(editableUntilMsecs))
 
@@ -5824,15 +5702,115 @@ private constructor(
 
     /** Lists hashtags, symbols, links, and mentions from tweet text. */
     class Entities
-    @JsonCreator
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
-        @com.fasterxml.jackson.annotation.JsonValue
-        private val additionalProperties: Map<String, JsonValue>
+        private val hashtags: JsonField<List<Hashtag>>,
+        private val smarttags: JsonField<List<Smarttag>>,
+        private val symbols: JsonField<List<Symbol>>,
+        private val timestamps: JsonField<List<Timestamp>>,
+        private val urls: JsonField<List<Url>>,
+        private val userMentions: JsonField<List<UserMention>>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("hashtags")
+            @ExcludeMissing
+            hashtags: JsonField<List<Hashtag>> = JsonMissing.of(),
+            @JsonProperty("smarttags")
+            @ExcludeMissing
+            smarttags: JsonField<List<Smarttag>> = JsonMissing.of(),
+            @JsonProperty("symbols")
+            @ExcludeMissing
+            symbols: JsonField<List<Symbol>> = JsonMissing.of(),
+            @JsonProperty("timestamps")
+            @ExcludeMissing
+            timestamps: JsonField<List<Timestamp>> = JsonMissing.of(),
+            @JsonProperty("urls") @ExcludeMissing urls: JsonField<List<Url>> = JsonMissing.of(),
+            @JsonProperty("user_mentions")
+            @ExcludeMissing
+            userMentions: JsonField<List<UserMention>> = JsonMissing.of(),
+        ) : this(hashtags, smarttags, symbols, timestamps, urls, userMentions, mutableMapOf())
+
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        fun hashtags(): List<Hashtag>? = hashtags.getNullable("hashtags")
+
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        fun smarttags(): List<Smarttag>? = smarttags.getNullable("smarttags")
+
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        fun symbols(): List<Symbol>? = symbols.getNullable("symbols")
+
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        fun timestamps(): List<Timestamp>? = timestamps.getNullable("timestamps")
+
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        fun urls(): List<Url>? = urls.getNullable("urls")
+
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        fun userMentions(): List<UserMention>? = userMentions.getNullable("user_mentions")
+
+        /**
+         * Returns the raw JSON value of [hashtags].
+         *
+         * Unlike [hashtags], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("hashtags")
+        @ExcludeMissing
+        fun _hashtags(): JsonField<List<Hashtag>> = hashtags
+
+        /**
+         * Returns the raw JSON value of [smarttags].
+         *
+         * Unlike [smarttags], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("smarttags")
+        @ExcludeMissing
+        fun _smarttags(): JsonField<List<Smarttag>> = smarttags
+
+        /**
+         * Returns the raw JSON value of [symbols].
+         *
+         * Unlike [symbols], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("symbols") @ExcludeMissing fun _symbols(): JsonField<List<Symbol>> = symbols
+
+        /**
+         * Returns the raw JSON value of [timestamps].
+         *
+         * Unlike [timestamps], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("timestamps")
+        @ExcludeMissing
+        fun _timestamps(): JsonField<List<Timestamp>> = timestamps
+
+        /**
+         * Returns the raw JSON value of [urls].
+         *
+         * Unlike [urls], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("urls") @ExcludeMissing fun _urls(): JsonField<List<Url>> = urls
+
+        /**
+         * Returns the raw JSON value of [userMentions].
+         *
+         * Unlike [userMentions], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("user_mentions")
+        @ExcludeMissing
+        fun _userMentions(): JsonField<List<UserMention>> = userMentions
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -5845,10 +5823,137 @@ private constructor(
         /** A builder for [Entities]. */
         class Builder internal constructor() {
 
+            private var hashtags: JsonField<MutableList<Hashtag>>? = null
+            private var smarttags: JsonField<MutableList<Smarttag>>? = null
+            private var symbols: JsonField<MutableList<Symbol>>? = null
+            private var timestamps: JsonField<MutableList<Timestamp>>? = null
+            private var urls: JsonField<MutableList<Url>>? = null
+            private var userMentions: JsonField<MutableList<UserMention>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(entities: Entities) = apply {
+                hashtags = entities.hashtags.map { it.toMutableList() }
+                smarttags = entities.smarttags.map { it.toMutableList() }
+                symbols = entities.symbols.map { it.toMutableList() }
+                timestamps = entities.timestamps.map { it.toMutableList() }
+                urls = entities.urls.map { it.toMutableList() }
+                userMentions = entities.userMentions.map { it.toMutableList() }
                 additionalProperties = entities.additionalProperties.toMutableMap()
+            }
+
+            fun hashtags(hashtags: List<Hashtag>) = hashtags(JsonField.of(hashtags))
+
+            /** Sets [Builder.hashtags] to an arbitrary JSON value. */
+            fun hashtags(hashtags: JsonField<List<Hashtag>>) = apply {
+                this.hashtags = hashtags.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [Hashtag] to [hashtags].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addHashtag(hashtag: Hashtag) = apply {
+                hashtags =
+                    (hashtags ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("hashtags", it).add(hashtag)
+                    }
+            }
+
+            fun smarttags(smarttags: List<Smarttag>) = smarttags(JsonField.of(smarttags))
+
+            /** Sets [Builder.smarttags] to an arbitrary JSON value. */
+            fun smarttags(smarttags: JsonField<List<Smarttag>>) = apply {
+                this.smarttags = smarttags.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [Smarttag] to [smarttags].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addSmarttag(smarttag: Smarttag) = apply {
+                smarttags =
+                    (smarttags ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("smarttags", it).add(smarttag)
+                    }
+            }
+
+            fun symbols(symbols: List<Symbol>) = symbols(JsonField.of(symbols))
+
+            /** Sets [Builder.symbols] to an arbitrary JSON value. */
+            fun symbols(symbols: JsonField<List<Symbol>>) = apply {
+                this.symbols = symbols.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [Symbol] to [symbols].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addSymbol(symbol: Symbol) = apply {
+                symbols =
+                    (symbols ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("symbols", it).add(symbol)
+                    }
+            }
+
+            fun timestamps(timestamps: List<Timestamp>) = timestamps(JsonField.of(timestamps))
+
+            /** Sets [Builder.timestamps] to an arbitrary JSON value. */
+            fun timestamps(timestamps: JsonField<List<Timestamp>>) = apply {
+                this.timestamps = timestamps.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [Timestamp] to [timestamps].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addTimestamp(timestamp: Timestamp) = apply {
+                timestamps =
+                    (timestamps ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("timestamps", it).add(timestamp)
+                    }
+            }
+
+            fun urls(urls: List<Url>) = urls(JsonField.of(urls))
+
+            /** Sets [Builder.urls] to an arbitrary JSON value. */
+            fun urls(urls: JsonField<List<Url>>) = apply {
+                this.urls = urls.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [Url] to [urls].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addUrl(url: Url) = apply {
+                urls =
+                    (urls ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("urls", it).add(url)
+                    }
+            }
+
+            fun userMentions(userMentions: List<UserMention>) =
+                userMentions(JsonField.of(userMentions))
+
+            /** Sets [Builder.userMentions] to an arbitrary JSON value. */
+            fun userMentions(userMentions: JsonField<List<UserMention>>) = apply {
+                this.userMentions = userMentions.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [UserMention] to [userMentions].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addUserMention(userMention: UserMention) = apply {
+                userMentions =
+                    (userMentions ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("userMentions", it).add(userMention)
+                    }
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -5875,7 +5980,16 @@ private constructor(
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              */
-            fun build(): Entities = Entities(additionalProperties.toImmutable())
+            fun build(): Entities =
+                Entities(
+                    (hashtags ?: JsonMissing.of()).map { it.toImmutable() },
+                    (smarttags ?: JsonMissing.of()).map { it.toImmutable() },
+                    (symbols ?: JsonMissing.of()).map { it.toImmutable() },
+                    (timestamps ?: JsonMissing.of()).map { it.toImmutable() },
+                    (urls ?: JsonMissing.of()).map { it.toImmutable() },
+                    (userMentions ?: JsonMissing.of()).map { it.toImmutable() },
+                    additionalProperties.toMutableMap(),
+                )
         }
 
         private var validated: Boolean = false
@@ -5894,6 +6008,12 @@ private constructor(
                 return@apply
             }
 
+            hashtags()?.forEach { it.validate() }
+            smarttags()?.forEach { it.validate() }
+            symbols()?.forEach { it.validate() }
+            timestamps()?.forEach { it.validate() }
+            urls()?.forEach { it.validate() }
+            userMentions()?.forEach { it.validate() }
             validated = true
         }
 
@@ -5905,8 +6025,3624 @@ private constructor(
                 false
             }
 
-        internal fun validity(): Int = additionalProperties.count { (_, value) ->
-            !value.isNull() && !value.isMissing()
+        internal fun validity(): Int =
+            (hashtags.asKnown()?.sumOf { it.validity() } ?: 0) +
+                (smarttags.asKnown()?.sumOf { it.validity() } ?: 0) +
+                (symbols.asKnown()?.sumOf { it.validity() } ?: 0) +
+                (timestamps.asKnown()?.sumOf { it.validity() } ?: 0) +
+                (urls.asKnown()?.sumOf { it.validity() } ?: 0) +
+                (userMentions.asKnown()?.sumOf { it.validity() } ?: 0)
+
+        /** Hashtag text and its source offsets in a tweet. */
+        class Hashtag
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val text: JsonField<String>,
+            private val indices: JsonField<List<Long>>,
+            private val tag: JsonField<Tag>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("text") @ExcludeMissing text: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("indices")
+                @ExcludeMissing
+                indices: JsonField<List<Long>> = JsonMissing.of(),
+                @JsonProperty("tag") @ExcludeMissing tag: JsonField<Tag> = JsonMissing.of(),
+            ) : this(text, indices, tag, mutableMapOf())
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
+             *   or is unexpectedly missing or null.
+             */
+            fun text(): String = text.getRequired("text")
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun indices(): List<Long>? = indices.getNullable("indices")
+
+            /**
+             * X's SmartTag for a cashtag, smarttag or hashtag. Xquik leaves out X's trading
+             * platforms, which differ by reader.
+             *
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun tag(): Tag? = tag.getNullable("tag")
+
+            /**
+             * Returns the raw JSON value of [text].
+             *
+             * Unlike [text], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("text") @ExcludeMissing fun _text(): JsonField<String> = text
+
+            /**
+             * Returns the raw JSON value of [indices].
+             *
+             * Unlike [indices], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("indices") @ExcludeMissing fun _indices(): JsonField<List<Long>> = indices
+
+            /**
+             * Returns the raw JSON value of [tag].
+             *
+             * Unlike [tag], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("tag") @ExcludeMissing fun _tag(): JsonField<Tag> = tag
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /**
+                 * Returns a mutable builder for constructing an instance of [Hashtag].
+                 *
+                 * The following fields are required:
+                 * ```kotlin
+                 * .text()
+                 * ```
+                 */
+                fun builder() = Builder()
+            }
+
+            /** A builder for [Hashtag]. */
+            class Builder internal constructor() {
+
+                private var text: JsonField<String>? = null
+                private var indices: JsonField<MutableList<Long>>? = null
+                private var tag: JsonField<Tag> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                internal fun from(hashtag: Hashtag) = apply {
+                    text = hashtag.text
+                    indices = hashtag.indices.map { it.toMutableList() }
+                    tag = hashtag.tag
+                    additionalProperties = hashtag.additionalProperties.toMutableMap()
+                }
+
+                fun text(text: String) = text(JsonField.of(text))
+
+                /** Sets [Builder.text] to an arbitrary JSON value. */
+                fun text(text: JsonField<String>) = apply { this.text = text }
+
+                fun indices(indices: List<Long>) = indices(JsonField.of(indices))
+
+                /** Sets [Builder.indices] to an arbitrary JSON value. */
+                fun indices(indices: JsonField<List<Long>>) = apply {
+                    this.indices = indices.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [Long] to [indices].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addIndex(index: Long) = apply {
+                    indices =
+                        (indices ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("indices", it).add(index)
+                        }
+                }
+
+                /**
+                 * X's SmartTag for a cashtag, smarttag or hashtag. Xquik leaves out X's trading
+                 * platforms, which differ by reader.
+                 */
+                fun tag(tag: Tag) = tag(JsonField.of(tag))
+
+                /** Sets [Builder.tag] to an arbitrary JSON value. */
+                fun tag(tag: JsonField<Tag>) = apply { this.tag = tag }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Hashtag].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```kotlin
+                 * .text()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
+                fun build(): Hashtag =
+                    Hashtag(
+                        checkRequired("text", text),
+                        (indices ?: JsonMissing.of()).map { it.toImmutable() },
+                        tag,
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+             *   match its expected type.
+             */
+            fun validate(): Hashtag = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                text()
+                indices()
+                tag()?.validate()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: XTwitterScraperInvalidDataException) {
+                    false
+                }
+
+            internal fun validity(): Int =
+                (if (text.asKnown() == null) 0 else 1) +
+                    (indices.asKnown()?.size ?: 0) +
+                    (tag.asKnown()?.validity() ?: 0)
+
+            /**
+             * X's SmartTag for a cashtag, smarttag or hashtag. Xquik leaves out X's trading
+             * platforms, which differ by reader.
+             */
+            class Tag
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+            private constructor(
+                private val id: JsonField<String>,
+                private val info: JsonField<Info>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
+            ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("info") @ExcludeMissing info: JsonField<Info> = JsonMissing.of(),
+                ) : this(id, info, mutableMapOf())
+
+                /**
+                 * X's ID for the SmartTag.
+                 *
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun id(): String? = id.getNullable("id")
+
+                /**
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun info(): Info? = info.getNullable("info")
+
+                /**
+                 * Returns the raw JSON value of [id].
+                 *
+                 * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+                 */
+                @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+                /**
+                 * Returns the raw JSON value of [info].
+                 *
+                 * Unlike [info], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("info") @ExcludeMissing fun _info(): JsonField<Info> = info
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /** Returns a mutable builder for constructing an instance of [Tag]. */
+                    fun builder() = Builder()
+                }
+
+                /** A builder for [Tag]. */
+                class Builder internal constructor() {
+
+                    private var id: JsonField<String> = JsonMissing.of()
+                    private var info: JsonField<Info> = JsonMissing.of()
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    internal fun from(tag: Tag) = apply {
+                        id = tag.id
+                        info = tag.info
+                        additionalProperties = tag.additionalProperties.toMutableMap()
+                    }
+
+                    /** X's ID for the SmartTag. */
+                    fun id(id: String) = id(JsonField.of(id))
+
+                    /** Sets [Builder.id] to an arbitrary JSON value. */
+                    fun id(id: JsonField<String>) = apply { this.id = id }
+
+                    fun info(info: Info) = info(JsonField.of(info))
+
+                    /** Sets [Builder.info] to an arbitrary JSON value. */
+                    fun info(info: JsonField<Info>) = apply { this.info = info }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [Tag].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
+                    fun build(): Tag = Tag(id, info, additionalProperties.toMutableMap())
+                }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws XTwitterScraperInvalidDataException if any value type in this object
+                 *   doesn't match its expected type.
+                 */
+                fun validate(): Tag = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    id()
+                    info()?.validate()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: XTwitterScraperInvalidDataException) {
+                        false
+                    }
+
+                internal fun validity(): Int =
+                    (if (id.asKnown() == null) 0 else 1) + (info.asKnown()?.validity() ?: 0)
+
+                class Info
+                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+                private constructor(
+                    private val info: JsonField<InnerInfo>,
+                    private val additionalProperties: MutableMap<String, JsonValue>,
+                ) {
+
+                    @JsonCreator
+                    private constructor(
+                        @JsonProperty("info")
+                        @ExcludeMissing
+                        info: JsonField<InnerInfo> = JsonMissing.of()
+                    ) : this(info, mutableMapOf())
+
+                    /**
+                     * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                     *   unexpected type.
+                     */
+                    fun info(): InnerInfo? = info.getNullable("info")
+
+                    /**
+                     * Returns the raw JSON value of [info].
+                     *
+                     * Unlike [info], this method doesn't throw if the JSON field has an unexpected
+                     * type.
+                     */
+                    @JsonProperty("info") @ExcludeMissing fun _info(): JsonField<InnerInfo> = info
+
+                    @JsonAnySetter
+                    private fun putAdditionalProperty(key: String, value: JsonValue) {
+                        additionalProperties.put(key, value)
+                    }
+
+                    @JsonAnyGetter
+                    @ExcludeMissing
+                    fun _additionalProperties(): Map<String, JsonValue> =
+                        Collections.unmodifiableMap(additionalProperties)
+
+                    fun toBuilder() = Builder().from(this)
+
+                    companion object {
+
+                        /** Returns a mutable builder for constructing an instance of [Info]. */
+                        fun builder() = Builder()
+                    }
+
+                    /** A builder for [Info]. */
+                    class Builder internal constructor() {
+
+                        private var info: JsonField<InnerInfo> = JsonMissing.of()
+                        private var additionalProperties: MutableMap<String, JsonValue> =
+                            mutableMapOf()
+
+                        internal fun from(info: Info) = apply {
+                            this.info = info.info
+                            additionalProperties = info.additionalProperties.toMutableMap()
+                        }
+
+                        fun info(info: InnerInfo) = info(JsonField.of(info))
+
+                        /** Sets [Builder.info] to an arbitrary JSON value. */
+                        fun info(info: JsonField<InnerInfo>) = apply { this.info = info }
+
+                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                            apply {
+                                this.additionalProperties.clear()
+                                putAllAdditionalProperties(additionalProperties)
+                            }
+
+                        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                            additionalProperties.put(key, value)
+                        }
+
+                        fun putAllAdditionalProperties(
+                            additionalProperties: Map<String, JsonValue>
+                        ) = apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                        fun removeAdditionalProperty(key: String) = apply {
+                            additionalProperties.remove(key)
+                        }
+
+                        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                            keys.forEach(::removeAdditionalProperty)
+                        }
+
+                        /**
+                         * Returns an immutable instance of [Info].
+                         *
+                         * Further updates to this [Builder] will not mutate the returned instance.
+                         */
+                        fun build(): Info = Info(info, additionalProperties.toMutableMap())
+                    }
+
+                    private var validated: Boolean = false
+
+                    /**
+                     * Validates that the types of all values in this object match their expected
+                     * types recursively.
+                     *
+                     * This method is _not_ forwards compatible with new types from the API for
+                     * existing fields.
+                     *
+                     * @throws XTwitterScraperInvalidDataException if any value type in this object
+                     *   doesn't match its expected type.
+                     */
+                    fun validate(): Info = apply {
+                        if (validated) {
+                            return@apply
+                        }
+
+                        info()?.validate()
+                        validated = true
+                    }
+
+                    fun isValid(): Boolean =
+                        try {
+                            validate()
+                            true
+                        } catch (e: XTwitterScraperInvalidDataException) {
+                            false
+                        }
+
+                    internal fun validity(): Int = (info.asKnown()?.validity() ?: 0)
+
+                    class InnerInfo
+                    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+                    private constructor(
+                        private val active: JsonField<Boolean>,
+                        private val name: JsonField<String>,
+                        private val ticker: JsonField<String>,
+                        private val additionalProperties: MutableMap<String, JsonValue>,
+                    ) {
+
+                        @JsonCreator
+                        private constructor(
+                            @JsonProperty("active")
+                            @ExcludeMissing
+                            active: JsonField<Boolean> = JsonMissing.of(),
+                            @JsonProperty("name")
+                            @ExcludeMissing
+                            name: JsonField<String> = JsonMissing.of(),
+                            @JsonProperty("ticker")
+                            @ExcludeMissing
+                            ticker: JsonField<String> = JsonMissing.of(),
+                        ) : this(active, name, ticker, mutableMapOf())
+
+                        /**
+                         * Whether X marks the SmartTag active.
+                         *
+                         * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                         *   unexpected type.
+                         */
+                        fun active(): Boolean? = active.getNullable("active")
+
+                        /**
+                         * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                         *   unexpected type.
+                         */
+                        fun name(): String? = name.getNullable("name")
+
+                        /**
+                         * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                         *   unexpected type.
+                         */
+                        fun ticker(): String? = ticker.getNullable("ticker")
+
+                        /**
+                         * Returns the raw JSON value of [active].
+                         *
+                         * Unlike [active], this method doesn't throw if the JSON field has an
+                         * unexpected type.
+                         */
+                        @JsonProperty("active")
+                        @ExcludeMissing
+                        fun _active(): JsonField<Boolean> = active
+
+                        /**
+                         * Returns the raw JSON value of [name].
+                         *
+                         * Unlike [name], this method doesn't throw if the JSON field has an
+                         * unexpected type.
+                         */
+                        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+                        /**
+                         * Returns the raw JSON value of [ticker].
+                         *
+                         * Unlike [ticker], this method doesn't throw if the JSON field has an
+                         * unexpected type.
+                         */
+                        @JsonProperty("ticker")
+                        @ExcludeMissing
+                        fun _ticker(): JsonField<String> = ticker
+
+                        @JsonAnySetter
+                        private fun putAdditionalProperty(key: String, value: JsonValue) {
+                            additionalProperties.put(key, value)
+                        }
+
+                        @JsonAnyGetter
+                        @ExcludeMissing
+                        fun _additionalProperties(): Map<String, JsonValue> =
+                            Collections.unmodifiableMap(additionalProperties)
+
+                        fun toBuilder() = Builder().from(this)
+
+                        companion object {
+
+                            /**
+                             * Returns a mutable builder for constructing an instance of
+                             * [InnerInfo].
+                             */
+                            fun builder() = Builder()
+                        }
+
+                        /** A builder for [InnerInfo]. */
+                        class Builder internal constructor() {
+
+                            private var active: JsonField<Boolean> = JsonMissing.of()
+                            private var name: JsonField<String> = JsonMissing.of()
+                            private var ticker: JsonField<String> = JsonMissing.of()
+                            private var additionalProperties: MutableMap<String, JsonValue> =
+                                mutableMapOf()
+
+                            internal fun from(innerInfo: InnerInfo) = apply {
+                                active = innerInfo.active
+                                name = innerInfo.name
+                                ticker = innerInfo.ticker
+                                additionalProperties = innerInfo.additionalProperties.toMutableMap()
+                            }
+
+                            /** Whether X marks the SmartTag active. */
+                            fun active(active: Boolean) = active(JsonField.of(active))
+
+                            /** Sets [Builder.active] to an arbitrary JSON value. */
+                            fun active(active: JsonField<Boolean>) = apply { this.active = active }
+
+                            fun name(name: String) = name(JsonField.of(name))
+
+                            /** Sets [Builder.name] to an arbitrary JSON value. */
+                            fun name(name: JsonField<String>) = apply { this.name = name }
+
+                            fun ticker(ticker: String) = ticker(JsonField.of(ticker))
+
+                            /** Sets [Builder.ticker] to an arbitrary JSON value. */
+                            fun ticker(ticker: JsonField<String>) = apply { this.ticker = ticker }
+
+                            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                                apply {
+                                    this.additionalProperties.clear()
+                                    putAllAdditionalProperties(additionalProperties)
+                                }
+
+                            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                                additionalProperties.put(key, value)
+                            }
+
+                            fun putAllAdditionalProperties(
+                                additionalProperties: Map<String, JsonValue>
+                            ) = apply {
+                                this.additionalProperties.putAll(additionalProperties)
+                            }
+
+                            fun removeAdditionalProperty(key: String) = apply {
+                                additionalProperties.remove(key)
+                            }
+
+                            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                                keys.forEach(::removeAdditionalProperty)
+                            }
+
+                            /**
+                             * Returns an immutable instance of [InnerInfo].
+                             *
+                             * Further updates to this [Builder] will not mutate the returned
+                             * instance.
+                             */
+                            fun build(): InnerInfo =
+                                InnerInfo(active, name, ticker, additionalProperties.toMutableMap())
+                        }
+
+                        private var validated: Boolean = false
+
+                        /**
+                         * Validates that the types of all values in this object match their
+                         * expected types recursively.
+                         *
+                         * This method is _not_ forwards compatible with new types from the API for
+                         * existing fields.
+                         *
+                         * @throws XTwitterScraperInvalidDataException if any value type in this
+                         *   object doesn't match its expected type.
+                         */
+                        fun validate(): InnerInfo = apply {
+                            if (validated) {
+                                return@apply
+                            }
+
+                            active()
+                            name()
+                            ticker()
+                            validated = true
+                        }
+
+                        fun isValid(): Boolean =
+                            try {
+                                validate()
+                                true
+                            } catch (e: XTwitterScraperInvalidDataException) {
+                                false
+                            }
+
+                        internal fun validity(): Int =
+                            (if (active.asKnown() == null) 0 else 1) +
+                                (if (name.asKnown() == null) 0 else 1) +
+                                (if (ticker.asKnown() == null) 0 else 1)
+
+                        override fun equals(other: Any?): Boolean {
+                            if (this === other) {
+                                return true
+                            }
+
+                            return other is InnerInfo &&
+                                active == other.active &&
+                                name == other.name &&
+                                ticker == other.ticker &&
+                                additionalProperties == other.additionalProperties
+                        }
+
+                        private val hashCode: Int by lazy {
+                            Objects.hash(active, name, ticker, additionalProperties)
+                        }
+
+                        override fun hashCode(): Int = hashCode
+
+                        override fun toString() =
+                            "InnerInfo{active=$active, name=$name, ticker=$ticker, additionalProperties=$additionalProperties}"
+                    }
+
+                    override fun equals(other: Any?): Boolean {
+                        if (this === other) {
+                            return true
+                        }
+
+                        return other is Info &&
+                            info == other.info &&
+                            additionalProperties == other.additionalProperties
+                    }
+
+                    private val hashCode: Int by lazy {
+                        Objects.hash(info, additionalProperties)
+                    }
+
+                    override fun hashCode(): Int = hashCode
+
+                    override fun toString() =
+                        "Info{info=$info, additionalProperties=$additionalProperties}"
+                }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is Tag &&
+                        id == other.id &&
+                        info == other.info &&
+                        additionalProperties == other.additionalProperties
+                }
+
+                private val hashCode: Int by lazy {
+                    Objects.hash(id, info, additionalProperties)
+                }
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() =
+                    "Tag{id=$id, info=$info, additionalProperties=$additionalProperties}"
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Hashtag &&
+                    text == other.text &&
+                    indices == other.indices &&
+                    tag == other.tag &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(text, indices, tag, additionalProperties)
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "Hashtag{text=$text, indices=$indices, tag=$tag, additionalProperties=$additionalProperties}"
+        }
+
+        /** Indexed smart-tag, cashtag, or video timestamp metadata. */
+        class Smarttag
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val indices: JsonField<List<Long>>,
+            private val seconds: JsonField<Double>,
+            private val tag: JsonField<Tag>,
+            private val text: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("indices")
+                @ExcludeMissing
+                indices: JsonField<List<Long>> = JsonMissing.of(),
+                @JsonProperty("seconds")
+                @ExcludeMissing
+                seconds: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("tag") @ExcludeMissing tag: JsonField<Tag> = JsonMissing.of(),
+                @JsonProperty("text") @ExcludeMissing text: JsonField<String> = JsonMissing.of(),
+            ) : this(indices, seconds, tag, text, mutableMapOf())
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun indices(): List<Long>? = indices.getNullable("indices")
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun seconds(): Double? = seconds.getNullable("seconds")
+
+            /**
+             * X's SmartTag for a cashtag, smarttag or hashtag. Xquik leaves out X's trading
+             * platforms, which differ by reader.
+             *
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun tag(): Tag? = tag.getNullable("tag")
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun text(): String? = text.getNullable("text")
+
+            /**
+             * Returns the raw JSON value of [indices].
+             *
+             * Unlike [indices], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("indices") @ExcludeMissing fun _indices(): JsonField<List<Long>> = indices
+
+            /**
+             * Returns the raw JSON value of [seconds].
+             *
+             * Unlike [seconds], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("seconds") @ExcludeMissing fun _seconds(): JsonField<Double> = seconds
+
+            /**
+             * Returns the raw JSON value of [tag].
+             *
+             * Unlike [tag], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("tag") @ExcludeMissing fun _tag(): JsonField<Tag> = tag
+
+            /**
+             * Returns the raw JSON value of [text].
+             *
+             * Unlike [text], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("text") @ExcludeMissing fun _text(): JsonField<String> = text
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /** Returns a mutable builder for constructing an instance of [Smarttag]. */
+                fun builder() = Builder()
+            }
+
+            /** A builder for [Smarttag]. */
+            class Builder internal constructor() {
+
+                private var indices: JsonField<MutableList<Long>>? = null
+                private var seconds: JsonField<Double> = JsonMissing.of()
+                private var tag: JsonField<Tag> = JsonMissing.of()
+                private var text: JsonField<String> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                internal fun from(smarttag: Smarttag) = apply {
+                    indices = smarttag.indices.map { it.toMutableList() }
+                    seconds = smarttag.seconds
+                    tag = smarttag.tag
+                    text = smarttag.text
+                    additionalProperties = smarttag.additionalProperties.toMutableMap()
+                }
+
+                fun indices(indices: List<Long>) = indices(JsonField.of(indices))
+
+                /** Sets [Builder.indices] to an arbitrary JSON value. */
+                fun indices(indices: JsonField<List<Long>>) = apply {
+                    this.indices = indices.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [Long] to [indices].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addIndex(index: Long) = apply {
+                    indices =
+                        (indices ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("indices", it).add(index)
+                        }
+                }
+
+                fun seconds(seconds: Double) = seconds(JsonField.of(seconds))
+
+                /** Sets [Builder.seconds] to an arbitrary JSON value. */
+                fun seconds(seconds: JsonField<Double>) = apply { this.seconds = seconds }
+
+                /**
+                 * X's SmartTag for a cashtag, smarttag or hashtag. Xquik leaves out X's trading
+                 * platforms, which differ by reader.
+                 */
+                fun tag(tag: Tag) = tag(JsonField.of(tag))
+
+                /** Sets [Builder.tag] to an arbitrary JSON value. */
+                fun tag(tag: JsonField<Tag>) = apply { this.tag = tag }
+
+                fun text(text: String) = text(JsonField.of(text))
+
+                /** Sets [Builder.text] to an arbitrary JSON value. */
+                fun text(text: JsonField<String>) = apply { this.text = text }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Smarttag].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
+                fun build(): Smarttag =
+                    Smarttag(
+                        (indices ?: JsonMissing.of()).map { it.toImmutable() },
+                        seconds,
+                        tag,
+                        text,
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+             *   match its expected type.
+             */
+            fun validate(): Smarttag = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                indices()
+                seconds()
+                tag()?.validate()
+                text()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: XTwitterScraperInvalidDataException) {
+                    false
+                }
+
+            internal fun validity(): Int =
+                (indices.asKnown()?.size ?: 0) +
+                    (if (seconds.asKnown() == null) 0 else 1) +
+                    (tag.asKnown()?.validity() ?: 0) +
+                    (if (text.asKnown() == null) 0 else 1)
+
+            /**
+             * X's SmartTag for a cashtag, smarttag or hashtag. Xquik leaves out X's trading
+             * platforms, which differ by reader.
+             */
+            class Tag
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+            private constructor(
+                private val id: JsonField<String>,
+                private val info: JsonField<Info>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
+            ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("info") @ExcludeMissing info: JsonField<Info> = JsonMissing.of(),
+                ) : this(id, info, mutableMapOf())
+
+                /**
+                 * X's ID for the SmartTag.
+                 *
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun id(): String? = id.getNullable("id")
+
+                /**
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun info(): Info? = info.getNullable("info")
+
+                /**
+                 * Returns the raw JSON value of [id].
+                 *
+                 * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+                 */
+                @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+                /**
+                 * Returns the raw JSON value of [info].
+                 *
+                 * Unlike [info], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("info") @ExcludeMissing fun _info(): JsonField<Info> = info
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /** Returns a mutable builder for constructing an instance of [Tag]. */
+                    fun builder() = Builder()
+                }
+
+                /** A builder for [Tag]. */
+                class Builder internal constructor() {
+
+                    private var id: JsonField<String> = JsonMissing.of()
+                    private var info: JsonField<Info> = JsonMissing.of()
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    internal fun from(tag: Tag) = apply {
+                        id = tag.id
+                        info = tag.info
+                        additionalProperties = tag.additionalProperties.toMutableMap()
+                    }
+
+                    /** X's ID for the SmartTag. */
+                    fun id(id: String) = id(JsonField.of(id))
+
+                    /** Sets [Builder.id] to an arbitrary JSON value. */
+                    fun id(id: JsonField<String>) = apply { this.id = id }
+
+                    fun info(info: Info) = info(JsonField.of(info))
+
+                    /** Sets [Builder.info] to an arbitrary JSON value. */
+                    fun info(info: JsonField<Info>) = apply { this.info = info }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [Tag].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
+                    fun build(): Tag = Tag(id, info, additionalProperties.toMutableMap())
+                }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws XTwitterScraperInvalidDataException if any value type in this object
+                 *   doesn't match its expected type.
+                 */
+                fun validate(): Tag = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    id()
+                    info()?.validate()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: XTwitterScraperInvalidDataException) {
+                        false
+                    }
+
+                internal fun validity(): Int =
+                    (if (id.asKnown() == null) 0 else 1) + (info.asKnown()?.validity() ?: 0)
+
+                class Info
+                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+                private constructor(
+                    private val info: JsonField<InnerInfo>,
+                    private val additionalProperties: MutableMap<String, JsonValue>,
+                ) {
+
+                    @JsonCreator
+                    private constructor(
+                        @JsonProperty("info")
+                        @ExcludeMissing
+                        info: JsonField<InnerInfo> = JsonMissing.of()
+                    ) : this(info, mutableMapOf())
+
+                    /**
+                     * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                     *   unexpected type.
+                     */
+                    fun info(): InnerInfo? = info.getNullable("info")
+
+                    /**
+                     * Returns the raw JSON value of [info].
+                     *
+                     * Unlike [info], this method doesn't throw if the JSON field has an unexpected
+                     * type.
+                     */
+                    @JsonProperty("info") @ExcludeMissing fun _info(): JsonField<InnerInfo> = info
+
+                    @JsonAnySetter
+                    private fun putAdditionalProperty(key: String, value: JsonValue) {
+                        additionalProperties.put(key, value)
+                    }
+
+                    @JsonAnyGetter
+                    @ExcludeMissing
+                    fun _additionalProperties(): Map<String, JsonValue> =
+                        Collections.unmodifiableMap(additionalProperties)
+
+                    fun toBuilder() = Builder().from(this)
+
+                    companion object {
+
+                        /** Returns a mutable builder for constructing an instance of [Info]. */
+                        fun builder() = Builder()
+                    }
+
+                    /** A builder for [Info]. */
+                    class Builder internal constructor() {
+
+                        private var info: JsonField<InnerInfo> = JsonMissing.of()
+                        private var additionalProperties: MutableMap<String, JsonValue> =
+                            mutableMapOf()
+
+                        internal fun from(info: Info) = apply {
+                            this.info = info.info
+                            additionalProperties = info.additionalProperties.toMutableMap()
+                        }
+
+                        fun info(info: InnerInfo) = info(JsonField.of(info))
+
+                        /** Sets [Builder.info] to an arbitrary JSON value. */
+                        fun info(info: JsonField<InnerInfo>) = apply { this.info = info }
+
+                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                            apply {
+                                this.additionalProperties.clear()
+                                putAllAdditionalProperties(additionalProperties)
+                            }
+
+                        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                            additionalProperties.put(key, value)
+                        }
+
+                        fun putAllAdditionalProperties(
+                            additionalProperties: Map<String, JsonValue>
+                        ) = apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                        fun removeAdditionalProperty(key: String) = apply {
+                            additionalProperties.remove(key)
+                        }
+
+                        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                            keys.forEach(::removeAdditionalProperty)
+                        }
+
+                        /**
+                         * Returns an immutable instance of [Info].
+                         *
+                         * Further updates to this [Builder] will not mutate the returned instance.
+                         */
+                        fun build(): Info = Info(info, additionalProperties.toMutableMap())
+                    }
+
+                    private var validated: Boolean = false
+
+                    /**
+                     * Validates that the types of all values in this object match their expected
+                     * types recursively.
+                     *
+                     * This method is _not_ forwards compatible with new types from the API for
+                     * existing fields.
+                     *
+                     * @throws XTwitterScraperInvalidDataException if any value type in this object
+                     *   doesn't match its expected type.
+                     */
+                    fun validate(): Info = apply {
+                        if (validated) {
+                            return@apply
+                        }
+
+                        info()?.validate()
+                        validated = true
+                    }
+
+                    fun isValid(): Boolean =
+                        try {
+                            validate()
+                            true
+                        } catch (e: XTwitterScraperInvalidDataException) {
+                            false
+                        }
+
+                    internal fun validity(): Int = (info.asKnown()?.validity() ?: 0)
+
+                    class InnerInfo
+                    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+                    private constructor(
+                        private val active: JsonField<Boolean>,
+                        private val name: JsonField<String>,
+                        private val ticker: JsonField<String>,
+                        private val additionalProperties: MutableMap<String, JsonValue>,
+                    ) {
+
+                        @JsonCreator
+                        private constructor(
+                            @JsonProperty("active")
+                            @ExcludeMissing
+                            active: JsonField<Boolean> = JsonMissing.of(),
+                            @JsonProperty("name")
+                            @ExcludeMissing
+                            name: JsonField<String> = JsonMissing.of(),
+                            @JsonProperty("ticker")
+                            @ExcludeMissing
+                            ticker: JsonField<String> = JsonMissing.of(),
+                        ) : this(active, name, ticker, mutableMapOf())
+
+                        /**
+                         * Whether X marks the SmartTag active.
+                         *
+                         * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                         *   unexpected type.
+                         */
+                        fun active(): Boolean? = active.getNullable("active")
+
+                        /**
+                         * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                         *   unexpected type.
+                         */
+                        fun name(): String? = name.getNullable("name")
+
+                        /**
+                         * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                         *   unexpected type.
+                         */
+                        fun ticker(): String? = ticker.getNullable("ticker")
+
+                        /**
+                         * Returns the raw JSON value of [active].
+                         *
+                         * Unlike [active], this method doesn't throw if the JSON field has an
+                         * unexpected type.
+                         */
+                        @JsonProperty("active")
+                        @ExcludeMissing
+                        fun _active(): JsonField<Boolean> = active
+
+                        /**
+                         * Returns the raw JSON value of [name].
+                         *
+                         * Unlike [name], this method doesn't throw if the JSON field has an
+                         * unexpected type.
+                         */
+                        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+                        /**
+                         * Returns the raw JSON value of [ticker].
+                         *
+                         * Unlike [ticker], this method doesn't throw if the JSON field has an
+                         * unexpected type.
+                         */
+                        @JsonProperty("ticker")
+                        @ExcludeMissing
+                        fun _ticker(): JsonField<String> = ticker
+
+                        @JsonAnySetter
+                        private fun putAdditionalProperty(key: String, value: JsonValue) {
+                            additionalProperties.put(key, value)
+                        }
+
+                        @JsonAnyGetter
+                        @ExcludeMissing
+                        fun _additionalProperties(): Map<String, JsonValue> =
+                            Collections.unmodifiableMap(additionalProperties)
+
+                        fun toBuilder() = Builder().from(this)
+
+                        companion object {
+
+                            /**
+                             * Returns a mutable builder for constructing an instance of
+                             * [InnerInfo].
+                             */
+                            fun builder() = Builder()
+                        }
+
+                        /** A builder for [InnerInfo]. */
+                        class Builder internal constructor() {
+
+                            private var active: JsonField<Boolean> = JsonMissing.of()
+                            private var name: JsonField<String> = JsonMissing.of()
+                            private var ticker: JsonField<String> = JsonMissing.of()
+                            private var additionalProperties: MutableMap<String, JsonValue> =
+                                mutableMapOf()
+
+                            internal fun from(innerInfo: InnerInfo) = apply {
+                                active = innerInfo.active
+                                name = innerInfo.name
+                                ticker = innerInfo.ticker
+                                additionalProperties = innerInfo.additionalProperties.toMutableMap()
+                            }
+
+                            /** Whether X marks the SmartTag active. */
+                            fun active(active: Boolean) = active(JsonField.of(active))
+
+                            /** Sets [Builder.active] to an arbitrary JSON value. */
+                            fun active(active: JsonField<Boolean>) = apply { this.active = active }
+
+                            fun name(name: String) = name(JsonField.of(name))
+
+                            /** Sets [Builder.name] to an arbitrary JSON value. */
+                            fun name(name: JsonField<String>) = apply { this.name = name }
+
+                            fun ticker(ticker: String) = ticker(JsonField.of(ticker))
+
+                            /** Sets [Builder.ticker] to an arbitrary JSON value. */
+                            fun ticker(ticker: JsonField<String>) = apply { this.ticker = ticker }
+
+                            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                                apply {
+                                    this.additionalProperties.clear()
+                                    putAllAdditionalProperties(additionalProperties)
+                                }
+
+                            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                                additionalProperties.put(key, value)
+                            }
+
+                            fun putAllAdditionalProperties(
+                                additionalProperties: Map<String, JsonValue>
+                            ) = apply {
+                                this.additionalProperties.putAll(additionalProperties)
+                            }
+
+                            fun removeAdditionalProperty(key: String) = apply {
+                                additionalProperties.remove(key)
+                            }
+
+                            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                                keys.forEach(::removeAdditionalProperty)
+                            }
+
+                            /**
+                             * Returns an immutable instance of [InnerInfo].
+                             *
+                             * Further updates to this [Builder] will not mutate the returned
+                             * instance.
+                             */
+                            fun build(): InnerInfo =
+                                InnerInfo(active, name, ticker, additionalProperties.toMutableMap())
+                        }
+
+                        private var validated: Boolean = false
+
+                        /**
+                         * Validates that the types of all values in this object match their
+                         * expected types recursively.
+                         *
+                         * This method is _not_ forwards compatible with new types from the API for
+                         * existing fields.
+                         *
+                         * @throws XTwitterScraperInvalidDataException if any value type in this
+                         *   object doesn't match its expected type.
+                         */
+                        fun validate(): InnerInfo = apply {
+                            if (validated) {
+                                return@apply
+                            }
+
+                            active()
+                            name()
+                            ticker()
+                            validated = true
+                        }
+
+                        fun isValid(): Boolean =
+                            try {
+                                validate()
+                                true
+                            } catch (e: XTwitterScraperInvalidDataException) {
+                                false
+                            }
+
+                        internal fun validity(): Int =
+                            (if (active.asKnown() == null) 0 else 1) +
+                                (if (name.asKnown() == null) 0 else 1) +
+                                (if (ticker.asKnown() == null) 0 else 1)
+
+                        override fun equals(other: Any?): Boolean {
+                            if (this === other) {
+                                return true
+                            }
+
+                            return other is InnerInfo &&
+                                active == other.active &&
+                                name == other.name &&
+                                ticker == other.ticker &&
+                                additionalProperties == other.additionalProperties
+                        }
+
+                        private val hashCode: Int by lazy {
+                            Objects.hash(active, name, ticker, additionalProperties)
+                        }
+
+                        override fun hashCode(): Int = hashCode
+
+                        override fun toString() =
+                            "InnerInfo{active=$active, name=$name, ticker=$ticker, additionalProperties=$additionalProperties}"
+                    }
+
+                    override fun equals(other: Any?): Boolean {
+                        if (this === other) {
+                            return true
+                        }
+
+                        return other is Info &&
+                            info == other.info &&
+                            additionalProperties == other.additionalProperties
+                    }
+
+                    private val hashCode: Int by lazy {
+                        Objects.hash(info, additionalProperties)
+                    }
+
+                    override fun hashCode(): Int = hashCode
+
+                    override fun toString() =
+                        "Info{info=$info, additionalProperties=$additionalProperties}"
+                }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is Tag &&
+                        id == other.id &&
+                        info == other.info &&
+                        additionalProperties == other.additionalProperties
+                }
+
+                private val hashCode: Int by lazy {
+                    Objects.hash(id, info, additionalProperties)
+                }
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() =
+                    "Tag{id=$id, info=$info, additionalProperties=$additionalProperties}"
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Smarttag &&
+                    indices == other.indices &&
+                    seconds == other.seconds &&
+                    tag == other.tag &&
+                    text == other.text &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(indices, seconds, tag, text, additionalProperties)
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "Smarttag{indices=$indices, seconds=$seconds, tag=$tag, text=$text, additionalProperties=$additionalProperties}"
+        }
+
+        /** Indexed smart-tag, cashtag, or video timestamp metadata. */
+        class Symbol
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val indices: JsonField<List<Long>>,
+            private val seconds: JsonField<Double>,
+            private val tag: JsonField<Tag>,
+            private val text: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("indices")
+                @ExcludeMissing
+                indices: JsonField<List<Long>> = JsonMissing.of(),
+                @JsonProperty("seconds")
+                @ExcludeMissing
+                seconds: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("tag") @ExcludeMissing tag: JsonField<Tag> = JsonMissing.of(),
+                @JsonProperty("text") @ExcludeMissing text: JsonField<String> = JsonMissing.of(),
+            ) : this(indices, seconds, tag, text, mutableMapOf())
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun indices(): List<Long>? = indices.getNullable("indices")
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun seconds(): Double? = seconds.getNullable("seconds")
+
+            /**
+             * X's SmartTag for a cashtag, smarttag or hashtag. Xquik leaves out X's trading
+             * platforms, which differ by reader.
+             *
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun tag(): Tag? = tag.getNullable("tag")
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun text(): String? = text.getNullable("text")
+
+            /**
+             * Returns the raw JSON value of [indices].
+             *
+             * Unlike [indices], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("indices") @ExcludeMissing fun _indices(): JsonField<List<Long>> = indices
+
+            /**
+             * Returns the raw JSON value of [seconds].
+             *
+             * Unlike [seconds], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("seconds") @ExcludeMissing fun _seconds(): JsonField<Double> = seconds
+
+            /**
+             * Returns the raw JSON value of [tag].
+             *
+             * Unlike [tag], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("tag") @ExcludeMissing fun _tag(): JsonField<Tag> = tag
+
+            /**
+             * Returns the raw JSON value of [text].
+             *
+             * Unlike [text], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("text") @ExcludeMissing fun _text(): JsonField<String> = text
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /** Returns a mutable builder for constructing an instance of [Symbol]. */
+                fun builder() = Builder()
+            }
+
+            /** A builder for [Symbol]. */
+            class Builder internal constructor() {
+
+                private var indices: JsonField<MutableList<Long>>? = null
+                private var seconds: JsonField<Double> = JsonMissing.of()
+                private var tag: JsonField<Tag> = JsonMissing.of()
+                private var text: JsonField<String> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                internal fun from(symbol: Symbol) = apply {
+                    indices = symbol.indices.map { it.toMutableList() }
+                    seconds = symbol.seconds
+                    tag = symbol.tag
+                    text = symbol.text
+                    additionalProperties = symbol.additionalProperties.toMutableMap()
+                }
+
+                fun indices(indices: List<Long>) = indices(JsonField.of(indices))
+
+                /** Sets [Builder.indices] to an arbitrary JSON value. */
+                fun indices(indices: JsonField<List<Long>>) = apply {
+                    this.indices = indices.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [Long] to [indices].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addIndex(index: Long) = apply {
+                    indices =
+                        (indices ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("indices", it).add(index)
+                        }
+                }
+
+                fun seconds(seconds: Double) = seconds(JsonField.of(seconds))
+
+                /** Sets [Builder.seconds] to an arbitrary JSON value. */
+                fun seconds(seconds: JsonField<Double>) = apply { this.seconds = seconds }
+
+                /**
+                 * X's SmartTag for a cashtag, smarttag or hashtag. Xquik leaves out X's trading
+                 * platforms, which differ by reader.
+                 */
+                fun tag(tag: Tag) = tag(JsonField.of(tag))
+
+                /** Sets [Builder.tag] to an arbitrary JSON value. */
+                fun tag(tag: JsonField<Tag>) = apply { this.tag = tag }
+
+                fun text(text: String) = text(JsonField.of(text))
+
+                /** Sets [Builder.text] to an arbitrary JSON value. */
+                fun text(text: JsonField<String>) = apply { this.text = text }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Symbol].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
+                fun build(): Symbol =
+                    Symbol(
+                        (indices ?: JsonMissing.of()).map { it.toImmutable() },
+                        seconds,
+                        tag,
+                        text,
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+             *   match its expected type.
+             */
+            fun validate(): Symbol = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                indices()
+                seconds()
+                tag()?.validate()
+                text()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: XTwitterScraperInvalidDataException) {
+                    false
+                }
+
+            internal fun validity(): Int =
+                (indices.asKnown()?.size ?: 0) +
+                    (if (seconds.asKnown() == null) 0 else 1) +
+                    (tag.asKnown()?.validity() ?: 0) +
+                    (if (text.asKnown() == null) 0 else 1)
+
+            /**
+             * X's SmartTag for a cashtag, smarttag or hashtag. Xquik leaves out X's trading
+             * platforms, which differ by reader.
+             */
+            class Tag
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+            private constructor(
+                private val id: JsonField<String>,
+                private val info: JsonField<Info>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
+            ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("info") @ExcludeMissing info: JsonField<Info> = JsonMissing.of(),
+                ) : this(id, info, mutableMapOf())
+
+                /**
+                 * X's ID for the SmartTag.
+                 *
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun id(): String? = id.getNullable("id")
+
+                /**
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun info(): Info? = info.getNullable("info")
+
+                /**
+                 * Returns the raw JSON value of [id].
+                 *
+                 * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+                 */
+                @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+                /**
+                 * Returns the raw JSON value of [info].
+                 *
+                 * Unlike [info], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("info") @ExcludeMissing fun _info(): JsonField<Info> = info
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /** Returns a mutable builder for constructing an instance of [Tag]. */
+                    fun builder() = Builder()
+                }
+
+                /** A builder for [Tag]. */
+                class Builder internal constructor() {
+
+                    private var id: JsonField<String> = JsonMissing.of()
+                    private var info: JsonField<Info> = JsonMissing.of()
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    internal fun from(tag: Tag) = apply {
+                        id = tag.id
+                        info = tag.info
+                        additionalProperties = tag.additionalProperties.toMutableMap()
+                    }
+
+                    /** X's ID for the SmartTag. */
+                    fun id(id: String) = id(JsonField.of(id))
+
+                    /** Sets [Builder.id] to an arbitrary JSON value. */
+                    fun id(id: JsonField<String>) = apply { this.id = id }
+
+                    fun info(info: Info) = info(JsonField.of(info))
+
+                    /** Sets [Builder.info] to an arbitrary JSON value. */
+                    fun info(info: JsonField<Info>) = apply { this.info = info }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [Tag].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
+                    fun build(): Tag = Tag(id, info, additionalProperties.toMutableMap())
+                }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws XTwitterScraperInvalidDataException if any value type in this object
+                 *   doesn't match its expected type.
+                 */
+                fun validate(): Tag = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    id()
+                    info()?.validate()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: XTwitterScraperInvalidDataException) {
+                        false
+                    }
+
+                internal fun validity(): Int =
+                    (if (id.asKnown() == null) 0 else 1) + (info.asKnown()?.validity() ?: 0)
+
+                class Info
+                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+                private constructor(
+                    private val info: JsonField<InnerInfo>,
+                    private val additionalProperties: MutableMap<String, JsonValue>,
+                ) {
+
+                    @JsonCreator
+                    private constructor(
+                        @JsonProperty("info")
+                        @ExcludeMissing
+                        info: JsonField<InnerInfo> = JsonMissing.of()
+                    ) : this(info, mutableMapOf())
+
+                    /**
+                     * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                     *   unexpected type.
+                     */
+                    fun info(): InnerInfo? = info.getNullable("info")
+
+                    /**
+                     * Returns the raw JSON value of [info].
+                     *
+                     * Unlike [info], this method doesn't throw if the JSON field has an unexpected
+                     * type.
+                     */
+                    @JsonProperty("info") @ExcludeMissing fun _info(): JsonField<InnerInfo> = info
+
+                    @JsonAnySetter
+                    private fun putAdditionalProperty(key: String, value: JsonValue) {
+                        additionalProperties.put(key, value)
+                    }
+
+                    @JsonAnyGetter
+                    @ExcludeMissing
+                    fun _additionalProperties(): Map<String, JsonValue> =
+                        Collections.unmodifiableMap(additionalProperties)
+
+                    fun toBuilder() = Builder().from(this)
+
+                    companion object {
+
+                        /** Returns a mutable builder for constructing an instance of [Info]. */
+                        fun builder() = Builder()
+                    }
+
+                    /** A builder for [Info]. */
+                    class Builder internal constructor() {
+
+                        private var info: JsonField<InnerInfo> = JsonMissing.of()
+                        private var additionalProperties: MutableMap<String, JsonValue> =
+                            mutableMapOf()
+
+                        internal fun from(info: Info) = apply {
+                            this.info = info.info
+                            additionalProperties = info.additionalProperties.toMutableMap()
+                        }
+
+                        fun info(info: InnerInfo) = info(JsonField.of(info))
+
+                        /** Sets [Builder.info] to an arbitrary JSON value. */
+                        fun info(info: JsonField<InnerInfo>) = apply { this.info = info }
+
+                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                            apply {
+                                this.additionalProperties.clear()
+                                putAllAdditionalProperties(additionalProperties)
+                            }
+
+                        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                            additionalProperties.put(key, value)
+                        }
+
+                        fun putAllAdditionalProperties(
+                            additionalProperties: Map<String, JsonValue>
+                        ) = apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                        fun removeAdditionalProperty(key: String) = apply {
+                            additionalProperties.remove(key)
+                        }
+
+                        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                            keys.forEach(::removeAdditionalProperty)
+                        }
+
+                        /**
+                         * Returns an immutable instance of [Info].
+                         *
+                         * Further updates to this [Builder] will not mutate the returned instance.
+                         */
+                        fun build(): Info = Info(info, additionalProperties.toMutableMap())
+                    }
+
+                    private var validated: Boolean = false
+
+                    /**
+                     * Validates that the types of all values in this object match their expected
+                     * types recursively.
+                     *
+                     * This method is _not_ forwards compatible with new types from the API for
+                     * existing fields.
+                     *
+                     * @throws XTwitterScraperInvalidDataException if any value type in this object
+                     *   doesn't match its expected type.
+                     */
+                    fun validate(): Info = apply {
+                        if (validated) {
+                            return@apply
+                        }
+
+                        info()?.validate()
+                        validated = true
+                    }
+
+                    fun isValid(): Boolean =
+                        try {
+                            validate()
+                            true
+                        } catch (e: XTwitterScraperInvalidDataException) {
+                            false
+                        }
+
+                    internal fun validity(): Int = (info.asKnown()?.validity() ?: 0)
+
+                    class InnerInfo
+                    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+                    private constructor(
+                        private val active: JsonField<Boolean>,
+                        private val name: JsonField<String>,
+                        private val ticker: JsonField<String>,
+                        private val additionalProperties: MutableMap<String, JsonValue>,
+                    ) {
+
+                        @JsonCreator
+                        private constructor(
+                            @JsonProperty("active")
+                            @ExcludeMissing
+                            active: JsonField<Boolean> = JsonMissing.of(),
+                            @JsonProperty("name")
+                            @ExcludeMissing
+                            name: JsonField<String> = JsonMissing.of(),
+                            @JsonProperty("ticker")
+                            @ExcludeMissing
+                            ticker: JsonField<String> = JsonMissing.of(),
+                        ) : this(active, name, ticker, mutableMapOf())
+
+                        /**
+                         * Whether X marks the SmartTag active.
+                         *
+                         * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                         *   unexpected type.
+                         */
+                        fun active(): Boolean? = active.getNullable("active")
+
+                        /**
+                         * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                         *   unexpected type.
+                         */
+                        fun name(): String? = name.getNullable("name")
+
+                        /**
+                         * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                         *   unexpected type.
+                         */
+                        fun ticker(): String? = ticker.getNullable("ticker")
+
+                        /**
+                         * Returns the raw JSON value of [active].
+                         *
+                         * Unlike [active], this method doesn't throw if the JSON field has an
+                         * unexpected type.
+                         */
+                        @JsonProperty("active")
+                        @ExcludeMissing
+                        fun _active(): JsonField<Boolean> = active
+
+                        /**
+                         * Returns the raw JSON value of [name].
+                         *
+                         * Unlike [name], this method doesn't throw if the JSON field has an
+                         * unexpected type.
+                         */
+                        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+                        /**
+                         * Returns the raw JSON value of [ticker].
+                         *
+                         * Unlike [ticker], this method doesn't throw if the JSON field has an
+                         * unexpected type.
+                         */
+                        @JsonProperty("ticker")
+                        @ExcludeMissing
+                        fun _ticker(): JsonField<String> = ticker
+
+                        @JsonAnySetter
+                        private fun putAdditionalProperty(key: String, value: JsonValue) {
+                            additionalProperties.put(key, value)
+                        }
+
+                        @JsonAnyGetter
+                        @ExcludeMissing
+                        fun _additionalProperties(): Map<String, JsonValue> =
+                            Collections.unmodifiableMap(additionalProperties)
+
+                        fun toBuilder() = Builder().from(this)
+
+                        companion object {
+
+                            /**
+                             * Returns a mutable builder for constructing an instance of
+                             * [InnerInfo].
+                             */
+                            fun builder() = Builder()
+                        }
+
+                        /** A builder for [InnerInfo]. */
+                        class Builder internal constructor() {
+
+                            private var active: JsonField<Boolean> = JsonMissing.of()
+                            private var name: JsonField<String> = JsonMissing.of()
+                            private var ticker: JsonField<String> = JsonMissing.of()
+                            private var additionalProperties: MutableMap<String, JsonValue> =
+                                mutableMapOf()
+
+                            internal fun from(innerInfo: InnerInfo) = apply {
+                                active = innerInfo.active
+                                name = innerInfo.name
+                                ticker = innerInfo.ticker
+                                additionalProperties = innerInfo.additionalProperties.toMutableMap()
+                            }
+
+                            /** Whether X marks the SmartTag active. */
+                            fun active(active: Boolean) = active(JsonField.of(active))
+
+                            /** Sets [Builder.active] to an arbitrary JSON value. */
+                            fun active(active: JsonField<Boolean>) = apply { this.active = active }
+
+                            fun name(name: String) = name(JsonField.of(name))
+
+                            /** Sets [Builder.name] to an arbitrary JSON value. */
+                            fun name(name: JsonField<String>) = apply { this.name = name }
+
+                            fun ticker(ticker: String) = ticker(JsonField.of(ticker))
+
+                            /** Sets [Builder.ticker] to an arbitrary JSON value. */
+                            fun ticker(ticker: JsonField<String>) = apply { this.ticker = ticker }
+
+                            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                                apply {
+                                    this.additionalProperties.clear()
+                                    putAllAdditionalProperties(additionalProperties)
+                                }
+
+                            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                                additionalProperties.put(key, value)
+                            }
+
+                            fun putAllAdditionalProperties(
+                                additionalProperties: Map<String, JsonValue>
+                            ) = apply {
+                                this.additionalProperties.putAll(additionalProperties)
+                            }
+
+                            fun removeAdditionalProperty(key: String) = apply {
+                                additionalProperties.remove(key)
+                            }
+
+                            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                                keys.forEach(::removeAdditionalProperty)
+                            }
+
+                            /**
+                             * Returns an immutable instance of [InnerInfo].
+                             *
+                             * Further updates to this [Builder] will not mutate the returned
+                             * instance.
+                             */
+                            fun build(): InnerInfo =
+                                InnerInfo(active, name, ticker, additionalProperties.toMutableMap())
+                        }
+
+                        private var validated: Boolean = false
+
+                        /**
+                         * Validates that the types of all values in this object match their
+                         * expected types recursively.
+                         *
+                         * This method is _not_ forwards compatible with new types from the API for
+                         * existing fields.
+                         *
+                         * @throws XTwitterScraperInvalidDataException if any value type in this
+                         *   object doesn't match its expected type.
+                         */
+                        fun validate(): InnerInfo = apply {
+                            if (validated) {
+                                return@apply
+                            }
+
+                            active()
+                            name()
+                            ticker()
+                            validated = true
+                        }
+
+                        fun isValid(): Boolean =
+                            try {
+                                validate()
+                                true
+                            } catch (e: XTwitterScraperInvalidDataException) {
+                                false
+                            }
+
+                        internal fun validity(): Int =
+                            (if (active.asKnown() == null) 0 else 1) +
+                                (if (name.asKnown() == null) 0 else 1) +
+                                (if (ticker.asKnown() == null) 0 else 1)
+
+                        override fun equals(other: Any?): Boolean {
+                            if (this === other) {
+                                return true
+                            }
+
+                            return other is InnerInfo &&
+                                active == other.active &&
+                                name == other.name &&
+                                ticker == other.ticker &&
+                                additionalProperties == other.additionalProperties
+                        }
+
+                        private val hashCode: Int by lazy {
+                            Objects.hash(active, name, ticker, additionalProperties)
+                        }
+
+                        override fun hashCode(): Int = hashCode
+
+                        override fun toString() =
+                            "InnerInfo{active=$active, name=$name, ticker=$ticker, additionalProperties=$additionalProperties}"
+                    }
+
+                    override fun equals(other: Any?): Boolean {
+                        if (this === other) {
+                            return true
+                        }
+
+                        return other is Info &&
+                            info == other.info &&
+                            additionalProperties == other.additionalProperties
+                    }
+
+                    private val hashCode: Int by lazy {
+                        Objects.hash(info, additionalProperties)
+                    }
+
+                    override fun hashCode(): Int = hashCode
+
+                    override fun toString() =
+                        "Info{info=$info, additionalProperties=$additionalProperties}"
+                }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is Tag &&
+                        id == other.id &&
+                        info == other.info &&
+                        additionalProperties == other.additionalProperties
+                }
+
+                private val hashCode: Int by lazy {
+                    Objects.hash(id, info, additionalProperties)
+                }
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() =
+                    "Tag{id=$id, info=$info, additionalProperties=$additionalProperties}"
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Symbol &&
+                    indices == other.indices &&
+                    seconds == other.seconds &&
+                    tag == other.tag &&
+                    text == other.text &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(indices, seconds, tag, text, additionalProperties)
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "Symbol{indices=$indices, seconds=$seconds, tag=$tag, text=$text, additionalProperties=$additionalProperties}"
+        }
+
+        /** Indexed smart-tag, cashtag, or video timestamp metadata. */
+        class Timestamp
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val indices: JsonField<List<Long>>,
+            private val seconds: JsonField<Double>,
+            private val tag: JsonField<Tag>,
+            private val text: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("indices")
+                @ExcludeMissing
+                indices: JsonField<List<Long>> = JsonMissing.of(),
+                @JsonProperty("seconds")
+                @ExcludeMissing
+                seconds: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("tag") @ExcludeMissing tag: JsonField<Tag> = JsonMissing.of(),
+                @JsonProperty("text") @ExcludeMissing text: JsonField<String> = JsonMissing.of(),
+            ) : this(indices, seconds, tag, text, mutableMapOf())
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun indices(): List<Long>? = indices.getNullable("indices")
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun seconds(): Double? = seconds.getNullable("seconds")
+
+            /**
+             * X's SmartTag for a cashtag, smarttag or hashtag. Xquik leaves out X's trading
+             * platforms, which differ by reader.
+             *
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun tag(): Tag? = tag.getNullable("tag")
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun text(): String? = text.getNullable("text")
+
+            /**
+             * Returns the raw JSON value of [indices].
+             *
+             * Unlike [indices], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("indices") @ExcludeMissing fun _indices(): JsonField<List<Long>> = indices
+
+            /**
+             * Returns the raw JSON value of [seconds].
+             *
+             * Unlike [seconds], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("seconds") @ExcludeMissing fun _seconds(): JsonField<Double> = seconds
+
+            /**
+             * Returns the raw JSON value of [tag].
+             *
+             * Unlike [tag], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("tag") @ExcludeMissing fun _tag(): JsonField<Tag> = tag
+
+            /**
+             * Returns the raw JSON value of [text].
+             *
+             * Unlike [text], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("text") @ExcludeMissing fun _text(): JsonField<String> = text
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /** Returns a mutable builder for constructing an instance of [Timestamp]. */
+                fun builder() = Builder()
+            }
+
+            /** A builder for [Timestamp]. */
+            class Builder internal constructor() {
+
+                private var indices: JsonField<MutableList<Long>>? = null
+                private var seconds: JsonField<Double> = JsonMissing.of()
+                private var tag: JsonField<Tag> = JsonMissing.of()
+                private var text: JsonField<String> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                internal fun from(timestamp: Timestamp) = apply {
+                    indices = timestamp.indices.map { it.toMutableList() }
+                    seconds = timestamp.seconds
+                    tag = timestamp.tag
+                    text = timestamp.text
+                    additionalProperties = timestamp.additionalProperties.toMutableMap()
+                }
+
+                fun indices(indices: List<Long>) = indices(JsonField.of(indices))
+
+                /** Sets [Builder.indices] to an arbitrary JSON value. */
+                fun indices(indices: JsonField<List<Long>>) = apply {
+                    this.indices = indices.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [Long] to [indices].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addIndex(index: Long) = apply {
+                    indices =
+                        (indices ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("indices", it).add(index)
+                        }
+                }
+
+                fun seconds(seconds: Double) = seconds(JsonField.of(seconds))
+
+                /** Sets [Builder.seconds] to an arbitrary JSON value. */
+                fun seconds(seconds: JsonField<Double>) = apply { this.seconds = seconds }
+
+                /**
+                 * X's SmartTag for a cashtag, smarttag or hashtag. Xquik leaves out X's trading
+                 * platforms, which differ by reader.
+                 */
+                fun tag(tag: Tag) = tag(JsonField.of(tag))
+
+                /** Sets [Builder.tag] to an arbitrary JSON value. */
+                fun tag(tag: JsonField<Tag>) = apply { this.tag = tag }
+
+                fun text(text: String) = text(JsonField.of(text))
+
+                /** Sets [Builder.text] to an arbitrary JSON value. */
+                fun text(text: JsonField<String>) = apply { this.text = text }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Timestamp].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
+                fun build(): Timestamp =
+                    Timestamp(
+                        (indices ?: JsonMissing.of()).map { it.toImmutable() },
+                        seconds,
+                        tag,
+                        text,
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+             *   match its expected type.
+             */
+            fun validate(): Timestamp = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                indices()
+                seconds()
+                tag()?.validate()
+                text()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: XTwitterScraperInvalidDataException) {
+                    false
+                }
+
+            internal fun validity(): Int =
+                (indices.asKnown()?.size ?: 0) +
+                    (if (seconds.asKnown() == null) 0 else 1) +
+                    (tag.asKnown()?.validity() ?: 0) +
+                    (if (text.asKnown() == null) 0 else 1)
+
+            /**
+             * X's SmartTag for a cashtag, smarttag or hashtag. Xquik leaves out X's trading
+             * platforms, which differ by reader.
+             */
+            class Tag
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+            private constructor(
+                private val id: JsonField<String>,
+                private val info: JsonField<Info>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
+            ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("info") @ExcludeMissing info: JsonField<Info> = JsonMissing.of(),
+                ) : this(id, info, mutableMapOf())
+
+                /**
+                 * X's ID for the SmartTag.
+                 *
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun id(): String? = id.getNullable("id")
+
+                /**
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun info(): Info? = info.getNullable("info")
+
+                /**
+                 * Returns the raw JSON value of [id].
+                 *
+                 * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+                 */
+                @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+                /**
+                 * Returns the raw JSON value of [info].
+                 *
+                 * Unlike [info], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("info") @ExcludeMissing fun _info(): JsonField<Info> = info
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /** Returns a mutable builder for constructing an instance of [Tag]. */
+                    fun builder() = Builder()
+                }
+
+                /** A builder for [Tag]. */
+                class Builder internal constructor() {
+
+                    private var id: JsonField<String> = JsonMissing.of()
+                    private var info: JsonField<Info> = JsonMissing.of()
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    internal fun from(tag: Tag) = apply {
+                        id = tag.id
+                        info = tag.info
+                        additionalProperties = tag.additionalProperties.toMutableMap()
+                    }
+
+                    /** X's ID for the SmartTag. */
+                    fun id(id: String) = id(JsonField.of(id))
+
+                    /** Sets [Builder.id] to an arbitrary JSON value. */
+                    fun id(id: JsonField<String>) = apply { this.id = id }
+
+                    fun info(info: Info) = info(JsonField.of(info))
+
+                    /** Sets [Builder.info] to an arbitrary JSON value. */
+                    fun info(info: JsonField<Info>) = apply { this.info = info }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [Tag].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
+                    fun build(): Tag = Tag(id, info, additionalProperties.toMutableMap())
+                }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws XTwitterScraperInvalidDataException if any value type in this object
+                 *   doesn't match its expected type.
+                 */
+                fun validate(): Tag = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    id()
+                    info()?.validate()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: XTwitterScraperInvalidDataException) {
+                        false
+                    }
+
+                internal fun validity(): Int =
+                    (if (id.asKnown() == null) 0 else 1) + (info.asKnown()?.validity() ?: 0)
+
+                class Info
+                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+                private constructor(
+                    private val info: JsonField<InnerInfo>,
+                    private val additionalProperties: MutableMap<String, JsonValue>,
+                ) {
+
+                    @JsonCreator
+                    private constructor(
+                        @JsonProperty("info")
+                        @ExcludeMissing
+                        info: JsonField<InnerInfo> = JsonMissing.of()
+                    ) : this(info, mutableMapOf())
+
+                    /**
+                     * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                     *   unexpected type.
+                     */
+                    fun info(): InnerInfo? = info.getNullable("info")
+
+                    /**
+                     * Returns the raw JSON value of [info].
+                     *
+                     * Unlike [info], this method doesn't throw if the JSON field has an unexpected
+                     * type.
+                     */
+                    @JsonProperty("info") @ExcludeMissing fun _info(): JsonField<InnerInfo> = info
+
+                    @JsonAnySetter
+                    private fun putAdditionalProperty(key: String, value: JsonValue) {
+                        additionalProperties.put(key, value)
+                    }
+
+                    @JsonAnyGetter
+                    @ExcludeMissing
+                    fun _additionalProperties(): Map<String, JsonValue> =
+                        Collections.unmodifiableMap(additionalProperties)
+
+                    fun toBuilder() = Builder().from(this)
+
+                    companion object {
+
+                        /** Returns a mutable builder for constructing an instance of [Info]. */
+                        fun builder() = Builder()
+                    }
+
+                    /** A builder for [Info]. */
+                    class Builder internal constructor() {
+
+                        private var info: JsonField<InnerInfo> = JsonMissing.of()
+                        private var additionalProperties: MutableMap<String, JsonValue> =
+                            mutableMapOf()
+
+                        internal fun from(info: Info) = apply {
+                            this.info = info.info
+                            additionalProperties = info.additionalProperties.toMutableMap()
+                        }
+
+                        fun info(info: InnerInfo) = info(JsonField.of(info))
+
+                        /** Sets [Builder.info] to an arbitrary JSON value. */
+                        fun info(info: JsonField<InnerInfo>) = apply { this.info = info }
+
+                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                            apply {
+                                this.additionalProperties.clear()
+                                putAllAdditionalProperties(additionalProperties)
+                            }
+
+                        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                            additionalProperties.put(key, value)
+                        }
+
+                        fun putAllAdditionalProperties(
+                            additionalProperties: Map<String, JsonValue>
+                        ) = apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                        fun removeAdditionalProperty(key: String) = apply {
+                            additionalProperties.remove(key)
+                        }
+
+                        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                            keys.forEach(::removeAdditionalProperty)
+                        }
+
+                        /**
+                         * Returns an immutable instance of [Info].
+                         *
+                         * Further updates to this [Builder] will not mutate the returned instance.
+                         */
+                        fun build(): Info = Info(info, additionalProperties.toMutableMap())
+                    }
+
+                    private var validated: Boolean = false
+
+                    /**
+                     * Validates that the types of all values in this object match their expected
+                     * types recursively.
+                     *
+                     * This method is _not_ forwards compatible with new types from the API for
+                     * existing fields.
+                     *
+                     * @throws XTwitterScraperInvalidDataException if any value type in this object
+                     *   doesn't match its expected type.
+                     */
+                    fun validate(): Info = apply {
+                        if (validated) {
+                            return@apply
+                        }
+
+                        info()?.validate()
+                        validated = true
+                    }
+
+                    fun isValid(): Boolean =
+                        try {
+                            validate()
+                            true
+                        } catch (e: XTwitterScraperInvalidDataException) {
+                            false
+                        }
+
+                    internal fun validity(): Int = (info.asKnown()?.validity() ?: 0)
+
+                    class InnerInfo
+                    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+                    private constructor(
+                        private val active: JsonField<Boolean>,
+                        private val name: JsonField<String>,
+                        private val ticker: JsonField<String>,
+                        private val additionalProperties: MutableMap<String, JsonValue>,
+                    ) {
+
+                        @JsonCreator
+                        private constructor(
+                            @JsonProperty("active")
+                            @ExcludeMissing
+                            active: JsonField<Boolean> = JsonMissing.of(),
+                            @JsonProperty("name")
+                            @ExcludeMissing
+                            name: JsonField<String> = JsonMissing.of(),
+                            @JsonProperty("ticker")
+                            @ExcludeMissing
+                            ticker: JsonField<String> = JsonMissing.of(),
+                        ) : this(active, name, ticker, mutableMapOf())
+
+                        /**
+                         * Whether X marks the SmartTag active.
+                         *
+                         * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                         *   unexpected type.
+                         */
+                        fun active(): Boolean? = active.getNullable("active")
+
+                        /**
+                         * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                         *   unexpected type.
+                         */
+                        fun name(): String? = name.getNullable("name")
+
+                        /**
+                         * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                         *   unexpected type.
+                         */
+                        fun ticker(): String? = ticker.getNullable("ticker")
+
+                        /**
+                         * Returns the raw JSON value of [active].
+                         *
+                         * Unlike [active], this method doesn't throw if the JSON field has an
+                         * unexpected type.
+                         */
+                        @JsonProperty("active")
+                        @ExcludeMissing
+                        fun _active(): JsonField<Boolean> = active
+
+                        /**
+                         * Returns the raw JSON value of [name].
+                         *
+                         * Unlike [name], this method doesn't throw if the JSON field has an
+                         * unexpected type.
+                         */
+                        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+                        /**
+                         * Returns the raw JSON value of [ticker].
+                         *
+                         * Unlike [ticker], this method doesn't throw if the JSON field has an
+                         * unexpected type.
+                         */
+                        @JsonProperty("ticker")
+                        @ExcludeMissing
+                        fun _ticker(): JsonField<String> = ticker
+
+                        @JsonAnySetter
+                        private fun putAdditionalProperty(key: String, value: JsonValue) {
+                            additionalProperties.put(key, value)
+                        }
+
+                        @JsonAnyGetter
+                        @ExcludeMissing
+                        fun _additionalProperties(): Map<String, JsonValue> =
+                            Collections.unmodifiableMap(additionalProperties)
+
+                        fun toBuilder() = Builder().from(this)
+
+                        companion object {
+
+                            /**
+                             * Returns a mutable builder for constructing an instance of
+                             * [InnerInfo].
+                             */
+                            fun builder() = Builder()
+                        }
+
+                        /** A builder for [InnerInfo]. */
+                        class Builder internal constructor() {
+
+                            private var active: JsonField<Boolean> = JsonMissing.of()
+                            private var name: JsonField<String> = JsonMissing.of()
+                            private var ticker: JsonField<String> = JsonMissing.of()
+                            private var additionalProperties: MutableMap<String, JsonValue> =
+                                mutableMapOf()
+
+                            internal fun from(innerInfo: InnerInfo) = apply {
+                                active = innerInfo.active
+                                name = innerInfo.name
+                                ticker = innerInfo.ticker
+                                additionalProperties = innerInfo.additionalProperties.toMutableMap()
+                            }
+
+                            /** Whether X marks the SmartTag active. */
+                            fun active(active: Boolean) = active(JsonField.of(active))
+
+                            /** Sets [Builder.active] to an arbitrary JSON value. */
+                            fun active(active: JsonField<Boolean>) = apply { this.active = active }
+
+                            fun name(name: String) = name(JsonField.of(name))
+
+                            /** Sets [Builder.name] to an arbitrary JSON value. */
+                            fun name(name: JsonField<String>) = apply { this.name = name }
+
+                            fun ticker(ticker: String) = ticker(JsonField.of(ticker))
+
+                            /** Sets [Builder.ticker] to an arbitrary JSON value. */
+                            fun ticker(ticker: JsonField<String>) = apply { this.ticker = ticker }
+
+                            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                                apply {
+                                    this.additionalProperties.clear()
+                                    putAllAdditionalProperties(additionalProperties)
+                                }
+
+                            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                                additionalProperties.put(key, value)
+                            }
+
+                            fun putAllAdditionalProperties(
+                                additionalProperties: Map<String, JsonValue>
+                            ) = apply {
+                                this.additionalProperties.putAll(additionalProperties)
+                            }
+
+                            fun removeAdditionalProperty(key: String) = apply {
+                                additionalProperties.remove(key)
+                            }
+
+                            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                                keys.forEach(::removeAdditionalProperty)
+                            }
+
+                            /**
+                             * Returns an immutable instance of [InnerInfo].
+                             *
+                             * Further updates to this [Builder] will not mutate the returned
+                             * instance.
+                             */
+                            fun build(): InnerInfo =
+                                InnerInfo(active, name, ticker, additionalProperties.toMutableMap())
+                        }
+
+                        private var validated: Boolean = false
+
+                        /**
+                         * Validates that the types of all values in this object match their
+                         * expected types recursively.
+                         *
+                         * This method is _not_ forwards compatible with new types from the API for
+                         * existing fields.
+                         *
+                         * @throws XTwitterScraperInvalidDataException if any value type in this
+                         *   object doesn't match its expected type.
+                         */
+                        fun validate(): InnerInfo = apply {
+                            if (validated) {
+                                return@apply
+                            }
+
+                            active()
+                            name()
+                            ticker()
+                            validated = true
+                        }
+
+                        fun isValid(): Boolean =
+                            try {
+                                validate()
+                                true
+                            } catch (e: XTwitterScraperInvalidDataException) {
+                                false
+                            }
+
+                        internal fun validity(): Int =
+                            (if (active.asKnown() == null) 0 else 1) +
+                                (if (name.asKnown() == null) 0 else 1) +
+                                (if (ticker.asKnown() == null) 0 else 1)
+
+                        override fun equals(other: Any?): Boolean {
+                            if (this === other) {
+                                return true
+                            }
+
+                            return other is InnerInfo &&
+                                active == other.active &&
+                                name == other.name &&
+                                ticker == other.ticker &&
+                                additionalProperties == other.additionalProperties
+                        }
+
+                        private val hashCode: Int by lazy {
+                            Objects.hash(active, name, ticker, additionalProperties)
+                        }
+
+                        override fun hashCode(): Int = hashCode
+
+                        override fun toString() =
+                            "InnerInfo{active=$active, name=$name, ticker=$ticker, additionalProperties=$additionalProperties}"
+                    }
+
+                    override fun equals(other: Any?): Boolean {
+                        if (this === other) {
+                            return true
+                        }
+
+                        return other is Info &&
+                            info == other.info &&
+                            additionalProperties == other.additionalProperties
+                    }
+
+                    private val hashCode: Int by lazy {
+                        Objects.hash(info, additionalProperties)
+                    }
+
+                    override fun hashCode(): Int = hashCode
+
+                    override fun toString() =
+                        "Info{info=$info, additionalProperties=$additionalProperties}"
+                }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is Tag &&
+                        id == other.id &&
+                        info == other.info &&
+                        additionalProperties == other.additionalProperties
+                }
+
+                private val hashCode: Int by lazy {
+                    Objects.hash(id, info, additionalProperties)
+                }
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() =
+                    "Tag{id=$id, info=$info, additionalProperties=$additionalProperties}"
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Timestamp &&
+                    indices == other.indices &&
+                    seconds == other.seconds &&
+                    tag == other.tag &&
+                    text == other.text &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(indices, seconds, tag, text, additionalProperties)
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "Timestamp{indices=$indices, seconds=$seconds, tag=$tag, text=$text, additionalProperties=$additionalProperties}"
+        }
+
+        /** Shortened, display, and expanded URLs from tweet text. */
+        class Url
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val displayUrl: JsonField<String>,
+            private val expandedUrl: JsonField<String>,
+            private val indices: JsonField<List<Long>>,
+            private val url: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("display_url")
+                @ExcludeMissing
+                displayUrl: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("expanded_url")
+                @ExcludeMissing
+                expandedUrl: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("indices")
+                @ExcludeMissing
+                indices: JsonField<List<Long>> = JsonMissing.of(),
+                @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of(),
+            ) : this(displayUrl, expandedUrl, indices, url, mutableMapOf())
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun displayUrl(): String? = displayUrl.getNullable("display_url")
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun expandedUrl(): String? = expandedUrl.getNullable("expanded_url")
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun indices(): List<Long>? = indices.getNullable("indices")
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun url(): String? = url.getNullable("url")
+
+            /**
+             * Returns the raw JSON value of [displayUrl].
+             *
+             * Unlike [displayUrl], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("display_url")
+            @ExcludeMissing
+            fun _displayUrl(): JsonField<String> = displayUrl
+
+            /**
+             * Returns the raw JSON value of [expandedUrl].
+             *
+             * Unlike [expandedUrl], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("expanded_url")
+            @ExcludeMissing
+            fun _expandedUrl(): JsonField<String> = expandedUrl
+
+            /**
+             * Returns the raw JSON value of [indices].
+             *
+             * Unlike [indices], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("indices") @ExcludeMissing fun _indices(): JsonField<List<Long>> = indices
+
+            /**
+             * Returns the raw JSON value of [url].
+             *
+             * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /** Returns a mutable builder for constructing an instance of [Url]. */
+                fun builder() = Builder()
+            }
+
+            /** A builder for [Url]. */
+            class Builder internal constructor() {
+
+                private var displayUrl: JsonField<String> = JsonMissing.of()
+                private var expandedUrl: JsonField<String> = JsonMissing.of()
+                private var indices: JsonField<MutableList<Long>>? = null
+                private var url: JsonField<String> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                internal fun from(url: Url) = apply {
+                    displayUrl = url.displayUrl
+                    expandedUrl = url.expandedUrl
+                    indices = url.indices.map { it.toMutableList() }
+                    this.url = url.url
+                    additionalProperties = url.additionalProperties.toMutableMap()
+                }
+
+                fun displayUrl(displayUrl: String) = displayUrl(JsonField.of(displayUrl))
+
+                /** Sets [Builder.displayUrl] to an arbitrary JSON value. */
+                fun displayUrl(displayUrl: JsonField<String>) = apply {
+                    this.displayUrl = displayUrl
+                }
+
+                fun expandedUrl(expandedUrl: String) = expandedUrl(JsonField.of(expandedUrl))
+
+                /** Sets [Builder.expandedUrl] to an arbitrary JSON value. */
+                fun expandedUrl(expandedUrl: JsonField<String>) = apply {
+                    this.expandedUrl = expandedUrl
+                }
+
+                fun indices(indices: List<Long>) = indices(JsonField.of(indices))
+
+                /** Sets [Builder.indices] to an arbitrary JSON value. */
+                fun indices(indices: JsonField<List<Long>>) = apply {
+                    this.indices = indices.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [Long] to [indices].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addIndex(index: Long) = apply {
+                    indices =
+                        (indices ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("indices", it).add(index)
+                        }
+                }
+
+                fun url(url: String) = url(JsonField.of(url))
+
+                /** Sets [Builder.url] to an arbitrary JSON value. */
+                fun url(url: JsonField<String>) = apply { this.url = url }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Url].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
+                fun build(): Url =
+                    Url(
+                        displayUrl,
+                        expandedUrl,
+                        (indices ?: JsonMissing.of()).map { it.toImmutable() },
+                        url,
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+             *   match its expected type.
+             */
+            fun validate(): Url = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                displayUrl()
+                expandedUrl()
+                indices()
+                url()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: XTwitterScraperInvalidDataException) {
+                    false
+                }
+
+            internal fun validity(): Int =
+                (if (displayUrl.asKnown() == null) 0 else 1) +
+                    (if (expandedUrl.asKnown() == null) 0 else 1) +
+                    (indices.asKnown()?.size ?: 0) +
+                    (if (url.asKnown() == null) 0 else 1)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Url &&
+                    displayUrl == other.displayUrl &&
+                    expandedUrl == other.expandedUrl &&
+                    indices == other.indices &&
+                    url == other.url &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(displayUrl, expandedUrl, indices, url, additionalProperties)
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "Url{displayUrl=$displayUrl, expandedUrl=$expandedUrl, indices=$indices, url=$url, additionalProperties=$additionalProperties}"
+        }
+
+        /** Profile identity and source offsets of a mention. */
+        class UserMention
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val screenName: JsonField<String>,
+            private val idStr: JsonField<String>,
+            private val indices: JsonField<List<Long>>,
+            private val name: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("screen_name")
+                @ExcludeMissing
+                screenName: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("id_str") @ExcludeMissing idStr: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("indices")
+                @ExcludeMissing
+                indices: JsonField<List<Long>> = JsonMissing.of(),
+                @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+            ) : this(screenName, idStr, indices, name, mutableMapOf())
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
+             *   or is unexpectedly missing or null.
+             */
+            fun screenName(): String = screenName.getRequired("screen_name")
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun idStr(): String? = idStr.getNullable("id_str")
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun indices(): List<Long>? = indices.getNullable("indices")
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun name(): String? = name.getNullable("name")
+
+            /**
+             * Returns the raw JSON value of [screenName].
+             *
+             * Unlike [screenName], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("screen_name")
+            @ExcludeMissing
+            fun _screenName(): JsonField<String> = screenName
+
+            /**
+             * Returns the raw JSON value of [idStr].
+             *
+             * Unlike [idStr], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("id_str") @ExcludeMissing fun _idStr(): JsonField<String> = idStr
+
+            /**
+             * Returns the raw JSON value of [indices].
+             *
+             * Unlike [indices], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("indices") @ExcludeMissing fun _indices(): JsonField<List<Long>> = indices
+
+            /**
+             * Returns the raw JSON value of [name].
+             *
+             * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /**
+                 * Returns a mutable builder for constructing an instance of [UserMention].
+                 *
+                 * The following fields are required:
+                 * ```kotlin
+                 * .screenName()
+                 * ```
+                 */
+                fun builder() = Builder()
+            }
+
+            /** A builder for [UserMention]. */
+            class Builder internal constructor() {
+
+                private var screenName: JsonField<String>? = null
+                private var idStr: JsonField<String> = JsonMissing.of()
+                private var indices: JsonField<MutableList<Long>>? = null
+                private var name: JsonField<String> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                internal fun from(userMention: UserMention) = apply {
+                    screenName = userMention.screenName
+                    idStr = userMention.idStr
+                    indices = userMention.indices.map { it.toMutableList() }
+                    name = userMention.name
+                    additionalProperties = userMention.additionalProperties.toMutableMap()
+                }
+
+                fun screenName(screenName: String) = screenName(JsonField.of(screenName))
+
+                /** Sets [Builder.screenName] to an arbitrary JSON value. */
+                fun screenName(screenName: JsonField<String>) = apply {
+                    this.screenName = screenName
+                }
+
+                fun idStr(idStr: String) = idStr(JsonField.of(idStr))
+
+                /** Sets [Builder.idStr] to an arbitrary JSON value. */
+                fun idStr(idStr: JsonField<String>) = apply { this.idStr = idStr }
+
+                fun indices(indices: List<Long>) = indices(JsonField.of(indices))
+
+                /** Sets [Builder.indices] to an arbitrary JSON value. */
+                fun indices(indices: JsonField<List<Long>>) = apply {
+                    this.indices = indices.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [Long] to [indices].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addIndex(index: Long) = apply {
+                    indices =
+                        (indices ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("indices", it).add(index)
+                        }
+                }
+
+                fun name(name: String) = name(JsonField.of(name))
+
+                /** Sets [Builder.name] to an arbitrary JSON value. */
+                fun name(name: JsonField<String>) = apply { this.name = name }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [UserMention].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```kotlin
+                 * .screenName()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
+                fun build(): UserMention =
+                    UserMention(
+                        checkRequired("screenName", screenName),
+                        idStr,
+                        (indices ?: JsonMissing.of()).map { it.toImmutable() },
+                        name,
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+             *   match its expected type.
+             */
+            fun validate(): UserMention = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                screenName()
+                idStr()
+                indices()
+                name()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: XTwitterScraperInvalidDataException) {
+                    false
+                }
+
+            internal fun validity(): Int =
+                (if (screenName.asKnown() == null) 0 else 1) +
+                    (if (idStr.asKnown() == null) 0 else 1) +
+                    (indices.asKnown()?.size ?: 0) +
+                    (if (name.asKnown() == null) 0 else 1)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is UserMention &&
+                    screenName == other.screenName &&
+                    idStr == other.idStr &&
+                    indices == other.indices &&
+                    name == other.name &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(screenName, idStr, indices, name, additionalProperties)
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "UserMention{screenName=$screenName, idStr=$idStr, indices=$indices, name=$name, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
@@ -5914,14 +9650,32 @@ private constructor(
                 return true
             }
 
-            return other is Entities && additionalProperties == other.additionalProperties
+            return other is Entities &&
+                hashtags == other.hashtags &&
+                smarttags == other.smarttags &&
+                symbols == other.symbols &&
+                timestamps == other.timestamps &&
+                urls == other.urls &&
+                userMentions == other.userMentions &&
+                additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                hashtags,
+                smarttags,
+                symbols,
+                timestamps,
+                urls,
+                userMentions,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() = "Entities{additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "Entities{hashtags=$hashtags, smarttags=$smarttags, symbols=$symbols, timestamps=$timestamps, urls=$urls, userMentions=$userMentions, additionalProperties=$additionalProperties}"
     }
 
     /**
@@ -8169,10 +11923,7 @@ private constructor(
          */
         fun id(): String? = id.getNullable("id")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun entities(): Entities? = entities.getNullable("entities")
 
         /**
@@ -8182,10 +11933,7 @@ private constructor(
          */
         fun inlineMedia(): List<InlineMedia>? = inlineMedia.getNullable("inlineMedia")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun isExpandable(): Boolean? = isExpandable.getNullable("isExpandable")
 
         /**
@@ -8195,10 +11943,7 @@ private constructor(
          */
         fun noteId(): String? = noteId.getNullable("noteId")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun richtextTags(): List<RichtextTag>? = richtextTags.getNullable("richtextTags")
 
         /**
@@ -8317,9 +12062,6 @@ private constructor(
             /** Sets [Builder.id] to an arbitrary JSON value. */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun entities(entities: Entities) = entities(JsonField.of(entities))
 
             /** Sets [Builder.entities] to an arbitrary JSON value. */
@@ -8345,9 +12087,6 @@ private constructor(
                     }
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun isExpandable(isExpandable: Boolean) = isExpandable(JsonField.of(isExpandable))
 
             /** Sets [Builder.isExpandable] to an arbitrary JSON value. */
@@ -8361,9 +12100,6 @@ private constructor(
             /** Sets [Builder.noteId] to an arbitrary JSON value. */
             fun noteId(noteId: JsonField<String>) = apply { this.noteId = noteId }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun richtextTags(richtextTags: List<RichtextTag>) =
                 richtextTags(JsonField.of(richtextTags))
 
@@ -8473,15 +12209,132 @@ private constructor(
 
         /** Lists hashtags, symbols, links, and mentions from tweet text. */
         class Entities
-        @JsonCreator
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
-            @com.fasterxml.jackson.annotation.JsonValue
-            private val additionalProperties: Map<String, JsonValue>
+            private val hashtags: JsonField<List<Hashtag>>,
+            private val smarttags: JsonField<List<Smarttag>>,
+            private val symbols: JsonField<List<Symbol>>,
+            private val timestamps: JsonField<List<Timestamp>>,
+            private val urls: JsonField<List<Url>>,
+            private val userMentions: JsonField<List<UserMention>>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("hashtags")
+                @ExcludeMissing
+                hashtags: JsonField<List<Hashtag>> = JsonMissing.of(),
+                @JsonProperty("smarttags")
+                @ExcludeMissing
+                smarttags: JsonField<List<Smarttag>> = JsonMissing.of(),
+                @JsonProperty("symbols")
+                @ExcludeMissing
+                symbols: JsonField<List<Symbol>> = JsonMissing.of(),
+                @JsonProperty("timestamps")
+                @ExcludeMissing
+                timestamps: JsonField<List<Timestamp>> = JsonMissing.of(),
+                @JsonProperty("urls") @ExcludeMissing urls: JsonField<List<Url>> = JsonMissing.of(),
+                @JsonProperty("user_mentions")
+                @ExcludeMissing
+                userMentions: JsonField<List<UserMention>> = JsonMissing.of(),
+            ) : this(hashtags, smarttags, symbols, timestamps, urls, userMentions, mutableMapOf())
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun hashtags(): List<Hashtag>? = hashtags.getNullable("hashtags")
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun smarttags(): List<Smarttag>? = smarttags.getNullable("smarttags")
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun symbols(): List<Symbol>? = symbols.getNullable("symbols")
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun timestamps(): List<Timestamp>? = timestamps.getNullable("timestamps")
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun urls(): List<Url>? = urls.getNullable("urls")
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun userMentions(): List<UserMention>? = userMentions.getNullable("user_mentions")
+
+            /**
+             * Returns the raw JSON value of [hashtags].
+             *
+             * Unlike [hashtags], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("hashtags")
+            @ExcludeMissing
+            fun _hashtags(): JsonField<List<Hashtag>> = hashtags
+
+            /**
+             * Returns the raw JSON value of [smarttags].
+             *
+             * Unlike [smarttags], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("smarttags")
+            @ExcludeMissing
+            fun _smarttags(): JsonField<List<Smarttag>> = smarttags
+
+            /**
+             * Returns the raw JSON value of [symbols].
+             *
+             * Unlike [symbols], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("symbols")
+            @ExcludeMissing
+            fun _symbols(): JsonField<List<Symbol>> = symbols
+
+            /**
+             * Returns the raw JSON value of [timestamps].
+             *
+             * Unlike [timestamps], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("timestamps")
+            @ExcludeMissing
+            fun _timestamps(): JsonField<List<Timestamp>> = timestamps
+
+            /**
+             * Returns the raw JSON value of [urls].
+             *
+             * Unlike [urls], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("urls") @ExcludeMissing fun _urls(): JsonField<List<Url>> = urls
+
+            /**
+             * Returns the raw JSON value of [userMentions].
+             *
+             * Unlike [userMentions], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("user_mentions")
+            @ExcludeMissing
+            fun _userMentions(): JsonField<List<UserMention>> = userMentions
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
@@ -8494,10 +12347,137 @@ private constructor(
             /** A builder for [Entities]. */
             class Builder internal constructor() {
 
+                private var hashtags: JsonField<MutableList<Hashtag>>? = null
+                private var smarttags: JsonField<MutableList<Smarttag>>? = null
+                private var symbols: JsonField<MutableList<Symbol>>? = null
+                private var timestamps: JsonField<MutableList<Timestamp>>? = null
+                private var urls: JsonField<MutableList<Url>>? = null
+                private var userMentions: JsonField<MutableList<UserMention>>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 internal fun from(entities: Entities) = apply {
+                    hashtags = entities.hashtags.map { it.toMutableList() }
+                    smarttags = entities.smarttags.map { it.toMutableList() }
+                    symbols = entities.symbols.map { it.toMutableList() }
+                    timestamps = entities.timestamps.map { it.toMutableList() }
+                    urls = entities.urls.map { it.toMutableList() }
+                    userMentions = entities.userMentions.map { it.toMutableList() }
                     additionalProperties = entities.additionalProperties.toMutableMap()
+                }
+
+                fun hashtags(hashtags: List<Hashtag>) = hashtags(JsonField.of(hashtags))
+
+                /** Sets [Builder.hashtags] to an arbitrary JSON value. */
+                fun hashtags(hashtags: JsonField<List<Hashtag>>) = apply {
+                    this.hashtags = hashtags.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [Hashtag] to [hashtags].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addHashtag(hashtag: Hashtag) = apply {
+                    hashtags =
+                        (hashtags ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("hashtags", it).add(hashtag)
+                        }
+                }
+
+                fun smarttags(smarttags: List<Smarttag>) = smarttags(JsonField.of(smarttags))
+
+                /** Sets [Builder.smarttags] to an arbitrary JSON value. */
+                fun smarttags(smarttags: JsonField<List<Smarttag>>) = apply {
+                    this.smarttags = smarttags.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [Smarttag] to [smarttags].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addSmarttag(smarttag: Smarttag) = apply {
+                    smarttags =
+                        (smarttags ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("smarttags", it).add(smarttag)
+                        }
+                }
+
+                fun symbols(symbols: List<Symbol>) = symbols(JsonField.of(symbols))
+
+                /** Sets [Builder.symbols] to an arbitrary JSON value. */
+                fun symbols(symbols: JsonField<List<Symbol>>) = apply {
+                    this.symbols = symbols.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [Symbol] to [symbols].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addSymbol(symbol: Symbol) = apply {
+                    symbols =
+                        (symbols ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("symbols", it).add(symbol)
+                        }
+                }
+
+                fun timestamps(timestamps: List<Timestamp>) = timestamps(JsonField.of(timestamps))
+
+                /** Sets [Builder.timestamps] to an arbitrary JSON value. */
+                fun timestamps(timestamps: JsonField<List<Timestamp>>) = apply {
+                    this.timestamps = timestamps.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [Timestamp] to [timestamps].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addTimestamp(timestamp: Timestamp) = apply {
+                    timestamps =
+                        (timestamps ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("timestamps", it).add(timestamp)
+                        }
+                }
+
+                fun urls(urls: List<Url>) = urls(JsonField.of(urls))
+
+                /** Sets [Builder.urls] to an arbitrary JSON value. */
+                fun urls(urls: JsonField<List<Url>>) = apply {
+                    this.urls = urls.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [Url] to [urls].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addUrl(url: Url) = apply {
+                    urls =
+                        (urls ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("urls", it).add(url)
+                        }
+                }
+
+                fun userMentions(userMentions: List<UserMention>) =
+                    userMentions(JsonField.of(userMentions))
+
+                /** Sets [Builder.userMentions] to an arbitrary JSON value. */
+                fun userMentions(userMentions: JsonField<List<UserMention>>) = apply {
+                    this.userMentions = userMentions.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [UserMention] to [userMentions].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addUserMention(userMention: UserMention) = apply {
+                    userMentions =
+                        (userMentions ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("userMentions", it).add(userMention)
+                        }
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -8527,7 +12507,16 @@ private constructor(
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  */
-                fun build(): Entities = Entities(additionalProperties.toImmutable())
+                fun build(): Entities =
+                    Entities(
+                        (hashtags ?: JsonMissing.of()).map { it.toImmutable() },
+                        (smarttags ?: JsonMissing.of()).map { it.toImmutable() },
+                        (symbols ?: JsonMissing.of()).map { it.toImmutable() },
+                        (timestamps ?: JsonMissing.of()).map { it.toImmutable() },
+                        (urls ?: JsonMissing.of()).map { it.toImmutable() },
+                        (userMentions ?: JsonMissing.of()).map { it.toImmutable() },
+                        additionalProperties.toMutableMap(),
+                    )
             }
 
             private var validated: Boolean = false
@@ -8547,6 +12536,12 @@ private constructor(
                     return@apply
                 }
 
+                hashtags()?.forEach { it.validate() }
+                smarttags()?.forEach { it.validate() }
+                symbols()?.forEach { it.validate() }
+                timestamps()?.forEach { it.validate() }
+                urls()?.forEach { it.validate() }
+                userMentions()?.forEach { it.validate() }
                 validated = true
             }
 
@@ -8558,8 +12553,3780 @@ private constructor(
                     false
                 }
 
-            internal fun validity(): Int = additionalProperties.count { (_, value) ->
-                !value.isNull() && !value.isMissing()
+            internal fun validity(): Int =
+                (hashtags.asKnown()?.sumOf { it.validity() } ?: 0) +
+                    (smarttags.asKnown()?.sumOf { it.validity() } ?: 0) +
+                    (symbols.asKnown()?.sumOf { it.validity() } ?: 0) +
+                    (timestamps.asKnown()?.sumOf { it.validity() } ?: 0) +
+                    (urls.asKnown()?.sumOf { it.validity() } ?: 0) +
+                    (userMentions.asKnown()?.sumOf { it.validity() } ?: 0)
+
+            /** Hashtag text and its source offsets in a tweet. */
+            class Hashtag
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+            private constructor(
+                private val text: JsonField<String>,
+                private val indices: JsonField<List<Long>>,
+                private val tag: JsonField<Tag>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
+            ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("text")
+                    @ExcludeMissing
+                    text: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("indices")
+                    @ExcludeMissing
+                    indices: JsonField<List<Long>> = JsonMissing.of(),
+                    @JsonProperty("tag") @ExcludeMissing tag: JsonField<Tag> = JsonMissing.of(),
+                ) : this(text, indices, tag, mutableMapOf())
+
+                /**
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type or is unexpectedly missing or null.
+                 */
+                fun text(): String = text.getRequired("text")
+
+                /**
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun indices(): List<Long>? = indices.getNullable("indices")
+
+                /**
+                 * X's SmartTag for a cashtag, smarttag or hashtag. Xquik leaves out X's trading
+                 * platforms, which differ by reader.
+                 *
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun tag(): Tag? = tag.getNullable("tag")
+
+                /**
+                 * Returns the raw JSON value of [text].
+                 *
+                 * Unlike [text], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("text") @ExcludeMissing fun _text(): JsonField<String> = text
+
+                /**
+                 * Returns the raw JSON value of [indices].
+                 *
+                 * Unlike [indices], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("indices")
+                @ExcludeMissing
+                fun _indices(): JsonField<List<Long>> = indices
+
+                /**
+                 * Returns the raw JSON value of [tag].
+                 *
+                 * Unlike [tag], this method doesn't throw if the JSON field has an unexpected type.
+                 */
+                @JsonProperty("tag") @ExcludeMissing fun _tag(): JsonField<Tag> = tag
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /**
+                     * Returns a mutable builder for constructing an instance of [Hashtag].
+                     *
+                     * The following fields are required:
+                     * ```kotlin
+                     * .text()
+                     * ```
+                     */
+                    fun builder() = Builder()
+                }
+
+                /** A builder for [Hashtag]. */
+                class Builder internal constructor() {
+
+                    private var text: JsonField<String>? = null
+                    private var indices: JsonField<MutableList<Long>>? = null
+                    private var tag: JsonField<Tag> = JsonMissing.of()
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    internal fun from(hashtag: Hashtag) = apply {
+                        text = hashtag.text
+                        indices = hashtag.indices.map { it.toMutableList() }
+                        tag = hashtag.tag
+                        additionalProperties = hashtag.additionalProperties.toMutableMap()
+                    }
+
+                    fun text(text: String) = text(JsonField.of(text))
+
+                    /** Sets [Builder.text] to an arbitrary JSON value. */
+                    fun text(text: JsonField<String>) = apply { this.text = text }
+
+                    fun indices(indices: List<Long>) = indices(JsonField.of(indices))
+
+                    /** Sets [Builder.indices] to an arbitrary JSON value. */
+                    fun indices(indices: JsonField<List<Long>>) = apply {
+                        this.indices = indices.map { it.toMutableList() }
+                    }
+
+                    /**
+                     * Adds a single [Long] to [indices].
+                     *
+                     * @throws IllegalStateException if the field was previously set to a non-list.
+                     */
+                    fun addIndex(index: Long) = apply {
+                        indices =
+                            (indices ?: JsonField.of(mutableListOf())).also {
+                                checkKnown("indices", it).add(index)
+                            }
+                    }
+
+                    /**
+                     * X's SmartTag for a cashtag, smarttag or hashtag. Xquik leaves out X's trading
+                     * platforms, which differ by reader.
+                     */
+                    fun tag(tag: Tag) = tag(JsonField.of(tag))
+
+                    /** Sets [Builder.tag] to an arbitrary JSON value. */
+                    fun tag(tag: JsonField<Tag>) = apply { this.tag = tag }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [Hashtag].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```kotlin
+                     * .text()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
+                    fun build(): Hashtag =
+                        Hashtag(
+                            checkRequired("text", text),
+                            (indices ?: JsonMissing.of()).map { it.toImmutable() },
+                            tag,
+                            additionalProperties.toMutableMap(),
+                        )
+                }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws XTwitterScraperInvalidDataException if any value type in this object
+                 *   doesn't match its expected type.
+                 */
+                fun validate(): Hashtag = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    text()
+                    indices()
+                    tag()?.validate()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: XTwitterScraperInvalidDataException) {
+                        false
+                    }
+
+                internal fun validity(): Int =
+                    (if (text.asKnown() == null) 0 else 1) +
+                        (indices.asKnown()?.size ?: 0) +
+                        (tag.asKnown()?.validity() ?: 0)
+
+                /**
+                 * X's SmartTag for a cashtag, smarttag or hashtag. Xquik leaves out X's trading
+                 * platforms, which differ by reader.
+                 */
+                class Tag
+                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+                private constructor(
+                    private val id: JsonField<String>,
+                    private val info: JsonField<Info>,
+                    private val additionalProperties: MutableMap<String, JsonValue>,
+                ) {
+
+                    @JsonCreator
+                    private constructor(
+                        @JsonProperty("id")
+                        @ExcludeMissing
+                        id: JsonField<String> = JsonMissing.of(),
+                        @JsonProperty("info")
+                        @ExcludeMissing
+                        info: JsonField<Info> = JsonMissing.of(),
+                    ) : this(id, info, mutableMapOf())
+
+                    /**
+                     * X's ID for the SmartTag.
+                     *
+                     * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                     *   unexpected type.
+                     */
+                    fun id(): String? = id.getNullable("id")
+
+                    /**
+                     * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                     *   unexpected type.
+                     */
+                    fun info(): Info? = info.getNullable("info")
+
+                    /**
+                     * Returns the raw JSON value of [id].
+                     *
+                     * Unlike [id], this method doesn't throw if the JSON field has an unexpected
+                     * type.
+                     */
+                    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+                    /**
+                     * Returns the raw JSON value of [info].
+                     *
+                     * Unlike [info], this method doesn't throw if the JSON field has an unexpected
+                     * type.
+                     */
+                    @JsonProperty("info") @ExcludeMissing fun _info(): JsonField<Info> = info
+
+                    @JsonAnySetter
+                    private fun putAdditionalProperty(key: String, value: JsonValue) {
+                        additionalProperties.put(key, value)
+                    }
+
+                    @JsonAnyGetter
+                    @ExcludeMissing
+                    fun _additionalProperties(): Map<String, JsonValue> =
+                        Collections.unmodifiableMap(additionalProperties)
+
+                    fun toBuilder() = Builder().from(this)
+
+                    companion object {
+
+                        /** Returns a mutable builder for constructing an instance of [Tag]. */
+                        fun builder() = Builder()
+                    }
+
+                    /** A builder for [Tag]. */
+                    class Builder internal constructor() {
+
+                        private var id: JsonField<String> = JsonMissing.of()
+                        private var info: JsonField<Info> = JsonMissing.of()
+                        private var additionalProperties: MutableMap<String, JsonValue> =
+                            mutableMapOf()
+
+                        internal fun from(tag: Tag) = apply {
+                            id = tag.id
+                            info = tag.info
+                            additionalProperties = tag.additionalProperties.toMutableMap()
+                        }
+
+                        /** X's ID for the SmartTag. */
+                        fun id(id: String) = id(JsonField.of(id))
+
+                        /** Sets [Builder.id] to an arbitrary JSON value. */
+                        fun id(id: JsonField<String>) = apply { this.id = id }
+
+                        fun info(info: Info) = info(JsonField.of(info))
+
+                        /** Sets [Builder.info] to an arbitrary JSON value. */
+                        fun info(info: JsonField<Info>) = apply { this.info = info }
+
+                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                            apply {
+                                this.additionalProperties.clear()
+                                putAllAdditionalProperties(additionalProperties)
+                            }
+
+                        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                            additionalProperties.put(key, value)
+                        }
+
+                        fun putAllAdditionalProperties(
+                            additionalProperties: Map<String, JsonValue>
+                        ) = apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                        fun removeAdditionalProperty(key: String) = apply {
+                            additionalProperties.remove(key)
+                        }
+
+                        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                            keys.forEach(::removeAdditionalProperty)
+                        }
+
+                        /**
+                         * Returns an immutable instance of [Tag].
+                         *
+                         * Further updates to this [Builder] will not mutate the returned instance.
+                         */
+                        fun build(): Tag = Tag(id, info, additionalProperties.toMutableMap())
+                    }
+
+                    private var validated: Boolean = false
+
+                    /**
+                     * Validates that the types of all values in this object match their expected
+                     * types recursively.
+                     *
+                     * This method is _not_ forwards compatible with new types from the API for
+                     * existing fields.
+                     *
+                     * @throws XTwitterScraperInvalidDataException if any value type in this object
+                     *   doesn't match its expected type.
+                     */
+                    fun validate(): Tag = apply {
+                        if (validated) {
+                            return@apply
+                        }
+
+                        id()
+                        info()?.validate()
+                        validated = true
+                    }
+
+                    fun isValid(): Boolean =
+                        try {
+                            validate()
+                            true
+                        } catch (e: XTwitterScraperInvalidDataException) {
+                            false
+                        }
+
+                    internal fun validity(): Int =
+                        (if (id.asKnown() == null) 0 else 1) + (info.asKnown()?.validity() ?: 0)
+
+                    class Info
+                    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+                    private constructor(
+                        private val info: JsonField<InnerInfo>,
+                        private val additionalProperties: MutableMap<String, JsonValue>,
+                    ) {
+
+                        @JsonCreator
+                        private constructor(
+                            @JsonProperty("info")
+                            @ExcludeMissing
+                            info: JsonField<InnerInfo> = JsonMissing.of()
+                        ) : this(info, mutableMapOf())
+
+                        /**
+                         * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                         *   unexpected type.
+                         */
+                        fun info(): InnerInfo? = info.getNullable("info")
+
+                        /**
+                         * Returns the raw JSON value of [info].
+                         *
+                         * Unlike [info], this method doesn't throw if the JSON field has an
+                         * unexpected type.
+                         */
+                        @JsonProperty("info")
+                        @ExcludeMissing
+                        fun _info(): JsonField<InnerInfo> = info
+
+                        @JsonAnySetter
+                        private fun putAdditionalProperty(key: String, value: JsonValue) {
+                            additionalProperties.put(key, value)
+                        }
+
+                        @JsonAnyGetter
+                        @ExcludeMissing
+                        fun _additionalProperties(): Map<String, JsonValue> =
+                            Collections.unmodifiableMap(additionalProperties)
+
+                        fun toBuilder() = Builder().from(this)
+
+                        companion object {
+
+                            /** Returns a mutable builder for constructing an instance of [Info]. */
+                            fun builder() = Builder()
+                        }
+
+                        /** A builder for [Info]. */
+                        class Builder internal constructor() {
+
+                            private var info: JsonField<InnerInfo> = JsonMissing.of()
+                            private var additionalProperties: MutableMap<String, JsonValue> =
+                                mutableMapOf()
+
+                            internal fun from(info: Info) = apply {
+                                this.info = info.info
+                                additionalProperties = info.additionalProperties.toMutableMap()
+                            }
+
+                            fun info(info: InnerInfo) = info(JsonField.of(info))
+
+                            /** Sets [Builder.info] to an arbitrary JSON value. */
+                            fun info(info: JsonField<InnerInfo>) = apply { this.info = info }
+
+                            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                                apply {
+                                    this.additionalProperties.clear()
+                                    putAllAdditionalProperties(additionalProperties)
+                                }
+
+                            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                                additionalProperties.put(key, value)
+                            }
+
+                            fun putAllAdditionalProperties(
+                                additionalProperties: Map<String, JsonValue>
+                            ) = apply {
+                                this.additionalProperties.putAll(additionalProperties)
+                            }
+
+                            fun removeAdditionalProperty(key: String) = apply {
+                                additionalProperties.remove(key)
+                            }
+
+                            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                                keys.forEach(::removeAdditionalProperty)
+                            }
+
+                            /**
+                             * Returns an immutable instance of [Info].
+                             *
+                             * Further updates to this [Builder] will not mutate the returned
+                             * instance.
+                             */
+                            fun build(): Info = Info(info, additionalProperties.toMutableMap())
+                        }
+
+                        private var validated: Boolean = false
+
+                        /**
+                         * Validates that the types of all values in this object match their
+                         * expected types recursively.
+                         *
+                         * This method is _not_ forwards compatible with new types from the API for
+                         * existing fields.
+                         *
+                         * @throws XTwitterScraperInvalidDataException if any value type in this
+                         *   object doesn't match its expected type.
+                         */
+                        fun validate(): Info = apply {
+                            if (validated) {
+                                return@apply
+                            }
+
+                            info()?.validate()
+                            validated = true
+                        }
+
+                        fun isValid(): Boolean =
+                            try {
+                                validate()
+                                true
+                            } catch (e: XTwitterScraperInvalidDataException) {
+                                false
+                            }
+
+                        internal fun validity(): Int = (info.asKnown()?.validity() ?: 0)
+
+                        class InnerInfo
+                        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+                        private constructor(
+                            private val active: JsonField<Boolean>,
+                            private val name: JsonField<String>,
+                            private val ticker: JsonField<String>,
+                            private val additionalProperties: MutableMap<String, JsonValue>,
+                        ) {
+
+                            @JsonCreator
+                            private constructor(
+                                @JsonProperty("active")
+                                @ExcludeMissing
+                                active: JsonField<Boolean> = JsonMissing.of(),
+                                @JsonProperty("name")
+                                @ExcludeMissing
+                                name: JsonField<String> = JsonMissing.of(),
+                                @JsonProperty("ticker")
+                                @ExcludeMissing
+                                ticker: JsonField<String> = JsonMissing.of(),
+                            ) : this(active, name, ticker, mutableMapOf())
+
+                            /**
+                             * Whether X marks the SmartTag active.
+                             *
+                             * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                             *   unexpected type.
+                             */
+                            fun active(): Boolean? = active.getNullable("active")
+
+                            /**
+                             * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                             *   unexpected type.
+                             */
+                            fun name(): String? = name.getNullable("name")
+
+                            /**
+                             * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                             *   unexpected type.
+                             */
+                            fun ticker(): String? = ticker.getNullable("ticker")
+
+                            /**
+                             * Returns the raw JSON value of [active].
+                             *
+                             * Unlike [active], this method doesn't throw if the JSON field has an
+                             * unexpected type.
+                             */
+                            @JsonProperty("active")
+                            @ExcludeMissing
+                            fun _active(): JsonField<Boolean> = active
+
+                            /**
+                             * Returns the raw JSON value of [name].
+                             *
+                             * Unlike [name], this method doesn't throw if the JSON field has an
+                             * unexpected type.
+                             */
+                            @JsonProperty("name")
+                            @ExcludeMissing
+                            fun _name(): JsonField<String> = name
+
+                            /**
+                             * Returns the raw JSON value of [ticker].
+                             *
+                             * Unlike [ticker], this method doesn't throw if the JSON field has an
+                             * unexpected type.
+                             */
+                            @JsonProperty("ticker")
+                            @ExcludeMissing
+                            fun _ticker(): JsonField<String> = ticker
+
+                            @JsonAnySetter
+                            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                                additionalProperties.put(key, value)
+                            }
+
+                            @JsonAnyGetter
+                            @ExcludeMissing
+                            fun _additionalProperties(): Map<String, JsonValue> =
+                                Collections.unmodifiableMap(additionalProperties)
+
+                            fun toBuilder() = Builder().from(this)
+
+                            companion object {
+
+                                /**
+                                 * Returns a mutable builder for constructing an instance of
+                                 * [InnerInfo].
+                                 */
+                                fun builder() = Builder()
+                            }
+
+                            /** A builder for [InnerInfo]. */
+                            class Builder internal constructor() {
+
+                                private var active: JsonField<Boolean> = JsonMissing.of()
+                                private var name: JsonField<String> = JsonMissing.of()
+                                private var ticker: JsonField<String> = JsonMissing.of()
+                                private var additionalProperties: MutableMap<String, JsonValue> =
+                                    mutableMapOf()
+
+                                internal fun from(innerInfo: InnerInfo) = apply {
+                                    active = innerInfo.active
+                                    name = innerInfo.name
+                                    ticker = innerInfo.ticker
+                                    additionalProperties =
+                                        innerInfo.additionalProperties.toMutableMap()
+                                }
+
+                                /** Whether X marks the SmartTag active. */
+                                fun active(active: Boolean) = active(JsonField.of(active))
+
+                                /** Sets [Builder.active] to an arbitrary JSON value. */
+                                fun active(active: JsonField<Boolean>) = apply {
+                                    this.active = active
+                                }
+
+                                fun name(name: String) = name(JsonField.of(name))
+
+                                /** Sets [Builder.name] to an arbitrary JSON value. */
+                                fun name(name: JsonField<String>) = apply { this.name = name }
+
+                                fun ticker(ticker: String) = ticker(JsonField.of(ticker))
+
+                                /** Sets [Builder.ticker] to an arbitrary JSON value. */
+                                fun ticker(ticker: JsonField<String>) = apply {
+                                    this.ticker = ticker
+                                }
+
+                                fun additionalProperties(
+                                    additionalProperties: Map<String, JsonValue>
+                                ) = apply {
+                                    this.additionalProperties.clear()
+                                    putAllAdditionalProperties(additionalProperties)
+                                }
+
+                                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                                    additionalProperties.put(key, value)
+                                }
+
+                                fun putAllAdditionalProperties(
+                                    additionalProperties: Map<String, JsonValue>
+                                ) = apply {
+                                    this.additionalProperties.putAll(additionalProperties)
+                                }
+
+                                fun removeAdditionalProperty(key: String) = apply {
+                                    additionalProperties.remove(key)
+                                }
+
+                                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                                    keys.forEach(::removeAdditionalProperty)
+                                }
+
+                                /**
+                                 * Returns an immutable instance of [InnerInfo].
+                                 *
+                                 * Further updates to this [Builder] will not mutate the returned
+                                 * instance.
+                                 */
+                                fun build(): InnerInfo =
+                                    InnerInfo(
+                                        active,
+                                        name,
+                                        ticker,
+                                        additionalProperties.toMutableMap(),
+                                    )
+                            }
+
+                            private var validated: Boolean = false
+
+                            /**
+                             * Validates that the types of all values in this object match their
+                             * expected types recursively.
+                             *
+                             * This method is _not_ forwards compatible with new types from the API
+                             * for existing fields.
+                             *
+                             * @throws XTwitterScraperInvalidDataException if any value type in this
+                             *   object doesn't match its expected type.
+                             */
+                            fun validate(): InnerInfo = apply {
+                                if (validated) {
+                                    return@apply
+                                }
+
+                                active()
+                                name()
+                                ticker()
+                                validated = true
+                            }
+
+                            fun isValid(): Boolean =
+                                try {
+                                    validate()
+                                    true
+                                } catch (e: XTwitterScraperInvalidDataException) {
+                                    false
+                                }
+
+                            internal fun validity(): Int =
+                                (if (active.asKnown() == null) 0 else 1) +
+                                    (if (name.asKnown() == null) 0 else 1) +
+                                    (if (ticker.asKnown() == null) 0 else 1)
+
+                            override fun equals(other: Any?): Boolean {
+                                if (this === other) {
+                                    return true
+                                }
+
+                                return other is InnerInfo &&
+                                    active == other.active &&
+                                    name == other.name &&
+                                    ticker == other.ticker &&
+                                    additionalProperties == other.additionalProperties
+                            }
+
+                            private val hashCode: Int by lazy {
+                                Objects.hash(active, name, ticker, additionalProperties)
+                            }
+
+                            override fun hashCode(): Int = hashCode
+
+                            override fun toString() =
+                                "InnerInfo{active=$active, name=$name, ticker=$ticker, additionalProperties=$additionalProperties}"
+                        }
+
+                        override fun equals(other: Any?): Boolean {
+                            if (this === other) {
+                                return true
+                            }
+
+                            return other is Info &&
+                                info == other.info &&
+                                additionalProperties == other.additionalProperties
+                        }
+
+                        private val hashCode: Int by lazy {
+                            Objects.hash(info, additionalProperties)
+                        }
+
+                        override fun hashCode(): Int = hashCode
+
+                        override fun toString() =
+                            "Info{info=$info, additionalProperties=$additionalProperties}"
+                    }
+
+                    override fun equals(other: Any?): Boolean {
+                        if (this === other) {
+                            return true
+                        }
+
+                        return other is Tag &&
+                            id == other.id &&
+                            info == other.info &&
+                            additionalProperties == other.additionalProperties
+                    }
+
+                    private val hashCode: Int by lazy {
+                        Objects.hash(id, info, additionalProperties)
+                    }
+
+                    override fun hashCode(): Int = hashCode
+
+                    override fun toString() =
+                        "Tag{id=$id, info=$info, additionalProperties=$additionalProperties}"
+                }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is Hashtag &&
+                        text == other.text &&
+                        indices == other.indices &&
+                        tag == other.tag &&
+                        additionalProperties == other.additionalProperties
+                }
+
+                private val hashCode: Int by lazy {
+                    Objects.hash(text, indices, tag, additionalProperties)
+                }
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() =
+                    "Hashtag{text=$text, indices=$indices, tag=$tag, additionalProperties=$additionalProperties}"
+            }
+
+            /** Indexed smart-tag, cashtag, or video timestamp metadata. */
+            class Smarttag
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+            private constructor(
+                private val indices: JsonField<List<Long>>,
+                private val seconds: JsonField<Double>,
+                private val tag: JsonField<Tag>,
+                private val text: JsonField<String>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
+            ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("indices")
+                    @ExcludeMissing
+                    indices: JsonField<List<Long>> = JsonMissing.of(),
+                    @JsonProperty("seconds")
+                    @ExcludeMissing
+                    seconds: JsonField<Double> = JsonMissing.of(),
+                    @JsonProperty("tag") @ExcludeMissing tag: JsonField<Tag> = JsonMissing.of(),
+                    @JsonProperty("text")
+                    @ExcludeMissing
+                    text: JsonField<String> = JsonMissing.of(),
+                ) : this(indices, seconds, tag, text, mutableMapOf())
+
+                /**
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun indices(): List<Long>? = indices.getNullable("indices")
+
+                /**
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun seconds(): Double? = seconds.getNullable("seconds")
+
+                /**
+                 * X's SmartTag for a cashtag, smarttag or hashtag. Xquik leaves out X's trading
+                 * platforms, which differ by reader.
+                 *
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun tag(): Tag? = tag.getNullable("tag")
+
+                /**
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun text(): String? = text.getNullable("text")
+
+                /**
+                 * Returns the raw JSON value of [indices].
+                 *
+                 * Unlike [indices], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("indices")
+                @ExcludeMissing
+                fun _indices(): JsonField<List<Long>> = indices
+
+                /**
+                 * Returns the raw JSON value of [seconds].
+                 *
+                 * Unlike [seconds], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("seconds") @ExcludeMissing fun _seconds(): JsonField<Double> = seconds
+
+                /**
+                 * Returns the raw JSON value of [tag].
+                 *
+                 * Unlike [tag], this method doesn't throw if the JSON field has an unexpected type.
+                 */
+                @JsonProperty("tag") @ExcludeMissing fun _tag(): JsonField<Tag> = tag
+
+                /**
+                 * Returns the raw JSON value of [text].
+                 *
+                 * Unlike [text], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("text") @ExcludeMissing fun _text(): JsonField<String> = text
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /** Returns a mutable builder for constructing an instance of [Smarttag]. */
+                    fun builder() = Builder()
+                }
+
+                /** A builder for [Smarttag]. */
+                class Builder internal constructor() {
+
+                    private var indices: JsonField<MutableList<Long>>? = null
+                    private var seconds: JsonField<Double> = JsonMissing.of()
+                    private var tag: JsonField<Tag> = JsonMissing.of()
+                    private var text: JsonField<String> = JsonMissing.of()
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    internal fun from(smarttag: Smarttag) = apply {
+                        indices = smarttag.indices.map { it.toMutableList() }
+                        seconds = smarttag.seconds
+                        tag = smarttag.tag
+                        text = smarttag.text
+                        additionalProperties = smarttag.additionalProperties.toMutableMap()
+                    }
+
+                    fun indices(indices: List<Long>) = indices(JsonField.of(indices))
+
+                    /** Sets [Builder.indices] to an arbitrary JSON value. */
+                    fun indices(indices: JsonField<List<Long>>) = apply {
+                        this.indices = indices.map { it.toMutableList() }
+                    }
+
+                    /**
+                     * Adds a single [Long] to [indices].
+                     *
+                     * @throws IllegalStateException if the field was previously set to a non-list.
+                     */
+                    fun addIndex(index: Long) = apply {
+                        indices =
+                            (indices ?: JsonField.of(mutableListOf())).also {
+                                checkKnown("indices", it).add(index)
+                            }
+                    }
+
+                    fun seconds(seconds: Double) = seconds(JsonField.of(seconds))
+
+                    /** Sets [Builder.seconds] to an arbitrary JSON value. */
+                    fun seconds(seconds: JsonField<Double>) = apply { this.seconds = seconds }
+
+                    /**
+                     * X's SmartTag for a cashtag, smarttag or hashtag. Xquik leaves out X's trading
+                     * platforms, which differ by reader.
+                     */
+                    fun tag(tag: Tag) = tag(JsonField.of(tag))
+
+                    /** Sets [Builder.tag] to an arbitrary JSON value. */
+                    fun tag(tag: JsonField<Tag>) = apply { this.tag = tag }
+
+                    fun text(text: String) = text(JsonField.of(text))
+
+                    /** Sets [Builder.text] to an arbitrary JSON value. */
+                    fun text(text: JsonField<String>) = apply { this.text = text }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [Smarttag].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
+                    fun build(): Smarttag =
+                        Smarttag(
+                            (indices ?: JsonMissing.of()).map { it.toImmutable() },
+                            seconds,
+                            tag,
+                            text,
+                            additionalProperties.toMutableMap(),
+                        )
+                }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws XTwitterScraperInvalidDataException if any value type in this object
+                 *   doesn't match its expected type.
+                 */
+                fun validate(): Smarttag = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    indices()
+                    seconds()
+                    tag()?.validate()
+                    text()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: XTwitterScraperInvalidDataException) {
+                        false
+                    }
+
+                internal fun validity(): Int =
+                    (indices.asKnown()?.size ?: 0) +
+                        (if (seconds.asKnown() == null) 0 else 1) +
+                        (tag.asKnown()?.validity() ?: 0) +
+                        (if (text.asKnown() == null) 0 else 1)
+
+                /**
+                 * X's SmartTag for a cashtag, smarttag or hashtag. Xquik leaves out X's trading
+                 * platforms, which differ by reader.
+                 */
+                class Tag
+                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+                private constructor(
+                    private val id: JsonField<String>,
+                    private val info: JsonField<Info>,
+                    private val additionalProperties: MutableMap<String, JsonValue>,
+                ) {
+
+                    @JsonCreator
+                    private constructor(
+                        @JsonProperty("id")
+                        @ExcludeMissing
+                        id: JsonField<String> = JsonMissing.of(),
+                        @JsonProperty("info")
+                        @ExcludeMissing
+                        info: JsonField<Info> = JsonMissing.of(),
+                    ) : this(id, info, mutableMapOf())
+
+                    /**
+                     * X's ID for the SmartTag.
+                     *
+                     * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                     *   unexpected type.
+                     */
+                    fun id(): String? = id.getNullable("id")
+
+                    /**
+                     * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                     *   unexpected type.
+                     */
+                    fun info(): Info? = info.getNullable("info")
+
+                    /**
+                     * Returns the raw JSON value of [id].
+                     *
+                     * Unlike [id], this method doesn't throw if the JSON field has an unexpected
+                     * type.
+                     */
+                    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+                    /**
+                     * Returns the raw JSON value of [info].
+                     *
+                     * Unlike [info], this method doesn't throw if the JSON field has an unexpected
+                     * type.
+                     */
+                    @JsonProperty("info") @ExcludeMissing fun _info(): JsonField<Info> = info
+
+                    @JsonAnySetter
+                    private fun putAdditionalProperty(key: String, value: JsonValue) {
+                        additionalProperties.put(key, value)
+                    }
+
+                    @JsonAnyGetter
+                    @ExcludeMissing
+                    fun _additionalProperties(): Map<String, JsonValue> =
+                        Collections.unmodifiableMap(additionalProperties)
+
+                    fun toBuilder() = Builder().from(this)
+
+                    companion object {
+
+                        /** Returns a mutable builder for constructing an instance of [Tag]. */
+                        fun builder() = Builder()
+                    }
+
+                    /** A builder for [Tag]. */
+                    class Builder internal constructor() {
+
+                        private var id: JsonField<String> = JsonMissing.of()
+                        private var info: JsonField<Info> = JsonMissing.of()
+                        private var additionalProperties: MutableMap<String, JsonValue> =
+                            mutableMapOf()
+
+                        internal fun from(tag: Tag) = apply {
+                            id = tag.id
+                            info = tag.info
+                            additionalProperties = tag.additionalProperties.toMutableMap()
+                        }
+
+                        /** X's ID for the SmartTag. */
+                        fun id(id: String) = id(JsonField.of(id))
+
+                        /** Sets [Builder.id] to an arbitrary JSON value. */
+                        fun id(id: JsonField<String>) = apply { this.id = id }
+
+                        fun info(info: Info) = info(JsonField.of(info))
+
+                        /** Sets [Builder.info] to an arbitrary JSON value. */
+                        fun info(info: JsonField<Info>) = apply { this.info = info }
+
+                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                            apply {
+                                this.additionalProperties.clear()
+                                putAllAdditionalProperties(additionalProperties)
+                            }
+
+                        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                            additionalProperties.put(key, value)
+                        }
+
+                        fun putAllAdditionalProperties(
+                            additionalProperties: Map<String, JsonValue>
+                        ) = apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                        fun removeAdditionalProperty(key: String) = apply {
+                            additionalProperties.remove(key)
+                        }
+
+                        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                            keys.forEach(::removeAdditionalProperty)
+                        }
+
+                        /**
+                         * Returns an immutable instance of [Tag].
+                         *
+                         * Further updates to this [Builder] will not mutate the returned instance.
+                         */
+                        fun build(): Tag = Tag(id, info, additionalProperties.toMutableMap())
+                    }
+
+                    private var validated: Boolean = false
+
+                    /**
+                     * Validates that the types of all values in this object match their expected
+                     * types recursively.
+                     *
+                     * This method is _not_ forwards compatible with new types from the API for
+                     * existing fields.
+                     *
+                     * @throws XTwitterScraperInvalidDataException if any value type in this object
+                     *   doesn't match its expected type.
+                     */
+                    fun validate(): Tag = apply {
+                        if (validated) {
+                            return@apply
+                        }
+
+                        id()
+                        info()?.validate()
+                        validated = true
+                    }
+
+                    fun isValid(): Boolean =
+                        try {
+                            validate()
+                            true
+                        } catch (e: XTwitterScraperInvalidDataException) {
+                            false
+                        }
+
+                    internal fun validity(): Int =
+                        (if (id.asKnown() == null) 0 else 1) + (info.asKnown()?.validity() ?: 0)
+
+                    class Info
+                    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+                    private constructor(
+                        private val info: JsonField<InnerInfo>,
+                        private val additionalProperties: MutableMap<String, JsonValue>,
+                    ) {
+
+                        @JsonCreator
+                        private constructor(
+                            @JsonProperty("info")
+                            @ExcludeMissing
+                            info: JsonField<InnerInfo> = JsonMissing.of()
+                        ) : this(info, mutableMapOf())
+
+                        /**
+                         * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                         *   unexpected type.
+                         */
+                        fun info(): InnerInfo? = info.getNullable("info")
+
+                        /**
+                         * Returns the raw JSON value of [info].
+                         *
+                         * Unlike [info], this method doesn't throw if the JSON field has an
+                         * unexpected type.
+                         */
+                        @JsonProperty("info")
+                        @ExcludeMissing
+                        fun _info(): JsonField<InnerInfo> = info
+
+                        @JsonAnySetter
+                        private fun putAdditionalProperty(key: String, value: JsonValue) {
+                            additionalProperties.put(key, value)
+                        }
+
+                        @JsonAnyGetter
+                        @ExcludeMissing
+                        fun _additionalProperties(): Map<String, JsonValue> =
+                            Collections.unmodifiableMap(additionalProperties)
+
+                        fun toBuilder() = Builder().from(this)
+
+                        companion object {
+
+                            /** Returns a mutable builder for constructing an instance of [Info]. */
+                            fun builder() = Builder()
+                        }
+
+                        /** A builder for [Info]. */
+                        class Builder internal constructor() {
+
+                            private var info: JsonField<InnerInfo> = JsonMissing.of()
+                            private var additionalProperties: MutableMap<String, JsonValue> =
+                                mutableMapOf()
+
+                            internal fun from(info: Info) = apply {
+                                this.info = info.info
+                                additionalProperties = info.additionalProperties.toMutableMap()
+                            }
+
+                            fun info(info: InnerInfo) = info(JsonField.of(info))
+
+                            /** Sets [Builder.info] to an arbitrary JSON value. */
+                            fun info(info: JsonField<InnerInfo>) = apply { this.info = info }
+
+                            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                                apply {
+                                    this.additionalProperties.clear()
+                                    putAllAdditionalProperties(additionalProperties)
+                                }
+
+                            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                                additionalProperties.put(key, value)
+                            }
+
+                            fun putAllAdditionalProperties(
+                                additionalProperties: Map<String, JsonValue>
+                            ) = apply {
+                                this.additionalProperties.putAll(additionalProperties)
+                            }
+
+                            fun removeAdditionalProperty(key: String) = apply {
+                                additionalProperties.remove(key)
+                            }
+
+                            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                                keys.forEach(::removeAdditionalProperty)
+                            }
+
+                            /**
+                             * Returns an immutable instance of [Info].
+                             *
+                             * Further updates to this [Builder] will not mutate the returned
+                             * instance.
+                             */
+                            fun build(): Info = Info(info, additionalProperties.toMutableMap())
+                        }
+
+                        private var validated: Boolean = false
+
+                        /**
+                         * Validates that the types of all values in this object match their
+                         * expected types recursively.
+                         *
+                         * This method is _not_ forwards compatible with new types from the API for
+                         * existing fields.
+                         *
+                         * @throws XTwitterScraperInvalidDataException if any value type in this
+                         *   object doesn't match its expected type.
+                         */
+                        fun validate(): Info = apply {
+                            if (validated) {
+                                return@apply
+                            }
+
+                            info()?.validate()
+                            validated = true
+                        }
+
+                        fun isValid(): Boolean =
+                            try {
+                                validate()
+                                true
+                            } catch (e: XTwitterScraperInvalidDataException) {
+                                false
+                            }
+
+                        internal fun validity(): Int = (info.asKnown()?.validity() ?: 0)
+
+                        class InnerInfo
+                        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+                        private constructor(
+                            private val active: JsonField<Boolean>,
+                            private val name: JsonField<String>,
+                            private val ticker: JsonField<String>,
+                            private val additionalProperties: MutableMap<String, JsonValue>,
+                        ) {
+
+                            @JsonCreator
+                            private constructor(
+                                @JsonProperty("active")
+                                @ExcludeMissing
+                                active: JsonField<Boolean> = JsonMissing.of(),
+                                @JsonProperty("name")
+                                @ExcludeMissing
+                                name: JsonField<String> = JsonMissing.of(),
+                                @JsonProperty("ticker")
+                                @ExcludeMissing
+                                ticker: JsonField<String> = JsonMissing.of(),
+                            ) : this(active, name, ticker, mutableMapOf())
+
+                            /**
+                             * Whether X marks the SmartTag active.
+                             *
+                             * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                             *   unexpected type.
+                             */
+                            fun active(): Boolean? = active.getNullable("active")
+
+                            /**
+                             * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                             *   unexpected type.
+                             */
+                            fun name(): String? = name.getNullable("name")
+
+                            /**
+                             * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                             *   unexpected type.
+                             */
+                            fun ticker(): String? = ticker.getNullable("ticker")
+
+                            /**
+                             * Returns the raw JSON value of [active].
+                             *
+                             * Unlike [active], this method doesn't throw if the JSON field has an
+                             * unexpected type.
+                             */
+                            @JsonProperty("active")
+                            @ExcludeMissing
+                            fun _active(): JsonField<Boolean> = active
+
+                            /**
+                             * Returns the raw JSON value of [name].
+                             *
+                             * Unlike [name], this method doesn't throw if the JSON field has an
+                             * unexpected type.
+                             */
+                            @JsonProperty("name")
+                            @ExcludeMissing
+                            fun _name(): JsonField<String> = name
+
+                            /**
+                             * Returns the raw JSON value of [ticker].
+                             *
+                             * Unlike [ticker], this method doesn't throw if the JSON field has an
+                             * unexpected type.
+                             */
+                            @JsonProperty("ticker")
+                            @ExcludeMissing
+                            fun _ticker(): JsonField<String> = ticker
+
+                            @JsonAnySetter
+                            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                                additionalProperties.put(key, value)
+                            }
+
+                            @JsonAnyGetter
+                            @ExcludeMissing
+                            fun _additionalProperties(): Map<String, JsonValue> =
+                                Collections.unmodifiableMap(additionalProperties)
+
+                            fun toBuilder() = Builder().from(this)
+
+                            companion object {
+
+                                /**
+                                 * Returns a mutable builder for constructing an instance of
+                                 * [InnerInfo].
+                                 */
+                                fun builder() = Builder()
+                            }
+
+                            /** A builder for [InnerInfo]. */
+                            class Builder internal constructor() {
+
+                                private var active: JsonField<Boolean> = JsonMissing.of()
+                                private var name: JsonField<String> = JsonMissing.of()
+                                private var ticker: JsonField<String> = JsonMissing.of()
+                                private var additionalProperties: MutableMap<String, JsonValue> =
+                                    mutableMapOf()
+
+                                internal fun from(innerInfo: InnerInfo) = apply {
+                                    active = innerInfo.active
+                                    name = innerInfo.name
+                                    ticker = innerInfo.ticker
+                                    additionalProperties =
+                                        innerInfo.additionalProperties.toMutableMap()
+                                }
+
+                                /** Whether X marks the SmartTag active. */
+                                fun active(active: Boolean) = active(JsonField.of(active))
+
+                                /** Sets [Builder.active] to an arbitrary JSON value. */
+                                fun active(active: JsonField<Boolean>) = apply {
+                                    this.active = active
+                                }
+
+                                fun name(name: String) = name(JsonField.of(name))
+
+                                /** Sets [Builder.name] to an arbitrary JSON value. */
+                                fun name(name: JsonField<String>) = apply { this.name = name }
+
+                                fun ticker(ticker: String) = ticker(JsonField.of(ticker))
+
+                                /** Sets [Builder.ticker] to an arbitrary JSON value. */
+                                fun ticker(ticker: JsonField<String>) = apply {
+                                    this.ticker = ticker
+                                }
+
+                                fun additionalProperties(
+                                    additionalProperties: Map<String, JsonValue>
+                                ) = apply {
+                                    this.additionalProperties.clear()
+                                    putAllAdditionalProperties(additionalProperties)
+                                }
+
+                                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                                    additionalProperties.put(key, value)
+                                }
+
+                                fun putAllAdditionalProperties(
+                                    additionalProperties: Map<String, JsonValue>
+                                ) = apply {
+                                    this.additionalProperties.putAll(additionalProperties)
+                                }
+
+                                fun removeAdditionalProperty(key: String) = apply {
+                                    additionalProperties.remove(key)
+                                }
+
+                                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                                    keys.forEach(::removeAdditionalProperty)
+                                }
+
+                                /**
+                                 * Returns an immutable instance of [InnerInfo].
+                                 *
+                                 * Further updates to this [Builder] will not mutate the returned
+                                 * instance.
+                                 */
+                                fun build(): InnerInfo =
+                                    InnerInfo(
+                                        active,
+                                        name,
+                                        ticker,
+                                        additionalProperties.toMutableMap(),
+                                    )
+                            }
+
+                            private var validated: Boolean = false
+
+                            /**
+                             * Validates that the types of all values in this object match their
+                             * expected types recursively.
+                             *
+                             * This method is _not_ forwards compatible with new types from the API
+                             * for existing fields.
+                             *
+                             * @throws XTwitterScraperInvalidDataException if any value type in this
+                             *   object doesn't match its expected type.
+                             */
+                            fun validate(): InnerInfo = apply {
+                                if (validated) {
+                                    return@apply
+                                }
+
+                                active()
+                                name()
+                                ticker()
+                                validated = true
+                            }
+
+                            fun isValid(): Boolean =
+                                try {
+                                    validate()
+                                    true
+                                } catch (e: XTwitterScraperInvalidDataException) {
+                                    false
+                                }
+
+                            internal fun validity(): Int =
+                                (if (active.asKnown() == null) 0 else 1) +
+                                    (if (name.asKnown() == null) 0 else 1) +
+                                    (if (ticker.asKnown() == null) 0 else 1)
+
+                            override fun equals(other: Any?): Boolean {
+                                if (this === other) {
+                                    return true
+                                }
+
+                                return other is InnerInfo &&
+                                    active == other.active &&
+                                    name == other.name &&
+                                    ticker == other.ticker &&
+                                    additionalProperties == other.additionalProperties
+                            }
+
+                            private val hashCode: Int by lazy {
+                                Objects.hash(active, name, ticker, additionalProperties)
+                            }
+
+                            override fun hashCode(): Int = hashCode
+
+                            override fun toString() =
+                                "InnerInfo{active=$active, name=$name, ticker=$ticker, additionalProperties=$additionalProperties}"
+                        }
+
+                        override fun equals(other: Any?): Boolean {
+                            if (this === other) {
+                                return true
+                            }
+
+                            return other is Info &&
+                                info == other.info &&
+                                additionalProperties == other.additionalProperties
+                        }
+
+                        private val hashCode: Int by lazy {
+                            Objects.hash(info, additionalProperties)
+                        }
+
+                        override fun hashCode(): Int = hashCode
+
+                        override fun toString() =
+                            "Info{info=$info, additionalProperties=$additionalProperties}"
+                    }
+
+                    override fun equals(other: Any?): Boolean {
+                        if (this === other) {
+                            return true
+                        }
+
+                        return other is Tag &&
+                            id == other.id &&
+                            info == other.info &&
+                            additionalProperties == other.additionalProperties
+                    }
+
+                    private val hashCode: Int by lazy {
+                        Objects.hash(id, info, additionalProperties)
+                    }
+
+                    override fun hashCode(): Int = hashCode
+
+                    override fun toString() =
+                        "Tag{id=$id, info=$info, additionalProperties=$additionalProperties}"
+                }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is Smarttag &&
+                        indices == other.indices &&
+                        seconds == other.seconds &&
+                        tag == other.tag &&
+                        text == other.text &&
+                        additionalProperties == other.additionalProperties
+                }
+
+                private val hashCode: Int by lazy {
+                    Objects.hash(indices, seconds, tag, text, additionalProperties)
+                }
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() =
+                    "Smarttag{indices=$indices, seconds=$seconds, tag=$tag, text=$text, additionalProperties=$additionalProperties}"
+            }
+
+            /** Indexed smart-tag, cashtag, or video timestamp metadata. */
+            class Symbol
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+            private constructor(
+                private val indices: JsonField<List<Long>>,
+                private val seconds: JsonField<Double>,
+                private val tag: JsonField<Tag>,
+                private val text: JsonField<String>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
+            ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("indices")
+                    @ExcludeMissing
+                    indices: JsonField<List<Long>> = JsonMissing.of(),
+                    @JsonProperty("seconds")
+                    @ExcludeMissing
+                    seconds: JsonField<Double> = JsonMissing.of(),
+                    @JsonProperty("tag") @ExcludeMissing tag: JsonField<Tag> = JsonMissing.of(),
+                    @JsonProperty("text")
+                    @ExcludeMissing
+                    text: JsonField<String> = JsonMissing.of(),
+                ) : this(indices, seconds, tag, text, mutableMapOf())
+
+                /**
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun indices(): List<Long>? = indices.getNullable("indices")
+
+                /**
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun seconds(): Double? = seconds.getNullable("seconds")
+
+                /**
+                 * X's SmartTag for a cashtag, smarttag or hashtag. Xquik leaves out X's trading
+                 * platforms, which differ by reader.
+                 *
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun tag(): Tag? = tag.getNullable("tag")
+
+                /**
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun text(): String? = text.getNullable("text")
+
+                /**
+                 * Returns the raw JSON value of [indices].
+                 *
+                 * Unlike [indices], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("indices")
+                @ExcludeMissing
+                fun _indices(): JsonField<List<Long>> = indices
+
+                /**
+                 * Returns the raw JSON value of [seconds].
+                 *
+                 * Unlike [seconds], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("seconds") @ExcludeMissing fun _seconds(): JsonField<Double> = seconds
+
+                /**
+                 * Returns the raw JSON value of [tag].
+                 *
+                 * Unlike [tag], this method doesn't throw if the JSON field has an unexpected type.
+                 */
+                @JsonProperty("tag") @ExcludeMissing fun _tag(): JsonField<Tag> = tag
+
+                /**
+                 * Returns the raw JSON value of [text].
+                 *
+                 * Unlike [text], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("text") @ExcludeMissing fun _text(): JsonField<String> = text
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /** Returns a mutable builder for constructing an instance of [Symbol]. */
+                    fun builder() = Builder()
+                }
+
+                /** A builder for [Symbol]. */
+                class Builder internal constructor() {
+
+                    private var indices: JsonField<MutableList<Long>>? = null
+                    private var seconds: JsonField<Double> = JsonMissing.of()
+                    private var tag: JsonField<Tag> = JsonMissing.of()
+                    private var text: JsonField<String> = JsonMissing.of()
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    internal fun from(symbol: Symbol) = apply {
+                        indices = symbol.indices.map { it.toMutableList() }
+                        seconds = symbol.seconds
+                        tag = symbol.tag
+                        text = symbol.text
+                        additionalProperties = symbol.additionalProperties.toMutableMap()
+                    }
+
+                    fun indices(indices: List<Long>) = indices(JsonField.of(indices))
+
+                    /** Sets [Builder.indices] to an arbitrary JSON value. */
+                    fun indices(indices: JsonField<List<Long>>) = apply {
+                        this.indices = indices.map { it.toMutableList() }
+                    }
+
+                    /**
+                     * Adds a single [Long] to [indices].
+                     *
+                     * @throws IllegalStateException if the field was previously set to a non-list.
+                     */
+                    fun addIndex(index: Long) = apply {
+                        indices =
+                            (indices ?: JsonField.of(mutableListOf())).also {
+                                checkKnown("indices", it).add(index)
+                            }
+                    }
+
+                    fun seconds(seconds: Double) = seconds(JsonField.of(seconds))
+
+                    /** Sets [Builder.seconds] to an arbitrary JSON value. */
+                    fun seconds(seconds: JsonField<Double>) = apply { this.seconds = seconds }
+
+                    /**
+                     * X's SmartTag for a cashtag, smarttag or hashtag. Xquik leaves out X's trading
+                     * platforms, which differ by reader.
+                     */
+                    fun tag(tag: Tag) = tag(JsonField.of(tag))
+
+                    /** Sets [Builder.tag] to an arbitrary JSON value. */
+                    fun tag(tag: JsonField<Tag>) = apply { this.tag = tag }
+
+                    fun text(text: String) = text(JsonField.of(text))
+
+                    /** Sets [Builder.text] to an arbitrary JSON value. */
+                    fun text(text: JsonField<String>) = apply { this.text = text }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [Symbol].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
+                    fun build(): Symbol =
+                        Symbol(
+                            (indices ?: JsonMissing.of()).map { it.toImmutable() },
+                            seconds,
+                            tag,
+                            text,
+                            additionalProperties.toMutableMap(),
+                        )
+                }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws XTwitterScraperInvalidDataException if any value type in this object
+                 *   doesn't match its expected type.
+                 */
+                fun validate(): Symbol = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    indices()
+                    seconds()
+                    tag()?.validate()
+                    text()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: XTwitterScraperInvalidDataException) {
+                        false
+                    }
+
+                internal fun validity(): Int =
+                    (indices.asKnown()?.size ?: 0) +
+                        (if (seconds.asKnown() == null) 0 else 1) +
+                        (tag.asKnown()?.validity() ?: 0) +
+                        (if (text.asKnown() == null) 0 else 1)
+
+                /**
+                 * X's SmartTag for a cashtag, smarttag or hashtag. Xquik leaves out X's trading
+                 * platforms, which differ by reader.
+                 */
+                class Tag
+                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+                private constructor(
+                    private val id: JsonField<String>,
+                    private val info: JsonField<Info>,
+                    private val additionalProperties: MutableMap<String, JsonValue>,
+                ) {
+
+                    @JsonCreator
+                    private constructor(
+                        @JsonProperty("id")
+                        @ExcludeMissing
+                        id: JsonField<String> = JsonMissing.of(),
+                        @JsonProperty("info")
+                        @ExcludeMissing
+                        info: JsonField<Info> = JsonMissing.of(),
+                    ) : this(id, info, mutableMapOf())
+
+                    /**
+                     * X's ID for the SmartTag.
+                     *
+                     * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                     *   unexpected type.
+                     */
+                    fun id(): String? = id.getNullable("id")
+
+                    /**
+                     * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                     *   unexpected type.
+                     */
+                    fun info(): Info? = info.getNullable("info")
+
+                    /**
+                     * Returns the raw JSON value of [id].
+                     *
+                     * Unlike [id], this method doesn't throw if the JSON field has an unexpected
+                     * type.
+                     */
+                    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+                    /**
+                     * Returns the raw JSON value of [info].
+                     *
+                     * Unlike [info], this method doesn't throw if the JSON field has an unexpected
+                     * type.
+                     */
+                    @JsonProperty("info") @ExcludeMissing fun _info(): JsonField<Info> = info
+
+                    @JsonAnySetter
+                    private fun putAdditionalProperty(key: String, value: JsonValue) {
+                        additionalProperties.put(key, value)
+                    }
+
+                    @JsonAnyGetter
+                    @ExcludeMissing
+                    fun _additionalProperties(): Map<String, JsonValue> =
+                        Collections.unmodifiableMap(additionalProperties)
+
+                    fun toBuilder() = Builder().from(this)
+
+                    companion object {
+
+                        /** Returns a mutable builder for constructing an instance of [Tag]. */
+                        fun builder() = Builder()
+                    }
+
+                    /** A builder for [Tag]. */
+                    class Builder internal constructor() {
+
+                        private var id: JsonField<String> = JsonMissing.of()
+                        private var info: JsonField<Info> = JsonMissing.of()
+                        private var additionalProperties: MutableMap<String, JsonValue> =
+                            mutableMapOf()
+
+                        internal fun from(tag: Tag) = apply {
+                            id = tag.id
+                            info = tag.info
+                            additionalProperties = tag.additionalProperties.toMutableMap()
+                        }
+
+                        /** X's ID for the SmartTag. */
+                        fun id(id: String) = id(JsonField.of(id))
+
+                        /** Sets [Builder.id] to an arbitrary JSON value. */
+                        fun id(id: JsonField<String>) = apply { this.id = id }
+
+                        fun info(info: Info) = info(JsonField.of(info))
+
+                        /** Sets [Builder.info] to an arbitrary JSON value. */
+                        fun info(info: JsonField<Info>) = apply { this.info = info }
+
+                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                            apply {
+                                this.additionalProperties.clear()
+                                putAllAdditionalProperties(additionalProperties)
+                            }
+
+                        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                            additionalProperties.put(key, value)
+                        }
+
+                        fun putAllAdditionalProperties(
+                            additionalProperties: Map<String, JsonValue>
+                        ) = apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                        fun removeAdditionalProperty(key: String) = apply {
+                            additionalProperties.remove(key)
+                        }
+
+                        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                            keys.forEach(::removeAdditionalProperty)
+                        }
+
+                        /**
+                         * Returns an immutable instance of [Tag].
+                         *
+                         * Further updates to this [Builder] will not mutate the returned instance.
+                         */
+                        fun build(): Tag = Tag(id, info, additionalProperties.toMutableMap())
+                    }
+
+                    private var validated: Boolean = false
+
+                    /**
+                     * Validates that the types of all values in this object match their expected
+                     * types recursively.
+                     *
+                     * This method is _not_ forwards compatible with new types from the API for
+                     * existing fields.
+                     *
+                     * @throws XTwitterScraperInvalidDataException if any value type in this object
+                     *   doesn't match its expected type.
+                     */
+                    fun validate(): Tag = apply {
+                        if (validated) {
+                            return@apply
+                        }
+
+                        id()
+                        info()?.validate()
+                        validated = true
+                    }
+
+                    fun isValid(): Boolean =
+                        try {
+                            validate()
+                            true
+                        } catch (e: XTwitterScraperInvalidDataException) {
+                            false
+                        }
+
+                    internal fun validity(): Int =
+                        (if (id.asKnown() == null) 0 else 1) + (info.asKnown()?.validity() ?: 0)
+
+                    class Info
+                    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+                    private constructor(
+                        private val info: JsonField<InnerInfo>,
+                        private val additionalProperties: MutableMap<String, JsonValue>,
+                    ) {
+
+                        @JsonCreator
+                        private constructor(
+                            @JsonProperty("info")
+                            @ExcludeMissing
+                            info: JsonField<InnerInfo> = JsonMissing.of()
+                        ) : this(info, mutableMapOf())
+
+                        /**
+                         * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                         *   unexpected type.
+                         */
+                        fun info(): InnerInfo? = info.getNullable("info")
+
+                        /**
+                         * Returns the raw JSON value of [info].
+                         *
+                         * Unlike [info], this method doesn't throw if the JSON field has an
+                         * unexpected type.
+                         */
+                        @JsonProperty("info")
+                        @ExcludeMissing
+                        fun _info(): JsonField<InnerInfo> = info
+
+                        @JsonAnySetter
+                        private fun putAdditionalProperty(key: String, value: JsonValue) {
+                            additionalProperties.put(key, value)
+                        }
+
+                        @JsonAnyGetter
+                        @ExcludeMissing
+                        fun _additionalProperties(): Map<String, JsonValue> =
+                            Collections.unmodifiableMap(additionalProperties)
+
+                        fun toBuilder() = Builder().from(this)
+
+                        companion object {
+
+                            /** Returns a mutable builder for constructing an instance of [Info]. */
+                            fun builder() = Builder()
+                        }
+
+                        /** A builder for [Info]. */
+                        class Builder internal constructor() {
+
+                            private var info: JsonField<InnerInfo> = JsonMissing.of()
+                            private var additionalProperties: MutableMap<String, JsonValue> =
+                                mutableMapOf()
+
+                            internal fun from(info: Info) = apply {
+                                this.info = info.info
+                                additionalProperties = info.additionalProperties.toMutableMap()
+                            }
+
+                            fun info(info: InnerInfo) = info(JsonField.of(info))
+
+                            /** Sets [Builder.info] to an arbitrary JSON value. */
+                            fun info(info: JsonField<InnerInfo>) = apply { this.info = info }
+
+                            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                                apply {
+                                    this.additionalProperties.clear()
+                                    putAllAdditionalProperties(additionalProperties)
+                                }
+
+                            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                                additionalProperties.put(key, value)
+                            }
+
+                            fun putAllAdditionalProperties(
+                                additionalProperties: Map<String, JsonValue>
+                            ) = apply {
+                                this.additionalProperties.putAll(additionalProperties)
+                            }
+
+                            fun removeAdditionalProperty(key: String) = apply {
+                                additionalProperties.remove(key)
+                            }
+
+                            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                                keys.forEach(::removeAdditionalProperty)
+                            }
+
+                            /**
+                             * Returns an immutable instance of [Info].
+                             *
+                             * Further updates to this [Builder] will not mutate the returned
+                             * instance.
+                             */
+                            fun build(): Info = Info(info, additionalProperties.toMutableMap())
+                        }
+
+                        private var validated: Boolean = false
+
+                        /**
+                         * Validates that the types of all values in this object match their
+                         * expected types recursively.
+                         *
+                         * This method is _not_ forwards compatible with new types from the API for
+                         * existing fields.
+                         *
+                         * @throws XTwitterScraperInvalidDataException if any value type in this
+                         *   object doesn't match its expected type.
+                         */
+                        fun validate(): Info = apply {
+                            if (validated) {
+                                return@apply
+                            }
+
+                            info()?.validate()
+                            validated = true
+                        }
+
+                        fun isValid(): Boolean =
+                            try {
+                                validate()
+                                true
+                            } catch (e: XTwitterScraperInvalidDataException) {
+                                false
+                            }
+
+                        internal fun validity(): Int = (info.asKnown()?.validity() ?: 0)
+
+                        class InnerInfo
+                        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+                        private constructor(
+                            private val active: JsonField<Boolean>,
+                            private val name: JsonField<String>,
+                            private val ticker: JsonField<String>,
+                            private val additionalProperties: MutableMap<String, JsonValue>,
+                        ) {
+
+                            @JsonCreator
+                            private constructor(
+                                @JsonProperty("active")
+                                @ExcludeMissing
+                                active: JsonField<Boolean> = JsonMissing.of(),
+                                @JsonProperty("name")
+                                @ExcludeMissing
+                                name: JsonField<String> = JsonMissing.of(),
+                                @JsonProperty("ticker")
+                                @ExcludeMissing
+                                ticker: JsonField<String> = JsonMissing.of(),
+                            ) : this(active, name, ticker, mutableMapOf())
+
+                            /**
+                             * Whether X marks the SmartTag active.
+                             *
+                             * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                             *   unexpected type.
+                             */
+                            fun active(): Boolean? = active.getNullable("active")
+
+                            /**
+                             * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                             *   unexpected type.
+                             */
+                            fun name(): String? = name.getNullable("name")
+
+                            /**
+                             * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                             *   unexpected type.
+                             */
+                            fun ticker(): String? = ticker.getNullable("ticker")
+
+                            /**
+                             * Returns the raw JSON value of [active].
+                             *
+                             * Unlike [active], this method doesn't throw if the JSON field has an
+                             * unexpected type.
+                             */
+                            @JsonProperty("active")
+                            @ExcludeMissing
+                            fun _active(): JsonField<Boolean> = active
+
+                            /**
+                             * Returns the raw JSON value of [name].
+                             *
+                             * Unlike [name], this method doesn't throw if the JSON field has an
+                             * unexpected type.
+                             */
+                            @JsonProperty("name")
+                            @ExcludeMissing
+                            fun _name(): JsonField<String> = name
+
+                            /**
+                             * Returns the raw JSON value of [ticker].
+                             *
+                             * Unlike [ticker], this method doesn't throw if the JSON field has an
+                             * unexpected type.
+                             */
+                            @JsonProperty("ticker")
+                            @ExcludeMissing
+                            fun _ticker(): JsonField<String> = ticker
+
+                            @JsonAnySetter
+                            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                                additionalProperties.put(key, value)
+                            }
+
+                            @JsonAnyGetter
+                            @ExcludeMissing
+                            fun _additionalProperties(): Map<String, JsonValue> =
+                                Collections.unmodifiableMap(additionalProperties)
+
+                            fun toBuilder() = Builder().from(this)
+
+                            companion object {
+
+                                /**
+                                 * Returns a mutable builder for constructing an instance of
+                                 * [InnerInfo].
+                                 */
+                                fun builder() = Builder()
+                            }
+
+                            /** A builder for [InnerInfo]. */
+                            class Builder internal constructor() {
+
+                                private var active: JsonField<Boolean> = JsonMissing.of()
+                                private var name: JsonField<String> = JsonMissing.of()
+                                private var ticker: JsonField<String> = JsonMissing.of()
+                                private var additionalProperties: MutableMap<String, JsonValue> =
+                                    mutableMapOf()
+
+                                internal fun from(innerInfo: InnerInfo) = apply {
+                                    active = innerInfo.active
+                                    name = innerInfo.name
+                                    ticker = innerInfo.ticker
+                                    additionalProperties =
+                                        innerInfo.additionalProperties.toMutableMap()
+                                }
+
+                                /** Whether X marks the SmartTag active. */
+                                fun active(active: Boolean) = active(JsonField.of(active))
+
+                                /** Sets [Builder.active] to an arbitrary JSON value. */
+                                fun active(active: JsonField<Boolean>) = apply {
+                                    this.active = active
+                                }
+
+                                fun name(name: String) = name(JsonField.of(name))
+
+                                /** Sets [Builder.name] to an arbitrary JSON value. */
+                                fun name(name: JsonField<String>) = apply { this.name = name }
+
+                                fun ticker(ticker: String) = ticker(JsonField.of(ticker))
+
+                                /** Sets [Builder.ticker] to an arbitrary JSON value. */
+                                fun ticker(ticker: JsonField<String>) = apply {
+                                    this.ticker = ticker
+                                }
+
+                                fun additionalProperties(
+                                    additionalProperties: Map<String, JsonValue>
+                                ) = apply {
+                                    this.additionalProperties.clear()
+                                    putAllAdditionalProperties(additionalProperties)
+                                }
+
+                                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                                    additionalProperties.put(key, value)
+                                }
+
+                                fun putAllAdditionalProperties(
+                                    additionalProperties: Map<String, JsonValue>
+                                ) = apply {
+                                    this.additionalProperties.putAll(additionalProperties)
+                                }
+
+                                fun removeAdditionalProperty(key: String) = apply {
+                                    additionalProperties.remove(key)
+                                }
+
+                                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                                    keys.forEach(::removeAdditionalProperty)
+                                }
+
+                                /**
+                                 * Returns an immutable instance of [InnerInfo].
+                                 *
+                                 * Further updates to this [Builder] will not mutate the returned
+                                 * instance.
+                                 */
+                                fun build(): InnerInfo =
+                                    InnerInfo(
+                                        active,
+                                        name,
+                                        ticker,
+                                        additionalProperties.toMutableMap(),
+                                    )
+                            }
+
+                            private var validated: Boolean = false
+
+                            /**
+                             * Validates that the types of all values in this object match their
+                             * expected types recursively.
+                             *
+                             * This method is _not_ forwards compatible with new types from the API
+                             * for existing fields.
+                             *
+                             * @throws XTwitterScraperInvalidDataException if any value type in this
+                             *   object doesn't match its expected type.
+                             */
+                            fun validate(): InnerInfo = apply {
+                                if (validated) {
+                                    return@apply
+                                }
+
+                                active()
+                                name()
+                                ticker()
+                                validated = true
+                            }
+
+                            fun isValid(): Boolean =
+                                try {
+                                    validate()
+                                    true
+                                } catch (e: XTwitterScraperInvalidDataException) {
+                                    false
+                                }
+
+                            internal fun validity(): Int =
+                                (if (active.asKnown() == null) 0 else 1) +
+                                    (if (name.asKnown() == null) 0 else 1) +
+                                    (if (ticker.asKnown() == null) 0 else 1)
+
+                            override fun equals(other: Any?): Boolean {
+                                if (this === other) {
+                                    return true
+                                }
+
+                                return other is InnerInfo &&
+                                    active == other.active &&
+                                    name == other.name &&
+                                    ticker == other.ticker &&
+                                    additionalProperties == other.additionalProperties
+                            }
+
+                            private val hashCode: Int by lazy {
+                                Objects.hash(active, name, ticker, additionalProperties)
+                            }
+
+                            override fun hashCode(): Int = hashCode
+
+                            override fun toString() =
+                                "InnerInfo{active=$active, name=$name, ticker=$ticker, additionalProperties=$additionalProperties}"
+                        }
+
+                        override fun equals(other: Any?): Boolean {
+                            if (this === other) {
+                                return true
+                            }
+
+                            return other is Info &&
+                                info == other.info &&
+                                additionalProperties == other.additionalProperties
+                        }
+
+                        private val hashCode: Int by lazy {
+                            Objects.hash(info, additionalProperties)
+                        }
+
+                        override fun hashCode(): Int = hashCode
+
+                        override fun toString() =
+                            "Info{info=$info, additionalProperties=$additionalProperties}"
+                    }
+
+                    override fun equals(other: Any?): Boolean {
+                        if (this === other) {
+                            return true
+                        }
+
+                        return other is Tag &&
+                            id == other.id &&
+                            info == other.info &&
+                            additionalProperties == other.additionalProperties
+                    }
+
+                    private val hashCode: Int by lazy {
+                        Objects.hash(id, info, additionalProperties)
+                    }
+
+                    override fun hashCode(): Int = hashCode
+
+                    override fun toString() =
+                        "Tag{id=$id, info=$info, additionalProperties=$additionalProperties}"
+                }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is Symbol &&
+                        indices == other.indices &&
+                        seconds == other.seconds &&
+                        tag == other.tag &&
+                        text == other.text &&
+                        additionalProperties == other.additionalProperties
+                }
+
+                private val hashCode: Int by lazy {
+                    Objects.hash(indices, seconds, tag, text, additionalProperties)
+                }
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() =
+                    "Symbol{indices=$indices, seconds=$seconds, tag=$tag, text=$text, additionalProperties=$additionalProperties}"
+            }
+
+            /** Indexed smart-tag, cashtag, or video timestamp metadata. */
+            class Timestamp
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+            private constructor(
+                private val indices: JsonField<List<Long>>,
+                private val seconds: JsonField<Double>,
+                private val tag: JsonField<Tag>,
+                private val text: JsonField<String>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
+            ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("indices")
+                    @ExcludeMissing
+                    indices: JsonField<List<Long>> = JsonMissing.of(),
+                    @JsonProperty("seconds")
+                    @ExcludeMissing
+                    seconds: JsonField<Double> = JsonMissing.of(),
+                    @JsonProperty("tag") @ExcludeMissing tag: JsonField<Tag> = JsonMissing.of(),
+                    @JsonProperty("text")
+                    @ExcludeMissing
+                    text: JsonField<String> = JsonMissing.of(),
+                ) : this(indices, seconds, tag, text, mutableMapOf())
+
+                /**
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun indices(): List<Long>? = indices.getNullable("indices")
+
+                /**
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun seconds(): Double? = seconds.getNullable("seconds")
+
+                /**
+                 * X's SmartTag for a cashtag, smarttag or hashtag. Xquik leaves out X's trading
+                 * platforms, which differ by reader.
+                 *
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun tag(): Tag? = tag.getNullable("tag")
+
+                /**
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun text(): String? = text.getNullable("text")
+
+                /**
+                 * Returns the raw JSON value of [indices].
+                 *
+                 * Unlike [indices], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("indices")
+                @ExcludeMissing
+                fun _indices(): JsonField<List<Long>> = indices
+
+                /**
+                 * Returns the raw JSON value of [seconds].
+                 *
+                 * Unlike [seconds], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("seconds") @ExcludeMissing fun _seconds(): JsonField<Double> = seconds
+
+                /**
+                 * Returns the raw JSON value of [tag].
+                 *
+                 * Unlike [tag], this method doesn't throw if the JSON field has an unexpected type.
+                 */
+                @JsonProperty("tag") @ExcludeMissing fun _tag(): JsonField<Tag> = tag
+
+                /**
+                 * Returns the raw JSON value of [text].
+                 *
+                 * Unlike [text], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("text") @ExcludeMissing fun _text(): JsonField<String> = text
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /** Returns a mutable builder for constructing an instance of [Timestamp]. */
+                    fun builder() = Builder()
+                }
+
+                /** A builder for [Timestamp]. */
+                class Builder internal constructor() {
+
+                    private var indices: JsonField<MutableList<Long>>? = null
+                    private var seconds: JsonField<Double> = JsonMissing.of()
+                    private var tag: JsonField<Tag> = JsonMissing.of()
+                    private var text: JsonField<String> = JsonMissing.of()
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    internal fun from(timestamp: Timestamp) = apply {
+                        indices = timestamp.indices.map { it.toMutableList() }
+                        seconds = timestamp.seconds
+                        tag = timestamp.tag
+                        text = timestamp.text
+                        additionalProperties = timestamp.additionalProperties.toMutableMap()
+                    }
+
+                    fun indices(indices: List<Long>) = indices(JsonField.of(indices))
+
+                    /** Sets [Builder.indices] to an arbitrary JSON value. */
+                    fun indices(indices: JsonField<List<Long>>) = apply {
+                        this.indices = indices.map { it.toMutableList() }
+                    }
+
+                    /**
+                     * Adds a single [Long] to [indices].
+                     *
+                     * @throws IllegalStateException if the field was previously set to a non-list.
+                     */
+                    fun addIndex(index: Long) = apply {
+                        indices =
+                            (indices ?: JsonField.of(mutableListOf())).also {
+                                checkKnown("indices", it).add(index)
+                            }
+                    }
+
+                    fun seconds(seconds: Double) = seconds(JsonField.of(seconds))
+
+                    /** Sets [Builder.seconds] to an arbitrary JSON value. */
+                    fun seconds(seconds: JsonField<Double>) = apply { this.seconds = seconds }
+
+                    /**
+                     * X's SmartTag for a cashtag, smarttag or hashtag. Xquik leaves out X's trading
+                     * platforms, which differ by reader.
+                     */
+                    fun tag(tag: Tag) = tag(JsonField.of(tag))
+
+                    /** Sets [Builder.tag] to an arbitrary JSON value. */
+                    fun tag(tag: JsonField<Tag>) = apply { this.tag = tag }
+
+                    fun text(text: String) = text(JsonField.of(text))
+
+                    /** Sets [Builder.text] to an arbitrary JSON value. */
+                    fun text(text: JsonField<String>) = apply { this.text = text }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [Timestamp].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
+                    fun build(): Timestamp =
+                        Timestamp(
+                            (indices ?: JsonMissing.of()).map { it.toImmutable() },
+                            seconds,
+                            tag,
+                            text,
+                            additionalProperties.toMutableMap(),
+                        )
+                }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws XTwitterScraperInvalidDataException if any value type in this object
+                 *   doesn't match its expected type.
+                 */
+                fun validate(): Timestamp = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    indices()
+                    seconds()
+                    tag()?.validate()
+                    text()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: XTwitterScraperInvalidDataException) {
+                        false
+                    }
+
+                internal fun validity(): Int =
+                    (indices.asKnown()?.size ?: 0) +
+                        (if (seconds.asKnown() == null) 0 else 1) +
+                        (tag.asKnown()?.validity() ?: 0) +
+                        (if (text.asKnown() == null) 0 else 1)
+
+                /**
+                 * X's SmartTag for a cashtag, smarttag or hashtag. Xquik leaves out X's trading
+                 * platforms, which differ by reader.
+                 */
+                class Tag
+                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+                private constructor(
+                    private val id: JsonField<String>,
+                    private val info: JsonField<Info>,
+                    private val additionalProperties: MutableMap<String, JsonValue>,
+                ) {
+
+                    @JsonCreator
+                    private constructor(
+                        @JsonProperty("id")
+                        @ExcludeMissing
+                        id: JsonField<String> = JsonMissing.of(),
+                        @JsonProperty("info")
+                        @ExcludeMissing
+                        info: JsonField<Info> = JsonMissing.of(),
+                    ) : this(id, info, mutableMapOf())
+
+                    /**
+                     * X's ID for the SmartTag.
+                     *
+                     * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                     *   unexpected type.
+                     */
+                    fun id(): String? = id.getNullable("id")
+
+                    /**
+                     * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                     *   unexpected type.
+                     */
+                    fun info(): Info? = info.getNullable("info")
+
+                    /**
+                     * Returns the raw JSON value of [id].
+                     *
+                     * Unlike [id], this method doesn't throw if the JSON field has an unexpected
+                     * type.
+                     */
+                    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+                    /**
+                     * Returns the raw JSON value of [info].
+                     *
+                     * Unlike [info], this method doesn't throw if the JSON field has an unexpected
+                     * type.
+                     */
+                    @JsonProperty("info") @ExcludeMissing fun _info(): JsonField<Info> = info
+
+                    @JsonAnySetter
+                    private fun putAdditionalProperty(key: String, value: JsonValue) {
+                        additionalProperties.put(key, value)
+                    }
+
+                    @JsonAnyGetter
+                    @ExcludeMissing
+                    fun _additionalProperties(): Map<String, JsonValue> =
+                        Collections.unmodifiableMap(additionalProperties)
+
+                    fun toBuilder() = Builder().from(this)
+
+                    companion object {
+
+                        /** Returns a mutable builder for constructing an instance of [Tag]. */
+                        fun builder() = Builder()
+                    }
+
+                    /** A builder for [Tag]. */
+                    class Builder internal constructor() {
+
+                        private var id: JsonField<String> = JsonMissing.of()
+                        private var info: JsonField<Info> = JsonMissing.of()
+                        private var additionalProperties: MutableMap<String, JsonValue> =
+                            mutableMapOf()
+
+                        internal fun from(tag: Tag) = apply {
+                            id = tag.id
+                            info = tag.info
+                            additionalProperties = tag.additionalProperties.toMutableMap()
+                        }
+
+                        /** X's ID for the SmartTag. */
+                        fun id(id: String) = id(JsonField.of(id))
+
+                        /** Sets [Builder.id] to an arbitrary JSON value. */
+                        fun id(id: JsonField<String>) = apply { this.id = id }
+
+                        fun info(info: Info) = info(JsonField.of(info))
+
+                        /** Sets [Builder.info] to an arbitrary JSON value. */
+                        fun info(info: JsonField<Info>) = apply { this.info = info }
+
+                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                            apply {
+                                this.additionalProperties.clear()
+                                putAllAdditionalProperties(additionalProperties)
+                            }
+
+                        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                            additionalProperties.put(key, value)
+                        }
+
+                        fun putAllAdditionalProperties(
+                            additionalProperties: Map<String, JsonValue>
+                        ) = apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                        fun removeAdditionalProperty(key: String) = apply {
+                            additionalProperties.remove(key)
+                        }
+
+                        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                            keys.forEach(::removeAdditionalProperty)
+                        }
+
+                        /**
+                         * Returns an immutable instance of [Tag].
+                         *
+                         * Further updates to this [Builder] will not mutate the returned instance.
+                         */
+                        fun build(): Tag = Tag(id, info, additionalProperties.toMutableMap())
+                    }
+
+                    private var validated: Boolean = false
+
+                    /**
+                     * Validates that the types of all values in this object match their expected
+                     * types recursively.
+                     *
+                     * This method is _not_ forwards compatible with new types from the API for
+                     * existing fields.
+                     *
+                     * @throws XTwitterScraperInvalidDataException if any value type in this object
+                     *   doesn't match its expected type.
+                     */
+                    fun validate(): Tag = apply {
+                        if (validated) {
+                            return@apply
+                        }
+
+                        id()
+                        info()?.validate()
+                        validated = true
+                    }
+
+                    fun isValid(): Boolean =
+                        try {
+                            validate()
+                            true
+                        } catch (e: XTwitterScraperInvalidDataException) {
+                            false
+                        }
+
+                    internal fun validity(): Int =
+                        (if (id.asKnown() == null) 0 else 1) + (info.asKnown()?.validity() ?: 0)
+
+                    class Info
+                    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+                    private constructor(
+                        private val info: JsonField<InnerInfo>,
+                        private val additionalProperties: MutableMap<String, JsonValue>,
+                    ) {
+
+                        @JsonCreator
+                        private constructor(
+                            @JsonProperty("info")
+                            @ExcludeMissing
+                            info: JsonField<InnerInfo> = JsonMissing.of()
+                        ) : this(info, mutableMapOf())
+
+                        /**
+                         * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                         *   unexpected type.
+                         */
+                        fun info(): InnerInfo? = info.getNullable("info")
+
+                        /**
+                         * Returns the raw JSON value of [info].
+                         *
+                         * Unlike [info], this method doesn't throw if the JSON field has an
+                         * unexpected type.
+                         */
+                        @JsonProperty("info")
+                        @ExcludeMissing
+                        fun _info(): JsonField<InnerInfo> = info
+
+                        @JsonAnySetter
+                        private fun putAdditionalProperty(key: String, value: JsonValue) {
+                            additionalProperties.put(key, value)
+                        }
+
+                        @JsonAnyGetter
+                        @ExcludeMissing
+                        fun _additionalProperties(): Map<String, JsonValue> =
+                            Collections.unmodifiableMap(additionalProperties)
+
+                        fun toBuilder() = Builder().from(this)
+
+                        companion object {
+
+                            /** Returns a mutable builder for constructing an instance of [Info]. */
+                            fun builder() = Builder()
+                        }
+
+                        /** A builder for [Info]. */
+                        class Builder internal constructor() {
+
+                            private var info: JsonField<InnerInfo> = JsonMissing.of()
+                            private var additionalProperties: MutableMap<String, JsonValue> =
+                                mutableMapOf()
+
+                            internal fun from(info: Info) = apply {
+                                this.info = info.info
+                                additionalProperties = info.additionalProperties.toMutableMap()
+                            }
+
+                            fun info(info: InnerInfo) = info(JsonField.of(info))
+
+                            /** Sets [Builder.info] to an arbitrary JSON value. */
+                            fun info(info: JsonField<InnerInfo>) = apply { this.info = info }
+
+                            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                                apply {
+                                    this.additionalProperties.clear()
+                                    putAllAdditionalProperties(additionalProperties)
+                                }
+
+                            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                                additionalProperties.put(key, value)
+                            }
+
+                            fun putAllAdditionalProperties(
+                                additionalProperties: Map<String, JsonValue>
+                            ) = apply {
+                                this.additionalProperties.putAll(additionalProperties)
+                            }
+
+                            fun removeAdditionalProperty(key: String) = apply {
+                                additionalProperties.remove(key)
+                            }
+
+                            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                                keys.forEach(::removeAdditionalProperty)
+                            }
+
+                            /**
+                             * Returns an immutable instance of [Info].
+                             *
+                             * Further updates to this [Builder] will not mutate the returned
+                             * instance.
+                             */
+                            fun build(): Info = Info(info, additionalProperties.toMutableMap())
+                        }
+
+                        private var validated: Boolean = false
+
+                        /**
+                         * Validates that the types of all values in this object match their
+                         * expected types recursively.
+                         *
+                         * This method is _not_ forwards compatible with new types from the API for
+                         * existing fields.
+                         *
+                         * @throws XTwitterScraperInvalidDataException if any value type in this
+                         *   object doesn't match its expected type.
+                         */
+                        fun validate(): Info = apply {
+                            if (validated) {
+                                return@apply
+                            }
+
+                            info()?.validate()
+                            validated = true
+                        }
+
+                        fun isValid(): Boolean =
+                            try {
+                                validate()
+                                true
+                            } catch (e: XTwitterScraperInvalidDataException) {
+                                false
+                            }
+
+                        internal fun validity(): Int = (info.asKnown()?.validity() ?: 0)
+
+                        class InnerInfo
+                        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+                        private constructor(
+                            private val active: JsonField<Boolean>,
+                            private val name: JsonField<String>,
+                            private val ticker: JsonField<String>,
+                            private val additionalProperties: MutableMap<String, JsonValue>,
+                        ) {
+
+                            @JsonCreator
+                            private constructor(
+                                @JsonProperty("active")
+                                @ExcludeMissing
+                                active: JsonField<Boolean> = JsonMissing.of(),
+                                @JsonProperty("name")
+                                @ExcludeMissing
+                                name: JsonField<String> = JsonMissing.of(),
+                                @JsonProperty("ticker")
+                                @ExcludeMissing
+                                ticker: JsonField<String> = JsonMissing.of(),
+                            ) : this(active, name, ticker, mutableMapOf())
+
+                            /**
+                             * Whether X marks the SmartTag active.
+                             *
+                             * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                             *   unexpected type.
+                             */
+                            fun active(): Boolean? = active.getNullable("active")
+
+                            /**
+                             * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                             *   unexpected type.
+                             */
+                            fun name(): String? = name.getNullable("name")
+
+                            /**
+                             * @throws XTwitterScraperInvalidDataException if the JSON field has an
+                             *   unexpected type.
+                             */
+                            fun ticker(): String? = ticker.getNullable("ticker")
+
+                            /**
+                             * Returns the raw JSON value of [active].
+                             *
+                             * Unlike [active], this method doesn't throw if the JSON field has an
+                             * unexpected type.
+                             */
+                            @JsonProperty("active")
+                            @ExcludeMissing
+                            fun _active(): JsonField<Boolean> = active
+
+                            /**
+                             * Returns the raw JSON value of [name].
+                             *
+                             * Unlike [name], this method doesn't throw if the JSON field has an
+                             * unexpected type.
+                             */
+                            @JsonProperty("name")
+                            @ExcludeMissing
+                            fun _name(): JsonField<String> = name
+
+                            /**
+                             * Returns the raw JSON value of [ticker].
+                             *
+                             * Unlike [ticker], this method doesn't throw if the JSON field has an
+                             * unexpected type.
+                             */
+                            @JsonProperty("ticker")
+                            @ExcludeMissing
+                            fun _ticker(): JsonField<String> = ticker
+
+                            @JsonAnySetter
+                            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                                additionalProperties.put(key, value)
+                            }
+
+                            @JsonAnyGetter
+                            @ExcludeMissing
+                            fun _additionalProperties(): Map<String, JsonValue> =
+                                Collections.unmodifiableMap(additionalProperties)
+
+                            fun toBuilder() = Builder().from(this)
+
+                            companion object {
+
+                                /**
+                                 * Returns a mutable builder for constructing an instance of
+                                 * [InnerInfo].
+                                 */
+                                fun builder() = Builder()
+                            }
+
+                            /** A builder for [InnerInfo]. */
+                            class Builder internal constructor() {
+
+                                private var active: JsonField<Boolean> = JsonMissing.of()
+                                private var name: JsonField<String> = JsonMissing.of()
+                                private var ticker: JsonField<String> = JsonMissing.of()
+                                private var additionalProperties: MutableMap<String, JsonValue> =
+                                    mutableMapOf()
+
+                                internal fun from(innerInfo: InnerInfo) = apply {
+                                    active = innerInfo.active
+                                    name = innerInfo.name
+                                    ticker = innerInfo.ticker
+                                    additionalProperties =
+                                        innerInfo.additionalProperties.toMutableMap()
+                                }
+
+                                /** Whether X marks the SmartTag active. */
+                                fun active(active: Boolean) = active(JsonField.of(active))
+
+                                /** Sets [Builder.active] to an arbitrary JSON value. */
+                                fun active(active: JsonField<Boolean>) = apply {
+                                    this.active = active
+                                }
+
+                                fun name(name: String) = name(JsonField.of(name))
+
+                                /** Sets [Builder.name] to an arbitrary JSON value. */
+                                fun name(name: JsonField<String>) = apply { this.name = name }
+
+                                fun ticker(ticker: String) = ticker(JsonField.of(ticker))
+
+                                /** Sets [Builder.ticker] to an arbitrary JSON value. */
+                                fun ticker(ticker: JsonField<String>) = apply {
+                                    this.ticker = ticker
+                                }
+
+                                fun additionalProperties(
+                                    additionalProperties: Map<String, JsonValue>
+                                ) = apply {
+                                    this.additionalProperties.clear()
+                                    putAllAdditionalProperties(additionalProperties)
+                                }
+
+                                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                                    additionalProperties.put(key, value)
+                                }
+
+                                fun putAllAdditionalProperties(
+                                    additionalProperties: Map<String, JsonValue>
+                                ) = apply {
+                                    this.additionalProperties.putAll(additionalProperties)
+                                }
+
+                                fun removeAdditionalProperty(key: String) = apply {
+                                    additionalProperties.remove(key)
+                                }
+
+                                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                                    keys.forEach(::removeAdditionalProperty)
+                                }
+
+                                /**
+                                 * Returns an immutable instance of [InnerInfo].
+                                 *
+                                 * Further updates to this [Builder] will not mutate the returned
+                                 * instance.
+                                 */
+                                fun build(): InnerInfo =
+                                    InnerInfo(
+                                        active,
+                                        name,
+                                        ticker,
+                                        additionalProperties.toMutableMap(),
+                                    )
+                            }
+
+                            private var validated: Boolean = false
+
+                            /**
+                             * Validates that the types of all values in this object match their
+                             * expected types recursively.
+                             *
+                             * This method is _not_ forwards compatible with new types from the API
+                             * for existing fields.
+                             *
+                             * @throws XTwitterScraperInvalidDataException if any value type in this
+                             *   object doesn't match its expected type.
+                             */
+                            fun validate(): InnerInfo = apply {
+                                if (validated) {
+                                    return@apply
+                                }
+
+                                active()
+                                name()
+                                ticker()
+                                validated = true
+                            }
+
+                            fun isValid(): Boolean =
+                                try {
+                                    validate()
+                                    true
+                                } catch (e: XTwitterScraperInvalidDataException) {
+                                    false
+                                }
+
+                            internal fun validity(): Int =
+                                (if (active.asKnown() == null) 0 else 1) +
+                                    (if (name.asKnown() == null) 0 else 1) +
+                                    (if (ticker.asKnown() == null) 0 else 1)
+
+                            override fun equals(other: Any?): Boolean {
+                                if (this === other) {
+                                    return true
+                                }
+
+                                return other is InnerInfo &&
+                                    active == other.active &&
+                                    name == other.name &&
+                                    ticker == other.ticker &&
+                                    additionalProperties == other.additionalProperties
+                            }
+
+                            private val hashCode: Int by lazy {
+                                Objects.hash(active, name, ticker, additionalProperties)
+                            }
+
+                            override fun hashCode(): Int = hashCode
+
+                            override fun toString() =
+                                "InnerInfo{active=$active, name=$name, ticker=$ticker, additionalProperties=$additionalProperties}"
+                        }
+
+                        override fun equals(other: Any?): Boolean {
+                            if (this === other) {
+                                return true
+                            }
+
+                            return other is Info &&
+                                info == other.info &&
+                                additionalProperties == other.additionalProperties
+                        }
+
+                        private val hashCode: Int by lazy {
+                            Objects.hash(info, additionalProperties)
+                        }
+
+                        override fun hashCode(): Int = hashCode
+
+                        override fun toString() =
+                            "Info{info=$info, additionalProperties=$additionalProperties}"
+                    }
+
+                    override fun equals(other: Any?): Boolean {
+                        if (this === other) {
+                            return true
+                        }
+
+                        return other is Tag &&
+                            id == other.id &&
+                            info == other.info &&
+                            additionalProperties == other.additionalProperties
+                    }
+
+                    private val hashCode: Int by lazy {
+                        Objects.hash(id, info, additionalProperties)
+                    }
+
+                    override fun hashCode(): Int = hashCode
+
+                    override fun toString() =
+                        "Tag{id=$id, info=$info, additionalProperties=$additionalProperties}"
+                }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is Timestamp &&
+                        indices == other.indices &&
+                        seconds == other.seconds &&
+                        tag == other.tag &&
+                        text == other.text &&
+                        additionalProperties == other.additionalProperties
+                }
+
+                private val hashCode: Int by lazy {
+                    Objects.hash(indices, seconds, tag, text, additionalProperties)
+                }
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() =
+                    "Timestamp{indices=$indices, seconds=$seconds, tag=$tag, text=$text, additionalProperties=$additionalProperties}"
+            }
+
+            /** Shortened, display, and expanded URLs from tweet text. */
+            class Url
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+            private constructor(
+                private val displayUrl: JsonField<String>,
+                private val expandedUrl: JsonField<String>,
+                private val indices: JsonField<List<Long>>,
+                private val url: JsonField<String>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
+            ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("display_url")
+                    @ExcludeMissing
+                    displayUrl: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("expanded_url")
+                    @ExcludeMissing
+                    expandedUrl: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("indices")
+                    @ExcludeMissing
+                    indices: JsonField<List<Long>> = JsonMissing.of(),
+                    @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of(),
+                ) : this(displayUrl, expandedUrl, indices, url, mutableMapOf())
+
+                /**
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun displayUrl(): String? = displayUrl.getNullable("display_url")
+
+                /**
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun expandedUrl(): String? = expandedUrl.getNullable("expanded_url")
+
+                /**
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun indices(): List<Long>? = indices.getNullable("indices")
+
+                /**
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun url(): String? = url.getNullable("url")
+
+                /**
+                 * Returns the raw JSON value of [displayUrl].
+                 *
+                 * Unlike [displayUrl], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("display_url")
+                @ExcludeMissing
+                fun _displayUrl(): JsonField<String> = displayUrl
+
+                /**
+                 * Returns the raw JSON value of [expandedUrl].
+                 *
+                 * Unlike [expandedUrl], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("expanded_url")
+                @ExcludeMissing
+                fun _expandedUrl(): JsonField<String> = expandedUrl
+
+                /**
+                 * Returns the raw JSON value of [indices].
+                 *
+                 * Unlike [indices], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("indices")
+                @ExcludeMissing
+                fun _indices(): JsonField<List<Long>> = indices
+
+                /**
+                 * Returns the raw JSON value of [url].
+                 *
+                 * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
+                 */
+                @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /** Returns a mutable builder for constructing an instance of [Url]. */
+                    fun builder() = Builder()
+                }
+
+                /** A builder for [Url]. */
+                class Builder internal constructor() {
+
+                    private var displayUrl: JsonField<String> = JsonMissing.of()
+                    private var expandedUrl: JsonField<String> = JsonMissing.of()
+                    private var indices: JsonField<MutableList<Long>>? = null
+                    private var url: JsonField<String> = JsonMissing.of()
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    internal fun from(url: Url) = apply {
+                        displayUrl = url.displayUrl
+                        expandedUrl = url.expandedUrl
+                        indices = url.indices.map { it.toMutableList() }
+                        this.url = url.url
+                        additionalProperties = url.additionalProperties.toMutableMap()
+                    }
+
+                    fun displayUrl(displayUrl: String) = displayUrl(JsonField.of(displayUrl))
+
+                    /** Sets [Builder.displayUrl] to an arbitrary JSON value. */
+                    fun displayUrl(displayUrl: JsonField<String>) = apply {
+                        this.displayUrl = displayUrl
+                    }
+
+                    fun expandedUrl(expandedUrl: String) = expandedUrl(JsonField.of(expandedUrl))
+
+                    /** Sets [Builder.expandedUrl] to an arbitrary JSON value. */
+                    fun expandedUrl(expandedUrl: JsonField<String>) = apply {
+                        this.expandedUrl = expandedUrl
+                    }
+
+                    fun indices(indices: List<Long>) = indices(JsonField.of(indices))
+
+                    /** Sets [Builder.indices] to an arbitrary JSON value. */
+                    fun indices(indices: JsonField<List<Long>>) = apply {
+                        this.indices = indices.map { it.toMutableList() }
+                    }
+
+                    /**
+                     * Adds a single [Long] to [indices].
+                     *
+                     * @throws IllegalStateException if the field was previously set to a non-list.
+                     */
+                    fun addIndex(index: Long) = apply {
+                        indices =
+                            (indices ?: JsonField.of(mutableListOf())).also {
+                                checkKnown("indices", it).add(index)
+                            }
+                    }
+
+                    fun url(url: String) = url(JsonField.of(url))
+
+                    /** Sets [Builder.url] to an arbitrary JSON value. */
+                    fun url(url: JsonField<String>) = apply { this.url = url }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [Url].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
+                    fun build(): Url =
+                        Url(
+                            displayUrl,
+                            expandedUrl,
+                            (indices ?: JsonMissing.of()).map { it.toImmutable() },
+                            url,
+                            additionalProperties.toMutableMap(),
+                        )
+                }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws XTwitterScraperInvalidDataException if any value type in this object
+                 *   doesn't match its expected type.
+                 */
+                fun validate(): Url = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    displayUrl()
+                    expandedUrl()
+                    indices()
+                    url()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: XTwitterScraperInvalidDataException) {
+                        false
+                    }
+
+                internal fun validity(): Int =
+                    (if (displayUrl.asKnown() == null) 0 else 1) +
+                        (if (expandedUrl.asKnown() == null) 0 else 1) +
+                        (indices.asKnown()?.size ?: 0) +
+                        (if (url.asKnown() == null) 0 else 1)
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is Url &&
+                        displayUrl == other.displayUrl &&
+                        expandedUrl == other.expandedUrl &&
+                        indices == other.indices &&
+                        url == other.url &&
+                        additionalProperties == other.additionalProperties
+                }
+
+                private val hashCode: Int by lazy {
+                    Objects.hash(displayUrl, expandedUrl, indices, url, additionalProperties)
+                }
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() =
+                    "Url{displayUrl=$displayUrl, expandedUrl=$expandedUrl, indices=$indices, url=$url, additionalProperties=$additionalProperties}"
+            }
+
+            /** Profile identity and source offsets of a mention. */
+            class UserMention
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+            private constructor(
+                private val screenName: JsonField<String>,
+                private val idStr: JsonField<String>,
+                private val indices: JsonField<List<Long>>,
+                private val name: JsonField<String>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
+            ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("screen_name")
+                    @ExcludeMissing
+                    screenName: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("id_str")
+                    @ExcludeMissing
+                    idStr: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("indices")
+                    @ExcludeMissing
+                    indices: JsonField<List<Long>> = JsonMissing.of(),
+                    @JsonProperty("name")
+                    @ExcludeMissing
+                    name: JsonField<String> = JsonMissing.of(),
+                ) : this(screenName, idStr, indices, name, mutableMapOf())
+
+                /**
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type or is unexpectedly missing or null.
+                 */
+                fun screenName(): String = screenName.getRequired("screen_name")
+
+                /**
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun idStr(): String? = idStr.getNullable("id_str")
+
+                /**
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun indices(): List<Long>? = indices.getNullable("indices")
+
+                /**
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun name(): String? = name.getNullable("name")
+
+                /**
+                 * Returns the raw JSON value of [screenName].
+                 *
+                 * Unlike [screenName], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("screen_name")
+                @ExcludeMissing
+                fun _screenName(): JsonField<String> = screenName
+
+                /**
+                 * Returns the raw JSON value of [idStr].
+                 *
+                 * Unlike [idStr], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("id_str") @ExcludeMissing fun _idStr(): JsonField<String> = idStr
+
+                /**
+                 * Returns the raw JSON value of [indices].
+                 *
+                 * Unlike [indices], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("indices")
+                @ExcludeMissing
+                fun _indices(): JsonField<List<Long>> = indices
+
+                /**
+                 * Returns the raw JSON value of [name].
+                 *
+                 * Unlike [name], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /**
+                     * Returns a mutable builder for constructing an instance of [UserMention].
+                     *
+                     * The following fields are required:
+                     * ```kotlin
+                     * .screenName()
+                     * ```
+                     */
+                    fun builder() = Builder()
+                }
+
+                /** A builder for [UserMention]. */
+                class Builder internal constructor() {
+
+                    private var screenName: JsonField<String>? = null
+                    private var idStr: JsonField<String> = JsonMissing.of()
+                    private var indices: JsonField<MutableList<Long>>? = null
+                    private var name: JsonField<String> = JsonMissing.of()
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    internal fun from(userMention: UserMention) = apply {
+                        screenName = userMention.screenName
+                        idStr = userMention.idStr
+                        indices = userMention.indices.map { it.toMutableList() }
+                        name = userMention.name
+                        additionalProperties = userMention.additionalProperties.toMutableMap()
+                    }
+
+                    fun screenName(screenName: String) = screenName(JsonField.of(screenName))
+
+                    /** Sets [Builder.screenName] to an arbitrary JSON value. */
+                    fun screenName(screenName: JsonField<String>) = apply {
+                        this.screenName = screenName
+                    }
+
+                    fun idStr(idStr: String) = idStr(JsonField.of(idStr))
+
+                    /** Sets [Builder.idStr] to an arbitrary JSON value. */
+                    fun idStr(idStr: JsonField<String>) = apply { this.idStr = idStr }
+
+                    fun indices(indices: List<Long>) = indices(JsonField.of(indices))
+
+                    /** Sets [Builder.indices] to an arbitrary JSON value. */
+                    fun indices(indices: JsonField<List<Long>>) = apply {
+                        this.indices = indices.map { it.toMutableList() }
+                    }
+
+                    /**
+                     * Adds a single [Long] to [indices].
+                     *
+                     * @throws IllegalStateException if the field was previously set to a non-list.
+                     */
+                    fun addIndex(index: Long) = apply {
+                        indices =
+                            (indices ?: JsonField.of(mutableListOf())).also {
+                                checkKnown("indices", it).add(index)
+                            }
+                    }
+
+                    fun name(name: String) = name(JsonField.of(name))
+
+                    /** Sets [Builder.name] to an arbitrary JSON value. */
+                    fun name(name: JsonField<String>) = apply { this.name = name }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [UserMention].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```kotlin
+                     * .screenName()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
+                    fun build(): UserMention =
+                        UserMention(
+                            checkRequired("screenName", screenName),
+                            idStr,
+                            (indices ?: JsonMissing.of()).map { it.toImmutable() },
+                            name,
+                            additionalProperties.toMutableMap(),
+                        )
+                }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws XTwitterScraperInvalidDataException if any value type in this object
+                 *   doesn't match its expected type.
+                 */
+                fun validate(): UserMention = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    screenName()
+                    idStr()
+                    indices()
+                    name()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: XTwitterScraperInvalidDataException) {
+                        false
+                    }
+
+                internal fun validity(): Int =
+                    (if (screenName.asKnown() == null) 0 else 1) +
+                        (if (idStr.asKnown() == null) 0 else 1) +
+                        (indices.asKnown()?.size ?: 0) +
+                        (if (name.asKnown() == null) 0 else 1)
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is UserMention &&
+                        screenName == other.screenName &&
+                        idStr == other.idStr &&
+                        indices == other.indices &&
+                        name == other.name &&
+                        additionalProperties == other.additionalProperties
+                }
+
+                private val hashCode: Int by lazy {
+                    Objects.hash(screenName, idStr, indices, name, additionalProperties)
+                }
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() =
+                    "UserMention{screenName=$screenName, idStr=$idStr, indices=$indices, name=$name, additionalProperties=$additionalProperties}"
             }
 
             override fun equals(other: Any?): Boolean {
@@ -8567,14 +16334,32 @@ private constructor(
                     return true
                 }
 
-                return other is Entities && additionalProperties == other.additionalProperties
+                return other is Entities &&
+                    hashtags == other.hashtags &&
+                    smarttags == other.smarttags &&
+                    symbols == other.symbols &&
+                    timestamps == other.timestamps &&
+                    urls == other.urls &&
+                    userMentions == other.userMentions &&
+                    additionalProperties == other.additionalProperties
             }
 
-            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+            private val hashCode: Int by lazy {
+                Objects.hash(
+                    hashtags,
+                    smarttags,
+                    symbols,
+                    timestamps,
+                    urls,
+                    userMentions,
+                    additionalProperties,
+                )
+            }
 
             override fun hashCode(): Int = hashCode
 
-            override fun toString() = "Entities{additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "Entities{hashtags=$hashtags, smarttags=$smarttags, symbols=$symbols, timestamps=$timestamps, urls=$urls, userMentions=$userMentions, additionalProperties=$additionalProperties}"
         }
 
         class InlineMedia
@@ -9084,52 +16869,28 @@ private constructor(
             mutableMapOf(),
         )
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun id(): String? = id.getNullable("id")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun boundingBox(): BoundingBox? = boundingBox.getNullable("boundingBox")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun country(): String? = country.getNullable("country")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun countryCode(): String? = countryCode.getNullable("countryCode")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun fullName(): String? = fullName.getNullable("fullName")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun name(): String? = name.getNullable("name")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun placeType(): String? = placeType.getNullable("placeType")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun url(): String? = url.getNullable("url")
 
         /**
@@ -9235,17 +16996,11 @@ private constructor(
                 additionalProperties = place.additionalProperties.toMutableMap()
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun id(id: String) = id(JsonField.of(id))
 
             /** Sets [Builder.id] to an arbitrary JSON value. */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun boundingBox(boundingBox: BoundingBox) = boundingBox(JsonField.of(boundingBox))
 
             /** Sets [Builder.boundingBox] to an arbitrary JSON value. */
@@ -9253,17 +17008,11 @@ private constructor(
                 this.boundingBox = boundingBox
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun country(country: String) = country(JsonField.of(country))
 
             /** Sets [Builder.country] to an arbitrary JSON value. */
             fun country(country: JsonField<String>) = apply { this.country = country }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun countryCode(countryCode: String) = countryCode(JsonField.of(countryCode))
 
             /** Sets [Builder.countryCode] to an arbitrary JSON value. */
@@ -9271,33 +17020,21 @@ private constructor(
                 this.countryCode = countryCode
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun fullName(fullName: String) = fullName(JsonField.of(fullName))
 
             /** Sets [Builder.fullName] to an arbitrary JSON value. */
             fun fullName(fullName: JsonField<String>) = apply { this.fullName = fullName }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun name(name: String) = name(JsonField.of(name))
 
             /** Sets [Builder.name] to an arbitrary JSON value. */
             fun name(name: JsonField<String>) = apply { this.name = name }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun placeType(placeType: String) = placeType(JsonField.of(placeType))
 
             /** Sets [Builder.placeType] to an arbitrary JSON value. */
             fun placeType(placeType: JsonField<String>) = apply { this.placeType = placeType }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun url(url: String) = url(JsonField.of(url))
 
             /** Sets [Builder.url] to an arbitrary JSON value. */
@@ -9662,34 +17399,19 @@ private constructor(
             retweetCount: JsonField<Long> = JsonMissing.of(),
         ) : this(bookmarkCount, likeCount, quoteCount, replyCount, retweetCount, mutableMapOf())
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun bookmarkCount(): Long? = bookmarkCount.getNullable("bookmarkCount")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun likeCount(): Long? = likeCount.getNullable("likeCount")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun quoteCount(): Long? = quoteCount.getNullable("quoteCount")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun replyCount(): Long? = replyCount.getNullable("replyCount")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun retweetCount(): Long? = retweetCount.getNullable("retweetCount")
 
         /**
@@ -9770,9 +17492,6 @@ private constructor(
                 additionalProperties = previousCounts.additionalProperties.toMutableMap()
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun bookmarkCount(bookmarkCount: Long) = bookmarkCount(JsonField.of(bookmarkCount))
 
             /** Sets [Builder.bookmarkCount] to an arbitrary JSON value. */
@@ -9780,33 +17499,21 @@ private constructor(
                 this.bookmarkCount = bookmarkCount
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun likeCount(likeCount: Long) = likeCount(JsonField.of(likeCount))
 
             /** Sets [Builder.likeCount] to an arbitrary JSON value. */
             fun likeCount(likeCount: JsonField<Long>) = apply { this.likeCount = likeCount }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun quoteCount(quoteCount: Long) = quoteCount(JsonField.of(quoteCount))
 
             /** Sets [Builder.quoteCount] to an arbitrary JSON value. */
             fun quoteCount(quoteCount: JsonField<Long>) = apply { this.quoteCount = quoteCount }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun replyCount(replyCount: Long) = replyCount(JsonField.of(replyCount))
 
             /** Sets [Builder.replyCount] to an arbitrary JSON value. */
             fun replyCount(replyCount: JsonField<Long>) = apply { this.replyCount = replyCount }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun retweetCount(retweetCount: Long) = retweetCount(JsonField.of(retweetCount))
 
             /** Sets [Builder.retweetCount] to an arbitrary JSON value. */

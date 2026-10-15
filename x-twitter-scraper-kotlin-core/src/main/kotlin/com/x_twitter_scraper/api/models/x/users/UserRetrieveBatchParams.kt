@@ -32,7 +32,6 @@ private constructor(
     private val minStatuses: Long?,
     private val omit: String?,
     private val usernameContains: String?,
-    private val usernames: String?,
     private val verifiedOnly: Boolean?,
     private val verifiedType: String?,
     private val additionalHeaders: Headers,
@@ -114,12 +113,6 @@ private constructor(
     /** Match a username substring, ignoring case. */
     fun usernameContains(): String? = usernameContains
 
-    /**
-     * Comma-separated X usernames, with or without @, or profile links such as x.com/nasa (1-100
-     * values), in place of ids. A name in another case is the same account.
-     */
-    fun usernames(): String? = usernames
-
     /** Only return verified profiles. */
     fun verifiedOnly(): Boolean? = verifiedOnly
 
@@ -169,7 +162,6 @@ private constructor(
         private var minStatuses: Long? = null
         private var omit: String? = null
         private var usernameContains: String? = null
-        private var usernames: String? = null
         private var verifiedOnly: Boolean? = null
         private var verifiedType: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -195,7 +187,6 @@ private constructor(
             minStatuses = userRetrieveBatchParams.minStatuses
             omit = userRetrieveBatchParams.omit
             usernameContains = userRetrieveBatchParams.usernameContains
-            usernames = userRetrieveBatchParams.usernames
             verifiedOnly = userRetrieveBatchParams.verifiedOnly
             verifiedType = userRetrieveBatchParams.verifiedType
             additionalHeaders = userRetrieveBatchParams.additionalHeaders.toBuilder()
@@ -325,12 +316,6 @@ private constructor(
         fun usernameContains(usernameContains: String?) = apply {
             this.usernameContains = usernameContains
         }
-
-        /**
-         * Comma-separated X usernames, with or without @, or profile links such as x.com/nasa
-         * (1-100 values), in place of ids. A name in another case is the same account.
-         */
-        fun usernames(usernames: String?) = apply { this.usernames = usernames }
 
         /** Only return verified profiles. */
         fun verifiedOnly(verifiedOnly: Boolean?) = apply { this.verifiedOnly = verifiedOnly }
@@ -472,7 +457,6 @@ private constructor(
                 minStatuses,
                 omit,
                 usernameContains,
-                usernames,
                 verifiedOnly,
                 verifiedType,
                 additionalHeaders.build(),
@@ -504,7 +488,6 @@ private constructor(
                 minStatuses?.let { put("minStatuses", it.toString()) }
                 omit?.let { put("omit", it) }
                 usernameContains?.let { put("usernameContains", it) }
-                usernames?.let { put("usernames", it) }
                 verifiedOnly?.let { put("verifiedOnly", it.toString()) }
                 verifiedType?.let { put("verifiedType", it) }
                 putAll(additionalQueryParams)
@@ -536,7 +519,6 @@ private constructor(
             minStatuses == other.minStatuses &&
             omit == other.omit &&
             usernameContains == other.usernameContains &&
-            usernames == other.usernames &&
             verifiedOnly == other.verifiedOnly &&
             verifiedType == other.verifiedType &&
             additionalHeaders == other.additionalHeaders &&
@@ -564,7 +546,6 @@ private constructor(
             minStatuses,
             omit,
             usernameContains,
-            usernames,
             verifiedOnly,
             verifiedType,
             additionalHeaders,
@@ -572,5 +553,5 @@ private constructor(
         )
 
     override fun toString() =
-        "UserRetrieveBatchParams{ids=$ids, bioContains=$bioContains, blueVerifiedOnly=$blueVerifiedOnly, businessEmailOnly=$businessEmailOnly, emailDomains=$emailDomains, fields=$fields, hasEmail=$hasEmail, hasLocation=$hasLocation, hasWebsite=$hasWebsite, locationContains=$locationContains, maxFollowers=$maxFollowers, maxFollowing=$maxFollowing, maxStatuses=$maxStatuses, minAccountAgeDays=$minAccountAgeDays, minFollowers=$minFollowers, minFollowing=$minFollowing, minStatuses=$minStatuses, omit=$omit, usernameContains=$usernameContains, usernames=$usernames, verifiedOnly=$verifiedOnly, verifiedType=$verifiedType, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "UserRetrieveBatchParams{ids=$ids, bioContains=$bioContains, blueVerifiedOnly=$blueVerifiedOnly, businessEmailOnly=$businessEmailOnly, emailDomains=$emailDomains, fields=$fields, hasEmail=$hasEmail, hasLocation=$hasLocation, hasWebsite=$hasWebsite, locationContains=$locationContains, maxFollowers=$maxFollowers, maxFollowing=$maxFollowing, maxStatuses=$maxStatuses, minAccountAgeDays=$minAccountAgeDays, minFollowers=$minFollowers, minFollowing=$minFollowing, minStatuses=$minStatuses, omit=$omit, usernameContains=$usernameContains, verifiedOnly=$verifiedOnly, verifiedType=$verifiedType, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

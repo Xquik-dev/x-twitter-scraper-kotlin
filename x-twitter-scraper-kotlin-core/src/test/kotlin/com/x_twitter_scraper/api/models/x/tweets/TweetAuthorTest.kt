@@ -302,72 +302,102 @@ internal class TweetAuthorTest {
 
     @Test
     fun toUserProfile() {
-        val json =
-            """
-{
-  "id": "11348282",
-  "username": "NASA",
-  "name": "NASA",
-  "followers": 92376194,
-  "following": 115,
-  "verified": true,
-  "isBlueVerified": true,
-  "isVerified": true,
-  "profilePicture": "https://pbs.twimg.com/profile_images/1321163587679784960/0ZxKlEKB_normal.jpg",
-  "profilePictureOriginal": "https://pbs.twimg.com/profile_images/1321163587679784960/0ZxKlEKB.jpg",
-  "coverPicture": "https://pbs.twimg.com/profile_banners/11348282/1788992290",
-  "profileBannerUrl": "https://pbs.twimg.com/profile_banners/11348282/1788992290",
-  "description": "Making the seemingly impossible, possible. ✨",
-  "location": "Pale Blue Dot",
-  "createdAt": "Wed Dec 19 20:20:32 +0000 2007",
-  "statusesCount": 74336,
-  "mediaCount": 28160,
-  "protected": false,
-  "url": "http://www.nasa.gov/",
-  "contactInfo": {
-    "links": [
-      {
-        "url": "http://www.nasa.gov/",
-        "network": "website",
-        "source": "url"
-      }
-    ]
-  },
-  "favouritesCount": 17003,
-  "isTranslator": false,
-  "possiblySensitive": false,
-  "verifiedType": "Government",
-  "profile_bio": {
-    "description": "Making the seemingly impossible, possible. ✨",
-    "entities": {
-      "description": {},
-      "url": {
-        "urls": [
-          {
-            "display_url": "nasa.gov",
-            "expanded_url": "http://www.nasa.gov/",
-            "indices": [
-              0,
-              23
-            ],
-            "url": "https://t.co/9NkQJKAnuU"
-          }
-        ]
-      }
-    }
-  },
-  "hasGraduatedAccess": true,
-  "parodyCommentaryFanLabel": "None",
-  "profileDescriptionLanguage": "en",
-  "profileImageShape": "Square",
-  "profileTranslatorType": "regular",
-  "superFollowEligible": false
-}
-"""
+        val tweetAuthor =
+            TweetAuthor.builder()
+                .id("id")
+                .name("name")
+                .username("username")
+                .accountBasedIn(
+                    UserProfile.AccountBasedIn.builder()
+                        .level(UserProfile.AccountBasedIn.Level.COUNTRY)
+                        .observedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .value("value")
+                        .build()
+                )
+                .accountBasedInAccurate(true)
+                .accountBasedInUnavailable(true)
+                .addAdvertiserAccountServiceLevel("advertiserAccountServiceLevel")
+                .advertiserAccountType("none")
+                .affiliateUsername("BBCNews")
+                .affiliatesHighlightedLabel(
+                    UserProfile.AffiliatesHighlightedLabel.builder().build()
+                )
+                .automatedBy("automatedBy")
+                .birthdate(UserProfile.Birthdate.builder().build())
+                .businessAccountAffiliatesCount(0L)
+                .businessProfileState("none")
+                .communityRole("communityRole")
+                .connectedVia("United States App Store")
+                .connectedViaAccurate(true)
+                .contactInfo(UserProfile.ContactInfo.builder().build())
+                .coverPicture("coverPicture")
+                .createdAt("createdAt")
+                .creatorSubscriptionsCount(0L)
+                .defaultProfile(true)
+                .defaultProfileImage(true)
+                .description("description")
+                .email("press@example.com")
+                .fastFollowersCount(0L)
+                .favouritesCount(0L)
+                .followers(0L)
+                .following(0L)
+                .geoEnabled(true)
+                .grokTranslatedBio(UserProfile.GrokTranslatedBio.builder().build())
+                .hasCustomTimelines(true)
+                .hasExtendedProfile(true)
+                .hasGraduatedAccess(true)
+                .hasHiddenSubscriptionsOnProfile(true)
+                .highlightsInfo(UserProfile.HighlightsInfo.builder().build())
+                .identityVerification(UserProfile.IdentityVerification.builder().build())
+                .isAutomated(true)
+                .isBlueVerified(true)
+                .isProfileTranslatable(true)
+                .isTranslationEnabled(true)
+                .isTranslator(true)
+                .isVerified(true)
+                .listedCount(3051L)
+                .location("location")
+                .mediaCount(0L)
+                .normalFollowersCount(0L)
+                .parodyCommentaryFanLabel("parodyCommentaryFanLabel")
+                .addPinnedTweetId("pinnedTweetId")
+                .possiblySensitive(true)
+                .professional(UserProfile.Professional.builder().build())
+                .profileBannerUrl("profileBannerUrl")
+                .profileDescriptionLanguage("profileDescriptionLanguage")
+                .profileImageShape("profileImageShape")
+                .profileInterstitialType("profileInterstitialType")
+                .profilePicture("profilePicture")
+                .profilePictureOriginal("https://pbs.twimg.com/profile_images/example.jpg")
+                .profileSortEnabled(true)
+                .profileTranslatorType("profileTranslatorType")
+                .profileBio(UserProfile.ProfileBio.builder().build())
+                .protected(true)
+                .redirectsToUsername("spacexsi")
+                .retweetedAt(OffsetDateTime.parse("2026-09-11T20:24:45.000Z"))
+                .statusesCount(0L)
+                .subscribersCount(0L)
+                .superFollowEligible(true)
+                .superFollowsUserProfileActive(true)
+                .tipJar(UserProfile.TipJar.builder().build())
+                .unavailable(true)
+                .unavailableReason("unavailableReason")
+                .url("url")
+                .usernameChanges(UserProfile.UsernameChanges.builder().count(0L).build())
+                .verificationReason(UserProfile.VerificationReason.builder().build())
+                .verified(true)
+                .verifiedType("verifiedType")
+                .addWithheldInCountry("withheldInCountry")
+                .withheldScope("user")
+                .build()
 
-        val author = jsonMapper().readValue(json, jacksonTypeRef<TweetAuthor>())
+        val userProfile =
+            jsonMapper()
+                .readValue(
+                    jsonMapper().writeValueAsString(tweetAuthor),
+                    jacksonTypeRef<UserProfile>(),
+                )
 
-        assertThat(author.toUserProfile())
-            .isEqualTo(jsonMapper().readValue(json, jacksonTypeRef<UserProfile>()))
+        assertThat(tweetAuthor.toUserProfile()).isEqualTo(userProfile)
     }
 }

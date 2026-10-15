@@ -11,8 +11,8 @@
 * `x().lists()` adds `retrieve` and `retrieveSearch`, and `x().dm()` adds `deleteMessage`.
 * `x()` adds `autocompleteSearch`, `getHashflags`, `searchPlaces`, `getTrendLocations`, `getTrendsHistory` and `getNewsStoryVersions`.
 * `x().getTrends` accepts `at`, `country`, `location`, `fields` and `omit`, and its response adds `capturedAt`, `requestedAt` and `location`.
-* `UserProfile`, `SearchTweet` and the models `SearchTweet` uses add every field the API sends, so responses no longer drop them.
-* 41 read methods accept the query params they lacked, such as `fields`, `omit`, `minLikes` and the search operators.
+* `UserProfile`, `SearchTweet`, `TweetDetail` and `TweetMedia` add getters for new API fields.
+* 43 read methods add their missing query params or values, such as `fields`, `omit` and `minLikes`.
 * `TweetAuthor.toUserProfile` copies every field the 2 models share.
 
 ## 0.9.4 (2026-10-13)

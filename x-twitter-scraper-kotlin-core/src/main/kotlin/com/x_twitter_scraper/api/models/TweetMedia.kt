@@ -2270,10 +2270,7 @@ private constructor(
          */
         fun url(): String = url.getRequired("url")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun bitrate(): Long? = bitrate.getNullable("bitrate")
 
         /**
@@ -2352,9 +2349,6 @@ private constructor(
             /** Sets [Builder.url] to an arbitrary JSON value. */
             fun url(url: JsonField<String>) = apply { this.url = url }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun bitrate(bitrate: Long) = bitrate(JsonField.of(bitrate))
 
             /** Sets [Builder.bitrate] to an arbitrary JSON value. */

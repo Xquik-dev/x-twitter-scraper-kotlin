@@ -38,16 +38,10 @@ private constructor(
         aiGenerated: JsonField<AiGenerated> = JsonMissing.of(),
     ) : this(advertising, aiGenerated, mutableMapOf())
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun advertising(): Advertising? = advertising.getNullable("advertising")
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun aiGenerated(): AiGenerated? = aiGenerated.getNullable("aiGenerated")
 
     /**
@@ -99,7 +93,6 @@ private constructor(
             additionalProperties = contentDisclosure.additionalProperties.toMutableMap()
         }
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun advertising(advertising: Advertising) = advertising(JsonField.of(advertising))
 
         /** Sets [Builder.advertising] to an arbitrary JSON value. */
@@ -107,7 +100,6 @@ private constructor(
             this.advertising = advertising
         }
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun aiGenerated(aiGenerated: AiGenerated) = aiGenerated(JsonField.of(aiGenerated))
 
         /** Sets [Builder.aiGenerated] to an arbitrary JSON value. */

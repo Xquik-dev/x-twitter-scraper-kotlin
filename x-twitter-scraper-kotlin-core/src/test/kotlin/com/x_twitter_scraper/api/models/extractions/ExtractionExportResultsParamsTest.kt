@@ -14,9 +14,12 @@ internal class ExtractionExportResultsParamsTest {
     @Test
     fun create() {
         ExtractionExportResultsParams.builder()
-            .id("id")
+            .id("L3NjAbCdEfGh")
             .format(ExtractionExportResultsParams.Format.CSV)
+            .businessEmailOnly(true)
+            .emailDomains("acme.com,stanford.edu")
             .hasDescription(true)
+            .hasEmail(true)
             .hasLocation(true)
             .hasMedia(true)
             .lang("lang")
@@ -41,11 +44,11 @@ internal class ExtractionExportResultsParamsTest {
     fun pathParams() {
         val params =
             ExtractionExportResultsParams.builder()
-                .id("id")
+                .id("L3NjAbCdEfGh")
                 .format(ExtractionExportResultsParams.Format.CSV)
                 .build()
 
-        assertThat(params._pathParam(0)).isEqualTo("id")
+        assertThat(params._pathParam(0)).isEqualTo("L3NjAbCdEfGh")
         assertThat(params._pathParam(1)).isEqualTo("")
     }
 
@@ -53,9 +56,12 @@ internal class ExtractionExportResultsParamsTest {
     fun queryParams() {
         val params =
             ExtractionExportResultsParams.builder()
-                .id("id")
+                .id("L3NjAbCdEfGh")
                 .format(ExtractionExportResultsParams.Format.CSV)
+                .businessEmailOnly(true)
+                .emailDomains("acme.com,stanford.edu")
                 .hasDescription(true)
+                .hasEmail(true)
                 .hasLocation(true)
                 .hasMedia(true)
                 .lang("lang")
@@ -81,7 +87,10 @@ internal class ExtractionExportResultsParamsTest {
             .isEqualTo(
                 QueryParams.builder()
                     .put("format", "csv")
+                    .put("businessEmailOnly", "true")
+                    .put("emailDomains", "acme.com,stanford.edu")
                     .put("hasDescription", "true")
+                    .put("hasEmail", "true")
                     .put("hasLocation", "true")
                     .put("hasMedia", "true")
                     .put("lang", "lang")
@@ -107,7 +116,7 @@ internal class ExtractionExportResultsParamsTest {
     fun queryParamsWithoutOptionalFields() {
         val params =
             ExtractionExportResultsParams.builder()
-                .id("id")
+                .id("L3NjAbCdEfGh")
                 .format(ExtractionExportResultsParams.Format.CSV)
                 .build()
 

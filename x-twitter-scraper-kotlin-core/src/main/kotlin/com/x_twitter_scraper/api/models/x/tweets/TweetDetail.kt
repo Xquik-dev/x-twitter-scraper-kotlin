@@ -8,28 +8,17 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.ObjectCodec
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
-import com.x_twitter_scraper.api.core.BaseDeserializer
-import com.x_twitter_scraper.api.core.BaseSerializer
-import com.x_twitter_scraper.api.core.Enum
 import com.x_twitter_scraper.api.core.ExcludeMissing
 import com.x_twitter_scraper.api.core.JsonField
 import com.x_twitter_scraper.api.core.JsonMissing
 import com.x_twitter_scraper.api.core.JsonValue
-import com.x_twitter_scraper.api.core.allMaxBy
 import com.x_twitter_scraper.api.core.checkKnown
 import com.x_twitter_scraper.api.core.checkRequired
-import com.x_twitter_scraper.api.core.getOrThrow
 import com.x_twitter_scraper.api.core.toImmutable
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
 import com.x_twitter_scraper.api.models.ContentDisclosure
 import com.x_twitter_scraper.api.models.EmbeddedTweet
+import com.x_twitter_scraper.api.models.SearchTweet
 import com.x_twitter_scraper.api.models.TweetMedia
 import com.x_twitter_scraper.api.models.UserProfile
 import java.time.OffsetDateTime
@@ -53,29 +42,29 @@ private constructor(
     private val viewCount: JsonField<Long>,
     private val article: JsonField<Article>,
     private val author: JsonField<TweetAuthor>,
-    private val authorUnavailable: JsonField<AuthorUnavailable>,
+    private val authorUnavailable: JsonField<SearchTweet.AuthorUnavailable>,
     private val card: JsonField<Card>,
-    private val cashtagAttachments: JsonField<List<CashtagAttachment>>,
+    private val cashtagAttachments: JsonField<List<SearchTweet.CashtagAttachment>>,
     private val communityId: JsonField<String>,
     private val communityName: JsonField<String>,
     private val communityNote: JsonField<CommunityNote>,
     private val contentDisclosure: JsonField<ContentDisclosure>,
-    private val conversationControl: JsonField<ConversationControl>,
+    private val conversationControl: JsonField<SearchTweet.ConversationControl>,
     private val conversationId: JsonField<String>,
-    private val coordinates: JsonField<Coordinates>,
+    private val coordinates: JsonField<SearchTweet.Coordinates>,
     private val createdAt: JsonField<String>,
     private val displayTextRange: JsonField<List<Long>>,
     private val edit: JsonField<Edit>,
     private val entities: JsonField<Entities>,
-    private val exclusiveContent: JsonField<ExclusiveContent>,
-    private val geo: JsonField<Geo>,
-    private val grokShareAttachment: JsonField<GrokShareAttachment>,
-    private val grokTranslatedPost: JsonField<GrokTranslatedPost>,
+    private val exclusiveContent: JsonField<SearchTweet.ExclusiveContent>,
+    private val geo: JsonField<SearchTweet.Geo>,
+    private val grokShareAttachment: JsonField<SearchTweet.GrokShareAttachment>,
+    private val grokTranslatedPost: JsonField<SearchTweet.GrokTranslatedPost>,
     private val hasCommunityNotes: JsonField<Boolean>,
     private val inReplyToId: JsonField<String>,
     private val inReplyToUserId: JsonField<String>,
     private val inReplyToUsername: JsonField<String>,
-    private val interstitial: JsonField<Interstitial>,
+    private val interstitial: JsonField<SearchTweet.Interstitial>,
     private val isLimitedReply: JsonField<Boolean>,
     private val isNoteTweet: JsonField<Boolean>,
     private val isPinned: JsonField<Boolean>,
@@ -83,29 +72,29 @@ private constructor(
     private val isReply: JsonField<Boolean>,
     private val isRetweet: JsonField<Boolean>,
     private val isTranslatable: JsonField<Boolean>,
-    private val jetfuelAttachment: JsonField<JetfuelAttachment>,
+    private val jetfuelAttachment: JsonField<SearchTweet.JetfuelAttachment>,
     private val lang: JsonField<String>,
-    private val limitedActions: JsonField<List<LimitedAction>>,
+    private val limitedActions: JsonField<List<SearchTweet.LimitedAction>>,
     private val media: JsonField<List<TweetMedia>>,
     private val noteTweet: JsonField<NoteTweet>,
     private val parentTweet: JsonField<EmbeddedTweet>,
     private val place: JsonField<Place>,
     private val possiblySensitive: JsonField<Boolean>,
-    private val postCta: JsonField<PostCta>,
+    private val postCta: JsonField<SearchTweet.PostCta>,
     private val previousCounts: JsonField<PreviousCounts>,
     private val quotedTweetId: JsonField<String>,
-    private val quotedTweetPermalink: JsonField<QuotedTweetPermalink>,
-    private val quotedTweetUnavailable: JsonField<QuotedTweetUnavailable>,
+    private val quotedTweetPermalink: JsonField<SearchTweet.QuotedTweetPermalink>,
+    private val quotedTweetUnavailable: JsonField<SearchTweet.QuotedTweetUnavailable>,
     private val quotedTweet: JsonField<EmbeddedTweet>,
-    private val reactionContext: JsonField<ReactionContext>,
+    private val reactionContext: JsonField<SearchTweet.ReactionContext>,
     private val retweetedAt: JsonField<OffsetDateTime>,
     private val retweetedTweet: JsonField<EmbeddedTweet>,
-    private val scopes: JsonField<Scopes>,
+    private val scopes: JsonField<SearchTweet.Scopes>,
     private val source: JsonField<String>,
-    private val sportsContext: JsonField<SportsContext>,
-    private val subscriberBadge: JsonField<SubscriberBadge>,
-    private val textHighlights: JsonField<List<TextHighlight>>,
-    private val tombstone: JsonField<Tombstone>,
+    private val sportsContext: JsonField<SearchTweet.SportsContext>,
+    private val subscriberBadge: JsonField<SearchTweet.SubscriberBadge>,
+    private val textHighlights: JsonField<List<SearchTweet.TextHighlight>>,
+    private val tombstone: JsonField<SearchTweet.Tombstone>,
     private val type: JsonField<String>,
     private val unavailableAuthorId: JsonField<String>,
     private val unmentionedUserIds: JsonField<List<String>>,
@@ -132,11 +121,11 @@ private constructor(
         @JsonProperty("author") @ExcludeMissing author: JsonField<TweetAuthor> = JsonMissing.of(),
         @JsonProperty("authorUnavailable")
         @ExcludeMissing
-        authorUnavailable: JsonField<AuthorUnavailable> = JsonMissing.of(),
+        authorUnavailable: JsonField<SearchTweet.AuthorUnavailable> = JsonMissing.of(),
         @JsonProperty("card") @ExcludeMissing card: JsonField<Card> = JsonMissing.of(),
         @JsonProperty("cashtagAttachments")
         @ExcludeMissing
-        cashtagAttachments: JsonField<List<CashtagAttachment>> = JsonMissing.of(),
+        cashtagAttachments: JsonField<List<SearchTweet.CashtagAttachment>> = JsonMissing.of(),
         @JsonProperty("communityId")
         @ExcludeMissing
         communityId: JsonField<String> = JsonMissing.of(),
@@ -151,13 +140,13 @@ private constructor(
         contentDisclosure: JsonField<ContentDisclosure> = JsonMissing.of(),
         @JsonProperty("conversationControl")
         @ExcludeMissing
-        conversationControl: JsonField<ConversationControl> = JsonMissing.of(),
+        conversationControl: JsonField<SearchTweet.ConversationControl> = JsonMissing.of(),
         @JsonProperty("conversationId")
         @ExcludeMissing
         conversationId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("coordinates")
         @ExcludeMissing
-        coordinates: JsonField<Coordinates> = JsonMissing.of(),
+        coordinates: JsonField<SearchTweet.Coordinates> = JsonMissing.of(),
         @JsonProperty("createdAt") @ExcludeMissing createdAt: JsonField<String> = JsonMissing.of(),
         @JsonProperty("displayTextRange")
         @ExcludeMissing
@@ -166,14 +155,14 @@ private constructor(
         @JsonProperty("entities") @ExcludeMissing entities: JsonField<Entities> = JsonMissing.of(),
         @JsonProperty("exclusiveContent")
         @ExcludeMissing
-        exclusiveContent: JsonField<ExclusiveContent> = JsonMissing.of(),
-        @JsonProperty("geo") @ExcludeMissing geo: JsonField<Geo> = JsonMissing.of(),
+        exclusiveContent: JsonField<SearchTweet.ExclusiveContent> = JsonMissing.of(),
+        @JsonProperty("geo") @ExcludeMissing geo: JsonField<SearchTweet.Geo> = JsonMissing.of(),
         @JsonProperty("grokShareAttachment")
         @ExcludeMissing
-        grokShareAttachment: JsonField<GrokShareAttachment> = JsonMissing.of(),
+        grokShareAttachment: JsonField<SearchTweet.GrokShareAttachment> = JsonMissing.of(),
         @JsonProperty("grokTranslatedPost")
         @ExcludeMissing
-        grokTranslatedPost: JsonField<GrokTranslatedPost> = JsonMissing.of(),
+        grokTranslatedPost: JsonField<SearchTweet.GrokTranslatedPost> = JsonMissing.of(),
         @JsonProperty("hasCommunityNotes")
         @ExcludeMissing
         hasCommunityNotes: JsonField<Boolean> = JsonMissing.of(),
@@ -188,7 +177,7 @@ private constructor(
         inReplyToUsername: JsonField<String> = JsonMissing.of(),
         @JsonProperty("interstitial")
         @ExcludeMissing
-        interstitial: JsonField<Interstitial> = JsonMissing.of(),
+        interstitial: JsonField<SearchTweet.Interstitial> = JsonMissing.of(),
         @JsonProperty("isLimitedReply")
         @ExcludeMissing
         isLimitedReply: JsonField<Boolean> = JsonMissing.of(),
@@ -206,11 +195,11 @@ private constructor(
         isTranslatable: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("jetfuelAttachment")
         @ExcludeMissing
-        jetfuelAttachment: JsonField<JetfuelAttachment> = JsonMissing.of(),
+        jetfuelAttachment: JsonField<SearchTweet.JetfuelAttachment> = JsonMissing.of(),
         @JsonProperty("lang") @ExcludeMissing lang: JsonField<String> = JsonMissing.of(),
         @JsonProperty("limitedActions")
         @ExcludeMissing
-        limitedActions: JsonField<List<LimitedAction>> = JsonMissing.of(),
+        limitedActions: JsonField<List<SearchTweet.LimitedAction>> = JsonMissing.of(),
         @JsonProperty("media")
         @ExcludeMissing
         media: JsonField<List<TweetMedia>> = JsonMissing.of(),
@@ -224,7 +213,9 @@ private constructor(
         @JsonProperty("possiblySensitive")
         @ExcludeMissing
         possiblySensitive: JsonField<Boolean> = JsonMissing.of(),
-        @JsonProperty("postCta") @ExcludeMissing postCta: JsonField<PostCta> = JsonMissing.of(),
+        @JsonProperty("postCta")
+        @ExcludeMissing
+        postCta: JsonField<SearchTweet.PostCta> = JsonMissing.of(),
         @JsonProperty("previousCounts")
         @ExcludeMissing
         previousCounts: JsonField<PreviousCounts> = JsonMissing.of(),
@@ -233,36 +224,38 @@ private constructor(
         quotedTweetId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("quotedTweetPermalink")
         @ExcludeMissing
-        quotedTweetPermalink: JsonField<QuotedTweetPermalink> = JsonMissing.of(),
+        quotedTweetPermalink: JsonField<SearchTweet.QuotedTweetPermalink> = JsonMissing.of(),
         @JsonProperty("quotedTweetUnavailable")
         @ExcludeMissing
-        quotedTweetUnavailable: JsonField<QuotedTweetUnavailable> = JsonMissing.of(),
+        quotedTweetUnavailable: JsonField<SearchTweet.QuotedTweetUnavailable> = JsonMissing.of(),
         @JsonProperty("quoted_tweet")
         @ExcludeMissing
         quotedTweet: JsonField<EmbeddedTweet> = JsonMissing.of(),
         @JsonProperty("reactionContext")
         @ExcludeMissing
-        reactionContext: JsonField<ReactionContext> = JsonMissing.of(),
+        reactionContext: JsonField<SearchTweet.ReactionContext> = JsonMissing.of(),
         @JsonProperty("retweetedAt")
         @ExcludeMissing
         retweetedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("retweeted_tweet")
         @ExcludeMissing
         retweetedTweet: JsonField<EmbeddedTweet> = JsonMissing.of(),
-        @JsonProperty("scopes") @ExcludeMissing scopes: JsonField<Scopes> = JsonMissing.of(),
+        @JsonProperty("scopes")
+        @ExcludeMissing
+        scopes: JsonField<SearchTweet.Scopes> = JsonMissing.of(),
         @JsonProperty("source") @ExcludeMissing source: JsonField<String> = JsonMissing.of(),
         @JsonProperty("sportsContext")
         @ExcludeMissing
-        sportsContext: JsonField<SportsContext> = JsonMissing.of(),
+        sportsContext: JsonField<SearchTweet.SportsContext> = JsonMissing.of(),
         @JsonProperty("subscriberBadge")
         @ExcludeMissing
-        subscriberBadge: JsonField<SubscriberBadge> = JsonMissing.of(),
+        subscriberBadge: JsonField<SearchTweet.SubscriberBadge> = JsonMissing.of(),
         @JsonProperty("textHighlights")
         @ExcludeMissing
-        textHighlights: JsonField<List<TextHighlight>> = JsonMissing.of(),
+        textHighlights: JsonField<List<SearchTweet.TextHighlight>> = JsonMissing.of(),
         @JsonProperty("tombstone")
         @ExcludeMissing
-        tombstone: JsonField<Tombstone> = JsonMissing.of(),
+        tombstone: JsonField<SearchTweet.Tombstone> = JsonMissing.of(),
         @JsonProperty("type") @ExcludeMissing type: JsonField<String> = JsonMissing.of(),
         @JsonProperty("unavailableAuthorId")
         @ExcludeMissing
@@ -413,7 +406,8 @@ private constructor(
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun authorUnavailable(): AuthorUnavailable? = authorUnavailable.getNullable("authorUnavailable")
+    fun authorUnavailable(): SearchTweet.AuthorUnavailable? =
+        authorUnavailable.getNullable("authorUnavailable")
 
     /**
      * Public card metadata attached to a tweet.
@@ -428,7 +422,7 @@ private constructor(
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun cashtagAttachments(): List<CashtagAttachment>? =
+    fun cashtagAttachments(): List<SearchTweet.CashtagAttachment>? =
         cashtagAttachments.getNullable("cashtagAttachments")
 
     /**
@@ -465,7 +459,7 @@ private constructor(
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun conversationControl(): ConversationControl? =
+    fun conversationControl(): SearchTweet.ConversationControl? =
         conversationControl.getNullable("conversationControl")
 
     /**
@@ -480,12 +474,9 @@ private constructor(
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun coordinates(): Coordinates? = coordinates.getNullable("coordinates")
+    fun coordinates(): SearchTweet.Coordinates? = coordinates.getNullable("coordinates")
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun createdAt(): String? = createdAt.getNullable("createdAt")
 
     /**
@@ -515,21 +506,22 @@ private constructor(
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun exclusiveContent(): ExclusiveContent? = exclusiveContent.getNullable("exclusiveContent")
+    fun exclusiveContent(): SearchTweet.ExclusiveContent? =
+        exclusiveContent.getNullable("exclusiveContent")
 
     /**
      * Author-published geographic point with 2 numeric coordinates.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun geo(): Geo? = geo.getNullable("geo")
+    fun geo(): SearchTweet.Geo? = geo.getNullable("geo")
 
     /**
      * Public metadata whose fields X defines.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun grokShareAttachment(): GrokShareAttachment? =
+    fun grokShareAttachment(): SearchTweet.GrokShareAttachment? =
         grokShareAttachment.getNullable("grokShareAttachment")
 
     /**
@@ -537,7 +529,7 @@ private constructor(
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun grokTranslatedPost(): GrokTranslatedPost? =
+    fun grokTranslatedPost(): SearchTweet.GrokTranslatedPost? =
         grokTranslatedPost.getNullable("grokTranslatedPost")
 
     /**
@@ -574,7 +566,7 @@ private constructor(
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun interstitial(): Interstitial? = interstitial.getNullable("interstitial")
+    fun interstitial(): SearchTweet.Interstitial? = interstitial.getNullable("interstitial")
 
     /**
      * Whether replies are limited for this tweet
@@ -610,10 +602,7 @@ private constructor(
     /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun isRetweet(): Boolean? = isRetweet.getNullable("isRetweet")
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun isTranslatable(): Boolean? = isTranslatable.getNullable("isTranslatable")
 
     /**
@@ -621,7 +610,8 @@ private constructor(
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun jetfuelAttachment(): JetfuelAttachment? = jetfuelAttachment.getNullable("jetfuelAttachment")
+    fun jetfuelAttachment(): SearchTweet.JetfuelAttachment? =
+        jetfuelAttachment.getNullable("jetfuelAttachment")
 
     /**
      * Tweet language code
@@ -635,7 +625,8 @@ private constructor(
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun limitedActions(): List<LimitedAction>? = limitedActions.getNullable("limitedActions")
+    fun limitedActions(): List<SearchTweet.LimitedAction>? =
+        limitedActions.getNullable("limitedActions")
 
     /**
      * Media, omitted when unavailable.
@@ -666,10 +657,7 @@ private constructor(
      */
     fun place(): Place? = place.getNullable("place")
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun possiblySensitive(): Boolean? = possiblySensitive.getNullable("possiblySensitive")
 
     /**
@@ -677,7 +665,7 @@ private constructor(
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun postCta(): PostCta? = postCta.getNullable("postCta")
+    fun postCta(): SearchTweet.PostCta? = postCta.getNullable("postCta")
 
     /**
      * Engagement counts retained from a prior tweet edit.
@@ -694,7 +682,7 @@ private constructor(
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun quotedTweetPermalink(): QuotedTweetPermalink? =
+    fun quotedTweetPermalink(): SearchTweet.QuotedTweetPermalink? =
         quotedTweetPermalink.getNullable("quotedTweetPermalink")
 
     /**
@@ -702,7 +690,7 @@ private constructor(
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun quotedTweetUnavailable(): QuotedTweetUnavailable? =
+    fun quotedTweetUnavailable(): SearchTweet.QuotedTweetUnavailable? =
         quotedTweetUnavailable.getNullable("quotedTweetUnavailable")
 
     /**
@@ -719,7 +707,8 @@ private constructor(
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun reactionContext(): ReactionContext? = reactionContext.getNullable("reactionContext")
+    fun reactionContext(): SearchTweet.ReactionContext? =
+        reactionContext.getNullable("reactionContext")
 
     /**
      * Repost event time in UTC. Null when unavailable. Omitted for other posts.
@@ -742,7 +731,7 @@ private constructor(
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun scopes(): Scopes? = scopes.getNullable("scopes")
+    fun scopes(): SearchTweet.Scopes? = scopes.getNullable("scopes")
 
     /**
      * The app the post was sent from, as X labels it. X sends it for some posts only.
@@ -756,7 +745,7 @@ private constructor(
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun sportsContext(): SportsContext? = sportsContext.getNullable("sportsContext")
+    fun sportsContext(): SearchTweet.SportsContext? = sportsContext.getNullable("sportsContext")
 
     /**
      * The Subscriber badge X shows on a reply. The reply's author subscribes to the creator who
@@ -764,7 +753,8 @@ private constructor(
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun subscriberBadge(): SubscriberBadge? = subscriberBadge.getNullable("subscriberBadge")
+    fun subscriberBadge(): SearchTweet.SubscriberBadge? =
+        subscriberBadge.getNullable("subscriberBadge")
 
     /**
      * Where `text` matches the search, on each row a search read. Offsets count code points of
@@ -773,14 +763,15 @@ private constructor(
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun textHighlights(): List<TextHighlight>? = textHighlights.getNullable("textHighlights")
+    fun textHighlights(): List<SearchTweet.TextHighlight>? =
+        textHighlights.getNullable("textHighlights")
 
     /**
      * Public visibility notice attached to an available tweet.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun tombstone(): Tombstone? = tombstone.getNullable("tombstone")
+    fun tombstone(): SearchTweet.Tombstone? = tombstone.getNullable("tombstone")
 
     /**
      * Tweet result type
@@ -810,10 +801,7 @@ private constructor(
      */
     fun url(): String? = url.getNullable("url")
 
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-     */
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun viewState(): String? = viewState.getNullable("viewState")
 
     /**
@@ -898,7 +886,7 @@ private constructor(
      */
     @JsonProperty("authorUnavailable")
     @ExcludeMissing
-    fun _authorUnavailable(): JsonField<AuthorUnavailable> = authorUnavailable
+    fun _authorUnavailable(): JsonField<SearchTweet.AuthorUnavailable> = authorUnavailable
 
     /**
      * Returns the raw JSON value of [card].
@@ -915,7 +903,7 @@ private constructor(
      */
     @JsonProperty("cashtagAttachments")
     @ExcludeMissing
-    fun _cashtagAttachments(): JsonField<List<CashtagAttachment>> = cashtagAttachments
+    fun _cashtagAttachments(): JsonField<List<SearchTweet.CashtagAttachment>> = cashtagAttachments
 
     /**
      * Returns the raw JSON value of [communityId].
@@ -960,7 +948,7 @@ private constructor(
      */
     @JsonProperty("conversationControl")
     @ExcludeMissing
-    fun _conversationControl(): JsonField<ConversationControl> = conversationControl
+    fun _conversationControl(): JsonField<SearchTweet.ConversationControl> = conversationControl
 
     /**
      * Returns the raw JSON value of [conversationId].
@@ -978,7 +966,7 @@ private constructor(
      */
     @JsonProperty("coordinates")
     @ExcludeMissing
-    fun _coordinates(): JsonField<Coordinates> = coordinates
+    fun _coordinates(): JsonField<SearchTweet.Coordinates> = coordinates
 
     /**
      * Returns the raw JSON value of [createdAt].
@@ -1019,14 +1007,14 @@ private constructor(
      */
     @JsonProperty("exclusiveContent")
     @ExcludeMissing
-    fun _exclusiveContent(): JsonField<ExclusiveContent> = exclusiveContent
+    fun _exclusiveContent(): JsonField<SearchTweet.ExclusiveContent> = exclusiveContent
 
     /**
      * Returns the raw JSON value of [geo].
      *
      * Unlike [geo], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("geo") @ExcludeMissing fun _geo(): JsonField<Geo> = geo
+    @JsonProperty("geo") @ExcludeMissing fun _geo(): JsonField<SearchTweet.Geo> = geo
 
     /**
      * Returns the raw JSON value of [grokShareAttachment].
@@ -1036,7 +1024,7 @@ private constructor(
      */
     @JsonProperty("grokShareAttachment")
     @ExcludeMissing
-    fun _grokShareAttachment(): JsonField<GrokShareAttachment> = grokShareAttachment
+    fun _grokShareAttachment(): JsonField<SearchTweet.GrokShareAttachment> = grokShareAttachment
 
     /**
      * Returns the raw JSON value of [grokTranslatedPost].
@@ -1046,7 +1034,7 @@ private constructor(
      */
     @JsonProperty("grokTranslatedPost")
     @ExcludeMissing
-    fun _grokTranslatedPost(): JsonField<GrokTranslatedPost> = grokTranslatedPost
+    fun _grokTranslatedPost(): JsonField<SearchTweet.GrokTranslatedPost> = grokTranslatedPost
 
     /**
      * Returns the raw JSON value of [hasCommunityNotes].
@@ -1091,7 +1079,7 @@ private constructor(
      */
     @JsonProperty("interstitial")
     @ExcludeMissing
-    fun _interstitial(): JsonField<Interstitial> = interstitial
+    fun _interstitial(): JsonField<SearchTweet.Interstitial> = interstitial
 
     /**
      * Returns the raw JSON value of [isLimitedReply].
@@ -1158,7 +1146,7 @@ private constructor(
      */
     @JsonProperty("jetfuelAttachment")
     @ExcludeMissing
-    fun _jetfuelAttachment(): JsonField<JetfuelAttachment> = jetfuelAttachment
+    fun _jetfuelAttachment(): JsonField<SearchTweet.JetfuelAttachment> = jetfuelAttachment
 
     /**
      * Returns the raw JSON value of [lang].
@@ -1174,7 +1162,7 @@ private constructor(
      */
     @JsonProperty("limitedActions")
     @ExcludeMissing
-    fun _limitedActions(): JsonField<List<LimitedAction>> = limitedActions
+    fun _limitedActions(): JsonField<List<SearchTweet.LimitedAction>> = limitedActions
 
     /**
      * Returns the raw JSON value of [media].
@@ -1221,7 +1209,9 @@ private constructor(
      *
      * Unlike [postCta], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("postCta") @ExcludeMissing fun _postCta(): JsonField<PostCta> = postCta
+    @JsonProperty("postCta")
+    @ExcludeMissing
+    fun _postCta(): JsonField<SearchTweet.PostCta> = postCta
 
     /**
      * Returns the raw JSON value of [previousCounts].
@@ -1249,7 +1239,7 @@ private constructor(
      */
     @JsonProperty("quotedTweetPermalink")
     @ExcludeMissing
-    fun _quotedTweetPermalink(): JsonField<QuotedTweetPermalink> = quotedTweetPermalink
+    fun _quotedTweetPermalink(): JsonField<SearchTweet.QuotedTweetPermalink> = quotedTweetPermalink
 
     /**
      * Returns the raw JSON value of [quotedTweetUnavailable].
@@ -1259,7 +1249,8 @@ private constructor(
      */
     @JsonProperty("quotedTweetUnavailable")
     @ExcludeMissing
-    fun _quotedTweetUnavailable(): JsonField<QuotedTweetUnavailable> = quotedTweetUnavailable
+    fun _quotedTweetUnavailable(): JsonField<SearchTweet.QuotedTweetUnavailable> =
+        quotedTweetUnavailable
 
     /**
      * Returns the raw JSON value of [quotedTweet].
@@ -1277,7 +1268,7 @@ private constructor(
      */
     @JsonProperty("reactionContext")
     @ExcludeMissing
-    fun _reactionContext(): JsonField<ReactionContext> = reactionContext
+    fun _reactionContext(): JsonField<SearchTweet.ReactionContext> = reactionContext
 
     /**
      * Returns the raw JSON value of [retweetedAt].
@@ -1302,7 +1293,7 @@ private constructor(
      *
      * Unlike [scopes], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("scopes") @ExcludeMissing fun _scopes(): JsonField<Scopes> = scopes
+    @JsonProperty("scopes") @ExcludeMissing fun _scopes(): JsonField<SearchTweet.Scopes> = scopes
 
     /**
      * Returns the raw JSON value of [source].
@@ -1318,7 +1309,7 @@ private constructor(
      */
     @JsonProperty("sportsContext")
     @ExcludeMissing
-    fun _sportsContext(): JsonField<SportsContext> = sportsContext
+    fun _sportsContext(): JsonField<SearchTweet.SportsContext> = sportsContext
 
     /**
      * Returns the raw JSON value of [subscriberBadge].
@@ -1327,7 +1318,7 @@ private constructor(
      */
     @JsonProperty("subscriberBadge")
     @ExcludeMissing
-    fun _subscriberBadge(): JsonField<SubscriberBadge> = subscriberBadge
+    fun _subscriberBadge(): JsonField<SearchTweet.SubscriberBadge> = subscriberBadge
 
     /**
      * Returns the raw JSON value of [textHighlights].
@@ -1336,14 +1327,16 @@ private constructor(
      */
     @JsonProperty("textHighlights")
     @ExcludeMissing
-    fun _textHighlights(): JsonField<List<TextHighlight>> = textHighlights
+    fun _textHighlights(): JsonField<List<SearchTweet.TextHighlight>> = textHighlights
 
     /**
      * Returns the raw JSON value of [tombstone].
      *
      * Unlike [tombstone], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("tombstone") @ExcludeMissing fun _tombstone(): JsonField<Tombstone> = tombstone
+    @JsonProperty("tombstone")
+    @ExcludeMissing
+    fun _tombstone(): JsonField<SearchTweet.Tombstone> = tombstone
 
     /**
      * Returns the raw JSON value of [type].
@@ -1431,29 +1424,32 @@ private constructor(
         private var viewCount: JsonField<Long>? = null
         private var article: JsonField<Article> = JsonMissing.of()
         private var author: JsonField<TweetAuthor> = JsonMissing.of()
-        private var authorUnavailable: JsonField<AuthorUnavailable> = JsonMissing.of()
+        private var authorUnavailable: JsonField<SearchTweet.AuthorUnavailable> = JsonMissing.of()
         private var card: JsonField<Card> = JsonMissing.of()
-        private var cashtagAttachments: JsonField<MutableList<CashtagAttachment>>? = null
+        private var cashtagAttachments: JsonField<MutableList<SearchTweet.CashtagAttachment>>? =
+            null
         private var communityId: JsonField<String> = JsonMissing.of()
         private var communityName: JsonField<String> = JsonMissing.of()
         private var communityNote: JsonField<CommunityNote> = JsonMissing.of()
         private var contentDisclosure: JsonField<ContentDisclosure> = JsonMissing.of()
-        private var conversationControl: JsonField<ConversationControl> = JsonMissing.of()
+        private var conversationControl: JsonField<SearchTweet.ConversationControl> =
+            JsonMissing.of()
         private var conversationId: JsonField<String> = JsonMissing.of()
-        private var coordinates: JsonField<Coordinates> = JsonMissing.of()
+        private var coordinates: JsonField<SearchTweet.Coordinates> = JsonMissing.of()
         private var createdAt: JsonField<String> = JsonMissing.of()
         private var displayTextRange: JsonField<MutableList<Long>>? = null
         private var edit: JsonField<Edit> = JsonMissing.of()
         private var entities: JsonField<Entities> = JsonMissing.of()
-        private var exclusiveContent: JsonField<ExclusiveContent> = JsonMissing.of()
-        private var geo: JsonField<Geo> = JsonMissing.of()
-        private var grokShareAttachment: JsonField<GrokShareAttachment> = JsonMissing.of()
-        private var grokTranslatedPost: JsonField<GrokTranslatedPost> = JsonMissing.of()
+        private var exclusiveContent: JsonField<SearchTweet.ExclusiveContent> = JsonMissing.of()
+        private var geo: JsonField<SearchTweet.Geo> = JsonMissing.of()
+        private var grokShareAttachment: JsonField<SearchTweet.GrokShareAttachment> =
+            JsonMissing.of()
+        private var grokTranslatedPost: JsonField<SearchTweet.GrokTranslatedPost> = JsonMissing.of()
         private var hasCommunityNotes: JsonField<Boolean> = JsonMissing.of()
         private var inReplyToId: JsonField<String> = JsonMissing.of()
         private var inReplyToUserId: JsonField<String> = JsonMissing.of()
         private var inReplyToUsername: JsonField<String> = JsonMissing.of()
-        private var interstitial: JsonField<Interstitial> = JsonMissing.of()
+        private var interstitial: JsonField<SearchTweet.Interstitial> = JsonMissing.of()
         private var isLimitedReply: JsonField<Boolean> = JsonMissing.of()
         private var isNoteTweet: JsonField<Boolean> = JsonMissing.of()
         private var isPinned: JsonField<Boolean> = JsonMissing.of()
@@ -1461,29 +1457,31 @@ private constructor(
         private var isReply: JsonField<Boolean> = JsonMissing.of()
         private var isRetweet: JsonField<Boolean> = JsonMissing.of()
         private var isTranslatable: JsonField<Boolean> = JsonMissing.of()
-        private var jetfuelAttachment: JsonField<JetfuelAttachment> = JsonMissing.of()
+        private var jetfuelAttachment: JsonField<SearchTweet.JetfuelAttachment> = JsonMissing.of()
         private var lang: JsonField<String> = JsonMissing.of()
-        private var limitedActions: JsonField<MutableList<LimitedAction>>? = null
+        private var limitedActions: JsonField<MutableList<SearchTweet.LimitedAction>>? = null
         private var media: JsonField<MutableList<TweetMedia>>? = null
         private var noteTweet: JsonField<NoteTweet> = JsonMissing.of()
         private var parentTweet: JsonField<EmbeddedTweet> = JsonMissing.of()
         private var place: JsonField<Place> = JsonMissing.of()
         private var possiblySensitive: JsonField<Boolean> = JsonMissing.of()
-        private var postCta: JsonField<PostCta> = JsonMissing.of()
+        private var postCta: JsonField<SearchTweet.PostCta> = JsonMissing.of()
         private var previousCounts: JsonField<PreviousCounts> = JsonMissing.of()
         private var quotedTweetId: JsonField<String> = JsonMissing.of()
-        private var quotedTweetPermalink: JsonField<QuotedTweetPermalink> = JsonMissing.of()
-        private var quotedTweetUnavailable: JsonField<QuotedTweetUnavailable> = JsonMissing.of()
+        private var quotedTweetPermalink: JsonField<SearchTweet.QuotedTweetPermalink> =
+            JsonMissing.of()
+        private var quotedTweetUnavailable: JsonField<SearchTweet.QuotedTweetUnavailable> =
+            JsonMissing.of()
         private var quotedTweet: JsonField<EmbeddedTweet> = JsonMissing.of()
-        private var reactionContext: JsonField<ReactionContext> = JsonMissing.of()
+        private var reactionContext: JsonField<SearchTweet.ReactionContext> = JsonMissing.of()
         private var retweetedAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var retweetedTweet: JsonField<EmbeddedTweet> = JsonMissing.of()
-        private var scopes: JsonField<Scopes> = JsonMissing.of()
+        private var scopes: JsonField<SearchTweet.Scopes> = JsonMissing.of()
         private var source: JsonField<String> = JsonMissing.of()
-        private var sportsContext: JsonField<SportsContext> = JsonMissing.of()
-        private var subscriberBadge: JsonField<SubscriberBadge> = JsonMissing.of()
-        private var textHighlights: JsonField<MutableList<TextHighlight>>? = null
-        private var tombstone: JsonField<Tombstone> = JsonMissing.of()
+        private var sportsContext: JsonField<SearchTweet.SportsContext> = JsonMissing.of()
+        private var subscriberBadge: JsonField<SearchTweet.SubscriberBadge> = JsonMissing.of()
+        private var textHighlights: JsonField<MutableList<SearchTweet.TextHighlight>>? = null
+        private var tombstone: JsonField<SearchTweet.Tombstone> = JsonMissing.of()
         private var type: JsonField<String> = JsonMissing.of()
         private var unavailableAuthorId: JsonField<String> = JsonMissing.of()
         private var unmentionedUserIds: JsonField<MutableList<String>>? = null
@@ -1624,11 +1622,11 @@ private constructor(
          * Why the tweet has no author. X serves a suspended or deleted account as an unavailable
          * user with a reason such as Suspended or NotFound. Omitted when the author is available.
          */
-        fun authorUnavailable(authorUnavailable: AuthorUnavailable) =
+        fun authorUnavailable(authorUnavailable: SearchTweet.AuthorUnavailable) =
             authorUnavailable(JsonField.of(authorUnavailable))
 
         /** Sets [Builder.authorUnavailable] to an arbitrary JSON value. */
-        fun authorUnavailable(authorUnavailable: JsonField<AuthorUnavailable>) = apply {
+        fun authorUnavailable(authorUnavailable: JsonField<SearchTweet.AuthorUnavailable>) = apply {
             this.authorUnavailable = authorUnavailable
         }
 
@@ -1642,20 +1640,21 @@ private constructor(
          * Price charts the author attached under the post, 1 per cashtag. Absent when the post has
          * none. X may send a cashtag without a chart window.
          */
-        fun cashtagAttachments(cashtagAttachments: List<CashtagAttachment>) =
+        fun cashtagAttachments(cashtagAttachments: List<SearchTweet.CashtagAttachment>) =
             cashtagAttachments(JsonField.of(cashtagAttachments))
 
         /** Sets [Builder.cashtagAttachments] to an arbitrary JSON value. */
-        fun cashtagAttachments(cashtagAttachments: JsonField<List<CashtagAttachment>>) = apply {
-            this.cashtagAttachments = cashtagAttachments.map { it.toMutableList() }
-        }
+        fun cashtagAttachments(cashtagAttachments: JsonField<List<SearchTweet.CashtagAttachment>>) =
+            apply {
+                this.cashtagAttachments = cashtagAttachments.map { it.toMutableList() }
+            }
 
         /**
-         * Adds a single [CashtagAttachment] to [cashtagAttachments].
+         * Adds a single [SearchTweet.CashtagAttachment] to [cashtagAttachments].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addCashtagAttachment(cashtagAttachment: CashtagAttachment) = apply {
+        fun addCashtagAttachment(cashtagAttachment: SearchTweet.CashtagAttachment) = apply {
             cashtagAttachments =
                 (cashtagAttachments ?: JsonField.of(mutableListOf())).also {
                     checkKnown("cashtagAttachments", it).add(cashtagAttachment)
@@ -1697,13 +1696,14 @@ private constructor(
         }
 
         /** Reply policy & conversation owner. */
-        fun conversationControl(conversationControl: ConversationControl) =
+        fun conversationControl(conversationControl: SearchTweet.ConversationControl) =
             conversationControl(JsonField.of(conversationControl))
 
         /** Sets [Builder.conversationControl] to an arbitrary JSON value. */
-        fun conversationControl(conversationControl: JsonField<ConversationControl>) = apply {
-            this.conversationControl = conversationControl
-        }
+        fun conversationControl(conversationControl: JsonField<SearchTweet.ConversationControl>) =
+            apply {
+                this.conversationControl = conversationControl
+            }
 
         /** ID of the root tweet in the conversation thread */
         fun conversationId(conversationId: String) = conversationId(JsonField.of(conversationId))
@@ -1714,14 +1714,14 @@ private constructor(
         }
 
         /** Author-published geographic point with 2 numeric coordinates. */
-        fun coordinates(coordinates: Coordinates) = coordinates(JsonField.of(coordinates))
+        fun coordinates(coordinates: SearchTweet.Coordinates) =
+            coordinates(JsonField.of(coordinates))
 
         /** Sets [Builder.coordinates] to an arbitrary JSON value. */
-        fun coordinates(coordinates: JsonField<Coordinates>) = apply {
+        fun coordinates(coordinates: JsonField<SearchTweet.Coordinates>) = apply {
             this.coordinates = coordinates
         }
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun createdAt(createdAt: String) = createdAt(JsonField.of(createdAt))
 
         /** Sets [Builder.createdAt] to an arbitrary JSON value. */
@@ -1764,37 +1764,39 @@ private constructor(
          * Marks a subscriber-only post with the creator whose subscription unlocks it.
          * Non-subscribers get the preview text & the subscribe link. Omitted on public posts.
          */
-        fun exclusiveContent(exclusiveContent: ExclusiveContent) =
+        fun exclusiveContent(exclusiveContent: SearchTweet.ExclusiveContent) =
             exclusiveContent(JsonField.of(exclusiveContent))
 
         /** Sets [Builder.exclusiveContent] to an arbitrary JSON value. */
-        fun exclusiveContent(exclusiveContent: JsonField<ExclusiveContent>) = apply {
+        fun exclusiveContent(exclusiveContent: JsonField<SearchTweet.ExclusiveContent>) = apply {
             this.exclusiveContent = exclusiveContent
         }
 
         /** Author-published geographic point with 2 numeric coordinates. */
-        fun geo(geo: Geo) = geo(JsonField.of(geo))
+        fun geo(geo: SearchTweet.Geo) = geo(JsonField.of(geo))
 
         /** Sets [Builder.geo] to an arbitrary JSON value. */
-        fun geo(geo: JsonField<Geo>) = apply { this.geo = geo }
+        fun geo(geo: JsonField<SearchTweet.Geo>) = apply { this.geo = geo }
 
         /** Public metadata whose fields X defines. */
-        fun grokShareAttachment(grokShareAttachment: GrokShareAttachment) =
+        fun grokShareAttachment(grokShareAttachment: SearchTweet.GrokShareAttachment) =
             grokShareAttachment(JsonField.of(grokShareAttachment))
 
         /** Sets [Builder.grokShareAttachment] to an arbitrary JSON value. */
-        fun grokShareAttachment(grokShareAttachment: JsonField<GrokShareAttachment>) = apply {
-            this.grokShareAttachment = grokShareAttachment
-        }
+        fun grokShareAttachment(grokShareAttachment: JsonField<SearchTweet.GrokShareAttachment>) =
+            apply {
+                this.grokShareAttachment = grokShareAttachment
+            }
 
         /** Public metadata whose fields X defines. */
-        fun grokTranslatedPost(grokTranslatedPost: GrokTranslatedPost) =
+        fun grokTranslatedPost(grokTranslatedPost: SearchTweet.GrokTranslatedPost) =
             grokTranslatedPost(JsonField.of(grokTranslatedPost))
 
         /** Sets [Builder.grokTranslatedPost] to an arbitrary JSON value. */
-        fun grokTranslatedPost(grokTranslatedPost: JsonField<GrokTranslatedPost>) = apply {
-            this.grokTranslatedPost = grokTranslatedPost
-        }
+        fun grokTranslatedPost(grokTranslatedPost: JsonField<SearchTweet.GrokTranslatedPost>) =
+            apply {
+                this.grokTranslatedPost = grokTranslatedPost
+            }
 
         /** Whether X holds Community Notes on the post, shown or not. */
         fun hasCommunityNotes(hasCommunityNotes: Boolean) =
@@ -1833,10 +1835,11 @@ private constructor(
          * The notice x.com covers the post with until the reader views it, such as X's public
          * interest notice on a post that broke its rules but stays up.
          */
-        fun interstitial(interstitial: Interstitial) = interstitial(JsonField.of(interstitial))
+        fun interstitial(interstitial: SearchTweet.Interstitial) =
+            interstitial(JsonField.of(interstitial))
 
         /** Sets [Builder.interstitial] to an arbitrary JSON value. */
-        fun interstitial(interstitial: JsonField<Interstitial>) = apply {
+        fun interstitial(interstitial: JsonField<SearchTweet.Interstitial>) = apply {
             this.interstitial = interstitial
         }
 
@@ -1878,7 +1881,6 @@ private constructor(
         /** Sets [Builder.isRetweet] to an arbitrary JSON value. */
         fun isRetweet(isRetweet: JsonField<Boolean>) = apply { this.isRetweet = isRetweet }
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun isTranslatable(isTranslatable: Boolean) = isTranslatable(JsonField.of(isTranslatable))
 
         /** Sets [Builder.isTranslatable] to an arbitrary JSON value. */
@@ -1887,11 +1889,11 @@ private constructor(
         }
 
         /** Public metadata whose fields X defines. */
-        fun jetfuelAttachment(jetfuelAttachment: JetfuelAttachment) =
+        fun jetfuelAttachment(jetfuelAttachment: SearchTweet.JetfuelAttachment) =
             jetfuelAttachment(JsonField.of(jetfuelAttachment))
 
         /** Sets [Builder.jetfuelAttachment] to an arbitrary JSON value. */
-        fun jetfuelAttachment(jetfuelAttachment: JsonField<JetfuelAttachment>) = apply {
+        fun jetfuelAttachment(jetfuelAttachment: JsonField<SearchTweet.JetfuelAttachment>) = apply {
             this.jetfuelAttachment = jetfuelAttachment
         }
 
@@ -1902,20 +1904,20 @@ private constructor(
         fun lang(lang: JsonField<String>) = apply { this.lang = lang }
 
         /** Public restrictions & prompts. */
-        fun limitedActions(limitedActions: List<LimitedAction>) =
+        fun limitedActions(limitedActions: List<SearchTweet.LimitedAction>) =
             limitedActions(JsonField.of(limitedActions))
 
         /** Sets [Builder.limitedActions] to an arbitrary JSON value. */
-        fun limitedActions(limitedActions: JsonField<List<LimitedAction>>) = apply {
+        fun limitedActions(limitedActions: JsonField<List<SearchTweet.LimitedAction>>) = apply {
             this.limitedActions = limitedActions.map { it.toMutableList() }
         }
 
         /**
-         * Adds a single [LimitedAction] to [limitedActions].
+         * Adds a single [SearchTweet.LimitedAction] to [limitedActions].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addLimitedAction(limitedAction: LimitedAction) = apply {
+        fun addLimitedAction(limitedAction: SearchTweet.LimitedAction) = apply {
             limitedActions =
                 (limitedActions ?: JsonField.of(mutableListOf())).also {
                     checkKnown("limitedActions", it).add(limitedAction)
@@ -1965,7 +1967,6 @@ private constructor(
         /** Sets [Builder.place] to an arbitrary JSON value. */
         fun place(place: JsonField<Place>) = apply { this.place = place }
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun possiblySensitive(possiblySensitive: Boolean) =
             possiblySensitive(JsonField.of(possiblySensitive))
 
@@ -1975,10 +1976,10 @@ private constructor(
         }
 
         /** Public metadata whose fields X defines. */
-        fun postCta(postCta: PostCta) = postCta(JsonField.of(postCta))
+        fun postCta(postCta: SearchTweet.PostCta) = postCta(JsonField.of(postCta))
 
         /** Sets [Builder.postCta] to an arbitrary JSON value. */
-        fun postCta(postCta: JsonField<PostCta>) = apply { this.postCta = postCta }
+        fun postCta(postCta: JsonField<SearchTweet.PostCta>) = apply { this.postCta = postCta }
 
         /** Engagement counts retained from a prior tweet edit. */
         fun previousCounts(previousCounts: PreviousCounts) =
@@ -1997,26 +1998,25 @@ private constructor(
         }
 
         /** The quoted post's link, kept when X withholds that post. */
-        fun quotedTweetPermalink(quotedTweetPermalink: QuotedTweetPermalink) =
+        fun quotedTweetPermalink(quotedTweetPermalink: SearchTweet.QuotedTweetPermalink) =
             quotedTweetPermalink(JsonField.of(quotedTweetPermalink))
 
         /** Sets [Builder.quotedTweetPermalink] to an arbitrary JSON value. */
-        fun quotedTweetPermalink(quotedTweetPermalink: JsonField<QuotedTweetPermalink>) = apply {
-            this.quotedTweetPermalink = quotedTweetPermalink
-        }
+        fun quotedTweetPermalink(
+            quotedTweetPermalink: JsonField<SearchTweet.QuotedTweetPermalink>
+        ) = apply { this.quotedTweetPermalink = quotedTweetPermalink }
 
         /**
          * Why X shows no quoted post. Omitted when X names no reason, as its legacy answers never
          * do.
          */
-        fun quotedTweetUnavailable(quotedTweetUnavailable: QuotedTweetUnavailable) =
+        fun quotedTweetUnavailable(quotedTweetUnavailable: SearchTweet.QuotedTweetUnavailable) =
             quotedTweetUnavailable(JsonField.of(quotedTweetUnavailable))
 
         /** Sets [Builder.quotedTweetUnavailable] to an arbitrary JSON value. */
-        fun quotedTweetUnavailable(quotedTweetUnavailable: JsonField<QuotedTweetUnavailable>) =
-            apply {
-                this.quotedTweetUnavailable = quotedTweetUnavailable
-            }
+        fun quotedTweetUnavailable(
+            quotedTweetUnavailable: JsonField<SearchTweet.QuotedTweetUnavailable>
+        ) = apply { this.quotedTweetUnavailable = quotedTweetUnavailable }
 
         /**
          * Quoted or retweeted tweet context. Every object includes id, text, and engagement
@@ -2031,11 +2031,11 @@ private constructor(
         }
 
         /** Public post & user this reaction references. */
-        fun reactionContext(reactionContext: ReactionContext) =
+        fun reactionContext(reactionContext: SearchTweet.ReactionContext) =
             reactionContext(JsonField.of(reactionContext))
 
         /** Sets [Builder.reactionContext] to an arbitrary JSON value. */
-        fun reactionContext(reactionContext: JsonField<ReactionContext>) = apply {
+        fun reactionContext(reactionContext: JsonField<SearchTweet.ReactionContext>) = apply {
             this.reactionContext = reactionContext
         }
 
@@ -2062,10 +2062,10 @@ private constructor(
         }
 
         /** Public metadata whose fields X defines. */
-        fun scopes(scopes: Scopes) = scopes(JsonField.of(scopes))
+        fun scopes(scopes: SearchTweet.Scopes) = scopes(JsonField.of(scopes))
 
         /** Sets [Builder.scopes] to an arbitrary JSON value. */
-        fun scopes(scopes: JsonField<Scopes>) = apply { this.scopes = scopes }
+        fun scopes(scopes: JsonField<SearchTweet.Scopes>) = apply { this.scopes = scopes }
 
         /** The app the post was sent from, as X labels it. X sends it for some posts only. */
         fun source(source: String) = source(JsonField.of(source))
@@ -2074,10 +2074,11 @@ private constructor(
         fun source(source: JsonField<String>) = apply { this.source = source }
 
         /** Game metadata attached to this post. */
-        fun sportsContext(sportsContext: SportsContext) = sportsContext(JsonField.of(sportsContext))
+        fun sportsContext(sportsContext: SearchTweet.SportsContext) =
+            sportsContext(JsonField.of(sportsContext))
 
         /** Sets [Builder.sportsContext] to an arbitrary JSON value. */
-        fun sportsContext(sportsContext: JsonField<SportsContext>) = apply {
+        fun sportsContext(sportsContext: JsonField<SearchTweet.SportsContext>) = apply {
             this.sportsContext = sportsContext
         }
 
@@ -2085,11 +2086,11 @@ private constructor(
          * The Subscriber badge X shows on a reply. The reply's author subscribes to the creator who
          * started the conversation. Omitted on a post without the badge.
          */
-        fun subscriberBadge(subscriberBadge: SubscriberBadge) =
+        fun subscriberBadge(subscriberBadge: SearchTweet.SubscriberBadge) =
             subscriberBadge(JsonField.of(subscriberBadge))
 
         /** Sets [Builder.subscriberBadge] to an arbitrary JSON value. */
-        fun subscriberBadge(subscriberBadge: JsonField<SubscriberBadge>) = apply {
+        fun subscriberBadge(subscriberBadge: JsonField<SearchTweet.SubscriberBadge>) = apply {
             this.subscriberBadge = subscriberBadge
         }
 
@@ -2098,20 +2099,20 @@ private constructor(
          * `text`, as `displayTextRange` does. Empty when X marks nothing in the post. X marks
          * matches only in a post's first 280 characters.
          */
-        fun textHighlights(textHighlights: List<TextHighlight>) =
+        fun textHighlights(textHighlights: List<SearchTweet.TextHighlight>) =
             textHighlights(JsonField.of(textHighlights))
 
         /** Sets [Builder.textHighlights] to an arbitrary JSON value. */
-        fun textHighlights(textHighlights: JsonField<List<TextHighlight>>) = apply {
+        fun textHighlights(textHighlights: JsonField<List<SearchTweet.TextHighlight>>) = apply {
             this.textHighlights = textHighlights.map { it.toMutableList() }
         }
 
         /**
-         * Adds a single [TextHighlight] to [textHighlights].
+         * Adds a single [SearchTweet.TextHighlight] to [textHighlights].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addTextHighlight(textHighlight: TextHighlight) = apply {
+        fun addTextHighlight(textHighlight: SearchTweet.TextHighlight) = apply {
             textHighlights =
                 (textHighlights ?: JsonField.of(mutableListOf())).also {
                     checkKnown("textHighlights", it).add(textHighlight)
@@ -2119,10 +2120,12 @@ private constructor(
         }
 
         /** Public visibility notice attached to an available tweet. */
-        fun tombstone(tombstone: Tombstone) = tombstone(JsonField.of(tombstone))
+        fun tombstone(tombstone: SearchTweet.Tombstone) = tombstone(JsonField.of(tombstone))
 
         /** Sets [Builder.tombstone] to an arbitrary JSON value. */
-        fun tombstone(tombstone: JsonField<Tombstone>) = apply { this.tombstone = tombstone }
+        fun tombstone(tombstone: JsonField<SearchTweet.Tombstone>) = apply {
+            this.tombstone = tombstone
+        }
 
         /** Tweet result type */
         fun type(type: String) = type(JsonField.of(type))
@@ -2166,7 +2169,6 @@ private constructor(
         /** Sets [Builder.url] to an arbitrary JSON value. */
         fun url(url: JsonField<String>) = apply { this.url = url }
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun viewState(viewState: String) = viewState(JsonField.of(viewState))
 
         /** Sets [Builder.viewState] to an arbitrary JSON value. */
@@ -2453,10 +2455,10 @@ private constructor(
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
-        private val coverMedia: JsonField<CoverMedia>,
+        private val coverMedia: JsonField<SearchTweet.Article.CoverMedia>,
         private val coverMediaUrl: JsonField<String>,
-        private val lifecycleState: JsonField<LifecycleState>,
-        private val metadata: JsonField<Metadata>,
+        private val lifecycleState: JsonField<SearchTweet.Article.LifecycleState>,
+        private val metadata: JsonField<SearchTweet.Article.Metadata>,
         private val previewText: JsonField<String>,
         private val title: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -2467,16 +2469,16 @@ private constructor(
             @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
             @JsonProperty("coverMedia")
             @ExcludeMissing
-            coverMedia: JsonField<CoverMedia> = JsonMissing.of(),
+            coverMedia: JsonField<SearchTweet.Article.CoverMedia> = JsonMissing.of(),
             @JsonProperty("coverMediaUrl")
             @ExcludeMissing
             coverMediaUrl: JsonField<String> = JsonMissing.of(),
             @JsonProperty("lifecycleState")
             @ExcludeMissing
-            lifecycleState: JsonField<LifecycleState> = JsonMissing.of(),
+            lifecycleState: JsonField<SearchTweet.Article.LifecycleState> = JsonMissing.of(),
             @JsonProperty("metadata")
             @ExcludeMissing
-            metadata: JsonField<Metadata> = JsonMissing.of(),
+            metadata: JsonField<SearchTweet.Article.Metadata> = JsonMissing.of(),
             @JsonProperty("previewText")
             @ExcludeMissing
             previewText: JsonField<String> = JsonMissing.of(),
@@ -2492,10 +2494,7 @@ private constructor(
             mutableMapOf(),
         )
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun id(): String? = id.getNullable("id")
 
         /**
@@ -2503,12 +2502,9 @@ private constructor(
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
-        fun coverMedia(): CoverMedia? = coverMedia.getNullable("coverMedia")
+        fun coverMedia(): SearchTweet.Article.CoverMedia? = coverMedia.getNullable("coverMedia")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun coverMediaUrl(): String? = coverMediaUrl.getNullable("coverMediaUrl")
 
         /**
@@ -2516,25 +2512,20 @@ private constructor(
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
-        fun lifecycleState(): LifecycleState? = lifecycleState.getNullable("lifecycleState")
+        fun lifecycleState(): SearchTweet.Article.LifecycleState? =
+            lifecycleState.getNullable("lifecycleState")
 
         /**
          * Public metadata whose fields X defines.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
-        fun metadata(): Metadata? = metadata.getNullable("metadata")
+        fun metadata(): SearchTweet.Article.Metadata? = metadata.getNullable("metadata")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun previewText(): String? = previewText.getNullable("previewText")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun title(): String? = title.getNullable("title")
 
         /**
@@ -2551,7 +2542,7 @@ private constructor(
          */
         @JsonProperty("coverMedia")
         @ExcludeMissing
-        fun _coverMedia(): JsonField<CoverMedia> = coverMedia
+        fun _coverMedia(): JsonField<SearchTweet.Article.CoverMedia> = coverMedia
 
         /**
          * Returns the raw JSON value of [coverMediaUrl].
@@ -2571,14 +2562,16 @@ private constructor(
          */
         @JsonProperty("lifecycleState")
         @ExcludeMissing
-        fun _lifecycleState(): JsonField<LifecycleState> = lifecycleState
+        fun _lifecycleState(): JsonField<SearchTweet.Article.LifecycleState> = lifecycleState
 
         /**
          * Returns the raw JSON value of [metadata].
          *
          * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
+        @JsonProperty("metadata")
+        @ExcludeMissing
+        fun _metadata(): JsonField<SearchTweet.Article.Metadata> = metadata
 
         /**
          * Returns the raw JSON value of [previewText].
@@ -2618,10 +2611,11 @@ private constructor(
         class Builder internal constructor() {
 
             private var id: JsonField<String> = JsonMissing.of()
-            private var coverMedia: JsonField<CoverMedia> = JsonMissing.of()
+            private var coverMedia: JsonField<SearchTweet.Article.CoverMedia> = JsonMissing.of()
             private var coverMediaUrl: JsonField<String> = JsonMissing.of()
-            private var lifecycleState: JsonField<LifecycleState> = JsonMissing.of()
-            private var metadata: JsonField<Metadata> = JsonMissing.of()
+            private var lifecycleState: JsonField<SearchTweet.Article.LifecycleState> =
+                JsonMissing.of()
+            private var metadata: JsonField<SearchTweet.Article.Metadata> = JsonMissing.of()
             private var previewText: JsonField<String> = JsonMissing.of()
             private var title: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -2637,25 +2631,20 @@ private constructor(
                 additionalProperties = article.additionalProperties.toMutableMap()
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun id(id: String) = id(JsonField.of(id))
 
             /** Sets [Builder.id] to an arbitrary JSON value. */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             /** Public metadata whose fields X defines. */
-            fun coverMedia(coverMedia: CoverMedia) = coverMedia(JsonField.of(coverMedia))
+            fun coverMedia(coverMedia: SearchTweet.Article.CoverMedia) =
+                coverMedia(JsonField.of(coverMedia))
 
             /** Sets [Builder.coverMedia] to an arbitrary JSON value. */
-            fun coverMedia(coverMedia: JsonField<CoverMedia>) = apply {
+            fun coverMedia(coverMedia: JsonField<SearchTweet.Article.CoverMedia>) = apply {
                 this.coverMedia = coverMedia
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun coverMediaUrl(coverMediaUrl: String) = coverMediaUrl(JsonField.of(coverMediaUrl))
 
             /** Sets [Builder.coverMediaUrl] to an arbitrary JSON value. */
@@ -2664,23 +2653,23 @@ private constructor(
             }
 
             /** Public metadata whose fields X defines. */
-            fun lifecycleState(lifecycleState: LifecycleState) =
+            fun lifecycleState(lifecycleState: SearchTweet.Article.LifecycleState) =
                 lifecycleState(JsonField.of(lifecycleState))
 
             /** Sets [Builder.lifecycleState] to an arbitrary JSON value. */
-            fun lifecycleState(lifecycleState: JsonField<LifecycleState>) = apply {
-                this.lifecycleState = lifecycleState
-            }
+            fun lifecycleState(lifecycleState: JsonField<SearchTweet.Article.LifecycleState>) =
+                apply {
+                    this.lifecycleState = lifecycleState
+                }
 
             /** Public metadata whose fields X defines. */
-            fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
+            fun metadata(metadata: SearchTweet.Article.Metadata) = metadata(JsonField.of(metadata))
 
             /** Sets [Builder.metadata] to an arbitrary JSON value. */
-            fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
+            fun metadata(metadata: JsonField<SearchTweet.Article.Metadata>) = apply {
+                this.metadata = metadata
+            }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun previewText(previewText: String) = previewText(JsonField.of(previewText))
 
             /** Sets [Builder.previewText] to an arbitrary JSON value. */
@@ -2688,9 +2677,6 @@ private constructor(
                 this.previewText = previewText
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun title(title: String) = title(JsonField.of(title))
 
             /** Sets [Builder.title] to an arbitrary JSON value. */
@@ -2776,324 +2762,6 @@ private constructor(
                 (if (previewText.asKnown() == null) 0 else 1) +
                 (if (title.asKnown() == null) 0 else 1)
 
-        /** Public metadata whose fields X defines. */
-        class CoverMedia
-        @JsonCreator
-        private constructor(
-            @com.fasterxml.jackson.annotation.JsonValue
-            private val additionalProperties: Map<String, JsonValue>
-        ) {
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /** Returns a mutable builder for constructing an instance of [CoverMedia]. */
-                fun builder() = Builder()
-            }
-
-            /** A builder for [CoverMedia]. */
-            class Builder internal constructor() {
-
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                internal fun from(coverMedia: CoverMedia) = apply {
-                    additionalProperties = coverMedia.additionalProperties.toMutableMap()
-                }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [CoverMedia].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 */
-                fun build(): CoverMedia = CoverMedia(additionalProperties.toImmutable())
-            }
-
-            private var validated: Boolean = false
-
-            /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
-             *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
-             *
-             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-             *   match its expected type.
-             */
-            fun validate(): CoverMedia = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: XTwitterScraperInvalidDataException) {
-                    false
-                }
-
-            internal fun validity(): Int = additionalProperties.count { (_, value) ->
-                !value.isNull() && !value.isMissing()
-            }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is CoverMedia && additionalProperties == other.additionalProperties
-            }
-
-            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() = "CoverMedia{additionalProperties=$additionalProperties}"
-        }
-
-        /** Public metadata whose fields X defines. */
-        class LifecycleState
-        @JsonCreator
-        private constructor(
-            @com.fasterxml.jackson.annotation.JsonValue
-            private val additionalProperties: Map<String, JsonValue>
-        ) {
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /** Returns a mutable builder for constructing an instance of [LifecycleState]. */
-                fun builder() = Builder()
-            }
-
-            /** A builder for [LifecycleState]. */
-            class Builder internal constructor() {
-
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                internal fun from(lifecycleState: LifecycleState) = apply {
-                    additionalProperties = lifecycleState.additionalProperties.toMutableMap()
-                }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [LifecycleState].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 */
-                fun build(): LifecycleState = LifecycleState(additionalProperties.toImmutable())
-            }
-
-            private var validated: Boolean = false
-
-            /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
-             *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
-             *
-             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-             *   match its expected type.
-             */
-            fun validate(): LifecycleState = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: XTwitterScraperInvalidDataException) {
-                    false
-                }
-
-            internal fun validity(): Int = additionalProperties.count { (_, value) ->
-                !value.isNull() && !value.isMissing()
-            }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is LifecycleState && additionalProperties == other.additionalProperties
-            }
-
-            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() = "LifecycleState{additionalProperties=$additionalProperties}"
-        }
-
-        /** Public metadata whose fields X defines. */
-        class Metadata
-        @JsonCreator
-        private constructor(
-            @com.fasterxml.jackson.annotation.JsonValue
-            private val additionalProperties: Map<String, JsonValue>
-        ) {
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /** Returns a mutable builder for constructing an instance of [Metadata]. */
-                fun builder() = Builder()
-            }
-
-            /** A builder for [Metadata]. */
-            class Builder internal constructor() {
-
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                internal fun from(metadata: Metadata) = apply {
-                    additionalProperties = metadata.additionalProperties.toMutableMap()
-                }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [Metadata].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 */
-                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
-            }
-
-            private var validated: Boolean = false
-
-            /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
-             *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
-             *
-             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-             *   match its expected type.
-             */
-            fun validate(): Metadata = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: XTwitterScraperInvalidDataException) {
-                    false
-                }
-
-            internal fun validity(): Int = additionalProperties.count { (_, value) ->
-                !value.isNull() && !value.isMissing()
-            }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Metadata && additionalProperties == other.additionalProperties
-            }
-
-            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
-        }
-
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
@@ -3129,195 +2797,6 @@ private constructor(
             "Article{id=$id, coverMedia=$coverMedia, coverMediaUrl=$coverMediaUrl, lifecycleState=$lifecycleState, metadata=$metadata, previewText=$previewText, title=$title, additionalProperties=$additionalProperties}"
     }
 
-    /**
-     * Why the tweet has no author. X serves a suspended or deleted account as an unavailable user
-     * with a reason such as Suspended or NotFound. Omitted when the author is available.
-     */
-    class AuthorUnavailable
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val reason: JsonField<String>,
-        private val message: JsonField<String>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("reason") @ExcludeMissing reason: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("message") @ExcludeMissing message: JsonField<String> = JsonMissing.of(),
-        ) : this(reason, message, mutableMapOf())
-
-        /**
-         * X's reason code.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null.
-         */
-        fun reason(): String = reason.getRequired("reason")
-
-        /**
-         * X's notice text for the reason.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun message(): String? = message.getNullable("message")
-
-        /**
-         * Returns the raw JSON value of [reason].
-         *
-         * Unlike [reason], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<String> = reason
-
-        /**
-         * Returns the raw JSON value of [message].
-         *
-         * Unlike [message], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("message") @ExcludeMissing fun _message(): JsonField<String> = message
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [AuthorUnavailable].
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .reason()
-             * ```
-             */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [AuthorUnavailable]. */
-        class Builder internal constructor() {
-
-            private var reason: JsonField<String>? = null
-            private var message: JsonField<String> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(authorUnavailable: AuthorUnavailable) = apply {
-                reason = authorUnavailable.reason
-                message = authorUnavailable.message
-                additionalProperties = authorUnavailable.additionalProperties.toMutableMap()
-            }
-
-            /** X's reason code. */
-            fun reason(reason: String) = reason(JsonField.of(reason))
-
-            /** Sets [Builder.reason] to an arbitrary JSON value. */
-            fun reason(reason: JsonField<String>) = apply { this.reason = reason }
-
-            /** X's notice text for the reason. */
-            fun message(message: String) = message(JsonField.of(message))
-
-            /** Sets [Builder.message] to an arbitrary JSON value. */
-            fun message(message: JsonField<String>) = apply { this.message = message }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [AuthorUnavailable].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .reason()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): AuthorUnavailable =
-                AuthorUnavailable(
-                    checkRequired("reason", reason),
-                    message,
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): AuthorUnavailable = apply {
-            if (validated) {
-                return@apply
-            }
-
-            reason()
-            message()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int =
-            (if (reason.asKnown() == null) 0 else 1) + (if (message.asKnown() == null) 0 else 1)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is AuthorUnavailable &&
-                reason == other.reason &&
-                message == other.message &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(reason, message, additionalProperties)
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "AuthorUnavailable{reason=$reason, message=$message, additionalProperties=$additionalProperties}"
-    }
-
     /** A public card and the profiles it references. */
     class Card
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
@@ -3325,9 +2804,9 @@ private constructor(
         private val id: JsonField<String>,
         private val bindingValues: JsonField<BindingValues>,
         private val name: JsonField<String>,
-        private val platform: JsonField<Platform>,
+        private val platform: JsonField<SearchTweet.Card.Platform>,
         private val url: JsonField<String>,
-        private val userReferenceErrors: JsonField<List<UserReferenceError>>,
+        private val userReferenceErrors: JsonField<List<SearchTweet.Card.UserReferenceError>>,
         private val userReferences: JsonField<List<UserProfile>>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -3341,11 +2820,12 @@ private constructor(
             @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
             @JsonProperty("platform")
             @ExcludeMissing
-            platform: JsonField<Platform> = JsonMissing.of(),
+            platform: JsonField<SearchTweet.Card.Platform> = JsonMissing.of(),
             @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of(),
             @JsonProperty("userReferenceErrors")
             @ExcludeMissing
-            userReferenceErrors: JsonField<List<UserReferenceError>> = JsonMissing.of(),
+            userReferenceErrors: JsonField<List<SearchTweet.Card.UserReferenceError>> =
+                JsonMissing.of(),
             @JsonProperty("userReferences")
             @ExcludeMissing
             userReferences: JsonField<List<UserProfile>> = JsonMissing.of(),
@@ -3360,22 +2840,13 @@ private constructor(
             mutableMapOf(),
         )
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun id(): String? = id.getNullable("id")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun bindingValues(): BindingValues? = bindingValues.getNullable("bindingValues")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun name(): String? = name.getNullable("name")
 
         /**
@@ -3383,12 +2854,9 @@ private constructor(
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
-        fun platform(): Platform? = platform.getNullable("platform")
+        fun platform(): SearchTweet.Card.Platform? = platform.getNullable("platform")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun url(): String? = url.getNullable("url")
 
         /**
@@ -3396,7 +2864,7 @@ private constructor(
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
-        fun userReferenceErrors(): List<UserReferenceError>? =
+        fun userReferenceErrors(): List<SearchTweet.Card.UserReferenceError>? =
             userReferenceErrors.getNullable("userReferenceErrors")
 
         /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
@@ -3431,7 +2899,9 @@ private constructor(
          *
          * Unlike [platform], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("platform") @ExcludeMissing fun _platform(): JsonField<Platform> = platform
+        @JsonProperty("platform")
+        @ExcludeMissing
+        fun _platform(): JsonField<SearchTweet.Card.Platform> = platform
 
         /**
          * Returns the raw JSON value of [url].
@@ -3448,7 +2918,8 @@ private constructor(
          */
         @JsonProperty("userReferenceErrors")
         @ExcludeMissing
-        fun _userReferenceErrors(): JsonField<List<UserReferenceError>> = userReferenceErrors
+        fun _userReferenceErrors(): JsonField<List<SearchTweet.Card.UserReferenceError>> =
+            userReferenceErrors
 
         /**
          * Returns the raw JSON value of [userReferences].
@@ -3484,9 +2955,11 @@ private constructor(
             private var id: JsonField<String> = JsonMissing.of()
             private var bindingValues: JsonField<BindingValues> = JsonMissing.of()
             private var name: JsonField<String> = JsonMissing.of()
-            private var platform: JsonField<Platform> = JsonMissing.of()
+            private var platform: JsonField<SearchTweet.Card.Platform> = JsonMissing.of()
             private var url: JsonField<String> = JsonMissing.of()
-            private var userReferenceErrors: JsonField<MutableList<UserReferenceError>>? = null
+            private var userReferenceErrors:
+                JsonField<MutableList<SearchTweet.Card.UserReferenceError>>? =
+                null
             private var userReferences: JsonField<MutableList<UserProfile>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -3501,17 +2974,11 @@ private constructor(
                 additionalProperties = card.additionalProperties.toMutableMap()
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun id(id: String) = id(JsonField.of(id))
 
             /** Sets [Builder.id] to an arbitrary JSON value. */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun bindingValues(bindingValues: BindingValues) =
                 bindingValues(JsonField.of(bindingValues))
 
@@ -3520,49 +2987,48 @@ private constructor(
                 this.bindingValues = bindingValues
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun name(name: String) = name(JsonField.of(name))
 
             /** Sets [Builder.name] to an arbitrary JSON value. */
             fun name(name: JsonField<String>) = apply { this.name = name }
 
             /** Public metadata whose fields X defines. */
-            fun platform(platform: Platform) = platform(JsonField.of(platform))
+            fun platform(platform: SearchTweet.Card.Platform) = platform(JsonField.of(platform))
 
             /** Sets [Builder.platform] to an arbitrary JSON value. */
-            fun platform(platform: JsonField<Platform>) = apply { this.platform = platform }
+            fun platform(platform: JsonField<SearchTweet.Card.Platform>) = apply {
+                this.platform = platform
+            }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun url(url: String) = url(JsonField.of(url))
 
             /** Sets [Builder.url] to an arbitrary JSON value. */
             fun url(url: JsonField<String>) = apply { this.url = url }
 
             /** Unresolved card user references. */
-            fun userReferenceErrors(userReferenceErrors: List<UserReferenceError>) =
-                userReferenceErrors(JsonField.of(userReferenceErrors))
+            fun userReferenceErrors(
+                userReferenceErrors: List<SearchTweet.Card.UserReferenceError>
+            ) = userReferenceErrors(JsonField.of(userReferenceErrors))
 
             /** Sets [Builder.userReferenceErrors] to an arbitrary JSON value. */
-            fun userReferenceErrors(userReferenceErrors: JsonField<List<UserReferenceError>>) =
-                apply {
-                    this.userReferenceErrors = userReferenceErrors.map { it.toMutableList() }
-                }
+            fun userReferenceErrors(
+                userReferenceErrors: JsonField<List<SearchTweet.Card.UserReferenceError>>
+            ) = apply {
+                this.userReferenceErrors = userReferenceErrors.map { it.toMutableList() }
+            }
 
             /**
-             * Adds a single [UserReferenceError] to [userReferenceErrors].
+             * Adds a single [SearchTweet.Card.UserReferenceError] to [userReferenceErrors].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addUserReferenceError(userReferenceError: UserReferenceError) = apply {
-                userReferenceErrors =
-                    (userReferenceErrors ?: JsonField.of(mutableListOf())).also {
-                        checkKnown("userReferenceErrors", it).add(userReferenceError)
-                    }
-            }
+            fun addUserReferenceError(userReferenceError: SearchTweet.Card.UserReferenceError) =
+                apply {
+                    userReferenceErrors =
+                        (userReferenceErrors ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("userReferenceErrors", it).add(userReferenceError)
+                        }
+                }
 
             fun userReferences(userReferences: List<UserProfile>) =
                 userReferences(JsonField.of(userReferences))
@@ -3770,282 +3236,6 @@ private constructor(
             override fun toString() = "BindingValues{additionalProperties=$additionalProperties}"
         }
 
-        /** Public metadata whose fields X defines. */
-        class Platform
-        @JsonCreator
-        private constructor(
-            @com.fasterxml.jackson.annotation.JsonValue
-            private val additionalProperties: Map<String, JsonValue>
-        ) {
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /** Returns a mutable builder for constructing an instance of [Platform]. */
-                fun builder() = Builder()
-            }
-
-            /** A builder for [Platform]. */
-            class Builder internal constructor() {
-
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                internal fun from(platform: Platform) = apply {
-                    additionalProperties = platform.additionalProperties.toMutableMap()
-                }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [Platform].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 */
-                fun build(): Platform = Platform(additionalProperties.toImmutable())
-            }
-
-            private var validated: Boolean = false
-
-            /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
-             *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
-             *
-             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-             *   match its expected type.
-             */
-            fun validate(): Platform = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: XTwitterScraperInvalidDataException) {
-                    false
-                }
-
-            internal fun validity(): Int = additionalProperties.count { (_, value) ->
-                !value.isNull() && !value.isMissing()
-            }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Platform && additionalProperties == other.additionalProperties
-            }
-
-            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() = "Platform{additionalProperties=$additionalProperties}"
-        }
-
-        class UserReferenceError
-        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-        private constructor(
-            private val message: JsonField<String>,
-            private val reason: JsonField<String>,
-            private val additionalProperties: MutableMap<String, JsonValue>,
-        ) {
-
-            @JsonCreator
-            private constructor(
-                @JsonProperty("message")
-                @ExcludeMissing
-                message: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("reason")
-                @ExcludeMissing
-                reason: JsonField<String> = JsonMissing.of(),
-            ) : this(message, reason, mutableMapOf())
-
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun message(): String? = message.getNullable("message")
-
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun reason(): String? = reason.getNullable("reason")
-
-            /**
-             * Returns the raw JSON value of [message].
-             *
-             * Unlike [message], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("message") @ExcludeMissing fun _message(): JsonField<String> = message
-
-            /**
-             * Returns the raw JSON value of [reason].
-             *
-             * Unlike [reason], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<String> = reason
-
-            @JsonAnySetter
-            private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
-            }
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /**
-                 * Returns a mutable builder for constructing an instance of [UserReferenceError].
-                 */
-                fun builder() = Builder()
-            }
-
-            /** A builder for [UserReferenceError]. */
-            class Builder internal constructor() {
-
-                private var message: JsonField<String> = JsonMissing.of()
-                private var reason: JsonField<String> = JsonMissing.of()
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                internal fun from(userReferenceError: UserReferenceError) = apply {
-                    message = userReferenceError.message
-                    reason = userReferenceError.reason
-                    additionalProperties = userReferenceError.additionalProperties.toMutableMap()
-                }
-
-                fun message(message: String) = message(JsonField.of(message))
-
-                /** Sets [Builder.message] to an arbitrary JSON value. */
-                fun message(message: JsonField<String>) = apply { this.message = message }
-
-                fun reason(reason: String) = reason(JsonField.of(reason))
-
-                /** Sets [Builder.reason] to an arbitrary JSON value. */
-                fun reason(reason: JsonField<String>) = apply { this.reason = reason }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [UserReferenceError].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 */
-                fun build(): UserReferenceError =
-                    UserReferenceError(message, reason, additionalProperties.toMutableMap())
-            }
-
-            private var validated: Boolean = false
-
-            /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
-             *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
-             *
-             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-             *   match its expected type.
-             */
-            fun validate(): UserReferenceError = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                message()
-                reason()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: XTwitterScraperInvalidDataException) {
-                    false
-                }
-
-            internal fun validity(): Int =
-                (if (message.asKnown() == null) 0 else 1) + (if (reason.asKnown() == null) 0 else 1)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is UserReferenceError &&
-                    message == other.message &&
-                    reason == other.reason &&
-                    additionalProperties == other.additionalProperties
-            }
-
-            private val hashCode: Int by lazy {
-                Objects.hash(message, reason, additionalProperties)
-            }
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() =
-                "UserReferenceError{message=$message, reason=$reason, additionalProperties=$additionalProperties}"
-        }
-
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
@@ -4081,330 +3271,6 @@ private constructor(
             "Card{id=$id, bindingValues=$bindingValues, name=$name, platform=$platform, url=$url, userReferenceErrors=$userReferenceErrors, userReferences=$userReferences, additionalProperties=$additionalProperties}"
     }
 
-    class CashtagAttachment
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val cashtag: JsonField<String>,
-        private val candleSize: JsonField<String>,
-        private val endTime: JsonField<OffsetDateTime>,
-        private val sizeVariant: JsonField<Long>,
-        private val startTime: JsonField<OffsetDateTime>,
-        private val timeframe: JsonField<String>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("cashtag") @ExcludeMissing cashtag: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("candleSize")
-            @ExcludeMissing
-            candleSize: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("endTime")
-            @ExcludeMissing
-            endTime: JsonField<OffsetDateTime> = JsonMissing.of(),
-            @JsonProperty("sizeVariant")
-            @ExcludeMissing
-            sizeVariant: JsonField<Long> = JsonMissing.of(),
-            @JsonProperty("startTime")
-            @ExcludeMissing
-            startTime: JsonField<OffsetDateTime> = JsonMissing.of(),
-            @JsonProperty("timeframe")
-            @ExcludeMissing
-            timeframe: JsonField<String> = JsonMissing.of(),
-        ) : this(cashtag, candleSize, endTime, sizeVariant, startTime, timeframe, mutableMapOf())
-
-        /**
-         * The cashtag with its `$`.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null.
-         */
-        fun cashtag(): String = cashtag.getRequired("cashtag")
-
-        /**
-         * Span of each candle.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun candleSize(): String? = candleSize.getNullable("candleSize")
-
-        /**
-         * Time of the chart's last price.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun endTime(): OffsetDateTime? = endTime.getNullable("endTime")
-
-        /**
-         * X's size for the chart.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun sizeVariant(): Long? = sizeVariant.getNullable("sizeVariant")
-
-        /**
-         * Time of the chart's first candle.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun startTime(): OffsetDateTime? = startTime.getNullable("startTime")
-
-        /**
-         * Span the chart covers.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun timeframe(): String? = timeframe.getNullable("timeframe")
-
-        /**
-         * Returns the raw JSON value of [cashtag].
-         *
-         * Unlike [cashtag], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("cashtag") @ExcludeMissing fun _cashtag(): JsonField<String> = cashtag
-
-        /**
-         * Returns the raw JSON value of [candleSize].
-         *
-         * Unlike [candleSize], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("candleSize")
-        @ExcludeMissing
-        fun _candleSize(): JsonField<String> = candleSize
-
-        /**
-         * Returns the raw JSON value of [endTime].
-         *
-         * Unlike [endTime], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("endTime") @ExcludeMissing fun _endTime(): JsonField<OffsetDateTime> = endTime
-
-        /**
-         * Returns the raw JSON value of [sizeVariant].
-         *
-         * Unlike [sizeVariant], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("sizeVariant")
-        @ExcludeMissing
-        fun _sizeVariant(): JsonField<Long> = sizeVariant
-
-        /**
-         * Returns the raw JSON value of [startTime].
-         *
-         * Unlike [startTime], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("startTime")
-        @ExcludeMissing
-        fun _startTime(): JsonField<OffsetDateTime> = startTime
-
-        /**
-         * Returns the raw JSON value of [timeframe].
-         *
-         * Unlike [timeframe], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("timeframe") @ExcludeMissing fun _timeframe(): JsonField<String> = timeframe
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [CashtagAttachment].
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .cashtag()
-             * ```
-             */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [CashtagAttachment]. */
-        class Builder internal constructor() {
-
-            private var cashtag: JsonField<String>? = null
-            private var candleSize: JsonField<String> = JsonMissing.of()
-            private var endTime: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var sizeVariant: JsonField<Long> = JsonMissing.of()
-            private var startTime: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var timeframe: JsonField<String> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(cashtagAttachment: CashtagAttachment) = apply {
-                cashtag = cashtagAttachment.cashtag
-                candleSize = cashtagAttachment.candleSize
-                endTime = cashtagAttachment.endTime
-                sizeVariant = cashtagAttachment.sizeVariant
-                startTime = cashtagAttachment.startTime
-                timeframe = cashtagAttachment.timeframe
-                additionalProperties = cashtagAttachment.additionalProperties.toMutableMap()
-            }
-
-            /** The cashtag with its `$`. */
-            fun cashtag(cashtag: String) = cashtag(JsonField.of(cashtag))
-
-            /** Sets [Builder.cashtag] to an arbitrary JSON value. */
-            fun cashtag(cashtag: JsonField<String>) = apply { this.cashtag = cashtag }
-
-            /** Span of each candle. */
-            fun candleSize(candleSize: String) = candleSize(JsonField.of(candleSize))
-
-            /** Sets [Builder.candleSize] to an arbitrary JSON value. */
-            fun candleSize(candleSize: JsonField<String>) = apply { this.candleSize = candleSize }
-
-            /** Time of the chart's last price. */
-            fun endTime(endTime: OffsetDateTime) = endTime(JsonField.of(endTime))
-
-            /** Sets [Builder.endTime] to an arbitrary JSON value. */
-            fun endTime(endTime: JsonField<OffsetDateTime>) = apply { this.endTime = endTime }
-
-            /** X's size for the chart. */
-            fun sizeVariant(sizeVariant: Long) = sizeVariant(JsonField.of(sizeVariant))
-
-            /** Sets [Builder.sizeVariant] to an arbitrary JSON value. */
-            fun sizeVariant(sizeVariant: JsonField<Long>) = apply { this.sizeVariant = sizeVariant }
-
-            /** Time of the chart's first candle. */
-            fun startTime(startTime: OffsetDateTime) = startTime(JsonField.of(startTime))
-
-            /** Sets [Builder.startTime] to an arbitrary JSON value. */
-            fun startTime(startTime: JsonField<OffsetDateTime>) = apply {
-                this.startTime = startTime
-            }
-
-            /** Span the chart covers. */
-            fun timeframe(timeframe: String) = timeframe(JsonField.of(timeframe))
-
-            /** Sets [Builder.timeframe] to an arbitrary JSON value. */
-            fun timeframe(timeframe: JsonField<String>) = apply { this.timeframe = timeframe }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [CashtagAttachment].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .cashtag()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): CashtagAttachment =
-                CashtagAttachment(
-                    checkRequired("cashtag", cashtag),
-                    candleSize,
-                    endTime,
-                    sizeVariant,
-                    startTime,
-                    timeframe,
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): CashtagAttachment = apply {
-            if (validated) {
-                return@apply
-            }
-
-            cashtag()
-            candleSize()
-            endTime()
-            sizeVariant()
-            startTime()
-            timeframe()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int =
-            (if (cashtag.asKnown() == null) 0 else 1) +
-                (if (candleSize.asKnown() == null) 0 else 1) +
-                (if (endTime.asKnown() == null) 0 else 1) +
-                (if (sizeVariant.asKnown() == null) 0 else 1) +
-                (if (startTime.asKnown() == null) 0 else 1) +
-                (if (timeframe.asKnown() == null) 0 else 1)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is CashtagAttachment &&
-                cashtag == other.cashtag &&
-                candleSize == other.candleSize &&
-                endTime == other.endTime &&
-                sizeVariant == other.sizeVariant &&
-                startTime == other.startTime &&
-                timeframe == other.timeframe &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(
-                cashtag,
-                candleSize,
-                endTime,
-                sizeVariant,
-                startTime,
-                timeframe,
-                additionalProperties,
-            )
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "CashtagAttachment{cashtag=$cashtag, candleSize=$candleSize, endTime=$endTime, sizeVariant=$sizeVariant, startTime=$startTime, timeframe=$timeframe, additionalProperties=$additionalProperties}"
-    }
-
     /** Community Note presentation metadata returned by X. */
     class CommunityNote
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
@@ -4414,7 +3280,7 @@ private constructor(
         private val footer: JsonField<String>,
         private val footerIconType: JsonField<String>,
         private val iconType: JsonField<String>,
-        private val metadata: JsonField<Metadata>,
+        private val metadata: JsonField<SearchTweet.CommunityNote.Metadata>,
         private val shortTitle: JsonField<String>,
         private val subtitle: JsonField<String>,
         private val title: JsonField<String>,
@@ -4437,7 +3303,7 @@ private constructor(
             iconType: JsonField<String> = JsonMissing.of(),
             @JsonProperty("metadata")
             @ExcludeMissing
-            metadata: JsonField<Metadata> = JsonMissing.of(),
+            metadata: JsonField<SearchTweet.CommunityNote.Metadata> = JsonMissing.of(),
             @JsonProperty("shortTitle")
             @ExcludeMissing
             shortTitle: JsonField<String> = JsonMissing.of(),
@@ -4462,22 +3328,13 @@ private constructor(
             mutableMapOf(),
         )
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun id(): String? = id.getNullable("id")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun destinationUrl(): String? = destinationUrl.getNullable("destinationUrl")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun footer(): String? = footer.getNullable("footer")
 
         /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
@@ -4491,30 +3348,18 @@ private constructor(
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
-        fun metadata(): Metadata? = metadata.getNullable("metadata")
+        fun metadata(): SearchTweet.CommunityNote.Metadata? = metadata.getNullable("metadata")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun shortTitle(): String? = shortTitle.getNullable("shortTitle")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun subtitle(): String? = subtitle.getNullable("subtitle")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun title(): String? = title.getNullable("title")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun visualStyle(): String? = visualStyle.getNullable("visualStyle")
 
         /**
@@ -4563,7 +3408,9 @@ private constructor(
          *
          * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
+        @JsonProperty("metadata")
+        @ExcludeMissing
+        fun _metadata(): JsonField<SearchTweet.CommunityNote.Metadata> = metadata
 
         /**
          * Returns the raw JSON value of [shortTitle].
@@ -4623,7 +3470,7 @@ private constructor(
             private var footer: JsonField<String> = JsonMissing.of()
             private var footerIconType: JsonField<String> = JsonMissing.of()
             private var iconType: JsonField<String> = JsonMissing.of()
-            private var metadata: JsonField<Metadata> = JsonMissing.of()
+            private var metadata: JsonField<SearchTweet.CommunityNote.Metadata> = JsonMissing.of()
             private var shortTitle: JsonField<String> = JsonMissing.of()
             private var subtitle: JsonField<String> = JsonMissing.of()
             private var title: JsonField<String> = JsonMissing.of()
@@ -4644,17 +3491,11 @@ private constructor(
                 additionalProperties = communityNote.additionalProperties.toMutableMap()
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun id(id: String) = id(JsonField.of(id))
 
             /** Sets [Builder.id] to an arbitrary JSON value. */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun destinationUrl(destinationUrl: String) =
                 destinationUrl(JsonField.of(destinationUrl))
 
@@ -4663,9 +3504,6 @@ private constructor(
                 this.destinationUrl = destinationUrl
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun footer(footer: String) = footer(JsonField.of(footer))
 
             /** Sets [Builder.footer] to an arbitrary JSON value. */
@@ -4685,38 +3523,29 @@ private constructor(
             fun iconType(iconType: JsonField<String>) = apply { this.iconType = iconType }
 
             /** Public metadata whose fields X defines. */
-            fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
+            fun metadata(metadata: SearchTweet.CommunityNote.Metadata) =
+                metadata(JsonField.of(metadata))
 
             /** Sets [Builder.metadata] to an arbitrary JSON value. */
-            fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
+            fun metadata(metadata: JsonField<SearchTweet.CommunityNote.Metadata>) = apply {
+                this.metadata = metadata
+            }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun shortTitle(shortTitle: String) = shortTitle(JsonField.of(shortTitle))
 
             /** Sets [Builder.shortTitle] to an arbitrary JSON value. */
             fun shortTitle(shortTitle: JsonField<String>) = apply { this.shortTitle = shortTitle }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun subtitle(subtitle: String) = subtitle(JsonField.of(subtitle))
 
             /** Sets [Builder.subtitle] to an arbitrary JSON value. */
             fun subtitle(subtitle: JsonField<String>) = apply { this.subtitle = subtitle }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun title(title: String) = title(JsonField.of(title))
 
             /** Sets [Builder.title] to an arbitrary JSON value. */
             fun title(title: JsonField<String>) = apply { this.title = title }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun visualStyle(visualStyle: String) = visualStyle(JsonField.of(visualStyle))
 
             /** Sets [Builder.visualStyle] to an arbitrary JSON value. */
@@ -4813,112 +3642,6 @@ private constructor(
                 (if (title.asKnown() == null) 0 else 1) +
                 (if (visualStyle.asKnown() == null) 0 else 1)
 
-        /** Public metadata whose fields X defines. */
-        class Metadata
-        @JsonCreator
-        private constructor(
-            @com.fasterxml.jackson.annotation.JsonValue
-            private val additionalProperties: Map<String, JsonValue>
-        ) {
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /** Returns a mutable builder for constructing an instance of [Metadata]. */
-                fun builder() = Builder()
-            }
-
-            /** A builder for [Metadata]. */
-            class Builder internal constructor() {
-
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                internal fun from(metadata: Metadata) = apply {
-                    additionalProperties = metadata.additionalProperties.toMutableMap()
-                }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [Metadata].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 */
-                fun build(): Metadata = Metadata(additionalProperties.toImmutable())
-            }
-
-            private var validated: Boolean = false
-
-            /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
-             *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
-             *
-             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-             *   match its expected type.
-             */
-            fun validate(): Metadata = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: XTwitterScraperInvalidDataException) {
-                    false
-                }
-
-            internal fun validity(): Int = additionalProperties.count { (_, value) ->
-                !value.isNull() && !value.isMissing()
-            }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Metadata && additionalProperties == other.additionalProperties
-            }
-
-            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
-        }
-
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
@@ -4960,645 +3683,6 @@ private constructor(
             "CommunityNote{id=$id, destinationUrl=$destinationUrl, footer=$footer, footerIconType=$footerIconType, iconType=$iconType, metadata=$metadata, shortTitle=$shortTitle, subtitle=$subtitle, title=$title, visualStyle=$visualStyle, additionalProperties=$additionalProperties}"
     }
 
-    /** Reply policy & conversation owner. */
-    class ConversationControl
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val allowedCountryCodes: JsonField<List<String>>,
-        private val inviteViaMention: JsonField<Boolean>,
-        private val mode: JsonField<String>,
-        private val ownerId: JsonField<String>,
-        private val ownerUsername: JsonField<String>,
-        private val policy: JsonField<String>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("allowedCountryCodes")
-            @ExcludeMissing
-            allowedCountryCodes: JsonField<List<String>> = JsonMissing.of(),
-            @JsonProperty("inviteViaMention")
-            @ExcludeMissing
-            inviteViaMention: JsonField<Boolean> = JsonMissing.of(),
-            @JsonProperty("mode") @ExcludeMissing mode: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("ownerId") @ExcludeMissing ownerId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("ownerUsername")
-            @ExcludeMissing
-            ownerUsername: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("policy") @ExcludeMissing policy: JsonField<String> = JsonMissing.of(),
-        ) : this(
-            allowedCountryCodes,
-            inviteViaMention,
-            mode,
-            ownerId,
-            ownerUsername,
-            policy,
-            mutableMapOf(),
-        )
-
-        /**
-         * Regions whose accounts may reply, as country codes. Sent with the `country_of_origin`
-         * mode.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun allowedCountryCodes(): List<String>? =
-            allowedCountryCodes.getNullable("allowedCountryCodes")
-
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
-        fun inviteViaMention(): Boolean? = inviteViaMention.getNullable("inviteViaMention")
-
-        /**
-         * Reply policy from X's newer field, such as `my_network`, `premium` or
-         * `country_of_origin`. Omitted when X sends none.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun mode(): String? = mode.getNullable("mode")
-
-        /**
-         * The conversation owner's account ID.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun ownerId(): String? = ownerId.getNullable("ownerId")
-
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
-        fun ownerUsername(): String? = ownerUsername.getNullable("ownerUsername")
-
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
-        fun policy(): String? = policy.getNullable("policy")
-
-        /**
-         * Returns the raw JSON value of [allowedCountryCodes].
-         *
-         * Unlike [allowedCountryCodes], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("allowedCountryCodes")
-        @ExcludeMissing
-        fun _allowedCountryCodes(): JsonField<List<String>> = allowedCountryCodes
-
-        /**
-         * Returns the raw JSON value of [inviteViaMention].
-         *
-         * Unlike [inviteViaMention], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("inviteViaMention")
-        @ExcludeMissing
-        fun _inviteViaMention(): JsonField<Boolean> = inviteViaMention
-
-        /**
-         * Returns the raw JSON value of [mode].
-         *
-         * Unlike [mode], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("mode") @ExcludeMissing fun _mode(): JsonField<String> = mode
-
-        /**
-         * Returns the raw JSON value of [ownerId].
-         *
-         * Unlike [ownerId], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("ownerId") @ExcludeMissing fun _ownerId(): JsonField<String> = ownerId
-
-        /**
-         * Returns the raw JSON value of [ownerUsername].
-         *
-         * Unlike [ownerUsername], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("ownerUsername")
-        @ExcludeMissing
-        fun _ownerUsername(): JsonField<String> = ownerUsername
-
-        /**
-         * Returns the raw JSON value of [policy].
-         *
-         * Unlike [policy], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("policy") @ExcludeMissing fun _policy(): JsonField<String> = policy
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [ConversationControl]. */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [ConversationControl]. */
-        class Builder internal constructor() {
-
-            private var allowedCountryCodes: JsonField<MutableList<String>>? = null
-            private var inviteViaMention: JsonField<Boolean> = JsonMissing.of()
-            private var mode: JsonField<String> = JsonMissing.of()
-            private var ownerId: JsonField<String> = JsonMissing.of()
-            private var ownerUsername: JsonField<String> = JsonMissing.of()
-            private var policy: JsonField<String> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(conversationControl: ConversationControl) = apply {
-                allowedCountryCodes =
-                    conversationControl.allowedCountryCodes.map { it.toMutableList() }
-                inviteViaMention = conversationControl.inviteViaMention
-                mode = conversationControl.mode
-                ownerId = conversationControl.ownerId
-                ownerUsername = conversationControl.ownerUsername
-                policy = conversationControl.policy
-                additionalProperties = conversationControl.additionalProperties.toMutableMap()
-            }
-
-            /**
-             * Regions whose accounts may reply, as country codes. Sent with the `country_of_origin`
-             * mode.
-             */
-            fun allowedCountryCodes(allowedCountryCodes: List<String>) =
-                allowedCountryCodes(JsonField.of(allowedCountryCodes))
-
-            /** Sets [Builder.allowedCountryCodes] to an arbitrary JSON value. */
-            fun allowedCountryCodes(allowedCountryCodes: JsonField<List<String>>) = apply {
-                this.allowedCountryCodes = allowedCountryCodes.map { it.toMutableList() }
-            }
-
-            /**
-             * Adds a single [String] to [allowedCountryCodes].
-             *
-             * @throws IllegalStateException if the field was previously set to a non-list.
-             */
-            fun addAllowedCountryCode(allowedCountryCode: String) = apply {
-                allowedCountryCodes =
-                    (allowedCountryCodes ?: JsonField.of(mutableListOf())).also {
-                        checkKnown("allowedCountryCodes", it).add(allowedCountryCode)
-                    }
-            }
-
-            fun inviteViaMention(inviteViaMention: Boolean) =
-                inviteViaMention(JsonField.of(inviteViaMention))
-
-            /** Sets [Builder.inviteViaMention] to an arbitrary JSON value. */
-            fun inviteViaMention(inviteViaMention: JsonField<Boolean>) = apply {
-                this.inviteViaMention = inviteViaMention
-            }
-
-            /**
-             * Reply policy from X's newer field, such as `my_network`, `premium` or
-             * `country_of_origin`. Omitted when X sends none.
-             */
-            fun mode(mode: String) = mode(JsonField.of(mode))
-
-            /** Sets [Builder.mode] to an arbitrary JSON value. */
-            fun mode(mode: JsonField<String>) = apply { this.mode = mode }
-
-            /** The conversation owner's account ID. */
-            fun ownerId(ownerId: String) = ownerId(JsonField.of(ownerId))
-
-            /** Sets [Builder.ownerId] to an arbitrary JSON value. */
-            fun ownerId(ownerId: JsonField<String>) = apply { this.ownerId = ownerId }
-
-            fun ownerUsername(ownerUsername: String) = ownerUsername(JsonField.of(ownerUsername))
-
-            /** Sets [Builder.ownerUsername] to an arbitrary JSON value. */
-            fun ownerUsername(ownerUsername: JsonField<String>) = apply {
-                this.ownerUsername = ownerUsername
-            }
-
-            fun policy(policy: String) = policy(JsonField.of(policy))
-
-            /** Sets [Builder.policy] to an arbitrary JSON value. */
-            fun policy(policy: JsonField<String>) = apply { this.policy = policy }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [ConversationControl].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): ConversationControl =
-                ConversationControl(
-                    (allowedCountryCodes ?: JsonMissing.of()).map { it.toImmutable() },
-                    inviteViaMention,
-                    mode,
-                    ownerId,
-                    ownerUsername,
-                    policy,
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): ConversationControl = apply {
-            if (validated) {
-                return@apply
-            }
-
-            allowedCountryCodes()
-            inviteViaMention()
-            mode()
-            ownerId()
-            ownerUsername()
-            policy()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int =
-            (allowedCountryCodes.asKnown()?.size ?: 0) +
-                (if (inviteViaMention.asKnown() == null) 0 else 1) +
-                (if (mode.asKnown() == null) 0 else 1) +
-                (if (ownerId.asKnown() == null) 0 else 1) +
-                (if (ownerUsername.asKnown() == null) 0 else 1) +
-                (if (policy.asKnown() == null) 0 else 1)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is ConversationControl &&
-                allowedCountryCodes == other.allowedCountryCodes &&
-                inviteViaMention == other.inviteViaMention &&
-                mode == other.mode &&
-                ownerId == other.ownerId &&
-                ownerUsername == other.ownerUsername &&
-                policy == other.policy &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(
-                allowedCountryCodes,
-                inviteViaMention,
-                mode,
-                ownerId,
-                ownerUsername,
-                policy,
-                additionalProperties,
-            )
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "ConversationControl{allowedCountryCodes=$allowedCountryCodes, inviteViaMention=$inviteViaMention, mode=$mode, ownerId=$ownerId, ownerUsername=$ownerUsername, policy=$policy, additionalProperties=$additionalProperties}"
-    }
-
-    /** Author-published geographic point with 2 numeric coordinates. */
-    class Coordinates
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val coordinates: JsonField<List<Double>>,
-        private val type: JsonField<Type>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("coordinates")
-            @ExcludeMissing
-            coordinates: JsonField<List<Double>> = JsonMissing.of(),
-            @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
-        ) : this(coordinates, type, mutableMapOf())
-
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null.
-         */
-        fun coordinates(): List<Double> = coordinates.getRequired("coordinates")
-
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null.
-         */
-        fun type(): Type = type.getRequired("type")
-
-        /**
-         * Returns the raw JSON value of [coordinates].
-         *
-         * Unlike [coordinates], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("coordinates")
-        @ExcludeMissing
-        fun _coordinates(): JsonField<List<Double>> = coordinates
-
-        /**
-         * Returns the raw JSON value of [type].
-         *
-         * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [Coordinates].
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .coordinates()
-             * .type()
-             * ```
-             */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [Coordinates]. */
-        class Builder internal constructor() {
-
-            private var coordinates: JsonField<MutableList<Double>>? = null
-            private var type: JsonField<Type>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(coordinates: Coordinates) = apply {
-                this.coordinates = coordinates.coordinates.map { it.toMutableList() }
-                type = coordinates.type
-                additionalProperties = coordinates.additionalProperties.toMutableMap()
-            }
-
-            fun coordinates(coordinates: List<Double>) = coordinates(JsonField.of(coordinates))
-
-            /** Sets [Builder.coordinates] to an arbitrary JSON value. */
-            fun coordinates(coordinates: JsonField<List<Double>>) = apply {
-                this.coordinates = coordinates.map { it.toMutableList() }
-            }
-
-            /**
-             * Adds a single [Double] to [coordinates].
-             *
-             * @throws IllegalStateException if the field was previously set to a non-list.
-             */
-            fun addCoordinate(coordinate: Double) = apply {
-                coordinates =
-                    (coordinates ?: JsonField.of(mutableListOf())).also {
-                        checkKnown("coordinates", it).add(coordinate)
-                    }
-            }
-
-            fun type(type: Type) = type(JsonField.of(type))
-
-            /** Sets [Builder.type] to an arbitrary JSON value. */
-            fun type(type: JsonField<Type>) = apply { this.type = type }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Coordinates].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .coordinates()
-             * .type()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): Coordinates =
-                Coordinates(
-                    checkRequired("coordinates", coordinates).map { it.toImmutable() },
-                    checkRequired("type", type),
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): Coordinates = apply {
-            if (validated) {
-                return@apply
-            }
-
-            coordinates()
-            type().validate()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int =
-            (coordinates.asKnown()?.size ?: 0) + (type.asKnown()?.validity() ?: 0)
-
-        class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
-
-            /** Returns this class instance's raw value. */
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-            companion object {
-
-                val POINT = of("Point")
-
-                fun of(value: String) = Type(JsonField.of(value))
-            }
-
-            /** An enum containing [Type]'s known values. */
-            enum class Known {
-                POINT
-            }
-
-            /**
-             * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
-             *
-             * An instance of [Type] can contain an unknown value in a couple of cases:
-             * - It was deserialized from data that doesn't match any known member. For example, if
-             *   the SDK is on an older version than the API, then the API may respond with new
-             *   members that the SDK is unaware of.
-             * - It was constructed with an arbitrary value using the [of] method.
-             */
-            enum class Value {
-                POINT,
-                /** An enum member indicating that [Type] was instantiated with an unknown value. */
-                _UNKNOWN,
-            }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value, or
-             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-             */
-            fun value(): Value =
-                when (this) {
-                    POINT -> Value.POINT
-                    else -> Value._UNKNOWN
-                }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value.
-             *
-             * @throws XTwitterScraperInvalidDataException if this class instance's value is a not a
-             *   known member.
-             */
-            fun known(): Known =
-                when (this) {
-                    POINT -> Known.POINT
-                    else -> throw XTwitterScraperInvalidDataException("Unknown Type: $value")
-                }
-
-            /**
-             * Returns this class instance's primitive wire representation.
-             *
-             * @throws XTwitterScraperInvalidDataException if this class instance's value does not
-             *   have the expected primitive type.
-             */
-            fun asString(): String =
-                _value().asString()
-                    ?: throw XTwitterScraperInvalidDataException("Value is not a String")
-
-            private var validated: Boolean = false
-
-            /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
-             *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
-             *
-             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-             *   match its expected type.
-             */
-            fun validate(): Type = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                known()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: XTwitterScraperInvalidDataException) {
-                    false
-                }
-
-            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Type && value == other.value
-            }
-
-            override fun hashCode() = value.hashCode()
-
-            override fun toString() = value.toString()
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Coordinates &&
-                coordinates == other.coordinates &&
-                type == other.type &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(coordinates, type, additionalProperties)
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Coordinates{coordinates=$coordinates, type=$type, additionalProperties=$additionalProperties}"
-    }
-
     /** Lists edit-chain identifiers and the remaining edit window. */
     class Edit
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
@@ -5622,16 +3706,10 @@ private constructor(
             initialTweetId: JsonField<String> = JsonMissing.of(),
         ) : this(editTweetIds, editableUntilMsecs, initialTweetId, mutableMapOf())
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun editTweetIds(): List<String>? = editTweetIds.getNullable("editTweetIds")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun editableUntilMsecs(): String? = editableUntilMsecs.getNullable("editableUntilMsecs")
 
         /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
@@ -5700,9 +3778,6 @@ private constructor(
                 additionalProperties = edit.additionalProperties.toMutableMap()
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun editTweetIds(editTweetIds: List<String>) = editTweetIds(JsonField.of(editTweetIds))
 
             /** Sets [Builder.editTweetIds] to an arbitrary JSON value. */
@@ -5722,9 +3797,6 @@ private constructor(
                     }
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun editableUntilMsecs(editableUntilMsecs: String) =
                 editableUntilMsecs(JsonField.of(editableUntilMsecs))
 
@@ -5833,15 +3905,123 @@ private constructor(
 
     /** Lists hashtags, symbols, links, and mentions from tweet text. */
     class Entities
-    @JsonCreator
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
-        @com.fasterxml.jackson.annotation.JsonValue
-        private val additionalProperties: Map<String, JsonValue>
+        private val hashtags: JsonField<List<SearchTweet.Entities.Hashtag>>,
+        private val smarttags: JsonField<List<SearchTweet.Entities.Smarttag>>,
+        private val symbols: JsonField<List<SearchTweet.Entities.Symbol>>,
+        private val timestamps: JsonField<List<SearchTweet.Entities.Timestamp>>,
+        private val urls: JsonField<List<SearchTweet.Entities.Url>>,
+        private val userMentions: JsonField<List<SearchTweet.Entities.UserMention>>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("hashtags")
+            @ExcludeMissing
+            hashtags: JsonField<List<SearchTweet.Entities.Hashtag>> = JsonMissing.of(),
+            @JsonProperty("smarttags")
+            @ExcludeMissing
+            smarttags: JsonField<List<SearchTweet.Entities.Smarttag>> = JsonMissing.of(),
+            @JsonProperty("symbols")
+            @ExcludeMissing
+            symbols: JsonField<List<SearchTweet.Entities.Symbol>> = JsonMissing.of(),
+            @JsonProperty("timestamps")
+            @ExcludeMissing
+            timestamps: JsonField<List<SearchTweet.Entities.Timestamp>> = JsonMissing.of(),
+            @JsonProperty("urls")
+            @ExcludeMissing
+            urls: JsonField<List<SearchTweet.Entities.Url>> = JsonMissing.of(),
+            @JsonProperty("user_mentions")
+            @ExcludeMissing
+            userMentions: JsonField<List<SearchTweet.Entities.UserMention>> = JsonMissing.of(),
+        ) : this(hashtags, smarttags, symbols, timestamps, urls, userMentions, mutableMapOf())
+
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        fun hashtags(): List<SearchTweet.Entities.Hashtag>? = hashtags.getNullable("hashtags")
+
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        fun smarttags(): List<SearchTweet.Entities.Smarttag>? = smarttags.getNullable("smarttags")
+
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        fun symbols(): List<SearchTweet.Entities.Symbol>? = symbols.getNullable("symbols")
+
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        fun timestamps(): List<SearchTweet.Entities.Timestamp>? =
+            timestamps.getNullable("timestamps")
+
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        fun urls(): List<SearchTweet.Entities.Url>? = urls.getNullable("urls")
+
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        fun userMentions(): List<SearchTweet.Entities.UserMention>? =
+            userMentions.getNullable("user_mentions")
+
+        /**
+         * Returns the raw JSON value of [hashtags].
+         *
+         * Unlike [hashtags], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("hashtags")
+        @ExcludeMissing
+        fun _hashtags(): JsonField<List<SearchTweet.Entities.Hashtag>> = hashtags
+
+        /**
+         * Returns the raw JSON value of [smarttags].
+         *
+         * Unlike [smarttags], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("smarttags")
+        @ExcludeMissing
+        fun _smarttags(): JsonField<List<SearchTweet.Entities.Smarttag>> = smarttags
+
+        /**
+         * Returns the raw JSON value of [symbols].
+         *
+         * Unlike [symbols], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("symbols")
+        @ExcludeMissing
+        fun _symbols(): JsonField<List<SearchTweet.Entities.Symbol>> = symbols
+
+        /**
+         * Returns the raw JSON value of [timestamps].
+         *
+         * Unlike [timestamps], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("timestamps")
+        @ExcludeMissing
+        fun _timestamps(): JsonField<List<SearchTweet.Entities.Timestamp>> = timestamps
+
+        /**
+         * Returns the raw JSON value of [urls].
+         *
+         * Unlike [urls], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("urls")
+        @ExcludeMissing
+        fun _urls(): JsonField<List<SearchTweet.Entities.Url>> = urls
+
+        /**
+         * Returns the raw JSON value of [userMentions].
+         *
+         * Unlike [userMentions], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("user_mentions")
+        @ExcludeMissing
+        fun _userMentions(): JsonField<List<SearchTweet.Entities.UserMention>> = userMentions
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -5854,10 +4034,142 @@ private constructor(
         /** A builder for [Entities]. */
         class Builder internal constructor() {
 
+            private var hashtags: JsonField<MutableList<SearchTweet.Entities.Hashtag>>? = null
+            private var smarttags: JsonField<MutableList<SearchTweet.Entities.Smarttag>>? = null
+            private var symbols: JsonField<MutableList<SearchTweet.Entities.Symbol>>? = null
+            private var timestamps: JsonField<MutableList<SearchTweet.Entities.Timestamp>>? = null
+            private var urls: JsonField<MutableList<SearchTweet.Entities.Url>>? = null
+            private var userMentions: JsonField<MutableList<SearchTweet.Entities.UserMention>>? =
+                null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(entities: Entities) = apply {
+                hashtags = entities.hashtags.map { it.toMutableList() }
+                smarttags = entities.smarttags.map { it.toMutableList() }
+                symbols = entities.symbols.map { it.toMutableList() }
+                timestamps = entities.timestamps.map { it.toMutableList() }
+                urls = entities.urls.map { it.toMutableList() }
+                userMentions = entities.userMentions.map { it.toMutableList() }
                 additionalProperties = entities.additionalProperties.toMutableMap()
+            }
+
+            fun hashtags(hashtags: List<SearchTweet.Entities.Hashtag>) =
+                hashtags(JsonField.of(hashtags))
+
+            /** Sets [Builder.hashtags] to an arbitrary JSON value. */
+            fun hashtags(hashtags: JsonField<List<SearchTweet.Entities.Hashtag>>) = apply {
+                this.hashtags = hashtags.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [SearchTweet.Entities.Hashtag] to [hashtags].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addHashtag(hashtag: SearchTweet.Entities.Hashtag) = apply {
+                hashtags =
+                    (hashtags ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("hashtags", it).add(hashtag)
+                    }
+            }
+
+            fun smarttags(smarttags: List<SearchTweet.Entities.Smarttag>) =
+                smarttags(JsonField.of(smarttags))
+
+            /** Sets [Builder.smarttags] to an arbitrary JSON value. */
+            fun smarttags(smarttags: JsonField<List<SearchTweet.Entities.Smarttag>>) = apply {
+                this.smarttags = smarttags.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [SearchTweet.Entities.Smarttag] to [smarttags].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addSmarttag(smarttag: SearchTweet.Entities.Smarttag) = apply {
+                smarttags =
+                    (smarttags ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("smarttags", it).add(smarttag)
+                    }
+            }
+
+            fun symbols(symbols: List<SearchTweet.Entities.Symbol>) = symbols(JsonField.of(symbols))
+
+            /** Sets [Builder.symbols] to an arbitrary JSON value. */
+            fun symbols(symbols: JsonField<List<SearchTweet.Entities.Symbol>>) = apply {
+                this.symbols = symbols.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [SearchTweet.Entities.Symbol] to [symbols].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addSymbol(symbol: SearchTweet.Entities.Symbol) = apply {
+                symbols =
+                    (symbols ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("symbols", it).add(symbol)
+                    }
+            }
+
+            fun timestamps(timestamps: List<SearchTweet.Entities.Timestamp>) =
+                timestamps(JsonField.of(timestamps))
+
+            /** Sets [Builder.timestamps] to an arbitrary JSON value. */
+            fun timestamps(timestamps: JsonField<List<SearchTweet.Entities.Timestamp>>) = apply {
+                this.timestamps = timestamps.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [SearchTweet.Entities.Timestamp] to [timestamps].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addTimestamp(timestamp: SearchTweet.Entities.Timestamp) = apply {
+                timestamps =
+                    (timestamps ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("timestamps", it).add(timestamp)
+                    }
+            }
+
+            fun urls(urls: List<SearchTweet.Entities.Url>) = urls(JsonField.of(urls))
+
+            /** Sets [Builder.urls] to an arbitrary JSON value. */
+            fun urls(urls: JsonField<List<SearchTweet.Entities.Url>>) = apply {
+                this.urls = urls.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [SearchTweet.Entities.Url] to [urls].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addUrl(url: SearchTweet.Entities.Url) = apply {
+                urls =
+                    (urls ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("urls", it).add(url)
+                    }
+            }
+
+            fun userMentions(userMentions: List<SearchTweet.Entities.UserMention>) =
+                userMentions(JsonField.of(userMentions))
+
+            /** Sets [Builder.userMentions] to an arbitrary JSON value. */
+            fun userMentions(userMentions: JsonField<List<SearchTweet.Entities.UserMention>>) =
+                apply {
+                    this.userMentions = userMentions.map { it.toMutableList() }
+                }
+
+            /**
+             * Adds a single [SearchTweet.Entities.UserMention] to [userMentions].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addUserMention(userMention: SearchTweet.Entities.UserMention) = apply {
+                userMentions =
+                    (userMentions ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("userMentions", it).add(userMention)
+                    }
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -5884,7 +4196,16 @@ private constructor(
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              */
-            fun build(): Entities = Entities(additionalProperties.toImmutable())
+            fun build(): Entities =
+                Entities(
+                    (hashtags ?: JsonMissing.of()).map { it.toImmutable() },
+                    (smarttags ?: JsonMissing.of()).map { it.toImmutable() },
+                    (symbols ?: JsonMissing.of()).map { it.toImmutable() },
+                    (timestamps ?: JsonMissing.of()).map { it.toImmutable() },
+                    (urls ?: JsonMissing.of()).map { it.toImmutable() },
+                    (userMentions ?: JsonMissing.of()).map { it.toImmutable() },
+                    additionalProperties.toMutableMap(),
+                )
         }
 
         private var validated: Boolean = false
@@ -5903,205 +4224,12 @@ private constructor(
                 return@apply
             }
 
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int = additionalProperties.count { (_, value) ->
-            !value.isNull() && !value.isMissing()
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Entities && additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() = "Entities{additionalProperties=$additionalProperties}"
-    }
-
-    /**
-     * Marks a subscriber-only post with the creator whose subscription unlocks it. Non-subscribers
-     * get the preview text & the subscribe link. Omitted on public posts.
-     */
-    class ExclusiveContent
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val creatorUserName: JsonField<String>,
-        private val subscribeUrl: JsonField<String>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("creatorUserName")
-            @ExcludeMissing
-            creatorUserName: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("subscribeUrl")
-            @ExcludeMissing
-            subscribeUrl: JsonField<String> = JsonMissing.of(),
-        ) : this(creatorUserName, subscribeUrl, mutableMapOf())
-
-        /**
-         * Username of the creator whose subscription unlocks the post.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null.
-         */
-        fun creatorUserName(): String = creatorUserName.getRequired("creatorUserName")
-
-        /**
-         * Subscribe link X shows non-subscribers. Omitted when X serves the full post.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun subscribeUrl(): String? = subscribeUrl.getNullable("subscribeUrl")
-
-        /**
-         * Returns the raw JSON value of [creatorUserName].
-         *
-         * Unlike [creatorUserName], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("creatorUserName")
-        @ExcludeMissing
-        fun _creatorUserName(): JsonField<String> = creatorUserName
-
-        /**
-         * Returns the raw JSON value of [subscribeUrl].
-         *
-         * Unlike [subscribeUrl], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("subscribeUrl")
-        @ExcludeMissing
-        fun _subscribeUrl(): JsonField<String> = subscribeUrl
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [ExclusiveContent].
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .creatorUserName()
-             * ```
-             */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [ExclusiveContent]. */
-        class Builder internal constructor() {
-
-            private var creatorUserName: JsonField<String>? = null
-            private var subscribeUrl: JsonField<String> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(exclusiveContent: ExclusiveContent) = apply {
-                creatorUserName = exclusiveContent.creatorUserName
-                subscribeUrl = exclusiveContent.subscribeUrl
-                additionalProperties = exclusiveContent.additionalProperties.toMutableMap()
-            }
-
-            /** Username of the creator whose subscription unlocks the post. */
-            fun creatorUserName(creatorUserName: String) =
-                creatorUserName(JsonField.of(creatorUserName))
-
-            /** Sets [Builder.creatorUserName] to an arbitrary JSON value. */
-            fun creatorUserName(creatorUserName: JsonField<String>) = apply {
-                this.creatorUserName = creatorUserName
-            }
-
-            /** Subscribe link X shows non-subscribers. Omitted when X serves the full post. */
-            fun subscribeUrl(subscribeUrl: String) = subscribeUrl(JsonField.of(subscribeUrl))
-
-            /** Sets [Builder.subscribeUrl] to an arbitrary JSON value. */
-            fun subscribeUrl(subscribeUrl: JsonField<String>) = apply {
-                this.subscribeUrl = subscribeUrl
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [ExclusiveContent].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .creatorUserName()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): ExclusiveContent =
-                ExclusiveContent(
-                    checkRequired("creatorUserName", creatorUserName),
-                    subscribeUrl,
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): ExclusiveContent = apply {
-            if (validated) {
-                return@apply
-            }
-
-            creatorUserName()
-            subscribeUrl()
+            hashtags()?.forEach { it.validate() }
+            smarttags()?.forEach { it.validate() }
+            symbols()?.forEach { it.validate() }
+            timestamps()?.forEach { it.validate() }
+            urls()?.forEach { it.validate() }
+            userMentions()?.forEach { it.validate() }
             validated = true
         }
 
@@ -6114,2013 +4242,44 @@ private constructor(
             }
 
         internal fun validity(): Int =
-            (if (creatorUserName.asKnown() == null) 0 else 1) +
-                (if (subscribeUrl.asKnown() == null) 0 else 1)
+            (hashtags.asKnown()?.sumOf { it.validity() } ?: 0) +
+                (smarttags.asKnown()?.sumOf { it.validity() } ?: 0) +
+                (symbols.asKnown()?.sumOf { it.validity() } ?: 0) +
+                (timestamps.asKnown()?.sumOf { it.validity() } ?: 0) +
+                (urls.asKnown()?.sumOf { it.validity() } ?: 0) +
+                (userMentions.asKnown()?.sumOf { it.validity() } ?: 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return other is ExclusiveContent &&
-                creatorUserName == other.creatorUserName &&
-                subscribeUrl == other.subscribeUrl &&
+            return other is Entities &&
+                hashtags == other.hashtags &&
+                smarttags == other.smarttags &&
+                symbols == other.symbols &&
+                timestamps == other.timestamps &&
+                urls == other.urls &&
+                userMentions == other.userMentions &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(creatorUserName, subscribeUrl, additionalProperties)
+            Objects.hash(
+                hashtags,
+                smarttags,
+                symbols,
+                timestamps,
+                urls,
+                userMentions,
+                additionalProperties,
+            )
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ExclusiveContent{creatorUserName=$creatorUserName, subscribeUrl=$subscribeUrl, additionalProperties=$additionalProperties}"
-    }
-
-    /** Author-published geographic point with 2 numeric coordinates. */
-    class Geo
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val coordinates: JsonField<List<Double>>,
-        private val type: JsonField<Type>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("coordinates")
-            @ExcludeMissing
-            coordinates: JsonField<List<Double>> = JsonMissing.of(),
-            @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
-        ) : this(coordinates, type, mutableMapOf())
-
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null.
-         */
-        fun coordinates(): List<Double> = coordinates.getRequired("coordinates")
-
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null.
-         */
-        fun type(): Type = type.getRequired("type")
-
-        /**
-         * Returns the raw JSON value of [coordinates].
-         *
-         * Unlike [coordinates], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("coordinates")
-        @ExcludeMissing
-        fun _coordinates(): JsonField<List<Double>> = coordinates
-
-        /**
-         * Returns the raw JSON value of [type].
-         *
-         * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [Geo].
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .coordinates()
-             * .type()
-             * ```
-             */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [Geo]. */
-        class Builder internal constructor() {
-
-            private var coordinates: JsonField<MutableList<Double>>? = null
-            private var type: JsonField<Type>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(geo: Geo) = apply {
-                coordinates = geo.coordinates.map { it.toMutableList() }
-                type = geo.type
-                additionalProperties = geo.additionalProperties.toMutableMap()
-            }
-
-            fun coordinates(coordinates: List<Double>) = coordinates(JsonField.of(coordinates))
-
-            /** Sets [Builder.coordinates] to an arbitrary JSON value. */
-            fun coordinates(coordinates: JsonField<List<Double>>) = apply {
-                this.coordinates = coordinates.map { it.toMutableList() }
-            }
-
-            /**
-             * Adds a single [Double] to [coordinates].
-             *
-             * @throws IllegalStateException if the field was previously set to a non-list.
-             */
-            fun addCoordinate(coordinate: Double) = apply {
-                coordinates =
-                    (coordinates ?: JsonField.of(mutableListOf())).also {
-                        checkKnown("coordinates", it).add(coordinate)
-                    }
-            }
-
-            fun type(type: Type) = type(JsonField.of(type))
-
-            /** Sets [Builder.type] to an arbitrary JSON value. */
-            fun type(type: JsonField<Type>) = apply { this.type = type }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Geo].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .coordinates()
-             * .type()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): Geo =
-                Geo(
-                    checkRequired("coordinates", coordinates).map { it.toImmutable() },
-                    checkRequired("type", type),
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): Geo = apply {
-            if (validated) {
-                return@apply
-            }
-
-            coordinates()
-            type().validate()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int =
-            (coordinates.asKnown()?.size ?: 0) + (type.asKnown()?.validity() ?: 0)
-
-        class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
-
-            /** Returns this class instance's raw value. */
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-            companion object {
-
-                val POINT = of("Point")
-
-                fun of(value: String) = Type(JsonField.of(value))
-            }
-
-            /** An enum containing [Type]'s known values. */
-            enum class Known {
-                POINT
-            }
-
-            /**
-             * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
-             *
-             * An instance of [Type] can contain an unknown value in a couple of cases:
-             * - It was deserialized from data that doesn't match any known member. For example, if
-             *   the SDK is on an older version than the API, then the API may respond with new
-             *   members that the SDK is unaware of.
-             * - It was constructed with an arbitrary value using the [of] method.
-             */
-            enum class Value {
-                POINT,
-                /** An enum member indicating that [Type] was instantiated with an unknown value. */
-                _UNKNOWN,
-            }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value, or
-             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-             */
-            fun value(): Value =
-                when (this) {
-                    POINT -> Value.POINT
-                    else -> Value._UNKNOWN
-                }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value.
-             *
-             * @throws XTwitterScraperInvalidDataException if this class instance's value is a not a
-             *   known member.
-             */
-            fun known(): Known =
-                when (this) {
-                    POINT -> Known.POINT
-                    else -> throw XTwitterScraperInvalidDataException("Unknown Type: $value")
-                }
-
-            /**
-             * Returns this class instance's primitive wire representation.
-             *
-             * @throws XTwitterScraperInvalidDataException if this class instance's value does not
-             *   have the expected primitive type.
-             */
-            fun asString(): String =
-                _value().asString()
-                    ?: throw XTwitterScraperInvalidDataException("Value is not a String")
-
-            private var validated: Boolean = false
-
-            /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
-             *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
-             *
-             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-             *   match its expected type.
-             */
-            fun validate(): Type = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                known()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: XTwitterScraperInvalidDataException) {
-                    false
-                }
-
-            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Type && value == other.value
-            }
-
-            override fun hashCode() = value.hashCode()
-
-            override fun toString() = value.toString()
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Geo &&
-                coordinates == other.coordinates &&
-                type == other.type &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(coordinates, type, additionalProperties)
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Geo{coordinates=$coordinates, type=$type, additionalProperties=$additionalProperties}"
-    }
-
-    /** Public metadata whose fields X defines. */
-    class GrokShareAttachment
-    @JsonCreator
-    private constructor(
-        @com.fasterxml.jackson.annotation.JsonValue
-        private val additionalProperties: Map<String, JsonValue>
-    ) {
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [GrokShareAttachment]. */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [GrokShareAttachment]. */
-        class Builder internal constructor() {
-
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(grokShareAttachment: GrokShareAttachment) = apply {
-                additionalProperties = grokShareAttachment.additionalProperties.toMutableMap()
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [GrokShareAttachment].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): GrokShareAttachment =
-                GrokShareAttachment(additionalProperties.toImmutable())
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): GrokShareAttachment = apply {
-            if (validated) {
-                return@apply
-            }
-
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int = additionalProperties.count { (_, value) ->
-            !value.isNull() && !value.isMissing()
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is GrokShareAttachment &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() = "GrokShareAttachment{additionalProperties=$additionalProperties}"
-    }
-
-    /** Public metadata whose fields X defines. */
-    class GrokTranslatedPost
-    @JsonCreator
-    private constructor(
-        @com.fasterxml.jackson.annotation.JsonValue
-        private val additionalProperties: Map<String, JsonValue>
-    ) {
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [GrokTranslatedPost]. */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [GrokTranslatedPost]. */
-        class Builder internal constructor() {
-
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(grokTranslatedPost: GrokTranslatedPost) = apply {
-                additionalProperties = grokTranslatedPost.additionalProperties.toMutableMap()
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [GrokTranslatedPost].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): GrokTranslatedPost = GrokTranslatedPost(additionalProperties.toImmutable())
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): GrokTranslatedPost = apply {
-            if (validated) {
-                return@apply
-            }
-
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int = additionalProperties.count { (_, value) ->
-            !value.isNull() && !value.isMissing()
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is GrokTranslatedPost && additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() = "GrokTranslatedPost{additionalProperties=$additionalProperties}"
-    }
-
-    /**
-     * The notice x.com covers the post with until the reader views it, such as X's public interest
-     * notice on a post that broke its rules but stays up.
-     */
-    class Interstitial
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val displayType: JsonField<String>,
-        private val text: JsonField<Text>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("displayType")
-            @ExcludeMissing
-            displayType: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("text") @ExcludeMissing text: JsonField<Text> = JsonMissing.of(),
-        ) : this(displayType, text, mutableMapOf())
-
-        /**
-         * How x.com shows the notice. `NonCompliant` marks a post that broke X's rules.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun displayType(): String? = displayType.getNullable("displayType")
-
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
-        fun text(): Text? = text.getNullable("text")
-
-        /**
-         * Returns the raw JSON value of [displayType].
-         *
-         * Unlike [displayType], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("displayType")
-        @ExcludeMissing
-        fun _displayType(): JsonField<String> = displayType
-
-        /**
-         * Returns the raw JSON value of [text].
-         *
-         * Unlike [text], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("text") @ExcludeMissing fun _text(): JsonField<Text> = text
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [Interstitial]. */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [Interstitial]. */
-        class Builder internal constructor() {
-
-            private var displayType: JsonField<String> = JsonMissing.of()
-            private var text: JsonField<Text> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(interstitial: Interstitial) = apply {
-                displayType = interstitial.displayType
-                text = interstitial.text
-                additionalProperties = interstitial.additionalProperties.toMutableMap()
-            }
-
-            /** How x.com shows the notice. `NonCompliant` marks a post that broke X's rules. */
-            fun displayType(displayType: String) = displayType(JsonField.of(displayType))
-
-            /** Sets [Builder.displayType] to an arbitrary JSON value. */
-            fun displayType(displayType: JsonField<String>) = apply {
-                this.displayType = displayType
-            }
-
-            fun text(text: Text) = text(JsonField.of(text))
-
-            /** Sets [Builder.text] to an arbitrary JSON value. */
-            fun text(text: JsonField<Text>) = apply { this.text = text }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Interstitial].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): Interstitial =
-                Interstitial(displayType, text, additionalProperties.toMutableMap())
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): Interstitial = apply {
-            if (validated) {
-                return@apply
-            }
-
-            displayType()
-            text()?.validate()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int =
-            (if (displayType.asKnown() == null) 0 else 1) + (text.asKnown()?.validity() ?: 0)
-
-        class Text
-        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-        private constructor(
-            private val entities: JsonField<List<Entity>>,
-            private val rtl: JsonField<Boolean>,
-            private val text: JsonField<String>,
-            private val additionalProperties: MutableMap<String, JsonValue>,
-        ) {
-
-            @JsonCreator
-            private constructor(
-                @JsonProperty("entities")
-                @ExcludeMissing
-                entities: JsonField<List<Entity>> = JsonMissing.of(),
-                @JsonProperty("rtl") @ExcludeMissing rtl: JsonField<Boolean> = JsonMissing.of(),
-                @JsonProperty("text") @ExcludeMissing text: JsonField<String> = JsonMissing.of(),
-            ) : this(entities, rtl, text, mutableMapOf())
-
-            /**
-             * Links inside the notice, by character range.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun entities(): List<Entity>? = entities.getNullable("entities")
-
-            /**
-             * Whether X writes it right to left.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun rtl(): Boolean? = rtl.getNullable("rtl")
-
-            /**
-             * The notice's text.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun text(): String? = text.getNullable("text")
-
-            /**
-             * Returns the raw JSON value of [entities].
-             *
-             * Unlike [entities], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("entities")
-            @ExcludeMissing
-            fun _entities(): JsonField<List<Entity>> = entities
-
-            /**
-             * Returns the raw JSON value of [rtl].
-             *
-             * Unlike [rtl], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("rtl") @ExcludeMissing fun _rtl(): JsonField<Boolean> = rtl
-
-            /**
-             * Returns the raw JSON value of [text].
-             *
-             * Unlike [text], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("text") @ExcludeMissing fun _text(): JsonField<String> = text
-
-            @JsonAnySetter
-            private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
-            }
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /** Returns a mutable builder for constructing an instance of [Text]. */
-                fun builder() = Builder()
-            }
-
-            /** A builder for [Text]. */
-            class Builder internal constructor() {
-
-                private var entities: JsonField<MutableList<Entity>>? = null
-                private var rtl: JsonField<Boolean> = JsonMissing.of()
-                private var text: JsonField<String> = JsonMissing.of()
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                internal fun from(text: Text) = apply {
-                    entities = text.entities.map { it.toMutableList() }
-                    rtl = text.rtl
-                    this.text = text.text
-                    additionalProperties = text.additionalProperties.toMutableMap()
-                }
-
-                /** Links inside the notice, by character range. */
-                fun entities(entities: List<Entity>) = entities(JsonField.of(entities))
-
-                /** Sets [Builder.entities] to an arbitrary JSON value. */
-                fun entities(entities: JsonField<List<Entity>>) = apply {
-                    this.entities = entities.map { it.toMutableList() }
-                }
-
-                /**
-                 * Adds a single [Entity] to [entities].
-                 *
-                 * @throws IllegalStateException if the field was previously set to a non-list.
-                 */
-                fun addEntity(entity: Entity) = apply {
-                    entities =
-                        (entities ?: JsonField.of(mutableListOf())).also {
-                            checkKnown("entities", it).add(entity)
-                        }
-                }
-
-                /** Whether X writes it right to left. */
-                fun rtl(rtl: Boolean) = rtl(JsonField.of(rtl))
-
-                /** Sets [Builder.rtl] to an arbitrary JSON value. */
-                fun rtl(rtl: JsonField<Boolean>) = apply { this.rtl = rtl }
-
-                /** The notice's text. */
-                fun text(text: String) = text(JsonField.of(text))
-
-                /** Sets [Builder.text] to an arbitrary JSON value. */
-                fun text(text: JsonField<String>) = apply { this.text = text }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [Text].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 */
-                fun build(): Text =
-                    Text(
-                        (entities ?: JsonMissing.of()).map { it.toImmutable() },
-                        rtl,
-                        text,
-                        additionalProperties.toMutableMap(),
-                    )
-            }
-
-            private var validated: Boolean = false
-
-            /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
-             *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
-             *
-             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-             *   match its expected type.
-             */
-            fun validate(): Text = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                entities()?.forEach { it.validate() }
-                rtl()
-                text()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: XTwitterScraperInvalidDataException) {
-                    false
-                }
-
-            internal fun validity(): Int =
-                (entities.asKnown()?.sumOf { it.validity() } ?: 0) +
-                    (if (rtl.asKnown() == null) 0 else 1) +
-                    (if (text.asKnown() == null) 0 else 1)
-
-            class Entity
-            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-            private constructor(
-                private val fromIndex: JsonField<Long>,
-                private val ref: JsonField<Ref>,
-                private val toIndex: JsonField<Long>,
-                private val additionalProperties: MutableMap<String, JsonValue>,
-            ) {
-
-                @JsonCreator
-                private constructor(
-                    @JsonProperty("fromIndex")
-                    @ExcludeMissing
-                    fromIndex: JsonField<Long> = JsonMissing.of(),
-                    @JsonProperty("ref") @ExcludeMissing ref: JsonField<Ref> = JsonMissing.of(),
-                    @JsonProperty("toIndex")
-                    @ExcludeMissing
-                    toIndex: JsonField<Long> = JsonMissing.of(),
-                ) : this(fromIndex, ref, toIndex, mutableMapOf())
-
-                /**
-                 * Whole number from 0.
-                 *
-                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
-                 *   type.
-                 */
-                fun fromIndex(): Long? = fromIndex.getNullable("fromIndex")
-
-                /**
-                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
-                 *   type.
-                 */
-                fun ref(): Ref? = ref.getNullable("ref")
-
-                /**
-                 * Whole number from 0.
-                 *
-                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
-                 *   type.
-                 */
-                fun toIndex(): Long? = toIndex.getNullable("toIndex")
-
-                /**
-                 * Returns the raw JSON value of [fromIndex].
-                 *
-                 * Unlike [fromIndex], this method doesn't throw if the JSON field has an unexpected
-                 * type.
-                 */
-                @JsonProperty("fromIndex")
-                @ExcludeMissing
-                fun _fromIndex(): JsonField<Long> = fromIndex
-
-                /**
-                 * Returns the raw JSON value of [ref].
-                 *
-                 * Unlike [ref], this method doesn't throw if the JSON field has an unexpected type.
-                 */
-                @JsonProperty("ref") @ExcludeMissing fun _ref(): JsonField<Ref> = ref
-
-                /**
-                 * Returns the raw JSON value of [toIndex].
-                 *
-                 * Unlike [toIndex], this method doesn't throw if the JSON field has an unexpected
-                 * type.
-                 */
-                @JsonProperty("toIndex") @ExcludeMissing fun _toIndex(): JsonField<Long> = toIndex
-
-                @JsonAnySetter
-                private fun putAdditionalProperty(key: String, value: JsonValue) {
-                    additionalProperties.put(key, value)
-                }
-
-                @JsonAnyGetter
-                @ExcludeMissing
-                fun _additionalProperties(): Map<String, JsonValue> =
-                    Collections.unmodifiableMap(additionalProperties)
-
-                fun toBuilder() = Builder().from(this)
-
-                companion object {
-
-                    /** Returns a mutable builder for constructing an instance of [Entity]. */
-                    fun builder() = Builder()
-                }
-
-                /** A builder for [Entity]. */
-                class Builder internal constructor() {
-
-                    private var fromIndex: JsonField<Long> = JsonMissing.of()
-                    private var ref: JsonField<Ref> = JsonMissing.of()
-                    private var toIndex: JsonField<Long> = JsonMissing.of()
-                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                    internal fun from(entity: Entity) = apply {
-                        fromIndex = entity.fromIndex
-                        ref = entity.ref
-                        toIndex = entity.toIndex
-                        additionalProperties = entity.additionalProperties.toMutableMap()
-                    }
-
-                    /** Whole number from 0. */
-                    fun fromIndex(fromIndex: Long) = fromIndex(JsonField.of(fromIndex))
-
-                    /** Sets [Builder.fromIndex] to an arbitrary JSON value. */
-                    fun fromIndex(fromIndex: JsonField<Long>) = apply { this.fromIndex = fromIndex }
-
-                    fun ref(ref: Ref) = ref(JsonField.of(ref))
-
-                    /** Sets [Builder.ref] to an arbitrary JSON value. */
-                    fun ref(ref: JsonField<Ref>) = apply { this.ref = ref }
-
-                    /** Whole number from 0. */
-                    fun toIndex(toIndex: Long) = toIndex(JsonField.of(toIndex))
-
-                    /** Sets [Builder.toIndex] to an arbitrary JSON value. */
-                    fun toIndex(toIndex: JsonField<Long>) = apply { this.toIndex = toIndex }
-
-                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
-
-                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                        additionalProperties.put(key, value)
-                    }
-
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                        apply {
-                            this.additionalProperties.putAll(additionalProperties)
-                        }
-
-                    fun removeAdditionalProperty(key: String) = apply {
-                        additionalProperties.remove(key)
-                    }
-
-                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
-
-                    /**
-                     * Returns an immutable instance of [Entity].
-                     *
-                     * Further updates to this [Builder] will not mutate the returned instance.
-                     */
-                    fun build(): Entity =
-                        Entity(fromIndex, ref, toIndex, additionalProperties.toMutableMap())
-                }
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws XTwitterScraperInvalidDataException if any value type in this object
-                 *   doesn't match its expected type.
-                 */
-                fun validate(): Entity = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    fromIndex()
-                    ref()?.validate()
-                    toIndex()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: XTwitterScraperInvalidDataException) {
-                        false
-                    }
-
-                internal fun validity(): Int =
-                    (if (fromIndex.asKnown() == null) 0 else 1) +
-                        (ref.asKnown()?.validity() ?: 0) +
-                        (if (toIndex.asKnown() == null) 0 else 1)
-
-                class Ref
-                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-                private constructor(
-                    private val screenName: JsonField<String>,
-                    private val text: JsonField<String>,
-                    private val type: JsonField<String>,
-                    private val url: JsonField<String>,
-                    private val urlType: JsonField<String>,
-                    private val additionalProperties: MutableMap<String, JsonValue>,
-                ) {
-
-                    @JsonCreator
-                    private constructor(
-                        @JsonProperty("screenName")
-                        @ExcludeMissing
-                        screenName: JsonField<String> = JsonMissing.of(),
-                        @JsonProperty("text")
-                        @ExcludeMissing
-                        text: JsonField<String> = JsonMissing.of(),
-                        @JsonProperty("type")
-                        @ExcludeMissing
-                        type: JsonField<String> = JsonMissing.of(),
-                        @JsonProperty("url")
-                        @ExcludeMissing
-                        url: JsonField<String> = JsonMissing.of(),
-                        @JsonProperty("urlType")
-                        @ExcludeMissing
-                        urlType: JsonField<String> = JsonMissing.of(),
-                    ) : this(screenName, text, type, url, urlType, mutableMapOf())
-
-                    /**
-                     * @throws XTwitterScraperInvalidDataException if the JSON field has an
-                     *   unexpected type.
-                     */
-                    fun screenName(): String? = screenName.getNullable("screenName")
-
-                    /**
-                     * @throws XTwitterScraperInvalidDataException if the JSON field has an
-                     *   unexpected type.
-                     */
-                    fun text(): String? = text.getNullable("text")
-
-                    /**
-                     * @throws XTwitterScraperInvalidDataException if the JSON field has an
-                     *   unexpected type.
-                     */
-                    fun type(): String? = type.getNullable("type")
-
-                    /**
-                     * @throws XTwitterScraperInvalidDataException if the JSON field has an
-                     *   unexpected type.
-                     */
-                    fun url(): String? = url.getNullable("url")
-
-                    /**
-                     * @throws XTwitterScraperInvalidDataException if the JSON field has an
-                     *   unexpected type.
-                     */
-                    fun urlType(): String? = urlType.getNullable("urlType")
-
-                    /**
-                     * Returns the raw JSON value of [screenName].
-                     *
-                     * Unlike [screenName], this method doesn't throw if the JSON field has an
-                     * unexpected type.
-                     */
-                    @JsonProperty("screenName")
-                    @ExcludeMissing
-                    fun _screenName(): JsonField<String> = screenName
-
-                    /**
-                     * Returns the raw JSON value of [text].
-                     *
-                     * Unlike [text], this method doesn't throw if the JSON field has an unexpected
-                     * type.
-                     */
-                    @JsonProperty("text") @ExcludeMissing fun _text(): JsonField<String> = text
-
-                    /**
-                     * Returns the raw JSON value of [type].
-                     *
-                     * Unlike [type], this method doesn't throw if the JSON field has an unexpected
-                     * type.
-                     */
-                    @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<String> = type
-
-                    /**
-                     * Returns the raw JSON value of [url].
-                     *
-                     * Unlike [url], this method doesn't throw if the JSON field has an unexpected
-                     * type.
-                     */
-                    @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
-
-                    /**
-                     * Returns the raw JSON value of [urlType].
-                     *
-                     * Unlike [urlType], this method doesn't throw if the JSON field has an
-                     * unexpected type.
-                     */
-                    @JsonProperty("urlType")
-                    @ExcludeMissing
-                    fun _urlType(): JsonField<String> = urlType
-
-                    @JsonAnySetter
-                    private fun putAdditionalProperty(key: String, value: JsonValue) {
-                        additionalProperties.put(key, value)
-                    }
-
-                    @JsonAnyGetter
-                    @ExcludeMissing
-                    fun _additionalProperties(): Map<String, JsonValue> =
-                        Collections.unmodifiableMap(additionalProperties)
-
-                    fun toBuilder() = Builder().from(this)
-
-                    companion object {
-
-                        /** Returns a mutable builder for constructing an instance of [Ref]. */
-                        fun builder() = Builder()
-                    }
-
-                    /** A builder for [Ref]. */
-                    class Builder internal constructor() {
-
-                        private var screenName: JsonField<String> = JsonMissing.of()
-                        private var text: JsonField<String> = JsonMissing.of()
-                        private var type: JsonField<String> = JsonMissing.of()
-                        private var url: JsonField<String> = JsonMissing.of()
-                        private var urlType: JsonField<String> = JsonMissing.of()
-                        private var additionalProperties: MutableMap<String, JsonValue> =
-                            mutableMapOf()
-
-                        internal fun from(ref: Ref) = apply {
-                            screenName = ref.screenName
-                            text = ref.text
-                            type = ref.type
-                            url = ref.url
-                            urlType = ref.urlType
-                            additionalProperties = ref.additionalProperties.toMutableMap()
-                        }
-
-                        fun screenName(screenName: String) = screenName(JsonField.of(screenName))
-
-                        /** Sets [Builder.screenName] to an arbitrary JSON value. */
-                        fun screenName(screenName: JsonField<String>) = apply {
-                            this.screenName = screenName
-                        }
-
-                        fun text(text: String) = text(JsonField.of(text))
-
-                        /** Sets [Builder.text] to an arbitrary JSON value. */
-                        fun text(text: JsonField<String>) = apply { this.text = text }
-
-                        fun type(type: String) = type(JsonField.of(type))
-
-                        /** Sets [Builder.type] to an arbitrary JSON value. */
-                        fun type(type: JsonField<String>) = apply { this.type = type }
-
-                        fun url(url: String) = url(JsonField.of(url))
-
-                        /** Sets [Builder.url] to an arbitrary JSON value. */
-                        fun url(url: JsonField<String>) = apply { this.url = url }
-
-                        fun urlType(urlType: String) = urlType(JsonField.of(urlType))
-
-                        /** Sets [Builder.urlType] to an arbitrary JSON value. */
-                        fun urlType(urlType: JsonField<String>) = apply { this.urlType = urlType }
-
-                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                            apply {
-                                this.additionalProperties.clear()
-                                putAllAdditionalProperties(additionalProperties)
-                            }
-
-                        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                            additionalProperties.put(key, value)
-                        }
-
-                        fun putAllAdditionalProperties(
-                            additionalProperties: Map<String, JsonValue>
-                        ) = apply {
-                            this.additionalProperties.putAll(additionalProperties)
-                        }
-
-                        fun removeAdditionalProperty(key: String) = apply {
-                            additionalProperties.remove(key)
-                        }
-
-                        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                            keys.forEach(::removeAdditionalProperty)
-                        }
-
-                        /**
-                         * Returns an immutable instance of [Ref].
-                         *
-                         * Further updates to this [Builder] will not mutate the returned instance.
-                         */
-                        fun build(): Ref =
-                            Ref(
-                                screenName,
-                                text,
-                                type,
-                                url,
-                                urlType,
-                                additionalProperties.toMutableMap(),
-                            )
-                    }
-
-                    private var validated: Boolean = false
-
-                    /**
-                     * Validates that the types of all values in this object match their expected
-                     * types recursively.
-                     *
-                     * This method is _not_ forwards compatible with new types from the API for
-                     * existing fields.
-                     *
-                     * @throws XTwitterScraperInvalidDataException if any value type in this object
-                     *   doesn't match its expected type.
-                     */
-                    fun validate(): Ref = apply {
-                        if (validated) {
-                            return@apply
-                        }
-
-                        screenName()
-                        text()
-                        type()
-                        url()
-                        urlType()
-                        validated = true
-                    }
-
-                    fun isValid(): Boolean =
-                        try {
-                            validate()
-                            true
-                        } catch (e: XTwitterScraperInvalidDataException) {
-                            false
-                        }
-
-                    internal fun validity(): Int =
-                        (if (screenName.asKnown() == null) 0 else 1) +
-                            (if (text.asKnown() == null) 0 else 1) +
-                            (if (type.asKnown() == null) 0 else 1) +
-                            (if (url.asKnown() == null) 0 else 1) +
-                            (if (urlType.asKnown() == null) 0 else 1)
-
-                    override fun equals(other: Any?): Boolean {
-                        if (this === other) {
-                            return true
-                        }
-
-                        return other is Ref &&
-                            screenName == other.screenName &&
-                            text == other.text &&
-                            type == other.type &&
-                            url == other.url &&
-                            urlType == other.urlType &&
-                            additionalProperties == other.additionalProperties
-                    }
-
-                    private val hashCode: Int by lazy {
-                        Objects.hash(screenName, text, type, url, urlType, additionalProperties)
-                    }
-
-                    override fun hashCode(): Int = hashCode
-
-                    override fun toString() =
-                        "Ref{screenName=$screenName, text=$text, type=$type, url=$url, urlType=$urlType, additionalProperties=$additionalProperties}"
-                }
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Entity &&
-                        fromIndex == other.fromIndex &&
-                        ref == other.ref &&
-                        toIndex == other.toIndex &&
-                        additionalProperties == other.additionalProperties
-                }
-
-                private val hashCode: Int by lazy {
-                    Objects.hash(fromIndex, ref, toIndex, additionalProperties)
-                }
-
-                override fun hashCode(): Int = hashCode
-
-                override fun toString() =
-                    "Entity{fromIndex=$fromIndex, ref=$ref, toIndex=$toIndex, additionalProperties=$additionalProperties}"
-            }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Text &&
-                    entities == other.entities &&
-                    rtl == other.rtl &&
-                    text == other.text &&
-                    additionalProperties == other.additionalProperties
-            }
-
-            private val hashCode: Int by lazy {
-                Objects.hash(entities, rtl, text, additionalProperties)
-            }
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() =
-                "Text{entities=$entities, rtl=$rtl, text=$text, additionalProperties=$additionalProperties}"
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Interstitial &&
-                displayType == other.displayType &&
-                text == other.text &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(displayType, text, additionalProperties)
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Interstitial{displayType=$displayType, text=$text, additionalProperties=$additionalProperties}"
-    }
-
-    /** Public metadata whose fields X defines. */
-    class JetfuelAttachment
-    @JsonCreator
-    private constructor(
-        @com.fasterxml.jackson.annotation.JsonValue
-        private val additionalProperties: Map<String, JsonValue>
-    ) {
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [JetfuelAttachment]. */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [JetfuelAttachment]. */
-        class Builder internal constructor() {
-
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(jetfuelAttachment: JetfuelAttachment) = apply {
-                additionalProperties = jetfuelAttachment.additionalProperties.toMutableMap()
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [JetfuelAttachment].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): JetfuelAttachment = JetfuelAttachment(additionalProperties.toImmutable())
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): JetfuelAttachment = apply {
-            if (validated) {
-                return@apply
-            }
-
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int = additionalProperties.count { (_, value) ->
-            !value.isNull() && !value.isMissing()
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is JetfuelAttachment && additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() = "JetfuelAttachment{additionalProperties=$additionalProperties}"
-    }
-
-    class LimitedAction
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val action: JsonField<String>,
-        private val prompt: JsonField<Prompt>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("action") @ExcludeMissing action: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("prompt") @ExcludeMissing prompt: JsonField<Prompt> = JsonMissing.of(),
-        ) : this(action, prompt, mutableMapOf())
-
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
-        fun action(): String? = action.getNullable("action")
-
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
-        fun prompt(): Prompt? = prompt.getNullable("prompt")
-
-        /**
-         * Returns the raw JSON value of [action].
-         *
-         * Unlike [action], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("action") @ExcludeMissing fun _action(): JsonField<String> = action
-
-        /**
-         * Returns the raw JSON value of [prompt].
-         *
-         * Unlike [prompt], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("prompt") @ExcludeMissing fun _prompt(): JsonField<Prompt> = prompt
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [LimitedAction]. */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [LimitedAction]. */
-        class Builder internal constructor() {
-
-            private var action: JsonField<String> = JsonMissing.of()
-            private var prompt: JsonField<Prompt> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(limitedAction: LimitedAction) = apply {
-                action = limitedAction.action
-                prompt = limitedAction.prompt
-                additionalProperties = limitedAction.additionalProperties.toMutableMap()
-            }
-
-            fun action(action: String) = action(JsonField.of(action))
-
-            /** Sets [Builder.action] to an arbitrary JSON value. */
-            fun action(action: JsonField<String>) = apply { this.action = action }
-
-            fun prompt(prompt: Prompt) = prompt(JsonField.of(prompt))
-
-            /** Sets [Builder.prompt] to an arbitrary JSON value. */
-            fun prompt(prompt: JsonField<Prompt>) = apply { this.prompt = prompt }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [LimitedAction].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): LimitedAction =
-                LimitedAction(action, prompt, additionalProperties.toMutableMap())
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): LimitedAction = apply {
-            if (validated) {
-                return@apply
-            }
-
-            action()
-            prompt()?.validate()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int =
-            (if (action.asKnown() == null) 0 else 1) + (prompt.asKnown()?.validity() ?: 0)
-
-        class Prompt
-        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-        private constructor(
-            private val ctaType: JsonField<String>,
-            private val headline: JsonField<String>,
-            private val metadata: JsonField<Metadata>,
-            private val subtext: JsonField<String>,
-            private val additionalProperties: MutableMap<String, JsonValue>,
-        ) {
-
-            @JsonCreator
-            private constructor(
-                @JsonProperty("ctaType")
-                @ExcludeMissing
-                ctaType: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("headline")
-                @ExcludeMissing
-                headline: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("metadata")
-                @ExcludeMissing
-                metadata: JsonField<Metadata> = JsonMissing.of(),
-                @JsonProperty("subtext")
-                @ExcludeMissing
-                subtext: JsonField<String> = JsonMissing.of(),
-            ) : this(ctaType, headline, metadata, subtext, mutableMapOf())
-
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun ctaType(): String? = ctaType.getNullable("ctaType")
-
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun headline(): String? = headline.getNullable("headline")
-
-            /**
-             * Public metadata whose fields X defines.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun metadata(): Metadata? = metadata.getNullable("metadata")
-
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun subtext(): String? = subtext.getNullable("subtext")
-
-            /**
-             * Returns the raw JSON value of [ctaType].
-             *
-             * Unlike [ctaType], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("ctaType") @ExcludeMissing fun _ctaType(): JsonField<String> = ctaType
-
-            /**
-             * Returns the raw JSON value of [headline].
-             *
-             * Unlike [headline], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("headline") @ExcludeMissing fun _headline(): JsonField<String> = headline
-
-            /**
-             * Returns the raw JSON value of [metadata].
-             *
-             * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("metadata")
-            @ExcludeMissing
-            fun _metadata(): JsonField<Metadata> = metadata
-
-            /**
-             * Returns the raw JSON value of [subtext].
-             *
-             * Unlike [subtext], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("subtext") @ExcludeMissing fun _subtext(): JsonField<String> = subtext
-
-            @JsonAnySetter
-            private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
-            }
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /** Returns a mutable builder for constructing an instance of [Prompt]. */
-                fun builder() = Builder()
-            }
-
-            /** A builder for [Prompt]. */
-            class Builder internal constructor() {
-
-                private var ctaType: JsonField<String> = JsonMissing.of()
-                private var headline: JsonField<String> = JsonMissing.of()
-                private var metadata: JsonField<Metadata> = JsonMissing.of()
-                private var subtext: JsonField<String> = JsonMissing.of()
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                internal fun from(prompt: Prompt) = apply {
-                    ctaType = prompt.ctaType
-                    headline = prompt.headline
-                    metadata = prompt.metadata
-                    subtext = prompt.subtext
-                    additionalProperties = prompt.additionalProperties.toMutableMap()
-                }
-
-                fun ctaType(ctaType: String) = ctaType(JsonField.of(ctaType))
-
-                /** Sets [Builder.ctaType] to an arbitrary JSON value. */
-                fun ctaType(ctaType: JsonField<String>) = apply { this.ctaType = ctaType }
-
-                fun headline(headline: String) = headline(JsonField.of(headline))
-
-                /** Sets [Builder.headline] to an arbitrary JSON value. */
-                fun headline(headline: JsonField<String>) = apply { this.headline = headline }
-
-                /** Public metadata whose fields X defines. */
-                fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
-
-                /** Sets [Builder.metadata] to an arbitrary JSON value. */
-                fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
-
-                fun subtext(subtext: String) = subtext(JsonField.of(subtext))
-
-                /** Sets [Builder.subtext] to an arbitrary JSON value. */
-                fun subtext(subtext: JsonField<String>) = apply { this.subtext = subtext }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [Prompt].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 */
-                fun build(): Prompt =
-                    Prompt(
-                        ctaType,
-                        headline,
-                        metadata,
-                        subtext,
-                        additionalProperties.toMutableMap(),
-                    )
-            }
-
-            private var validated: Boolean = false
-
-            /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
-             *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
-             *
-             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-             *   match its expected type.
-             */
-            fun validate(): Prompt = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                ctaType()
-                headline()
-                metadata()?.validate()
-                subtext()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: XTwitterScraperInvalidDataException) {
-                    false
-                }
-
-            internal fun validity(): Int =
-                (if (ctaType.asKnown() == null) 0 else 1) +
-                    (if (headline.asKnown() == null) 0 else 1) +
-                    (metadata.asKnown()?.validity() ?: 0) +
-                    (if (subtext.asKnown() == null) 0 else 1)
-
-            /** Public metadata whose fields X defines. */
-            class Metadata
-            @JsonCreator
-            private constructor(
-                @com.fasterxml.jackson.annotation.JsonValue
-                private val additionalProperties: Map<String, JsonValue>
-            ) {
-
-                @JsonAnyGetter
-                @ExcludeMissing
-                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-                fun toBuilder() = Builder().from(this)
-
-                companion object {
-
-                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
-                    fun builder() = Builder()
-                }
-
-                /** A builder for [Metadata]. */
-                class Builder internal constructor() {
-
-                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                    internal fun from(metadata: Metadata) = apply {
-                        additionalProperties = metadata.additionalProperties.toMutableMap()
-                    }
-
-                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
-
-                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                        additionalProperties.put(key, value)
-                    }
-
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                        apply {
-                            this.additionalProperties.putAll(additionalProperties)
-                        }
-
-                    fun removeAdditionalProperty(key: String) = apply {
-                        additionalProperties.remove(key)
-                    }
-
-                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
-
-                    /**
-                     * Returns an immutable instance of [Metadata].
-                     *
-                     * Further updates to this [Builder] will not mutate the returned instance.
-                     */
-                    fun build(): Metadata = Metadata(additionalProperties.toImmutable())
-                }
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws XTwitterScraperInvalidDataException if any value type in this object
-                 *   doesn't match its expected type.
-                 */
-                fun validate(): Metadata = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: XTwitterScraperInvalidDataException) {
-                        false
-                    }
-
-                internal fun validity(): Int = additionalProperties.count { (_, value) ->
-                    !value.isNull() && !value.isMissing()
-                }
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Metadata && additionalProperties == other.additionalProperties
-                }
-
-                private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-
-                override fun hashCode(): Int = hashCode
-
-                override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
-            }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Prompt &&
-                    ctaType == other.ctaType &&
-                    headline == other.headline &&
-                    metadata == other.metadata &&
-                    subtext == other.subtext &&
-                    additionalProperties == other.additionalProperties
-            }
-
-            private val hashCode: Int by lazy {
-                Objects.hash(ctaType, headline, metadata, subtext, additionalProperties)
-            }
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() =
-                "Prompt{ctaType=$ctaType, headline=$headline, metadata=$metadata, subtext=$subtext, additionalProperties=$additionalProperties}"
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is LimitedAction &&
-                action == other.action &&
-                prompt == other.prompt &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(action, prompt, additionalProperties)
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "LimitedAction{action=$action, prompt=$prompt, additionalProperties=$additionalProperties}"
+            "Entities{hashtags=$hashtags, smarttags=$smarttags, symbols=$symbols, timestamps=$timestamps, urls=$urls, userMentions=$userMentions, additionalProperties=$additionalProperties}"
     }
 
     /** Complete Note Tweet content and rich-text metadata. */
@@ -8130,7 +4289,7 @@ private constructor(
         private val text: JsonField<String>,
         private val id: JsonField<String>,
         private val entities: JsonField<Entities>,
-        private val inlineMedia: JsonField<List<InlineMedia>>,
+        private val inlineMedia: JsonField<List<SearchTweet.NoteTweet.InlineMedia>>,
         private val isExpandable: JsonField<Boolean>,
         private val noteId: JsonField<String>,
         private val richtextTags: JsonField<List<RichtextTag>>,
@@ -8146,7 +4305,7 @@ private constructor(
             entities: JsonField<Entities> = JsonMissing.of(),
             @JsonProperty("inlineMedia")
             @ExcludeMissing
-            inlineMedia: JsonField<List<InlineMedia>> = JsonMissing.of(),
+            inlineMedia: JsonField<List<SearchTweet.NoteTweet.InlineMedia>> = JsonMissing.of(),
             @JsonProperty("isExpandable")
             @ExcludeMissing
             isExpandable: JsonField<Boolean> = JsonMissing.of(),
@@ -8178,10 +4337,7 @@ private constructor(
          */
         fun id(): String? = id.getNullable("id")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun entities(): Entities? = entities.getNullable("entities")
 
         /**
@@ -8189,12 +4345,10 @@ private constructor(
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
-        fun inlineMedia(): List<InlineMedia>? = inlineMedia.getNullable("inlineMedia")
+        fun inlineMedia(): List<SearchTweet.NoteTweet.InlineMedia>? =
+            inlineMedia.getNullable("inlineMedia")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun isExpandable(): Boolean? = isExpandable.getNullable("isExpandable")
 
         /**
@@ -8204,10 +4358,7 @@ private constructor(
          */
         fun noteId(): String? = noteId.getNullable("noteId")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun richtextTags(): List<RichtextTag>? = richtextTags.getNullable("richtextTags")
 
         /**
@@ -8238,7 +4389,7 @@ private constructor(
          */
         @JsonProperty("inlineMedia")
         @ExcludeMissing
-        fun _inlineMedia(): JsonField<List<InlineMedia>> = inlineMedia
+        fun _inlineMedia(): JsonField<List<SearchTweet.NoteTweet.InlineMedia>> = inlineMedia
 
         /**
          * Returns the raw JSON value of [isExpandable].
@@ -8298,7 +4449,8 @@ private constructor(
             private var text: JsonField<String>? = null
             private var id: JsonField<String> = JsonMissing.of()
             private var entities: JsonField<Entities> = JsonMissing.of()
-            private var inlineMedia: JsonField<MutableList<InlineMedia>>? = null
+            private var inlineMedia: JsonField<MutableList<SearchTweet.NoteTweet.InlineMedia>>? =
+                null
             private var isExpandable: JsonField<Boolean> = JsonMissing.of()
             private var noteId: JsonField<String> = JsonMissing.of()
             private var richtextTags: JsonField<MutableList<RichtextTag>>? = null
@@ -8326,37 +4478,33 @@ private constructor(
             /** Sets [Builder.id] to an arbitrary JSON value. */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun entities(entities: Entities) = entities(JsonField.of(entities))
 
             /** Sets [Builder.entities] to an arbitrary JSON value. */
             fun entities(entities: JsonField<Entities>) = apply { this.entities = entities }
 
             /** Inline media positions in the Note Tweet text. */
-            fun inlineMedia(inlineMedia: List<InlineMedia>) = inlineMedia(JsonField.of(inlineMedia))
+            fun inlineMedia(inlineMedia: List<SearchTweet.NoteTweet.InlineMedia>) =
+                inlineMedia(JsonField.of(inlineMedia))
 
             /** Sets [Builder.inlineMedia] to an arbitrary JSON value. */
-            fun inlineMedia(inlineMedia: JsonField<List<InlineMedia>>) = apply {
-                this.inlineMedia = inlineMedia.map { it.toMutableList() }
-            }
+            fun inlineMedia(inlineMedia: JsonField<List<SearchTweet.NoteTweet.InlineMedia>>) =
+                apply {
+                    this.inlineMedia = inlineMedia.map { it.toMutableList() }
+                }
 
             /**
-             * Adds a single [InlineMedia] to [inlineMedia].
+             * Adds a single [SearchTweet.NoteTweet.InlineMedia] to [inlineMedia].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addInlineMedia(inlineMedia: InlineMedia) = apply {
+            fun addInlineMedia(inlineMedia: SearchTweet.NoteTweet.InlineMedia) = apply {
                 this.inlineMedia =
                     (this.inlineMedia ?: JsonField.of(mutableListOf())).also {
                         checkKnown("inlineMedia", it).add(inlineMedia)
                     }
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun isExpandable(isExpandable: Boolean) = isExpandable(JsonField.of(isExpandable))
 
             /** Sets [Builder.isExpandable] to an arbitrary JSON value. */
@@ -8370,9 +4518,6 @@ private constructor(
             /** Sets [Builder.noteId] to an arbitrary JSON value. */
             fun noteId(noteId: JsonField<String>) = apply { this.noteId = noteId }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun richtextTags(richtextTags: List<RichtextTag>) =
                 richtextTags(JsonField.of(richtextTags))
 
@@ -8482,15 +4627,147 @@ private constructor(
 
         /** Lists hashtags, symbols, links, and mentions from tweet text. */
         class Entities
-        @JsonCreator
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
-            @com.fasterxml.jackson.annotation.JsonValue
-            private val additionalProperties: Map<String, JsonValue>
+            private val hashtags: JsonField<List<SearchTweet.NoteTweet.Entities.Hashtag>>,
+            private val smarttags: JsonField<List<SearchTweet.NoteTweet.Entities.Smarttag>>,
+            private val symbols: JsonField<List<SearchTweet.NoteTweet.Entities.Symbol>>,
+            private val timestamps: JsonField<List<SearchTweet.NoteTweet.Entities.Timestamp>>,
+            private val urls: JsonField<List<SearchTweet.NoteTweet.Entities.Url>>,
+            private val userMentions: JsonField<List<SearchTweet.NoteTweet.Entities.UserMention>>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("hashtags")
+                @ExcludeMissing
+                hashtags: JsonField<List<SearchTweet.NoteTweet.Entities.Hashtag>> =
+                    JsonMissing.of(),
+                @JsonProperty("smarttags")
+                @ExcludeMissing
+                smarttags: JsonField<List<SearchTweet.NoteTweet.Entities.Smarttag>> =
+                    JsonMissing.of(),
+                @JsonProperty("symbols")
+                @ExcludeMissing
+                symbols: JsonField<List<SearchTweet.NoteTweet.Entities.Symbol>> = JsonMissing.of(),
+                @JsonProperty("timestamps")
+                @ExcludeMissing
+                timestamps: JsonField<List<SearchTweet.NoteTweet.Entities.Timestamp>> =
+                    JsonMissing.of(),
+                @JsonProperty("urls")
+                @ExcludeMissing
+                urls: JsonField<List<SearchTweet.NoteTweet.Entities.Url>> = JsonMissing.of(),
+                @JsonProperty("user_mentions")
+                @ExcludeMissing
+                userMentions: JsonField<List<SearchTweet.NoteTweet.Entities.UserMention>> =
+                    JsonMissing.of(),
+            ) : this(hashtags, smarttags, symbols, timestamps, urls, userMentions, mutableMapOf())
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun hashtags(): List<SearchTweet.NoteTweet.Entities.Hashtag>? =
+                hashtags.getNullable("hashtags")
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun smarttags(): List<SearchTweet.NoteTweet.Entities.Smarttag>? =
+                smarttags.getNullable("smarttags")
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun symbols(): List<SearchTweet.NoteTweet.Entities.Symbol>? =
+                symbols.getNullable("symbols")
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun timestamps(): List<SearchTweet.NoteTweet.Entities.Timestamp>? =
+                timestamps.getNullable("timestamps")
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun urls(): List<SearchTweet.NoteTweet.Entities.Url>? = urls.getNullable("urls")
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun userMentions(): List<SearchTweet.NoteTweet.Entities.UserMention>? =
+                userMentions.getNullable("user_mentions")
+
+            /**
+             * Returns the raw JSON value of [hashtags].
+             *
+             * Unlike [hashtags], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("hashtags")
+            @ExcludeMissing
+            fun _hashtags(): JsonField<List<SearchTweet.NoteTweet.Entities.Hashtag>> = hashtags
+
+            /**
+             * Returns the raw JSON value of [smarttags].
+             *
+             * Unlike [smarttags], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("smarttags")
+            @ExcludeMissing
+            fun _smarttags(): JsonField<List<SearchTweet.NoteTweet.Entities.Smarttag>> = smarttags
+
+            /**
+             * Returns the raw JSON value of [symbols].
+             *
+             * Unlike [symbols], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("symbols")
+            @ExcludeMissing
+            fun _symbols(): JsonField<List<SearchTweet.NoteTweet.Entities.Symbol>> = symbols
+
+            /**
+             * Returns the raw JSON value of [timestamps].
+             *
+             * Unlike [timestamps], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("timestamps")
+            @ExcludeMissing
+            fun _timestamps(): JsonField<List<SearchTweet.NoteTweet.Entities.Timestamp>> =
+                timestamps
+
+            /**
+             * Returns the raw JSON value of [urls].
+             *
+             * Unlike [urls], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("urls")
+            @ExcludeMissing
+            fun _urls(): JsonField<List<SearchTweet.NoteTweet.Entities.Url>> = urls
+
+            /**
+             * Returns the raw JSON value of [userMentions].
+             *
+             * Unlike [userMentions], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("user_mentions")
+            @ExcludeMissing
+            fun _userMentions(): JsonField<List<SearchTweet.NoteTweet.Entities.UserMention>> =
+                userMentions
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
@@ -8503,11 +4780,160 @@ private constructor(
             /** A builder for [Entities]. */
             class Builder internal constructor() {
 
+                private var hashtags:
+                    JsonField<MutableList<SearchTweet.NoteTweet.Entities.Hashtag>>? =
+                    null
+                private var smarttags:
+                    JsonField<MutableList<SearchTweet.NoteTweet.Entities.Smarttag>>? =
+                    null
+                private var symbols:
+                    JsonField<MutableList<SearchTweet.NoteTweet.Entities.Symbol>>? =
+                    null
+                private var timestamps:
+                    JsonField<MutableList<SearchTweet.NoteTweet.Entities.Timestamp>>? =
+                    null
+                private var urls: JsonField<MutableList<SearchTweet.NoteTweet.Entities.Url>>? = null
+                private var userMentions:
+                    JsonField<MutableList<SearchTweet.NoteTweet.Entities.UserMention>>? =
+                    null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 internal fun from(entities: Entities) = apply {
+                    hashtags = entities.hashtags.map { it.toMutableList() }
+                    smarttags = entities.smarttags.map { it.toMutableList() }
+                    symbols = entities.symbols.map { it.toMutableList() }
+                    timestamps = entities.timestamps.map { it.toMutableList() }
+                    urls = entities.urls.map { it.toMutableList() }
+                    userMentions = entities.userMentions.map { it.toMutableList() }
                     additionalProperties = entities.additionalProperties.toMutableMap()
                 }
+
+                fun hashtags(hashtags: List<SearchTweet.NoteTweet.Entities.Hashtag>) =
+                    hashtags(JsonField.of(hashtags))
+
+                /** Sets [Builder.hashtags] to an arbitrary JSON value. */
+                fun hashtags(hashtags: JsonField<List<SearchTweet.NoteTweet.Entities.Hashtag>>) =
+                    apply {
+                        this.hashtags = hashtags.map { it.toMutableList() }
+                    }
+
+                /**
+                 * Adds a single [SearchTweet.NoteTweet.Entities.Hashtag] to [hashtags].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addHashtag(hashtag: SearchTweet.NoteTweet.Entities.Hashtag) = apply {
+                    hashtags =
+                        (hashtags ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("hashtags", it).add(hashtag)
+                        }
+                }
+
+                fun smarttags(smarttags: List<SearchTweet.NoteTweet.Entities.Smarttag>) =
+                    smarttags(JsonField.of(smarttags))
+
+                /** Sets [Builder.smarttags] to an arbitrary JSON value. */
+                fun smarttags(smarttags: JsonField<List<SearchTweet.NoteTweet.Entities.Smarttag>>) =
+                    apply {
+                        this.smarttags = smarttags.map { it.toMutableList() }
+                    }
+
+                /**
+                 * Adds a single [SearchTweet.NoteTweet.Entities.Smarttag] to [smarttags].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addSmarttag(smarttag: SearchTweet.NoteTweet.Entities.Smarttag) = apply {
+                    smarttags =
+                        (smarttags ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("smarttags", it).add(smarttag)
+                        }
+                }
+
+                fun symbols(symbols: List<SearchTweet.NoteTweet.Entities.Symbol>) =
+                    symbols(JsonField.of(symbols))
+
+                /** Sets [Builder.symbols] to an arbitrary JSON value. */
+                fun symbols(symbols: JsonField<List<SearchTweet.NoteTweet.Entities.Symbol>>) =
+                    apply {
+                        this.symbols = symbols.map { it.toMutableList() }
+                    }
+
+                /**
+                 * Adds a single [SearchTweet.NoteTweet.Entities.Symbol] to [symbols].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addSymbol(symbol: SearchTweet.NoteTweet.Entities.Symbol) = apply {
+                    symbols =
+                        (symbols ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("symbols", it).add(symbol)
+                        }
+                }
+
+                fun timestamps(timestamps: List<SearchTweet.NoteTweet.Entities.Timestamp>) =
+                    timestamps(JsonField.of(timestamps))
+
+                /** Sets [Builder.timestamps] to an arbitrary JSON value. */
+                fun timestamps(
+                    timestamps: JsonField<List<SearchTweet.NoteTweet.Entities.Timestamp>>
+                ) = apply {
+                    this.timestamps = timestamps.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [SearchTweet.NoteTweet.Entities.Timestamp] to [timestamps].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addTimestamp(timestamp: SearchTweet.NoteTweet.Entities.Timestamp) = apply {
+                    timestamps =
+                        (timestamps ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("timestamps", it).add(timestamp)
+                        }
+                }
+
+                fun urls(urls: List<SearchTweet.NoteTweet.Entities.Url>) = urls(JsonField.of(urls))
+
+                /** Sets [Builder.urls] to an arbitrary JSON value. */
+                fun urls(urls: JsonField<List<SearchTweet.NoteTweet.Entities.Url>>) = apply {
+                    this.urls = urls.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [SearchTweet.NoteTweet.Entities.Url] to [urls].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addUrl(url: SearchTweet.NoteTweet.Entities.Url) = apply {
+                    urls =
+                        (urls ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("urls", it).add(url)
+                        }
+                }
+
+                fun userMentions(userMentions: List<SearchTweet.NoteTweet.Entities.UserMention>) =
+                    userMentions(JsonField.of(userMentions))
+
+                /** Sets [Builder.userMentions] to an arbitrary JSON value. */
+                fun userMentions(
+                    userMentions: JsonField<List<SearchTweet.NoteTweet.Entities.UserMention>>
+                ) = apply {
+                    this.userMentions = userMentions.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [SearchTweet.NoteTweet.Entities.UserMention] to [userMentions].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addUserMention(userMention: SearchTweet.NoteTweet.Entities.UserMention) =
+                    apply {
+                        userMentions =
+                            (userMentions ?: JsonField.of(mutableListOf())).also {
+                                checkKnown("userMentions", it).add(userMention)
+                            }
+                    }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -8536,7 +4962,16 @@ private constructor(
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  */
-                fun build(): Entities = Entities(additionalProperties.toImmutable())
+                fun build(): Entities =
+                    Entities(
+                        (hashtags ?: JsonMissing.of()).map { it.toImmutable() },
+                        (smarttags ?: JsonMissing.of()).map { it.toImmutable() },
+                        (symbols ?: JsonMissing.of()).map { it.toImmutable() },
+                        (timestamps ?: JsonMissing.of()).map { it.toImmutable() },
+                        (urls ?: JsonMissing.of()).map { it.toImmutable() },
+                        (userMentions ?: JsonMissing.of()).map { it.toImmutable() },
+                        additionalProperties.toMutableMap(),
+                    )
             }
 
             private var validated: Boolean = false
@@ -8556,192 +4991,12 @@ private constructor(
                     return@apply
                 }
 
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: XTwitterScraperInvalidDataException) {
-                    false
-                }
-
-            internal fun validity(): Int = additionalProperties.count { (_, value) ->
-                !value.isNull() && !value.isMissing()
-            }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Entities && additionalProperties == other.additionalProperties
-            }
-
-            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() = "Entities{additionalProperties=$additionalProperties}"
-        }
-
-        class InlineMedia
-        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-        private constructor(
-            private val index: JsonField<Long>,
-            private val mediaId: JsonField<String>,
-            private val additionalProperties: MutableMap<String, JsonValue>,
-        ) {
-
-            @JsonCreator
-            private constructor(
-                @JsonProperty("index") @ExcludeMissing index: JsonField<Long> = JsonMissing.of(),
-                @JsonProperty("mediaId")
-                @ExcludeMissing
-                mediaId: JsonField<String> = JsonMissing.of(),
-            ) : this(index, mediaId, mutableMapOf())
-
-            /**
-             * Whole number from 0.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null.
-             */
-            fun index(): Long = index.getRequired("index")
-
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null.
-             */
-            fun mediaId(): String = mediaId.getRequired("mediaId")
-
-            /**
-             * Returns the raw JSON value of [index].
-             *
-             * Unlike [index], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("index") @ExcludeMissing fun _index(): JsonField<Long> = index
-
-            /**
-             * Returns the raw JSON value of [mediaId].
-             *
-             * Unlike [mediaId], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("mediaId") @ExcludeMissing fun _mediaId(): JsonField<String> = mediaId
-
-            @JsonAnySetter
-            private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
-            }
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /**
-                 * Returns a mutable builder for constructing an instance of [InlineMedia].
-                 *
-                 * The following fields are required:
-                 * ```kotlin
-                 * .index()
-                 * .mediaId()
-                 * ```
-                 */
-                fun builder() = Builder()
-            }
-
-            /** A builder for [InlineMedia]. */
-            class Builder internal constructor() {
-
-                private var index: JsonField<Long>? = null
-                private var mediaId: JsonField<String>? = null
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                internal fun from(inlineMedia: InlineMedia) = apply {
-                    index = inlineMedia.index
-                    mediaId = inlineMedia.mediaId
-                    additionalProperties = inlineMedia.additionalProperties.toMutableMap()
-                }
-
-                /** Whole number from 0. */
-                fun index(index: Long) = index(JsonField.of(index))
-
-                /** Sets [Builder.index] to an arbitrary JSON value. */
-                fun index(index: JsonField<Long>) = apply { this.index = index }
-
-                fun mediaId(mediaId: String) = mediaId(JsonField.of(mediaId))
-
-                /** Sets [Builder.mediaId] to an arbitrary JSON value. */
-                fun mediaId(mediaId: JsonField<String>) = apply { this.mediaId = mediaId }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [InlineMedia].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 *
-                 * The following fields are required:
-                 * ```kotlin
-                 * .index()
-                 * .mediaId()
-                 * ```
-                 *
-                 * @throws IllegalStateException if any required field is unset.
-                 */
-                fun build(): InlineMedia =
-                    InlineMedia(
-                        checkRequired("index", index),
-                        checkRequired("mediaId", mediaId),
-                        additionalProperties.toMutableMap(),
-                    )
-            }
-
-            private var validated: Boolean = false
-
-            /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
-             *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
-             *
-             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-             *   match its expected type.
-             */
-            fun validate(): InlineMedia = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                index()
-                mediaId()
+                hashtags()?.forEach { it.validate() }
+                smarttags()?.forEach { it.validate() }
+                symbols()?.forEach { it.validate() }
+                timestamps()?.forEach { it.validate() }
+                urls()?.forEach { it.validate() }
+                userMentions()?.forEach { it.validate() }
                 validated = true
             }
 
@@ -8754,27 +5009,44 @@ private constructor(
                 }
 
             internal fun validity(): Int =
-                (if (index.asKnown() == null) 0 else 1) + (if (mediaId.asKnown() == null) 0 else 1)
+                (hashtags.asKnown()?.sumOf { it.validity() } ?: 0) +
+                    (smarttags.asKnown()?.sumOf { it.validity() } ?: 0) +
+                    (symbols.asKnown()?.sumOf { it.validity() } ?: 0) +
+                    (timestamps.asKnown()?.sumOf { it.validity() } ?: 0) +
+                    (urls.asKnown()?.sumOf { it.validity() } ?: 0) +
+                    (userMentions.asKnown()?.sumOf { it.validity() } ?: 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
                 }
 
-                return other is InlineMedia &&
-                    index == other.index &&
-                    mediaId == other.mediaId &&
+                return other is Entities &&
+                    hashtags == other.hashtags &&
+                    smarttags == other.smarttags &&
+                    symbols == other.symbols &&
+                    timestamps == other.timestamps &&
+                    urls == other.urls &&
+                    userMentions == other.userMentions &&
                     additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy {
-                Objects.hash(index, mediaId, additionalProperties)
+                Objects.hash(
+                    hashtags,
+                    smarttags,
+                    symbols,
+                    timestamps,
+                    urls,
+                    userMentions,
+                    additionalProperties,
+                )
             }
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "InlineMedia{index=$index, mediaId=$mediaId, additionalProperties=$additionalProperties}"
+                "Entities{hashtags=$hashtags, smarttags=$smarttags, symbols=$symbols, timestamps=$timestamps, urls=$urls, userMentions=$userMentions, additionalProperties=$additionalProperties}"
         }
 
         class RichtextTag
@@ -9093,52 +5365,28 @@ private constructor(
             mutableMapOf(),
         )
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun id(): String? = id.getNullable("id")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun boundingBox(): BoundingBox? = boundingBox.getNullable("boundingBox")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun country(): String? = country.getNullable("country")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun countryCode(): String? = countryCode.getNullable("countryCode")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun fullName(): String? = fullName.getNullable("fullName")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun name(): String? = name.getNullable("name")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun placeType(): String? = placeType.getNullable("placeType")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun url(): String? = url.getNullable("url")
 
         /**
@@ -9244,17 +5492,11 @@ private constructor(
                 additionalProperties = place.additionalProperties.toMutableMap()
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun id(id: String) = id(JsonField.of(id))
 
             /** Sets [Builder.id] to an arbitrary JSON value. */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun boundingBox(boundingBox: BoundingBox) = boundingBox(JsonField.of(boundingBox))
 
             /** Sets [Builder.boundingBox] to an arbitrary JSON value. */
@@ -9262,17 +5504,11 @@ private constructor(
                 this.boundingBox = boundingBox
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun country(country: String) = country(JsonField.of(country))
 
             /** Sets [Builder.country] to an arbitrary JSON value. */
             fun country(country: JsonField<String>) = apply { this.country = country }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun countryCode(countryCode: String) = countryCode(JsonField.of(countryCode))
 
             /** Sets [Builder.countryCode] to an arbitrary JSON value. */
@@ -9280,33 +5516,21 @@ private constructor(
                 this.countryCode = countryCode
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun fullName(fullName: String) = fullName(JsonField.of(fullName))
 
             /** Sets [Builder.fullName] to an arbitrary JSON value. */
             fun fullName(fullName: JsonField<String>) = apply { this.fullName = fullName }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun name(name: String) = name(JsonField.of(name))
 
             /** Sets [Builder.name] to an arbitrary JSON value. */
             fun name(name: JsonField<String>) = apply { this.name = name }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun placeType(placeType: String) = placeType(JsonField.of(placeType))
 
             /** Sets [Builder.placeType] to an arbitrary JSON value. */
             fun placeType(placeType: JsonField<String>) = apply { this.placeType = placeType }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun url(url: String) = url(JsonField.of(url))
 
             /** Sets [Builder.url] to an arbitrary JSON value. */
@@ -9538,108 +5762,6 @@ private constructor(
             "Place{id=$id, boundingBox=$boundingBox, country=$country, countryCode=$countryCode, fullName=$fullName, name=$name, placeType=$placeType, url=$url, additionalProperties=$additionalProperties}"
     }
 
-    /** Public metadata whose fields X defines. */
-    class PostCta
-    @JsonCreator
-    private constructor(
-        @com.fasterxml.jackson.annotation.JsonValue
-        private val additionalProperties: Map<String, JsonValue>
-    ) {
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [PostCta]. */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [PostCta]. */
-        class Builder internal constructor() {
-
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(postCta: PostCta) = apply {
-                additionalProperties = postCta.additionalProperties.toMutableMap()
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [PostCta].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): PostCta = PostCta(additionalProperties.toImmutable())
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): PostCta = apply {
-            if (validated) {
-                return@apply
-            }
-
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int = additionalProperties.count { (_, value) ->
-            !value.isNull() && !value.isMissing()
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is PostCta && additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() = "PostCta{additionalProperties=$additionalProperties}"
-    }
-
     /** Engagement counts retained from a prior tweet edit. */
     class PreviousCounts
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
@@ -9671,34 +5793,19 @@ private constructor(
             retweetCount: JsonField<Long> = JsonMissing.of(),
         ) : this(bookmarkCount, likeCount, quoteCount, replyCount, retweetCount, mutableMapOf())
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun bookmarkCount(): Long? = bookmarkCount.getNullable("bookmarkCount")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun likeCount(): Long? = likeCount.getNullable("likeCount")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun quoteCount(): Long? = quoteCount.getNullable("quoteCount")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun replyCount(): Long? = replyCount.getNullable("replyCount")
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun retweetCount(): Long? = retweetCount.getNullable("retweetCount")
 
         /**
@@ -9779,9 +5886,6 @@ private constructor(
                 additionalProperties = previousCounts.additionalProperties.toMutableMap()
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun bookmarkCount(bookmarkCount: Long) = bookmarkCount(JsonField.of(bookmarkCount))
 
             /** Sets [Builder.bookmarkCount] to an arbitrary JSON value. */
@@ -9789,33 +5893,21 @@ private constructor(
                 this.bookmarkCount = bookmarkCount
             }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun likeCount(likeCount: Long) = likeCount(JsonField.of(likeCount))
 
             /** Sets [Builder.likeCount] to an arbitrary JSON value. */
             fun likeCount(likeCount: JsonField<Long>) = apply { this.likeCount = likeCount }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun quoteCount(quoteCount: Long) = quoteCount(JsonField.of(quoteCount))
 
             /** Sets [Builder.quoteCount] to an arbitrary JSON value. */
             fun quoteCount(quoteCount: JsonField<Long>) = apply { this.quoteCount = quoteCount }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun replyCount(replyCount: Long) = replyCount(JsonField.of(replyCount))
 
             /** Sets [Builder.replyCount] to an arbitrary JSON value. */
             fun replyCount(replyCount: JsonField<Long>) = apply { this.replyCount = replyCount }
 
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
             fun retweetCount(retweetCount: Long) = retweetCount(JsonField.of(retweetCount))
 
             /** Sets [Builder.retweetCount] to an arbitrary JSON value. */
@@ -9926,2851 +6018,6 @@ private constructor(
 
         override fun toString() =
             "PreviousCounts{bookmarkCount=$bookmarkCount, likeCount=$likeCount, quoteCount=$quoteCount, replyCount=$replyCount, retweetCount=$retweetCount, additionalProperties=$additionalProperties}"
-    }
-
-    /** The quoted post's link, kept when X withholds that post. */
-    class QuotedTweetPermalink
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val displayUrl: JsonField<String>,
-        private val expandedUrl: JsonField<String>,
-        private val url: JsonField<String>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("displayUrl")
-            @ExcludeMissing
-            displayUrl: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("expandedUrl")
-            @ExcludeMissing
-            expandedUrl: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of(),
-        ) : this(displayUrl, expandedUrl, url, mutableMapOf())
-
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
-        fun displayUrl(): String? = displayUrl.getNullable("displayUrl")
-
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
-        fun expandedUrl(): String? = expandedUrl.getNullable("expandedUrl")
-
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
-        fun url(): String? = url.getNullable("url")
-
-        /**
-         * Returns the raw JSON value of [displayUrl].
-         *
-         * Unlike [displayUrl], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("displayUrl")
-        @ExcludeMissing
-        fun _displayUrl(): JsonField<String> = displayUrl
-
-        /**
-         * Returns the raw JSON value of [expandedUrl].
-         *
-         * Unlike [expandedUrl], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("expandedUrl")
-        @ExcludeMissing
-        fun _expandedUrl(): JsonField<String> = expandedUrl
-
-        /**
-         * Returns the raw JSON value of [url].
-         *
-         * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [QuotedTweetPermalink]. */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [QuotedTweetPermalink]. */
-        class Builder internal constructor() {
-
-            private var displayUrl: JsonField<String> = JsonMissing.of()
-            private var expandedUrl: JsonField<String> = JsonMissing.of()
-            private var url: JsonField<String> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(quotedTweetPermalink: QuotedTweetPermalink) = apply {
-                displayUrl = quotedTweetPermalink.displayUrl
-                expandedUrl = quotedTweetPermalink.expandedUrl
-                url = quotedTweetPermalink.url
-                additionalProperties = quotedTweetPermalink.additionalProperties.toMutableMap()
-            }
-
-            fun displayUrl(displayUrl: String) = displayUrl(JsonField.of(displayUrl))
-
-            /** Sets [Builder.displayUrl] to an arbitrary JSON value. */
-            fun displayUrl(displayUrl: JsonField<String>) = apply { this.displayUrl = displayUrl }
-
-            fun expandedUrl(expandedUrl: String) = expandedUrl(JsonField.of(expandedUrl))
-
-            /** Sets [Builder.expandedUrl] to an arbitrary JSON value. */
-            fun expandedUrl(expandedUrl: JsonField<String>) = apply {
-                this.expandedUrl = expandedUrl
-            }
-
-            fun url(url: String) = url(JsonField.of(url))
-
-            /** Sets [Builder.url] to an arbitrary JSON value. */
-            fun url(url: JsonField<String>) = apply { this.url = url }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [QuotedTweetPermalink].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): QuotedTweetPermalink =
-                QuotedTweetPermalink(
-                    displayUrl,
-                    expandedUrl,
-                    url,
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): QuotedTweetPermalink = apply {
-            if (validated) {
-                return@apply
-            }
-
-            displayUrl()
-            expandedUrl()
-            url()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int =
-            (if (displayUrl.asKnown() == null) 0 else 1) +
-                (if (expandedUrl.asKnown() == null) 0 else 1) +
-                (if (url.asKnown() == null) 0 else 1)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is QuotedTweetPermalink &&
-                displayUrl == other.displayUrl &&
-                expandedUrl == other.expandedUrl &&
-                url == other.url &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(displayUrl, expandedUrl, url, additionalProperties)
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "QuotedTweetPermalink{displayUrl=$displayUrl, expandedUrl=$expandedUrl, url=$url, additionalProperties=$additionalProperties}"
-    }
-
-    /**
-     * Why X shows no quoted post. Omitted when X names no reason, as its legacy answers never do.
-     */
-    class QuotedTweetUnavailable
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val reason: JsonField<String>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("reason") @ExcludeMissing reason: JsonField<String> = JsonMissing.of()
-        ) : this(reason, mutableMapOf())
-
-        /**
-         * X's reason, such as `Suspended` for a suspended author or `Protected` for an author who
-         * protects their posts.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null.
-         */
-        fun reason(): String = reason.getRequired("reason")
-
-        /**
-         * Returns the raw JSON value of [reason].
-         *
-         * Unlike [reason], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<String> = reason
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [QuotedTweetUnavailable].
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .reason()
-             * ```
-             */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [QuotedTweetUnavailable]. */
-        class Builder internal constructor() {
-
-            private var reason: JsonField<String>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(quotedTweetUnavailable: QuotedTweetUnavailable) = apply {
-                reason = quotedTweetUnavailable.reason
-                additionalProperties = quotedTweetUnavailable.additionalProperties.toMutableMap()
-            }
-
-            /**
-             * X's reason, such as `Suspended` for a suspended author or `Protected` for an author
-             * who protects their posts.
-             */
-            fun reason(reason: String) = reason(JsonField.of(reason))
-
-            /** Sets [Builder.reason] to an arbitrary JSON value. */
-            fun reason(reason: JsonField<String>) = apply { this.reason = reason }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [QuotedTweetUnavailable].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .reason()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): QuotedTweetUnavailable =
-                QuotedTweetUnavailable(
-                    checkRequired("reason", reason),
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): QuotedTweetUnavailable = apply {
-            if (validated) {
-                return@apply
-            }
-
-            reason()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int = (if (reason.asKnown() == null) 0 else 1)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is QuotedTweetUnavailable &&
-                reason == other.reason &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(reason, additionalProperties)
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "QuotedTweetUnavailable{reason=$reason, additionalProperties=$additionalProperties}"
-    }
-
-    /** Public post & user this reaction references. */
-    class ReactionContext
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val reactedToPostId: JsonField<String>,
-        private val reactedToUser: JsonField<UserProfile>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("reactedToPostId")
-            @ExcludeMissing
-            reactedToPostId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("reactedToUser")
-            @ExcludeMissing
-            reactedToUser: JsonField<UserProfile> = JsonMissing.of(),
-        ) : this(reactedToPostId, reactedToUser, mutableMapOf())
-
-        /**
-         * Referenced post ID.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun reactedToPostId(): String? = reactedToPostId.getNullable("reactedToPostId")
-
-        /**
-         * Public X profile.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun reactedToUser(): UserProfile? = reactedToUser.getNullable("reactedToUser")
-
-        /**
-         * Returns the raw JSON value of [reactedToPostId].
-         *
-         * Unlike [reactedToPostId], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("reactedToPostId")
-        @ExcludeMissing
-        fun _reactedToPostId(): JsonField<String> = reactedToPostId
-
-        /**
-         * Returns the raw JSON value of [reactedToUser].
-         *
-         * Unlike [reactedToUser], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("reactedToUser")
-        @ExcludeMissing
-        fun _reactedToUser(): JsonField<UserProfile> = reactedToUser
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [ReactionContext]. */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [ReactionContext]. */
-        class Builder internal constructor() {
-
-            private var reactedToPostId: JsonField<String> = JsonMissing.of()
-            private var reactedToUser: JsonField<UserProfile> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(reactionContext: ReactionContext) = apply {
-                reactedToPostId = reactionContext.reactedToPostId
-                reactedToUser = reactionContext.reactedToUser
-                additionalProperties = reactionContext.additionalProperties.toMutableMap()
-            }
-
-            /** Referenced post ID. */
-            fun reactedToPostId(reactedToPostId: String) =
-                reactedToPostId(JsonField.of(reactedToPostId))
-
-            /** Sets [Builder.reactedToPostId] to an arbitrary JSON value. */
-            fun reactedToPostId(reactedToPostId: JsonField<String>) = apply {
-                this.reactedToPostId = reactedToPostId
-            }
-
-            /** Public X profile. */
-            fun reactedToUser(reactedToUser: UserProfile) =
-                reactedToUser(JsonField.of(reactedToUser))
-
-            /** Sets [Builder.reactedToUser] to an arbitrary JSON value. */
-            fun reactedToUser(reactedToUser: JsonField<UserProfile>) = apply {
-                this.reactedToUser = reactedToUser
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [ReactionContext].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): ReactionContext =
-                ReactionContext(reactedToPostId, reactedToUser, additionalProperties.toMutableMap())
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): ReactionContext = apply {
-            if (validated) {
-                return@apply
-            }
-
-            reactedToPostId()
-            reactedToUser()?.validate()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int =
-            (if (reactedToPostId.asKnown() == null) 0 else 1) +
-                (reactedToUser.asKnown()?.validity() ?: 0)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is ReactionContext &&
-                reactedToPostId == other.reactedToPostId &&
-                reactedToUser == other.reactedToUser &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(reactedToPostId, reactedToUser, additionalProperties)
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "ReactionContext{reactedToPostId=$reactedToPostId, reactedToUser=$reactedToUser, additionalProperties=$additionalProperties}"
-    }
-
-    /** Public metadata whose fields X defines. */
-    class Scopes
-    @JsonCreator
-    private constructor(
-        @com.fasterxml.jackson.annotation.JsonValue
-        private val additionalProperties: Map<String, JsonValue>
-    ) {
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [Scopes]. */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [Scopes]. */
-        class Builder internal constructor() {
-
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(scopes: Scopes) = apply {
-                additionalProperties = scopes.additionalProperties.toMutableMap()
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Scopes].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): Scopes = Scopes(additionalProperties.toImmutable())
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): Scopes = apply {
-            if (validated) {
-                return@apply
-            }
-
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int = additionalProperties.count { (_, value) ->
-            !value.isNull() && !value.isMissing()
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Scopes && additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() = "Scopes{additionalProperties=$additionalProperties}"
-    }
-
-    /** Game metadata attached to this post. */
-    class SportsContext
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val competitors: JsonField<List<Competitor>>,
-        private val gameId: JsonField<String>,
-        private val league: JsonField<String>,
-        private val scheduledAtMs: JsonField<ScheduledAtMs>,
-        private val state: JsonField<String>,
-        private val statusText: JsonField<String>,
-        private val title: JsonField<String>,
-        private val url: JsonField<String>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("competitors")
-            @ExcludeMissing
-            competitors: JsonField<List<Competitor>> = JsonMissing.of(),
-            @JsonProperty("gameId") @ExcludeMissing gameId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("league") @ExcludeMissing league: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("scheduledAtMs")
-            @ExcludeMissing
-            scheduledAtMs: JsonField<ScheduledAtMs> = JsonMissing.of(),
-            @JsonProperty("state") @ExcludeMissing state: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("statusText")
-            @ExcludeMissing
-            statusText: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("title") @ExcludeMissing title: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of(),
-        ) : this(
-            competitors,
-            gameId,
-            league,
-            scheduledAtMs,
-            state,
-            statusText,
-            title,
-            url,
-            mutableMapOf(),
-        )
-
-        /**
-         * Teams & reported scores.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun competitors(): List<Competitor>? = competitors.getNullable("competitors")
-
-        /**
-         * Game ID.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun gameId(): String? = gameId.getNullable("gameId")
-
-        /**
-         * League ID.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun league(): String? = league.getNullable("league")
-
-        /**
-         * Scheduled Unix milliseconds, retaining the source type.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun scheduledAtMs(): ScheduledAtMs? = scheduledAtMs.getNullable("scheduledAtMs")
-
-        /**
-         * Reported game state.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun state(): String? = state.getNullable("state")
-
-        /**
-         * Game progress text.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun statusText(): String? = statusText.getNullable("statusText")
-
-        /**
-         * Game title.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun title(): String? = title.getNullable("title")
-
-        /**
-         * Game link.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun url(): String? = url.getNullable("url")
-
-        /**
-         * Returns the raw JSON value of [competitors].
-         *
-         * Unlike [competitors], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("competitors")
-        @ExcludeMissing
-        fun _competitors(): JsonField<List<Competitor>> = competitors
-
-        /**
-         * Returns the raw JSON value of [gameId].
-         *
-         * Unlike [gameId], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("gameId") @ExcludeMissing fun _gameId(): JsonField<String> = gameId
-
-        /**
-         * Returns the raw JSON value of [league].
-         *
-         * Unlike [league], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("league") @ExcludeMissing fun _league(): JsonField<String> = league
-
-        /**
-         * Returns the raw JSON value of [scheduledAtMs].
-         *
-         * Unlike [scheduledAtMs], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("scheduledAtMs")
-        @ExcludeMissing
-        fun _scheduledAtMs(): JsonField<ScheduledAtMs> = scheduledAtMs
-
-        /**
-         * Returns the raw JSON value of [state].
-         *
-         * Unlike [state], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("state") @ExcludeMissing fun _state(): JsonField<String> = state
-
-        /**
-         * Returns the raw JSON value of [statusText].
-         *
-         * Unlike [statusText], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("statusText")
-        @ExcludeMissing
-        fun _statusText(): JsonField<String> = statusText
-
-        /**
-         * Returns the raw JSON value of [title].
-         *
-         * Unlike [title], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("title") @ExcludeMissing fun _title(): JsonField<String> = title
-
-        /**
-         * Returns the raw JSON value of [url].
-         *
-         * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [SportsContext]. */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [SportsContext]. */
-        class Builder internal constructor() {
-
-            private var competitors: JsonField<MutableList<Competitor>>? = null
-            private var gameId: JsonField<String> = JsonMissing.of()
-            private var league: JsonField<String> = JsonMissing.of()
-            private var scheduledAtMs: JsonField<ScheduledAtMs> = JsonMissing.of()
-            private var state: JsonField<String> = JsonMissing.of()
-            private var statusText: JsonField<String> = JsonMissing.of()
-            private var title: JsonField<String> = JsonMissing.of()
-            private var url: JsonField<String> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(sportsContext: SportsContext) = apply {
-                competitors = sportsContext.competitors.map { it.toMutableList() }
-                gameId = sportsContext.gameId
-                league = sportsContext.league
-                scheduledAtMs = sportsContext.scheduledAtMs
-                state = sportsContext.state
-                statusText = sportsContext.statusText
-                title = sportsContext.title
-                url = sportsContext.url
-                additionalProperties = sportsContext.additionalProperties.toMutableMap()
-            }
-
-            /** Teams & reported scores. */
-            fun competitors(competitors: List<Competitor>) = competitors(JsonField.of(competitors))
-
-            /** Sets [Builder.competitors] to an arbitrary JSON value. */
-            fun competitors(competitors: JsonField<List<Competitor>>) = apply {
-                this.competitors = competitors.map { it.toMutableList() }
-            }
-
-            /**
-             * Adds a single [Competitor] to [competitors].
-             *
-             * @throws IllegalStateException if the field was previously set to a non-list.
-             */
-            fun addCompetitor(competitor: Competitor) = apply {
-                competitors =
-                    (competitors ?: JsonField.of(mutableListOf())).also {
-                        checkKnown("competitors", it).add(competitor)
-                    }
-            }
-
-            /** Game ID. */
-            fun gameId(gameId: String) = gameId(JsonField.of(gameId))
-
-            /** Sets [Builder.gameId] to an arbitrary JSON value. */
-            fun gameId(gameId: JsonField<String>) = apply { this.gameId = gameId }
-
-            /** League ID. */
-            fun league(league: String) = league(JsonField.of(league))
-
-            /** Sets [Builder.league] to an arbitrary JSON value. */
-            fun league(league: JsonField<String>) = apply { this.league = league }
-
-            /** Scheduled Unix milliseconds, retaining the source type. */
-            fun scheduledAtMs(scheduledAtMs: ScheduledAtMs) =
-                scheduledAtMs(JsonField.of(scheduledAtMs))
-
-            /** Sets [Builder.scheduledAtMs] to an arbitrary JSON value. */
-            fun scheduledAtMs(scheduledAtMs: JsonField<ScheduledAtMs>) = apply {
-                this.scheduledAtMs = scheduledAtMs
-            }
-
-            /** Alias for calling [scheduledAtMs] with `ScheduledAtMs.ofDouble(double)`. */
-            fun scheduledAtMs(double: Double) = scheduledAtMs(ScheduledAtMs.ofDouble(double))
-
-            /** Alias for calling [scheduledAtMs] with `ScheduledAtMs.ofString(string)`. */
-            fun scheduledAtMs(string: String) = scheduledAtMs(ScheduledAtMs.ofString(string))
-
-            /** Reported game state. */
-            fun state(state: String) = state(JsonField.of(state))
-
-            /** Sets [Builder.state] to an arbitrary JSON value. */
-            fun state(state: JsonField<String>) = apply { this.state = state }
-
-            /** Game progress text. */
-            fun statusText(statusText: String) = statusText(JsonField.of(statusText))
-
-            /** Sets [Builder.statusText] to an arbitrary JSON value. */
-            fun statusText(statusText: JsonField<String>) = apply { this.statusText = statusText }
-
-            /** Game title. */
-            fun title(title: String) = title(JsonField.of(title))
-
-            /** Sets [Builder.title] to an arbitrary JSON value. */
-            fun title(title: JsonField<String>) = apply { this.title = title }
-
-            /** Game link. */
-            fun url(url: String) = url(JsonField.of(url))
-
-            /** Sets [Builder.url] to an arbitrary JSON value. */
-            fun url(url: JsonField<String>) = apply { this.url = url }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [SportsContext].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): SportsContext =
-                SportsContext(
-                    (competitors ?: JsonMissing.of()).map { it.toImmutable() },
-                    gameId,
-                    league,
-                    scheduledAtMs,
-                    state,
-                    statusText,
-                    title,
-                    url,
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): SportsContext = apply {
-            if (validated) {
-                return@apply
-            }
-
-            competitors()?.forEach { it.validate() }
-            gameId()
-            league()
-            scheduledAtMs()?.validate()
-            state()
-            statusText()
-            title()
-            url()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int =
-            (competitors.asKnown()?.sumOf { it.validity() } ?: 0) +
-                (if (gameId.asKnown() == null) 0 else 1) +
-                (if (league.asKnown() == null) 0 else 1) +
-                (scheduledAtMs.asKnown()?.validity() ?: 0) +
-                (if (state.asKnown() == null) 0 else 1) +
-                (if (statusText.asKnown() == null) 0 else 1) +
-                (if (title.asKnown() == null) 0 else 1) +
-                (if (url.asKnown() == null) 0 else 1)
-
-        class Competitor
-        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-        private constructor(
-            private val abbreviation: JsonField<String>,
-            private val color: JsonField<String>,
-            private val darkLogoUrl: JsonField<String>,
-            private val isActive: JsonField<Boolean>,
-            private val isWinner: JsonField<Boolean>,
-            private val logoUrl: JsonField<String>,
-            private val name: JsonField<String>,
-            private val score: JsonField<String>,
-            private val teamId: JsonField<String>,
-            private val additionalProperties: MutableMap<String, JsonValue>,
-        ) {
-
-            @JsonCreator
-            private constructor(
-                @JsonProperty("abbreviation")
-                @ExcludeMissing
-                abbreviation: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("color") @ExcludeMissing color: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("darkLogoUrl")
-                @ExcludeMissing
-                darkLogoUrl: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("isActive")
-                @ExcludeMissing
-                isActive: JsonField<Boolean> = JsonMissing.of(),
-                @JsonProperty("isWinner")
-                @ExcludeMissing
-                isWinner: JsonField<Boolean> = JsonMissing.of(),
-                @JsonProperty("logoUrl")
-                @ExcludeMissing
-                logoUrl: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("score") @ExcludeMissing score: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("teamId")
-                @ExcludeMissing
-                teamId: JsonField<String> = JsonMissing.of(),
-            ) : this(
-                abbreviation,
-                color,
-                darkLogoUrl,
-                isActive,
-                isWinner,
-                logoUrl,
-                name,
-                score,
-                teamId,
-                mutableMapOf(),
-            )
-
-            /**
-             * Team abbreviation.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun abbreviation(): String? = abbreviation.getNullable("abbreviation")
-
-            /**
-             * Team display color.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun color(): String? = color.getNullable("color")
-
-            /**
-             * Logo for dark backgrounds.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun darkLogoUrl(): String? = darkLogoUrl.getNullable("darkLogoUrl")
-
-            /**
-             * Active competitor.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun isActive(): Boolean? = isActive.getNullable("isActive")
-
-            /**
-             * Winning competitor.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun isWinner(): Boolean? = isWinner.getNullable("isWinner")
-
-            /**
-             * Logo for light backgrounds.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun logoUrl(): String? = logoUrl.getNullable("logoUrl")
-
-            /**
-             * Team name.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun name(): String? = name.getNullable("name")
-
-            /**
-             * Score display text.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun score(): String? = score.getNullable("score")
-
-            /**
-             * Team ID.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun teamId(): String? = teamId.getNullable("teamId")
-
-            /**
-             * Returns the raw JSON value of [abbreviation].
-             *
-             * Unlike [abbreviation], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("abbreviation")
-            @ExcludeMissing
-            fun _abbreviation(): JsonField<String> = abbreviation
-
-            /**
-             * Returns the raw JSON value of [color].
-             *
-             * Unlike [color], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("color") @ExcludeMissing fun _color(): JsonField<String> = color
-
-            /**
-             * Returns the raw JSON value of [darkLogoUrl].
-             *
-             * Unlike [darkLogoUrl], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("darkLogoUrl")
-            @ExcludeMissing
-            fun _darkLogoUrl(): JsonField<String> = darkLogoUrl
-
-            /**
-             * Returns the raw JSON value of [isActive].
-             *
-             * Unlike [isActive], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("isActive") @ExcludeMissing fun _isActive(): JsonField<Boolean> = isActive
-
-            /**
-             * Returns the raw JSON value of [isWinner].
-             *
-             * Unlike [isWinner], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("isWinner") @ExcludeMissing fun _isWinner(): JsonField<Boolean> = isWinner
-
-            /**
-             * Returns the raw JSON value of [logoUrl].
-             *
-             * Unlike [logoUrl], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("logoUrl") @ExcludeMissing fun _logoUrl(): JsonField<String> = logoUrl
-
-            /**
-             * Returns the raw JSON value of [name].
-             *
-             * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
-
-            /**
-             * Returns the raw JSON value of [score].
-             *
-             * Unlike [score], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("score") @ExcludeMissing fun _score(): JsonField<String> = score
-
-            /**
-             * Returns the raw JSON value of [teamId].
-             *
-             * Unlike [teamId], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("teamId") @ExcludeMissing fun _teamId(): JsonField<String> = teamId
-
-            @JsonAnySetter
-            private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
-            }
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /** Returns a mutable builder for constructing an instance of [Competitor]. */
-                fun builder() = Builder()
-            }
-
-            /** A builder for [Competitor]. */
-            class Builder internal constructor() {
-
-                private var abbreviation: JsonField<String> = JsonMissing.of()
-                private var color: JsonField<String> = JsonMissing.of()
-                private var darkLogoUrl: JsonField<String> = JsonMissing.of()
-                private var isActive: JsonField<Boolean> = JsonMissing.of()
-                private var isWinner: JsonField<Boolean> = JsonMissing.of()
-                private var logoUrl: JsonField<String> = JsonMissing.of()
-                private var name: JsonField<String> = JsonMissing.of()
-                private var score: JsonField<String> = JsonMissing.of()
-                private var teamId: JsonField<String> = JsonMissing.of()
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                internal fun from(competitor: Competitor) = apply {
-                    abbreviation = competitor.abbreviation
-                    color = competitor.color
-                    darkLogoUrl = competitor.darkLogoUrl
-                    isActive = competitor.isActive
-                    isWinner = competitor.isWinner
-                    logoUrl = competitor.logoUrl
-                    name = competitor.name
-                    score = competitor.score
-                    teamId = competitor.teamId
-                    additionalProperties = competitor.additionalProperties.toMutableMap()
-                }
-
-                /** Team abbreviation. */
-                fun abbreviation(abbreviation: String) = abbreviation(JsonField.of(abbreviation))
-
-                /** Sets [Builder.abbreviation] to an arbitrary JSON value. */
-                fun abbreviation(abbreviation: JsonField<String>) = apply {
-                    this.abbreviation = abbreviation
-                }
-
-                /** Team display color. */
-                fun color(color: String) = color(JsonField.of(color))
-
-                /** Sets [Builder.color] to an arbitrary JSON value. */
-                fun color(color: JsonField<String>) = apply { this.color = color }
-
-                /** Logo for dark backgrounds. */
-                fun darkLogoUrl(darkLogoUrl: String) = darkLogoUrl(JsonField.of(darkLogoUrl))
-
-                /** Sets [Builder.darkLogoUrl] to an arbitrary JSON value. */
-                fun darkLogoUrl(darkLogoUrl: JsonField<String>) = apply {
-                    this.darkLogoUrl = darkLogoUrl
-                }
-
-                /** Active competitor. */
-                fun isActive(isActive: Boolean) = isActive(JsonField.of(isActive))
-
-                /** Sets [Builder.isActive] to an arbitrary JSON value. */
-                fun isActive(isActive: JsonField<Boolean>) = apply { this.isActive = isActive }
-
-                /** Winning competitor. */
-                fun isWinner(isWinner: Boolean) = isWinner(JsonField.of(isWinner))
-
-                /** Sets [Builder.isWinner] to an arbitrary JSON value. */
-                fun isWinner(isWinner: JsonField<Boolean>) = apply { this.isWinner = isWinner }
-
-                /** Logo for light backgrounds. */
-                fun logoUrl(logoUrl: String) = logoUrl(JsonField.of(logoUrl))
-
-                /** Sets [Builder.logoUrl] to an arbitrary JSON value. */
-                fun logoUrl(logoUrl: JsonField<String>) = apply { this.logoUrl = logoUrl }
-
-                /** Team name. */
-                fun name(name: String) = name(JsonField.of(name))
-
-                /** Sets [Builder.name] to an arbitrary JSON value. */
-                fun name(name: JsonField<String>) = apply { this.name = name }
-
-                /** Score display text. */
-                fun score(score: String) = score(JsonField.of(score))
-
-                /** Sets [Builder.score] to an arbitrary JSON value. */
-                fun score(score: JsonField<String>) = apply { this.score = score }
-
-                /** Team ID. */
-                fun teamId(teamId: String) = teamId(JsonField.of(teamId))
-
-                /** Sets [Builder.teamId] to an arbitrary JSON value. */
-                fun teamId(teamId: JsonField<String>) = apply { this.teamId = teamId }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [Competitor].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 */
-                fun build(): Competitor =
-                    Competitor(
-                        abbreviation,
-                        color,
-                        darkLogoUrl,
-                        isActive,
-                        isWinner,
-                        logoUrl,
-                        name,
-                        score,
-                        teamId,
-                        additionalProperties.toMutableMap(),
-                    )
-            }
-
-            private var validated: Boolean = false
-
-            /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
-             *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
-             *
-             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-             *   match its expected type.
-             */
-            fun validate(): Competitor = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                abbreviation()
-                color()
-                darkLogoUrl()
-                isActive()
-                isWinner()
-                logoUrl()
-                name()
-                score()
-                teamId()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: XTwitterScraperInvalidDataException) {
-                    false
-                }
-
-            internal fun validity(): Int =
-                (if (abbreviation.asKnown() == null) 0 else 1) +
-                    (if (color.asKnown() == null) 0 else 1) +
-                    (if (darkLogoUrl.asKnown() == null) 0 else 1) +
-                    (if (isActive.asKnown() == null) 0 else 1) +
-                    (if (isWinner.asKnown() == null) 0 else 1) +
-                    (if (logoUrl.asKnown() == null) 0 else 1) +
-                    (if (name.asKnown() == null) 0 else 1) +
-                    (if (score.asKnown() == null) 0 else 1) +
-                    (if (teamId.asKnown() == null) 0 else 1)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Competitor &&
-                    abbreviation == other.abbreviation &&
-                    color == other.color &&
-                    darkLogoUrl == other.darkLogoUrl &&
-                    isActive == other.isActive &&
-                    isWinner == other.isWinner &&
-                    logoUrl == other.logoUrl &&
-                    name == other.name &&
-                    score == other.score &&
-                    teamId == other.teamId &&
-                    additionalProperties == other.additionalProperties
-            }
-
-            private val hashCode: Int by lazy {
-                Objects.hash(
-                    abbreviation,
-                    color,
-                    darkLogoUrl,
-                    isActive,
-                    isWinner,
-                    logoUrl,
-                    name,
-                    score,
-                    teamId,
-                    additionalProperties,
-                )
-            }
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() =
-                "Competitor{abbreviation=$abbreviation, color=$color, darkLogoUrl=$darkLogoUrl, isActive=$isActive, isWinner=$isWinner, logoUrl=$logoUrl, name=$name, score=$score, teamId=$teamId, additionalProperties=$additionalProperties}"
-        }
-
-        /** Scheduled Unix milliseconds, retaining the source type. */
-        @JsonDeserialize(using = ScheduledAtMs.Deserializer::class)
-        @JsonSerialize(using = ScheduledAtMs.Serializer::class)
-        class ScheduledAtMs
-        private constructor(
-            private val double: Double? = null,
-            private val string: String? = null,
-            private val _json: JsonValue? = null,
-        ) {
-
-            fun double(): Double? = double
-
-            fun string(): String? = string
-
-            fun isDouble(): Boolean = double != null
-
-            fun isString(): Boolean = string != null
-
-            fun asDouble(): Double = double.getOrThrow("double")
-
-            fun asString(): String = string.getOrThrow("string")
-
-            fun _json(): JsonValue? = _json
-
-            /**
-             * Maps this instance's current variant to a value of type [T] using the given
-             * [visitor].
-             *
-             * @throws XTwitterScraperInvalidDataException if [Visitor.unknown] is not overridden in
-             *   [visitor] and the current variant is unknown.
-             */
-            fun <T> accept(visitor: Visitor<T>): T =
-                when {
-                    double != null -> visitor.visitDouble(double)
-                    string != null -> visitor.visitString(string)
-                    else -> visitor.unknown(_json)
-                }
-
-            private var validated: Boolean = false
-
-            /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
-             *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
-             *
-             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-             *   match its expected type.
-             */
-            fun validate(): ScheduledAtMs = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                accept(
-                    object : Visitor<Unit> {
-                        override fun visitDouble(double: Double) {}
-
-                        override fun visitString(string: String) {}
-                    }
-                )
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: XTwitterScraperInvalidDataException) {
-                    false
-                }
-
-            internal fun validity(): Int =
-                accept(
-                    object : Visitor<Int> {
-                        override fun visitDouble(double: Double) = 1
-
-                        override fun visitString(string: String) = 1
-
-                        override fun unknown(json: JsonValue?) = 0
-                    }
-                )
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is ScheduledAtMs && double == other.double && string == other.string
-            }
-
-            override fun hashCode(): Int = Objects.hash(double, string)
-
-            override fun toString(): String =
-                when {
-                    double != null -> "ScheduledAtMs{double=$double}"
-                    string != null -> "ScheduledAtMs{string=$string}"
-                    _json != null -> "ScheduledAtMs{_unknown=$_json}"
-                    else -> throw IllegalStateException("Invalid ScheduledAtMs")
-                }
-
-            companion object {
-
-                fun ofDouble(double: Double) = ScheduledAtMs(double = double)
-
-                fun ofString(string: String) = ScheduledAtMs(string = string)
-            }
-
-            /**
-             * An interface that defines how to map each variant of [ScheduledAtMs] to a value of
-             * type [T].
-             */
-            interface Visitor<out T> {
-
-                fun visitDouble(double: Double): T
-
-                fun visitString(string: String): T
-
-                /**
-                 * Maps an unknown variant of [ScheduledAtMs] to a value of type [T].
-                 *
-                 * An instance of [ScheduledAtMs] can contain an unknown variant if it was
-                 * deserialized from data that doesn't match any known variant.
-                 *
-                 * @throws XTwitterScraperInvalidDataException in the default implementation.
-                 */
-                fun unknown(json: JsonValue?): T {
-                    throw XTwitterScraperInvalidDataException("Unknown ScheduledAtMs: $json")
-                }
-            }
-
-            internal class Deserializer : BaseDeserializer<ScheduledAtMs>(ScheduledAtMs::class) {
-
-                override fun ObjectCodec.deserialize(node: JsonNode): ScheduledAtMs {
-                    val json = JsonValue.fromJsonNode(node)
-
-                    val bestMatches =
-                        sequenceOf(
-                                tryDeserialize(node, jacksonTypeRef<Double>())?.let {
-                                    ScheduledAtMs(double = it, _json = json)
-                                },
-                                tryDeserialize(node, jacksonTypeRef<String>())?.let {
-                                    ScheduledAtMs(string = it, _json = json)
-                                },
-                            )
-                            .filterNotNull()
-                            .allMaxBy { it.validity() }
-                            .toList()
-                    return when (bestMatches.size) {
-                        0 -> ScheduledAtMs(_json = json)
-                        1 -> bestMatches.single()
-                        else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
-                    }
-                }
-            }
-
-            internal class Serializer : BaseSerializer<ScheduledAtMs>(ScheduledAtMs::class) {
-
-                override fun serialize(
-                    value: ScheduledAtMs,
-                    generator: JsonGenerator,
-                    provider: SerializerProvider,
-                ) {
-                    when {
-                        value.double != null -> generator.writeObject(value.double)
-                        value.string != null -> generator.writeObject(value.string)
-                        value._json != null -> generator.writeObject(value._json)
-                        else -> throw IllegalStateException("Invalid ScheduledAtMs")
-                    }
-                }
-            }
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is SportsContext &&
-                competitors == other.competitors &&
-                gameId == other.gameId &&
-                league == other.league &&
-                scheduledAtMs == other.scheduledAtMs &&
-                state == other.state &&
-                statusText == other.statusText &&
-                title == other.title &&
-                url == other.url &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(
-                competitors,
-                gameId,
-                league,
-                scheduledAtMs,
-                state,
-                statusText,
-                title,
-                url,
-                additionalProperties,
-            )
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "SportsContext{competitors=$competitors, gameId=$gameId, league=$league, scheduledAtMs=$scheduledAtMs, state=$state, statusText=$statusText, title=$title, url=$url, additionalProperties=$additionalProperties}"
-    }
-
-    /**
-     * The Subscriber badge X shows on a reply. The reply's author subscribes to the creator who
-     * started the conversation. Omitted on a post without the badge.
-     */
-    class SubscriberBadge
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val creatorId: JsonField<String>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("creatorId")
-            @ExcludeMissing
-            creatorId: JsonField<String> = JsonMissing.of()
-        ) : this(creatorId, mutableMapOf())
-
-        /**
-         * Account ID of the creator the author subscribes to.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null.
-         */
-        fun creatorId(): String = creatorId.getRequired("creatorId")
-
-        /**
-         * Returns the raw JSON value of [creatorId].
-         *
-         * Unlike [creatorId], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("creatorId") @ExcludeMissing fun _creatorId(): JsonField<String> = creatorId
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [SubscriberBadge].
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .creatorId()
-             * ```
-             */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [SubscriberBadge]. */
-        class Builder internal constructor() {
-
-            private var creatorId: JsonField<String>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(subscriberBadge: SubscriberBadge) = apply {
-                creatorId = subscriberBadge.creatorId
-                additionalProperties = subscriberBadge.additionalProperties.toMutableMap()
-            }
-
-            /** Account ID of the creator the author subscribes to. */
-            fun creatorId(creatorId: String) = creatorId(JsonField.of(creatorId))
-
-            /** Sets [Builder.creatorId] to an arbitrary JSON value. */
-            fun creatorId(creatorId: JsonField<String>) = apply { this.creatorId = creatorId }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [SubscriberBadge].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .creatorId()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): SubscriberBadge =
-                SubscriberBadge(
-                    checkRequired("creatorId", creatorId),
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): SubscriberBadge = apply {
-            if (validated) {
-                return@apply
-            }
-
-            creatorId()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int = (if (creatorId.asKnown() == null) 0 else 1)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is SubscriberBadge &&
-                creatorId == other.creatorId &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(creatorId, additionalProperties)
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "SubscriberBadge{creatorId=$creatorId, additionalProperties=$additionalProperties}"
-    }
-
-    class TextHighlight
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val endIndex: JsonField<Long>,
-        private val startIndex: JsonField<Long>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("endIndex") @ExcludeMissing endIndex: JsonField<Long> = JsonMissing.of(),
-            @JsonProperty("startIndex")
-            @ExcludeMissing
-            startIndex: JsonField<Long> = JsonMissing.of(),
-        ) : this(endIndex, startIndex, mutableMapOf())
-
-        /**
-         * The first code point after the match.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null.
-         */
-        fun endIndex(): Long = endIndex.getRequired("endIndex")
-
-        /**
-         * The first code point of the match.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null.
-         */
-        fun startIndex(): Long = startIndex.getRequired("startIndex")
-
-        /**
-         * Returns the raw JSON value of [endIndex].
-         *
-         * Unlike [endIndex], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("endIndex") @ExcludeMissing fun _endIndex(): JsonField<Long> = endIndex
-
-        /**
-         * Returns the raw JSON value of [startIndex].
-         *
-         * Unlike [startIndex], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("startIndex") @ExcludeMissing fun _startIndex(): JsonField<Long> = startIndex
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [TextHighlight].
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .endIndex()
-             * .startIndex()
-             * ```
-             */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [TextHighlight]. */
-        class Builder internal constructor() {
-
-            private var endIndex: JsonField<Long>? = null
-            private var startIndex: JsonField<Long>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(textHighlight: TextHighlight) = apply {
-                endIndex = textHighlight.endIndex
-                startIndex = textHighlight.startIndex
-                additionalProperties = textHighlight.additionalProperties.toMutableMap()
-            }
-
-            /** The first code point after the match. */
-            fun endIndex(endIndex: Long) = endIndex(JsonField.of(endIndex))
-
-            /** Sets [Builder.endIndex] to an arbitrary JSON value. */
-            fun endIndex(endIndex: JsonField<Long>) = apply { this.endIndex = endIndex }
-
-            /** The first code point of the match. */
-            fun startIndex(startIndex: Long) = startIndex(JsonField.of(startIndex))
-
-            /** Sets [Builder.startIndex] to an arbitrary JSON value. */
-            fun startIndex(startIndex: JsonField<Long>) = apply { this.startIndex = startIndex }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [TextHighlight].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .endIndex()
-             * .startIndex()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): TextHighlight =
-                TextHighlight(
-                    checkRequired("endIndex", endIndex),
-                    checkRequired("startIndex", startIndex),
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): TextHighlight = apply {
-            if (validated) {
-                return@apply
-            }
-
-            endIndex()
-            startIndex()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int =
-            (if (endIndex.asKnown() == null) 0 else 1) +
-                (if (startIndex.asKnown() == null) 0 else 1)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is TextHighlight &&
-                endIndex == other.endIndex &&
-                startIndex == other.startIndex &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(endIndex, startIndex, additionalProperties)
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "TextHighlight{endIndex=$endIndex, startIndex=$startIndex, additionalProperties=$additionalProperties}"
-    }
-
-    /** Public visibility notice attached to an available tweet. */
-    class Tombstone
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val text: JsonField<Text>,
-        private val type: JsonField<String>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("text") @ExcludeMissing text: JsonField<Text> = JsonMissing.of(),
-            @JsonProperty("type") @ExcludeMissing type: JsonField<String> = JsonMissing.of(),
-        ) : this(text, type, mutableMapOf())
-
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
-        fun text(): Text? = text.getNullable("text")
-
-        /**
-         * Visibility notice type.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun type(): String? = type.getNullable("type")
-
-        /**
-         * Returns the raw JSON value of [text].
-         *
-         * Unlike [text], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("text") @ExcludeMissing fun _text(): JsonField<Text> = text
-
-        /**
-         * Returns the raw JSON value of [type].
-         *
-         * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<String> = type
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [Tombstone]. */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [Tombstone]. */
-        class Builder internal constructor() {
-
-            private var text: JsonField<Text> = JsonMissing.of()
-            private var type: JsonField<String> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(tombstone: Tombstone) = apply {
-                text = tombstone.text
-                type = tombstone.type
-                additionalProperties = tombstone.additionalProperties.toMutableMap()
-            }
-
-            fun text(text: Text) = text(JsonField.of(text))
-
-            /** Sets [Builder.text] to an arbitrary JSON value. */
-            fun text(text: JsonField<Text>) = apply { this.text = text }
-
-            /** Visibility notice type. */
-            fun type(type: String) = type(JsonField.of(type))
-
-            /** Sets [Builder.type] to an arbitrary JSON value. */
-            fun type(type: JsonField<String>) = apply { this.type = type }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Tombstone].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): Tombstone = Tombstone(text, type, additionalProperties.toMutableMap())
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): Tombstone = apply {
-            if (validated) {
-                return@apply
-            }
-
-            text()?.validate()
-            type()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int =
-            (text.asKnown()?.validity() ?: 0) + (if (type.asKnown() == null) 0 else 1)
-
-        class Text
-        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-        private constructor(
-            private val entities: JsonField<List<Entity>>,
-            private val rtl: JsonField<Boolean>,
-            private val text: JsonField<String>,
-            private val additionalProperties: MutableMap<String, JsonValue>,
-        ) {
-
-            @JsonCreator
-            private constructor(
-                @JsonProperty("entities")
-                @ExcludeMissing
-                entities: JsonField<List<Entity>> = JsonMissing.of(),
-                @JsonProperty("rtl") @ExcludeMissing rtl: JsonField<Boolean> = JsonMissing.of(),
-                @JsonProperty("text") @ExcludeMissing text: JsonField<String> = JsonMissing.of(),
-            ) : this(entities, rtl, text, mutableMapOf())
-
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun entities(): List<Entity>? = entities.getNullable("entities")
-
-            /**
-             * Right-to-left text direction.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun rtl(): Boolean? = rtl.getNullable("rtl")
-
-            /**
-             * Human-readable notice text.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun text(): String? = text.getNullable("text")
-
-            /**
-             * Returns the raw JSON value of [entities].
-             *
-             * Unlike [entities], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("entities")
-            @ExcludeMissing
-            fun _entities(): JsonField<List<Entity>> = entities
-
-            /**
-             * Returns the raw JSON value of [rtl].
-             *
-             * Unlike [rtl], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("rtl") @ExcludeMissing fun _rtl(): JsonField<Boolean> = rtl
-
-            /**
-             * Returns the raw JSON value of [text].
-             *
-             * Unlike [text], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("text") @ExcludeMissing fun _text(): JsonField<String> = text
-
-            @JsonAnySetter
-            private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
-            }
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /** Returns a mutable builder for constructing an instance of [Text]. */
-                fun builder() = Builder()
-            }
-
-            /** A builder for [Text]. */
-            class Builder internal constructor() {
-
-                private var entities: JsonField<MutableList<Entity>>? = null
-                private var rtl: JsonField<Boolean> = JsonMissing.of()
-                private var text: JsonField<String> = JsonMissing.of()
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                internal fun from(text: Text) = apply {
-                    entities = text.entities.map { it.toMutableList() }
-                    rtl = text.rtl
-                    this.text = text.text
-                    additionalProperties = text.additionalProperties.toMutableMap()
-                }
-
-                fun entities(entities: List<Entity>) = entities(JsonField.of(entities))
-
-                /** Sets [Builder.entities] to an arbitrary JSON value. */
-                fun entities(entities: JsonField<List<Entity>>) = apply {
-                    this.entities = entities.map { it.toMutableList() }
-                }
-
-                /**
-                 * Adds a single [Entity] to [entities].
-                 *
-                 * @throws IllegalStateException if the field was previously set to a non-list.
-                 */
-                fun addEntity(entity: Entity) = apply {
-                    entities =
-                        (entities ?: JsonField.of(mutableListOf())).also {
-                            checkKnown("entities", it).add(entity)
-                        }
-                }
-
-                /** Right-to-left text direction. */
-                fun rtl(rtl: Boolean) = rtl(JsonField.of(rtl))
-
-                /** Sets [Builder.rtl] to an arbitrary JSON value. */
-                fun rtl(rtl: JsonField<Boolean>) = apply { this.rtl = rtl }
-
-                /** Human-readable notice text. */
-                fun text(text: String) = text(JsonField.of(text))
-
-                /** Sets [Builder.text] to an arbitrary JSON value. */
-                fun text(text: JsonField<String>) = apply { this.text = text }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [Text].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 */
-                fun build(): Text =
-                    Text(
-                        (entities ?: JsonMissing.of()).map { it.toImmutable() },
-                        rtl,
-                        text,
-                        additionalProperties.toMutableMap(),
-                    )
-            }
-
-            private var validated: Boolean = false
-
-            /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
-             *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
-             *
-             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-             *   match its expected type.
-             */
-            fun validate(): Text = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                entities()?.forEach { it.validate() }
-                rtl()
-                text()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: XTwitterScraperInvalidDataException) {
-                    false
-                }
-
-            internal fun validity(): Int =
-                (entities.asKnown()?.sumOf { it.validity() } ?: 0) +
-                    (if (rtl.asKnown() == null) 0 else 1) +
-                    (if (text.asKnown() == null) 0 else 1)
-
-            class Entity
-            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-            private constructor(
-                private val fromIndex: JsonField<Long>,
-                private val ref: JsonField<Ref>,
-                private val toIndex: JsonField<Long>,
-                private val additionalProperties: MutableMap<String, JsonValue>,
-            ) {
-
-                @JsonCreator
-                private constructor(
-                    @JsonProperty("fromIndex")
-                    @ExcludeMissing
-                    fromIndex: JsonField<Long> = JsonMissing.of(),
-                    @JsonProperty("ref") @ExcludeMissing ref: JsonField<Ref> = JsonMissing.of(),
-                    @JsonProperty("toIndex")
-                    @ExcludeMissing
-                    toIndex: JsonField<Long> = JsonMissing.of(),
-                ) : this(fromIndex, ref, toIndex, mutableMapOf())
-
-                /**
-                 * Whole number from 0.
-                 *
-                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
-                 *   type.
-                 */
-                fun fromIndex(): Long? = fromIndex.getNullable("fromIndex")
-
-                /**
-                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
-                 *   type.
-                 */
-                fun ref(): Ref? = ref.getNullable("ref")
-
-                /**
-                 * Whole number from 0.
-                 *
-                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
-                 *   type.
-                 */
-                fun toIndex(): Long? = toIndex.getNullable("toIndex")
-
-                /**
-                 * Returns the raw JSON value of [fromIndex].
-                 *
-                 * Unlike [fromIndex], this method doesn't throw if the JSON field has an unexpected
-                 * type.
-                 */
-                @JsonProperty("fromIndex")
-                @ExcludeMissing
-                fun _fromIndex(): JsonField<Long> = fromIndex
-
-                /**
-                 * Returns the raw JSON value of [ref].
-                 *
-                 * Unlike [ref], this method doesn't throw if the JSON field has an unexpected type.
-                 */
-                @JsonProperty("ref") @ExcludeMissing fun _ref(): JsonField<Ref> = ref
-
-                /**
-                 * Returns the raw JSON value of [toIndex].
-                 *
-                 * Unlike [toIndex], this method doesn't throw if the JSON field has an unexpected
-                 * type.
-                 */
-                @JsonProperty("toIndex") @ExcludeMissing fun _toIndex(): JsonField<Long> = toIndex
-
-                @JsonAnySetter
-                private fun putAdditionalProperty(key: String, value: JsonValue) {
-                    additionalProperties.put(key, value)
-                }
-
-                @JsonAnyGetter
-                @ExcludeMissing
-                fun _additionalProperties(): Map<String, JsonValue> =
-                    Collections.unmodifiableMap(additionalProperties)
-
-                fun toBuilder() = Builder().from(this)
-
-                companion object {
-
-                    /** Returns a mutable builder for constructing an instance of [Entity]. */
-                    fun builder() = Builder()
-                }
-
-                /** A builder for [Entity]. */
-                class Builder internal constructor() {
-
-                    private var fromIndex: JsonField<Long> = JsonMissing.of()
-                    private var ref: JsonField<Ref> = JsonMissing.of()
-                    private var toIndex: JsonField<Long> = JsonMissing.of()
-                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                    internal fun from(entity: Entity) = apply {
-                        fromIndex = entity.fromIndex
-                        ref = entity.ref
-                        toIndex = entity.toIndex
-                        additionalProperties = entity.additionalProperties.toMutableMap()
-                    }
-
-                    /** Whole number from 0. */
-                    fun fromIndex(fromIndex: Long) = fromIndex(JsonField.of(fromIndex))
-
-                    /** Sets [Builder.fromIndex] to an arbitrary JSON value. */
-                    fun fromIndex(fromIndex: JsonField<Long>) = apply { this.fromIndex = fromIndex }
-
-                    fun ref(ref: Ref) = ref(JsonField.of(ref))
-
-                    /** Sets [Builder.ref] to an arbitrary JSON value. */
-                    fun ref(ref: JsonField<Ref>) = apply { this.ref = ref }
-
-                    /** Whole number from 0. */
-                    fun toIndex(toIndex: Long) = toIndex(JsonField.of(toIndex))
-
-                    /** Sets [Builder.toIndex] to an arbitrary JSON value. */
-                    fun toIndex(toIndex: JsonField<Long>) = apply { this.toIndex = toIndex }
-
-                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
-
-                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                        additionalProperties.put(key, value)
-                    }
-
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                        apply {
-                            this.additionalProperties.putAll(additionalProperties)
-                        }
-
-                    fun removeAdditionalProperty(key: String) = apply {
-                        additionalProperties.remove(key)
-                    }
-
-                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
-
-                    /**
-                     * Returns an immutable instance of [Entity].
-                     *
-                     * Further updates to this [Builder] will not mutate the returned instance.
-                     */
-                    fun build(): Entity =
-                        Entity(fromIndex, ref, toIndex, additionalProperties.toMutableMap())
-                }
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws XTwitterScraperInvalidDataException if any value type in this object
-                 *   doesn't match its expected type.
-                 */
-                fun validate(): Entity = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    fromIndex()
-                    ref()?.validate()
-                    toIndex()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: XTwitterScraperInvalidDataException) {
-                        false
-                    }
-
-                internal fun validity(): Int =
-                    (if (fromIndex.asKnown() == null) 0 else 1) +
-                        (ref.asKnown()?.validity() ?: 0) +
-                        (if (toIndex.asKnown() == null) 0 else 1)
-
-                class Ref
-                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-                private constructor(
-                    private val screenName: JsonField<String>,
-                    private val text: JsonField<String>,
-                    private val type: JsonField<String>,
-                    private val url: JsonField<String>,
-                    private val urlType: JsonField<String>,
-                    private val additionalProperties: MutableMap<String, JsonValue>,
-                ) {
-
-                    @JsonCreator
-                    private constructor(
-                        @JsonProperty("screenName")
-                        @ExcludeMissing
-                        screenName: JsonField<String> = JsonMissing.of(),
-                        @JsonProperty("text")
-                        @ExcludeMissing
-                        text: JsonField<String> = JsonMissing.of(),
-                        @JsonProperty("type")
-                        @ExcludeMissing
-                        type: JsonField<String> = JsonMissing.of(),
-                        @JsonProperty("url")
-                        @ExcludeMissing
-                        url: JsonField<String> = JsonMissing.of(),
-                        @JsonProperty("urlType")
-                        @ExcludeMissing
-                        urlType: JsonField<String> = JsonMissing.of(),
-                    ) : this(screenName, text, type, url, urlType, mutableMapOf())
-
-                    /**
-                     * @throws XTwitterScraperInvalidDataException if the JSON field has an
-                     *   unexpected type.
-                     */
-                    fun screenName(): String? = screenName.getNullable("screenName")
-
-                    /**
-                     * @throws XTwitterScraperInvalidDataException if the JSON field has an
-                     *   unexpected type.
-                     */
-                    fun text(): String? = text.getNullable("text")
-
-                    /**
-                     * @throws XTwitterScraperInvalidDataException if the JSON field has an
-                     *   unexpected type.
-                     */
-                    fun type(): String? = type.getNullable("type")
-
-                    /**
-                     * @throws XTwitterScraperInvalidDataException if the JSON field has an
-                     *   unexpected type.
-                     */
-                    fun url(): String? = url.getNullable("url")
-
-                    /**
-                     * @throws XTwitterScraperInvalidDataException if the JSON field has an
-                     *   unexpected type.
-                     */
-                    fun urlType(): String? = urlType.getNullable("urlType")
-
-                    /**
-                     * Returns the raw JSON value of [screenName].
-                     *
-                     * Unlike [screenName], this method doesn't throw if the JSON field has an
-                     * unexpected type.
-                     */
-                    @JsonProperty("screenName")
-                    @ExcludeMissing
-                    fun _screenName(): JsonField<String> = screenName
-
-                    /**
-                     * Returns the raw JSON value of [text].
-                     *
-                     * Unlike [text], this method doesn't throw if the JSON field has an unexpected
-                     * type.
-                     */
-                    @JsonProperty("text") @ExcludeMissing fun _text(): JsonField<String> = text
-
-                    /**
-                     * Returns the raw JSON value of [type].
-                     *
-                     * Unlike [type], this method doesn't throw if the JSON field has an unexpected
-                     * type.
-                     */
-                    @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<String> = type
-
-                    /**
-                     * Returns the raw JSON value of [url].
-                     *
-                     * Unlike [url], this method doesn't throw if the JSON field has an unexpected
-                     * type.
-                     */
-                    @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
-
-                    /**
-                     * Returns the raw JSON value of [urlType].
-                     *
-                     * Unlike [urlType], this method doesn't throw if the JSON field has an
-                     * unexpected type.
-                     */
-                    @JsonProperty("urlType")
-                    @ExcludeMissing
-                    fun _urlType(): JsonField<String> = urlType
-
-                    @JsonAnySetter
-                    private fun putAdditionalProperty(key: String, value: JsonValue) {
-                        additionalProperties.put(key, value)
-                    }
-
-                    @JsonAnyGetter
-                    @ExcludeMissing
-                    fun _additionalProperties(): Map<String, JsonValue> =
-                        Collections.unmodifiableMap(additionalProperties)
-
-                    fun toBuilder() = Builder().from(this)
-
-                    companion object {
-
-                        /** Returns a mutable builder for constructing an instance of [Ref]. */
-                        fun builder() = Builder()
-                    }
-
-                    /** A builder for [Ref]. */
-                    class Builder internal constructor() {
-
-                        private var screenName: JsonField<String> = JsonMissing.of()
-                        private var text: JsonField<String> = JsonMissing.of()
-                        private var type: JsonField<String> = JsonMissing.of()
-                        private var url: JsonField<String> = JsonMissing.of()
-                        private var urlType: JsonField<String> = JsonMissing.of()
-                        private var additionalProperties: MutableMap<String, JsonValue> =
-                            mutableMapOf()
-
-                        internal fun from(ref: Ref) = apply {
-                            screenName = ref.screenName
-                            text = ref.text
-                            type = ref.type
-                            url = ref.url
-                            urlType = ref.urlType
-                            additionalProperties = ref.additionalProperties.toMutableMap()
-                        }
-
-                        fun screenName(screenName: String) = screenName(JsonField.of(screenName))
-
-                        /** Sets [Builder.screenName] to an arbitrary JSON value. */
-                        fun screenName(screenName: JsonField<String>) = apply {
-                            this.screenName = screenName
-                        }
-
-                        fun text(text: String) = text(JsonField.of(text))
-
-                        /** Sets [Builder.text] to an arbitrary JSON value. */
-                        fun text(text: JsonField<String>) = apply { this.text = text }
-
-                        fun type(type: String) = type(JsonField.of(type))
-
-                        /** Sets [Builder.type] to an arbitrary JSON value. */
-                        fun type(type: JsonField<String>) = apply { this.type = type }
-
-                        fun url(url: String) = url(JsonField.of(url))
-
-                        /** Sets [Builder.url] to an arbitrary JSON value. */
-                        fun url(url: JsonField<String>) = apply { this.url = url }
-
-                        fun urlType(urlType: String) = urlType(JsonField.of(urlType))
-
-                        /** Sets [Builder.urlType] to an arbitrary JSON value. */
-                        fun urlType(urlType: JsonField<String>) = apply { this.urlType = urlType }
-
-                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                            apply {
-                                this.additionalProperties.clear()
-                                putAllAdditionalProperties(additionalProperties)
-                            }
-
-                        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                            additionalProperties.put(key, value)
-                        }
-
-                        fun putAllAdditionalProperties(
-                            additionalProperties: Map<String, JsonValue>
-                        ) = apply {
-                            this.additionalProperties.putAll(additionalProperties)
-                        }
-
-                        fun removeAdditionalProperty(key: String) = apply {
-                            additionalProperties.remove(key)
-                        }
-
-                        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                            keys.forEach(::removeAdditionalProperty)
-                        }
-
-                        /**
-                         * Returns an immutable instance of [Ref].
-                         *
-                         * Further updates to this [Builder] will not mutate the returned instance.
-                         */
-                        fun build(): Ref =
-                            Ref(
-                                screenName,
-                                text,
-                                type,
-                                url,
-                                urlType,
-                                additionalProperties.toMutableMap(),
-                            )
-                    }
-
-                    private var validated: Boolean = false
-
-                    /**
-                     * Validates that the types of all values in this object match their expected
-                     * types recursively.
-                     *
-                     * This method is _not_ forwards compatible with new types from the API for
-                     * existing fields.
-                     *
-                     * @throws XTwitterScraperInvalidDataException if any value type in this object
-                     *   doesn't match its expected type.
-                     */
-                    fun validate(): Ref = apply {
-                        if (validated) {
-                            return@apply
-                        }
-
-                        screenName()
-                        text()
-                        type()
-                        url()
-                        urlType()
-                        validated = true
-                    }
-
-                    fun isValid(): Boolean =
-                        try {
-                            validate()
-                            true
-                        } catch (e: XTwitterScraperInvalidDataException) {
-                            false
-                        }
-
-                    internal fun validity(): Int =
-                        (if (screenName.asKnown() == null) 0 else 1) +
-                            (if (text.asKnown() == null) 0 else 1) +
-                            (if (type.asKnown() == null) 0 else 1) +
-                            (if (url.asKnown() == null) 0 else 1) +
-                            (if (urlType.asKnown() == null) 0 else 1)
-
-                    override fun equals(other: Any?): Boolean {
-                        if (this === other) {
-                            return true
-                        }
-
-                        return other is Ref &&
-                            screenName == other.screenName &&
-                            text == other.text &&
-                            type == other.type &&
-                            url == other.url &&
-                            urlType == other.urlType &&
-                            additionalProperties == other.additionalProperties
-                    }
-
-                    private val hashCode: Int by lazy {
-                        Objects.hash(screenName, text, type, url, urlType, additionalProperties)
-                    }
-
-                    override fun hashCode(): Int = hashCode
-
-                    override fun toString() =
-                        "Ref{screenName=$screenName, text=$text, type=$type, url=$url, urlType=$urlType, additionalProperties=$additionalProperties}"
-                }
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Entity &&
-                        fromIndex == other.fromIndex &&
-                        ref == other.ref &&
-                        toIndex == other.toIndex &&
-                        additionalProperties == other.additionalProperties
-                }
-
-                private val hashCode: Int by lazy {
-                    Objects.hash(fromIndex, ref, toIndex, additionalProperties)
-                }
-
-                override fun hashCode(): Int = hashCode
-
-                override fun toString() =
-                    "Entity{fromIndex=$fromIndex, ref=$ref, toIndex=$toIndex, additionalProperties=$additionalProperties}"
-            }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Text &&
-                    entities == other.entities &&
-                    rtl == other.rtl &&
-                    text == other.text &&
-                    additionalProperties == other.additionalProperties
-            }
-
-            private val hashCode: Int by lazy {
-                Objects.hash(entities, rtl, text, additionalProperties)
-            }
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() =
-                "Text{entities=$entities, rtl=$rtl, text=$text, additionalProperties=$additionalProperties}"
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Tombstone &&
-                text == other.text &&
-                type == other.type &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(text, type, additionalProperties)
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Tombstone{text=$text, type=$type, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
