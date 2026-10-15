@@ -5,15 +5,24 @@
 package com.x_twitter_scraper.api.services.async.x
 
 import com.x_twitter_scraper.api.client.okhttp.XTwitterScraperOkHttpClientAsync
+import com.x_twitter_scraper.api.models.x.tweets.TweetCheckRepostParams
 import com.x_twitter_scraper.api.models.x.tweets.TweetCreateParams
 import com.x_twitter_scraper.api.models.x.tweets.TweetDeleteParams
+import com.x_twitter_scraper.api.models.x.tweets.TweetEmbedParams
 import com.x_twitter_scraper.api.models.x.tweets.TweetGetFavoritersParams
+import com.x_twitter_scraper.api.models.x.tweets.TweetGetHiddenRepliesParams
+import com.x_twitter_scraper.api.models.x.tweets.TweetGetInsightsParams
 import com.x_twitter_scraper.api.models.x.tweets.TweetGetQuotesParams
 import com.x_twitter_scraper.api.models.x.tweets.TweetGetRepliesParams
+import com.x_twitter_scraper.api.models.x.tweets.TweetGetRetweeterIdsParams
 import com.x_twitter_scraper.api.models.x.tweets.TweetGetRetweetersParams
+import com.x_twitter_scraper.api.models.x.tweets.TweetGetSubtitlesParams
 import com.x_twitter_scraper.api.models.x.tweets.TweetGetThreadParams
 import com.x_twitter_scraper.api.models.x.tweets.TweetListParams
+import com.x_twitter_scraper.api.models.x.tweets.TweetListTopParams
+import com.x_twitter_scraper.api.models.x.tweets.TweetResolveLinksParams
 import com.x_twitter_scraper.api.models.x.tweets.TweetSearchParams
+import com.x_twitter_scraper.api.models.x.tweets.TweetTranslateParams
 import java.time.LocalDate
 import org.junit.jupiter.api.Test
 
@@ -438,6 +447,253 @@ internal class TweetServiceAsyncTest {
                     .verifiedOnly(true)
                     .within("within")
                     .withinTime("withinTime")
+                    .build()
+            )
+
+        kotlin.test.assertNotNull(response)
+    }
+
+    @Test
+    suspend fun listTop() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val tweetServiceAsync = client.x().tweets()
+
+        val paginatedTweets =
+            tweetServiceAsync.listTop(
+                TweetListTopParams.builder()
+                    .country("US")
+                    .cursor("cursor")
+                    .fields("id,text,author.username")
+                    .language("en")
+                    .metric(TweetListTopParams.Metric.LIKES)
+                    .omit("entities,media")
+                    .pageSize(20L)
+                    .window(TweetListTopParams.Window.DAY)
+                    .build()
+            )
+
+        kotlin.test.assertNotNull(paginatedTweets)
+    }
+
+    @Test
+    suspend fun embed() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val tweetServiceAsync = client.x().tweets()
+
+        val response =
+            tweetServiceAsync.embed(
+                TweetEmbedParams.builder()
+                    .id("id")
+                    .fields("id,text,author.username")
+                    .hideMedia(true)
+                    .hideThread(true)
+                    .omit("entities,media")
+                    .omitScript(true)
+                    .theme(TweetEmbedParams.Theme.LIGHT)
+                    .build()
+            )
+
+        kotlin.test.assertNotNull(response)
+    }
+
+    @Test
+    suspend fun getHiddenReplies() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val tweetServiceAsync = client.x().tweets()
+
+        val paginatedTweets =
+            tweetServiceAsync.getHiddenReplies(
+                TweetGetHiddenRepliesParams.builder()
+                    .id("id")
+                    .anyWords("anyWords")
+                    .blueVerifiedOnly(true)
+                    .cashtags("cashtags")
+                    .conversationId("conversationId")
+                    .cursor("cursor")
+                    .exactPhrase("exactPhrase")
+                    .excludeWords("excludeWords")
+                    .fields("id,text,author.username")
+                    .fromUser("fromUser")
+                    .hashtags("hashtags")
+                    .inReplyToTweetId("inReplyToTweetId")
+                    .language("language")
+                    .maxFaves(0L)
+                    .maxId("maxId")
+                    .maxQuotes(0L)
+                    .maxReplies(0L)
+                    .maxRetweets(0L)
+                    .mediaType(TweetGetHiddenRepliesParams.MediaType.IMAGES)
+                    .mentioning("mentioning")
+                    .minBookmarks(0L)
+                    .minLikes(0L)
+                    .minQuotes(0L)
+                    .minReplies(0L)
+                    .minRetweets(0L)
+                    .minViews(0L)
+                    .nativeRetweets(true)
+                    .omit("entities,media")
+                    .pageSize(20L)
+                    .quotes(TweetGetHiddenRepliesParams.Quotes.INCLUDE)
+                    .quotesOfTweetId("quotesOfTweetId")
+                    .replies(TweetGetHiddenRepliesParams.Replies.INCLUDE)
+                    .retweets(TweetGetHiddenRepliesParams.Retweets.INCLUDE)
+                    .retweetsOfTweetId("retweetsOfTweetId")
+                    .sinceDate(LocalDate.parse("2019-12-27"))
+                    .sinceId("sinceId")
+                    .toUser("toUser")
+                    .untilDate(LocalDate.parse("2019-12-27"))
+                    .url("url")
+                    .verifiedOnly(true)
+                    .withinTime("7d")
+                    .build()
+            )
+
+        kotlin.test.assertNotNull(paginatedTweets)
+    }
+
+    @Test
+    suspend fun getInsights() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val tweetServiceAsync = client.x().tweets()
+
+        val response =
+            tweetServiceAsync.getInsights(
+                TweetGetInsightsParams.builder()
+                    .id("id")
+                    .fields("id,text,author.username")
+                    .omit("entities,media")
+                    .build()
+            )
+
+        kotlin.test.assertNotNull(response)
+    }
+
+    @Test
+    suspend fun getRetweeterIds() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val tweetServiceAsync = client.x().tweets()
+
+        val response =
+            tweetServiceAsync.getRetweeterIds(
+                TweetGetRetweeterIdsParams.builder()
+                    .id("id")
+                    .cursor("cursor")
+                    .pageSize(200L)
+                    .build()
+            )
+
+        kotlin.test.assertNotNull(response)
+    }
+
+    @Test
+    suspend fun checkRepost() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val tweetServiceAsync = client.x().tweets()
+
+        val response =
+            tweetServiceAsync.checkRepost(
+                TweetCheckRepostParams.builder()
+                    .id("id")
+                    .user("nasa")
+                    .fields("id,text,author.username")
+                    .omit("entities,media")
+                    .build()
+            )
+
+        kotlin.test.assertNotNull(response)
+    }
+
+    @Test
+    suspend fun getSubtitles() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val tweetServiceAsync = client.x().tweets()
+
+        val response =
+            tweetServiceAsync.getSubtitles(
+                TweetGetSubtitlesParams.builder()
+                    .id("id")
+                    .fields("id,text,author.username")
+                    .omit("entities,media")
+                    .build()
+            )
+
+        kotlin.test.assertNotNull(response)
+    }
+
+    @Test
+    suspend fun translate() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val tweetServiceAsync = client.x().tweets()
+
+        val response =
+            tweetServiceAsync.translate(
+                TweetTranslateParams.builder()
+                    .id("id")
+                    .language("tr")
+                    .fields("id,text,author.username")
+                    .omit("entities,media")
+                    .build()
+            )
+
+        kotlin.test.assertNotNull(response)
+    }
+
+    @Test
+    suspend fun resolveLinks() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val tweetServiceAsync = client.x().tweets()
+
+        val response =
+            tweetServiceAsync.resolveLinks(
+                TweetResolveLinksParams.builder()
+                    .urls("https://t.co/Xe1nm2pkSX")
+                    .fields("id,text,author.username")
+                    .omit("entities,media")
                     .build()
             )
 
