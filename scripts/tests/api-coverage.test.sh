@@ -18,7 +18,19 @@ readonly invalid_next_step="Fix excluded-operations.json as the lines above say,
 
 write_spec() {
     write_file spec.json
-    run_env=("XQUIK_OPENAPI_SPEC=$sandbox_repo/spec.json")
+}
+
+fake_curl_serving_the_spec() {
+    fake curl <<EOF
+#!/bin/sh
+echo "\$*" >>"\$FAKE_LOGS/curl"
+while [ "\$#" -gt 0 ]; do
+    if [ "\$1" = "--output" ]; then
+        cp "$sandbox_repo/spec.json" "\$2"
+    fi
+    shift
+done
+EOF
 }
 
 write_exclusions() {
@@ -66,12 +78,33 @@ class TweetServiceImpl {
 EOF
     write_service async/x/TweetServiceAsyncImpl.kt <<'EOF'
 class TweetServiceAsyncImpl {
-    fun retrieve() {
+    suspend fun retrieve() {
         val request =
             HttpRequest.builder()
                 .method(HttpMethod.GET)
                 .baseUrl(clientOptions.baseUrl())
                 .addPathSegments("x", "tweets", params._pathParam(0))
+                .build()
+    }
+
+    suspend fun like() {
+        val request =
+            HttpRequest.builder()
+                .method(HttpMethod.POST)
+                .baseUrl(clientOptions.baseUrl())
+                .addPathSegments("x", "tweets", params._pathParam(0), "like")
+                .build()
+    }
+}
+EOF
+    write_service async/AccountServiceAsyncImpl.kt <<'EOF'
+class AccountServiceAsyncImpl {
+    suspend fun retrieve() {
+        val request =
+            HttpRequest.builder()
+                .method(HttpMethod.GET)
+                .baseUrl(clientOptions.baseUrl())
+                .addPathSegments("account")
                 .build()
     }
 }
@@ -115,6 +148,7 @@ EOF
   }
 ]
 EOF
+    run_env=("XQUIK_OPENAPI_SPEC=$sandbox_repo/spec.json")
 }
 
 test_a_covered_spec_passes_with_the_counts() {
@@ -128,7 +162,7 @@ test_a_covered_spec_passes_with_the_counts() {
         "$run_stdout" "stdout"
 }
 
-test_a_spec_without_exclusions_says_the_sdk_covers_all_operations() {
+test_a_spec_without_exclusions_passes_without_the_exclusion_count() {
     prepare_coverage
     write_spec <<'EOF'
 {"servers": [{"url": "https://xquik.com/api/v1"}], "paths": {"/account": {"get": {}}}}
@@ -138,7 +172,7 @@ EOF
     run_in_repo scripts/api-coverage
 
     assert_equal 0 "$run_status" "the exit code"
-    assert_equal "The SDK covers all 1 API operations." "$run_stdout" "stdout"
+    assert_equal "The SDK covers 1 of 1 API operations." "$run_stdout" "stdout"
 }
 
 test_a_missing_operation_fails_with_its_line_and_the_next_step() {
@@ -307,22 +341,13 @@ EOF
     run_in_repo scripts/api-coverage
 
     assert_equal 0 "$run_status" "the exit code"
-    assert_equal "The SDK covers all 1 API operations." "$run_stdout" "stdout"
+    assert_equal "The SDK covers 1 of 1 API operations." "$run_stdout" "stdout"
 }
 
 test_the_public_spec_is_the_default_source() {
     prepare_coverage
     run_env=()
-    fake curl <<EOF
-#!/bin/sh
-echo "\$*" >>"\$FAKE_LOGS/curl"
-while [ "\$#" -gt 0 ]; do
-    if [ "\$1" = "--output" ]; then
-        cp "$sandbox_repo/spec.json" "\$2"
-    fi
-    shift
-done
-EOF
+    fake_curl_serving_the_spec
 
     run_in_repo scripts/api-coverage
 
@@ -335,16 +360,7 @@ EOF
 test_a_spec_url_in_the_environment_replaces_the_default() {
     prepare_coverage
     run_env=("XQUIK_OPENAPI_SPEC=https://spec.example.com/openapi.json")
-    fake curl <<EOF
-#!/bin/sh
-echo "\$*" >>"\$FAKE_LOGS/curl"
-while [ "\$#" -gt 0 ]; do
-    if [ "\$1" = "--output" ]; then
-        cp "$sandbox_repo/spec.json" "\$2"
-    fi
-    shift
-done
-EOF
+    fake_curl_serving_the_spec
 
     run_in_repo scripts/api-coverage
 
@@ -365,7 +381,8 @@ EOF
     run_in_repo scripts/api-coverage
 
     assert_equal 1 "$run_status" "the exit code"
-    assert_equal "Could not read the API spec from https://xquik.com/openapi.json. $unreadable_tail" \
+    assert_equal "curl: (6) Could not resolve host: xquik.com
+Could not read the API spec from https://xquik.com/openapi.json. $unreadable_tail" \
         "$run_stderr" "stderr"
 }
 
@@ -383,6 +400,7 @@ test_a_spec_file_that_is_missing_or_not_json_fails_with_the_next_step() {
 openapi: 3.1.0
 paths: {}
 EOF
+    run_env=("XQUIK_OPENAPI_SPEC=$sandbox_repo/spec.json")
 
     run_in_repo scripts/api-coverage
 
@@ -414,6 +432,9 @@ $invalid_next_step" "$run_stderr" "stderr for $invalid_file"
 [{"reason": "Docs search.", "operations": ["GET /ask", "POST /ask", 7]}]|Group 1 lists 7, but each operation needs an upper-case method, 1 space and a path that starts with /.
 [{"reason": "Docs search.", "operations": ["GET /ask", "POST /ask"]}, {"reason": "Again.", "operations": ["GET /ask"]}]|It lists GET /ask 2 times. List each operation once.
 [{"reason": "Docs.", "operations": ["GET /x/{id}", "GET /x/{tweetId}", "GET /ask", "POST /ask"]}]|It lists GET /x/{id} 2 times. List each operation once.
+null|It must be a JSON array of groups.
+[] [{"reason": "Docs search.", "operations": ["GET /ask", "POST /ask"]}]|It holds 2 JSON values, but it needs 1 array.
+|It is empty.
 EOF
 }
 
@@ -475,6 +496,109 @@ EOF
 
     assert_equal 1 "$run_status" "the exit code"
     assert_equal "Could not read the default base URL from $client_options. Keep it in 1 line that reads const val PRODUCTION_URL = \"<url>\"." \
+        "$run_stderr" "stderr"
+}
+
+test_an_operation_that_only_the_blocking_client_has_fails() {
+    prepare_coverage
+    write_service async/x/TweetServiceAsyncImpl.kt <<'EOF'
+class TweetServiceAsyncImpl {
+    suspend fun retrieve() {
+        val request =
+            HttpRequest.builder()
+                .method(HttpMethod.GET)
+                .baseUrl(clientOptions.baseUrl())
+                .addPathSegments("x", "tweets", params._pathParam(0))
+                .build()
+    }
+}
+EOF
+
+    run_in_repo scripts/api-coverage
+
+    assert_equal 1 "$run_status" "the exit code"
+    assert_equal "POST /api/v1/x/tweets/{}/like is in the blocking client but not in the async client.
+POST /api/v1/x/tweets/{id}/like (likeTweet) is in the API but not in the SDK.
+$missing_next_step" "$run_stderr" "stderr"
+}
+
+test_an_operation_that_only_the_async_client_has_fails() {
+    prepare_coverage
+    write_service async/x/DraftServiceAsyncImpl.kt <<'EOF'
+class DraftServiceAsyncImpl {
+    suspend fun list() {
+        val request =
+            HttpRequest.builder()
+                .method(HttpMethod.GET)
+                .baseUrl(clientOptions.baseUrl())
+                .addPathSegments("drafts")
+                .build()
+    }
+}
+EOF
+
+    run_in_repo scripts/api-coverage
+
+    assert_equal 1 "$run_status" "the exit code"
+    assert_equal "GET /api/v1/drafts is in the async client but not in the blocking client.
+Add each operation above to the client that lacks it, then rerun." "$run_stderr" "stderr"
+}
+
+test_an_async_request_whose_path_cannot_be_read_fails_with_its_file_and_line() {
+    prepare_coverage
+    write_service async/DraftServiceAsyncImpl.kt <<'EOF'
+class DraftServiceAsyncImpl {
+    suspend fun list() {
+        val request =
+            HttpRequest.builder()
+                .method(HttpMethod.GET)
+                .baseUrl(clientOptions.baseUrl())
+                .addPathSegments(*segments)
+                .build()
+    }
+}
+EOF
+
+    run_in_repo scripts/api-coverage
+
+    assert_equal 1 "$run_status" "the exit code"
+    assert_contains "$run_stderr" "$services/async/DraftServiceAsyncImpl.kt:5 sends a request whose method or path this check cannot read." \
+        "stderr"
+}
+
+test_a_relative_spec_path_reads_from_the_callers_folder() {
+    prepare_coverage
+    mkdir -p "$sandbox_repo/specs"
+    mv -- "$sandbox_repo/spec.json" "$sandbox_repo/specs/openapi.json"
+    run_env=("XQUIK_OPENAPI_SPEC=openapi.json")
+
+    run_in_repo sh -c 'cd specs && ../scripts/api-coverage'
+
+    assert_equal "" "$run_stderr" "stderr"
+    assert_equal 0 "$run_status" "the exit code"
+    assert_equal "The SDK covers 3 of 5 API operations, and excluded-operations.json lists the other 2." \
+        "$run_stdout" "stdout"
+}
+
+test_a_path_item_that_uses_ref_fails_instead_of_counting_no_operations() {
+    prepare_coverage
+    write_spec <<'EOF'
+{
+  "servers": [{"url": "https://xquik.com"}],
+  "paths": {
+    "/api/v1/x/tweets/{id}": {"get": {}},
+    "/api/v1/x/tweets/{id}/like": {"post": {}},
+    "/api/v1/account": {"$ref": "#/components/pathItems/Account"},
+    "/ask": {"get": {}, "post": {}}
+  }
+}
+EOF
+
+    run_in_repo scripts/api-coverage
+
+    assert_equal 1 "$run_status" "the exit code"
+    assert_equal "The API spec path /api/v1/account uses \$ref, which this check cannot read.
+Inline each path item that uses \$ref in the API spec, or set XQUIK_OPENAPI_SPEC to a spec that does." \
         "$run_stderr" "stderr"
 }
 

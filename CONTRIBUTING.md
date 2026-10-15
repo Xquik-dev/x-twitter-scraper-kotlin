@@ -121,19 +121,19 @@ This guard prevents tests from mutating remote services.
 
 ## API coverage
 
-`scripts/api-coverage` is the first check of `bin/check-local`, right after the tool and JDK checks.
-It fails when the API has an operation that the SDK neither implements nor excludes.
+`scripts/api-coverage` fails when the API has an operation that the SDK neither implements nor excludes.
 
 It reads the operations of the public spec at https://xquik.com/openapi.json.
 Each operation is its upper-case method and the path of its server joined with its path key, such as `GET /api/v1/x/trends`.
-It reads the SDK operations from the `HttpMethod` and `addPathSegments` calls of each `*ServiceImpl.kt` file.
+It reads the SDK operations from the `HttpMethod` and `addPathSegments` calls of each service `Impl` class.
+An operation counts only when the blocking and the async client both send it.
 Each SDK path starts with the path of `PRODUCTION_URL` in `ClientOptions.kt`.
 Path parameter names do not matter, so `{id}` matches `{tweetId}`.
-SDK operations that the spec lacks pass.
+The check ignores SDK operations that the spec lacks.
 
 Fix a failure by its line.
 
-- An operation the API has but the SDK lacks needs a method in the SDK, or an entry in `excluded-operations.json` with a reason.
+- An operation the API has but the SDK lacks needs a method in both clients, or an entry in `excluded-operations.json` with a reason.
 - An excluded operation that the API no longer has, or that the SDK now implements, comes out of `excluded-operations.json`.
 - A request that the check cannot read needs the generated form, with string literals and `params._pathParam(n)` in `addPathSegments`.
 
@@ -150,7 +150,8 @@ An operation appears at most once in the file.
 ]
 ```
 
-Set `XQUIK_OPENAPI_SPEC` to a local file path or another URL to check against another copy of the spec.
+Set `XQUIK_OPENAPI_SPEC` to a file path or another URL to check against another copy of the spec.
+A relative path starts from the folder you run the check in.
 The check reads JSON only.
 
 ```sh
