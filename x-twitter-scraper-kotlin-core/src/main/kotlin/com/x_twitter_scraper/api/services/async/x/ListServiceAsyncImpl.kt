@@ -21,6 +21,10 @@ import com.x_twitter_scraper.api.models.PaginatedTweets
 import com.x_twitter_scraper.api.models.PaginatedUsers
 import com.x_twitter_scraper.api.models.x.lists.ListRetrieveFollowersParams
 import com.x_twitter_scraper.api.models.x.lists.ListRetrieveMembersParams
+import com.x_twitter_scraper.api.models.x.lists.ListRetrieveParams
+import com.x_twitter_scraper.api.models.x.lists.ListRetrieveResponse
+import com.x_twitter_scraper.api.models.x.lists.ListRetrieveSearchParams
+import com.x_twitter_scraper.api.models.x.lists.ListRetrieveSearchResponse
 import com.x_twitter_scraper.api.models.x.lists.ListRetrieveTweetsParams
 
 /** X List followers, members, and tweets */
@@ -50,6 +54,16 @@ class ListServiceAsyncImpl internal constructor(private val clientOptions: Clien
         params: ListRetrieveTweetsParams,
         requestOptions: RequestOptions,
     ): PaginatedTweets = withRawResponse().retrieveTweets(params, requestOptions).parse()
+
+    override suspend fun retrieve(
+        params: ListRetrieveParams,
+        requestOptions: RequestOptions,
+    ): ListRetrieveResponse = withRawResponse().retrieve(params, requestOptions).parse()
+
+    override suspend fun retrieveSearch(
+        params: ListRetrieveSearchParams,
+        requestOptions: RequestOptions,
+    ): ListRetrieveSearchResponse = withRawResponse().retrieveSearch(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         ListServiceAsync.WithRawResponse {
@@ -140,6 +154,61 @@ class ListServiceAsyncImpl internal constructor(private val clientOptions: Clien
             return errorHandler.handle(response).parseable {
                 response
                     .use { retrieveTweetsHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val retrieveHandler: Handler<ListRetrieveResponse> =
+            jsonHandler<ListRetrieveResponse>(clientOptions.jsonMapper)
+
+        override suspend fun retrieve(
+            params: ListRetrieveParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<ListRetrieveResponse> {
+            checkRequired("id", params.id())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("x", "lists", params._pathParam(0))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { retrieveHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val retrieveSearchHandler: Handler<ListRetrieveSearchResponse> =
+            jsonHandler<ListRetrieveSearchResponse>(clientOptions.jsonMapper)
+
+        override suspend fun retrieveSearch(
+            params: ListRetrieveSearchParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<ListRetrieveSearchResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("x", "lists", "search")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { retrieveSearchHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()

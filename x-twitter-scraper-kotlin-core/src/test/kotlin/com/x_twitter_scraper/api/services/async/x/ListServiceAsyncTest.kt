@@ -7,6 +7,8 @@ package com.x_twitter_scraper.api.services.async.x
 import com.x_twitter_scraper.api.client.okhttp.XTwitterScraperOkHttpClientAsync
 import com.x_twitter_scraper.api.models.x.lists.ListRetrieveFollowersParams
 import com.x_twitter_scraper.api.models.x.lists.ListRetrieveMembersParams
+import com.x_twitter_scraper.api.models.x.lists.ListRetrieveParams
+import com.x_twitter_scraper.api.models.x.lists.ListRetrieveSearchParams
 import com.x_twitter_scraper.api.models.x.lists.ListRetrieveTweetsParams
 import org.junit.jupiter.api.Test
 
@@ -107,5 +109,51 @@ internal class ListServiceAsyncTest {
             )
 
         kotlin.test.assertNotNull(paginatedTweets)
+    }
+
+    @Test
+    suspend fun retrieve() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val listServiceAsync = client.x().lists()
+
+        val response =
+            listServiceAsync.retrieve(
+                ListRetrieveParams.builder()
+                    .id("id")
+                    .fields("id,text,author.username")
+                    .omit("entities,media")
+                    .build()
+            )
+
+        kotlin.test.assertNotNull(response)
+    }
+
+    @Test
+    suspend fun retrieveSearch() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val listServiceAsync = client.x().lists()
+
+        val response =
+            listServiceAsync.retrieveSearch(
+                ListRetrieveSearchParams.builder()
+                    .q("q")
+                    .cursor("cursor")
+                    .fields("id,text,author.username")
+                    .omit("entities,media")
+                    .pageSize(20L)
+                    .build()
+            )
+
+        kotlin.test.assertNotNull(response)
     }
 }
