@@ -7,9 +7,14 @@ package com.x_twitter_scraper.api.services.async.x
 import com.x_twitter_scraper.api.client.okhttp.XTwitterScraperOkHttpClientAsync
 import com.x_twitter_scraper.api.models.x.communities.CommunityCreateParams
 import com.x_twitter_scraper.api.models.x.communities.CommunityDeleteParams
+import com.x_twitter_scraper.api.models.x.communities.CommunityFindParams
+import com.x_twitter_scraper.api.models.x.communities.CommunityListPopularParams
+import com.x_twitter_scraper.api.models.x.communities.CommunityListSuggestedParams
+import com.x_twitter_scraper.api.models.x.communities.CommunityListTopicsParams
 import com.x_twitter_scraper.api.models.x.communities.CommunityRetrieveMembersParams
 import com.x_twitter_scraper.api.models.x.communities.CommunityRetrieveModeratorsParams
 import com.x_twitter_scraper.api.models.x.communities.CommunityRetrieveSearchParams
+import com.x_twitter_scraper.api.models.x.communities.CommunitySearchMembersParams
 import org.junit.jupiter.api.Test
 
 internal class CommunityServiceAsyncTest {
@@ -168,5 +173,139 @@ internal class CommunityServiceAsyncTest {
             )
 
         kotlin.test.assertNotNull(paginatedTweets)
+    }
+
+    @Test
+    suspend fun find() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val communityServiceAsync = client.x().communities()
+
+        val communityPage =
+            communityServiceAsync.find(
+                CommunityFindParams.builder()
+                    .q("q")
+                    .cursor("cursor")
+                    .fields("id,text,author.username")
+                    .omit("entities,media")
+                    .pageSize(1L)
+                    .build()
+            )
+
+        kotlin.test.assertNotNull(communityPage)
+    }
+
+    @Test
+    suspend fun listPopular() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val communityServiceAsync = client.x().communities()
+
+        val communityPage =
+            communityServiceAsync.listPopular(
+                CommunityListPopularParams.builder()
+                    .cursor("cursor")
+                    .fields("id,text,author.username")
+                    .omit("entities,media")
+                    .pageSize(1L)
+                    .topic("topic")
+                    .topicId("topicId")
+                    .build()
+            )
+
+        kotlin.test.assertNotNull(communityPage)
+    }
+
+    @Test
+    suspend fun listSuggested() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val communityServiceAsync = client.x().communities()
+
+        val response =
+            communityServiceAsync.listSuggested(
+                CommunityListSuggestedParams.builder()
+                    .fields("id,text,author.username")
+                    .limit(1L)
+                    .omit("entities,media")
+                    .build()
+            )
+
+        kotlin.test.assertNotNull(response)
+    }
+
+    @Test
+    suspend fun listTopics() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val communityServiceAsync = client.x().communities()
+
+        val response =
+            communityServiceAsync.listTopics(
+                CommunityListTopicsParams.builder()
+                    .fields("id,text,author.username")
+                    .limit(1L)
+                    .omit("entities,media")
+                    .build()
+            )
+
+        kotlin.test.assertNotNull(response)
+    }
+
+    @Test
+    suspend fun searchMembers() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val communityServiceAsync = client.x().communities()
+
+        val paginatedUsers =
+            communityServiceAsync.searchMembers(
+                CommunitySearchMembersParams.builder()
+                    .id("1500000000000000000")
+                    .q("q")
+                    .bioContains("bioContains")
+                    .blueVerifiedOnly(true)
+                    .businessEmailOnly(true)
+                    .emailDomains("acme.com,stanford.edu")
+                    .fields("id,text,author.username")
+                    .hasEmail(true)
+                    .hasLocation(true)
+                    .hasWebsite(true)
+                    .locationContains("locationContains")
+                    .maxFollowers(0L)
+                    .maxFollowing(0L)
+                    .maxStatuses(0L)
+                    .minAccountAgeDays(0L)
+                    .minFollowers(0L)
+                    .minFollowing(0L)
+                    .minStatuses(0L)
+                    .omit("entities,media")
+                    .usernameContains("usernameContains")
+                    .verifiedOnly(true)
+                    .verifiedType("verifiedType")
+                    .build()
+            )
+
+        kotlin.test.assertNotNull(paginatedUsers)
     }
 }

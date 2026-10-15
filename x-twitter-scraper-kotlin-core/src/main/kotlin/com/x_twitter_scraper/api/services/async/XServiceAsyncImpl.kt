@@ -18,13 +18,25 @@ import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.core.http.parseable
 import com.x_twitter_scraper.api.core.prepareAsync
 import com.x_twitter_scraper.api.models.PaginatedTweets
+import com.x_twitter_scraper.api.models.x.XAutocompleteSearchParams
+import com.x_twitter_scraper.api.models.x.XAutocompleteSearchResponse
 import com.x_twitter_scraper.api.models.x.XGetArticleParams
 import com.x_twitter_scraper.api.models.x.XGetArticleResponse
+import com.x_twitter_scraper.api.models.x.XGetHashflagsParams
+import com.x_twitter_scraper.api.models.x.XGetHashflagsResponse
 import com.x_twitter_scraper.api.models.x.XGetHomeTimelineParams
+import com.x_twitter_scraper.api.models.x.XGetNewsStoryVersionsParams
+import com.x_twitter_scraper.api.models.x.XGetNewsStoryVersionsResponse
 import com.x_twitter_scraper.api.models.x.XGetNotificationsParams
 import com.x_twitter_scraper.api.models.x.XGetNotificationsResponse
+import com.x_twitter_scraper.api.models.x.XGetTrendLocationsParams
+import com.x_twitter_scraper.api.models.x.XGetTrendLocationsResponse
+import com.x_twitter_scraper.api.models.x.XGetTrendsHistoryParams
+import com.x_twitter_scraper.api.models.x.XGetTrendsHistoryResponse
 import com.x_twitter_scraper.api.models.x.XGetTrendsParams
 import com.x_twitter_scraper.api.models.x.XGetTrendsResponse
+import com.x_twitter_scraper.api.models.x.XSearchPlacesParams
+import com.x_twitter_scraper.api.models.x.XSearchPlacesResponse
 import com.x_twitter_scraper.api.services.async.x.AccountConnectionAttemptServiceAsync
 import com.x_twitter_scraper.api.services.async.x.AccountConnectionAttemptServiceAsyncImpl
 import com.x_twitter_scraper.api.services.async.x.AccountConnectionChallengeServiceAsync
@@ -154,6 +166,40 @@ class XServiceAsyncImpl internal constructor(private val clientOptions: ClientOp
         params: XGetTrendsParams,
         requestOptions: RequestOptions,
     ): XGetTrendsResponse = withRawResponse().getTrends(params, requestOptions).parse()
+
+    override suspend fun autocompleteSearch(
+        params: XAutocompleteSearchParams,
+        requestOptions: RequestOptions,
+    ): XAutocompleteSearchResponse =
+        withRawResponse().autocompleteSearch(params, requestOptions).parse()
+
+    override suspend fun getHashflags(
+        params: XGetHashflagsParams,
+        requestOptions: RequestOptions,
+    ): XGetHashflagsResponse = withRawResponse().getHashflags(params, requestOptions).parse()
+
+    override suspend fun searchPlaces(
+        params: XSearchPlacesParams,
+        requestOptions: RequestOptions,
+    ): XSearchPlacesResponse = withRawResponse().searchPlaces(params, requestOptions).parse()
+
+    override suspend fun getTrendLocations(
+        params: XGetTrendLocationsParams,
+        requestOptions: RequestOptions,
+    ): XGetTrendLocationsResponse =
+        withRawResponse().getTrendLocations(params, requestOptions).parse()
+
+    override suspend fun getTrendsHistory(
+        params: XGetTrendsHistoryParams,
+        requestOptions: RequestOptions,
+    ): XGetTrendsHistoryResponse =
+        withRawResponse().getTrendsHistory(params, requestOptions).parse()
+
+    override suspend fun getNewsStoryVersions(
+        params: XGetNewsStoryVersionsParams,
+        requestOptions: RequestOptions,
+    ): XGetNewsStoryVersionsResponse =
+        withRawResponse().getNewsStoryVersions(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         XServiceAsync.WithRawResponse {
@@ -357,6 +403,169 @@ class XServiceAsyncImpl internal constructor(private val clientOptions: ClientOp
             return errorHandler.handle(response).parseable {
                 response
                     .use { getTrendsHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val autocompleteSearchHandler: Handler<XAutocompleteSearchResponse> =
+            jsonHandler<XAutocompleteSearchResponse>(clientOptions.jsonMapper)
+
+        override suspend fun autocompleteSearch(
+            params: XAutocompleteSearchParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<XAutocompleteSearchResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("x", "search", "autocomplete")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { autocompleteSearchHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val getHashflagsHandler: Handler<XGetHashflagsResponse> =
+            jsonHandler<XGetHashflagsResponse>(clientOptions.jsonMapper)
+
+        override suspend fun getHashflags(
+            params: XGetHashflagsParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<XGetHashflagsResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("x", "hashflags")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { getHashflagsHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val searchPlacesHandler: Handler<XSearchPlacesResponse> =
+            jsonHandler<XSearchPlacesResponse>(clientOptions.jsonMapper)
+
+        override suspend fun searchPlaces(
+            params: XSearchPlacesParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<XSearchPlacesResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("x", "places", "search")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { searchPlacesHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val getTrendLocationsHandler: Handler<XGetTrendLocationsResponse> =
+            jsonHandler<XGetTrendLocationsResponse>(clientOptions.jsonMapper)
+
+        override suspend fun getTrendLocations(
+            params: XGetTrendLocationsParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<XGetTrendLocationsResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("x", "trends", "locations")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { getTrendLocationsHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val getTrendsHistoryHandler: Handler<XGetTrendsHistoryResponse> =
+            jsonHandler<XGetTrendsHistoryResponse>(clientOptions.jsonMapper)
+
+        override suspend fun getTrendsHistory(
+            params: XGetTrendsHistoryParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<XGetTrendsHistoryResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("x", "trends", "history")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { getTrendsHistoryHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val getNewsStoryVersionsHandler: Handler<XGetNewsStoryVersionsResponse> =
+            jsonHandler<XGetNewsStoryVersionsResponse>(clientOptions.jsonMapper)
+
+        override suspend fun getNewsStoryVersions(
+            params: XGetNewsStoryVersionsParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<XGetNewsStoryVersionsResponse> {
+            checkRequired("id", params.id())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("x", "news", params._pathParam(0), "versions")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { getNewsStoryVersionsHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()

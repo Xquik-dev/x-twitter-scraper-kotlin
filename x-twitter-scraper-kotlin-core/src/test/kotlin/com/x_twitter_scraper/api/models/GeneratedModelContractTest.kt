@@ -343,7 +343,10 @@ internal class GeneratedModelContractTest {
                     it.declaringClass == builder.javaClass &&
                         !it.isSynthetic &&
                         it.returnType == builder.javaClass &&
-                        it.name != "from" &&
+                        !(it.name == "from" &&
+                            it.parameterTypes.contentEquals(
+                                arrayOf(builder.javaClass.declaringClass)
+                            )) &&
                         !it.name.startsWith("from\$")
                 }
                 .sortedWith(
@@ -656,10 +659,7 @@ internal class GeneratedModelContractTest {
                     Map::class.java.isAssignableFrom(it.returnType)
             } ?: return
         val unknownModel =
-            MAPPER.readValue(
-                MAPPER.writeValueAsString(mapOf(UNKNOWN_PROPERTY to true)),
-                modelClass,
-            )
+            MAPPER.readValue(MAPPER.writeValueAsString(mapOf(UNKNOWN_PROPERTY to true)), modelClass)
         val unknownProperties = additionalProperties.invoke(unknownModel) as Map<*, *>
 
         assertThat(additionalProperties.invoke(emptyModel) as Map<*, *>).isEmpty()
@@ -726,10 +726,7 @@ internal class GeneratedModelContractTest {
         propertyName: String,
     ) {
         val valueModel =
-            MAPPER.readValue(
-                MAPPER.writeValueAsString(mapOf(propertyName to true)),
-                modelClass,
-            )
+            MAPPER.readValue(MAPPER.writeValueAsString(mapOf(propertyName to true)), modelClass)
         val valueField = rawGetter.invoke(valueModel) as JsonField<*>
 
         assertThat(valueField.asBoolean()).isEqualTo(true)

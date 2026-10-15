@@ -8,6 +8,8 @@ import com.google.errorprone.annotations.MustBeClosed
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
+import com.x_twitter_scraper.api.models.x.dm.DmDeleteMessageParams
+import com.x_twitter_scraper.api.models.x.dm.DmDeleteMessageResponse
 import com.x_twitter_scraper.api.models.x.dm.DmRetrieveHistoryParams
 import com.x_twitter_scraper.api.models.x.dm.DmRetrieveHistoryResponse
 import com.x_twitter_scraper.api.models.x.dm.DmSendParams
@@ -53,6 +55,24 @@ interface DmService {
         params: DmSendParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): DmSendResponse
+
+    /**
+     * Deletes 1 DM from the account's side. The other person keeps it. Success means the account's
+     * conversation no longer shows it. A DM still shown gets 422 `x_dm_not_deleted`, and Xquik
+     * charges nothing.
+     */
+    fun deleteMessage(
+        messageId: String,
+        params: DmDeleteMessageParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): DmDeleteMessageResponse =
+        deleteMessage(params.toBuilder().messageId(messageId).build(), requestOptions)
+
+    /** @see deleteMessage */
+    fun deleteMessage(
+        params: DmDeleteMessageParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): DmDeleteMessageResponse
 
     /** A view of [DmService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -101,5 +121,24 @@ interface DmService {
             params: DmSendParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<DmSendResponse>
+
+        /**
+         * Returns a raw HTTP response for `delete /x/dm/{userId}/messages/{messageId}`, but is
+         * otherwise the same as [DmService.deleteMessage].
+         */
+        @MustBeClosed
+        fun deleteMessage(
+            messageId: String,
+            params: DmDeleteMessageParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<DmDeleteMessageResponse> =
+            deleteMessage(params.toBuilder().messageId(messageId).build(), requestOptions)
+
+        /** @see deleteMessage */
+        @MustBeClosed
+        fun deleteMessage(
+            params: DmDeleteMessageParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<DmDeleteMessageResponse>
     }
 }

@@ -6,6 +6,11 @@
 
 * `x().tweets()` adds `listTop`, `embed`, `getHiddenReplies`, `getInsights`, `getRetweeterIds`, `checkRepost`, `getSubtitles`, `translate` and `resolveLinks`, with typed params and responses.
 * `x().users()` adds `retrieveBatchTweets`, `retrieveAffiliates`, `retrieveArticles`, `retrieveFollowerIds`, `retrieveFollowingIds`, `retrieveHighlights`, `retrieveInsights`, `retrieveListMemberships`, `retrieveLists`, `retrieveLive`, `retrieveSimilar`, `retrieveSubscriptions` and `translateBio`, with typed params and responses.
+* `x().communities()` adds `find`, `listPopular`, `listSuggested`, `listTopics` and `searchMembers`, and the new `x().communities().media()` service lists a Community's media posts.
+* The shared `Community`, `CommunityPage` and `CommunityTopic` models describe Communities in the new responses.
+* `x().lists()` adds `retrieve` and `retrieveSearch`, and `x().dm()` adds `deleteMessage`.
+* `x()` adds `autocompleteSearch`, `getHashflags`, `searchPlaces`, `getTrendLocations`, `getTrendsHistory` and `getNewsStoryVersions`.
+* `x().getTrends` accepts `at`, `country`, `location`, `fields` and `omit`, and its response adds `capturedAt`, `requestedAt` and `location`.
 
 ## 0.9.4 (2026-10-13)
 
