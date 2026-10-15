@@ -234,13 +234,7 @@ private constructor(
     }
 
     override fun hashCode(): Int =
-        Objects.hash(
-            id,
-            fields,
-            omit,
-            additionalHeaders,
-            additionalQueryParams,
-        )
+        Objects.hash(id, fields, omit, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "TweetGetSubtitlesParams{id=$id, fields=$fields, omit=$omit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

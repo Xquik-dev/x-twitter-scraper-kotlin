@@ -14,12 +14,33 @@ import java.util.Objects
 class TweetListParams
 private constructor(
     private val ids: String,
+    private val fields: String?,
+    private val omit: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** Comma-separated tweet IDs (max 100) */
+    /**
+     * 1 to 100 posts, separated by commas. Each is a tweet ID or a tweet URL, such as
+     * x.com/nasa/status/20. Xquik reads a post named twice once. It skips any other entry & lists
+     * it under `skipped` with why. A batch without 1 post gets 400 `invalid_tweet_id`.
+     */
     fun ids(): String = ids
+
+    /**
+     * Fields to keep in each row, comma-separated. Use dots for nested fields, such as
+     * author.username. A list keeps the field in each item. Case & underscores do not matter. A row
+     * that lacks a field leaves it out. Cursors, counts & diagnostics always stay. An unknown name
+     * answers 400 unknown_field with the valid names, before any read. The price stays the same.
+     * SDK row types then hold only the named fields.
+     */
+    fun fields(): String? = fields
+
+    /**
+     * Fields to drop from each row, comma-separated. It takes the same names as fields. With
+     * fields, it drops from the kept fields.
+     */
+    fun omit(): String? = omit
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -46,17 +67,40 @@ private constructor(
     class Builder internal constructor() {
 
         private var ids: String? = null
+        private var fields: String? = null
+        private var omit: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(tweetListParams: TweetListParams) = apply {
             ids = tweetListParams.ids
+            fields = tweetListParams.fields
+            omit = tweetListParams.omit
             additionalHeaders = tweetListParams.additionalHeaders.toBuilder()
             additionalQueryParams = tweetListParams.additionalQueryParams.toBuilder()
         }
 
-        /** Comma-separated tweet IDs (max 100) */
+        /**
+         * 1 to 100 posts, separated by commas. Each is a tweet ID or a tweet URL, such as
+         * x.com/nasa/status/20. Xquik reads a post named twice once. It skips any other entry &
+         * lists it under `skipped` with why. A batch without 1 post gets 400 `invalid_tweet_id`.
+         */
         fun ids(ids: String) = apply { this.ids = ids }
+
+        /**
+         * Fields to keep in each row, comma-separated. Use dots for nested fields, such as
+         * author.username. A list keeps the field in each item. Case & underscores do not matter. A
+         * row that lacks a field leaves it out. Cursors, counts & diagnostics always stay. An
+         * unknown name answers 400 unknown_field with the valid names, before any read. The price
+         * stays the same. SDK row types then hold only the named fields.
+         */
+        fun fields(fields: String?) = apply { this.fields = fields }
+
+        /**
+         * Fields to drop from each row, comma-separated. It takes the same names as fields. With
+         * fields, it drops from the kept fields.
+         */
+        fun omit(omit: String?) = apply { this.omit = omit }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -171,6 +215,8 @@ private constructor(
         fun build(): TweetListParams =
             TweetListParams(
                 checkRequired("ids", ids),
+                fields,
+                omit,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -182,6 +228,8 @@ private constructor(
         QueryParams.builder()
             .apply {
                 put("ids", ids)
+                fields?.let { put("fields", it) }
+                omit?.let { put("omit", it) }
                 putAll(additionalQueryParams)
             }
             .build()
@@ -193,12 +241,15 @@ private constructor(
 
         return other is TweetListParams &&
             ids == other.ids &&
+            fields == other.fields &&
+            omit == other.omit &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = Objects.hash(ids, additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int =
+        Objects.hash(ids, fields, omit, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "TweetListParams{ids=$ids, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "TweetListParams{ids=$ids, fields=$fields, omit=$omit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

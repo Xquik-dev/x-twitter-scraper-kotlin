@@ -235,13 +235,7 @@ private constructor(
     }
 
     override fun hashCode(): Int =
-        Objects.hash(
-            id,
-            cursor,
-            pageSize,
-            additionalHeaders,
-            additionalQueryParams,
-        )
+        Objects.hash(id, cursor, pageSize, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "UserRetrieveFollowerIdsParams{id=$id, cursor=$cursor, pageSize=$pageSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

@@ -233,13 +233,7 @@ private constructor(
     }
 
     override fun hashCode(): Int =
-        Objects.hash(
-            id,
-            fields,
-            omit,
-            additionalHeaders,
-            additionalQueryParams,
-        )
+        Objects.hash(id, fields, omit, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "UserRetrieveLiveParams{id=$id, fields=$fields, omit=$omit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

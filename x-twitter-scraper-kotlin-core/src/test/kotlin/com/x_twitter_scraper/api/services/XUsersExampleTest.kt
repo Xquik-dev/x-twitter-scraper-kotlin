@@ -266,10 +266,7 @@ internal class XUsersExampleTest {
                 client.async().x().users().retrieveInsights(params),
             )
 
-        verify(
-            2,
-            getRequestedFor(urlPathEqualTo("/x/users/2102882545427714266/insights")),
-        )
+        verify(2, getRequestedFor(urlPathEqualTo("/x/users/2102882545427714266/insights")))
         responses.forEach { response ->
             assertThat(response.insights().accountAgeDays()).isEqualTo(6858.0)
             assertThat(response.insights().averages()!!.bookmarks()).isEqualTo(209.7)
@@ -317,10 +314,7 @@ internal class XUsersExampleTest {
                 client.async().x().users().retrieveInsights(params),
             )
 
-        verify(
-            2,
-            getRequestedFor(urlPathEqualTo("/x/users/2102882545427714266/insights")),
-        )
+        verify(2, getRequestedFor(urlPathEqualTo("/x/users/2102882545427714266/insights")))
         responses.forEach { response ->
             assertThat(response.insights().accountAgeDays()).isEqualTo(6858.0)
             assertThat(response.insights().averages()).isNull()
@@ -517,10 +511,7 @@ internal class XUsersExampleTest {
                 client.async().x().users().retrieveLive(params),
             )
 
-        verify(
-            2,
-            getRequestedFor(urlPathEqualTo("/x/users/2102882545427714266/live")),
-        )
+        verify(2, getRequestedFor(urlPathEqualTo("/x/users/2102882545427714266/live")))
         responses.forEach { response ->
             assertThat(response.broadcast()!!.id()).isEqualTo("1DxLdZyVPMMxm")
             assertThat(response.broadcast()!!.endedAt())
@@ -558,10 +549,7 @@ internal class XUsersExampleTest {
                 client.async().x().users().retrieveLive(params),
             )
 
-        verify(
-            2,
-            getRequestedFor(urlPathEqualTo("/x/users/2102882545427714266/live")),
-        )
+        verify(2, getRequestedFor(urlPathEqualTo("/x/users/2102882545427714266/live")))
         responses.forEach { response ->
             assertThat(response.broadcast()).isNull()
             assertThat(response.live()).isEqualTo(false)

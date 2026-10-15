@@ -12,11 +12,36 @@ internal class TweetListParamsTest {
 
     @Test
     fun create() {
-        TweetListParams.builder().ids("ids").build()
+        TweetListParams.builder()
+            .ids("ids")
+            .fields("id,text,author.username")
+            .omit("entities,media")
+            .build()
     }
 
     @Test
     fun queryParams() {
+        val params =
+            TweetListParams.builder()
+                .ids("ids")
+                .fields("id,text,author.username")
+                .omit("entities,media")
+                .build()
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("ids", "ids")
+                    .put("fields", "id,text,author.username")
+                    .put("omit", "entities,media")
+                    .build()
+            )
+    }
+
+    @Test
+    fun queryParamsWithoutOptionalFields() {
         val params = TweetListParams.builder().ids("ids").build()
 
         val queryParams = params._queryParams()

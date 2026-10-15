@@ -12,9 +12,16 @@ import java.util.Objects
 /** Get bookmark folders */
 class BookmarkRetrieveFoldersParams
 private constructor(
+    private val cursor: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
+
+    /**
+     * Pagination cursor for collection results. Also read as next_cursor, next_token,
+     * pagination_token or continuation_token.
+     */
+    fun cursor(): String? = cursor
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -38,13 +45,21 @@ private constructor(
     /** A builder for [BookmarkRetrieveFoldersParams]. */
     class Builder internal constructor() {
 
+        private var cursor: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(bookmarkRetrieveFoldersParams: BookmarkRetrieveFoldersParams) = apply {
+            cursor = bookmarkRetrieveFoldersParams.cursor
             additionalHeaders = bookmarkRetrieveFoldersParams.additionalHeaders.toBuilder()
             additionalQueryParams = bookmarkRetrieveFoldersParams.additionalQueryParams.toBuilder()
         }
+
+        /**
+         * Pagination cursor for collection results. Also read as next_cursor, next_token,
+         * pagination_token or continuation_token.
+         */
+        fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -150,12 +165,22 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          */
         fun build(): BookmarkRetrieveFoldersParams =
-            BookmarkRetrieveFoldersParams(additionalHeaders.build(), additionalQueryParams.build())
+            BookmarkRetrieveFoldersParams(
+                cursor,
+                additionalHeaders.build(),
+                additionalQueryParams.build(),
+            )
     }
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                cursor?.let { put("cursor", it) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -163,12 +188,13 @@ private constructor(
         }
 
         return other is BookmarkRetrieveFoldersParams &&
+            cursor == other.cursor &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = Objects.hash(additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int = Objects.hash(cursor, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "BookmarkRetrieveFoldersParams{additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "BookmarkRetrieveFoldersParams{cursor=$cursor, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

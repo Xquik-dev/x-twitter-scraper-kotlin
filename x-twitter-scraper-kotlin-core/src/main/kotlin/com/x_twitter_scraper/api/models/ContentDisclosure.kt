@@ -17,7 +17,7 @@ import java.util.Collections
 import java.util.Objects
 
 /**
- * Content disclosure metadata shown by X when a tweet is labeled as paid partnership content or
+ * Content disclosure metadata X shows on a labeled tweet. X labels paid partnership content and
  * AI-generated media.
  */
 class ContentDisclosure
@@ -303,7 +303,9 @@ private constructor(
                 additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(isPaidPromotion, additionalProperties) }
+        private val hashCode: Int by lazy {
+            Objects.hash(isPaidPromotion, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -330,7 +332,7 @@ private constructor(
         ) : this(detectionSource, hasAiGeneratedMedia, mutableMapOf())
 
         /**
-         * Source of the AI-generated media disclosure.
+         * How X detected AI media. X omits it for self-declared posts.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
@@ -394,7 +396,7 @@ private constructor(
                 additionalProperties = aiGenerated.additionalProperties.toMutableMap()
             }
 
-            /** Source of the AI-generated media disclosure. */
+            /** How X detected AI media. X omits it for self-declared posts. */
             fun detectionSource(detectionSource: String) =
                 detectionSource(JsonField.of(detectionSource))
 

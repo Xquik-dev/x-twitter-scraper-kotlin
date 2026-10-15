@@ -12,9 +12,20 @@ import java.util.Objects
 /** List connected X accounts */
 class AccountListParams
 private constructor(
+    private val cursor: String?,
+    private val limit: Long?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
+
+    /** Previous nextCursor. The after alias also works. Offset pagination is not supported. */
+    fun cursor(): String? = cursor
+
+    /**
+     * Maximum items per page, from 1 to 100. Default 50. A low credit balance can return fewer paid
+     * results. When it covers none, the answer is 402 insufficient_credits.
+     */
+    fun limit(): Long? = limit
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -35,13 +46,29 @@ private constructor(
     /** A builder for [AccountListParams]. */
     class Builder internal constructor() {
 
+        private var cursor: String? = null
+        private var limit: Long? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(accountListParams: AccountListParams) = apply {
+            cursor = accountListParams.cursor
+            limit = accountListParams.limit
             additionalHeaders = accountListParams.additionalHeaders.toBuilder()
             additionalQueryParams = accountListParams.additionalQueryParams.toBuilder()
         }
+
+        /** Previous nextCursor. The after alias also works. Offset pagination is not supported. */
+        fun cursor(cursor: String?) = apply { this.cursor = cursor }
+
+        /**
+         * Maximum items per page, from 1 to 100. Default 50. A low credit balance can return fewer
+         * paid results. When it covers none, the answer is 402 insufficient_credits.
+         */
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /** Alias for [Builder.limit]. */
+        fun limit(limit: Long) = limit(limit as Long?)
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -147,12 +174,24 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          */
         fun build(): AccountListParams =
-            AccountListParams(additionalHeaders.build(), additionalQueryParams.build())
+            AccountListParams(
+                cursor,
+                limit,
+                additionalHeaders.build(),
+                additionalQueryParams.build(),
+            )
     }
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                cursor?.let { put("cursor", it) }
+                limit?.let { put("limit", it.toString()) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -160,12 +199,15 @@ private constructor(
         }
 
         return other is AccountListParams &&
+            cursor == other.cursor &&
+            limit == other.limit &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = Objects.hash(additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int =
+        Objects.hash(cursor, limit, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "AccountListParams{additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "AccountListParams{cursor=$cursor, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

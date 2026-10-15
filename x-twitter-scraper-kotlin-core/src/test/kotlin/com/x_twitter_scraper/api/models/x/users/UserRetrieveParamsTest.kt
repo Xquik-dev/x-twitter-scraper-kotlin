@@ -4,6 +4,7 @@
 
 package com.x_twitter_scraper.api.models.x.users
 
+import com.x_twitter_scraper.api.core.http.QueryParams
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -11,7 +12,11 @@ internal class UserRetrieveParamsTest {
 
     @Test
     fun create() {
-        UserRetrieveParams.builder().id("id").build()
+        UserRetrieveParams.builder()
+            .id("id")
+            .fields("id,text,author.username")
+            .omit("entities,media")
+            .build()
     }
 
     @Test
@@ -20,5 +25,34 @@ internal class UserRetrieveParamsTest {
 
         assertThat(params._pathParam(0)).isEqualTo("id")
         assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
+    fun queryParams() {
+        val params =
+            UserRetrieveParams.builder()
+                .id("id")
+                .fields("id,text,author.username")
+                .omit("entities,media")
+                .build()
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("fields", "id,text,author.username")
+                    .put("omit", "entities,media")
+                    .build()
+            )
+    }
+
+    @Test
+    fun queryParamsWithoutOptionalFields() {
+        val params = UserRetrieveParams.builder().id("id").build()
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().build())
     }
 }

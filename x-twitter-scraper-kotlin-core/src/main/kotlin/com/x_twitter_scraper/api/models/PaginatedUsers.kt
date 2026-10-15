@@ -20,10 +20,8 @@ import java.util.Collections
 import java.util.Objects
 
 /**
- * Paginated user profiles. No-mode follower, following, and verified follower requests merge
- * independent views automatically. Response fields, page size, aliases, filters, and
- * per-returned-profile billing stay unchanged. Existing unprefixed cursors retain legacy behavior.
- * Follow next_cursor while has_next_page is true.
+ * Profile coverage preserves shape, billing, aliases, and filters. Follow next_cursor while the
+ * response reports more pages. Unprefixed cursors remain legacy.
  */
 class PaginatedUsers
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
@@ -31,6 +29,7 @@ private constructor(
     private val hasNextPage: JsonField<Boolean>,
     private val nextCursor: JsonField<String>,
     private val users: JsonField<List<UserProfile>>,
+    private val filteredCount: JsonField<Long>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -45,7 +44,10 @@ private constructor(
         @JsonProperty("users")
         @ExcludeMissing
         users: JsonField<List<UserProfile>> = JsonMissing.of(),
-    ) : this(hasNextPage, nextCursor, users, mutableMapOf())
+        @JsonProperty("filtered_count")
+        @ExcludeMissing
+        filteredCount: JsonField<Long> = JsonMissing.of(),
+    ) : this(hasNextPage, nextCursor, users, filteredCount, mutableMapOf())
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
@@ -64,6 +66,13 @@ private constructor(
      *   unexpectedly missing or null.
      */
     fun users(): List<UserProfile> = users.getRequired("users")
+
+    /**
+     * Whole number from 0.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun filteredCount(): Long? = filteredCount.getNullable("filtered_count")
 
     /**
      * Returns the raw JSON value of [hasNextPage].
@@ -87,6 +96,15 @@ private constructor(
      * Unlike [users], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("users") @ExcludeMissing fun _users(): JsonField<List<UserProfile>> = users
+
+    /**
+     * Returns the raw JSON value of [filteredCount].
+     *
+     * Unlike [filteredCount], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("filtered_count")
+    @ExcludeMissing
+    fun _filteredCount(): JsonField<Long> = filteredCount
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -121,12 +139,14 @@ private constructor(
         private var hasNextPage: JsonField<Boolean>? = null
         private var nextCursor: JsonField<String>? = null
         private var users: JsonField<MutableList<UserProfile>>? = null
+        private var filteredCount: JsonField<Long> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(paginatedUsers: PaginatedUsers) = apply {
             hasNextPage = paginatedUsers.hasNextPage
             nextCursor = paginatedUsers.nextCursor
             users = paginatedUsers.users.map { it.toMutableList() }
+            filteredCount = paginatedUsers.filteredCount
             additionalProperties = paginatedUsers.additionalProperties.toMutableMap()
         }
 
@@ -154,7 +174,17 @@ private constructor(
          */
         fun addUser(user: UserProfile) = apply {
             users =
-                (users ?: JsonField.of(mutableListOf())).also { checkKnown("users", it).add(user) }
+                (users ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("users", it).add(user)
+                }
+        }
+
+        /** Whole number from 0. */
+        fun filteredCount(filteredCount: Long) = filteredCount(JsonField.of(filteredCount))
+
+        /** Sets [Builder.filteredCount] to an arbitrary JSON value. */
+        fun filteredCount(filteredCount: JsonField<Long>) = apply {
+            this.filteredCount = filteredCount
         }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -195,6 +225,7 @@ private constructor(
                 checkRequired("hasNextPage", hasNextPage),
                 checkRequired("nextCursor", nextCursor),
                 checkRequired("users", users).map { it.toImmutable() },
+                filteredCount,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -217,6 +248,7 @@ private constructor(
         hasNextPage()
         nextCursor()
         users().forEach { it.validate() }
+        filteredCount()
         validated = true
     }
 
@@ -231,7 +263,8 @@ private constructor(
     internal fun validity(): Int =
         (if (hasNextPage.asKnown() == null) 0 else 1) +
             (if (nextCursor.asKnown() == null) 0 else 1) +
-            (users.asKnown()?.sumOf { it.validity() } ?: 0)
+            (users.asKnown()?.sumOf { it.validity() } ?: 0) +
+            (if (filteredCount.asKnown() == null) 0 else 1)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -242,15 +275,16 @@ private constructor(
             hasNextPage == other.hasNextPage &&
             nextCursor == other.nextCursor &&
             users == other.users &&
+            filteredCount == other.filteredCount &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(hasNextPage, nextCursor, users, additionalProperties)
+        Objects.hash(hasNextPage, nextCursor, users, filteredCount, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "PaginatedUsers{hasNextPage=$hasNextPage, nextCursor=$nextCursor, users=$users, additionalProperties=$additionalProperties}"
+        "PaginatedUsers{hasNextPage=$hasNextPage, nextCursor=$nextCursor, users=$users, filteredCount=$filteredCount, additionalProperties=$additionalProperties}"
 }

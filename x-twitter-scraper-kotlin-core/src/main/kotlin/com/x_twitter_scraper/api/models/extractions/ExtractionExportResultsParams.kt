@@ -20,7 +20,10 @@ class ExtractionExportResultsParams
 private constructor(
     private val id: String?,
     private val format: Format,
+    private val businessEmailOnly: Boolean?,
+    private val emailDomains: String?,
     private val hasDescription: Boolean?,
+    private val hasEmail: Boolean?,
     private val hasLocation: Boolean?,
     private val hasMedia: Boolean?,
     private val lang: String?,
@@ -47,8 +50,20 @@ private constructor(
     /** Export file format */
     fun format(): Format = format
 
+    /** Require an email outside free webmail, such as Gmail, in the row's Email column. */
+    fun businessEmailOnly(): Boolean? = businessEmailOnly
+
+    /**
+     * Require the row's email at one of these domains. Separate domains with commas. Subdomains
+     * match.
+     */
+    fun emailDomains(): String? = emailDomains
+
     /** Require a non-empty description. */
     fun hasDescription(): Boolean? = hasDescription
+
+    /** Require an email in the row's Email column. */
+    fun hasEmail(): Boolean? = hasEmail
 
     /** Require a non-empty location. */
     fun hasLocation(): Boolean? = hasLocation
@@ -92,10 +107,17 @@ private constructor(
     /** Search exported result text. */
     fun search(): String? = search
 
-    /** Include results on or after this date. */
+    /**
+     * Include results on or after this date, from 00:00 UTC. An ISO 8601 time starts at that
+     * instant. The filter drops results without a post date. An empty value sets no filter.
+     */
     fun sinceDate(): LocalDate? = sinceDate
 
-    /** Include results on or before this date. */
+    /**
+     * Include results on or before this date, inclusive, through 23:59:59 UTC. An ISO 8601 time
+     * ends at that instant. The filter drops results without a post date. An empty value sets no
+     * filter.
+     */
     fun untilDate(): LocalDate? = untilDate
 
     /** Filter by verified status. */
@@ -128,7 +150,10 @@ private constructor(
 
         private var id: String? = null
         private var format: Format? = null
+        private var businessEmailOnly: Boolean? = null
+        private var emailDomains: String? = null
         private var hasDescription: Boolean? = null
+        private var hasEmail: Boolean? = null
         private var hasLocation: Boolean? = null
         private var hasMedia: Boolean? = null
         private var lang: String? = null
@@ -152,7 +177,10 @@ private constructor(
         internal fun from(extractionExportResultsParams: ExtractionExportResultsParams) = apply {
             id = extractionExportResultsParams.id
             format = extractionExportResultsParams.format
+            businessEmailOnly = extractionExportResultsParams.businessEmailOnly
+            emailDomains = extractionExportResultsParams.emailDomains
             hasDescription = extractionExportResultsParams.hasDescription
+            hasEmail = extractionExportResultsParams.hasEmail
             hasLocation = extractionExportResultsParams.hasLocation
             hasMedia = extractionExportResultsParams.hasMedia
             lang = extractionExportResultsParams.lang
@@ -179,6 +207,21 @@ private constructor(
         /** Export file format */
         fun format(format: Format) = apply { this.format = format }
 
+        /** Require an email outside free webmail, such as Gmail, in the row's Email column. */
+        fun businessEmailOnly(businessEmailOnly: Boolean?) = apply {
+            this.businessEmailOnly = businessEmailOnly
+        }
+
+        /** Alias for [Builder.businessEmailOnly]. */
+        fun businessEmailOnly(businessEmailOnly: Boolean) =
+            businessEmailOnly(businessEmailOnly as Boolean?)
+
+        /**
+         * Require the row's email at one of these domains. Separate domains with commas. Subdomains
+         * match.
+         */
+        fun emailDomains(emailDomains: String?) = apply { this.emailDomains = emailDomains }
+
         /** Require a non-empty description. */
         fun hasDescription(hasDescription: Boolean?) = apply {
             this.hasDescription = hasDescription
@@ -186,6 +229,12 @@ private constructor(
 
         /** Alias for [Builder.hasDescription]. */
         fun hasDescription(hasDescription: Boolean) = hasDescription(hasDescription as Boolean?)
+
+        /** Require an email in the row's Email column. */
+        fun hasEmail(hasEmail: Boolean?) = apply { this.hasEmail = hasEmail }
+
+        /** Alias for [Builder.hasEmail]. */
+        fun hasEmail(hasEmail: Boolean) = hasEmail(hasEmail as Boolean?)
 
         /** Require a non-empty location. */
         fun hasLocation(hasLocation: Boolean?) = apply { this.hasLocation = hasLocation }
@@ -265,10 +314,17 @@ private constructor(
         /** Search exported result text. */
         fun search(search: String?) = apply { this.search = search }
 
-        /** Include results on or after this date. */
+        /**
+         * Include results on or after this date, from 00:00 UTC. An ISO 8601 time starts at that
+         * instant. The filter drops results without a post date. An empty value sets no filter.
+         */
         fun sinceDate(sinceDate: LocalDate?) = apply { this.sinceDate = sinceDate }
 
-        /** Include results on or before this date. */
+        /**
+         * Include results on or before this date, inclusive, through 23:59:59 UTC. An ISO 8601 time
+         * ends at that instant. The filter drops results without a post date. An empty value sets
+         * no filter.
+         */
         fun untilDate(untilDate: LocalDate?) = apply { this.untilDate = untilDate }
 
         /** Filter by verified status. */
@@ -391,7 +447,10 @@ private constructor(
             ExtractionExportResultsParams(
                 id,
                 checkRequired("format", format),
+                businessEmailOnly,
+                emailDomains,
                 hasDescription,
+                hasEmail,
                 hasLocation,
                 hasMedia,
                 lang,
@@ -426,7 +485,10 @@ private constructor(
         QueryParams.builder()
             .apply {
                 put("format", format.toString())
+                businessEmailOnly?.let { put("businessEmailOnly", it.toString()) }
+                emailDomains?.let { put("emailDomains", it) }
                 hasDescription?.let { put("hasDescription", it.toString()) }
+                hasEmail?.let { put("hasEmail", it.toString()) }
                 hasLocation?.let { put("hasLocation", it.toString()) }
                 hasMedia?.let { put("hasMedia", it.toString()) }
                 lang?.let { put("lang", it) }
@@ -600,7 +662,10 @@ private constructor(
         return other is ExtractionExportResultsParams &&
             id == other.id &&
             format == other.format &&
+            businessEmailOnly == other.businessEmailOnly &&
+            emailDomains == other.emailDomains &&
             hasDescription == other.hasDescription &&
+            hasEmail == other.hasEmail &&
             hasLocation == other.hasLocation &&
             hasMedia == other.hasMedia &&
             lang == other.lang &&
@@ -626,7 +691,10 @@ private constructor(
         Objects.hash(
             id,
             format,
+            businessEmailOnly,
+            emailDomains,
             hasDescription,
+            hasEmail,
             hasLocation,
             hasMedia,
             lang,
@@ -649,5 +717,5 @@ private constructor(
         )
 
     override fun toString() =
-        "ExtractionExportResultsParams{id=$id, format=$format, hasDescription=$hasDescription, hasLocation=$hasLocation, hasMedia=$hasMedia, lang=$lang, maxFollowers=$maxFollowers, maxFollowing=$maxFollowing, maxPosts=$maxPosts, minFollowers=$minFollowers, minFollowing=$minFollowing, minLikes=$minLikes, minPosts=$minPosts, minReplies=$minReplies, minRetweets=$minRetweets, minViews=$minViews, search=$search, sinceDate=$sinceDate, untilDate=$untilDate, verified=$verified, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "ExtractionExportResultsParams{id=$id, format=$format, businessEmailOnly=$businessEmailOnly, emailDomains=$emailDomains, hasDescription=$hasDescription, hasEmail=$hasEmail, hasLocation=$hasLocation, hasMedia=$hasMedia, lang=$lang, maxFollowers=$maxFollowers, maxFollowing=$maxFollowing, maxPosts=$maxPosts, minFollowers=$minFollowers, minFollowing=$minFollowing, minLikes=$minLikes, minPosts=$minPosts, minReplies=$minReplies, minRetweets=$minRetweets, minViews=$minViews, search=$search, sinceDate=$sinceDate, untilDate=$untilDate, verified=$verified, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

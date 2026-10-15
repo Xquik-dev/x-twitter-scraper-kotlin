@@ -14,7 +14,12 @@ class CommunityRetrieveMembersParams
 private constructor(
     private val id: String?,
     private val bioContains: String?,
+    private val blueVerifiedOnly: Boolean?,
+    private val businessEmailOnly: Boolean?,
     private val cursor: String?,
+    private val emailDomains: String?,
+    private val fields: String?,
+    private val hasEmail: Boolean?,
     private val hasLocation: Boolean?,
     private val hasWebsite: Boolean?,
     private val locationContains: String?,
@@ -25,6 +30,7 @@ private constructor(
     private val minFollowers: Long?,
     private val minFollowing: Long?,
     private val minStatuses: Long?,
+    private val omit: String?,
     private val pageSize: Long?,
     private val usernameContains: String?,
     private val verifiedOnly: Boolean?,
@@ -38,8 +44,38 @@ private constructor(
     /** Match any comma-separated or line-separated bio term, ignoring case. */
     fun bioContains(): String? = bioContains
 
-    /** Pagination cursor */
+    /**
+     * Only return profiles X marks as blue verified. X marks many business & government accounts
+     * blue too. Use verifiedType for 1 badge type.
+     */
+    fun blueVerifiedOnly(): Boolean? = blueVerifiedOnly
+
+    /** Only return profiles that publish an email outside free webmail, such as Gmail. */
+    fun businessEmailOnly(): Boolean? = businessEmailOnly
+
+    /**
+     * Pagination cursor for collection results. Also read as next_cursor, next_token,
+     * pagination_token or continuation_token.
+     */
     fun cursor(): String? = cursor
+
+    /**
+     * Only return profiles with an email at one of these domains. Separate domains with commas.
+     * Subdomains match.
+     */
+    fun emailDomains(): String? = emailDomains
+
+    /**
+     * Fields to keep in each row, comma-separated. Use dots for nested fields, such as
+     * author.username. A list keeps the field in each item. Case & underscores do not matter. A row
+     * that lacks a field leaves it out. Cursors, counts & diagnostics always stay. An unknown name
+     * answers 400 unknown_field with the valid names, before any read. The price stays the same.
+     * SDK row types then hold only the named fields.
+     */
+    fun fields(): String? = fields
+
+    /** Only return profiles that publish an email. */
+    fun hasEmail(): Boolean? = hasEmail
 
     /** Only return profiles with a location. */
     fun hasLocation(): Boolean? = hasLocation
@@ -50,10 +86,10 @@ private constructor(
     /** Match a location substring, ignoring case. */
     fun locationContains(): String? = locationContains
 
-    /** Maximum follower count. Missing counts pass this maximum. */
+    /** Maximum follower count. A profile without a count passes. */
     fun maxFollowers(): Long? = maxFollowers
 
-    /** Maximum following count. */
+    /** Profiles may follow at most this many accounts. */
     fun maxFollowing(): Long? = maxFollowing
 
     /** Maximum post count. maxPosts is also accepted. */
@@ -62,20 +98,22 @@ private constructor(
     /** Minimum account age in whole days. */
     fun minAccountAgeDays(): Long? = minAccountAgeDays
 
-    /** Minimum follower count. Filtering happens before billing. */
+    /** Minimum follower count. Profiles the filter drops cost nothing. */
     fun minFollowers(): Long? = minFollowers
 
-    /** Minimum following count. */
+    /** Profiles must follow at least this many accounts. */
     fun minFollowing(): Long? = minFollowing
 
     /** Minimum post count. minPosts is also accepted. */
     fun minStatuses(): Long? = minStatuses
 
     /**
-     * Items per page (20-200, default 20). This is an upper bound for paid authenticated calls:
-     * remaining credits can reduce the returned page size, and zero affordable results returns 402
-     * insufficient_credits.
+     * Fields to drop from each row, comma-separated. It takes the same names as fields. With
+     * fields, it drops from the kept fields.
      */
+    fun omit(): String? = omit
+
+    /** Maximum user profiles per page (1-200, default 20). */
     fun pageSize(): Long? = pageSize
 
     /** Match a username substring, ignoring case. */
@@ -111,7 +149,12 @@ private constructor(
 
         private var id: String? = null
         private var bioContains: String? = null
+        private var blueVerifiedOnly: Boolean? = null
+        private var businessEmailOnly: Boolean? = null
         private var cursor: String? = null
+        private var emailDomains: String? = null
+        private var fields: String? = null
+        private var hasEmail: Boolean? = null
         private var hasLocation: Boolean? = null
         private var hasWebsite: Boolean? = null
         private var locationContains: String? = null
@@ -122,6 +165,7 @@ private constructor(
         private var minFollowers: Long? = null
         private var minFollowing: Long? = null
         private var minStatuses: Long? = null
+        private var omit: String? = null
         private var pageSize: Long? = null
         private var usernameContains: String? = null
         private var verifiedOnly: Boolean? = null
@@ -132,7 +176,12 @@ private constructor(
         internal fun from(communityRetrieveMembersParams: CommunityRetrieveMembersParams) = apply {
             id = communityRetrieveMembersParams.id
             bioContains = communityRetrieveMembersParams.bioContains
+            blueVerifiedOnly = communityRetrieveMembersParams.blueVerifiedOnly
+            businessEmailOnly = communityRetrieveMembersParams.businessEmailOnly
             cursor = communityRetrieveMembersParams.cursor
+            emailDomains = communityRetrieveMembersParams.emailDomains
+            fields = communityRetrieveMembersParams.fields
+            hasEmail = communityRetrieveMembersParams.hasEmail
             hasLocation = communityRetrieveMembersParams.hasLocation
             hasWebsite = communityRetrieveMembersParams.hasWebsite
             locationContains = communityRetrieveMembersParams.locationContains
@@ -143,6 +192,7 @@ private constructor(
             minFollowers = communityRetrieveMembersParams.minFollowers
             minFollowing = communityRetrieveMembersParams.minFollowing
             minStatuses = communityRetrieveMembersParams.minStatuses
+            omit = communityRetrieveMembersParams.omit
             pageSize = communityRetrieveMembersParams.pageSize
             usernameContains = communityRetrieveMembersParams.usernameContains
             verifiedOnly = communityRetrieveMembersParams.verifiedOnly
@@ -156,8 +206,53 @@ private constructor(
         /** Match any comma-separated or line-separated bio term, ignoring case. */
         fun bioContains(bioContains: String?) = apply { this.bioContains = bioContains }
 
-        /** Pagination cursor */
+        /**
+         * Only return profiles X marks as blue verified. X marks many business & government
+         * accounts blue too. Use verifiedType for 1 badge type.
+         */
+        fun blueVerifiedOnly(blueVerifiedOnly: Boolean?) = apply {
+            this.blueVerifiedOnly = blueVerifiedOnly
+        }
+
+        /** Alias for [Builder.blueVerifiedOnly]. */
+        fun blueVerifiedOnly(blueVerifiedOnly: Boolean) =
+            blueVerifiedOnly(blueVerifiedOnly as Boolean?)
+
+        /** Only return profiles that publish an email outside free webmail, such as Gmail. */
+        fun businessEmailOnly(businessEmailOnly: Boolean?) = apply {
+            this.businessEmailOnly = businessEmailOnly
+        }
+
+        /** Alias for [Builder.businessEmailOnly]. */
+        fun businessEmailOnly(businessEmailOnly: Boolean) =
+            businessEmailOnly(businessEmailOnly as Boolean?)
+
+        /**
+         * Pagination cursor for collection results. Also read as next_cursor, next_token,
+         * pagination_token or continuation_token.
+         */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
+
+        /**
+         * Only return profiles with an email at one of these domains. Separate domains with commas.
+         * Subdomains match.
+         */
+        fun emailDomains(emailDomains: String?) = apply { this.emailDomains = emailDomains }
+
+        /**
+         * Fields to keep in each row, comma-separated. Use dots for nested fields, such as
+         * author.username. A list keeps the field in each item. Case & underscores do not matter. A
+         * row that lacks a field leaves it out. Cursors, counts & diagnostics always stay. An
+         * unknown name answers 400 unknown_field with the valid names, before any read. The price
+         * stays the same. SDK row types then hold only the named fields.
+         */
+        fun fields(fields: String?) = apply { this.fields = fields }
+
+        /** Only return profiles that publish an email. */
+        fun hasEmail(hasEmail: Boolean?) = apply { this.hasEmail = hasEmail }
+
+        /** Alias for [Builder.hasEmail]. */
+        fun hasEmail(hasEmail: Boolean) = hasEmail(hasEmail as Boolean?)
 
         /** Only return profiles with a location. */
         fun hasLocation(hasLocation: Boolean?) = apply { this.hasLocation = hasLocation }
@@ -176,13 +271,13 @@ private constructor(
             this.locationContains = locationContains
         }
 
-        /** Maximum follower count. Missing counts pass this maximum. */
+        /** Maximum follower count. A profile without a count passes. */
         fun maxFollowers(maxFollowers: Long?) = apply { this.maxFollowers = maxFollowers }
 
         /** Alias for [Builder.maxFollowers]. */
         fun maxFollowers(maxFollowers: Long) = maxFollowers(maxFollowers as Long?)
 
-        /** Maximum following count. */
+        /** Profiles may follow at most this many accounts. */
         fun maxFollowing(maxFollowing: Long?) = apply { this.maxFollowing = maxFollowing }
 
         /** Alias for [Builder.maxFollowing]. */
@@ -203,13 +298,13 @@ private constructor(
         fun minAccountAgeDays(minAccountAgeDays: Long) =
             minAccountAgeDays(minAccountAgeDays as Long?)
 
-        /** Minimum follower count. Filtering happens before billing. */
+        /** Minimum follower count. Profiles the filter drops cost nothing. */
         fun minFollowers(minFollowers: Long?) = apply { this.minFollowers = minFollowers }
 
         /** Alias for [Builder.minFollowers]. */
         fun minFollowers(minFollowers: Long) = minFollowers(minFollowers as Long?)
 
-        /** Minimum following count. */
+        /** Profiles must follow at least this many accounts. */
         fun minFollowing(minFollowing: Long?) = apply { this.minFollowing = minFollowing }
 
         /** Alias for [Builder.minFollowing]. */
@@ -222,10 +317,12 @@ private constructor(
         fun minStatuses(minStatuses: Long) = minStatuses(minStatuses as Long?)
 
         /**
-         * Items per page (20-200, default 20). This is an upper bound for paid authenticated calls:
-         * remaining credits can reduce the returned page size, and zero affordable results returns
-         * 402 insufficient_credits.
+         * Fields to drop from each row, comma-separated. It takes the same names as fields. With
+         * fields, it drops from the kept fields.
          */
+        fun omit(omit: String?) = apply { this.omit = omit }
+
+        /** Maximum user profiles per page (1-200, default 20). */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
         /** Alias for [Builder.pageSize]. */
@@ -352,7 +449,12 @@ private constructor(
             CommunityRetrieveMembersParams(
                 id,
                 bioContains,
+                blueVerifiedOnly,
+                businessEmailOnly,
                 cursor,
+                emailDomains,
+                fields,
+                hasEmail,
                 hasLocation,
                 hasWebsite,
                 locationContains,
@@ -363,6 +465,7 @@ private constructor(
                 minFollowers,
                 minFollowing,
                 minStatuses,
+                omit,
                 pageSize,
                 usernameContains,
                 verifiedOnly,
@@ -384,7 +487,12 @@ private constructor(
         QueryParams.builder()
             .apply {
                 bioContains?.let { put("bioContains", it) }
+                blueVerifiedOnly?.let { put("blueVerifiedOnly", it.toString()) }
+                businessEmailOnly?.let { put("businessEmailOnly", it.toString()) }
                 cursor?.let { put("cursor", it) }
+                emailDomains?.let { put("emailDomains", it) }
+                fields?.let { put("fields", it) }
+                hasEmail?.let { put("hasEmail", it.toString()) }
                 hasLocation?.let { put("hasLocation", it.toString()) }
                 hasWebsite?.let { put("hasWebsite", it.toString()) }
                 locationContains?.let { put("locationContains", it) }
@@ -395,6 +503,7 @@ private constructor(
                 minFollowers?.let { put("minFollowers", it.toString()) }
                 minFollowing?.let { put("minFollowing", it.toString()) }
                 minStatuses?.let { put("minStatuses", it.toString()) }
+                omit?.let { put("omit", it) }
                 pageSize?.let { put("pageSize", it.toString()) }
                 usernameContains?.let { put("usernameContains", it) }
                 verifiedOnly?.let { put("verifiedOnly", it.toString()) }
@@ -411,7 +520,12 @@ private constructor(
         return other is CommunityRetrieveMembersParams &&
             id == other.id &&
             bioContains == other.bioContains &&
+            blueVerifiedOnly == other.blueVerifiedOnly &&
+            businessEmailOnly == other.businessEmailOnly &&
             cursor == other.cursor &&
+            emailDomains == other.emailDomains &&
+            fields == other.fields &&
+            hasEmail == other.hasEmail &&
             hasLocation == other.hasLocation &&
             hasWebsite == other.hasWebsite &&
             locationContains == other.locationContains &&
@@ -422,6 +536,7 @@ private constructor(
             minFollowers == other.minFollowers &&
             minFollowing == other.minFollowing &&
             minStatuses == other.minStatuses &&
+            omit == other.omit &&
             pageSize == other.pageSize &&
             usernameContains == other.usernameContains &&
             verifiedOnly == other.verifiedOnly &&
@@ -434,7 +549,12 @@ private constructor(
         Objects.hash(
             id,
             bioContains,
+            blueVerifiedOnly,
+            businessEmailOnly,
             cursor,
+            emailDomains,
+            fields,
+            hasEmail,
             hasLocation,
             hasWebsite,
             locationContains,
@@ -445,6 +565,7 @@ private constructor(
             minFollowers,
             minFollowing,
             minStatuses,
+            omit,
             pageSize,
             usernameContains,
             verifiedOnly,
@@ -454,5 +575,5 @@ private constructor(
         )
 
     override fun toString() =
-        "CommunityRetrieveMembersParams{id=$id, bioContains=$bioContains, cursor=$cursor, hasLocation=$hasLocation, hasWebsite=$hasWebsite, locationContains=$locationContains, maxFollowers=$maxFollowers, maxFollowing=$maxFollowing, maxStatuses=$maxStatuses, minAccountAgeDays=$minAccountAgeDays, minFollowers=$minFollowers, minFollowing=$minFollowing, minStatuses=$minStatuses, pageSize=$pageSize, usernameContains=$usernameContains, verifiedOnly=$verifiedOnly, verifiedType=$verifiedType, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "CommunityRetrieveMembersParams{id=$id, bioContains=$bioContains, blueVerifiedOnly=$blueVerifiedOnly, businessEmailOnly=$businessEmailOnly, cursor=$cursor, emailDomains=$emailDomains, fields=$fields, hasEmail=$hasEmail, hasLocation=$hasLocation, hasWebsite=$hasWebsite, locationContains=$locationContains, maxFollowers=$maxFollowers, maxFollowing=$maxFollowing, maxStatuses=$maxStatuses, minAccountAgeDays=$minAccountAgeDays, minFollowers=$minFollowers, minFollowing=$minFollowing, minStatuses=$minStatuses, omit=$omit, pageSize=$pageSize, usernameContains=$usernameContains, verifiedOnly=$verifiedOnly, verifiedType=$verifiedType, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

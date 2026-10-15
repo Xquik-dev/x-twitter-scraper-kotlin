@@ -24,13 +24,12 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** Previous nextCursor. */
+    /** Previous nextCursor. The after alias also works. Offset pagination is not supported. */
     fun cursor(): String? = cursor
 
     /**
-     * Maximum number of items to return (1-100, default 50). For paid per-result endpoints, the
-     * returned count may be lower when remaining credits cannot cover the requested page. If zero
-     * paid results are affordable, the endpoint returns 402 insufficient_credits.
+     * Maximum items per page, from 1 to 100. Default 50. A low credit balance can return fewer paid
+     * results. When it covers none, the answer is 402 insufficient_credits.
      */
     fun limit(): Long? = limit
 
@@ -75,13 +74,12 @@ private constructor(
             additionalQueryParams = extractionListParams.additionalQueryParams.toBuilder()
         }
 
-        /** Previous nextCursor. */
+        /** Previous nextCursor. The after alias also works. Offset pagination is not supported. */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
         /**
-         * Maximum number of items to return (1-100, default 50). For paid per-result endpoints, the
-         * returned count may be lower when remaining credits cannot cover the requested page. If
-         * zero paid results are affordable, the endpoint returns 402 insufficient_credits.
+         * Maximum items per page, from 1 to 100. Default 50. A low credit balance can return fewer
+         * paid results. When it covers none, the answer is 402 insufficient_credits.
          */
         fun limit(limit: Long?) = apply { this.limit = limit }
 
@@ -235,6 +233,10 @@ private constructor(
 
             val FAILED = of("failed")
 
+            val PENDING = of("pending")
+
+            val CANCELED = of("canceled")
+
             fun of(value: String) = Status(JsonField.of(value))
         }
 
@@ -243,6 +245,8 @@ private constructor(
             RUNNING,
             COMPLETED,
             FAILED,
+            PENDING,
+            CANCELED,
         }
 
         /**
@@ -258,6 +262,8 @@ private constructor(
             RUNNING,
             COMPLETED,
             FAILED,
+            PENDING,
+            CANCELED,
             /** An enum member indicating that [Status] was instantiated with an unknown value. */
             _UNKNOWN,
         }
@@ -271,6 +277,8 @@ private constructor(
                 RUNNING -> Value.RUNNING
                 COMPLETED -> Value.COMPLETED
                 FAILED -> Value.FAILED
+                PENDING -> Value.PENDING
+                CANCELED -> Value.CANCELED
                 else -> Value._UNKNOWN
             }
 
@@ -285,6 +293,8 @@ private constructor(
                 RUNNING -> Known.RUNNING
                 COMPLETED -> Known.COMPLETED
                 FAILED -> Known.FAILED
+                PENDING -> Known.PENDING
+                CANCELED -> Known.CANCELED
                 else -> throw XTwitterScraperInvalidDataException("Unknown Status: $value")
             }
 

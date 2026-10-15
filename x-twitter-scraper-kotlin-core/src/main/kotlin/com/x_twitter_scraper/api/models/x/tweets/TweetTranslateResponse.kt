@@ -1136,12 +1136,7 @@ private constructor(
                          *
                          * Further updates to this [Builder] will not mutate the returned instance.
                          */
-                        fun build(): Tag =
-                            Tag(
-                                id,
-                                info,
-                                additionalProperties.toMutableMap(),
-                            )
+                        fun build(): Tag = Tag(id, info, additionalProperties.toMutableMap())
                     }
 
                     private var validated: Boolean = false
@@ -1272,11 +1267,7 @@ private constructor(
                              * Further updates to this [Builder] will not mutate the returned
                              * instance.
                              */
-                            fun build(): Info =
-                                Info(
-                                    info,
-                                    additionalProperties.toMutableMap(),
-                                )
+                            fun build(): Info = Info(info, additionalProperties.toMutableMap())
                         }
 
                         private var validated: Boolean = false
@@ -1529,12 +1520,7 @@ private constructor(
                             }
 
                             private val hashCode: Int by lazy {
-                                Objects.hash(
-                                    active,
-                                    name,
-                                    ticker,
-                                    additionalProperties,
-                                )
+                                Objects.hash(active, name, ticker, additionalProperties)
                             }
 
                             override fun hashCode(): Int = hashCode
@@ -1554,10 +1540,7 @@ private constructor(
                         }
 
                         private val hashCode: Int by lazy {
-                            Objects.hash(
-                                info,
-                                additionalProperties,
-                            )
+                            Objects.hash(info, additionalProperties)
                         }
 
                         override fun hashCode(): Int = hashCode
@@ -1578,11 +1561,7 @@ private constructor(
                     }
 
                     private val hashCode: Int by lazy {
-                        Objects.hash(
-                            id,
-                            info,
-                            additionalProperties,
-                        )
+                        Objects.hash(id, info, additionalProperties)
                     }
 
                     override fun hashCode(): Int = hashCode
@@ -1604,12 +1583,7 @@ private constructor(
                 }
 
                 private val hashCode: Int by lazy {
-                    Objects.hash(
-                        text,
-                        indices,
-                        tag,
-                        additionalProperties,
-                    )
+                    Objects.hash(text, indices, tag, additionalProperties)
                 }
 
                 override fun hashCode(): Int = hashCode
@@ -1975,12 +1949,7 @@ private constructor(
                          *
                          * Further updates to this [Builder] will not mutate the returned instance.
                          */
-                        fun build(): Tag =
-                            Tag(
-                                id,
-                                info,
-                                additionalProperties.toMutableMap(),
-                            )
+                        fun build(): Tag = Tag(id, info, additionalProperties.toMutableMap())
                     }
 
                     private var validated: Boolean = false
@@ -2111,11 +2080,7 @@ private constructor(
                              * Further updates to this [Builder] will not mutate the returned
                              * instance.
                              */
-                            fun build(): Info =
-                                Info(
-                                    info,
-                                    additionalProperties.toMutableMap(),
-                                )
+                            fun build(): Info = Info(info, additionalProperties.toMutableMap())
                         }
 
                         private var validated: Boolean = false
@@ -2368,12 +2333,7 @@ private constructor(
                             }
 
                             private val hashCode: Int by lazy {
-                                Objects.hash(
-                                    active,
-                                    name,
-                                    ticker,
-                                    additionalProperties,
-                                )
+                                Objects.hash(active, name, ticker, additionalProperties)
                             }
 
                             override fun hashCode(): Int = hashCode
@@ -2393,10 +2353,7 @@ private constructor(
                         }
 
                         private val hashCode: Int by lazy {
-                            Objects.hash(
-                                info,
-                                additionalProperties,
-                            )
+                            Objects.hash(info, additionalProperties)
                         }
 
                         override fun hashCode(): Int = hashCode
@@ -2417,11 +2374,7 @@ private constructor(
                     }
 
                     private val hashCode: Int by lazy {
-                        Objects.hash(
-                            id,
-                            info,
-                            additionalProperties,
-                        )
+                        Objects.hash(id, info, additionalProperties)
                     }
 
                     override fun hashCode(): Int = hashCode
@@ -2444,13 +2397,7 @@ private constructor(
                 }
 
                 private val hashCode: Int by lazy {
-                    Objects.hash(
-                        indices,
-                        seconds,
-                        tag,
-                        text,
-                        additionalProperties,
-                    )
+                    Objects.hash(indices, seconds, tag, text, additionalProperties)
                 }
 
                 override fun hashCode(): Int = hashCode
@@ -2816,12 +2763,7 @@ private constructor(
                          *
                          * Further updates to this [Builder] will not mutate the returned instance.
                          */
-                        fun build(): Tag =
-                            Tag(
-                                id,
-                                info,
-                                additionalProperties.toMutableMap(),
-                            )
+                        fun build(): Tag = Tag(id, info, additionalProperties.toMutableMap())
                     }
 
                     private var validated: Boolean = false
@@ -2952,11 +2894,7 @@ private constructor(
                              * Further updates to this [Builder] will not mutate the returned
                              * instance.
                              */
-                            fun build(): Info =
-                                Info(
-                                    info,
-                                    additionalProperties.toMutableMap(),
-                                )
+                            fun build(): Info = Info(info, additionalProperties.toMutableMap())
                         }
 
                         private var validated: Boolean = false
@@ -3209,12 +3147,7 @@ private constructor(
                             }
 
                             private val hashCode: Int by lazy {
-                                Objects.hash(
-                                    active,
-                                    name,
-                                    ticker,
-                                    additionalProperties,
-                                )
+                                Objects.hash(active, name, ticker, additionalProperties)
                             }
 
                             override fun hashCode(): Int = hashCode
@@ -3234,10 +3167,7 @@ private constructor(
                         }
 
                         private val hashCode: Int by lazy {
-                            Objects.hash(
-                                info,
-                                additionalProperties,
-                            )
+                            Objects.hash(info, additionalProperties)
                         }
 
                         override fun hashCode(): Int = hashCode
@@ -3258,11 +3188,7 @@ private constructor(
                     }
 
                     private val hashCode: Int by lazy {
-                        Objects.hash(
-                            id,
-                            info,
-                            additionalProperties,
-                        )
+                        Objects.hash(id, info, additionalProperties)
                     }
 
                     override fun hashCode(): Int = hashCode
@@ -3285,13 +3211,7 @@ private constructor(
                 }
 
                 private val hashCode: Int by lazy {
-                    Objects.hash(
-                        indices,
-                        seconds,
-                        tag,
-                        text,
-                        additionalProperties,
-                    )
+                    Objects.hash(indices, seconds, tag, text, additionalProperties)
                 }
 
                 override fun hashCode(): Int = hashCode
@@ -3657,12 +3577,7 @@ private constructor(
                          *
                          * Further updates to this [Builder] will not mutate the returned instance.
                          */
-                        fun build(): Tag =
-                            Tag(
-                                id,
-                                info,
-                                additionalProperties.toMutableMap(),
-                            )
+                        fun build(): Tag = Tag(id, info, additionalProperties.toMutableMap())
                     }
 
                     private var validated: Boolean = false
@@ -3793,11 +3708,7 @@ private constructor(
                              * Further updates to this [Builder] will not mutate the returned
                              * instance.
                              */
-                            fun build(): Info =
-                                Info(
-                                    info,
-                                    additionalProperties.toMutableMap(),
-                                )
+                            fun build(): Info = Info(info, additionalProperties.toMutableMap())
                         }
 
                         private var validated: Boolean = false
@@ -4050,12 +3961,7 @@ private constructor(
                             }
 
                             private val hashCode: Int by lazy {
-                                Objects.hash(
-                                    active,
-                                    name,
-                                    ticker,
-                                    additionalProperties,
-                                )
+                                Objects.hash(active, name, ticker, additionalProperties)
                             }
 
                             override fun hashCode(): Int = hashCode
@@ -4075,10 +3981,7 @@ private constructor(
                         }
 
                         private val hashCode: Int by lazy {
-                            Objects.hash(
-                                info,
-                                additionalProperties,
-                            )
+                            Objects.hash(info, additionalProperties)
                         }
 
                         override fun hashCode(): Int = hashCode
@@ -4099,11 +4002,7 @@ private constructor(
                     }
 
                     private val hashCode: Int by lazy {
-                        Objects.hash(
-                            id,
-                            info,
-                            additionalProperties,
-                        )
+                        Objects.hash(id, info, additionalProperties)
                     }
 
                     override fun hashCode(): Int = hashCode
@@ -4126,13 +4025,7 @@ private constructor(
                 }
 
                 private val hashCode: Int by lazy {
-                    Objects.hash(
-                        indices,
-                        seconds,
-                        tag,
-                        text,
-                        additionalProperties,
-                    )
+                    Objects.hash(indices, seconds, tag, text, additionalProperties)
                 }
 
                 override fun hashCode(): Int = hashCode
@@ -4389,13 +4282,7 @@ private constructor(
                 }
 
                 private val hashCode: Int by lazy {
-                    Objects.hash(
-                        displayUrl,
-                        expandedUrl,
-                        indices,
-                        url,
-                        additionalProperties,
-                    )
+                    Objects.hash(displayUrl, expandedUrl, indices, url, additionalProperties)
                 }
 
                 override fun hashCode(): Int = hashCode
@@ -4665,13 +4552,7 @@ private constructor(
                 }
 
                 private val hashCode: Int by lazy {
-                    Objects.hash(
-                        screenName,
-                        idStr,
-                        indices,
-                        name,
-                        additionalProperties,
-                    )
+                    Objects.hash(screenName, idStr, indices, name, additionalProperties)
                 }
 
                 override fun hashCode(): Int = hashCode
@@ -4728,14 +4609,7 @@ private constructor(
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(
-                entities,
-                language,
-                text,
-                tweetId,
-                sourceLanguage,
-                additionalProperties,
-            )
+            Objects.hash(entities, language, text, tweetId, sourceLanguage, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
@@ -4755,10 +4629,7 @@ private constructor(
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(
-            translation,
-            additionalProperties,
-        )
+        Objects.hash(translation, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode

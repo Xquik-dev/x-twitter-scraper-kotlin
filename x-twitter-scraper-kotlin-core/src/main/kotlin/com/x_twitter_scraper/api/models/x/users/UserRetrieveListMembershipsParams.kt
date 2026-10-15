@@ -279,15 +279,7 @@ private constructor(
     }
 
     override fun hashCode(): Int =
-        Objects.hash(
-            id,
-            cursor,
-            fields,
-            omit,
-            pageSize,
-            additionalHeaders,
-            additionalQueryParams,
-        )
+        Objects.hash(id, cursor, fields, omit, pageSize, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "UserRetrieveListMembershipsParams{id=$id, cursor=$cursor, fields=$fields, omit=$omit, pageSize=$pageSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

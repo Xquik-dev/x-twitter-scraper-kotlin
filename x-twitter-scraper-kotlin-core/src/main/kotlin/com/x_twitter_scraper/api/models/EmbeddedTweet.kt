@@ -20,9 +20,8 @@ import java.util.Collections
 import java.util.Objects
 
 /**
- * Quoted or retweeted tweet context. Every object includes id, text, and engagement metrics. A zero
- * metric can mean X did not report the count. Author, media, and conversation fields appear when
- * available.
+ * A parent, quoted or retweeted tweet. It has the TweetPublicData fields and an author. Nesting
+ * stops after 4 levels.
  */
 class EmbeddedTweet
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
@@ -895,7 +894,7 @@ private constructor(
         }
 
         /**
-         * Adds a single [Long] to [Builder.displayTextRange].
+         * Adds a single [Long] to [displayTextRange].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
@@ -982,7 +981,7 @@ private constructor(
         }
 
         /**
-         * Adds a single [TweetMedia] to [Builder.media].
+         * Adds a single [TweetMedia] to [media].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
@@ -2102,36 +2101,26 @@ private constructor(
     class Edit
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
-        private val editableUntilMsecs: JsonField<String>,
         private val editTweetIds: JsonField<List<String>>,
+        private val editableUntilMsecs: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("editableUntilMsecs")
-            @ExcludeMissing
-            editableUntilMsecs: JsonField<String> = JsonMissing.of(),
             @JsonProperty("editTweetIds")
             @ExcludeMissing
             editTweetIds: JsonField<List<String>> = JsonMissing.of(),
-        ) : this(editableUntilMsecs, editTweetIds, mutableMapOf())
-
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
-        fun editableUntilMsecs(): String? = editableUntilMsecs.getNullable("editableUntilMsecs")
+            @JsonProperty("editableUntilMsecs")
+            @ExcludeMissing
+            editableUntilMsecs: JsonField<String> = JsonMissing.of(),
+        ) : this(editTweetIds, editableUntilMsecs, mutableMapOf())
 
         /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun editTweetIds(): List<String>? = editTweetIds.getNullable("editTweetIds")
 
-        /**
-         * Returns the raw JSON value of [editableUntilMsecs].
-         *
-         * Unlike [editableUntilMsecs], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("editableUntilMsecs")
-        @ExcludeMissing
-        fun _editableUntilMsecs(): JsonField<String> = editableUntilMsecs
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        fun editableUntilMsecs(): String? = editableUntilMsecs.getNullable("editableUntilMsecs")
 
         /**
          * Returns the raw JSON value of [editTweetIds].
@@ -2142,6 +2131,16 @@ private constructor(
         @JsonProperty("editTweetIds")
         @ExcludeMissing
         fun _editTweetIds(): JsonField<List<String>> = editTweetIds
+
+        /**
+         * Returns the raw JSON value of [editableUntilMsecs].
+         *
+         * Unlike [editableUntilMsecs], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("editableUntilMsecs")
+        @ExcludeMissing
+        fun _editableUntilMsecs(): JsonField<String> = editableUntilMsecs
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -2164,22 +2163,14 @@ private constructor(
         /** A builder for [Edit]. */
         class Builder internal constructor() {
 
-            private var editableUntilMsecs: JsonField<String> = JsonMissing.of()
             private var editTweetIds: JsonField<MutableList<String>>? = null
+            private var editableUntilMsecs: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(edit: Edit) = apply {
-                editableUntilMsecs = edit.editableUntilMsecs
                 editTweetIds = edit.editTweetIds.map { it.toMutableList() }
+                editableUntilMsecs = edit.editableUntilMsecs
                 additionalProperties = edit.additionalProperties.toMutableMap()
-            }
-
-            fun editableUntilMsecs(editableUntilMsecs: String) =
-                editableUntilMsecs(JsonField.of(editableUntilMsecs))
-
-            /** Sets [Builder.editableUntilMsecs] to an arbitrary JSON value. */
-            fun editableUntilMsecs(editableUntilMsecs: JsonField<String>) = apply {
-                this.editableUntilMsecs = editableUntilMsecs
             }
 
             fun editTweetIds(editTweetIds: List<String>) = editTweetIds(JsonField.of(editTweetIds))
@@ -2199,6 +2190,14 @@ private constructor(
                     (editTweetIds ?: JsonField.of(mutableListOf())).also {
                         checkKnown("editTweetIds", it).add(editTweetId)
                     }
+            }
+
+            fun editableUntilMsecs(editableUntilMsecs: String) =
+                editableUntilMsecs(JsonField.of(editableUntilMsecs))
+
+            /** Sets [Builder.editableUntilMsecs] to an arbitrary JSON value. */
+            fun editableUntilMsecs(editableUntilMsecs: JsonField<String>) = apply {
+                this.editableUntilMsecs = editableUntilMsecs
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -2227,8 +2226,8 @@ private constructor(
              */
             fun build(): Edit =
                 Edit(
-                    editableUntilMsecs,
                     (editTweetIds ?: JsonMissing.of()).map { it.toImmutable() },
+                    editableUntilMsecs,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -2249,8 +2248,8 @@ private constructor(
                 return@apply
             }
 
-            editableUntilMsecs()
             editTweetIds()
+            editableUntilMsecs()
             validated = true
         }
 
@@ -2263,8 +2262,8 @@ private constructor(
             }
 
         internal fun validity(): Int =
-            (if (editableUntilMsecs.asKnown() == null) 0 else 1) +
-                (editTweetIds.asKnown()?.size ?: 0)
+            (editTweetIds.asKnown()?.size ?: 0) +
+                (if (editableUntilMsecs.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -2272,19 +2271,19 @@ private constructor(
             }
 
             return other is Edit &&
-                editableUntilMsecs == other.editableUntilMsecs &&
                 editTweetIds == other.editTweetIds &&
+                editableUntilMsecs == other.editableUntilMsecs &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(editableUntilMsecs, editTweetIds, additionalProperties)
+            Objects.hash(editTweetIds, editableUntilMsecs, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Edit{editableUntilMsecs=$editableUntilMsecs, editTweetIds=$editTweetIds, additionalProperties=$additionalProperties}"
+            "Edit{editTweetIds=$editTweetIds, editableUntilMsecs=$editableUntilMsecs, additionalProperties=$additionalProperties}"
     }
 
     class Entities
