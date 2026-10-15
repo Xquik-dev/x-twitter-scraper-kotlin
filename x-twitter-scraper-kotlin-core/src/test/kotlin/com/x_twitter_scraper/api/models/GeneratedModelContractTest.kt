@@ -343,7 +343,10 @@ internal class GeneratedModelContractTest {
                     it.declaringClass == builder.javaClass &&
                         !it.isSynthetic &&
                         it.returnType == builder.javaClass &&
-                        it.name != "from" &&
+                        !(it.name == "from" &&
+                            it.parameterTypes.contentEquals(
+                                arrayOf(builder.javaClass.declaringClass)
+                            )) &&
                         !it.name.startsWith("from\$")
                 }
                 .sortedWith(
