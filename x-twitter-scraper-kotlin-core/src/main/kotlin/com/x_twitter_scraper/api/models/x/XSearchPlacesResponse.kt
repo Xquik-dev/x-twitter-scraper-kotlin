@@ -1671,7 +1671,9 @@ private constructor(
                     @JsonProperty("coordinates")
                     @ExcludeMissing
                     coordinates: JsonField<List<List<List<Double>>>> = JsonMissing.of(),
-                    @JsonProperty("type") @ExcludeMissing type: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("type")
+                    @ExcludeMissing
+                    type: JsonField<String> = JsonMissing.of(),
                 ) : this(coordinates, type, mutableMapOf())
 
                 /**

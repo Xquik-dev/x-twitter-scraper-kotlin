@@ -1415,7 +1415,9 @@ private constructor(
         @JsonCreator
         private constructor(
             @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("username") @ExcludeMissing username: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("username")
+            @ExcludeMissing
+            username: JsonField<String> = JsonMissing.of(),
         ) : this(id, username, mutableMapOf())
 
         /**

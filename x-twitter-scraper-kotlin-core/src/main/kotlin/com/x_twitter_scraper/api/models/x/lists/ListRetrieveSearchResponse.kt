@@ -1296,7 +1296,9 @@ private constructor(
                         @JsonProperty("green")
                         @ExcludeMissing
                         green: JsonField<Long> = JsonMissing.of(),
-                        @JsonProperty("red") @ExcludeMissing red: JsonField<Long> = JsonMissing.of(),
+                        @JsonProperty("red")
+                        @ExcludeMissing
+                        red: JsonField<Long> = JsonMissing.of(),
                     ) : this(blue, green, red, mutableMapOf())
 
                     /**
@@ -1520,7 +1522,9 @@ private constructor(
                     height: JsonField<Long> = JsonMissing.of(),
                     @JsonProperty("left") @ExcludeMissing left: JsonField<Long> = JsonMissing.of(),
                     @JsonProperty("top") @ExcludeMissing top: JsonField<Long> = JsonMissing.of(),
-                    @JsonProperty("width") @ExcludeMissing width: JsonField<Long> = JsonMissing.of(),
+                    @JsonProperty("width")
+                    @ExcludeMissing
+                    width: JsonField<Long> = JsonMissing.of(),
                 ) : this(height, left, top, width, mutableMapOf())
 
                 /**
@@ -2283,7 +2287,9 @@ private constructor(
                         @JsonProperty("green")
                         @ExcludeMissing
                         green: JsonField<Long> = JsonMissing.of(),
-                        @JsonProperty("red") @ExcludeMissing red: JsonField<Long> = JsonMissing.of(),
+                        @JsonProperty("red")
+                        @ExcludeMissing
+                        red: JsonField<Long> = JsonMissing.of(),
                     ) : this(blue, green, red, mutableMapOf())
 
                     /**
@@ -2507,7 +2513,9 @@ private constructor(
                     height: JsonField<Long> = JsonMissing.of(),
                     @JsonProperty("left") @ExcludeMissing left: JsonField<Long> = JsonMissing.of(),
                     @JsonProperty("top") @ExcludeMissing top: JsonField<Long> = JsonMissing.of(),
-                    @JsonProperty("width") @ExcludeMissing width: JsonField<Long> = JsonMissing.of(),
+                    @JsonProperty("width")
+                    @ExcludeMissing
+                    width: JsonField<Long> = JsonMissing.of(),
                 ) : this(height, left, top, width, mutableMapOf())
 
                 /**

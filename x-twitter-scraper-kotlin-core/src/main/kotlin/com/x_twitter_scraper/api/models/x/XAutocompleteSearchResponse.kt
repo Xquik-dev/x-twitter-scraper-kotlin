@@ -412,7 +412,9 @@ private constructor(
             marketCap: JsonField<String> = JsonMissing.of(),
             @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
             @JsonProperty("price") @ExcludeMissing price: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("smartTag") @ExcludeMissing smartTag: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("smartTag")
+            @ExcludeMissing
+            smartTag: JsonField<String> = JsonMissing.of(),
         ) : this(
             ticker,
             chainLogoUrl,
