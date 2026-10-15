@@ -12,6 +12,10 @@
 * `x()` adds `autocompleteSearch`, `getHashflags`, `searchPlaces`, `getTrendLocations`, `getTrendsHistory` and `getNewsStoryVersions`.
 * `x().getTrends` accepts `at`, `country`, `location`, `fields` and `omit`, and its response adds `capturedAt`, `requestedAt` and `location`.
 
+### Chores
+
+* `bin/check-local` hands its run to the command that `git config checklocal.runner` names. `CHECK_LOCAL_HERE=1` runs the checks here anyway.
+
 ## 0.9.4 (2026-10-13)
 
 [Full changelog from v0.9.3 to v0.9.4](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.9.3...v0.9.4)
