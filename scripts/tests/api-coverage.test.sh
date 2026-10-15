@@ -43,6 +43,7 @@ write_service() {
 
 prepare_coverage() {
     copy_file scripts/api-coverage
+    copy_file scripts/lib/api-spec.sh
     write_file "$client_options" <<'EOF'
 class ClientOptions {
     companion object {

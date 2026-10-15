@@ -71,3 +71,10 @@ tasks.named<Test>("test") {
         doFirst { regressionDirectory.mkdirs() }
     }
 }
+
+tasks.register<JavaExec>("apiFields") {
+    group = "Verification"
+    description = "Compares the SDK's request and response fields with the API spec."
+    classpath = sourceSets.test.get().runtimeClasspath
+    mainClass = "com.x_twitter_scraper.api.fields.ApiFieldsKt"
+}
