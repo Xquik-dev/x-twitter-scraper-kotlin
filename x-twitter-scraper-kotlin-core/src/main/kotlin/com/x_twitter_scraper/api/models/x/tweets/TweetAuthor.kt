@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.x_twitter_scraper.api.core.Enum
 import com.x_twitter_scraper.api.core.ExcludeMissing
 import com.x_twitter_scraper.api.core.JsonField
 import com.x_twitter_scraper.api.core.JsonMissing
@@ -32,7 +31,7 @@ private constructor(
     private val id: JsonField<String>,
     private val name: JsonField<String>,
     private val username: JsonField<String>,
-    private val accountBasedIn: JsonField<AccountBasedIn>,
+    private val accountBasedIn: JsonField<UserProfile.AccountBasedIn>,
     private val accountBasedInAccurate: JsonField<Boolean>,
     private val accountBasedInUnavailable: JsonField<Boolean>,
     private val advertiserAccountServiceLevels: JsonField<List<String>>,
@@ -40,13 +39,13 @@ private constructor(
     private val affiliateUsername: JsonField<String>,
     private val affiliatesHighlightedLabel: JsonField<UserProfile.AffiliatesHighlightedLabel>,
     private val automatedBy: JsonField<String>,
-    private val birthdate: JsonField<Birthdate>,
+    private val birthdate: JsonField<UserProfile.Birthdate>,
     private val businessAccountAffiliatesCount: JsonField<Long>,
     private val businessProfileState: JsonField<String>,
     private val communityRole: JsonField<String>,
     private val connectedVia: JsonField<String>,
     private val connectedViaAccurate: JsonField<Boolean>,
-    private val contactInfo: JsonField<ContactInfo>,
+    private val contactInfo: JsonField<UserProfile.ContactInfo>,
     private val coverPicture: JsonField<String>,
     private val createdAt: JsonField<String>,
     private val creatorSubscriptionsCount: JsonField<Long>,
@@ -59,7 +58,7 @@ private constructor(
     private val followers: JsonField<Long>,
     private val following: JsonField<Long>,
     private val geoEnabled: JsonField<Boolean>,
-    private val grokTranslatedBio: JsonField<GrokTranslatedBio>,
+    private val grokTranslatedBio: JsonField<UserProfile.GrokTranslatedBio>,
     private val hasCustomTimelines: JsonField<Boolean>,
     private val hasExtendedProfile: JsonField<Boolean>,
     private val hasGraduatedAccess: JsonField<Boolean>,
@@ -79,7 +78,7 @@ private constructor(
     private val parodyCommentaryFanLabel: JsonField<String>,
     private val pinnedTweetIds: JsonField<List<String>>,
     private val possiblySensitive: JsonField<Boolean>,
-    private val professional: JsonField<Professional>,
+    private val professional: JsonField<UserProfile.Professional>,
     private val profileBannerUrl: JsonField<String>,
     private val profileDescriptionLanguage: JsonField<String>,
     private val profileImageShape: JsonField<String>,
@@ -96,12 +95,12 @@ private constructor(
     private val subscribersCount: JsonField<Long>,
     private val superFollowEligible: JsonField<Boolean>,
     private val superFollowsUserProfileActive: JsonField<Boolean>,
-    private val tipJar: JsonField<TipJar>,
+    private val tipJar: JsonField<UserProfile.TipJar>,
     private val unavailable: JsonField<Boolean>,
     private val unavailableReason: JsonField<String>,
     private val url: JsonField<String>,
-    private val usernameChanges: JsonField<UsernameChanges>,
-    private val verificationReason: JsonField<VerificationReason>,
+    private val usernameChanges: JsonField<UserProfile.UsernameChanges>,
+    private val verificationReason: JsonField<UserProfile.VerificationReason>,
     private val verified: JsonField<Boolean>,
     private val verifiedType: JsonField<String>,
     private val withheldInCountries: JsonField<List<String>>,
@@ -116,7 +115,7 @@ private constructor(
         @JsonProperty("username") @ExcludeMissing username: JsonField<String> = JsonMissing.of(),
         @JsonProperty("accountBasedIn")
         @ExcludeMissing
-        accountBasedIn: JsonField<AccountBasedIn> = JsonMissing.of(),
+        accountBasedIn: JsonField<UserProfile.AccountBasedIn> = JsonMissing.of(),
         @JsonProperty("accountBasedInAccurate")
         @ExcludeMissing
         accountBasedInAccurate: JsonField<Boolean> = JsonMissing.of(),
@@ -141,7 +140,7 @@ private constructor(
         automatedBy: JsonField<String> = JsonMissing.of(),
         @JsonProperty("birthdate")
         @ExcludeMissing
-        birthdate: JsonField<Birthdate> = JsonMissing.of(),
+        birthdate: JsonField<UserProfile.Birthdate> = JsonMissing.of(),
         @JsonProperty("businessAccountAffiliatesCount")
         @ExcludeMissing
         businessAccountAffiliatesCount: JsonField<Long> = JsonMissing.of(),
@@ -159,7 +158,7 @@ private constructor(
         connectedViaAccurate: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("contactInfo")
         @ExcludeMissing
-        contactInfo: JsonField<ContactInfo> = JsonMissing.of(),
+        contactInfo: JsonField<UserProfile.ContactInfo> = JsonMissing.of(),
         @JsonProperty("coverPicture")
         @ExcludeMissing
         coverPicture: JsonField<String> = JsonMissing.of(),
@@ -190,7 +189,7 @@ private constructor(
         geoEnabled: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("grokTranslatedBio")
         @ExcludeMissing
-        grokTranslatedBio: JsonField<GrokTranslatedBio> = JsonMissing.of(),
+        grokTranslatedBio: JsonField<UserProfile.GrokTranslatedBio> = JsonMissing.of(),
         @JsonProperty("hasCustomTimelines")
         @ExcludeMissing
         hasCustomTimelines: JsonField<Boolean> = JsonMissing.of(),
@@ -246,7 +245,7 @@ private constructor(
         possiblySensitive: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("professional")
         @ExcludeMissing
-        professional: JsonField<Professional> = JsonMissing.of(),
+        professional: JsonField<UserProfile.Professional> = JsonMissing.of(),
         @JsonProperty("profileBannerUrl")
         @ExcludeMissing
         profileBannerUrl: JsonField<String> = JsonMissing.of(),
@@ -293,7 +292,9 @@ private constructor(
         @JsonProperty("superFollowsUserProfileActive")
         @ExcludeMissing
         superFollowsUserProfileActive: JsonField<Boolean> = JsonMissing.of(),
-        @JsonProperty("tipJar") @ExcludeMissing tipJar: JsonField<TipJar> = JsonMissing.of(),
+        @JsonProperty("tipJar")
+        @ExcludeMissing
+        tipJar: JsonField<UserProfile.TipJar> = JsonMissing.of(),
         @JsonProperty("unavailable")
         @ExcludeMissing
         unavailable: JsonField<Boolean> = JsonMissing.of(),
@@ -303,10 +304,10 @@ private constructor(
         @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of(),
         @JsonProperty("usernameChanges")
         @ExcludeMissing
-        usernameChanges: JsonField<UsernameChanges> = JsonMissing.of(),
+        usernameChanges: JsonField<UserProfile.UsernameChanges> = JsonMissing.of(),
         @JsonProperty("verificationReason")
         @ExcludeMissing
-        verificationReason: JsonField<VerificationReason> = JsonMissing.of(),
+        verificationReason: JsonField<UserProfile.VerificationReason> = JsonMissing.of(),
         @JsonProperty("verified") @ExcludeMissing verified: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("verifiedType")
         @ExcludeMissing
@@ -403,18 +404,36 @@ private constructor(
             .id(id)
             .name(name)
             .username(username)
+            .accountBasedIn(accountBasedIn)
+            .accountBasedInAccurate(accountBasedInAccurate)
+            .accountBasedInUnavailable(accountBasedInUnavailable)
+            .advertiserAccountServiceLevels(advertiserAccountServiceLevels)
+            .advertiserAccountType(advertiserAccountType)
+            .affiliateUsername(affiliateUsername)
             .affiliatesHighlightedLabel(affiliatesHighlightedLabel)
             .automatedBy(automatedBy)
+            .birthdate(birthdate)
             .businessAccountAffiliatesCount(businessAccountAffiliatesCount)
+            .businessProfileState(businessProfileState)
             .communityRole(communityRole)
+            .connectedVia(connectedVia)
+            .connectedViaAccurate(connectedViaAccurate)
+            .contactInfo(contactInfo)
             .coverPicture(coverPicture)
             .createdAt(createdAt)
             .creatorSubscriptionsCount(creatorSubscriptionsCount)
+            .defaultProfile(defaultProfile)
+            .defaultProfileImage(defaultProfileImage)
             .description(description)
+            .email(email)
+            .fastFollowersCount(fastFollowersCount)
             .favouritesCount(favouritesCount)
             .followers(followers)
             .following(following)
+            .geoEnabled(geoEnabled)
+            .grokTranslatedBio(grokTranslatedBio)
             .hasCustomTimelines(hasCustomTimelines)
+            .hasExtendedProfile(hasExtendedProfile)
             .hasGraduatedAccess(hasGraduatedAccess)
             .hasHiddenSubscriptionsOnProfile(hasHiddenSubscriptionsOnProfile)
             .highlightsInfo(highlightsInfo)
@@ -422,30 +441,43 @@ private constructor(
             .isAutomated(isAutomated)
             .isBlueVerified(isBlueVerified)
             .isProfileTranslatable(isProfileTranslatable)
+            .isTranslationEnabled(isTranslationEnabled)
             .isTranslator(isTranslator)
             .isVerified(isVerified)
+            .listedCount(listedCount)
             .location(location)
             .mediaCount(mediaCount)
+            .normalFollowersCount(normalFollowersCount)
             .parodyCommentaryFanLabel(parodyCommentaryFanLabel)
             .pinnedTweetIds(pinnedTweetIds)
             .possiblySensitive(possiblySensitive)
-            .profileBio(profileBio)
+            .professional(professional)
             .profileBannerUrl(profileBannerUrl)
+            .profileBio(profileBio)
             .profileDescriptionLanguage(profileDescriptionLanguage)
             .profileImageShape(profileImageShape)
             .profileInterstitialType(profileInterstitialType)
             .profilePicture(profilePicture)
+            .profilePictureOriginal(profilePictureOriginal)
             .profileSortEnabled(profileSortEnabled)
             .profileTranslatorType(profileTranslatorType)
             .protected(protected)
+            .redirectsToUsername(redirectsToUsername)
+            .retweetedAt(retweetedAt)
             .statusesCount(statusesCount)
+            .subscribersCount(subscribersCount)
             .superFollowEligible(superFollowEligible)
+            .superFollowsUserProfileActive(superFollowsUserProfileActive)
+            .tipJar(tipJar)
             .unavailable(unavailable)
             .unavailableReason(unavailableReason)
             .url(url)
+            .usernameChanges(usernameChanges)
+            .verificationReason(verificationReason)
             .verified(verified)
             .verifiedType(verifiedType)
             .withheldInCountries(withheldInCountries)
+            .withheldScope(withheldScope)
             .build()
 
     /**
@@ -471,7 +503,7 @@ private constructor(
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun accountBasedIn(): AccountBasedIn? = accountBasedIn.getNullable("accountBasedIn")
+    fun accountBasedIn(): UserProfile.AccountBasedIn? = accountBasedIn.getNullable("accountBasedIn")
 
     /**
      * False when X notes accountBasedIn may be inaccurate.
@@ -533,7 +565,7 @@ private constructor(
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun birthdate(): Birthdate? = birthdate.getNullable("birthdate")
+    fun birthdate(): UserProfile.Birthdate? = birthdate.getNullable("birthdate")
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
@@ -576,7 +608,7 @@ private constructor(
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun contactInfo(): ContactInfo? = contactInfo.getNullable("contactInfo")
+    fun contactInfo(): UserProfile.ContactInfo? = contactInfo.getNullable("contactInfo")
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
@@ -662,7 +694,8 @@ private constructor(
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun grokTranslatedBio(): GrokTranslatedBio? = grokTranslatedBio.getNullable("grokTranslatedBio")
+    fun grokTranslatedBio(): UserProfile.GrokTranslatedBio? =
+        grokTranslatedBio.getNullable("grokTranslatedBio")
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
@@ -796,7 +829,7 @@ private constructor(
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun professional(): Professional? = professional.getNullable("professional")
+    fun professional(): UserProfile.Professional? = professional.getNullable("professional")
 
     /**
      * Original X profile banner field when available
@@ -916,7 +949,7 @@ private constructor(
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun tipJar(): TipJar? = tipJar.getNullable("tipJar")
+    fun tipJar(): UserProfile.TipJar? = tipJar.getNullable("tipJar")
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
@@ -941,14 +974,15 @@ private constructor(
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun usernameChanges(): UsernameChanges? = usernameChanges.getNullable("usernameChanges")
+    fun usernameChanges(): UserProfile.UsernameChanges? =
+        usernameChanges.getNullable("usernameChanges")
 
     /**
      * X's text on why the profile is verified, with its links.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun verificationReason(): VerificationReason? =
+    fun verificationReason(): UserProfile.VerificationReason? =
         verificationReason.getNullable("verificationReason")
 
     /**
@@ -1005,7 +1039,7 @@ private constructor(
      */
     @JsonProperty("accountBasedIn")
     @ExcludeMissing
-    fun _accountBasedIn(): JsonField<AccountBasedIn> = accountBasedIn
+    fun _accountBasedIn(): JsonField<UserProfile.AccountBasedIn> = accountBasedIn
 
     /**
      * Returns the raw JSON value of [accountBasedInAccurate].
@@ -1080,7 +1114,9 @@ private constructor(
      *
      * Unlike [birthdate], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("birthdate") @ExcludeMissing fun _birthdate(): JsonField<Birthdate> = birthdate
+    @JsonProperty("birthdate")
+    @ExcludeMissing
+    fun _birthdate(): JsonField<UserProfile.Birthdate> = birthdate
 
     /**
      * Returns the raw JSON value of [businessAccountAffiliatesCount].
@@ -1137,7 +1173,7 @@ private constructor(
      */
     @JsonProperty("contactInfo")
     @ExcludeMissing
-    fun _contactInfo(): JsonField<ContactInfo> = contactInfo
+    fun _contactInfo(): JsonField<UserProfile.ContactInfo> = contactInfo
 
     /**
      * Returns the raw JSON value of [coverPicture].
@@ -1246,7 +1282,7 @@ private constructor(
      */
     @JsonProperty("grokTranslatedBio")
     @ExcludeMissing
-    fun _grokTranslatedBio(): JsonField<GrokTranslatedBio> = grokTranslatedBio
+    fun _grokTranslatedBio(): JsonField<UserProfile.GrokTranslatedBio> = grokTranslatedBio
 
     /**
      * Returns the raw JSON value of [hasCustomTimelines].
@@ -1428,7 +1464,7 @@ private constructor(
      */
     @JsonProperty("professional")
     @ExcludeMissing
-    fun _professional(): JsonField<Professional> = professional
+    fun _professional(): JsonField<UserProfile.Professional> = professional
 
     /**
      * Returns the raw JSON value of [profileBannerUrl].
@@ -1588,7 +1624,7 @@ private constructor(
      *
      * Unlike [tipJar], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("tipJar") @ExcludeMissing fun _tipJar(): JsonField<TipJar> = tipJar
+    @JsonProperty("tipJar") @ExcludeMissing fun _tipJar(): JsonField<UserProfile.TipJar> = tipJar
 
     /**
      * Returns the raw JSON value of [unavailable].
@@ -1623,7 +1659,7 @@ private constructor(
      */
     @JsonProperty("usernameChanges")
     @ExcludeMissing
-    fun _usernameChanges(): JsonField<UsernameChanges> = usernameChanges
+    fun _usernameChanges(): JsonField<UserProfile.UsernameChanges> = usernameChanges
 
     /**
      * Returns the raw JSON value of [verificationReason].
@@ -1633,7 +1669,7 @@ private constructor(
      */
     @JsonProperty("verificationReason")
     @ExcludeMissing
-    fun _verificationReason(): JsonField<VerificationReason> = verificationReason
+    fun _verificationReason(): JsonField<UserProfile.VerificationReason> = verificationReason
 
     /**
      * Returns the raw JSON value of [verified].
@@ -1703,7 +1739,7 @@ private constructor(
         private var id: JsonField<String>? = null
         private var name: JsonField<String>? = null
         private var username: JsonField<String>? = null
-        private var accountBasedIn: JsonField<AccountBasedIn> = JsonMissing.of()
+        private var accountBasedIn: JsonField<UserProfile.AccountBasedIn> = JsonMissing.of()
         private var accountBasedInAccurate: JsonField<Boolean> = JsonMissing.of()
         private var accountBasedInUnavailable: JsonField<Boolean> = JsonMissing.of()
         private var advertiserAccountServiceLevels: JsonField<MutableList<String>>? = null
@@ -1712,13 +1748,13 @@ private constructor(
         private var affiliatesHighlightedLabel: JsonField<UserProfile.AffiliatesHighlightedLabel> =
             JsonMissing.of()
         private var automatedBy: JsonField<String> = JsonMissing.of()
-        private var birthdate: JsonField<Birthdate> = JsonMissing.of()
+        private var birthdate: JsonField<UserProfile.Birthdate> = JsonMissing.of()
         private var businessAccountAffiliatesCount: JsonField<Long> = JsonMissing.of()
         private var businessProfileState: JsonField<String> = JsonMissing.of()
         private var communityRole: JsonField<String> = JsonMissing.of()
         private var connectedVia: JsonField<String> = JsonMissing.of()
         private var connectedViaAccurate: JsonField<Boolean> = JsonMissing.of()
-        private var contactInfo: JsonField<ContactInfo> = JsonMissing.of()
+        private var contactInfo: JsonField<UserProfile.ContactInfo> = JsonMissing.of()
         private var coverPicture: JsonField<String> = JsonMissing.of()
         private var createdAt: JsonField<String> = JsonMissing.of()
         private var creatorSubscriptionsCount: JsonField<Long> = JsonMissing.of()
@@ -1731,7 +1767,7 @@ private constructor(
         private var followers: JsonField<Long> = JsonMissing.of()
         private var following: JsonField<Long> = JsonMissing.of()
         private var geoEnabled: JsonField<Boolean> = JsonMissing.of()
-        private var grokTranslatedBio: JsonField<GrokTranslatedBio> = JsonMissing.of()
+        private var grokTranslatedBio: JsonField<UserProfile.GrokTranslatedBio> = JsonMissing.of()
         private var hasCustomTimelines: JsonField<Boolean> = JsonMissing.of()
         private var hasExtendedProfile: JsonField<Boolean> = JsonMissing.of()
         private var hasGraduatedAccess: JsonField<Boolean> = JsonMissing.of()
@@ -1752,7 +1788,7 @@ private constructor(
         private var parodyCommentaryFanLabel: JsonField<String> = JsonMissing.of()
         private var pinnedTweetIds: JsonField<MutableList<String>>? = null
         private var possiblySensitive: JsonField<Boolean> = JsonMissing.of()
-        private var professional: JsonField<Professional> = JsonMissing.of()
+        private var professional: JsonField<UserProfile.Professional> = JsonMissing.of()
         private var profileBannerUrl: JsonField<String> = JsonMissing.of()
         private var profileDescriptionLanguage: JsonField<String> = JsonMissing.of()
         private var profileImageShape: JsonField<String> = JsonMissing.of()
@@ -1769,12 +1805,12 @@ private constructor(
         private var subscribersCount: JsonField<Long> = JsonMissing.of()
         private var superFollowEligible: JsonField<Boolean> = JsonMissing.of()
         private var superFollowsUserProfileActive: JsonField<Boolean> = JsonMissing.of()
-        private var tipJar: JsonField<TipJar> = JsonMissing.of()
+        private var tipJar: JsonField<UserProfile.TipJar> = JsonMissing.of()
         private var unavailable: JsonField<Boolean> = JsonMissing.of()
         private var unavailableReason: JsonField<String> = JsonMissing.of()
         private var url: JsonField<String> = JsonMissing.of()
-        private var usernameChanges: JsonField<UsernameChanges> = JsonMissing.of()
-        private var verificationReason: JsonField<VerificationReason> = JsonMissing.of()
+        private var usernameChanges: JsonField<UserProfile.UsernameChanges> = JsonMissing.of()
+        private var verificationReason: JsonField<UserProfile.VerificationReason> = JsonMissing.of()
         private var verified: JsonField<Boolean> = JsonMissing.of()
         private var verifiedType: JsonField<String> = JsonMissing.of()
         private var withheldInCountries: JsonField<MutableList<String>>? = null
@@ -1879,11 +1915,11 @@ private constructor(
         fun username(username: JsonField<String>) = apply { this.username = username }
 
         /** Null when X shows no label. */
-        fun accountBasedIn(accountBasedIn: AccountBasedIn?) =
+        fun accountBasedIn(accountBasedIn: UserProfile.AccountBasedIn?) =
             accountBasedIn(JsonField.ofNullable(accountBasedIn))
 
         /** Sets [Builder.accountBasedIn] to an arbitrary JSON value. */
-        fun accountBasedIn(accountBasedIn: JsonField<AccountBasedIn>) = apply {
+        fun accountBasedIn(accountBasedIn: JsonField<UserProfile.AccountBasedIn>) = apply {
             this.accountBasedIn = accountBasedIn
         }
 
@@ -1974,10 +2010,12 @@ private constructor(
         fun automatedBy(automatedBy: JsonField<String>) = apply { this.automatedBy = automatedBy }
 
         /** The parts of the birthday the account made public. */
-        fun birthdate(birthdate: Birthdate) = birthdate(JsonField.of(birthdate))
+        fun birthdate(birthdate: UserProfile.Birthdate) = birthdate(JsonField.of(birthdate))
 
         /** Sets [Builder.birthdate] to an arbitrary JSON value. */
-        fun birthdate(birthdate: JsonField<Birthdate>) = apply { this.birthdate = birthdate }
+        fun birthdate(birthdate: JsonField<UserProfile.Birthdate>) = apply {
+            this.birthdate = birthdate
+        }
 
         /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun businessAccountAffiliatesCount(businessAccountAffiliatesCount: Long) =
@@ -2027,10 +2065,11 @@ private constructor(
          * Emails, phone numbers & links the account publishes on its own profile. Omitted when it
          * publishes none.
          */
-        fun contactInfo(contactInfo: ContactInfo) = contactInfo(JsonField.of(contactInfo))
+        fun contactInfo(contactInfo: UserProfile.ContactInfo) =
+            contactInfo(JsonField.of(contactInfo))
 
         /** Sets [Builder.contactInfo] to an arbitrary JSON value. */
-        fun contactInfo(contactInfo: JsonField<ContactInfo>) = apply {
+        fun contactInfo(contactInfo: JsonField<UserProfile.ContactInfo>) = apply {
             this.contactInfo = contactInfo
         }
 
@@ -2125,11 +2164,11 @@ private constructor(
         fun geoEnabled(geoEnabled: JsonField<Boolean>) = apply { this.geoEnabled = geoEnabled }
 
         /** Public metadata whose fields X defines. */
-        fun grokTranslatedBio(grokTranslatedBio: GrokTranslatedBio) =
+        fun grokTranslatedBio(grokTranslatedBio: UserProfile.GrokTranslatedBio) =
             grokTranslatedBio(JsonField.of(grokTranslatedBio))
 
         /** Sets [Builder.grokTranslatedBio] to an arbitrary JSON value. */
-        fun grokTranslatedBio(grokTranslatedBio: JsonField<GrokTranslatedBio>) = apply {
+        fun grokTranslatedBio(grokTranslatedBio: JsonField<UserProfile.GrokTranslatedBio>) = apply {
             this.grokTranslatedBio = grokTranslatedBio
         }
 
@@ -2301,10 +2340,11 @@ private constructor(
         }
 
         /** Public metadata whose fields X defines. */
-        fun professional(professional: Professional) = professional(JsonField.of(professional))
+        fun professional(professional: UserProfile.Professional) =
+            professional(JsonField.of(professional))
 
         /** Sets [Builder.professional] to an arbitrary JSON value. */
-        fun professional(professional: JsonField<Professional>) = apply {
+        fun professional(professional: JsonField<UserProfile.Professional>) = apply {
             this.professional = professional
         }
 
@@ -2458,10 +2498,10 @@ private constructor(
             }
 
         /** Public payment and creator-support handles shown on X. */
-        fun tipJar(tipJar: TipJar) = tipJar(JsonField.of(tipJar))
+        fun tipJar(tipJar: UserProfile.TipJar) = tipJar(JsonField.of(tipJar))
 
         /** Sets [Builder.tipJar] to an arbitrary JSON value. */
-        fun tipJar(tipJar: JsonField<TipJar>) = apply { this.tipJar = tipJar }
+        fun tipJar(tipJar: JsonField<UserProfile.TipJar>) = apply { this.tipJar = tipJar }
 
         /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun unavailable(unavailable: Boolean) = unavailable(JsonField.of(unavailable))
@@ -2485,22 +2525,23 @@ private constructor(
         fun url(url: JsonField<String>) = apply { this.url = url }
 
         /** How often the account changed its username. */
-        fun usernameChanges(usernameChanges: UsernameChanges) =
+        fun usernameChanges(usernameChanges: UserProfile.UsernameChanges) =
             usernameChanges(JsonField.of(usernameChanges))
 
         /** Sets [Builder.usernameChanges] to an arbitrary JSON value. */
-        fun usernameChanges(usernameChanges: JsonField<UsernameChanges>) = apply {
+        fun usernameChanges(usernameChanges: JsonField<UserProfile.UsernameChanges>) = apply {
             this.usernameChanges = usernameChanges
         }
 
         /** X's text on why the profile is verified, with its links. */
-        fun verificationReason(verificationReason: VerificationReason) =
+        fun verificationReason(verificationReason: UserProfile.VerificationReason) =
             verificationReason(JsonField.of(verificationReason))
 
         /** Sets [Builder.verificationReason] to an arbitrary JSON value. */
-        fun verificationReason(verificationReason: JsonField<VerificationReason>) = apply {
-            this.verificationReason = verificationReason
-        }
+        fun verificationReason(verificationReason: JsonField<UserProfile.VerificationReason>) =
+            apply {
+                this.verificationReason = verificationReason
+            }
 
         /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun verified(verified: Boolean) = verified(JsonField.of(verified))
@@ -2842,3083 +2883,6 @@ private constructor(
             (if (verifiedType.asKnown() == null) 0 else 1) +
             (withheldInCountries.asKnown()?.size ?: 0) +
             (if (withheldScope.asKnown() == null) 0 else 1)
-
-    /**
-     * X's best-effort public label inferred from aggregated account-access IP addresses. It does
-     * not state nationality, residence, identity, registration, post location, or exact location.
-     */
-    class AccountBasedIn
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val level: JsonField<Level>,
-        private val observedAt: JsonField<OffsetDateTime>,
-        private val value: JsonField<String>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("level") @ExcludeMissing level: JsonField<Level> = JsonMissing.of(),
-            @JsonProperty("observedAt")
-            @ExcludeMissing
-            observedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-            @JsonProperty("value") @ExcludeMissing value: JsonField<String> = JsonMissing.of(),
-        ) : this(level, observedAt, value, mutableMapOf())
-
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null.
-         */
-        fun level(): Level = level.getRequired("level")
-
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null.
-         */
-        fun observedAt(): OffsetDateTime = observedAt.getRequired("observedAt")
-
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null.
-         */
-        fun value(): String = value.getRequired("value")
-
-        /**
-         * Returns the raw JSON value of [level].
-         *
-         * Unlike [level], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("level") @ExcludeMissing fun _level(): JsonField<Level> = level
-
-        /**
-         * Returns the raw JSON value of [observedAt].
-         *
-         * Unlike [observedAt], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("observedAt")
-        @ExcludeMissing
-        fun _observedAt(): JsonField<OffsetDateTime> = observedAt
-
-        /**
-         * Returns the raw JSON value of [value].
-         *
-         * Unlike [value], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<String> = value
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [AccountBasedIn].
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .level()
-             * .observedAt()
-             * .value()
-             * ```
-             */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [AccountBasedIn]. */
-        class Builder internal constructor() {
-
-            private var level: JsonField<Level>? = null
-            private var observedAt: JsonField<OffsetDateTime>? = null
-            private var value: JsonField<String>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(accountBasedIn: AccountBasedIn) = apply {
-                level = accountBasedIn.level
-                observedAt = accountBasedIn.observedAt
-                value = accountBasedIn.value
-                additionalProperties = accountBasedIn.additionalProperties.toMutableMap()
-            }
-
-            fun level(level: Level) = level(JsonField.of(level))
-
-            /** Sets [Builder.level] to an arbitrary JSON value. */
-            fun level(level: JsonField<Level>) = apply { this.level = level }
-
-            fun observedAt(observedAt: OffsetDateTime) = observedAt(JsonField.of(observedAt))
-
-            /** Sets [Builder.observedAt] to an arbitrary JSON value. */
-            fun observedAt(observedAt: JsonField<OffsetDateTime>) = apply {
-                this.observedAt = observedAt
-            }
-
-            fun value(value: String) = value(JsonField.of(value))
-
-            /** Sets [Builder.value] to an arbitrary JSON value. */
-            fun value(value: JsonField<String>) = apply { this.value = value }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [AccountBasedIn].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .level()
-             * .observedAt()
-             * .value()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): AccountBasedIn =
-                AccountBasedIn(
-                    checkRequired("level", level),
-                    checkRequired("observedAt", observedAt),
-                    checkRequired("value", value),
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): AccountBasedIn = apply {
-            if (validated) {
-                return@apply
-            }
-
-            level().validate()
-            observedAt()
-            value()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int =
-            (level.asKnown()?.validity() ?: 0) +
-                (if (observedAt.asKnown() == null) 0 else 1) +
-                (if (value.asKnown() == null) 0 else 1)
-
-        class Level @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
-
-            /** Returns this class instance's raw value. */
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-            companion object {
-
-                val COUNTRY = of("country")
-
-                val REGION = of("region")
-
-                fun of(value: String) = Level(JsonField.of(value))
-            }
-
-            /** An enum containing [Level]'s known values. */
-            enum class Known {
-                COUNTRY,
-                REGION,
-            }
-
-            /**
-             * An enum containing [Level]'s known values, as well as an [_UNKNOWN] member.
-             *
-             * An instance of [Level] can contain an unknown value in a couple of cases:
-             * - It was deserialized from data that doesn't match any known member. For example, if
-             *   the SDK is on an older version than the API, then the API may respond with new
-             *   members that the SDK is unaware of.
-             * - It was constructed with an arbitrary value using the [of] method.
-             */
-            enum class Value {
-                COUNTRY,
-                REGION,
-                /**
-                 * An enum member indicating that [Level] was instantiated with an unknown value.
-                 */
-                _UNKNOWN,
-            }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value, or
-             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-             */
-            fun value(): Value =
-                when (this) {
-                    COUNTRY -> Value.COUNTRY
-                    REGION -> Value.REGION
-                    else -> Value._UNKNOWN
-                }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value.
-             *
-             * @throws XTwitterScraperInvalidDataException if this class instance's value is a not a
-             *   known member.
-             */
-            fun known(): Known =
-                when (this) {
-                    COUNTRY -> Known.COUNTRY
-                    REGION -> Known.REGION
-                    else -> throw XTwitterScraperInvalidDataException("Unknown Level: $value")
-                }
-
-            /**
-             * Returns this class instance's primitive wire representation.
-             *
-             * @throws XTwitterScraperInvalidDataException if this class instance's value does not
-             *   have the expected primitive type.
-             */
-            fun asString(): String =
-                _value().asString()
-                    ?: throw XTwitterScraperInvalidDataException("Value is not a String")
-
-            private var validated: Boolean = false
-
-            /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
-             *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
-             *
-             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-             *   match its expected type.
-             */
-            fun validate(): Level = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                known()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: XTwitterScraperInvalidDataException) {
-                    false
-                }
-
-            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Level && value == other.value
-            }
-
-            override fun hashCode() = value.hashCode()
-
-            override fun toString() = value.toString()
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is AccountBasedIn &&
-                level == other.level &&
-                observedAt == other.observedAt &&
-                value == other.value &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(level, observedAt, value, additionalProperties)
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "AccountBasedIn{level=$level, observedAt=$observedAt, value=$value, additionalProperties=$additionalProperties}"
-    }
-
-    /** The parts of the birthday the account made public. */
-    class Birthdate
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val day: JsonField<Long>,
-        private val month: JsonField<Long>,
-        private val year: JsonField<Long>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("day") @ExcludeMissing day: JsonField<Long> = JsonMissing.of(),
-            @JsonProperty("month") @ExcludeMissing month: JsonField<Long> = JsonMissing.of(),
-            @JsonProperty("year") @ExcludeMissing year: JsonField<Long> = JsonMissing.of(),
-        ) : this(day, month, year, mutableMapOf())
-
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
-        fun day(): Long? = day.getNullable("day")
-
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
-        fun month(): Long? = month.getNullable("month")
-
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
-        fun year(): Long? = year.getNullable("year")
-
-        /**
-         * Returns the raw JSON value of [day].
-         *
-         * Unlike [day], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("day") @ExcludeMissing fun _day(): JsonField<Long> = day
-
-        /**
-         * Returns the raw JSON value of [month].
-         *
-         * Unlike [month], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("month") @ExcludeMissing fun _month(): JsonField<Long> = month
-
-        /**
-         * Returns the raw JSON value of [year].
-         *
-         * Unlike [year], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("year") @ExcludeMissing fun _year(): JsonField<Long> = year
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [Birthdate]. */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [Birthdate]. */
-        class Builder internal constructor() {
-
-            private var day: JsonField<Long> = JsonMissing.of()
-            private var month: JsonField<Long> = JsonMissing.of()
-            private var year: JsonField<Long> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(birthdate: Birthdate) = apply {
-                day = birthdate.day
-                month = birthdate.month
-                year = birthdate.year
-                additionalProperties = birthdate.additionalProperties.toMutableMap()
-            }
-
-            fun day(day: Long) = day(JsonField.of(day))
-
-            /** Sets [Builder.day] to an arbitrary JSON value. */
-            fun day(day: JsonField<Long>) = apply { this.day = day }
-
-            fun month(month: Long) = month(JsonField.of(month))
-
-            /** Sets [Builder.month] to an arbitrary JSON value. */
-            fun month(month: JsonField<Long>) = apply { this.month = month }
-
-            fun year(year: Long) = year(JsonField.of(year))
-
-            /** Sets [Builder.year] to an arbitrary JSON value. */
-            fun year(year: JsonField<Long>) = apply { this.year = year }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Birthdate].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): Birthdate =
-                Birthdate(day, month, year, additionalProperties.toMutableMap())
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): Birthdate = apply {
-            if (validated) {
-                return@apply
-            }
-
-            day()
-            month()
-            year()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int =
-            (if (day.asKnown() == null) 0 else 1) +
-                (if (month.asKnown() == null) 0 else 1) +
-                (if (year.asKnown() == null) 0 else 1)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Birthdate &&
-                day == other.day &&
-                month == other.month &&
-                year == other.year &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(day, month, year, additionalProperties)
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Birthdate{day=$day, month=$month, year=$year, additionalProperties=$additionalProperties}"
-    }
-
-    /**
-     * Emails, phone numbers & links the account publishes on its own profile. Omitted when it
-     * publishes none.
-     */
-    class ContactInfo
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val emails: JsonField<List<Email>>,
-        private val links: JsonField<List<Link>>,
-        private val phones: JsonField<List<Phone>>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("emails")
-            @ExcludeMissing
-            emails: JsonField<List<Email>> = JsonMissing.of(),
-            @JsonProperty("links") @ExcludeMissing links: JsonField<List<Link>> = JsonMissing.of(),
-            @JsonProperty("phones")
-            @ExcludeMissing
-            phones: JsonField<List<Phone>> = JsonMissing.of(),
-        ) : this(emails, links, phones, mutableMapOf())
-
-        /**
-         * Emails in the bio, name or location, lowercased.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun emails(): List<Email>? = emails.getNullable("emails")
-
-        /**
-         * The profile's website & the links in its bio.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun links(): List<Link>? = links.getNullable("links")
-
-        /**
-         * Phone numbers on the profile. Only a spelling that can be nothing else counts.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun phones(): List<Phone>? = phones.getNullable("phones")
-
-        /**
-         * Returns the raw JSON value of [emails].
-         *
-         * Unlike [emails], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("emails") @ExcludeMissing fun _emails(): JsonField<List<Email>> = emails
-
-        /**
-         * Returns the raw JSON value of [links].
-         *
-         * Unlike [links], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("links") @ExcludeMissing fun _links(): JsonField<List<Link>> = links
-
-        /**
-         * Returns the raw JSON value of [phones].
-         *
-         * Unlike [phones], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("phones") @ExcludeMissing fun _phones(): JsonField<List<Phone>> = phones
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [ContactInfo]. */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [ContactInfo]. */
-        class Builder internal constructor() {
-
-            private var emails: JsonField<MutableList<Email>>? = null
-            private var links: JsonField<MutableList<Link>>? = null
-            private var phones: JsonField<MutableList<Phone>>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(contactInfo: ContactInfo) = apply {
-                emails = contactInfo.emails.map { it.toMutableList() }
-                links = contactInfo.links.map { it.toMutableList() }
-                phones = contactInfo.phones.map { it.toMutableList() }
-                additionalProperties = contactInfo.additionalProperties.toMutableMap()
-            }
-
-            /** Emails in the bio, name or location, lowercased. */
-            fun emails(emails: List<Email>) = emails(JsonField.of(emails))
-
-            /** Sets [Builder.emails] to an arbitrary JSON value. */
-            fun emails(emails: JsonField<List<Email>>) = apply {
-                this.emails = emails.map { it.toMutableList() }
-            }
-
-            /**
-             * Adds a single [Email] to [emails].
-             *
-             * @throws IllegalStateException if the field was previously set to a non-list.
-             */
-            fun addEmail(email: Email) = apply {
-                emails =
-                    (emails ?: JsonField.of(mutableListOf())).also {
-                        checkKnown("emails", it).add(email)
-                    }
-            }
-
-            /** The profile's website & the links in its bio. */
-            fun links(links: List<Link>) = links(JsonField.of(links))
-
-            /** Sets [Builder.links] to an arbitrary JSON value. */
-            fun links(links: JsonField<List<Link>>) = apply {
-                this.links = links.map { it.toMutableList() }
-            }
-
-            /**
-             * Adds a single [Link] to [links].
-             *
-             * @throws IllegalStateException if the field was previously set to a non-list.
-             */
-            fun addLink(link: Link) = apply {
-                links =
-                    (links ?: JsonField.of(mutableListOf())).also {
-                        checkKnown("links", it).add(link)
-                    }
-            }
-
-            /** Phone numbers on the profile. Only a spelling that can be nothing else counts. */
-            fun phones(phones: List<Phone>) = phones(JsonField.of(phones))
-
-            /** Sets [Builder.phones] to an arbitrary JSON value. */
-            fun phones(phones: JsonField<List<Phone>>) = apply {
-                this.phones = phones.map { it.toMutableList() }
-            }
-
-            /**
-             * Adds a single [Phone] to [phones].
-             *
-             * @throws IllegalStateException if the field was previously set to a non-list.
-             */
-            fun addPhone(phone: Phone) = apply {
-                phones =
-                    (phones ?: JsonField.of(mutableListOf())).also {
-                        checkKnown("phones", it).add(phone)
-                    }
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [ContactInfo].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): ContactInfo =
-                ContactInfo(
-                    (emails ?: JsonMissing.of()).map { it.toImmutable() },
-                    (links ?: JsonMissing.of()).map { it.toImmutable() },
-                    (phones ?: JsonMissing.of()).map { it.toImmutable() },
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): ContactInfo = apply {
-            if (validated) {
-                return@apply
-            }
-
-            emails()?.forEach { it.validate() }
-            links()?.forEach { it.validate() }
-            phones()?.forEach { it.validate() }
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int =
-            (emails.asKnown()?.sumOf { it.validity() } ?: 0) +
-                (links.asKnown()?.sumOf { it.validity() } ?: 0) +
-                (phones.asKnown()?.sumOf { it.validity() } ?: 0)
-
-        class Email
-        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-        private constructor(
-            private val domain: JsonField<String>,
-            private val source: JsonField<Source>,
-            private val value: JsonField<String>,
-            private val writtenAs: JsonField<String>,
-            private val additionalProperties: MutableMap<String, JsonValue>,
-        ) {
-
-            @JsonCreator
-            private constructor(
-                @JsonProperty("domain")
-                @ExcludeMissing
-                domain: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("source")
-                @ExcludeMissing
-                source: JsonField<Source> = JsonMissing.of(),
-                @JsonProperty("value") @ExcludeMissing value: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("writtenAs")
-                @ExcludeMissing
-                writtenAs: JsonField<String> = JsonMissing.of(),
-            ) : this(domain, source, value, writtenAs, mutableMapOf())
-
-            /**
-             * The part after the @ sign.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null.
-             */
-            fun domain(): String = domain.getRequired("domain")
-
-            /**
-             * Profile field that holds the email.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null.
-             */
-            fun source(): Source = source.getRequired("source")
-
-            /**
-             * The email address.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null.
-             */
-            fun value(): String = value.getRequired("value")
-
-            /**
-             * The account's own spelling, sent when it spelled the email out.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun writtenAs(): String? = writtenAs.getNullable("writtenAs")
-
-            /**
-             * Returns the raw JSON value of [domain].
-             *
-             * Unlike [domain], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("domain") @ExcludeMissing fun _domain(): JsonField<String> = domain
-
-            /**
-             * Returns the raw JSON value of [source].
-             *
-             * Unlike [source], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("source") @ExcludeMissing fun _source(): JsonField<Source> = source
-
-            /**
-             * Returns the raw JSON value of [value].
-             *
-             * Unlike [value], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<String> = value
-
-            /**
-             * Returns the raw JSON value of [writtenAs].
-             *
-             * Unlike [writtenAs], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("writtenAs")
-            @ExcludeMissing
-            fun _writtenAs(): JsonField<String> = writtenAs
-
-            @JsonAnySetter
-            private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
-            }
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /**
-                 * Returns a mutable builder for constructing an instance of [Email].
-                 *
-                 * The following fields are required:
-                 * ```kotlin
-                 * .domain()
-                 * .source()
-                 * .value()
-                 * ```
-                 */
-                fun builder() = Builder()
-            }
-
-            /** A builder for [Email]. */
-            class Builder internal constructor() {
-
-                private var domain: JsonField<String>? = null
-                private var source: JsonField<Source>? = null
-                private var value: JsonField<String>? = null
-                private var writtenAs: JsonField<String> = JsonMissing.of()
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                internal fun from(email: Email) = apply {
-                    domain = email.domain
-                    source = email.source
-                    value = email.value
-                    writtenAs = email.writtenAs
-                    additionalProperties = email.additionalProperties.toMutableMap()
-                }
-
-                /** The part after the @ sign. */
-                fun domain(domain: String) = domain(JsonField.of(domain))
-
-                /** Sets [Builder.domain] to an arbitrary JSON value. */
-                fun domain(domain: JsonField<String>) = apply { this.domain = domain }
-
-                /** Profile field that holds the email. */
-                fun source(source: Source) = source(JsonField.of(source))
-
-                /** Sets [Builder.source] to an arbitrary JSON value. */
-                fun source(source: JsonField<Source>) = apply { this.source = source }
-
-                /** The email address. */
-                fun value(value: String) = value(JsonField.of(value))
-
-                /** Sets [Builder.value] to an arbitrary JSON value. */
-                fun value(value: JsonField<String>) = apply { this.value = value }
-
-                /** The account's own spelling, sent when it spelled the email out. */
-                fun writtenAs(writtenAs: String) = writtenAs(JsonField.of(writtenAs))
-
-                /** Sets [Builder.writtenAs] to an arbitrary JSON value. */
-                fun writtenAs(writtenAs: JsonField<String>) = apply { this.writtenAs = writtenAs }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [Email].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 *
-                 * The following fields are required:
-                 * ```kotlin
-                 * .domain()
-                 * .source()
-                 * .value()
-                 * ```
-                 *
-                 * @throws IllegalStateException if any required field is unset.
-                 */
-                fun build(): Email =
-                    Email(
-                        checkRequired("domain", domain),
-                        checkRequired("source", source),
-                        checkRequired("value", value),
-                        writtenAs,
-                        additionalProperties.toMutableMap(),
-                    )
-            }
-
-            private var validated: Boolean = false
-
-            /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
-             *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
-             *
-             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-             *   match its expected type.
-             */
-            fun validate(): Email = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                domain()
-                source().validate()
-                value()
-                writtenAs()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: XTwitterScraperInvalidDataException) {
-                    false
-                }
-
-            internal fun validity(): Int =
-                (if (domain.asKnown() == null) 0 else 1) +
-                    (source.asKnown()?.validity() ?: 0) +
-                    (if (value.asKnown() == null) 0 else 1) +
-                    (if (writtenAs.asKnown() == null) 0 else 1)
-
-            /** Profile field that holds the email. */
-            class Source @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /** Returns this class instance's raw value. */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    val BIO = of("bio")
-
-                    val NAME = of("name")
-
-                    val LOCATION = of("location")
-
-                    fun of(value: String) = Source(JsonField.of(value))
-                }
-
-                /** An enum containing [Source]'s known values. */
-                enum class Known {
-                    BIO,
-                    NAME,
-                    LOCATION,
-                }
-
-                /**
-                 * An enum containing [Source]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [Source] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    BIO,
-                    NAME,
-                    LOCATION,
-                    /**
-                     * An enum member indicating that [Source] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        BIO -> Value.BIO
-                        NAME -> Value.NAME
-                        LOCATION -> Value.LOCATION
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * @throws XTwitterScraperInvalidDataException if this class instance's value is a
-                 *   not a known member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        BIO -> Known.BIO
-                        NAME -> Known.NAME
-                        LOCATION -> Known.LOCATION
-                        else -> throw XTwitterScraperInvalidDataException("Unknown Source: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * @throws XTwitterScraperInvalidDataException if this class instance's value does
-                 *   not have the expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString()
-                        ?: throw XTwitterScraperInvalidDataException("Value is not a String")
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws XTwitterScraperInvalidDataException if any value type in this object
-                 *   doesn't match its expected type.
-                 */
-                fun validate(): Source = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: XTwitterScraperInvalidDataException) {
-                        false
-                    }
-
-                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Source && value == other.value
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Email &&
-                    domain == other.domain &&
-                    source == other.source &&
-                    value == other.value &&
-                    writtenAs == other.writtenAs &&
-                    additionalProperties == other.additionalProperties
-            }
-
-            private val hashCode: Int by lazy {
-                Objects.hash(domain, source, value, writtenAs, additionalProperties)
-            }
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() =
-                "Email{domain=$domain, source=$source, value=$value, writtenAs=$writtenAs, additionalProperties=$additionalProperties}"
-        }
-
-        class Link
-        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-        private constructor(
-            private val network: JsonField<String>,
-            private val source: JsonField<Source>,
-            private val url: JsonField<String>,
-            private val additionalProperties: MutableMap<String, JsonValue>,
-        ) {
-
-            @JsonCreator
-            private constructor(
-                @JsonProperty("network")
-                @ExcludeMissing
-                network: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("source")
-                @ExcludeMissing
-                source: JsonField<Source> = JsonMissing.of(),
-                @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of(),
-            ) : this(network, source, url, mutableMapOf())
-
-            /**
-             * Site the link belongs to, such as `linkedin`, `github` or `telegram`. Any other site
-             * is `website`.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null.
-             */
-            fun network(): String = network.getRequired("network")
-
-            /**
-             * `url` for the website field, `bio` for a bio link.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null.
-             */
-            fun source(): Source = source.getRequired("source")
-
-            /**
-             * The link, as X expands it.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null.
-             */
-            fun url(): String = url.getRequired("url")
-
-            /**
-             * Returns the raw JSON value of [network].
-             *
-             * Unlike [network], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("network") @ExcludeMissing fun _network(): JsonField<String> = network
-
-            /**
-             * Returns the raw JSON value of [source].
-             *
-             * Unlike [source], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("source") @ExcludeMissing fun _source(): JsonField<Source> = source
-
-            /**
-             * Returns the raw JSON value of [url].
-             *
-             * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
-
-            @JsonAnySetter
-            private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
-            }
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /**
-                 * Returns a mutable builder for constructing an instance of [Link].
-                 *
-                 * The following fields are required:
-                 * ```kotlin
-                 * .network()
-                 * .source()
-                 * .url()
-                 * ```
-                 */
-                fun builder() = Builder()
-            }
-
-            /** A builder for [Link]. */
-            class Builder internal constructor() {
-
-                private var network: JsonField<String>? = null
-                private var source: JsonField<Source>? = null
-                private var url: JsonField<String>? = null
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                internal fun from(link: Link) = apply {
-                    network = link.network
-                    source = link.source
-                    url = link.url
-                    additionalProperties = link.additionalProperties.toMutableMap()
-                }
-
-                /**
-                 * Site the link belongs to, such as `linkedin`, `github` or `telegram`. Any other
-                 * site is `website`.
-                 */
-                fun network(network: String) = network(JsonField.of(network))
-
-                /** Sets [Builder.network] to an arbitrary JSON value. */
-                fun network(network: JsonField<String>) = apply { this.network = network }
-
-                /** `url` for the website field, `bio` for a bio link. */
-                fun source(source: Source) = source(JsonField.of(source))
-
-                /** Sets [Builder.source] to an arbitrary JSON value. */
-                fun source(source: JsonField<Source>) = apply { this.source = source }
-
-                /** The link, as X expands it. */
-                fun url(url: String) = url(JsonField.of(url))
-
-                /** Sets [Builder.url] to an arbitrary JSON value. */
-                fun url(url: JsonField<String>) = apply { this.url = url }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [Link].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 *
-                 * The following fields are required:
-                 * ```kotlin
-                 * .network()
-                 * .source()
-                 * .url()
-                 * ```
-                 *
-                 * @throws IllegalStateException if any required field is unset.
-                 */
-                fun build(): Link =
-                    Link(
-                        checkRequired("network", network),
-                        checkRequired("source", source),
-                        checkRequired("url", url),
-                        additionalProperties.toMutableMap(),
-                    )
-            }
-
-            private var validated: Boolean = false
-
-            /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
-             *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
-             *
-             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-             *   match its expected type.
-             */
-            fun validate(): Link = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                network()
-                source().validate()
-                url()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: XTwitterScraperInvalidDataException) {
-                    false
-                }
-
-            internal fun validity(): Int =
-                (if (network.asKnown() == null) 0 else 1) +
-                    (source.asKnown()?.validity() ?: 0) +
-                    (if (url.asKnown() == null) 0 else 1)
-
-            /** `url` for the website field, `bio` for a bio link. */
-            class Source @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /** Returns this class instance's raw value. */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    val URL = of("url")
-
-                    val BIO = of("bio")
-
-                    fun of(value: String) = Source(JsonField.of(value))
-                }
-
-                /** An enum containing [Source]'s known values. */
-                enum class Known {
-                    URL,
-                    BIO,
-                }
-
-                /**
-                 * An enum containing [Source]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [Source] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    URL,
-                    BIO,
-                    /**
-                     * An enum member indicating that [Source] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        URL -> Value.URL
-                        BIO -> Value.BIO
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * @throws XTwitterScraperInvalidDataException if this class instance's value is a
-                 *   not a known member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        URL -> Known.URL
-                        BIO -> Known.BIO
-                        else -> throw XTwitterScraperInvalidDataException("Unknown Source: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * @throws XTwitterScraperInvalidDataException if this class instance's value does
-                 *   not have the expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString()
-                        ?: throw XTwitterScraperInvalidDataException("Value is not a String")
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws XTwitterScraperInvalidDataException if any value type in this object
-                 *   doesn't match its expected type.
-                 */
-                fun validate(): Source = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: XTwitterScraperInvalidDataException) {
-                        false
-                    }
-
-                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Source && value == other.value
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Link &&
-                    network == other.network &&
-                    source == other.source &&
-                    url == other.url &&
-                    additionalProperties == other.additionalProperties
-            }
-
-            private val hashCode: Int by lazy {
-                Objects.hash(network, source, url, additionalProperties)
-            }
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() =
-                "Link{network=$network, source=$source, url=$url, additionalProperties=$additionalProperties}"
-        }
-
-        class Phone
-        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-        private constructor(
-            private val source: JsonField<Source>,
-            private val value: JsonField<String>,
-            private val writtenAs: JsonField<String>,
-            private val additionalProperties: MutableMap<String, JsonValue>,
-        ) {
-
-            @JsonCreator
-            private constructor(
-                @JsonProperty("source")
-                @ExcludeMissing
-                source: JsonField<Source> = JsonMissing.of(),
-                @JsonProperty("value") @ExcludeMissing value: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("writtenAs")
-                @ExcludeMissing
-                writtenAs: JsonField<String> = JsonMissing.of(),
-            ) : this(source, value, writtenAs, mutableMapOf())
-
-            /**
-             * Profile field that holds the number.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null.
-             */
-            fun source(): Source = source.getRequired("source")
-
-            /**
-             * The digits, with a leading + when the account wrote a country code.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null.
-             */
-            fun value(): String = value.getRequired("value")
-
-            /**
-             * The account's own spelling of the number.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun writtenAs(): String? = writtenAs.getNullable("writtenAs")
-
-            /**
-             * Returns the raw JSON value of [source].
-             *
-             * Unlike [source], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("source") @ExcludeMissing fun _source(): JsonField<Source> = source
-
-            /**
-             * Returns the raw JSON value of [value].
-             *
-             * Unlike [value], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<String> = value
-
-            /**
-             * Returns the raw JSON value of [writtenAs].
-             *
-             * Unlike [writtenAs], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("writtenAs")
-            @ExcludeMissing
-            fun _writtenAs(): JsonField<String> = writtenAs
-
-            @JsonAnySetter
-            private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
-            }
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /**
-                 * Returns a mutable builder for constructing an instance of [Phone].
-                 *
-                 * The following fields are required:
-                 * ```kotlin
-                 * .source()
-                 * .value()
-                 * ```
-                 */
-                fun builder() = Builder()
-            }
-
-            /** A builder for [Phone]. */
-            class Builder internal constructor() {
-
-                private var source: JsonField<Source>? = null
-                private var value: JsonField<String>? = null
-                private var writtenAs: JsonField<String> = JsonMissing.of()
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                internal fun from(phone: Phone) = apply {
-                    source = phone.source
-                    value = phone.value
-                    writtenAs = phone.writtenAs
-                    additionalProperties = phone.additionalProperties.toMutableMap()
-                }
-
-                /** Profile field that holds the number. */
-                fun source(source: Source) = source(JsonField.of(source))
-
-                /** Sets [Builder.source] to an arbitrary JSON value. */
-                fun source(source: JsonField<Source>) = apply { this.source = source }
-
-                /** The digits, with a leading + when the account wrote a country code. */
-                fun value(value: String) = value(JsonField.of(value))
-
-                /** Sets [Builder.value] to an arbitrary JSON value. */
-                fun value(value: JsonField<String>) = apply { this.value = value }
-
-                /** The account's own spelling of the number. */
-                fun writtenAs(writtenAs: String) = writtenAs(JsonField.of(writtenAs))
-
-                /** Sets [Builder.writtenAs] to an arbitrary JSON value. */
-                fun writtenAs(writtenAs: JsonField<String>) = apply { this.writtenAs = writtenAs }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [Phone].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 *
-                 * The following fields are required:
-                 * ```kotlin
-                 * .source()
-                 * .value()
-                 * ```
-                 *
-                 * @throws IllegalStateException if any required field is unset.
-                 */
-                fun build(): Phone =
-                    Phone(
-                        checkRequired("source", source),
-                        checkRequired("value", value),
-                        writtenAs,
-                        additionalProperties.toMutableMap(),
-                    )
-            }
-
-            private var validated: Boolean = false
-
-            /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
-             *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
-             *
-             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-             *   match its expected type.
-             */
-            fun validate(): Phone = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                source().validate()
-                value()
-                writtenAs()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: XTwitterScraperInvalidDataException) {
-                    false
-                }
-
-            internal fun validity(): Int =
-                (source.asKnown()?.validity() ?: 0) +
-                    (if (value.asKnown() == null) 0 else 1) +
-                    (if (writtenAs.asKnown() == null) 0 else 1)
-
-            /** Profile field that holds the number. */
-            class Source @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /** Returns this class instance's raw value. */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    val BIO = of("bio")
-
-                    val NAME = of("name")
-
-                    val LOCATION = of("location")
-
-                    val URL = of("url")
-
-                    fun of(value: String) = Source(JsonField.of(value))
-                }
-
-                /** An enum containing [Source]'s known values. */
-                enum class Known {
-                    BIO,
-                    NAME,
-                    LOCATION,
-                    URL,
-                }
-
-                /**
-                 * An enum containing [Source]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [Source] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    BIO,
-                    NAME,
-                    LOCATION,
-                    URL,
-                    /**
-                     * An enum member indicating that [Source] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        BIO -> Value.BIO
-                        NAME -> Value.NAME
-                        LOCATION -> Value.LOCATION
-                        URL -> Value.URL
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * @throws XTwitterScraperInvalidDataException if this class instance's value is a
-                 *   not a known member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        BIO -> Known.BIO
-                        NAME -> Known.NAME
-                        LOCATION -> Known.LOCATION
-                        URL -> Known.URL
-                        else -> throw XTwitterScraperInvalidDataException("Unknown Source: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * @throws XTwitterScraperInvalidDataException if this class instance's value does
-                 *   not have the expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString()
-                        ?: throw XTwitterScraperInvalidDataException("Value is not a String")
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws XTwitterScraperInvalidDataException if any value type in this object
-                 *   doesn't match its expected type.
-                 */
-                fun validate(): Source = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: XTwitterScraperInvalidDataException) {
-                        false
-                    }
-
-                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Source && value == other.value
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Phone &&
-                    source == other.source &&
-                    value == other.value &&
-                    writtenAs == other.writtenAs &&
-                    additionalProperties == other.additionalProperties
-            }
-
-            private val hashCode: Int by lazy {
-                Objects.hash(source, value, writtenAs, additionalProperties)
-            }
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() =
-                "Phone{source=$source, value=$value, writtenAs=$writtenAs, additionalProperties=$additionalProperties}"
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is ContactInfo &&
-                emails == other.emails &&
-                links == other.links &&
-                phones == other.phones &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(emails, links, phones, additionalProperties)
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "ContactInfo{emails=$emails, links=$links, phones=$phones, additionalProperties=$additionalProperties}"
-    }
-
-    /** Public metadata whose fields X defines. */
-    class GrokTranslatedBio
-    @JsonCreator
-    private constructor(
-        @com.fasterxml.jackson.annotation.JsonValue
-        private val additionalProperties: Map<String, JsonValue>
-    ) {
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [GrokTranslatedBio]. */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [GrokTranslatedBio]. */
-        class Builder internal constructor() {
-
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(grokTranslatedBio: GrokTranslatedBio) = apply {
-                additionalProperties = grokTranslatedBio.additionalProperties.toMutableMap()
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [GrokTranslatedBio].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): GrokTranslatedBio = GrokTranslatedBio(additionalProperties.toImmutable())
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): GrokTranslatedBio = apply {
-            if (validated) {
-                return@apply
-            }
-
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int = additionalProperties.count { (_, value) ->
-            !value.isNull() && !value.isMissing()
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is GrokTranslatedBio && additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() = "GrokTranslatedBio{additionalProperties=$additionalProperties}"
-    }
-
-    /** Public metadata whose fields X defines. */
-    class Professional
-    @JsonCreator
-    private constructor(
-        @com.fasterxml.jackson.annotation.JsonValue
-        private val additionalProperties: Map<String, JsonValue>
-    ) {
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [Professional]. */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [Professional]. */
-        class Builder internal constructor() {
-
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(professional: Professional) = apply {
-                additionalProperties = professional.additionalProperties.toMutableMap()
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Professional].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): Professional = Professional(additionalProperties.toImmutable())
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): Professional = apply {
-            if (validated) {
-                return@apply
-            }
-
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int = additionalProperties.count { (_, value) ->
-            !value.isNull() && !value.isMissing()
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Professional && additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() = "Professional{additionalProperties=$additionalProperties}"
-    }
-
-    /** Public payment and creator-support handles shown on X. */
-    class TipJar
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val bandcampHandle: JsonField<String>,
-        private val bitcoinHandle: JsonField<String>,
-        private val cashAppHandle: JsonField<String>,
-        private val ethereumHandle: JsonField<String>,
-        private val gofundmeHandle: JsonField<String>,
-        private val isEnabled: JsonField<Boolean>,
-        private val patreonHandle: JsonField<String>,
-        private val payPalHandle: JsonField<String>,
-        private val venmoHandle: JsonField<String>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("bandcampHandle")
-            @ExcludeMissing
-            bandcampHandle: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("bitcoinHandle")
-            @ExcludeMissing
-            bitcoinHandle: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("cashAppHandle")
-            @ExcludeMissing
-            cashAppHandle: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("ethereumHandle")
-            @ExcludeMissing
-            ethereumHandle: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("gofundmeHandle")
-            @ExcludeMissing
-            gofundmeHandle: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("isEnabled")
-            @ExcludeMissing
-            isEnabled: JsonField<Boolean> = JsonMissing.of(),
-            @JsonProperty("patreonHandle")
-            @ExcludeMissing
-            patreonHandle: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("payPalHandle")
-            @ExcludeMissing
-            payPalHandle: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("venmoHandle")
-            @ExcludeMissing
-            venmoHandle: JsonField<String> = JsonMissing.of(),
-        ) : this(
-            bandcampHandle,
-            bitcoinHandle,
-            cashAppHandle,
-            ethereumHandle,
-            gofundmeHandle,
-            isEnabled,
-            patreonHandle,
-            payPalHandle,
-            venmoHandle,
-            mutableMapOf(),
-        )
-
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
-        fun bandcampHandle(): String? = bandcampHandle.getNullable("bandcampHandle")
-
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
-        fun bitcoinHandle(): String? = bitcoinHandle.getNullable("bitcoinHandle")
-
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
-        fun cashAppHandle(): String? = cashAppHandle.getNullable("cashAppHandle")
-
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
-        fun ethereumHandle(): String? = ethereumHandle.getNullable("ethereumHandle")
-
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
-        fun gofundmeHandle(): String? = gofundmeHandle.getNullable("gofundmeHandle")
-
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
-        fun isEnabled(): Boolean? = isEnabled.getNullable("isEnabled")
-
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
-        fun patreonHandle(): String? = patreonHandle.getNullable("patreonHandle")
-
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
-        fun payPalHandle(): String? = payPalHandle.getNullable("payPalHandle")
-
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
-        fun venmoHandle(): String? = venmoHandle.getNullable("venmoHandle")
-
-        /**
-         * Returns the raw JSON value of [bandcampHandle].
-         *
-         * Unlike [bandcampHandle], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("bandcampHandle")
-        @ExcludeMissing
-        fun _bandcampHandle(): JsonField<String> = bandcampHandle
-
-        /**
-         * Returns the raw JSON value of [bitcoinHandle].
-         *
-         * Unlike [bitcoinHandle], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("bitcoinHandle")
-        @ExcludeMissing
-        fun _bitcoinHandle(): JsonField<String> = bitcoinHandle
-
-        /**
-         * Returns the raw JSON value of [cashAppHandle].
-         *
-         * Unlike [cashAppHandle], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("cashAppHandle")
-        @ExcludeMissing
-        fun _cashAppHandle(): JsonField<String> = cashAppHandle
-
-        /**
-         * Returns the raw JSON value of [ethereumHandle].
-         *
-         * Unlike [ethereumHandle], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("ethereumHandle")
-        @ExcludeMissing
-        fun _ethereumHandle(): JsonField<String> = ethereumHandle
-
-        /**
-         * Returns the raw JSON value of [gofundmeHandle].
-         *
-         * Unlike [gofundmeHandle], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("gofundmeHandle")
-        @ExcludeMissing
-        fun _gofundmeHandle(): JsonField<String> = gofundmeHandle
-
-        /**
-         * Returns the raw JSON value of [isEnabled].
-         *
-         * Unlike [isEnabled], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("isEnabled") @ExcludeMissing fun _isEnabled(): JsonField<Boolean> = isEnabled
-
-        /**
-         * Returns the raw JSON value of [patreonHandle].
-         *
-         * Unlike [patreonHandle], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("patreonHandle")
-        @ExcludeMissing
-        fun _patreonHandle(): JsonField<String> = patreonHandle
-
-        /**
-         * Returns the raw JSON value of [payPalHandle].
-         *
-         * Unlike [payPalHandle], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("payPalHandle")
-        @ExcludeMissing
-        fun _payPalHandle(): JsonField<String> = payPalHandle
-
-        /**
-         * Returns the raw JSON value of [venmoHandle].
-         *
-         * Unlike [venmoHandle], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("venmoHandle")
-        @ExcludeMissing
-        fun _venmoHandle(): JsonField<String> = venmoHandle
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [TipJar]. */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [TipJar]. */
-        class Builder internal constructor() {
-
-            private var bandcampHandle: JsonField<String> = JsonMissing.of()
-            private var bitcoinHandle: JsonField<String> = JsonMissing.of()
-            private var cashAppHandle: JsonField<String> = JsonMissing.of()
-            private var ethereumHandle: JsonField<String> = JsonMissing.of()
-            private var gofundmeHandle: JsonField<String> = JsonMissing.of()
-            private var isEnabled: JsonField<Boolean> = JsonMissing.of()
-            private var patreonHandle: JsonField<String> = JsonMissing.of()
-            private var payPalHandle: JsonField<String> = JsonMissing.of()
-            private var venmoHandle: JsonField<String> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(tipJar: TipJar) = apply {
-                bandcampHandle = tipJar.bandcampHandle
-                bitcoinHandle = tipJar.bitcoinHandle
-                cashAppHandle = tipJar.cashAppHandle
-                ethereumHandle = tipJar.ethereumHandle
-                gofundmeHandle = tipJar.gofundmeHandle
-                isEnabled = tipJar.isEnabled
-                patreonHandle = tipJar.patreonHandle
-                payPalHandle = tipJar.payPalHandle
-                venmoHandle = tipJar.venmoHandle
-                additionalProperties = tipJar.additionalProperties.toMutableMap()
-            }
-
-            fun bandcampHandle(bandcampHandle: String) =
-                bandcampHandle(JsonField.of(bandcampHandle))
-
-            /** Sets [Builder.bandcampHandle] to an arbitrary JSON value. */
-            fun bandcampHandle(bandcampHandle: JsonField<String>) = apply {
-                this.bandcampHandle = bandcampHandle
-            }
-
-            fun bitcoinHandle(bitcoinHandle: String) = bitcoinHandle(JsonField.of(bitcoinHandle))
-
-            /** Sets [Builder.bitcoinHandle] to an arbitrary JSON value. */
-            fun bitcoinHandle(bitcoinHandle: JsonField<String>) = apply {
-                this.bitcoinHandle = bitcoinHandle
-            }
-
-            fun cashAppHandle(cashAppHandle: String) = cashAppHandle(JsonField.of(cashAppHandle))
-
-            /** Sets [Builder.cashAppHandle] to an arbitrary JSON value. */
-            fun cashAppHandle(cashAppHandle: JsonField<String>) = apply {
-                this.cashAppHandle = cashAppHandle
-            }
-
-            fun ethereumHandle(ethereumHandle: String) =
-                ethereumHandle(JsonField.of(ethereumHandle))
-
-            /** Sets [Builder.ethereumHandle] to an arbitrary JSON value. */
-            fun ethereumHandle(ethereumHandle: JsonField<String>) = apply {
-                this.ethereumHandle = ethereumHandle
-            }
-
-            fun gofundmeHandle(gofundmeHandle: String) =
-                gofundmeHandle(JsonField.of(gofundmeHandle))
-
-            /** Sets [Builder.gofundmeHandle] to an arbitrary JSON value. */
-            fun gofundmeHandle(gofundmeHandle: JsonField<String>) = apply {
-                this.gofundmeHandle = gofundmeHandle
-            }
-
-            fun isEnabled(isEnabled: Boolean) = isEnabled(JsonField.of(isEnabled))
-
-            /** Sets [Builder.isEnabled] to an arbitrary JSON value. */
-            fun isEnabled(isEnabled: JsonField<Boolean>) = apply { this.isEnabled = isEnabled }
-
-            fun patreonHandle(patreonHandle: String) = patreonHandle(JsonField.of(patreonHandle))
-
-            /** Sets [Builder.patreonHandle] to an arbitrary JSON value. */
-            fun patreonHandle(patreonHandle: JsonField<String>) = apply {
-                this.patreonHandle = patreonHandle
-            }
-
-            fun payPalHandle(payPalHandle: String) = payPalHandle(JsonField.of(payPalHandle))
-
-            /** Sets [Builder.payPalHandle] to an arbitrary JSON value. */
-            fun payPalHandle(payPalHandle: JsonField<String>) = apply {
-                this.payPalHandle = payPalHandle
-            }
-
-            fun venmoHandle(venmoHandle: String) = venmoHandle(JsonField.of(venmoHandle))
-
-            /** Sets [Builder.venmoHandle] to an arbitrary JSON value. */
-            fun venmoHandle(venmoHandle: JsonField<String>) = apply {
-                this.venmoHandle = venmoHandle
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [TipJar].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): TipJar =
-                TipJar(
-                    bandcampHandle,
-                    bitcoinHandle,
-                    cashAppHandle,
-                    ethereumHandle,
-                    gofundmeHandle,
-                    isEnabled,
-                    patreonHandle,
-                    payPalHandle,
-                    venmoHandle,
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): TipJar = apply {
-            if (validated) {
-                return@apply
-            }
-
-            bandcampHandle()
-            bitcoinHandle()
-            cashAppHandle()
-            ethereumHandle()
-            gofundmeHandle()
-            isEnabled()
-            patreonHandle()
-            payPalHandle()
-            venmoHandle()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int =
-            (if (bandcampHandle.asKnown() == null) 0 else 1) +
-                (if (bitcoinHandle.asKnown() == null) 0 else 1) +
-                (if (cashAppHandle.asKnown() == null) 0 else 1) +
-                (if (ethereumHandle.asKnown() == null) 0 else 1) +
-                (if (gofundmeHandle.asKnown() == null) 0 else 1) +
-                (if (isEnabled.asKnown() == null) 0 else 1) +
-                (if (patreonHandle.asKnown() == null) 0 else 1) +
-                (if (payPalHandle.asKnown() == null) 0 else 1) +
-                (if (venmoHandle.asKnown() == null) 0 else 1)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is TipJar &&
-                bandcampHandle == other.bandcampHandle &&
-                bitcoinHandle == other.bitcoinHandle &&
-                cashAppHandle == other.cashAppHandle &&
-                ethereumHandle == other.ethereumHandle &&
-                gofundmeHandle == other.gofundmeHandle &&
-                isEnabled == other.isEnabled &&
-                patreonHandle == other.patreonHandle &&
-                payPalHandle == other.payPalHandle &&
-                venmoHandle == other.venmoHandle &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(
-                bandcampHandle,
-                bitcoinHandle,
-                cashAppHandle,
-                ethereumHandle,
-                gofundmeHandle,
-                isEnabled,
-                patreonHandle,
-                payPalHandle,
-                venmoHandle,
-                additionalProperties,
-            )
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "TipJar{bandcampHandle=$bandcampHandle, bitcoinHandle=$bitcoinHandle, cashAppHandle=$cashAppHandle, ethereumHandle=$ethereumHandle, gofundmeHandle=$gofundmeHandle, isEnabled=$isEnabled, patreonHandle=$patreonHandle, payPalHandle=$payPalHandle, venmoHandle=$venmoHandle, additionalProperties=$additionalProperties}"
-    }
-
-    /** How often the account changed its username. */
-    class UsernameChanges
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val count: JsonField<Long>,
-        private val lastChangedAt: JsonField<OffsetDateTime>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("count") @ExcludeMissing count: JsonField<Long> = JsonMissing.of(),
-            @JsonProperty("lastChangedAt")
-            @ExcludeMissing
-            lastChangedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-        ) : this(count, lastChangedAt, mutableMapOf())
-
-        /**
-         * Whole number from 0.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null.
-         */
-        fun count(): Long = count.getRequired("count")
-
-        /**
-         * Time of the latest change, omitted when there is none.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun lastChangedAt(): OffsetDateTime? = lastChangedAt.getNullable("lastChangedAt")
-
-        /**
-         * Returns the raw JSON value of [count].
-         *
-         * Unlike [count], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("count") @ExcludeMissing fun _count(): JsonField<Long> = count
-
-        /**
-         * Returns the raw JSON value of [lastChangedAt].
-         *
-         * Unlike [lastChangedAt], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("lastChangedAt")
-        @ExcludeMissing
-        fun _lastChangedAt(): JsonField<OffsetDateTime> = lastChangedAt
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [UsernameChanges].
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .count()
-             * ```
-             */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [UsernameChanges]. */
-        class Builder internal constructor() {
-
-            private var count: JsonField<Long>? = null
-            private var lastChangedAt: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(usernameChanges: UsernameChanges) = apply {
-                count = usernameChanges.count
-                lastChangedAt = usernameChanges.lastChangedAt
-                additionalProperties = usernameChanges.additionalProperties.toMutableMap()
-            }
-
-            /** Whole number from 0. */
-            fun count(count: Long) = count(JsonField.of(count))
-
-            /** Sets [Builder.count] to an arbitrary JSON value. */
-            fun count(count: JsonField<Long>) = apply { this.count = count }
-
-            /** Time of the latest change, omitted when there is none. */
-            fun lastChangedAt(lastChangedAt: OffsetDateTime) =
-                lastChangedAt(JsonField.of(lastChangedAt))
-
-            /** Sets [Builder.lastChangedAt] to an arbitrary JSON value. */
-            fun lastChangedAt(lastChangedAt: JsonField<OffsetDateTime>) = apply {
-                this.lastChangedAt = lastChangedAt
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [UsernameChanges].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .count()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): UsernameChanges =
-                UsernameChanges(
-                    checkRequired("count", count),
-                    lastChangedAt,
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): UsernameChanges = apply {
-            if (validated) {
-                return@apply
-            }
-
-            count()
-            lastChangedAt()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int =
-            (if (count.asKnown() == null) 0 else 1) +
-                (if (lastChangedAt.asKnown() == null) 0 else 1)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is UsernameChanges &&
-                count == other.count &&
-                lastChangedAt == other.lastChangedAt &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(count, lastChangedAt, additionalProperties)
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "UsernameChanges{count=$count, lastChangedAt=$lastChangedAt, additionalProperties=$additionalProperties}"
-    }
-
-    /** X's text on why the profile is verified, with its links. */
-    class VerificationReason
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val entities: JsonField<List<Entity>>,
-        private val text: JsonField<String>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("entities")
-            @ExcludeMissing
-            entities: JsonField<List<Entity>> = JsonMissing.of(),
-            @JsonProperty("text") @ExcludeMissing text: JsonField<String> = JsonMissing.of(),
-        ) : this(entities, text, mutableMapOf())
-
-        /**
-         * Links inside the text, by character range.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun entities(): List<Entity>? = entities.getNullable("entities")
-
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
-        fun text(): String? = text.getNullable("text")
-
-        /**
-         * Returns the raw JSON value of [entities].
-         *
-         * Unlike [entities], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("entities")
-        @ExcludeMissing
-        fun _entities(): JsonField<List<Entity>> = entities
-
-        /**
-         * Returns the raw JSON value of [text].
-         *
-         * Unlike [text], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("text") @ExcludeMissing fun _text(): JsonField<String> = text
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [VerificationReason]. */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [VerificationReason]. */
-        class Builder internal constructor() {
-
-            private var entities: JsonField<MutableList<Entity>>? = null
-            private var text: JsonField<String> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(verificationReason: VerificationReason) = apply {
-                entities = verificationReason.entities.map { it.toMutableList() }
-                text = verificationReason.text
-                additionalProperties = verificationReason.additionalProperties.toMutableMap()
-            }
-
-            /** Links inside the text, by character range. */
-            fun entities(entities: List<Entity>) = entities(JsonField.of(entities))
-
-            /** Sets [Builder.entities] to an arbitrary JSON value. */
-            fun entities(entities: JsonField<List<Entity>>) = apply {
-                this.entities = entities.map { it.toMutableList() }
-            }
-
-            /**
-             * Adds a single [Entity] to [entities].
-             *
-             * @throws IllegalStateException if the field was previously set to a non-list.
-             */
-            fun addEntity(entity: Entity) = apply {
-                entities =
-                    (entities ?: JsonField.of(mutableListOf())).also {
-                        checkKnown("entities", it).add(entity)
-                    }
-            }
-
-            fun text(text: String) = text(JsonField.of(text))
-
-            /** Sets [Builder.text] to an arbitrary JSON value. */
-            fun text(text: JsonField<String>) = apply { this.text = text }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [VerificationReason].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): VerificationReason =
-                VerificationReason(
-                    (entities ?: JsonMissing.of()).map { it.toImmutable() },
-                    text,
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-         *   match its expected type.
-         */
-        fun validate(): VerificationReason = apply {
-            if (validated) {
-                return@apply
-            }
-
-            entities()?.forEach { it.validate() }
-            text()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: XTwitterScraperInvalidDataException) {
-                false
-            }
-
-        internal fun validity(): Int =
-            (entities.asKnown()?.sumOf { it.validity() } ?: 0) +
-                (if (text.asKnown() == null) 0 else 1)
-
-        class Entity
-        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-        private constructor(
-            private val fromIndex: JsonField<Long>,
-            private val toIndex: JsonField<Long>,
-            private val url: JsonField<String>,
-            private val urlType: JsonField<String>,
-            private val additionalProperties: MutableMap<String, JsonValue>,
-        ) {
-
-            @JsonCreator
-            private constructor(
-                @JsonProperty("fromIndex")
-                @ExcludeMissing
-                fromIndex: JsonField<Long> = JsonMissing.of(),
-                @JsonProperty("toIndex")
-                @ExcludeMissing
-                toIndex: JsonField<Long> = JsonMissing.of(),
-                @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("urlType")
-                @ExcludeMissing
-                urlType: JsonField<String> = JsonMissing.of(),
-            ) : this(fromIndex, toIndex, url, urlType, mutableMapOf())
-
-            /**
-             * Whole number from 0.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun fromIndex(): Long? = fromIndex.getNullable("fromIndex")
-
-            /**
-             * Whole number from 0.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun toIndex(): Long? = toIndex.getNullable("toIndex")
-
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun url(): String? = url.getNullable("url")
-
-            /**
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun urlType(): String? = urlType.getNullable("urlType")
-
-            /**
-             * Returns the raw JSON value of [fromIndex].
-             *
-             * Unlike [fromIndex], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("fromIndex") @ExcludeMissing fun _fromIndex(): JsonField<Long> = fromIndex
-
-            /**
-             * Returns the raw JSON value of [toIndex].
-             *
-             * Unlike [toIndex], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("toIndex") @ExcludeMissing fun _toIndex(): JsonField<Long> = toIndex
-
-            /**
-             * Returns the raw JSON value of [url].
-             *
-             * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
-
-            /**
-             * Returns the raw JSON value of [urlType].
-             *
-             * Unlike [urlType], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("urlType") @ExcludeMissing fun _urlType(): JsonField<String> = urlType
-
-            @JsonAnySetter
-            private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
-            }
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /** Returns a mutable builder for constructing an instance of [Entity]. */
-                fun builder() = Builder()
-            }
-
-            /** A builder for [Entity]. */
-            class Builder internal constructor() {
-
-                private var fromIndex: JsonField<Long> = JsonMissing.of()
-                private var toIndex: JsonField<Long> = JsonMissing.of()
-                private var url: JsonField<String> = JsonMissing.of()
-                private var urlType: JsonField<String> = JsonMissing.of()
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                internal fun from(entity: Entity) = apply {
-                    fromIndex = entity.fromIndex
-                    toIndex = entity.toIndex
-                    url = entity.url
-                    urlType = entity.urlType
-                    additionalProperties = entity.additionalProperties.toMutableMap()
-                }
-
-                /** Whole number from 0. */
-                fun fromIndex(fromIndex: Long) = fromIndex(JsonField.of(fromIndex))
-
-                /** Sets [Builder.fromIndex] to an arbitrary JSON value. */
-                fun fromIndex(fromIndex: JsonField<Long>) = apply { this.fromIndex = fromIndex }
-
-                /** Whole number from 0. */
-                fun toIndex(toIndex: Long) = toIndex(JsonField.of(toIndex))
-
-                /** Sets [Builder.toIndex] to an arbitrary JSON value. */
-                fun toIndex(toIndex: JsonField<Long>) = apply { this.toIndex = toIndex }
-
-                fun url(url: String) = url(JsonField.of(url))
-
-                /** Sets [Builder.url] to an arbitrary JSON value. */
-                fun url(url: JsonField<String>) = apply { this.url = url }
-
-                fun urlType(urlType: String) = urlType(JsonField.of(urlType))
-
-                /** Sets [Builder.urlType] to an arbitrary JSON value. */
-                fun urlType(urlType: JsonField<String>) = apply { this.urlType = urlType }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [Entity].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 */
-                fun build(): Entity =
-                    Entity(fromIndex, toIndex, url, urlType, additionalProperties.toMutableMap())
-            }
-
-            private var validated: Boolean = false
-
-            /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
-             *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
-             *
-             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
-             *   match its expected type.
-             */
-            fun validate(): Entity = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                fromIndex()
-                toIndex()
-                url()
-                urlType()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: XTwitterScraperInvalidDataException) {
-                    false
-                }
-
-            internal fun validity(): Int =
-                (if (fromIndex.asKnown() == null) 0 else 1) +
-                    (if (toIndex.asKnown() == null) 0 else 1) +
-                    (if (url.asKnown() == null) 0 else 1) +
-                    (if (urlType.asKnown() == null) 0 else 1)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Entity &&
-                    fromIndex == other.fromIndex &&
-                    toIndex == other.toIndex &&
-                    url == other.url &&
-                    urlType == other.urlType &&
-                    additionalProperties == other.additionalProperties
-            }
-
-            private val hashCode: Int by lazy {
-                Objects.hash(fromIndex, toIndex, url, urlType, additionalProperties)
-            }
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() =
-                "Entity{fromIndex=$fromIndex, toIndex=$toIndex, url=$url, urlType=$urlType, additionalProperties=$additionalProperties}"
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is VerificationReason &&
-                entities == other.entities &&
-                text == other.text &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(entities, text, additionalProperties)
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "VerificationReason{entities=$entities, text=$text, additionalProperties=$additionalProperties}"
-    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

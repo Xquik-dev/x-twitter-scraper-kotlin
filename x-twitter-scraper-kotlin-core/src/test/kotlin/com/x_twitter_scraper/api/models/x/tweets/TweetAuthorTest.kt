@@ -5,7 +5,6 @@
 package com.x_twitter_scraper.api.models.x.tweets
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
-import com.x_twitter_scraper.api.core.JsonValue
 import com.x_twitter_scraper.api.core.jsonMapper
 import com.x_twitter_scraper.api.models.UserProfile
 import java.time.OffsetDateTime
@@ -22,10 +21,10 @@ internal class TweetAuthorTest {
                 .name("name")
                 .username("username")
                 .accountBasedIn(
-                    TweetAuthor.AccountBasedIn.builder()
-                        .level(TweetAuthor.AccountBasedIn.Level.COUNTRY)
-                        .observedAt(OffsetDateTime.parse("2026-08-21T10:00:00Z"))
-                        .value("United States")
+                    UserProfile.AccountBasedIn.builder()
+                        .level(UserProfile.AccountBasedIn.Level.COUNTRY)
+                        .observedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .value("value")
                         .build()
                 )
                 .accountBasedInAccurate(true)
@@ -37,38 +36,13 @@ internal class TweetAuthorTest {
                     UserProfile.AffiliatesHighlightedLabel.builder().build()
                 )
                 .automatedBy("automatedBy")
-                .birthdate(TweetAuthor.Birthdate.builder().day(1L).month(1L).year(1L).build())
+                .birthdate(UserProfile.Birthdate.builder().build())
                 .businessAccountAffiliatesCount(0L)
                 .businessProfileState("none")
                 .communityRole("communityRole")
                 .connectedVia("United States App Store")
                 .connectedViaAccurate(true)
-                .contactInfo(
-                    TweetAuthor.ContactInfo.builder()
-                        .addEmail(
-                            TweetAuthor.ContactInfo.Email.builder()
-                                .domain("example.com")
-                                .source(TweetAuthor.ContactInfo.Email.Source.BIO)
-                                .value("press@example.com")
-                                .writtenAs("press [at] example [dot] com")
-                                .build()
-                        )
-                        .addLink(
-                            TweetAuthor.ContactInfo.Link.builder()
-                                .network("linkedin")
-                                .source(TweetAuthor.ContactInfo.Link.Source.URL)
-                                .url("https://www.linkedin.com/company/acme")
-                                .build()
-                        )
-                        .addPhone(
-                            TweetAuthor.ContactInfo.Phone.builder()
-                                .source(TweetAuthor.ContactInfo.Phone.Source.BIO)
-                                .value("+14155550123")
-                                .writtenAs("+1 (415) 555-0123")
-                                .build()
-                        )
-                        .build()
-                )
+                .contactInfo(UserProfile.ContactInfo.builder().build())
                 .coverPicture("coverPicture")
                 .createdAt("createdAt")
                 .creatorSubscriptionsCount(0L)
@@ -81,11 +55,7 @@ internal class TweetAuthorTest {
                 .followers(0L)
                 .following(0L)
                 .geoEnabled(true)
-                .grokTranslatedBio(
-                    TweetAuthor.GrokTranslatedBio.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("bar"))
-                        .build()
-                )
+                .grokTranslatedBio(UserProfile.GrokTranslatedBio.builder().build())
                 .hasCustomTimelines(true)
                 .hasExtendedProfile(true)
                 .hasGraduatedAccess(true)
@@ -105,11 +75,7 @@ internal class TweetAuthorTest {
                 .parodyCommentaryFanLabel("parodyCommentaryFanLabel")
                 .addPinnedTweetId("pinnedTweetId")
                 .possiblySensitive(true)
-                .professional(
-                    TweetAuthor.Professional.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("bar"))
-                        .build()
-                )
+                .professional(UserProfile.Professional.builder().build())
                 .profileBannerUrl("profileBannerUrl")
                 .profileDescriptionLanguage("profileDescriptionLanguage")
                 .profileImageShape("profileImageShape")
@@ -126,43 +92,12 @@ internal class TweetAuthorTest {
                 .subscribersCount(0L)
                 .superFollowEligible(true)
                 .superFollowsUserProfileActive(true)
-                .tipJar(
-                    TweetAuthor.TipJar.builder()
-                        .bandcampHandle("bandcampHandle")
-                        .bitcoinHandle("bitcoinHandle")
-                        .cashAppHandle("cashAppHandle")
-                        .ethereumHandle("ethereumHandle")
-                        .gofundmeHandle("gofundmeHandle")
-                        .isEnabled(true)
-                        .patreonHandle("patreonHandle")
-                        .payPalHandle("payPalHandle")
-                        .venmoHandle("venmoHandle")
-                        .build()
-                )
+                .tipJar(UserProfile.TipJar.builder().build())
                 .unavailable(true)
                 .unavailableReason("unavailableReason")
                 .url("url")
-                .usernameChanges(
-                    TweetAuthor.UsernameChanges.builder()
-                        .count(0L)
-                        .lastChangedAt(OffsetDateTime.parse("2016-05-14T00:22:47.057Z"))
-                        .build()
-                )
-                .verificationReason(
-                    TweetAuthor.VerificationReason.builder()
-                        .addEntity(
-                            TweetAuthor.VerificationReason.Entity.builder()
-                                .fromIndex(0L)
-                                .toIndex(0L)
-                                .url("url")
-                                .urlType("urlType")
-                                .build()
-                        )
-                        .text(
-                            "This account is verified because it's an official organization on X."
-                        )
-                        .build()
-                )
+                .usernameChanges(UserProfile.UsernameChanges.builder().count(0L).build())
+                .verificationReason(UserProfile.VerificationReason.builder().build())
                 .verified(true)
                 .verifiedType("verifiedType")
                 .addWithheldInCountry("withheldInCountry")
@@ -174,10 +109,10 @@ internal class TweetAuthorTest {
         assertThat(tweetAuthor.username()).isEqualTo("username")
         assertThat(tweetAuthor.accountBasedIn())
             .isEqualTo(
-                TweetAuthor.AccountBasedIn.builder()
-                    .level(TweetAuthor.AccountBasedIn.Level.COUNTRY)
-                    .observedAt(OffsetDateTime.parse("2026-08-21T10:00:00Z"))
-                    .value("United States")
+                UserProfile.AccountBasedIn.builder()
+                    .level(UserProfile.AccountBasedIn.Level.COUNTRY)
+                    .observedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .value("value")
                     .build()
             )
         assertThat(tweetAuthor.accountBasedInAccurate()).isEqualTo(true)
@@ -189,40 +124,13 @@ internal class TweetAuthorTest {
         assertThat(tweetAuthor.affiliatesHighlightedLabel())
             .isEqualTo(UserProfile.AffiliatesHighlightedLabel.builder().build())
         assertThat(tweetAuthor.automatedBy()).isEqualTo("automatedBy")
-        assertThat(tweetAuthor.birthdate())
-            .isEqualTo(TweetAuthor.Birthdate.builder().day(1L).month(1L).year(1L).build())
+        assertThat(tweetAuthor.birthdate()).isEqualTo(UserProfile.Birthdate.builder().build())
         assertThat(tweetAuthor.businessAccountAffiliatesCount()).isEqualTo(0L)
         assertThat(tweetAuthor.businessProfileState()).isEqualTo("none")
         assertThat(tweetAuthor.communityRole()).isEqualTo("communityRole")
         assertThat(tweetAuthor.connectedVia()).isEqualTo("United States App Store")
         assertThat(tweetAuthor.connectedViaAccurate()).isEqualTo(true)
-        assertThat(tweetAuthor.contactInfo())
-            .isEqualTo(
-                TweetAuthor.ContactInfo.builder()
-                    .addEmail(
-                        TweetAuthor.ContactInfo.Email.builder()
-                            .domain("example.com")
-                            .source(TweetAuthor.ContactInfo.Email.Source.BIO)
-                            .value("press@example.com")
-                            .writtenAs("press [at] example [dot] com")
-                            .build()
-                    )
-                    .addLink(
-                        TweetAuthor.ContactInfo.Link.builder()
-                            .network("linkedin")
-                            .source(TweetAuthor.ContactInfo.Link.Source.URL)
-                            .url("https://www.linkedin.com/company/acme")
-                            .build()
-                    )
-                    .addPhone(
-                        TweetAuthor.ContactInfo.Phone.builder()
-                            .source(TweetAuthor.ContactInfo.Phone.Source.BIO)
-                            .value("+14155550123")
-                            .writtenAs("+1 (415) 555-0123")
-                            .build()
-                    )
-                    .build()
-            )
+        assertThat(tweetAuthor.contactInfo()).isEqualTo(UserProfile.ContactInfo.builder().build())
         assertThat(tweetAuthor.coverPicture()).isEqualTo("coverPicture")
         assertThat(tweetAuthor.createdAt()).isEqualTo("createdAt")
         assertThat(tweetAuthor.creatorSubscriptionsCount()).isEqualTo(0L)
@@ -236,11 +144,7 @@ internal class TweetAuthorTest {
         assertThat(tweetAuthor.following()).isEqualTo(0L)
         assertThat(tweetAuthor.geoEnabled()).isEqualTo(true)
         assertThat(tweetAuthor.grokTranslatedBio())
-            .isEqualTo(
-                TweetAuthor.GrokTranslatedBio.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("bar"))
-                    .build()
-            )
+            .isEqualTo(UserProfile.GrokTranslatedBio.builder().build())
         assertThat(tweetAuthor.hasCustomTimelines()).isEqualTo(true)
         assertThat(tweetAuthor.hasExtendedProfile()).isEqualTo(true)
         assertThat(tweetAuthor.hasGraduatedAccess()).isEqualTo(true)
@@ -262,12 +166,7 @@ internal class TweetAuthorTest {
         assertThat(tweetAuthor.parodyCommentaryFanLabel()).isEqualTo("parodyCommentaryFanLabel")
         assertThat(tweetAuthor.pinnedTweetIds()).containsExactly("pinnedTweetId")
         assertThat(tweetAuthor.possiblySensitive()).isEqualTo(true)
-        assertThat(tweetAuthor.professional())
-            .isEqualTo(
-                TweetAuthor.Professional.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("bar"))
-                    .build()
-            )
+        assertThat(tweetAuthor.professional()).isEqualTo(UserProfile.Professional.builder().build())
         assertThat(tweetAuthor.profileBannerUrl()).isEqualTo("profileBannerUrl")
         assertThat(tweetAuthor.profileDescriptionLanguage()).isEqualTo("profileDescriptionLanguage")
         assertThat(tweetAuthor.profileImageShape()).isEqualTo("profileImageShape")
@@ -286,44 +185,14 @@ internal class TweetAuthorTest {
         assertThat(tweetAuthor.subscribersCount()).isEqualTo(0L)
         assertThat(tweetAuthor.superFollowEligible()).isEqualTo(true)
         assertThat(tweetAuthor.superFollowsUserProfileActive()).isEqualTo(true)
-        assertThat(tweetAuthor.tipJar())
-            .isEqualTo(
-                TweetAuthor.TipJar.builder()
-                    .bandcampHandle("bandcampHandle")
-                    .bitcoinHandle("bitcoinHandle")
-                    .cashAppHandle("cashAppHandle")
-                    .ethereumHandle("ethereumHandle")
-                    .gofundmeHandle("gofundmeHandle")
-                    .isEnabled(true)
-                    .patreonHandle("patreonHandle")
-                    .payPalHandle("payPalHandle")
-                    .venmoHandle("venmoHandle")
-                    .build()
-            )
+        assertThat(tweetAuthor.tipJar()).isEqualTo(UserProfile.TipJar.builder().build())
         assertThat(tweetAuthor.unavailable()).isEqualTo(true)
         assertThat(tweetAuthor.unavailableReason()).isEqualTo("unavailableReason")
         assertThat(tweetAuthor.url()).isEqualTo("url")
         assertThat(tweetAuthor.usernameChanges())
-            .isEqualTo(
-                TweetAuthor.UsernameChanges.builder()
-                    .count(0L)
-                    .lastChangedAt(OffsetDateTime.parse("2016-05-14T00:22:47.057Z"))
-                    .build()
-            )
+            .isEqualTo(UserProfile.UsernameChanges.builder().count(0L).build())
         assertThat(tweetAuthor.verificationReason())
-            .isEqualTo(
-                TweetAuthor.VerificationReason.builder()
-                    .addEntity(
-                        TweetAuthor.VerificationReason.Entity.builder()
-                            .fromIndex(0L)
-                            .toIndex(0L)
-                            .url("url")
-                            .urlType("urlType")
-                            .build()
-                    )
-                    .text("This account is verified because it's an official organization on X.")
-                    .build()
-            )
+            .isEqualTo(UserProfile.VerificationReason.builder().build())
         assertThat(tweetAuthor.verified()).isEqualTo(true)
         assertThat(tweetAuthor.verifiedType()).isEqualTo("verifiedType")
         assertThat(tweetAuthor.withheldInCountries()).containsExactly("withheldInCountry")
@@ -339,10 +208,10 @@ internal class TweetAuthorTest {
                 .name("name")
                 .username("username")
                 .accountBasedIn(
-                    TweetAuthor.AccountBasedIn.builder()
-                        .level(TweetAuthor.AccountBasedIn.Level.COUNTRY)
-                        .observedAt(OffsetDateTime.parse("2026-08-21T10:00:00Z"))
-                        .value("United States")
+                    UserProfile.AccountBasedIn.builder()
+                        .level(UserProfile.AccountBasedIn.Level.COUNTRY)
+                        .observedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .value("value")
                         .build()
                 )
                 .accountBasedInAccurate(true)
@@ -354,38 +223,13 @@ internal class TweetAuthorTest {
                     UserProfile.AffiliatesHighlightedLabel.builder().build()
                 )
                 .automatedBy("automatedBy")
-                .birthdate(TweetAuthor.Birthdate.builder().day(1L).month(1L).year(1L).build())
+                .birthdate(UserProfile.Birthdate.builder().build())
                 .businessAccountAffiliatesCount(0L)
                 .businessProfileState("none")
                 .communityRole("communityRole")
                 .connectedVia("United States App Store")
                 .connectedViaAccurate(true)
-                .contactInfo(
-                    TweetAuthor.ContactInfo.builder()
-                        .addEmail(
-                            TweetAuthor.ContactInfo.Email.builder()
-                                .domain("example.com")
-                                .source(TweetAuthor.ContactInfo.Email.Source.BIO)
-                                .value("press@example.com")
-                                .writtenAs("press [at] example [dot] com")
-                                .build()
-                        )
-                        .addLink(
-                            TweetAuthor.ContactInfo.Link.builder()
-                                .network("linkedin")
-                                .source(TweetAuthor.ContactInfo.Link.Source.URL)
-                                .url("https://www.linkedin.com/company/acme")
-                                .build()
-                        )
-                        .addPhone(
-                            TweetAuthor.ContactInfo.Phone.builder()
-                                .source(TweetAuthor.ContactInfo.Phone.Source.BIO)
-                                .value("+14155550123")
-                                .writtenAs("+1 (415) 555-0123")
-                                .build()
-                        )
-                        .build()
-                )
+                .contactInfo(UserProfile.ContactInfo.builder().build())
                 .coverPicture("coverPicture")
                 .createdAt("createdAt")
                 .creatorSubscriptionsCount(0L)
@@ -398,11 +242,7 @@ internal class TweetAuthorTest {
                 .followers(0L)
                 .following(0L)
                 .geoEnabled(true)
-                .grokTranslatedBio(
-                    TweetAuthor.GrokTranslatedBio.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("bar"))
-                        .build()
-                )
+                .grokTranslatedBio(UserProfile.GrokTranslatedBio.builder().build())
                 .hasCustomTimelines(true)
                 .hasExtendedProfile(true)
                 .hasGraduatedAccess(true)
@@ -422,11 +262,7 @@ internal class TweetAuthorTest {
                 .parodyCommentaryFanLabel("parodyCommentaryFanLabel")
                 .addPinnedTweetId("pinnedTweetId")
                 .possiblySensitive(true)
-                .professional(
-                    TweetAuthor.Professional.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("bar"))
-                        .build()
-                )
+                .professional(UserProfile.Professional.builder().build())
                 .profileBannerUrl("profileBannerUrl")
                 .profileDescriptionLanguage("profileDescriptionLanguage")
                 .profileImageShape("profileImageShape")
@@ -443,43 +279,12 @@ internal class TweetAuthorTest {
                 .subscribersCount(0L)
                 .superFollowEligible(true)
                 .superFollowsUserProfileActive(true)
-                .tipJar(
-                    TweetAuthor.TipJar.builder()
-                        .bandcampHandle("bandcampHandle")
-                        .bitcoinHandle("bitcoinHandle")
-                        .cashAppHandle("cashAppHandle")
-                        .ethereumHandle("ethereumHandle")
-                        .gofundmeHandle("gofundmeHandle")
-                        .isEnabled(true)
-                        .patreonHandle("patreonHandle")
-                        .payPalHandle("payPalHandle")
-                        .venmoHandle("venmoHandle")
-                        .build()
-                )
+                .tipJar(UserProfile.TipJar.builder().build())
                 .unavailable(true)
                 .unavailableReason("unavailableReason")
                 .url("url")
-                .usernameChanges(
-                    TweetAuthor.UsernameChanges.builder()
-                        .count(0L)
-                        .lastChangedAt(OffsetDateTime.parse("2016-05-14T00:22:47.057Z"))
-                        .build()
-                )
-                .verificationReason(
-                    TweetAuthor.VerificationReason.builder()
-                        .addEntity(
-                            TweetAuthor.VerificationReason.Entity.builder()
-                                .fromIndex(0L)
-                                .toIndex(0L)
-                                .url("url")
-                                .urlType("urlType")
-                                .build()
-                        )
-                        .text(
-                            "This account is verified because it's an official organization on X."
-                        )
-                        .build()
-                )
+                .usernameChanges(UserProfile.UsernameChanges.builder().count(0L).build())
+                .verificationReason(UserProfile.VerificationReason.builder().build())
                 .verified(true)
                 .verifiedType("verifiedType")
                 .addWithheldInCountry("withheldInCountry")
@@ -493,5 +298,76 @@ internal class TweetAuthorTest {
             )
 
         assertThat(roundtrippedTweetAuthor).isEqualTo(tweetAuthor)
+    }
+
+    @Test
+    fun toUserProfile() {
+        val json =
+            """
+{
+  "id": "11348282",
+  "username": "NASA",
+  "name": "NASA",
+  "followers": 92376194,
+  "following": 115,
+  "verified": true,
+  "isBlueVerified": true,
+  "isVerified": true,
+  "profilePicture": "https://pbs.twimg.com/profile_images/1321163587679784960/0ZxKlEKB_normal.jpg",
+  "profilePictureOriginal": "https://pbs.twimg.com/profile_images/1321163587679784960/0ZxKlEKB.jpg",
+  "coverPicture": "https://pbs.twimg.com/profile_banners/11348282/1788992290",
+  "profileBannerUrl": "https://pbs.twimg.com/profile_banners/11348282/1788992290",
+  "description": "Making the seemingly impossible, possible. ✨",
+  "location": "Pale Blue Dot",
+  "createdAt": "Wed Dec 19 20:20:32 +0000 2007",
+  "statusesCount": 74336,
+  "mediaCount": 28160,
+  "protected": false,
+  "url": "http://www.nasa.gov/",
+  "contactInfo": {
+    "links": [
+      {
+        "url": "http://www.nasa.gov/",
+        "network": "website",
+        "source": "url"
+      }
+    ]
+  },
+  "favouritesCount": 17003,
+  "isTranslator": false,
+  "possiblySensitive": false,
+  "verifiedType": "Government",
+  "profile_bio": {
+    "description": "Making the seemingly impossible, possible. ✨",
+    "entities": {
+      "description": {},
+      "url": {
+        "urls": [
+          {
+            "display_url": "nasa.gov",
+            "expanded_url": "http://www.nasa.gov/",
+            "indices": [
+              0,
+              23
+            ],
+            "url": "https://t.co/9NkQJKAnuU"
+          }
+        ]
+      }
+    }
+  },
+  "hasGraduatedAccess": true,
+  "parodyCommentaryFanLabel": "None",
+  "profileDescriptionLanguage": "en",
+  "profileImageShape": "Square",
+  "profileTranslatorType": "regular",
+  "superFollowEligible": false
+}
+"""
+
+        val author = jsonMapper().readValue(json, jacksonTypeRef<TweetAuthor>())
+
+        assertThat(author.toUserProfile())
+            .isEqualTo(jsonMapper().readValue(json, jacksonTypeRef<UserProfile>()))
     }
 }
