@@ -1,0 +1,165 @@
+#!/usr/bin/env bash
+
+# SPDX-FileCopyrightText: 2026 Xquik contributors
+#
+# SPDX-License-Identifier: Apache-2.0
+
+set -euo pipefail
+
+readonly public_spec="https://xquik.com/openapi.json"
+spec_source="${XQUIK_OPENAPI_SPEC:-$public_spec}"
+case "$spec_source" in
+    http://* | https://* | /*) ;;
+    *) spec_source="$PWD/$spec_source" ;;
+esac
+readonly spec_source
+
+cd -- "$(dirname -- "$0")/.."
+
+readonly exclusions_file="excluded-operations.json"
+readonly source_root="x-twitter-scraper-kotlin-core/src/main/kotlin/com/x_twitter_scraper/api"
+readonly client_options="$source_root/core/ClientOptions.kt"
+readonly services="$source_root/services"
+readonly unreadable_spec="Could not read the API spec from $spec_source. Check network access, or set XQUIK_OPENAPI_SPEC to a local copy of $public_spec."
+readonly invalid_next_step="Fix $exclusions_file as the lines above say, then rerun."
+
+fail() {
+    printf '%s\n' "$@" >&2
+    exit 1
+}
+
+coverage_workspace="$(mktemp -d "${TMPDIR:-/tmp}/xquik-kotlin-api-coverage.XXXXXX")"
+trap 'rm -rf -- "$coverage_workspace"' EXIT
+readonly spec_file="$coverage_workspace/spec.json"
+readonly requests_file="$coverage_workspace/requests.json"
+
+case "$spec_source" in
+    http://* | https://*)
+        curl --fail --silent --show-error --location --retry 3 --max-time 60 \
+            --output "$spec_file" "$spec_source" || fail "$unreadable_spec"
+        ;;
+    *) cp -- "$spec_source" "$spec_file" 2>/dev/null || fail "$unreadable_spec" ;;
+esac
+jq -e '.paths | type == "object"' "$spec_file" >/dev/null 2>&1 || fail "$unreadable_spec"
+
+base_url="$(sed -n 's/^ *const val PRODUCTION_URL = "\([^"]*\)"$/\1/p' "$client_options" 2>/dev/null || true)"
+if [[ -z "$base_url" || "$base_url" == *$'\n'* ]]; then
+    fail "Could not read the default base URL from $client_options. Keep it in 1 line that reads const val PRODUCTION_URL = \"<url>\"."
+fi
+
+for client in blocking async; do
+    [[ -d "$services/$client" ]] ||
+        fail "Could not find the $client services in $services/$client. Fix the path in scripts/api-coverage."
+    while IFS= read -r -d '' impl; do
+        jq -Rs -c --arg file "$impl" --arg client "$client" '
+            def line_of($offset): .[0:$offset] | [scan("\n")] | length + 1;
+            def segment:
+                if test("^\"[^\"/]+\"$") then .[1:-1]
+                elif test("^params\\._pathParam\\([0-9]+\\)$") then "{}"
+                else null
+                end;
+            . as $text
+            | match("\\.method\\("; "g").offset as $offset
+            | ([$text[$offset:]
+                | capture("\\A\\.method\\(HttpMethod\\.(?<method>[A-Z]+)\\)\\s*\\.baseUrl\\(clientOptions\\.baseUrl\\(\\)\\)\\s*\\.addPathSegments\\((?<segments>(?:[^()]|\\([0-9]+\\))*)\\)")]
+                | first) as $request
+            | [$request.segments // "" | split(",")[] | gsub("^\\s+|\\s+$"; "") | select(length > 0) | segment] as $path
+            | if $request == null or ($path | length) == 0 or any($path[]; . == null) then
+                {file: $file, line: ($text | line_of($offset))}
+              else
+                {client: $client, operation: "\($request.method) /\($path | join("/"))"}
+              end
+        ' "$impl"
+    done < <(find "$services/$client" -type f -name '*Impl.kt' -print0)
+done >"$requests_file"
+
+unreadable_requests="$(jq -rs '
+    map(select(.file)) | sort_by(.file, .line)[]
+    | "\(.file):\(.line) sends a request whose method or path this check cannot read."
+' "$requests_file")"
+if [[ -n "$unreadable_requests" ]]; then
+    fail "$unreadable_requests" \
+        "Build each request with .method(HttpMethod.<METHOD>), then .baseUrl(clientOptions.baseUrl()), then .addPathSegments with string literals and params._pathParam(<index>)."
+fi
+
+[[ -f "$exclusions_file" ]] || fail "$exclusions_file is not valid. The file does not exist." "$invalid_next_step"
+exclusion_problems="$(jq -rs --arg name "$exclusions_file" '
+    def path_shape: gsub("\\{[^}]*\\}"; "{}");
+    def well_formed: type == "string" and test("^[A-Z]+ /[^ ]*$");
+    def group_problems($number):
+        if type != "object" then "Group \($number) must be an object with a reason and operations."
+        else
+            (keys[] | select(. != "reason" and . != "operations") | "Group \($number) has the unknown key \(.)."),
+            (if (.reason | type) == "string" and (.reason | test("\\S")) then empty
+             else "Group \($number) needs a non-empty reason." end),
+            (if (.operations | type) == "array" and (.operations | length) > 0 then
+                .operations[] | select(well_formed | not)
+                | "Group \($number) lists \(tostring), but each operation needs an upper-case method, 1 space and a path that starts with /."
+             else "Group \($number) needs at least 1 operation." end)
+        end;
+    "\($name) is not valid. " + (
+        if length == 0 then "It is empty."
+        elif length > 1 then "It holds \(length) JSON values, but it needs 1 array."
+        elif (.[0] | type) != "array" then "It must be a JSON array of groups."
+        else
+            .[0]
+            | [to_entries[] | .key as $index | .value | group_problems($index + 1)] as $group_problems
+            | if ($group_problems | length) > 0 then $group_problems[]
+              else
+                [.[].operations[]] | group_by(path_shape)[] | select(length > 1)
+                | "It lists \(.[0]) \(length) times. List each operation once."
+              end
+        end
+    )
+' "$exclusions_file" 2>/dev/null)" || exclusion_problems="$exclusions_file is not valid. It does not parse as JSON."
+[[ -z "$exclusion_problems" ]] || fail "$exclusion_problems" "$invalid_next_step"
+
+jq -r \
+    --arg base_url "$base_url" \
+    --arg exclusions_name "$exclusions_file" \
+    --slurpfile requests "$requests_file" \
+    --slurpfile exclusions "$exclusions_file" '
+    def url_path: sub("^[A-Za-z][A-Za-z0-9+.-]*://[^/]*"; "") | sub("/+$"; "");
+    def path_shape: gsub("\\{[^}]*\\}"; "{}");
+    def operation_methods: ["get", "put", "post", "delete", "options", "head", "patch", "trace"];
+    def client_operations($client):
+        $requests | map(select(.client == $client) | .operation | sub(" "; " \($base_url | url_path)")) | unique;
+
+    client_operations("blocking") as $blocking
+    | client_operations("async") as $async
+    | ($blocking - ($blocking - $async) | map(path_shape) | INDEX(.)) as $sdk
+    | (.servers // []) as $root_servers
+    | [.paths | to_entries[] | select(.value["$ref"]) | .key] as $referenced_paths
+    | [.paths | to_entries[] | .key as $path | .value as $item
+        | $item | to_entries[] | select(.key as $key | operation_methods | index($key) != null)
+        | ((.value.servers // $item.servers // $root_servers)[0].url // "" | url_path) as $server
+        | "\(.key | ascii_upcase) \($server)\($path)" as $operation
+        | {operation: $operation, shape: ($operation | path_shape), id: .value.operationId}] as $api
+    | ($api | map(.shape) | INDEX(.)) as $api_shapes
+    | [$exclusions[0][].operations[]] as $excluded
+    | ($excluded | map(path_shape) | INDEX(.)) as $excluded_shapes
+    | [$referenced_paths[] | "The API spec path \(.) uses $ref, which this check cannot read."] as $unread
+    | ([($blocking - $async)[] | "\(.) is in the blocking client but not in the async client."]
+        + [($async - $blocking)[] | "\(.) is in the async client but not in the blocking client."]) as $gaps
+    | [$api | sort_by(.operation)[] | select($sdk[.shape] == null and $excluded_shapes[.shape] == null)
+        | "\(.operation)\(if .id then " (\(.id))" else "" end) is in the API but not in the SDK."] as $missing
+    | [$excluded | sort[] | select($api_shapes[path_shape] == null)
+        | "\($exclusions_name) lists \(.), which the API no longer has. Remove it."] as $gone
+    | [$excluded | sort[] | select($api_shapes[path_shape] != null and $sdk[path_shape] != null)
+        | "\($exclusions_name) lists \(.), which the SDK already implements. Remove it."] as $implemented
+    | ($unread + $gaps + $missing + $gone + $implemented) as $failures
+    | ($api | map(select($sdk[.shape] != null)) | length) as $covered
+    | if ($failures | length) == 0 then
+        "The SDK covers \($covered) of \($api | length) API operations"
+        + (if $covered < ($api | length) then ", and \($exclusions_name) lists the other \(($api | length) - $covered)" else "" end)
+        + "."
+      else
+        $failures
+        + [if ($unread | length) > 0 then "Inline each path item that uses $ref in the API spec, or set XQUIK_OPENAPI_SPEC to a spec that does."
+           elif ($missing | length) > 0 then "Add each operation above to the SDK, or list it in \($exclusions_name) with a reason."
+           elif ($gaps | length) > 0 then "Add each operation above to the client that lacks it, then rerun."
+           else "Update \($exclusions_name) as the lines above say, then rerun."
+           end]
+        | join("\n") + "\n" | halt_error(1)
+      end
+' "$spec_file"

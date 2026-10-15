@@ -62,7 +62,7 @@ bin/check-local
 ```
 
 It checks the tools and both JDKs first.
-Then it runs lint, shellcheck, the script tests, REUSE, build, tests, coverage, 30 seconds of Jazzer fuzzing, the dependency audit, the reproducible artifact check, and CodeQL security-extended queries.
+Then it runs the API coverage check, lint, shellcheck, the script tests, REUSE, build, tests, coverage, 30 seconds of Jazzer fuzzing, the dependency audit, the reproducible artifact check, and CodeQL security-extended queries.
 It stops at the first failure and says what to fix.
 REUSE 6.2.0 runs through `uvx` on every run.
 CodeQL and REUSE are required, and any finding fails the run.
@@ -118,6 +118,45 @@ When fuzzing finds a failure, Jazzer saves the input in `RetryAfterFuzzTestInput
 Service tests accept literal loopback traffic only.
 
 This guard prevents tests from mutating remote services.
+
+## API coverage
+
+`scripts/api-coverage` fails when the API has an operation that the SDK neither implements nor excludes.
+
+It reads the operations of the public spec at https://xquik.com/openapi.json.
+Each operation is its upper-case method and the path of its server joined with its path key, such as `GET /api/v1/x/trends`.
+It reads the SDK operations from the `HttpMethod` and `addPathSegments` calls of each service `Impl` class.
+An operation counts only when the blocking and the async client both send it.
+Each SDK path starts with the path of `PRODUCTION_URL` in `ClientOptions.kt`.
+Path parameter names do not matter, so `{id}` matches `{tweetId}`.
+The check ignores SDK operations that the spec lacks.
+
+Fix a failure by its line.
+
+- An operation the API has but the SDK lacks needs a method in both clients, or an entry in `excluded-operations.json` with a reason.
+- An excluded operation that the API no longer has, or that the SDK now implements, comes out of `excluded-operations.json`.
+- A request that the check cannot read needs the generated form, with string literals and `params._pathParam(n)` in `addPathSegments`.
+
+`excluded-operations.json` holds groups of operations that share 1 reason.
+Each group needs a non-empty reason and at least 1 operation.
+An operation appears at most once in the file.
+
+```json
+[
+  {
+    "reason": "Searches the Xquik docs at https://xquik.com/ask, outside the SDK base URL https://xquik.com/api/v1.",
+    "operations": ["GET /ask", "POST /ask"]
+  }
+]
+```
+
+Set `XQUIK_OPENAPI_SPEC` to a file path or another URL to check against another copy of the spec.
+A relative path starts from the folder you run the check in.
+The check reads JSON only.
+
+```sh
+XQUIK_OPENAPI_SPEC=/path/to/openapi.json ./scripts/api-coverage
+```
 
 ## Submit changes
 
