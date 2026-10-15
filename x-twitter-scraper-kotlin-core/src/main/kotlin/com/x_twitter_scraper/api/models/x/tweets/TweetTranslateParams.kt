@@ -264,14 +264,7 @@ private constructor(
     }
 
     override fun hashCode(): Int =
-        Objects.hash(
-            id,
-            language,
-            fields,
-            omit,
-            additionalHeaders,
-            additionalQueryParams,
-        )
+        Objects.hash(id, language, fields, omit, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "TweetTranslateParams{id=$id, language=$language, fields=$fields, omit=$omit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

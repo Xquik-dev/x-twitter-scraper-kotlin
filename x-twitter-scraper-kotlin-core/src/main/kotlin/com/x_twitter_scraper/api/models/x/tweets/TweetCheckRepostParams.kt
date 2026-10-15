@@ -258,14 +258,7 @@ private constructor(
     }
 
     override fun hashCode(): Int =
-        Objects.hash(
-            id,
-            user,
-            fields,
-            omit,
-            additionalHeaders,
-            additionalQueryParams,
-        )
+        Objects.hash(id, user, fields, omit, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "TweetCheckRepostParams{id=$id, user=$user, fields=$fields, omit=$omit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

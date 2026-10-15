@@ -355,11 +355,7 @@ private constructor(
              * @throws IllegalStateException if any required field is unset.
              */
             fun build(): Link =
-                Link(
-                    checkRequired("url", url),
-                    resolvedUrl,
-                    additionalProperties.toMutableMap(),
-                )
+                Link(checkRequired("url", url), resolvedUrl, additionalProperties.toMutableMap())
         }
 
         private var validated: Boolean = false
@@ -406,11 +402,7 @@ private constructor(
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(
-                url,
-                resolvedUrl,
-                additionalProperties,
-            )
+            Objects.hash(url, resolvedUrl, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
@@ -431,11 +423,7 @@ private constructor(
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(
-            links,
-            unprocessedUrls,
-            additionalProperties,
-        )
+        Objects.hash(links, unprocessedUrls, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode

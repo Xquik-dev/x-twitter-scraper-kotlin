@@ -251,13 +251,7 @@ private constructor(
     }
 
     override fun hashCode(): Int =
-        Objects.hash(
-            urls,
-            fields,
-            omit,
-            additionalHeaders,
-            additionalQueryParams,
-        )
+        Objects.hash(urls, fields, omit, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "TweetResolveLinksParams{urls=$urls, fields=$fields, omit=$omit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

@@ -118,10 +118,7 @@ private constructor(
          * @throws IllegalStateException if any required field is unset.
          */
         fun build(): TweetEmbedResponse =
-            TweetEmbedResponse(
-                checkRequired("embed", embed),
-                additionalProperties.toMutableMap(),
-            )
+            TweetEmbedResponse(checkRequired("embed", embed), additionalProperties.toMutableMap())
     }
 
     private var validated: Boolean = false
@@ -520,10 +517,7 @@ private constructor(
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(
-            embed,
-            additionalProperties,
-        )
+        Objects.hash(embed, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode
