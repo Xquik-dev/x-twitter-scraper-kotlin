@@ -20,6 +20,7 @@
 ### Chores
 
 * The prefix of the idempotency key that the client can generate is now `xquik-kotlin-retry-`. The client never sends that key by default, so no request changes.
+* The SDK now depends on kotlin-stdlib 2.3.21, the latest patch of the 2.3 line, instead of 2.3.20.
 
 ## 0.9.3 (2026-08-21)
 
