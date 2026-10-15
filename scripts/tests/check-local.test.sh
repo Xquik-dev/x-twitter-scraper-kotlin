@@ -9,7 +9,8 @@ set -euo pipefail
 # shellcheck source=scripts/tests/support.sh
 source "$(dirname -- "${BASH_SOURCE[0]}")/support.sh"
 
-readonly check_order="lint
+readonly check_order="api-coverage
+lint
 shellcheck
 test-scripts
 uvx
@@ -20,12 +21,12 @@ fuzz
 audit
 check-reproducible
 codeql"
-readonly passed_line="Passed lint, shellcheck, script tests, REUSE, build, 12 tests, coverage, fuzzing, audit, reproducible artifacts and CodeQL."
+readonly passed_line="Passed API coverage, lint, shellcheck, script tests, REUSE, build, 12 tests, coverage, fuzzing, audit, reproducible artifacts and CodeQL."
 
 prepare_checks() {
     local name
     copy_file bin/check-local
-    for name in lint test-scripts build coverage fuzz audit check-reproducible codeql; do
+    for name in api-coverage lint test-scripts build coverage fuzz audit check-reproducible codeql; do
         stub "scripts/$name" <<EOF
 #!/usr/bin/env bash
 echo "$name" >>"\$FAKE_LOGS/order"
@@ -110,7 +111,7 @@ EOF
     run_in_repo bin/check-local --no-status
 
     assert_equal 0 "$run_status" "the exit code"
-    assert_equal "--external-sources bin/check-local scripts/audit scripts/build scripts/check-reproducible scripts/codeql scripts/coverage scripts/fuzz scripts/lint scripts/test scripts/test-scripts scripts/tests/sample.test.sh" \
+    assert_equal "--external-sources bin/check-local scripts/api-coverage scripts/audit scripts/build scripts/check-reproducible scripts/codeql scripts/coverage scripts/fuzz scripts/lint scripts/test scripts/test-scripts scripts/tests/sample.test.sh" \
         "$(log_of shellcheck)" "the shellcheck call"
 }
 
@@ -201,7 +202,8 @@ test_a_failing_check_stops_the_run_and_posts_a_failure_status_that_names_it() {
 
     assert_equal 1 "$run_status" "the exit code"
     assert_equal "Check failed at Tests. Fix the failing or skipped tests above, then rerun." "$run_stderr" "stderr"
-    assert_equal "lint
+    assert_equal "api-coverage
+lint
 shellcheck
 test-scripts
 uvx
@@ -210,6 +212,17 @@ test" "$(log_of order)" "the checks that ran"
     assert_equal "repos/Xquik-dev/x-twitter-scraper-kotlin/statuses/$head pending Local checks are running.
 repos/Xquik-dev/x-twitter-scraper-kotlin/statuses/$head failure Failed at Tests." \
         "$(log_of gh)" "the posted statuses"
+}
+
+test_an_api_coverage_failure_stops_the_run_before_the_slow_checks() {
+    prepare_checks
+    run_env+=("FAKE_FAILING_CHECK=api-coverage")
+
+    run_in_repo bin/check-local --no-status
+
+    assert_equal 1 "$run_status" "the exit code"
+    assert_equal "Check failed at API coverage. Follow the next step above, then rerun." "$run_stderr" "stderr"
+    assert_equal "api-coverage" "$(log_of order)" "the checks that ran"
 }
 
 test_a_codeql_failure_posts_a_failure_status_and_no_success() {

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Chores
+
+* `bin/check-local` now fails when the API has an operation that the SDK neither implements nor lists in `excluded-operations.json`.
+
 ## 0.9.4 (2026-10-13)
 
 [Full changelog from v0.9.3 to v0.9.4](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.9.3...v0.9.4)

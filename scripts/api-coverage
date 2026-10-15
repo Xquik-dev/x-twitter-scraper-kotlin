@@ -1,0 +1,155 @@
+#!/usr/bin/env bash
+
+# SPDX-FileCopyrightText: 2026 Xquik contributors
+#
+# SPDX-License-Identifier: Apache-2.0
+
+set -euo pipefail
+
+cd -- "$(dirname -- "$0")/.."
+
+readonly public_spec="https://xquik.com/openapi.json"
+readonly exclusions_file="excluded-operations.json"
+readonly source_root="x-twitter-scraper-kotlin-core/src/main/kotlin/com/x_twitter_scraper/api"
+readonly client_options="$source_root/core/ClientOptions.kt"
+readonly services="$source_root/services"
+readonly spec_source="${XQUIK_OPENAPI_SPEC:-$public_spec}"
+
+fail() {
+    printf '%s\n' "$@" >&2
+    exit 1
+}
+
+coverage_workspace="$(mktemp -d "${TMPDIR:-/tmp}/xquik-kotlin-api-coverage.XXXXXX")"
+trap 'rm -rf -- "$coverage_workspace"' EXIT
+readonly spec_file="$coverage_workspace/spec.json"
+readonly sdk_file="$coverage_workspace/sdk.json"
+
+unreadable_spec="Could not read the API spec from $spec_source. Check network access, or set XQUIK_OPENAPI_SPEC to a local copy of $public_spec."
+case "$spec_source" in
+    http://* | https://*)
+        curl --fail --silent --location --max-time 60 --output "$spec_file" "$spec_source" 2>/dev/null ||
+            fail "$unreadable_spec"
+        ;;
+    *) cp -- "$spec_source" "$spec_file" 2>/dev/null || fail "$unreadable_spec" ;;
+esac
+jq -e '.paths | type == "object"' "$spec_file" >/dev/null 2>&1 || fail "$unreadable_spec"
+
+base_url="$(sed -n 's/^ *const val PRODUCTION_URL = "\([^"]*\)"$/\1/p' "$client_options" 2>/dev/null || true)"
+if [[ -z "$base_url" || "$base_url" == *$'\n'* ]]; then
+    fail "Could not read the default base URL from $client_options. Keep it in 1 line that reads const val PRODUCTION_URL = \"<url>\"."
+fi
+
+[[ -d "$services" ]] || fail "Could not find the services in $services. Fix the path in scripts/api-coverage."
+
+while IFS= read -r -d '' impl; do
+    jq -Rs -c --arg file "$impl" '
+        def line_of($offset): .[0:$offset] | [scan("\n")] | length + 1;
+        def unreadable($offset):
+            line_of($offset) as $line
+            | {file: $file, line: $line, error: "\($file):\($line) sends a request whose method or path this check cannot read."};
+        def segment:
+            if test("^\"[^\"/]+\"$") then .[1:-1]
+            elif test("^params\\._pathParam\\([0-9]+\\)$") then "{}"
+            else null
+            end;
+        . as $text
+        | ([match("\\.method\\(HttpMethod\\.([A-Z]+)\\)\\s*\\.baseUrl\\(clientOptions\\.baseUrl\\(\\)\\)\\s*\\.addPathSegments\\(((?:[^()]|\\([0-9]+\\))*)\\)"; "g")
+            | {key: (.offset | tostring), value: {method: .captures[0].string, segments: .captures[1].string}}]
+            | from_entries) as $requests
+        | match("\\.method\\("; "g").offset as $offset
+        | $requests[$offset | tostring] as $request
+        | if $request == null then $text | unreadable($offset)
+          else
+            [$request.segments | split(",")[] | gsub("^\\s+|\\s+$"; "") | select(length > 0) | segment] as $path
+            | if ($path | length) == 0 or any($path[]; . == null) then $text | unreadable($offset)
+              else {operation: "\($request.method) /\($path | join("/"))"}
+              end
+          end
+    ' "$impl"
+done < <(find "$services" -type f -name '*ServiceImpl.kt' -print0) >"$sdk_file"
+
+unreadable_requests="$(jq -rs 'map(select(.error)) | sort_by(.file, .line)[].error' "$sdk_file")"
+if [[ -n "$unreadable_requests" ]]; then
+    fail "$unreadable_requests" \
+        "Build each request with .method(HttpMethod.<METHOD>), then .baseUrl(clientOptions.baseUrl()), then .addPathSegments with string literals and params._pathParam(<index>)."
+fi
+
+if [[ ! -f "$exclusions_file" ]]; then
+    fail "$exclusions_file is not valid. The file does not exist." \
+        "Fix $exclusions_file as the lines above say, then rerun."
+fi
+if ! jq -e . "$exclusions_file" >/dev/null 2>&1; then
+    fail "$exclusions_file is not valid. It does not parse as JSON." \
+        "Fix $exclusions_file as the lines above say, then rerun."
+fi
+
+jq -r \
+    --arg base_url "$base_url" \
+    --arg exclusions_name "$exclusions_file" \
+    --slurpfile sdk "$sdk_file" \
+    --slurpfile exclusions "$exclusions_file" '
+    def url_path: sub("^[A-Za-z][A-Za-z0-9+.-]*://[^/]*"; "") | sub("/+$"; "");
+    def identity: gsub("\\{[^}]*\\}"; "{}");
+    def operation_methods: ["get", "put", "post", "delete", "options", "head", "patch", "trace"];
+    def well_formed: type == "string" and test("^[A-Z]+ /[^ ]*$");
+    def group_problems($number):
+        if type != "object" then ["Group \($number) must be an object with a reason and operations."]
+        else
+            [keys[] | select(. != "reason" and . != "operations") | "Group \($number) has the unknown key \(.)."]
+            + (if (.reason | type) == "string" and (.reason | test("\\S")) then []
+               else ["Group \($number) needs a non-empty reason."] end)
+            + (if (.operations | type) == "array" and (.operations | length) > 0
+               then [.operations[] | select(well_formed | not) | "Group \($number) lists \(tostring), but each operation needs an upper-case method, 1 space and a path that starts with /."]
+               else ["Group \($number) needs at least 1 operation."] end)
+        end;
+    def exclusion_problems:
+        if type != "array" then ["It must be a JSON array of groups."]
+        else
+            [to_entries[] | .key as $index | .value | group_problems($index + 1)[]] as $group_problems
+            | if ($group_problems | length) > 0 then $group_problems
+              else
+                [.[].operations[]]
+                | group_by(identity)
+                | map(select(length > 1) | "It lists \(.[0]) \(length) times. List each operation once.")
+              end
+        end;
+
+    ($base_url | url_path) as $base_path
+    | ($sdk | map(.operation | sub(" "; " \($base_path)")) | unique) as $sdk_operations
+    | (.servers // []) as $root_servers
+    | [.paths | to_entries[] | .key as $path | .value as $item
+        | $item | to_entries[] | select(.key as $key | operation_methods | index($key))
+        | ((.value.servers // $item.servers // $root_servers)[0].url // "" | url_path) as $server
+        | "\(.key | ascii_upcase) \($server)\($path)" as $operation
+        | {operation: $operation, identity: ($operation | identity), id: .value.operationId}] as $api
+    | ($exclusions[0] | exclusion_problems) as $problems
+    | if ($problems | length) > 0 then
+        ($problems | map("\($exclusions_name) is not valid. \(.)") + ["Fix \($exclusions_name) as the lines above say, then rerun."])
+        | join("\n") + "\n" | halt_error(1)
+      else
+        ($api | map(.identity)) as $api_identities
+        | ($sdk_operations | map(identity)) as $sdk_identities
+        | [$exclusions[0][].operations[]] as $excluded
+        | ($excluded | map(identity)) as $excluded_identities
+        | [$api | sort_by(.operation)[] | select(.identity as $identity | ($sdk_identities | index($identity)) or ($excluded_identities | index($identity)) | not)
+            | "\(.operation)\(if .id then " (\(.id))" else "" end) is in the API but not in the SDK."] as $missing
+        | [$excluded | sort[] | select(identity as $identity | $api_identities | index($identity) | not)
+            | "\($exclusions_name) lists \(.), which the API no longer has. Remove it."] as $gone
+        | [$excluded | sort[] | select(identity as $identity | ($api_identities | index($identity)) and ($sdk_identities | index($identity)))
+            | "\($exclusions_name) lists \(.), which the SDK already implements. Remove it."] as $implemented
+        | if ($missing + $gone + $implemented | length) > 0 then
+            ($missing + $gone + $implemented
+                + [if ($missing | length) > 0
+                   then "Add each operation above to the SDK, or list it in \($exclusions_name) with a reason."
+                   else "Update \($exclusions_name) as the lines above say, then rerun."
+                   end])
+            | join("\n") + "\n" | halt_error(1)
+          else
+            ($api | map(select(.identity as $identity | $sdk_identities | index($identity))) | length) as $covered
+            | if $covered == ($api | length) then "The SDK covers all \($covered) API operations."
+              else "The SDK covers \($covered) of \($api | length) API operations, and \($exclusions_name) lists the other \(($api | length) - $covered)."
+              end
+          end
+      end
+' "$spec_file"
