@@ -12,11 +12,39 @@ internal class FollowerCheckParamsTest {
 
     @Test
     fun create() {
-        FollowerCheckParams.builder().source("source").target("target").build()
+        FollowerCheckParams.builder()
+            .source("source")
+            .target("target")
+            .fields("id,text,author.username")
+            .omit("entities,media")
+            .build()
     }
 
     @Test
     fun queryParams() {
+        val params =
+            FollowerCheckParams.builder()
+                .source("source")
+                .target("target")
+                .fields("id,text,author.username")
+                .omit("entities,media")
+                .build()
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("source", "source")
+                    .put("target", "target")
+                    .put("fields", "id,text,author.username")
+                    .put("omit", "entities,media")
+                    .build()
+            )
+    }
+
+    @Test
+    fun queryParamsWithoutOptionalFields() {
         val params = FollowerCheckParams.builder().source("source").target("target").build()
 
         val queryParams = params._queryParams()

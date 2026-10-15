@@ -23,13 +23,14 @@ private constructor(
     private val limit: Long?,
     private val outputMode: OutputMode?,
     private val outputPreset: OutputPreset?,
+    private val wait: Long?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun id(): String? = id
 
-    /** Previous nextCursor. */
+    /** Previous nextCursor. The after alias also works. Offset pagination is not supported. */
     fun cursor(): String? = cursor
 
     /** Preserve source keys or convert result field names. */
@@ -38,14 +39,20 @@ private constructor(
     /** Use outputMode=raw instead. */
     fun includeRaw(): Boolean? = includeRaw
 
-    /** Maximum number of results to return (1-1000, default 100) */
+    /** Maximum results per page (1-1000, default 100). */
     fun limit(): Long? = limit
 
-    /** Select compact, full, or raw-compatible result fields. */
+    /**
+     * Use compact for core fields and tweet counts, full for nested enrichment, or raw for a source
+     * copy.
+     */
     fun outputMode(): OutputMode? = outputMode
 
     /** Keep enrichment nested or merge it into each result. */
     fun outputPreset(): OutputPreset? = outputPreset
+
+    /** Wait up to this many seconds when the job is active. */
+    fun wait(): Long? = wait
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -73,6 +80,7 @@ private constructor(
         private var limit: Long? = null
         private var outputMode: OutputMode? = null
         private var outputPreset: OutputPreset? = null
+        private var wait: Long? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -84,13 +92,14 @@ private constructor(
             limit = extractionRetrieveParams.limit
             outputMode = extractionRetrieveParams.outputMode
             outputPreset = extractionRetrieveParams.outputPreset
+            wait = extractionRetrieveParams.wait
             additionalHeaders = extractionRetrieveParams.additionalHeaders.toBuilder()
             additionalQueryParams = extractionRetrieveParams.additionalQueryParams.toBuilder()
         }
 
         fun id(id: String?) = apply { this.id = id }
 
-        /** Previous nextCursor. */
+        /** Previous nextCursor. The after alias also works. Offset pagination is not supported. */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
         /** Preserve source keys or convert result field names. */
@@ -102,17 +111,26 @@ private constructor(
         /** Alias for [Builder.includeRaw]. */
         fun includeRaw(includeRaw: Boolean) = includeRaw(includeRaw as Boolean?)
 
-        /** Maximum number of results to return (1-1000, default 100) */
+        /** Maximum results per page (1-1000, default 100). */
         fun limit(limit: Long?) = apply { this.limit = limit }
 
         /** Alias for [Builder.limit]. */
         fun limit(limit: Long) = limit(limit as Long?)
 
-        /** Select compact, full, or raw-compatible result fields. */
+        /**
+         * Use compact for core fields and tweet counts, full for nested enrichment, or raw for a
+         * source copy.
+         */
         fun outputMode(outputMode: OutputMode?) = apply { this.outputMode = outputMode }
 
         /** Keep enrichment nested or merge it into each result. */
         fun outputPreset(outputPreset: OutputPreset?) = apply { this.outputPreset = outputPreset }
+
+        /** Wait up to this many seconds when the job is active. */
+        fun wait(wait: Long?) = apply { this.wait = wait }
+
+        /** Alias for [Builder.wait]. */
+        fun wait(wait: Long) = wait(wait as Long?)
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -226,6 +244,7 @@ private constructor(
                 limit,
                 outputMode,
                 outputPreset,
+                wait,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -248,6 +267,7 @@ private constructor(
                 limit?.let { put("limit", it.toString()) }
                 outputMode?.let { put("outputMode", it.toString()) }
                 outputPreset?.let { put("outputPreset", it.toString()) }
+                wait?.let { put("wait", it.toString()) }
                 putAll(additionalQueryParams)
             }
             .build()
@@ -626,6 +646,7 @@ private constructor(
             limit == other.limit &&
             outputMode == other.outputMode &&
             outputPreset == other.outputPreset &&
+            wait == other.wait &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
@@ -639,10 +660,11 @@ private constructor(
             limit,
             outputMode,
             outputPreset,
+            wait,
             additionalHeaders,
             additionalQueryParams,
         )
 
     override fun toString() =
-        "ExtractionRetrieveParams{id=$id, cursor=$cursor, fieldStyle=$fieldStyle, includeRaw=$includeRaw, limit=$limit, outputMode=$outputMode, outputPreset=$outputPreset, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "ExtractionRetrieveParams{id=$id, cursor=$cursor, fieldStyle=$fieldStyle, includeRaw=$includeRaw, limit=$limit, outputMode=$outputMode, outputPreset=$outputPreset, wait=$wait, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

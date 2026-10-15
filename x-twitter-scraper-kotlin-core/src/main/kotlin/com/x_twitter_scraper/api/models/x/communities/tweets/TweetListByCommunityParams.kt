@@ -4,31 +4,208 @@
 
 package com.x_twitter_scraper.api.models.x.communities.tweets
 
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.x_twitter_scraper.api.core.Enum
+import com.x_twitter_scraper.api.core.JsonField
 import com.x_twitter_scraper.api.core.Params
 import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
+import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
+import java.time.LocalDate
 import java.util.Objects
 
 /** List tweets posted in a community */
 class TweetListByCommunityParams
 private constructor(
     private val id: String?,
+    private val anyWords: String?,
+    private val blueVerifiedOnly: Boolean?,
+    private val cashtags: String?,
+    private val conversationId: String?,
     private val cursor: String?,
+    private val exactPhrase: String?,
+    private val excludeWords: String?,
+    private val fields: String?,
+    private val fromUser: String?,
+    private val hashtags: String?,
+    private val inReplyToTweetId: String?,
+    private val language: String?,
+    private val maxFaves: Long?,
+    private val maxId: String?,
+    private val maxQuotes: Long?,
+    private val maxReplies: Long?,
+    private val maxRetweets: Long?,
+    private val mediaType: MediaType?,
+    private val mentioning: String?,
+    private val minBookmarks: Long?,
+    private val minLikes: Long?,
+    private val minQuotes: Long?,
+    private val minReplies: Long?,
+    private val minRetweets: Long?,
+    private val minViews: Long?,
+    private val nativeRetweets: Boolean?,
+    private val omit: String?,
     private val pageSize: Long?,
+    private val queryType: QueryType?,
+    private val quotes: Quotes?,
+    private val quotesOfTweetId: String?,
+    private val replies: Replies?,
+    private val retweets: Retweets?,
+    private val retweetsOfTweetId: String?,
+    private val sinceDate: LocalDate?,
+    private val sinceId: String?,
+    private val toUser: String?,
+    private val untilDate: LocalDate?,
+    private val url: String?,
+    private val verifiedOnly: Boolean?,
+    private val withinTime: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun id(): String? = id
 
-    /** Pagination cursor for community tweets */
-    fun cursor(): String? = cursor
+    /** Words or quoted phrases where any one can match. Separate with spaces, commas, or lines. */
+    fun anyWords(): String? = anyWords
+
+    /** Only return tweets from Blue-verified authors. */
+    fun blueVerifiedOnly(): Boolean? = blueVerifiedOnly
+
+    /** Cashtags separated by spaces, commas, or lines. */
+    fun cashtags(): String? = cashtags
+
+    /** Conversation ID filter. */
+    fun conversationId(): String? = conversationId
 
     /**
-     * Maximum page items (1-100, default 20). Source, filters, or credits can reduce results.
-     * Continue while has_next_page is true. Deprecated limit and count aliases remain accepted.
+     * Pagination cursor for collection results. Also read as next_cursor, next_token,
+     * pagination_token or continuation_token.
+     */
+    fun cursor(): String? = cursor
+
+    /** Match this literal phrase, including any hyphens. */
+    fun exactPhrase(): String? = exactPhrase
+
+    /** Words or quoted phrases to exclude. Separate with spaces, commas, or lines. */
+    fun excludeWords(): String? = excludeWords
+
+    /**
+     * Fields to keep in each row, comma-separated. Use dots for nested fields, such as
+     * author.username. A list keeps the field in each item. Case & underscores do not matter. A row
+     * that lacks a field leaves it out. Cursors, counts & diagnostics always stay. An unknown name
+     * answers 400 unknown_field with the valid names, before any read. The price stays the same.
+     * SDK row types then hold only the named fields.
+     */
+    fun fields(): String? = fields
+
+    /** Filter by author username. */
+    fun fromUser(): String? = fromUser
+
+    /** Hashtags separated by spaces, commas, or lines. */
+    fun hashtags(): String? = hashtags
+
+    /** Only replies to this tweet ID. */
+    fun inReplyToTweetId(): String? = inReplyToTweetId
+
+    /** Filter by language. Its alias is `lang`. */
+    fun language(): String? = language
+
+    /** Maximum likes threshold. maxLikes & max_likes also work. */
+    fun maxFaves(): Long? = maxFaves
+
+    /** Return Tweets at or below this ID. */
+    fun maxId(): String? = maxId
+
+    /** Maximum quotes threshold. */
+    fun maxQuotes(): Long? = maxQuotes
+
+    /** Maximum replies threshold. */
+    fun maxReplies(): Long? = maxReplies
+
+    /** Maximum retweets threshold. */
+    fun maxRetweets(): Long? = maxRetweets
+
+    /** Filter media. Its aliases are has_video & has_media. */
+    fun mediaType(): MediaType? = mediaType
+
+    /** Filter tweets mentioning a username. */
+    fun mentioning(): String? = mentioning
+
+    /** Minimum bookmark count threshold. */
+    fun minBookmarks(): Long? = minBookmarks
+
+    /** Minimum likes. Its aliases are minFaves, min_likes & min_faves. */
+    fun minLikes(): Long? = minLikes
+
+    /** Minimum quote count threshold. */
+    fun minQuotes(): Long? = minQuotes
+
+    /** Minimum replies threshold. */
+    fun minReplies(): Long? = minReplies
+
+    /** Minimum retweets threshold. */
+    fun minRetweets(): Long? = minRetweets
+
+    /** Minimum view count threshold. */
+    fun minViews(): Long? = minViews
+
+    /** Only return native reposts. */
+    fun nativeRetweets(): Boolean? = nativeRetweets
+
+    /**
+     * Fields to drop from each row, comma-separated. It takes the same names as fields. With
+     * fields, it drops from the kept fields.
+     */
+    fun omit(): String? = omit
+
+    /**
+     * Items per page (1-100, default 20). Source, filters or credits can return fewer. Follow
+     * next_cursor for more pages. Its aliases are limit, count, max_results, maxItems, max_items &
+     * per_page.
      */
     fun pageSize(): Long? = pageSize
+
+    /**
+     * Latest for newest first, or Top for the posts X ranks highest. Any case works. Aliases
+     * ranking & sort, which also take Recency & Relevance. Send the same value with each cursor.
+     */
+    fun queryType(): QueryType? = queryType
+
+    /** Only when the caller requests a quote mode. */
+    fun quotes(): Quotes? = quotes
+
+    /** Only quotes of this tweet ID. */
+    fun quotesOfTweetId(): String? = quotesOfTweetId
+
+    /** Reply mode. Exclude keeps own-thread replies. */
+    fun replies(): Replies? = replies
+
+    /** Only when the caller requests a repost mode. */
+    fun retweets(): Retweets? = retweets
+
+    /** Only retweets of this tweet ID. */
+    fun retweetsOfTweetId(): String? = retweetsOfTweetId
+
+    /** Start date in YYYY-MM-DD format, as a UTC day. */
+    fun sinceDate(): LocalDate? = sinceDate
+
+    /** Return Tweets whose IDs exceed this ID. */
+    fun sinceId(): String? = sinceId
+
+    /** Filter replies sent to a username. */
+    fun toUser(): String? = toUser
+
+    /** End date in YYYY-MM-DD format, as a UTC day, inclusive, so its own posts count. */
+    fun untilDate(): LocalDate? = untilDate
+
+    /** URL substring or domain filter. */
+    fun url(): String? = url
+
+    /** Only return tweets from verified authors. */
+    fun verifiedOnly(): Boolean? = verifiedOnly
+
+    /** Keeps Tweets from a recent window, such as 90m or 7d. Use a whole number & s, m, h or d. */
+    fun withinTime(): String? = withinTime
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -52,32 +229,298 @@ private constructor(
     class Builder internal constructor() {
 
         private var id: String? = null
+        private var anyWords: String? = null
+        private var blueVerifiedOnly: Boolean? = null
+        private var cashtags: String? = null
+        private var conversationId: String? = null
         private var cursor: String? = null
+        private var exactPhrase: String? = null
+        private var excludeWords: String? = null
+        private var fields: String? = null
+        private var fromUser: String? = null
+        private var hashtags: String? = null
+        private var inReplyToTweetId: String? = null
+        private var language: String? = null
+        private var maxFaves: Long? = null
+        private var maxId: String? = null
+        private var maxQuotes: Long? = null
+        private var maxReplies: Long? = null
+        private var maxRetweets: Long? = null
+        private var mediaType: MediaType? = null
+        private var mentioning: String? = null
+        private var minBookmarks: Long? = null
+        private var minLikes: Long? = null
+        private var minQuotes: Long? = null
+        private var minReplies: Long? = null
+        private var minRetweets: Long? = null
+        private var minViews: Long? = null
+        private var nativeRetweets: Boolean? = null
+        private var omit: String? = null
         private var pageSize: Long? = null
+        private var queryType: QueryType? = null
+        private var quotes: Quotes? = null
+        private var quotesOfTweetId: String? = null
+        private var replies: Replies? = null
+        private var retweets: Retweets? = null
+        private var retweetsOfTweetId: String? = null
+        private var sinceDate: LocalDate? = null
+        private var sinceId: String? = null
+        private var toUser: String? = null
+        private var untilDate: LocalDate? = null
+        private var url: String? = null
+        private var verifiedOnly: Boolean? = null
+        private var withinTime: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(tweetListByCommunityParams: TweetListByCommunityParams) = apply {
             id = tweetListByCommunityParams.id
+            anyWords = tweetListByCommunityParams.anyWords
+            blueVerifiedOnly = tweetListByCommunityParams.blueVerifiedOnly
+            cashtags = tweetListByCommunityParams.cashtags
+            conversationId = tweetListByCommunityParams.conversationId
             cursor = tweetListByCommunityParams.cursor
+            exactPhrase = tweetListByCommunityParams.exactPhrase
+            excludeWords = tweetListByCommunityParams.excludeWords
+            fields = tweetListByCommunityParams.fields
+            fromUser = tweetListByCommunityParams.fromUser
+            hashtags = tweetListByCommunityParams.hashtags
+            inReplyToTweetId = tweetListByCommunityParams.inReplyToTweetId
+            language = tweetListByCommunityParams.language
+            maxFaves = tweetListByCommunityParams.maxFaves
+            maxId = tweetListByCommunityParams.maxId
+            maxQuotes = tweetListByCommunityParams.maxQuotes
+            maxReplies = tweetListByCommunityParams.maxReplies
+            maxRetweets = tweetListByCommunityParams.maxRetweets
+            mediaType = tweetListByCommunityParams.mediaType
+            mentioning = tweetListByCommunityParams.mentioning
+            minBookmarks = tweetListByCommunityParams.minBookmarks
+            minLikes = tweetListByCommunityParams.minLikes
+            minQuotes = tweetListByCommunityParams.minQuotes
+            minReplies = tweetListByCommunityParams.minReplies
+            minRetweets = tweetListByCommunityParams.minRetweets
+            minViews = tweetListByCommunityParams.minViews
+            nativeRetweets = tweetListByCommunityParams.nativeRetweets
+            omit = tweetListByCommunityParams.omit
             pageSize = tweetListByCommunityParams.pageSize
+            queryType = tweetListByCommunityParams.queryType
+            quotes = tweetListByCommunityParams.quotes
+            quotesOfTweetId = tweetListByCommunityParams.quotesOfTweetId
+            replies = tweetListByCommunityParams.replies
+            retweets = tweetListByCommunityParams.retweets
+            retweetsOfTweetId = tweetListByCommunityParams.retweetsOfTweetId
+            sinceDate = tweetListByCommunityParams.sinceDate
+            sinceId = tweetListByCommunityParams.sinceId
+            toUser = tweetListByCommunityParams.toUser
+            untilDate = tweetListByCommunityParams.untilDate
+            url = tweetListByCommunityParams.url
+            verifiedOnly = tweetListByCommunityParams.verifiedOnly
+            withinTime = tweetListByCommunityParams.withinTime
             additionalHeaders = tweetListByCommunityParams.additionalHeaders.toBuilder()
             additionalQueryParams = tweetListByCommunityParams.additionalQueryParams.toBuilder()
         }
 
         fun id(id: String?) = apply { this.id = id }
 
-        /** Pagination cursor for community tweets */
-        fun cursor(cursor: String?) = apply { this.cursor = cursor }
+        /**
+         * Words or quoted phrases where any one can match. Separate with spaces, commas, or lines.
+         */
+        fun anyWords(anyWords: String?) = apply { this.anyWords = anyWords }
+
+        /** Only return tweets from Blue-verified authors. */
+        fun blueVerifiedOnly(blueVerifiedOnly: Boolean?) = apply {
+            this.blueVerifiedOnly = blueVerifiedOnly
+        }
+
+        /** Alias for [Builder.blueVerifiedOnly]. */
+        fun blueVerifiedOnly(blueVerifiedOnly: Boolean) =
+            blueVerifiedOnly(blueVerifiedOnly as Boolean?)
+
+        /** Cashtags separated by spaces, commas, or lines. */
+        fun cashtags(cashtags: String?) = apply { this.cashtags = cashtags }
+
+        /** Conversation ID filter. */
+        fun conversationId(conversationId: String?) = apply { this.conversationId = conversationId }
 
         /**
-         * Maximum page items (1-100, default 20). Source, filters, or credits can reduce results.
-         * Continue while has_next_page is true. Deprecated limit and count aliases remain accepted.
+         * Pagination cursor for collection results. Also read as next_cursor, next_token,
+         * pagination_token or continuation_token.
+         */
+        fun cursor(cursor: String?) = apply { this.cursor = cursor }
+
+        /** Match this literal phrase, including any hyphens. */
+        fun exactPhrase(exactPhrase: String?) = apply { this.exactPhrase = exactPhrase }
+
+        /** Words or quoted phrases to exclude. Separate with spaces, commas, or lines. */
+        fun excludeWords(excludeWords: String?) = apply { this.excludeWords = excludeWords }
+
+        /**
+         * Fields to keep in each row, comma-separated. Use dots for nested fields, such as
+         * author.username. A list keeps the field in each item. Case & underscores do not matter. A
+         * row that lacks a field leaves it out. Cursors, counts & diagnostics always stay. An
+         * unknown name answers 400 unknown_field with the valid names, before any read. The price
+         * stays the same. SDK row types then hold only the named fields.
+         */
+        fun fields(fields: String?) = apply { this.fields = fields }
+
+        /** Filter by author username. */
+        fun fromUser(fromUser: String?) = apply { this.fromUser = fromUser }
+
+        /** Hashtags separated by spaces, commas, or lines. */
+        fun hashtags(hashtags: String?) = apply { this.hashtags = hashtags }
+
+        /** Only replies to this tweet ID. */
+        fun inReplyToTweetId(inReplyToTweetId: String?) = apply {
+            this.inReplyToTweetId = inReplyToTweetId
+        }
+
+        /** Filter by language. Its alias is `lang`. */
+        fun language(language: String?) = apply { this.language = language }
+
+        /** Maximum likes threshold. maxLikes & max_likes also work. */
+        fun maxFaves(maxFaves: Long?) = apply { this.maxFaves = maxFaves }
+
+        /** Alias for [Builder.maxFaves]. */
+        fun maxFaves(maxFaves: Long) = maxFaves(maxFaves as Long?)
+
+        /** Return Tweets at or below this ID. */
+        fun maxId(maxId: String?) = apply { this.maxId = maxId }
+
+        /** Maximum quotes threshold. */
+        fun maxQuotes(maxQuotes: Long?) = apply { this.maxQuotes = maxQuotes }
+
+        /** Alias for [Builder.maxQuotes]. */
+        fun maxQuotes(maxQuotes: Long) = maxQuotes(maxQuotes as Long?)
+
+        /** Maximum replies threshold. */
+        fun maxReplies(maxReplies: Long?) = apply { this.maxReplies = maxReplies }
+
+        /** Alias for [Builder.maxReplies]. */
+        fun maxReplies(maxReplies: Long) = maxReplies(maxReplies as Long?)
+
+        /** Maximum retweets threshold. */
+        fun maxRetweets(maxRetweets: Long?) = apply { this.maxRetweets = maxRetweets }
+
+        /** Alias for [Builder.maxRetweets]. */
+        fun maxRetweets(maxRetweets: Long) = maxRetweets(maxRetweets as Long?)
+
+        /** Filter media. Its aliases are has_video & has_media. */
+        fun mediaType(mediaType: MediaType?) = apply { this.mediaType = mediaType }
+
+        /** Filter tweets mentioning a username. */
+        fun mentioning(mentioning: String?) = apply { this.mentioning = mentioning }
+
+        /** Minimum bookmark count threshold. */
+        fun minBookmarks(minBookmarks: Long?) = apply { this.minBookmarks = minBookmarks }
+
+        /** Alias for [Builder.minBookmarks]. */
+        fun minBookmarks(minBookmarks: Long) = minBookmarks(minBookmarks as Long?)
+
+        /** Minimum likes. Its aliases are minFaves, min_likes & min_faves. */
+        fun minLikes(minLikes: Long?) = apply { this.minLikes = minLikes }
+
+        /** Alias for [Builder.minLikes]. */
+        fun minLikes(minLikes: Long) = minLikes(minLikes as Long?)
+
+        /** Minimum quote count threshold. */
+        fun minQuotes(minQuotes: Long?) = apply { this.minQuotes = minQuotes }
+
+        /** Alias for [Builder.minQuotes]. */
+        fun minQuotes(minQuotes: Long) = minQuotes(minQuotes as Long?)
+
+        /** Minimum replies threshold. */
+        fun minReplies(minReplies: Long?) = apply { this.minReplies = minReplies }
+
+        /** Alias for [Builder.minReplies]. */
+        fun minReplies(minReplies: Long) = minReplies(minReplies as Long?)
+
+        /** Minimum retweets threshold. */
+        fun minRetweets(minRetweets: Long?) = apply { this.minRetweets = minRetweets }
+
+        /** Alias for [Builder.minRetweets]. */
+        fun minRetweets(minRetweets: Long) = minRetweets(minRetweets as Long?)
+
+        /** Minimum view count threshold. */
+        fun minViews(minViews: Long?) = apply { this.minViews = minViews }
+
+        /** Alias for [Builder.minViews]. */
+        fun minViews(minViews: Long) = minViews(minViews as Long?)
+
+        /** Only return native reposts. */
+        fun nativeRetweets(nativeRetweets: Boolean?) = apply {
+            this.nativeRetweets = nativeRetweets
+        }
+
+        /** Alias for [Builder.nativeRetweets]. */
+        fun nativeRetweets(nativeRetweets: Boolean) = nativeRetweets(nativeRetweets as Boolean?)
+
+        /**
+         * Fields to drop from each row, comma-separated. It takes the same names as fields. With
+         * fields, it drops from the kept fields.
+         */
+        fun omit(omit: String?) = apply { this.omit = omit }
+
+        /**
+         * Items per page (1-100, default 20). Source, filters or credits can return fewer. Follow
+         * next_cursor for more pages. Its aliases are limit, count, max_results, maxItems,
+         * max_items & per_page.
          */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
         /** Alias for [Builder.pageSize]. */
         fun pageSize(pageSize: Long) = pageSize(pageSize as Long?)
+
+        /**
+         * Latest for newest first, or Top for the posts X ranks highest. Any case works. Aliases
+         * ranking & sort, which also take Recency & Relevance. Send the same value with each
+         * cursor.
+         */
+        fun queryType(queryType: QueryType?) = apply { this.queryType = queryType }
+
+        /** Only when the caller requests a quote mode. */
+        fun quotes(quotes: Quotes?) = apply { this.quotes = quotes }
+
+        /** Only quotes of this tweet ID. */
+        fun quotesOfTweetId(quotesOfTweetId: String?) = apply {
+            this.quotesOfTweetId = quotesOfTweetId
+        }
+
+        /** Reply mode. Exclude keeps own-thread replies. */
+        fun replies(replies: Replies?) = apply { this.replies = replies }
+
+        /** Only when the caller requests a repost mode. */
+        fun retweets(retweets: Retweets?) = apply { this.retweets = retweets }
+
+        /** Only retweets of this tweet ID. */
+        fun retweetsOfTweetId(retweetsOfTweetId: String?) = apply {
+            this.retweetsOfTweetId = retweetsOfTweetId
+        }
+
+        /** Start date in YYYY-MM-DD format, as a UTC day. */
+        fun sinceDate(sinceDate: LocalDate?) = apply { this.sinceDate = sinceDate }
+
+        /** Return Tweets whose IDs exceed this ID. */
+        fun sinceId(sinceId: String?) = apply { this.sinceId = sinceId }
+
+        /** Filter replies sent to a username. */
+        fun toUser(toUser: String?) = apply { this.toUser = toUser }
+
+        /** End date in YYYY-MM-DD format, as a UTC day, inclusive, so its own posts count. */
+        fun untilDate(untilDate: LocalDate?) = apply { this.untilDate = untilDate }
+
+        /** URL substring or domain filter. */
+        fun url(url: String?) = apply { this.url = url }
+
+        /** Only return tweets from verified authors. */
+        fun verifiedOnly(verifiedOnly: Boolean?) = apply { this.verifiedOnly = verifiedOnly }
+
+        /** Alias for [Builder.verifiedOnly]. */
+        fun verifiedOnly(verifiedOnly: Boolean) = verifiedOnly(verifiedOnly as Boolean?)
+
+        /**
+         * Keeps Tweets from a recent window, such as 90m or 7d. Use a whole number & s, m, h or d.
+         */
+        fun withinTime(withinTime: String?) = apply { this.withinTime = withinTime }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -185,8 +628,47 @@ private constructor(
         fun build(): TweetListByCommunityParams =
             TweetListByCommunityParams(
                 id,
+                anyWords,
+                blueVerifiedOnly,
+                cashtags,
+                conversationId,
                 cursor,
+                exactPhrase,
+                excludeWords,
+                fields,
+                fromUser,
+                hashtags,
+                inReplyToTweetId,
+                language,
+                maxFaves,
+                maxId,
+                maxQuotes,
+                maxReplies,
+                maxRetweets,
+                mediaType,
+                mentioning,
+                minBookmarks,
+                minLikes,
+                minQuotes,
+                minReplies,
+                minRetweets,
+                minViews,
+                nativeRetweets,
+                omit,
                 pageSize,
+                queryType,
+                quotes,
+                quotesOfTweetId,
+                replies,
+                retweets,
+                retweetsOfTweetId,
+                sinceDate,
+                sinceId,
+                toUser,
+                untilDate,
+                url,
+                verifiedOnly,
+                withinTime,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -203,11 +685,669 @@ private constructor(
     override fun _queryParams(): QueryParams =
         QueryParams.builder()
             .apply {
+                anyWords?.let { put("anyWords", it) }
+                blueVerifiedOnly?.let { put("blueVerifiedOnly", it.toString()) }
+                cashtags?.let { put("cashtags", it) }
+                conversationId?.let { put("conversationId", it) }
                 cursor?.let { put("cursor", it) }
+                exactPhrase?.let { put("exactPhrase", it) }
+                excludeWords?.let { put("excludeWords", it) }
+                fields?.let { put("fields", it) }
+                fromUser?.let { put("fromUser", it) }
+                hashtags?.let { put("hashtags", it) }
+                inReplyToTweetId?.let { put("inReplyToTweetId", it) }
+                language?.let { put("language", it) }
+                maxFaves?.let { put("maxFaves", it.toString()) }
+                maxId?.let { put("maxId", it) }
+                maxQuotes?.let { put("maxQuotes", it.toString()) }
+                maxReplies?.let { put("maxReplies", it.toString()) }
+                maxRetweets?.let { put("maxRetweets", it.toString()) }
+                mediaType?.let { put("mediaType", it.toString()) }
+                mentioning?.let { put("mentioning", it) }
+                minBookmarks?.let { put("minBookmarks", it.toString()) }
+                minLikes?.let { put("minLikes", it.toString()) }
+                minQuotes?.let { put("minQuotes", it.toString()) }
+                minReplies?.let { put("minReplies", it.toString()) }
+                minRetweets?.let { put("minRetweets", it.toString()) }
+                minViews?.let { put("minViews", it.toString()) }
+                nativeRetweets?.let { put("nativeRetweets", it.toString()) }
+                omit?.let { put("omit", it) }
                 pageSize?.let { put("pageSize", it.toString()) }
+                queryType?.let { put("queryType", it.toString()) }
+                quotes?.let { put("quotes", it.toString()) }
+                quotesOfTweetId?.let { put("quotesOfTweetId", it) }
+                replies?.let { put("replies", it.toString()) }
+                retweets?.let { put("retweets", it.toString()) }
+                retweetsOfTweetId?.let { put("retweetsOfTweetId", it) }
+                sinceDate?.let { put("sinceDate", it.toString()) }
+                sinceId?.let { put("sinceId", it) }
+                toUser?.let { put("toUser", it) }
+                untilDate?.let { put("untilDate", it.toString()) }
+                url?.let { put("url", it) }
+                verifiedOnly?.let { put("verifiedOnly", it.toString()) }
+                withinTime?.let { put("withinTime", it) }
                 putAll(additionalQueryParams)
             }
             .build()
+
+    /** Filter media. Its aliases are has_video & has_media. */
+    class MediaType @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+        /** Returns this class instance's raw value. */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            val IMAGES = of("images")
+
+            val VIDEOS = of("videos")
+
+            val GIFS = of("gifs")
+
+            val MEDIA = of("media")
+
+            val LINKS = of("links")
+
+            val NONE = of("none")
+
+            fun of(value: String) = MediaType(JsonField.of(value))
+        }
+
+        /** An enum containing [MediaType]'s known values. */
+        enum class Known {
+            IMAGES,
+            VIDEOS,
+            GIFS,
+            MEDIA,
+            LINKS,
+            NONE,
+        }
+
+        /**
+         * An enum containing [MediaType]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [MediaType] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            IMAGES,
+            VIDEOS,
+            GIFS,
+            MEDIA,
+            LINKS,
+            NONE,
+            /**
+             * An enum member indicating that [MediaType] was instantiated with an unknown value.
+             */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         */
+        fun value(): Value =
+            when (this) {
+                IMAGES -> Value.IMAGES
+                VIDEOS -> Value.VIDEOS
+                GIFS -> Value.GIFS
+                MEDIA -> Value.MEDIA
+                LINKS -> Value.LINKS
+                NONE -> Value.NONE
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * @throws XTwitterScraperInvalidDataException if this class instance's value is a not a
+         *   known member.
+         */
+        fun known(): Known =
+            when (this) {
+                IMAGES -> Known.IMAGES
+                VIDEOS -> Known.VIDEOS
+                GIFS -> Known.GIFS
+                MEDIA -> Known.MEDIA
+                LINKS -> Known.LINKS
+                NONE -> Known.NONE
+                else -> throw XTwitterScraperInvalidDataException("Unknown MediaType: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * @throws XTwitterScraperInvalidDataException if this class instance's value does not have
+         *   the expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString()
+                ?: throw XTwitterScraperInvalidDataException("Value is not a String")
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+         *   match its expected type.
+         */
+        fun validate(): MediaType = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: XTwitterScraperInvalidDataException) {
+                false
+            }
+
+        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is MediaType && value == other.value
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+    }
+
+    /**
+     * Latest for newest first, or Top for the posts X ranks highest. Any case works. Aliases
+     * ranking & sort, which also take Recency & Relevance. Send the same value with each cursor.
+     */
+    class QueryType @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+        /** Returns this class instance's raw value. */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            val LATEST = of("Latest")
+
+            val TOP = of("Top")
+
+            fun of(value: String) = QueryType(JsonField.of(value))
+        }
+
+        /** An enum containing [QueryType]'s known values. */
+        enum class Known {
+            LATEST,
+            TOP,
+        }
+
+        /**
+         * An enum containing [QueryType]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [QueryType] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            LATEST,
+            TOP,
+            /**
+             * An enum member indicating that [QueryType] was instantiated with an unknown value.
+             */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         */
+        fun value(): Value =
+            when (this) {
+                LATEST -> Value.LATEST
+                TOP -> Value.TOP
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * @throws XTwitterScraperInvalidDataException if this class instance's value is a not a
+         *   known member.
+         */
+        fun known(): Known =
+            when (this) {
+                LATEST -> Known.LATEST
+                TOP -> Known.TOP
+                else -> throw XTwitterScraperInvalidDataException("Unknown QueryType: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * @throws XTwitterScraperInvalidDataException if this class instance's value does not have
+         *   the expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString()
+                ?: throw XTwitterScraperInvalidDataException("Value is not a String")
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+         *   match its expected type.
+         */
+        fun validate(): QueryType = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: XTwitterScraperInvalidDataException) {
+                false
+            }
+
+        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is QueryType && value == other.value
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+    }
+
+    /** Only when the caller requests a quote mode. */
+    class Quotes @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+        /** Returns this class instance's raw value. */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            val INCLUDE = of("include")
+
+            val EXCLUDE = of("exclude")
+
+            val ONLY = of("only")
+
+            fun of(value: String) = Quotes(JsonField.of(value))
+        }
+
+        /** An enum containing [Quotes]'s known values. */
+        enum class Known {
+            INCLUDE,
+            EXCLUDE,
+            ONLY,
+        }
+
+        /**
+         * An enum containing [Quotes]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [Quotes] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            INCLUDE,
+            EXCLUDE,
+            ONLY,
+            /** An enum member indicating that [Quotes] was instantiated with an unknown value. */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         */
+        fun value(): Value =
+            when (this) {
+                INCLUDE -> Value.INCLUDE
+                EXCLUDE -> Value.EXCLUDE
+                ONLY -> Value.ONLY
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * @throws XTwitterScraperInvalidDataException if this class instance's value is a not a
+         *   known member.
+         */
+        fun known(): Known =
+            when (this) {
+                INCLUDE -> Known.INCLUDE
+                EXCLUDE -> Known.EXCLUDE
+                ONLY -> Known.ONLY
+                else -> throw XTwitterScraperInvalidDataException("Unknown Quotes: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * @throws XTwitterScraperInvalidDataException if this class instance's value does not have
+         *   the expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString()
+                ?: throw XTwitterScraperInvalidDataException("Value is not a String")
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+         *   match its expected type.
+         */
+        fun validate(): Quotes = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: XTwitterScraperInvalidDataException) {
+                false
+            }
+
+        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Quotes && value == other.value
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+    }
+
+    /** Reply mode. Exclude keeps own-thread replies. */
+    class Replies @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+        /** Returns this class instance's raw value. */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            val INCLUDE = of("include")
+
+            val EXCLUDE = of("exclude")
+
+            val ONLY = of("only")
+
+            fun of(value: String) = Replies(JsonField.of(value))
+        }
+
+        /** An enum containing [Replies]'s known values. */
+        enum class Known {
+            INCLUDE,
+            EXCLUDE,
+            ONLY,
+        }
+
+        /**
+         * An enum containing [Replies]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [Replies] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            INCLUDE,
+            EXCLUDE,
+            ONLY,
+            /** An enum member indicating that [Replies] was instantiated with an unknown value. */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         */
+        fun value(): Value =
+            when (this) {
+                INCLUDE -> Value.INCLUDE
+                EXCLUDE -> Value.EXCLUDE
+                ONLY -> Value.ONLY
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * @throws XTwitterScraperInvalidDataException if this class instance's value is a not a
+         *   known member.
+         */
+        fun known(): Known =
+            when (this) {
+                INCLUDE -> Known.INCLUDE
+                EXCLUDE -> Known.EXCLUDE
+                ONLY -> Known.ONLY
+                else -> throw XTwitterScraperInvalidDataException("Unknown Replies: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * @throws XTwitterScraperInvalidDataException if this class instance's value does not have
+         *   the expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString()
+                ?: throw XTwitterScraperInvalidDataException("Value is not a String")
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+         *   match its expected type.
+         */
+        fun validate(): Replies = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: XTwitterScraperInvalidDataException) {
+                false
+            }
+
+        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Replies && value == other.value
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+    }
+
+    /** Only when the caller requests a repost mode. */
+    class Retweets @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+        /** Returns this class instance's raw value. */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            val INCLUDE = of("include")
+
+            val EXCLUDE = of("exclude")
+
+            val ONLY = of("only")
+
+            fun of(value: String) = Retweets(JsonField.of(value))
+        }
+
+        /** An enum containing [Retweets]'s known values. */
+        enum class Known {
+            INCLUDE,
+            EXCLUDE,
+            ONLY,
+        }
+
+        /**
+         * An enum containing [Retweets]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [Retweets] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            INCLUDE,
+            EXCLUDE,
+            ONLY,
+            /** An enum member indicating that [Retweets] was instantiated with an unknown value. */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         */
+        fun value(): Value =
+            when (this) {
+                INCLUDE -> Value.INCLUDE
+                EXCLUDE -> Value.EXCLUDE
+                ONLY -> Value.ONLY
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * @throws XTwitterScraperInvalidDataException if this class instance's value is a not a
+         *   known member.
+         */
+        fun known(): Known =
+            when (this) {
+                INCLUDE -> Known.INCLUDE
+                EXCLUDE -> Known.EXCLUDE
+                ONLY -> Known.ONLY
+                else -> throw XTwitterScraperInvalidDataException("Unknown Retweets: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * @throws XTwitterScraperInvalidDataException if this class instance's value does not have
+         *   the expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString()
+                ?: throw XTwitterScraperInvalidDataException("Value is not a String")
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+         *   match its expected type.
+         */
+        fun validate(): Retweets = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: XTwitterScraperInvalidDataException) {
+                false
+            }
+
+        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Retweets && value == other.value
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -216,15 +1356,99 @@ private constructor(
 
         return other is TweetListByCommunityParams &&
             id == other.id &&
+            anyWords == other.anyWords &&
+            blueVerifiedOnly == other.blueVerifiedOnly &&
+            cashtags == other.cashtags &&
+            conversationId == other.conversationId &&
             cursor == other.cursor &&
+            exactPhrase == other.exactPhrase &&
+            excludeWords == other.excludeWords &&
+            fields == other.fields &&
+            fromUser == other.fromUser &&
+            hashtags == other.hashtags &&
+            inReplyToTweetId == other.inReplyToTweetId &&
+            language == other.language &&
+            maxFaves == other.maxFaves &&
+            maxId == other.maxId &&
+            maxQuotes == other.maxQuotes &&
+            maxReplies == other.maxReplies &&
+            maxRetweets == other.maxRetweets &&
+            mediaType == other.mediaType &&
+            mentioning == other.mentioning &&
+            minBookmarks == other.minBookmarks &&
+            minLikes == other.minLikes &&
+            minQuotes == other.minQuotes &&
+            minReplies == other.minReplies &&
+            minRetweets == other.minRetweets &&
+            minViews == other.minViews &&
+            nativeRetweets == other.nativeRetweets &&
+            omit == other.omit &&
             pageSize == other.pageSize &&
+            queryType == other.queryType &&
+            quotes == other.quotes &&
+            quotesOfTweetId == other.quotesOfTweetId &&
+            replies == other.replies &&
+            retweets == other.retweets &&
+            retweetsOfTweetId == other.retweetsOfTweetId &&
+            sinceDate == other.sinceDate &&
+            sinceId == other.sinceId &&
+            toUser == other.toUser &&
+            untilDate == other.untilDate &&
+            url == other.url &&
+            verifiedOnly == other.verifiedOnly &&
+            withinTime == other.withinTime &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(id, cursor, pageSize, additionalHeaders, additionalQueryParams)
+        Objects.hash(
+            id,
+            anyWords,
+            blueVerifiedOnly,
+            cashtags,
+            conversationId,
+            cursor,
+            exactPhrase,
+            excludeWords,
+            fields,
+            fromUser,
+            hashtags,
+            inReplyToTweetId,
+            language,
+            maxFaves,
+            maxId,
+            maxQuotes,
+            maxReplies,
+            maxRetweets,
+            mediaType,
+            mentioning,
+            minBookmarks,
+            minLikes,
+            minQuotes,
+            minReplies,
+            minRetweets,
+            minViews,
+            nativeRetweets,
+            omit,
+            pageSize,
+            queryType,
+            quotes,
+            quotesOfTweetId,
+            replies,
+            retweets,
+            retweetsOfTweetId,
+            sinceDate,
+            sinceId,
+            toUser,
+            untilDate,
+            url,
+            verifiedOnly,
+            withinTime,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
-        "TweetListByCommunityParams{id=$id, cursor=$cursor, pageSize=$pageSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "TweetListByCommunityParams{id=$id, anyWords=$anyWords, blueVerifiedOnly=$blueVerifiedOnly, cashtags=$cashtags, conversationId=$conversationId, cursor=$cursor, exactPhrase=$exactPhrase, excludeWords=$excludeWords, fields=$fields, fromUser=$fromUser, hashtags=$hashtags, inReplyToTweetId=$inReplyToTweetId, language=$language, maxFaves=$maxFaves, maxId=$maxId, maxQuotes=$maxQuotes, maxReplies=$maxReplies, maxRetweets=$maxRetweets, mediaType=$mediaType, mentioning=$mentioning, minBookmarks=$minBookmarks, minLikes=$minLikes, minQuotes=$minQuotes, minReplies=$minReplies, minRetweets=$minRetweets, minViews=$minViews, nativeRetweets=$nativeRetweets, omit=$omit, pageSize=$pageSize, queryType=$queryType, quotes=$quotes, quotesOfTweetId=$quotesOfTweetId, replies=$replies, retweets=$retweets, retweetsOfTweetId=$retweetsOfTweetId, sinceDate=$sinceDate, sinceId=$sinceId, toUser=$toUser, untilDate=$untilDate, url=$url, verifiedOnly=$verifiedOnly, withinTime=$withinTime, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

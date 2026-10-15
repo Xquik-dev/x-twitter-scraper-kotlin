@@ -4,6 +4,7 @@
 
 package com.x_twitter_scraper.api.models.webhooks
 
+import com.x_twitter_scraper.api.core.http.QueryParams
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -11,7 +12,7 @@ internal class WebhookListDeliveriesParamsTest {
 
     @Test
     fun create() {
-        WebhookListDeliveriesParams.builder().id("id").build()
+        WebhookListDeliveriesParams.builder().id("id").cursor("cursor").limit(1L).build()
     }
 
     @Test
@@ -20,5 +21,25 @@ internal class WebhookListDeliveriesParamsTest {
 
         assertThat(params._pathParam(0)).isEqualTo("id")
         assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
+    fun queryParams() {
+        val params =
+            WebhookListDeliveriesParams.builder().id("id").cursor("cursor").limit(1L).build()
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(QueryParams.builder().put("cursor", "cursor").put("limit", "1").build())
+    }
+
+    @Test
+    fun queryParamsWithoutOptionalFields() {
+        val params = WebhookListDeliveriesParams.builder().id("id").build()
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().build())
     }
 }

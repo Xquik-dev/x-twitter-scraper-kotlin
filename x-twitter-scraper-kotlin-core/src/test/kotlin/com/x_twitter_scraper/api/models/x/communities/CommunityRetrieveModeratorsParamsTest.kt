@@ -13,9 +13,14 @@ internal class CommunityRetrieveModeratorsParamsTest {
     @Test
     fun create() {
         CommunityRetrieveModeratorsParams.builder()
-            .id("id")
+            .id("1500000000000000000")
             .bioContains("bioContains")
+            .blueVerifiedOnly(true)
+            .businessEmailOnly(true)
             .cursor("cursor")
+            .emailDomains("acme.com,stanford.edu")
+            .fields("id,text,author.username")
+            .hasEmail(true)
             .hasLocation(true)
             .hasWebsite(true)
             .locationContains("locationContains")
@@ -26,6 +31,7 @@ internal class CommunityRetrieveModeratorsParamsTest {
             .minFollowers(0L)
             .minFollowing(0L)
             .minStatuses(0L)
+            .omit("entities,media")
             .usernameContains("usernameContains")
             .verifiedOnly(true)
             .verifiedType("verifiedType")
@@ -34,9 +40,9 @@ internal class CommunityRetrieveModeratorsParamsTest {
 
     @Test
     fun pathParams() {
-        val params = CommunityRetrieveModeratorsParams.builder().id("id").build()
+        val params = CommunityRetrieveModeratorsParams.builder().id("1500000000000000000").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("id")
+        assertThat(params._pathParam(0)).isEqualTo("1500000000000000000")
         assertThat(params._pathParam(1)).isEqualTo("")
     }
 
@@ -44,9 +50,14 @@ internal class CommunityRetrieveModeratorsParamsTest {
     fun queryParams() {
         val params =
             CommunityRetrieveModeratorsParams.builder()
-                .id("id")
+                .id("1500000000000000000")
                 .bioContains("bioContains")
+                .blueVerifiedOnly(true)
+                .businessEmailOnly(true)
                 .cursor("cursor")
+                .emailDomains("acme.com,stanford.edu")
+                .fields("id,text,author.username")
+                .hasEmail(true)
                 .hasLocation(true)
                 .hasWebsite(true)
                 .locationContains("locationContains")
@@ -57,6 +68,7 @@ internal class CommunityRetrieveModeratorsParamsTest {
                 .minFollowers(0L)
                 .minFollowing(0L)
                 .minStatuses(0L)
+                .omit("entities,media")
                 .usernameContains("usernameContains")
                 .verifiedOnly(true)
                 .verifiedType("verifiedType")
@@ -68,7 +80,12 @@ internal class CommunityRetrieveModeratorsParamsTest {
             .isEqualTo(
                 QueryParams.builder()
                     .put("bioContains", "bioContains")
+                    .put("blueVerifiedOnly", "true")
+                    .put("businessEmailOnly", "true")
                     .put("cursor", "cursor")
+                    .put("emailDomains", "acme.com,stanford.edu")
+                    .put("fields", "id,text,author.username")
+                    .put("hasEmail", "true")
                     .put("hasLocation", "true")
                     .put("hasWebsite", "true")
                     .put("locationContains", "locationContains")
@@ -79,6 +96,7 @@ internal class CommunityRetrieveModeratorsParamsTest {
                     .put("minFollowers", "0")
                     .put("minFollowing", "0")
                     .put("minStatuses", "0")
+                    .put("omit", "entities,media")
                     .put("usernameContains", "usernameContains")
                     .put("verifiedOnly", "true")
                     .put("verifiedType", "verifiedType")
@@ -88,7 +106,7 @@ internal class CommunityRetrieveModeratorsParamsTest {
 
     @Test
     fun queryParamsWithoutOptionalFields() {
-        val params = CommunityRetrieveModeratorsParams.builder().id("id").build()
+        val params = CommunityRetrieveModeratorsParams.builder().id("1500000000000000000").build()
 
         val queryParams = params._queryParams()
 

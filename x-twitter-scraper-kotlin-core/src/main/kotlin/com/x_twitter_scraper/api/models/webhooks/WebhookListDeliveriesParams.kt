@@ -13,11 +13,22 @@ import java.util.Objects
 class WebhookListDeliveriesParams
 private constructor(
     private val id: String?,
+    private val cursor: String?,
+    private val limit: Long?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun id(): String? = id
+
+    /** Previous nextCursor. The after alias also works. Offset pagination is not supported. */
+    fun cursor(): String? = cursor
+
+    /**
+     * Maximum deliveries per page, from 1 to 100. Default 100. Pass nextCursor as cursor for the
+     * next page.
+     */
+    fun limit(): Long? = limit
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -41,16 +52,32 @@ private constructor(
     class Builder internal constructor() {
 
         private var id: String? = null
+        private var cursor: String? = null
+        private var limit: Long? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(webhookListDeliveriesParams: WebhookListDeliveriesParams) = apply {
             id = webhookListDeliveriesParams.id
+            cursor = webhookListDeliveriesParams.cursor
+            limit = webhookListDeliveriesParams.limit
             additionalHeaders = webhookListDeliveriesParams.additionalHeaders.toBuilder()
             additionalQueryParams = webhookListDeliveriesParams.additionalQueryParams.toBuilder()
         }
 
         fun id(id: String?) = apply { this.id = id }
+
+        /** Previous nextCursor. The after alias also works. Offset pagination is not supported. */
+        fun cursor(cursor: String?) = apply { this.cursor = cursor }
+
+        /**
+         * Maximum deliveries per page, from 1 to 100. Default 100. Pass nextCursor as cursor for
+         * the next page.
+         */
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /** Alias for [Builder.limit]. */
+        fun limit(limit: Long) = limit(limit as Long?)
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -158,6 +185,8 @@ private constructor(
         fun build(): WebhookListDeliveriesParams =
             WebhookListDeliveriesParams(
                 id,
+                cursor,
+                limit,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -171,7 +200,14 @@ private constructor(
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                cursor?.let { put("cursor", it) }
+                limit?.let { put("limit", it.toString()) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -180,12 +216,15 @@ private constructor(
 
         return other is WebhookListDeliveriesParams &&
             id == other.id &&
+            cursor == other.cursor &&
+            limit == other.limit &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = Objects.hash(id, additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int =
+        Objects.hash(id, cursor, limit, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "WebhookListDeliveriesParams{id=$id, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "WebhookListDeliveriesParams{id=$id, cursor=$cursor, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

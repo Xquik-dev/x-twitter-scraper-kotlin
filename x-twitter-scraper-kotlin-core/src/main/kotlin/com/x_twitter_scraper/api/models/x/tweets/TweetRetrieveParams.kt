@@ -13,11 +13,28 @@ import java.util.Objects
 class TweetRetrieveParams
 private constructor(
     private val id: String?,
+    private val fields: String?,
+    private val omit: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun id(): String? = id
+
+    /**
+     * Fields to keep in each row, comma-separated. Use dots for nested fields, such as
+     * author.username. A list keeps the field in each item. Case & underscores do not matter. A row
+     * that lacks a field leaves it out. Cursors, counts & diagnostics always stay. An unknown name
+     * answers 400 unknown_field with the valid names, before any read. The price stays the same.
+     * SDK row types then hold only the named fields.
+     */
+    fun fields(): String? = fields
+
+    /**
+     * Fields to drop from each row, comma-separated. It takes the same names as fields. With
+     * fields, it drops from the kept fields.
+     */
+    fun omit(): String? = omit
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -39,16 +56,35 @@ private constructor(
     class Builder internal constructor() {
 
         private var id: String? = null
+        private var fields: String? = null
+        private var omit: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(tweetRetrieveParams: TweetRetrieveParams) = apply {
             id = tweetRetrieveParams.id
+            fields = tweetRetrieveParams.fields
+            omit = tweetRetrieveParams.omit
             additionalHeaders = tweetRetrieveParams.additionalHeaders.toBuilder()
             additionalQueryParams = tweetRetrieveParams.additionalQueryParams.toBuilder()
         }
 
         fun id(id: String?) = apply { this.id = id }
+
+        /**
+         * Fields to keep in each row, comma-separated. Use dots for nested fields, such as
+         * author.username. A list keeps the field in each item. Case & underscores do not matter. A
+         * row that lacks a field leaves it out. Cursors, counts & diagnostics always stay. An
+         * unknown name answers 400 unknown_field with the valid names, before any read. The price
+         * stays the same. SDK row types then hold only the named fields.
+         */
+        fun fields(fields: String?) = apply { this.fields = fields }
+
+        /**
+         * Fields to drop from each row, comma-separated. It takes the same names as fields. With
+         * fields, it drops from the kept fields.
+         */
+        fun omit(omit: String?) = apply { this.omit = omit }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -154,7 +190,13 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          */
         fun build(): TweetRetrieveParams =
-            TweetRetrieveParams(id, additionalHeaders.build(), additionalQueryParams.build())
+            TweetRetrieveParams(
+                id,
+                fields,
+                omit,
+                additionalHeaders.build(),
+                additionalQueryParams.build(),
+            )
     }
 
     fun _pathParam(index: Int): String =
@@ -165,7 +207,14 @@ private constructor(
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                fields?.let { put("fields", it) }
+                omit?.let { put("omit", it) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -174,12 +223,15 @@ private constructor(
 
         return other is TweetRetrieveParams &&
             id == other.id &&
+            fields == other.fields &&
+            omit == other.omit &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = Objects.hash(id, additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int =
+        Objects.hash(id, fields, omit, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "TweetRetrieveParams{id=$id, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "TweetRetrieveParams{id=$id, fields=$fields, omit=$omit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

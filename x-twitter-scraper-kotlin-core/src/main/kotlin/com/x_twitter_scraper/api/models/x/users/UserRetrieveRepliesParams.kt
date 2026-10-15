@@ -21,8 +21,10 @@ import java.util.Objects
 class UserRetrieveRepliesParams
 private constructor(
     private val id: String?,
+    private val advancedQuery: String?,
     private val anyWords: String?,
     private val blueVerifiedOnly: Boolean?,
+    private val boundingBox: String?,
     private val cardName: String?,
     private val cashtags: String?,
     private val conversationId: String?,
@@ -30,12 +32,15 @@ private constructor(
     private val exactPhrase: String?,
     private val excludeSource: String?,
     private val excludeWords: String?,
+    private val fields: String?,
     private val fromUser: String?,
     private val geocode: String?,
     private val hashtags: String?,
-    private val includeParentTweet: Boolean?,
     private val inReplyToTweetId: String?,
+    private val includeParentTweet: Boolean?,
+    private val keywords: String?,
     private val language: String?,
+    private val listId: String?,
     private val maxFaves: Long?,
     private val maxId: String?,
     private val maxQuotes: Long?,
@@ -45,14 +50,20 @@ private constructor(
     private val mentioning: String?,
     private val minBookmarks: Long?,
     private val minFaves: Long?,
+    private val minLikes: Long?,
     private val minQuotes: Long?,
     private val minReplies: Long?,
     private val minRetweets: Long?,
     private val minViews: Long?,
+    private val mode: Mode?,
     private val nativeRetweets: Boolean?,
     private val near: String?,
     private val news: Boolean?,
+    private val omit: String?,
     private val pageSize: Long?,
+    private val place: String?,
+    private val placeCountry: String?,
+    private val pointRadius: String?,
     private val quotes: Quotes?,
     private val quotesOfTweetId: String?,
     private val replies: Replies?,
@@ -61,9 +72,11 @@ private constructor(
     private val safe: Boolean?,
     private val sinceDate: LocalDate?,
     private val sinceId: String?,
+    private val sinceTime: String?,
     private val source: String?,
     private val toUser: String?,
     private val untilDate: LocalDate?,
+    private val untilTime: String?,
     private val url: String?,
     private val verifiedOnly: Boolean?,
     private val within: String?,
@@ -74,13 +87,22 @@ private constructor(
 
     fun id(): String? = id
 
+    /** Raw advanced search query appended as-is. */
+    fun advancedQuery(): String? = advancedQuery
+
     /** Words or quoted phrases where any one can match. Separate with spaces, commas, or lines. */
     fun anyWords(): String? = anyWords
 
     /** Only return tweets from Blue-verified authors. */
     fun blueVerifiedOnly(): Boolean? = blueVerifiedOnly
 
-    /** Match the Tweet card name. */
+    /** Geo bounding box, such as -74.1 40.6 -73.9 40.8. */
+    fun boundingBox(): String? = boundingBox
+
+    /**
+     * Keep only Tweets with this card type, such as poll2choice_text_only. Tweet search checks each
+     * Tweet's card.
+     */
     fun cardName(): String? = cardName
 
     /** Cashtags separated by spaces, commas, or lines. */
@@ -90,42 +112,66 @@ private constructor(
     fun conversationId(): String? = conversationId
 
     /**
-     * Cursor from the previous response. Xquik cursors resume automatic coverage. Existing
-     * unprefixed cursors keep legacy standard behavior.
+     * Cursor from the previous response. Existing unprefixed cursors keep legacy standard behavior.
+     * Pages can be empty before more rows. Follow next_cursor. Also read as next_cursor,
+     * next_token, pagination_token or continuation_token.
      */
     fun cursor(): String? = cursor
 
-    /** Exact phrase to match. */
+    /** Match this literal phrase, including any hyphens. */
     fun exactPhrase(): String? = exactPhrase
 
-    /** Exclude a source application. */
+    /**
+     * X search no longer supports excludeSource. A Tweet search with it answers 424 & charges
+     * nothing.
+     */
     fun excludeSource(): String? = excludeSource
 
     /** Words or quoted phrases to exclude. Separate with spaces, commas, or lines. */
     fun excludeWords(): String? = excludeWords
 
+    /**
+     * Fields to keep in each row, comma-separated. Use dots for nested fields, such as
+     * author.username. A list keeps the field in each item. Case & underscores do not matter. A row
+     * that lacks a field leaves it out. Cursors, counts & diagnostics always stay. An unknown name
+     * answers 400 unknown_field with the valid names, before any read. The price stays the same.
+     * SDK row types then hold only the named fields.
+     */
+    fun fields(): String? = fields
+
     /** Filter by author username. */
     fun fromUser(): String? = fromUser
 
-    /** Match latitude, longitude, and radius. */
+    /**
+     * X search no longer supports geocode. A Tweet search with it answers 424 & charges nothing.
+     */
     fun geocode(): String? = geocode
 
     /** Hashtags separated by spaces, commas, or lines. */
     fun hashtags(): String? = hashtags
 
-    /** Include each reply's parent tweet. */
-    fun includeParentTweet(): Boolean? = includeParentTweet
-
     /** Only replies to this tweet ID. */
     fun inReplyToTweetId(): String? = inReplyToTweetId
 
-    /** Language code filter, e.g. en or tr. */
+    /**
+     * Include each reply's parent tweet as parentTweet on the reply. A reply whose parent X does
+     * not return comes without it. Search-only filters such as keywords do not apply with it.
+     */
+    fun includeParentTweet(): Boolean? = includeParentTweet
+
+    /** Words the Tweets must match, in X search syntax. */
+    fun keywords(): String? = keywords
+
+    /** Filter by language. Its alias is `lang`. */
     fun language(): String? = language
 
-    /** Maximum likes threshold. maxLikes is also accepted. */
+    /** Search within a list ID. */
+    fun listId(): String? = listId
+
+    /** Maximum likes threshold. maxLikes & max_likes also work. */
     fun maxFaves(): Long? = maxFaves
 
-    /** Return Tweets older than this Tweet ID. */
+    /** Return Tweets at or below this ID. */
     fun maxId(): String? = maxId
 
     /** Maximum quotes threshold. */
@@ -137,7 +183,7 @@ private constructor(
     /** Maximum retweets threshold. */
     fun maxRetweets(): Long? = maxRetweets
 
-    /** Filter by media type. */
+    /** Filter media. Its aliases are has_video & has_media. */
     fun mediaType(): MediaType? = mediaType
 
     /** Filter tweets mentioning a username. */
@@ -148,6 +194,9 @@ private constructor(
 
     /** Minimum likes threshold. minLikes is also accepted. */
     fun minFaves(): Long? = minFaves
+
+    /** Minimum likes. Its aliases are minFaves, min_likes & min_faves. */
+    fun minLikes(): Long? = minLikes
 
     /** Minimum quote count threshold. */
     fun minQuotes(): Long? = minQuotes
@@ -161,31 +210,55 @@ private constructor(
     /** Minimum view count threshold. */
     fun minViews(): Long? = minViews
 
+    /**
+     * Optional legacy pagination override. Search-only filters such as keywords apply only without
+     * it.
+     */
+    fun mode(): Mode? = mode
+
     /** Only return native reposts. */
     fun nativeRetweets(): Boolean? = nativeRetweets
 
-    /** Match a place name. */
+    /**
+     * A place name. A country, such as United States, works like placeCountry & keeps Tweets tagged
+     * there. A city keeps Tweets about it.
+     */
     fun near(): String? = near
 
-    /** Only return news results. */
+    /** X no longer searches filter:news. */
     fun news(): Boolean? = news
 
     /**
-     * Automatic pages accept 1-300 Tweets. Standard pages keep 1-100. Default 20. Continue while
-     * has_next_page is true. Deprecated aliases remain accepted.
+     * Fields to drop from each row, comma-separated. It takes the same names as fields. With
+     * fields, it drops from the kept fields.
+     */
+    fun omit(): String? = omit
+
+    /**
+     * Automatic pages accept 1-300 Tweets, standard pages 1-100. Default 20. Follow next_cursor for
+     * more pages. Its aliases are limit, count, max_results, maxItems, max_items & per_page.
      */
     fun pageSize(): Long? = pageSize
 
-    /** Quote mode. */
+    /** Search within a place ID. */
+    fun place(): String? = place
+
+    /** Search within a country code. */
+    fun placeCountry(): String? = placeCountry
+
+    /** Geo point radius, such as -73.99 40.73 25mi. */
+    fun pointRadius(): String? = pointRadius
+
+    /** Only when the caller requests a quote mode. */
     fun quotes(): Quotes? = quotes
 
     /** Only quotes of this tweet ID. */
     fun quotesOfTweetId(): String? = quotesOfTweetId
 
-    /** Reply mode. */
+    /** Reply mode. Exclude keeps own-thread replies. */
     fun replies(): Replies? = replies
 
-    /** Retweet mode. */
+    /** Only when the caller requests a repost mode. */
     fun retweets(): Retweets? = retweets
 
     /** Only retweets of this tweet ID. */
@@ -194,20 +267,32 @@ private constructor(
     /** Enable the safe-search filter. */
     fun safe(): Boolean? = safe
 
-    /** Start date in YYYY-MM-DD format. */
+    /** Start date in YYYY-MM-DD format, as a UTC day. */
     fun sinceDate(): LocalDate? = sinceDate
 
-    /** Return Tweets newer than this Tweet ID. */
+    /** Return Tweets whose IDs exceed this ID. */
     fun sinceId(): String? = sinceId
 
-    /** Match the source application. */
+    /**
+     * Inclusive ISO bound for Tweet creation time, such as 2026-09-25T19:20:41Z. Unix seconds also
+     * work. A time without an offset is UTC.
+     */
+    fun sinceTime(): String? = sinceTime
+
+    /** X search no longer supports source. A Tweet search with it answers 424 & charges nothing. */
     fun source(): String? = source
 
     /** Filter replies sent to a username. */
     fun toUser(): String? = toUser
 
-    /** End date in YYYY-MM-DD format. */
+    /** End date in YYYY-MM-DD format, as a UTC day, inclusive, so its own posts count. */
     fun untilDate(): LocalDate? = untilDate
+
+    /**
+     * Exclusive ISO bound for Tweet creation time. Unix seconds also work. A time without an offset
+     * is UTC.
+     */
+    fun untilTime(): String? = untilTime
 
     /** URL substring or domain filter. */
     fun url(): String? = url
@@ -215,10 +300,13 @@ private constructor(
     /** Only return tweets from verified authors. */
     fun verifiedOnly(): Boolean? = verifiedOnly
 
-    /** Set the radius for the near filter. */
+    /**
+     * X search no longer supports within. A Tweet search with it answers 424 & charges nothing. Use
+     * near alone.
+     */
     fun within(): String? = within
 
-    /** Match Tweets inside a recent time window. */
+    /** Keeps Tweets from a recent window, such as 90m or 7d. Use a whole number & s, m, h or d. */
     fun withinTime(): String? = withinTime
 
     /** Additional headers to send with the request. */
@@ -243,8 +331,10 @@ private constructor(
     class Builder internal constructor() {
 
         private var id: String? = null
+        private var advancedQuery: String? = null
         private var anyWords: String? = null
         private var blueVerifiedOnly: Boolean? = null
+        private var boundingBox: String? = null
         private var cardName: String? = null
         private var cashtags: String? = null
         private var conversationId: String? = null
@@ -252,12 +342,15 @@ private constructor(
         private var exactPhrase: String? = null
         private var excludeSource: String? = null
         private var excludeWords: String? = null
+        private var fields: String? = null
         private var fromUser: String? = null
         private var geocode: String? = null
         private var hashtags: String? = null
-        private var includeParentTweet: Boolean? = null
         private var inReplyToTweetId: String? = null
+        private var includeParentTweet: Boolean? = null
+        private var keywords: String? = null
         private var language: String? = null
+        private var listId: String? = null
         private var maxFaves: Long? = null
         private var maxId: String? = null
         private var maxQuotes: Long? = null
@@ -267,14 +360,20 @@ private constructor(
         private var mentioning: String? = null
         private var minBookmarks: Long? = null
         private var minFaves: Long? = null
+        private var minLikes: Long? = null
         private var minQuotes: Long? = null
         private var minReplies: Long? = null
         private var minRetweets: Long? = null
         private var minViews: Long? = null
+        private var mode: Mode? = null
         private var nativeRetweets: Boolean? = null
         private var near: String? = null
         private var news: Boolean? = null
+        private var omit: String? = null
         private var pageSize: Long? = null
+        private var place: String? = null
+        private var placeCountry: String? = null
+        private var pointRadius: String? = null
         private var quotes: Quotes? = null
         private var quotesOfTweetId: String? = null
         private var replies: Replies? = null
@@ -283,9 +382,11 @@ private constructor(
         private var safe: Boolean? = null
         private var sinceDate: LocalDate? = null
         private var sinceId: String? = null
+        private var sinceTime: String? = null
         private var source: String? = null
         private var toUser: String? = null
         private var untilDate: LocalDate? = null
+        private var untilTime: String? = null
         private var url: String? = null
         private var verifiedOnly: Boolean? = null
         private var within: String? = null
@@ -295,8 +396,10 @@ private constructor(
 
         internal fun from(userRetrieveRepliesParams: UserRetrieveRepliesParams) = apply {
             id = userRetrieveRepliesParams.id
+            advancedQuery = userRetrieveRepliesParams.advancedQuery
             anyWords = userRetrieveRepliesParams.anyWords
             blueVerifiedOnly = userRetrieveRepliesParams.blueVerifiedOnly
+            boundingBox = userRetrieveRepliesParams.boundingBox
             cardName = userRetrieveRepliesParams.cardName
             cashtags = userRetrieveRepliesParams.cashtags
             conversationId = userRetrieveRepliesParams.conversationId
@@ -304,12 +407,15 @@ private constructor(
             exactPhrase = userRetrieveRepliesParams.exactPhrase
             excludeSource = userRetrieveRepliesParams.excludeSource
             excludeWords = userRetrieveRepliesParams.excludeWords
+            fields = userRetrieveRepliesParams.fields
             fromUser = userRetrieveRepliesParams.fromUser
             geocode = userRetrieveRepliesParams.geocode
             hashtags = userRetrieveRepliesParams.hashtags
-            includeParentTweet = userRetrieveRepliesParams.includeParentTweet
             inReplyToTweetId = userRetrieveRepliesParams.inReplyToTweetId
+            includeParentTweet = userRetrieveRepliesParams.includeParentTweet
+            keywords = userRetrieveRepliesParams.keywords
             language = userRetrieveRepliesParams.language
+            listId = userRetrieveRepliesParams.listId
             maxFaves = userRetrieveRepliesParams.maxFaves
             maxId = userRetrieveRepliesParams.maxId
             maxQuotes = userRetrieveRepliesParams.maxQuotes
@@ -319,14 +425,20 @@ private constructor(
             mentioning = userRetrieveRepliesParams.mentioning
             minBookmarks = userRetrieveRepliesParams.minBookmarks
             minFaves = userRetrieveRepliesParams.minFaves
+            minLikes = userRetrieveRepliesParams.minLikes
             minQuotes = userRetrieveRepliesParams.minQuotes
             minReplies = userRetrieveRepliesParams.minReplies
             minRetweets = userRetrieveRepliesParams.minRetweets
             minViews = userRetrieveRepliesParams.minViews
+            mode = userRetrieveRepliesParams.mode
             nativeRetweets = userRetrieveRepliesParams.nativeRetweets
             near = userRetrieveRepliesParams.near
             news = userRetrieveRepliesParams.news
+            omit = userRetrieveRepliesParams.omit
             pageSize = userRetrieveRepliesParams.pageSize
+            place = userRetrieveRepliesParams.place
+            placeCountry = userRetrieveRepliesParams.placeCountry
+            pointRadius = userRetrieveRepliesParams.pointRadius
             quotes = userRetrieveRepliesParams.quotes
             quotesOfTweetId = userRetrieveRepliesParams.quotesOfTweetId
             replies = userRetrieveRepliesParams.replies
@@ -335,9 +447,11 @@ private constructor(
             safe = userRetrieveRepliesParams.safe
             sinceDate = userRetrieveRepliesParams.sinceDate
             sinceId = userRetrieveRepliesParams.sinceId
+            sinceTime = userRetrieveRepliesParams.sinceTime
             source = userRetrieveRepliesParams.source
             toUser = userRetrieveRepliesParams.toUser
             untilDate = userRetrieveRepliesParams.untilDate
+            untilTime = userRetrieveRepliesParams.untilTime
             url = userRetrieveRepliesParams.url
             verifiedOnly = userRetrieveRepliesParams.verifiedOnly
             within = userRetrieveRepliesParams.within
@@ -347,6 +461,9 @@ private constructor(
         }
 
         fun id(id: String?) = apply { this.id = id }
+
+        /** Raw advanced search query appended as-is. */
+        fun advancedQuery(advancedQuery: String?) = apply { this.advancedQuery = advancedQuery }
 
         /**
          * Words or quoted phrases where any one can match. Separate with spaces, commas, or lines.
@@ -362,7 +479,13 @@ private constructor(
         fun blueVerifiedOnly(blueVerifiedOnly: Boolean) =
             blueVerifiedOnly(blueVerifiedOnly as Boolean?)
 
-        /** Match the Tweet card name. */
+        /** Geo bounding box, such as -74.1 40.6 -73.9 40.8. */
+        fun boundingBox(boundingBox: String?) = apply { this.boundingBox = boundingBox }
+
+        /**
+         * Keep only Tweets with this card type, such as poll2choice_text_only. Tweet search checks
+         * each Tweet's card.
+         */
         fun cardName(cardName: String?) = apply { this.cardName = cardName }
 
         /** Cashtags separated by spaces, commas, or lines. */
@@ -372,30 +495,55 @@ private constructor(
         fun conversationId(conversationId: String?) = apply { this.conversationId = conversationId }
 
         /**
-         * Cursor from the previous response. Xquik cursors resume automatic coverage. Existing
-         * unprefixed cursors keep legacy standard behavior.
+         * Cursor from the previous response. Existing unprefixed cursors keep legacy standard
+         * behavior. Pages can be empty before more rows. Follow next_cursor. Also read as
+         * next_cursor, next_token, pagination_token or continuation_token.
          */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
-        /** Exact phrase to match. */
+        /** Match this literal phrase, including any hyphens. */
         fun exactPhrase(exactPhrase: String?) = apply { this.exactPhrase = exactPhrase }
 
-        /** Exclude a source application. */
+        /**
+         * X search no longer supports excludeSource. A Tweet search with it answers 424 & charges
+         * nothing.
+         */
         fun excludeSource(excludeSource: String?) = apply { this.excludeSource = excludeSource }
 
         /** Words or quoted phrases to exclude. Separate with spaces, commas, or lines. */
         fun excludeWords(excludeWords: String?) = apply { this.excludeWords = excludeWords }
 
+        /**
+         * Fields to keep in each row, comma-separated. Use dots for nested fields, such as
+         * author.username. A list keeps the field in each item. Case & underscores do not matter. A
+         * row that lacks a field leaves it out. Cursors, counts & diagnostics always stay. An
+         * unknown name answers 400 unknown_field with the valid names, before any read. The price
+         * stays the same. SDK row types then hold only the named fields.
+         */
+        fun fields(fields: String?) = apply { this.fields = fields }
+
         /** Filter by author username. */
         fun fromUser(fromUser: String?) = apply { this.fromUser = fromUser }
 
-        /** Match latitude, longitude, and radius. */
+        /**
+         * X search no longer supports geocode. A Tweet search with it answers 424 & charges
+         * nothing.
+         */
         fun geocode(geocode: String?) = apply { this.geocode = geocode }
 
         /** Hashtags separated by spaces, commas, or lines. */
         fun hashtags(hashtags: String?) = apply { this.hashtags = hashtags }
 
-        /** Include each reply's parent tweet. */
+        /** Only replies to this tweet ID. */
+        fun inReplyToTweetId(inReplyToTweetId: String?) = apply {
+            this.inReplyToTweetId = inReplyToTweetId
+        }
+
+        /**
+         * Include each reply's parent tweet as parentTweet on the reply. A reply whose parent X
+         * does not return comes without it. Search-only filters such as keywords do not apply with
+         * it.
+         */
         fun includeParentTweet(includeParentTweet: Boolean?) = apply {
             this.includeParentTweet = includeParentTweet
         }
@@ -404,21 +552,22 @@ private constructor(
         fun includeParentTweet(includeParentTweet: Boolean) =
             includeParentTweet(includeParentTweet as Boolean?)
 
-        /** Only replies to this tweet ID. */
-        fun inReplyToTweetId(inReplyToTweetId: String?) = apply {
-            this.inReplyToTweetId = inReplyToTweetId
-        }
+        /** Words the Tweets must match, in X search syntax. */
+        fun keywords(keywords: String?) = apply { this.keywords = keywords }
 
-        /** Language code filter, e.g. en or tr. */
+        /** Filter by language. Its alias is `lang`. */
         fun language(language: String?) = apply { this.language = language }
 
-        /** Maximum likes threshold. maxLikes is also accepted. */
+        /** Search within a list ID. */
+        fun listId(listId: String?) = apply { this.listId = listId }
+
+        /** Maximum likes threshold. maxLikes & max_likes also work. */
         fun maxFaves(maxFaves: Long?) = apply { this.maxFaves = maxFaves }
 
         /** Alias for [Builder.maxFaves]. */
         fun maxFaves(maxFaves: Long) = maxFaves(maxFaves as Long?)
 
-        /** Return Tweets older than this Tweet ID. */
+        /** Return Tweets at or below this ID. */
         fun maxId(maxId: String?) = apply { this.maxId = maxId }
 
         /** Maximum quotes threshold. */
@@ -439,7 +588,7 @@ private constructor(
         /** Alias for [Builder.maxRetweets]. */
         fun maxRetweets(maxRetweets: Long) = maxRetweets(maxRetweets as Long?)
 
-        /** Filter by media type. */
+        /** Filter media. Its aliases are has_video & has_media. */
         fun mediaType(mediaType: MediaType?) = apply { this.mediaType = mediaType }
 
         /** Filter tweets mentioning a username. */
@@ -456,6 +605,12 @@ private constructor(
 
         /** Alias for [Builder.minFaves]. */
         fun minFaves(minFaves: Long) = minFaves(minFaves as Long?)
+
+        /** Minimum likes. Its aliases are minFaves, min_likes & min_faves. */
+        fun minLikes(minLikes: Long?) = apply { this.minLikes = minLikes }
+
+        /** Alias for [Builder.minLikes]. */
+        fun minLikes(minLikes: Long) = minLikes(minLikes as Long?)
 
         /** Minimum quote count threshold. */
         fun minQuotes(minQuotes: Long?) = apply { this.minQuotes = minQuotes }
@@ -481,6 +636,12 @@ private constructor(
         /** Alias for [Builder.minViews]. */
         fun minViews(minViews: Long) = minViews(minViews as Long?)
 
+        /**
+         * Optional legacy pagination override. Search-only filters such as keywords apply only
+         * without it.
+         */
+        fun mode(mode: Mode?) = apply { this.mode = mode }
+
         /** Only return native reposts. */
         fun nativeRetweets(nativeRetweets: Boolean?) = apply {
             this.nativeRetweets = nativeRetweets
@@ -489,25 +650,44 @@ private constructor(
         /** Alias for [Builder.nativeRetweets]. */
         fun nativeRetweets(nativeRetweets: Boolean) = nativeRetweets(nativeRetweets as Boolean?)
 
-        /** Match a place name. */
+        /**
+         * A place name. A country, such as United States, works like placeCountry & keeps Tweets
+         * tagged there. A city keeps Tweets about it.
+         */
         fun near(near: String?) = apply { this.near = near }
 
-        /** Only return news results. */
+        /** X no longer searches filter:news. */
         fun news(news: Boolean?) = apply { this.news = news }
 
         /** Alias for [Builder.news]. */
         fun news(news: Boolean) = news(news as Boolean?)
 
         /**
-         * Automatic pages accept 1-300 Tweets. Standard pages keep 1-100. Default 20. Continue
-         * while has_next_page is true. Deprecated aliases remain accepted.
+         * Fields to drop from each row, comma-separated. It takes the same names as fields. With
+         * fields, it drops from the kept fields.
+         */
+        fun omit(omit: String?) = apply { this.omit = omit }
+
+        /**
+         * Automatic pages accept 1-300 Tweets, standard pages 1-100. Default 20. Follow next_cursor
+         * for more pages. Its aliases are limit, count, max_results, maxItems, max_items &
+         * per_page.
          */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
         /** Alias for [Builder.pageSize]. */
         fun pageSize(pageSize: Long) = pageSize(pageSize as Long?)
 
-        /** Quote mode. */
+        /** Search within a place ID. */
+        fun place(place: String?) = apply { this.place = place }
+
+        /** Search within a country code. */
+        fun placeCountry(placeCountry: String?) = apply { this.placeCountry = placeCountry }
+
+        /** Geo point radius, such as -73.99 40.73 25mi. */
+        fun pointRadius(pointRadius: String?) = apply { this.pointRadius = pointRadius }
+
+        /** Only when the caller requests a quote mode. */
         fun quotes(quotes: Quotes?) = apply { this.quotes = quotes }
 
         /** Only quotes of this tweet ID. */
@@ -515,10 +695,10 @@ private constructor(
             this.quotesOfTweetId = quotesOfTweetId
         }
 
-        /** Reply mode. */
+        /** Reply mode. Exclude keeps own-thread replies. */
         fun replies(replies: Replies?) = apply { this.replies = replies }
 
-        /** Retweet mode. */
+        /** Only when the caller requests a repost mode. */
         fun retweets(retweets: Retweets?) = apply { this.retweets = retweets }
 
         /** Only retweets of this tweet ID. */
@@ -532,20 +712,34 @@ private constructor(
         /** Alias for [Builder.safe]. */
         fun safe(safe: Boolean) = safe(safe as Boolean?)
 
-        /** Start date in YYYY-MM-DD format. */
+        /** Start date in YYYY-MM-DD format, as a UTC day. */
         fun sinceDate(sinceDate: LocalDate?) = apply { this.sinceDate = sinceDate }
 
-        /** Return Tweets newer than this Tweet ID. */
+        /** Return Tweets whose IDs exceed this ID. */
         fun sinceId(sinceId: String?) = apply { this.sinceId = sinceId }
 
-        /** Match the source application. */
+        /**
+         * Inclusive ISO bound for Tweet creation time, such as 2026-09-25T19:20:41Z. Unix seconds
+         * also work. A time without an offset is UTC.
+         */
+        fun sinceTime(sinceTime: String?) = apply { this.sinceTime = sinceTime }
+
+        /**
+         * X search no longer supports source. A Tweet search with it answers 424 & charges nothing.
+         */
         fun source(source: String?) = apply { this.source = source }
 
         /** Filter replies sent to a username. */
         fun toUser(toUser: String?) = apply { this.toUser = toUser }
 
-        /** End date in YYYY-MM-DD format. */
+        /** End date in YYYY-MM-DD format, as a UTC day, inclusive, so its own posts count. */
         fun untilDate(untilDate: LocalDate?) = apply { this.untilDate = untilDate }
+
+        /**
+         * Exclusive ISO bound for Tweet creation time. Unix seconds also work. A time without an
+         * offset is UTC.
+         */
+        fun untilTime(untilTime: String?) = apply { this.untilTime = untilTime }
 
         /** URL substring or domain filter. */
         fun url(url: String?) = apply { this.url = url }
@@ -556,10 +750,15 @@ private constructor(
         /** Alias for [Builder.verifiedOnly]. */
         fun verifiedOnly(verifiedOnly: Boolean) = verifiedOnly(verifiedOnly as Boolean?)
 
-        /** Set the radius for the near filter. */
+        /**
+         * X search no longer supports within. A Tweet search with it answers 424 & charges nothing.
+         * Use near alone.
+         */
         fun within(within: String?) = apply { this.within = within }
 
-        /** Match Tweets inside a recent time window. */
+        /**
+         * Keeps Tweets from a recent window, such as 90m or 7d. Use a whole number & s, m, h or d.
+         */
         fun withinTime(withinTime: String?) = apply { this.withinTime = withinTime }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -668,8 +867,10 @@ private constructor(
         fun build(): UserRetrieveRepliesParams =
             UserRetrieveRepliesParams(
                 id,
+                advancedQuery,
                 anyWords,
                 blueVerifiedOnly,
+                boundingBox,
                 cardName,
                 cashtags,
                 conversationId,
@@ -677,12 +878,15 @@ private constructor(
                 exactPhrase,
                 excludeSource,
                 excludeWords,
+                fields,
                 fromUser,
                 geocode,
                 hashtags,
-                includeParentTweet,
                 inReplyToTweetId,
+                includeParentTweet,
+                keywords,
                 language,
+                listId,
                 maxFaves,
                 maxId,
                 maxQuotes,
@@ -692,14 +896,20 @@ private constructor(
                 mentioning,
                 minBookmarks,
                 minFaves,
+                minLikes,
                 minQuotes,
                 minReplies,
                 minRetweets,
                 minViews,
+                mode,
                 nativeRetweets,
                 near,
                 news,
+                omit,
                 pageSize,
+                place,
+                placeCountry,
+                pointRadius,
                 quotes,
                 quotesOfTweetId,
                 replies,
@@ -708,9 +918,11 @@ private constructor(
                 safe,
                 sinceDate,
                 sinceId,
+                sinceTime,
                 source,
                 toUser,
                 untilDate,
+                untilTime,
                 url,
                 verifiedOnly,
                 within,
@@ -731,8 +943,10 @@ private constructor(
     override fun _queryParams(): QueryParams =
         QueryParams.builder()
             .apply {
+                advancedQuery?.let { put("advancedQuery", it) }
                 anyWords?.let { put("anyWords", it) }
                 blueVerifiedOnly?.let { put("blueVerifiedOnly", it.toString()) }
+                boundingBox?.let { put("boundingBox", it) }
                 cardName?.let { put("cardName", it) }
                 cashtags?.let { put("cashtags", it) }
                 conversationId?.let { put("conversationId", it) }
@@ -740,12 +954,15 @@ private constructor(
                 exactPhrase?.let { put("exactPhrase", it) }
                 excludeSource?.let { put("excludeSource", it) }
                 excludeWords?.let { put("excludeWords", it) }
+                fields?.let { put("fields", it) }
                 fromUser?.let { put("fromUser", it) }
                 geocode?.let { put("geocode", it) }
                 hashtags?.let { put("hashtags", it) }
-                includeParentTweet?.let { put("includeParentTweet", it.toString()) }
                 inReplyToTweetId?.let { put("inReplyToTweetId", it) }
+                includeParentTweet?.let { put("includeParentTweet", it.toString()) }
+                keywords?.let { put("keywords", it) }
                 language?.let { put("language", it) }
+                listId?.let { put("listId", it) }
                 maxFaves?.let { put("maxFaves", it.toString()) }
                 maxId?.let { put("maxId", it) }
                 maxQuotes?.let { put("maxQuotes", it.toString()) }
@@ -755,14 +972,20 @@ private constructor(
                 mentioning?.let { put("mentioning", it) }
                 minBookmarks?.let { put("minBookmarks", it.toString()) }
                 minFaves?.let { put("minFaves", it.toString()) }
+                minLikes?.let { put("minLikes", it.toString()) }
                 minQuotes?.let { put("minQuotes", it.toString()) }
                 minReplies?.let { put("minReplies", it.toString()) }
                 minRetweets?.let { put("minRetweets", it.toString()) }
                 minViews?.let { put("minViews", it.toString()) }
+                mode?.let { put("mode", it.toString()) }
                 nativeRetweets?.let { put("nativeRetweets", it.toString()) }
                 near?.let { put("near", it) }
                 news?.let { put("news", it.toString()) }
+                omit?.let { put("omit", it) }
                 pageSize?.let { put("pageSize", it.toString()) }
+                place?.let { put("place", it) }
+                placeCountry?.let { put("placeCountry", it) }
+                pointRadius?.let { put("pointRadius", it) }
                 quotes?.let { put("quotes", it.toString()) }
                 quotesOfTweetId?.let { put("quotesOfTweetId", it) }
                 replies?.let { put("replies", it.toString()) }
@@ -771,9 +994,11 @@ private constructor(
                 safe?.let { put("safe", it.toString()) }
                 sinceDate?.let { put("sinceDate", it.toString()) }
                 sinceId?.let { put("sinceId", it) }
+                sinceTime?.let { put("sinceTime", it) }
                 source?.let { put("source", it) }
                 toUser?.let { put("toUser", it) }
                 untilDate?.let { put("untilDate", it.toString()) }
+                untilTime?.let { put("untilTime", it) }
                 url?.let { put("url", it) }
                 verifiedOnly?.let { put("verifiedOnly", it.toString()) }
                 within?.let { put("within", it) }
@@ -1282,6 +1507,117 @@ private constructor(
         override fun toString() = value.toString()
     }
 
+    /**
+     * Optional legacy pagination override. Search-only filters such as keywords apply only without
+     * it.
+     */
+    class Mode @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+        /** Returns this class instance's raw value. */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            val STANDARD = of("standard")
+
+            fun of(value: String) = Mode(JsonField.of(value))
+        }
+
+        /** An enum containing [Mode]'s known values. */
+        enum class Known {
+            STANDARD
+        }
+
+        /**
+         * An enum containing [Mode]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [Mode] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            STANDARD,
+            /** An enum member indicating that [Mode] was instantiated with an unknown value. */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         */
+        fun value(): Value =
+            when (this) {
+                STANDARD -> Value.STANDARD
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * @throws XTwitterScraperInvalidDataException if this class instance's value is a not a
+         *   known member.
+         */
+        fun known(): Known =
+            when (this) {
+                STANDARD -> Known.STANDARD
+                else -> throw XTwitterScraperInvalidDataException("Unknown Mode: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * @throws XTwitterScraperInvalidDataException if this class instance's value does not have
+         *   the expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString()
+                ?: throw XTwitterScraperInvalidDataException("Value is not a String")
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+         *   match its expected type.
+         */
+        fun validate(): Mode = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: XTwitterScraperInvalidDataException) {
+                false
+            }
+
+        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Mode && value == other.value
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
@@ -1289,8 +1625,10 @@ private constructor(
 
         return other is UserRetrieveRepliesParams &&
             id == other.id &&
+            advancedQuery == other.advancedQuery &&
             anyWords == other.anyWords &&
             blueVerifiedOnly == other.blueVerifiedOnly &&
+            boundingBox == other.boundingBox &&
             cardName == other.cardName &&
             cashtags == other.cashtags &&
             conversationId == other.conversationId &&
@@ -1298,12 +1636,15 @@ private constructor(
             exactPhrase == other.exactPhrase &&
             excludeSource == other.excludeSource &&
             excludeWords == other.excludeWords &&
+            fields == other.fields &&
             fromUser == other.fromUser &&
             geocode == other.geocode &&
             hashtags == other.hashtags &&
-            includeParentTweet == other.includeParentTweet &&
             inReplyToTweetId == other.inReplyToTweetId &&
+            includeParentTweet == other.includeParentTweet &&
+            keywords == other.keywords &&
             language == other.language &&
+            listId == other.listId &&
             maxFaves == other.maxFaves &&
             maxId == other.maxId &&
             maxQuotes == other.maxQuotes &&
@@ -1313,14 +1654,20 @@ private constructor(
             mentioning == other.mentioning &&
             minBookmarks == other.minBookmarks &&
             minFaves == other.minFaves &&
+            minLikes == other.minLikes &&
             minQuotes == other.minQuotes &&
             minReplies == other.minReplies &&
             minRetweets == other.minRetweets &&
             minViews == other.minViews &&
+            mode == other.mode &&
             nativeRetweets == other.nativeRetweets &&
             near == other.near &&
             news == other.news &&
+            omit == other.omit &&
             pageSize == other.pageSize &&
+            place == other.place &&
+            placeCountry == other.placeCountry &&
+            pointRadius == other.pointRadius &&
             quotes == other.quotes &&
             quotesOfTweetId == other.quotesOfTweetId &&
             replies == other.replies &&
@@ -1329,9 +1676,11 @@ private constructor(
             safe == other.safe &&
             sinceDate == other.sinceDate &&
             sinceId == other.sinceId &&
+            sinceTime == other.sinceTime &&
             source == other.source &&
             toUser == other.toUser &&
             untilDate == other.untilDate &&
+            untilTime == other.untilTime &&
             url == other.url &&
             verifiedOnly == other.verifiedOnly &&
             within == other.within &&
@@ -1343,8 +1692,10 @@ private constructor(
     override fun hashCode(): Int =
         Objects.hash(
             id,
+            advancedQuery,
             anyWords,
             blueVerifiedOnly,
+            boundingBox,
             cardName,
             cashtags,
             conversationId,
@@ -1352,12 +1703,15 @@ private constructor(
             exactPhrase,
             excludeSource,
             excludeWords,
+            fields,
             fromUser,
             geocode,
             hashtags,
-            includeParentTweet,
             inReplyToTweetId,
+            includeParentTweet,
+            keywords,
             language,
+            listId,
             maxFaves,
             maxId,
             maxQuotes,
@@ -1367,14 +1721,20 @@ private constructor(
             mentioning,
             minBookmarks,
             minFaves,
+            minLikes,
             minQuotes,
             minReplies,
             minRetweets,
             minViews,
+            mode,
             nativeRetweets,
             near,
             news,
+            omit,
             pageSize,
+            place,
+            placeCountry,
+            pointRadius,
             quotes,
             quotesOfTweetId,
             replies,
@@ -1383,9 +1743,11 @@ private constructor(
             safe,
             sinceDate,
             sinceId,
+            sinceTime,
             source,
             toUser,
             untilDate,
+            untilTime,
             url,
             verifiedOnly,
             within,
@@ -1395,5 +1757,5 @@ private constructor(
         )
 
     override fun toString() =
-        "UserRetrieveRepliesParams{id=$id, anyWords=$anyWords, blueVerifiedOnly=$blueVerifiedOnly, cardName=$cardName, cashtags=$cashtags, conversationId=$conversationId, cursor=$cursor, exactPhrase=$exactPhrase, excludeSource=$excludeSource, excludeWords=$excludeWords, fromUser=$fromUser, geocode=$geocode, hashtags=$hashtags, includeParentTweet=$includeParentTweet, inReplyToTweetId=$inReplyToTweetId, language=$language, maxFaves=$maxFaves, maxId=$maxId, maxQuotes=$maxQuotes, maxReplies=$maxReplies, maxRetweets=$maxRetweets, mediaType=$mediaType, mentioning=$mentioning, minBookmarks=$minBookmarks, minFaves=$minFaves, minQuotes=$minQuotes, minReplies=$minReplies, minRetweets=$minRetweets, minViews=$minViews, nativeRetweets=$nativeRetweets, near=$near, news=$news, pageSize=$pageSize, quotes=$quotes, quotesOfTweetId=$quotesOfTweetId, replies=$replies, retweets=$retweets, retweetsOfTweetId=$retweetsOfTweetId, safe=$safe, sinceDate=$sinceDate, sinceId=$sinceId, source=$source, toUser=$toUser, untilDate=$untilDate, url=$url, verifiedOnly=$verifiedOnly, within=$within, withinTime=$withinTime, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "UserRetrieveRepliesParams{id=$id, advancedQuery=$advancedQuery, anyWords=$anyWords, blueVerifiedOnly=$blueVerifiedOnly, boundingBox=$boundingBox, cardName=$cardName, cashtags=$cashtags, conversationId=$conversationId, cursor=$cursor, exactPhrase=$exactPhrase, excludeSource=$excludeSource, excludeWords=$excludeWords, fields=$fields, fromUser=$fromUser, geocode=$geocode, hashtags=$hashtags, inReplyToTweetId=$inReplyToTweetId, includeParentTweet=$includeParentTweet, keywords=$keywords, language=$language, listId=$listId, maxFaves=$maxFaves, maxId=$maxId, maxQuotes=$maxQuotes, maxReplies=$maxReplies, maxRetweets=$maxRetweets, mediaType=$mediaType, mentioning=$mentioning, minBookmarks=$minBookmarks, minFaves=$minFaves, minLikes=$minLikes, minQuotes=$minQuotes, minReplies=$minReplies, minRetweets=$minRetweets, minViews=$minViews, mode=$mode, nativeRetweets=$nativeRetweets, near=$near, news=$news, omit=$omit, pageSize=$pageSize, place=$place, placeCountry=$placeCountry, pointRadius=$pointRadius, quotes=$quotes, quotesOfTweetId=$quotesOfTweetId, replies=$replies, retweets=$retweets, retweetsOfTweetId=$retweetsOfTweetId, safe=$safe, sinceDate=$sinceDate, sinceId=$sinceId, sinceTime=$sinceTime, source=$source, toUser=$toUser, untilDate=$untilDate, untilTime=$untilTime, url=$url, verifiedOnly=$verifiedOnly, within=$within, withinTime=$withinTime, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

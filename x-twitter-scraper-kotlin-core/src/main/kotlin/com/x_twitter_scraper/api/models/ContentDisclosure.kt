@@ -17,7 +17,7 @@ import java.util.Collections
 import java.util.Objects
 
 /**
- * Content disclosure metadata shown by X when a tweet is labeled as paid partnership content or
+ * Content disclosure metadata X shows on a labeled tweet. X labels paid partnership content and
  * AI-generated media.
  */
 class ContentDisclosure
@@ -38,10 +38,16 @@ private constructor(
         aiGenerated: JsonField<AiGenerated> = JsonMissing.of(),
     ) : this(advertising, aiGenerated, mutableMapOf())
 
-    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
     fun advertising(): Advertising? = advertising.getNullable("advertising")
 
-    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
     fun aiGenerated(): AiGenerated? = aiGenerated.getNullable("aiGenerated")
 
     /**
@@ -93,6 +99,7 @@ private constructor(
             additionalProperties = contentDisclosure.additionalProperties.toMutableMap()
         }
 
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun advertising(advertising: Advertising) = advertising(JsonField.of(advertising))
 
         /** Sets [Builder.advertising] to an arbitrary JSON value. */
@@ -100,6 +107,7 @@ private constructor(
             this.advertising = advertising
         }
 
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun aiGenerated(aiGenerated: AiGenerated) = aiGenerated(JsonField.of(aiGenerated))
 
         /** Sets [Builder.aiGenerated] to an arbitrary JSON value. */
@@ -303,7 +311,9 @@ private constructor(
                 additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(isPaidPromotion, additionalProperties) }
+        private val hashCode: Int by lazy {
+            Objects.hash(isPaidPromotion, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -330,7 +340,7 @@ private constructor(
         ) : this(detectionSource, hasAiGeneratedMedia, mutableMapOf())
 
         /**
-         * Source of the AI-generated media disclosure.
+         * How X detected AI media. X omits it for self-declared posts.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
@@ -394,7 +404,7 @@ private constructor(
                 additionalProperties = aiGenerated.additionalProperties.toMutableMap()
             }
 
-            /** Source of the AI-generated media disclosure. */
+            /** How X detected AI media. X omits it for self-declared posts. */
             fun detectionSource(detectionSource: String) =
                 detectionSource(JsonField.of(detectionSource))
 

@@ -20,9 +20,8 @@ import java.util.Collections
 import java.util.Objects
 
 /**
- * Quoted or retweeted tweet context. Every object includes id, text, and engagement metrics. A zero
- * metric can mean X did not report the count. Author, media, and conversation fields appear when
- * available.
+ * A parent, quoted or retweeted tweet. It has the TweetPublicData fields and an author. Nesting
+ * stops after 4 levels.
  */
 class EmbeddedTweet
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
@@ -272,13 +271,22 @@ private constructor(
      */
     fun contentDisclosure(): ContentDisclosure? = contentDisclosure.getNullable("contentDisclosure")
 
-    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
     fun conversationId(): String? = conversationId.getNullable("conversationId")
 
-    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
     fun createdAt(): String? = createdAt.getNullable("createdAt")
 
-    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
     fun displayTextRange(): List<Long>? = displayTextRange.getNullable("displayTextRange")
 
     /**
@@ -288,37 +296,70 @@ private constructor(
      */
     fun edit(): Edit? = edit.getNullable("edit")
 
-    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
     fun entities(): Entities? = entities.getNullable("entities")
 
-    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
     fun inReplyToId(): String? = inReplyToId.getNullable("inReplyToId")
 
-    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
     fun inReplyToUserId(): String? = inReplyToUserId.getNullable("inReplyToUserId")
 
-    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
     fun inReplyToUsername(): String? = inReplyToUsername.getNullable("inReplyToUsername")
 
-    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
     fun isLimitedReply(): Boolean? = isLimitedReply.getNullable("isLimitedReply")
 
-    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
     fun isNoteTweet(): Boolean? = isNoteTweet.getNullable("isNoteTweet")
 
-    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
     fun isQuoteStatus(): Boolean? = isQuoteStatus.getNullable("isQuoteStatus")
 
-    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
     fun isReply(): Boolean? = isReply.getNullable("isReply")
 
-    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
     fun isTranslatable(): Boolean? = isTranslatable.getNullable("isTranslatable")
 
-    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
     fun lang(): String? = lang.getNullable("lang")
 
-    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
     fun media(): List<TweetMedia>? = media.getNullable("media")
 
     /**
@@ -335,7 +376,10 @@ private constructor(
      */
     fun place(): Place? = place.getNullable("place")
 
-    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
     fun possiblySensitive(): Boolean? = possiblySensitive.getNullable("possiblySensitive")
 
     /**
@@ -363,16 +407,28 @@ private constructor(
      */
     fun retweetedTweet(): EmbeddedTweet? = retweetedTweet.getNullable("retweeted_tweet")
 
-    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
     fun source(): String? = source.getNullable("source")
 
-    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
     fun type(): String? = type.getNullable("type")
 
-    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
     fun url(): String? = url.getNullable("url")
 
-    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
     fun viewState(): String? = viewState.getNullable("viewState")
 
     /**
@@ -874,6 +930,7 @@ private constructor(
             this.contentDisclosure = contentDisclosure
         }
 
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun conversationId(conversationId: String) = conversationId(JsonField.of(conversationId))
 
         /** Sets [Builder.conversationId] to an arbitrary JSON value. */
@@ -881,11 +938,13 @@ private constructor(
             this.conversationId = conversationId
         }
 
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun createdAt(createdAt: String) = createdAt(JsonField.of(createdAt))
 
         /** Sets [Builder.createdAt] to an arbitrary JSON value. */
         fun createdAt(createdAt: JsonField<String>) = apply { this.createdAt = createdAt }
 
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun displayTextRange(displayTextRange: List<Long>) =
             displayTextRange(JsonField.of(displayTextRange))
 
@@ -895,7 +954,7 @@ private constructor(
         }
 
         /**
-         * Adds a single [Long] to [Builder.displayTextRange].
+         * Adds a single [Long] to [displayTextRange].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
@@ -912,16 +971,19 @@ private constructor(
         /** Sets [Builder.edit] to an arbitrary JSON value. */
         fun edit(edit: JsonField<Edit>) = apply { this.edit = edit }
 
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun entities(entities: Entities) = entities(JsonField.of(entities))
 
         /** Sets [Builder.entities] to an arbitrary JSON value. */
         fun entities(entities: JsonField<Entities>) = apply { this.entities = entities }
 
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun inReplyToId(inReplyToId: String) = inReplyToId(JsonField.of(inReplyToId))
 
         /** Sets [Builder.inReplyToId] to an arbitrary JSON value. */
         fun inReplyToId(inReplyToId: JsonField<String>) = apply { this.inReplyToId = inReplyToId }
 
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun inReplyToUserId(inReplyToUserId: String) =
             inReplyToUserId(JsonField.of(inReplyToUserId))
 
@@ -930,6 +992,7 @@ private constructor(
             this.inReplyToUserId = inReplyToUserId
         }
 
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun inReplyToUsername(inReplyToUsername: String) =
             inReplyToUsername(JsonField.of(inReplyToUsername))
 
@@ -938,6 +1001,7 @@ private constructor(
             this.inReplyToUsername = inReplyToUsername
         }
 
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun isLimitedReply(isLimitedReply: Boolean) = isLimitedReply(JsonField.of(isLimitedReply))
 
         /** Sets [Builder.isLimitedReply] to an arbitrary JSON value. */
@@ -945,11 +1009,13 @@ private constructor(
             this.isLimitedReply = isLimitedReply
         }
 
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun isNoteTweet(isNoteTweet: Boolean) = isNoteTweet(JsonField.of(isNoteTweet))
 
         /** Sets [Builder.isNoteTweet] to an arbitrary JSON value. */
         fun isNoteTweet(isNoteTweet: JsonField<Boolean>) = apply { this.isNoteTweet = isNoteTweet }
 
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun isQuoteStatus(isQuoteStatus: Boolean) = isQuoteStatus(JsonField.of(isQuoteStatus))
 
         /** Sets [Builder.isQuoteStatus] to an arbitrary JSON value. */
@@ -957,11 +1023,13 @@ private constructor(
             this.isQuoteStatus = isQuoteStatus
         }
 
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun isReply(isReply: Boolean) = isReply(JsonField.of(isReply))
 
         /** Sets [Builder.isReply] to an arbitrary JSON value. */
         fun isReply(isReply: JsonField<Boolean>) = apply { this.isReply = isReply }
 
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun isTranslatable(isTranslatable: Boolean) = isTranslatable(JsonField.of(isTranslatable))
 
         /** Sets [Builder.isTranslatable] to an arbitrary JSON value. */
@@ -969,11 +1037,13 @@ private constructor(
             this.isTranslatable = isTranslatable
         }
 
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun lang(lang: String) = lang(JsonField.of(lang))
 
         /** Sets [Builder.lang] to an arbitrary JSON value. */
         fun lang(lang: JsonField<String>) = apply { this.lang = lang }
 
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun media(media: List<TweetMedia>) = media(JsonField.of(media))
 
         /** Sets [Builder.media] to an arbitrary JSON value. */
@@ -982,7 +1052,7 @@ private constructor(
         }
 
         /**
-         * Adds a single [TweetMedia] to [Builder.media].
+         * Adds a single [TweetMedia] to [media].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
@@ -1005,6 +1075,7 @@ private constructor(
         /** Sets [Builder.place] to an arbitrary JSON value. */
         fun place(place: JsonField<Place>) = apply { this.place = place }
 
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun possiblySensitive(possiblySensitive: Boolean) =
             possiblySensitive(JsonField.of(possiblySensitive))
 
@@ -1047,21 +1118,25 @@ private constructor(
             this.retweetedTweet = retweetedTweet
         }
 
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun source(source: String) = source(JsonField.of(source))
 
         /** Sets [Builder.source] to an arbitrary JSON value. */
         fun source(source: JsonField<String>) = apply { this.source = source }
 
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun type(type: String) = type(JsonField.of(type))
 
         /** Sets [Builder.type] to an arbitrary JSON value. */
         fun type(type: JsonField<String>) = apply { this.type = type }
 
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun url(url: String) = url(JsonField.of(url))
 
         /** Sets [Builder.url] to an arbitrary JSON value. */
         fun url(url: JsonField<String>) = apply { this.url = url }
 
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun viewState(viewState: String) = viewState(JsonField.of(viewState))
 
         /** Sets [Builder.viewState] to an arbitrary JSON value. */
@@ -1276,16 +1351,28 @@ private constructor(
             @JsonProperty("title") @ExcludeMissing title: JsonField<String> = JsonMissing.of(),
         ) : this(id, coverMediaUrl, previewText, title, mutableMapOf())
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun id(): String? = id.getNullable("id")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun coverMediaUrl(): String? = coverMediaUrl.getNullable("coverMediaUrl")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun previewText(): String? = previewText.getNullable("previewText")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun title(): String? = title.getNullable("title")
 
         /**
@@ -1356,11 +1443,17 @@ private constructor(
                 additionalProperties = article.additionalProperties.toMutableMap()
             }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun id(id: String) = id(JsonField.of(id))
 
             /** Sets [Builder.id] to an arbitrary JSON value. */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun coverMediaUrl(coverMediaUrl: String) = coverMediaUrl(JsonField.of(coverMediaUrl))
 
             /** Sets [Builder.coverMediaUrl] to an arbitrary JSON value. */
@@ -1368,6 +1461,9 @@ private constructor(
                 this.coverMediaUrl = coverMediaUrl
             }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun previewText(previewText: String) = previewText(JsonField.of(previewText))
 
             /** Sets [Builder.previewText] to an arbitrary JSON value. */
@@ -1375,6 +1471,9 @@ private constructor(
                 this.previewText = previewText
             }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun title(title: String) = title(JsonField.of(title))
 
             /** Sets [Builder.title] to an arbitrary JSON value. */
@@ -1489,16 +1588,28 @@ private constructor(
             @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of(),
         ) : this(id, bindingValues, name, url, mutableMapOf())
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun id(): String? = id.getNullable("id")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun bindingValues(): BindingValues? = bindingValues.getNullable("bindingValues")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun name(): String? = name.getNullable("name")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun url(): String? = url.getNullable("url")
 
         /**
@@ -1567,11 +1678,17 @@ private constructor(
                 additionalProperties = card.additionalProperties.toMutableMap()
             }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun id(id: String) = id(JsonField.of(id))
 
             /** Sets [Builder.id] to an arbitrary JSON value. */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun bindingValues(bindingValues: BindingValues) =
                 bindingValues(JsonField.of(bindingValues))
 
@@ -1580,11 +1697,17 @@ private constructor(
                 this.bindingValues = bindingValues
             }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun name(name: String) = name(JsonField.of(name))
 
             /** Sets [Builder.name] to an arbitrary JSON value. */
             fun name(name: JsonField<String>) = apply { this.name = name }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun url(url: String) = url(JsonField.of(url))
 
             /** Sets [Builder.url] to an arbitrary JSON value. */
@@ -1825,25 +1948,46 @@ private constructor(
             mutableMapOf(),
         )
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun id(): String? = id.getNullable("id")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun destinationUrl(): String? = destinationUrl.getNullable("destinationUrl")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun footer(): String? = footer.getNullable("footer")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun shortTitle(): String? = shortTitle.getNullable("shortTitle")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun subtitle(): String? = subtitle.getNullable("subtitle")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun title(): String? = title.getNullable("title")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun visualStyle(): String? = visualStyle.getNullable("visualStyle")
 
         /**
@@ -1943,11 +2087,17 @@ private constructor(
                 additionalProperties = communityNote.additionalProperties.toMutableMap()
             }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun id(id: String) = id(JsonField.of(id))
 
             /** Sets [Builder.id] to an arbitrary JSON value. */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun destinationUrl(destinationUrl: String) =
                 destinationUrl(JsonField.of(destinationUrl))
 
@@ -1956,26 +2106,41 @@ private constructor(
                 this.destinationUrl = destinationUrl
             }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun footer(footer: String) = footer(JsonField.of(footer))
 
             /** Sets [Builder.footer] to an arbitrary JSON value. */
             fun footer(footer: JsonField<String>) = apply { this.footer = footer }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun shortTitle(shortTitle: String) = shortTitle(JsonField.of(shortTitle))
 
             /** Sets [Builder.shortTitle] to an arbitrary JSON value. */
             fun shortTitle(shortTitle: JsonField<String>) = apply { this.shortTitle = shortTitle }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun subtitle(subtitle: String) = subtitle(JsonField.of(subtitle))
 
             /** Sets [Builder.subtitle] to an arbitrary JSON value. */
             fun subtitle(subtitle: JsonField<String>) = apply { this.subtitle = subtitle }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun title(title: String) = title(JsonField.of(title))
 
             /** Sets [Builder.title] to an arbitrary JSON value. */
             fun title(title: JsonField<String>) = apply { this.title = title }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun visualStyle(visualStyle: String) = visualStyle(JsonField.of(visualStyle))
 
             /** Sets [Builder.visualStyle] to an arbitrary JSON value. */
@@ -2102,36 +2267,32 @@ private constructor(
     class Edit
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
-        private val editableUntilMsecs: JsonField<String>,
         private val editTweetIds: JsonField<List<String>>,
+        private val editableUntilMsecs: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("editableUntilMsecs")
-            @ExcludeMissing
-            editableUntilMsecs: JsonField<String> = JsonMissing.of(),
             @JsonProperty("editTweetIds")
             @ExcludeMissing
             editTweetIds: JsonField<List<String>> = JsonMissing.of(),
-        ) : this(editableUntilMsecs, editTweetIds, mutableMapOf())
+            @JsonProperty("editableUntilMsecs")
+            @ExcludeMissing
+            editableUntilMsecs: JsonField<String> = JsonMissing.of(),
+        ) : this(editTweetIds, editableUntilMsecs, mutableMapOf())
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
-        fun editableUntilMsecs(): String? = editableUntilMsecs.getNullable("editableUntilMsecs")
-
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun editTweetIds(): List<String>? = editTweetIds.getNullable("editTweetIds")
 
         /**
-         * Returns the raw JSON value of [editableUntilMsecs].
-         *
-         * Unlike [editableUntilMsecs], this method doesn't throw if the JSON field has an
-         * unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
-        @JsonProperty("editableUntilMsecs")
-        @ExcludeMissing
-        fun _editableUntilMsecs(): JsonField<String> = editableUntilMsecs
+        fun editableUntilMsecs(): String? = editableUntilMsecs.getNullable("editableUntilMsecs")
 
         /**
          * Returns the raw JSON value of [editTweetIds].
@@ -2142,6 +2303,16 @@ private constructor(
         @JsonProperty("editTweetIds")
         @ExcludeMissing
         fun _editTweetIds(): JsonField<List<String>> = editTweetIds
+
+        /**
+         * Returns the raw JSON value of [editableUntilMsecs].
+         *
+         * Unlike [editableUntilMsecs], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("editableUntilMsecs")
+        @ExcludeMissing
+        fun _editableUntilMsecs(): JsonField<String> = editableUntilMsecs
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -2164,24 +2335,19 @@ private constructor(
         /** A builder for [Edit]. */
         class Builder internal constructor() {
 
-            private var editableUntilMsecs: JsonField<String> = JsonMissing.of()
             private var editTweetIds: JsonField<MutableList<String>>? = null
+            private var editableUntilMsecs: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(edit: Edit) = apply {
-                editableUntilMsecs = edit.editableUntilMsecs
                 editTweetIds = edit.editTweetIds.map { it.toMutableList() }
+                editableUntilMsecs = edit.editableUntilMsecs
                 additionalProperties = edit.additionalProperties.toMutableMap()
             }
 
-            fun editableUntilMsecs(editableUntilMsecs: String) =
-                editableUntilMsecs(JsonField.of(editableUntilMsecs))
-
-            /** Sets [Builder.editableUntilMsecs] to an arbitrary JSON value. */
-            fun editableUntilMsecs(editableUntilMsecs: JsonField<String>) = apply {
-                this.editableUntilMsecs = editableUntilMsecs
-            }
-
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun editTweetIds(editTweetIds: List<String>) = editTweetIds(JsonField.of(editTweetIds))
 
             /** Sets [Builder.editTweetIds] to an arbitrary JSON value. */
@@ -2199,6 +2365,17 @@ private constructor(
                     (editTweetIds ?: JsonField.of(mutableListOf())).also {
                         checkKnown("editTweetIds", it).add(editTweetId)
                     }
+            }
+
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun editableUntilMsecs(editableUntilMsecs: String) =
+                editableUntilMsecs(JsonField.of(editableUntilMsecs))
+
+            /** Sets [Builder.editableUntilMsecs] to an arbitrary JSON value. */
+            fun editableUntilMsecs(editableUntilMsecs: JsonField<String>) = apply {
+                this.editableUntilMsecs = editableUntilMsecs
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -2227,8 +2404,8 @@ private constructor(
              */
             fun build(): Edit =
                 Edit(
-                    editableUntilMsecs,
                     (editTweetIds ?: JsonMissing.of()).map { it.toImmutable() },
+                    editableUntilMsecs,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -2249,8 +2426,8 @@ private constructor(
                 return@apply
             }
 
-            editableUntilMsecs()
             editTweetIds()
+            editableUntilMsecs()
             validated = true
         }
 
@@ -2263,8 +2440,8 @@ private constructor(
             }
 
         internal fun validity(): Int =
-            (if (editableUntilMsecs.asKnown() == null) 0 else 1) +
-                (editTweetIds.asKnown()?.size ?: 0)
+            (editTweetIds.asKnown()?.size ?: 0) +
+                (if (editableUntilMsecs.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -2272,19 +2449,19 @@ private constructor(
             }
 
             return other is Edit &&
-                editableUntilMsecs == other.editableUntilMsecs &&
                 editTweetIds == other.editTweetIds &&
+                editableUntilMsecs == other.editableUntilMsecs &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(editableUntilMsecs, editTweetIds, additionalProperties)
+            Objects.hash(editTweetIds, editableUntilMsecs, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Edit{editableUntilMsecs=$editableUntilMsecs, editTweetIds=$editTweetIds, additionalProperties=$additionalProperties}"
+            "Edit{editTweetIds=$editTweetIds, editableUntilMsecs=$editableUntilMsecs, additionalProperties=$additionalProperties}"
     }
 
     class Entities
@@ -2421,16 +2598,28 @@ private constructor(
          */
         fun text(): String = text.getRequired("text")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun id(): String? = id.getNullable("id")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun entities(): Entities? = entities.getNullable("entities")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun isExpandable(): Boolean? = isExpandable.getNullable("isExpandable")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun richtextTags(): List<RichtextTag>? = richtextTags.getNullable("richtextTags")
 
         /**
@@ -2523,16 +2712,25 @@ private constructor(
             /** Sets [Builder.text] to an arbitrary JSON value. */
             fun text(text: JsonField<String>) = apply { this.text = text }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun id(id: String) = id(JsonField.of(id))
 
             /** Sets [Builder.id] to an arbitrary JSON value. */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun entities(entities: Entities) = entities(JsonField.of(entities))
 
             /** Sets [Builder.entities] to an arbitrary JSON value. */
             fun entities(entities: JsonField<Entities>) = apply { this.entities = entities }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun isExpandable(isExpandable: Boolean) = isExpandable(JsonField.of(isExpandable))
 
             /** Sets [Builder.isExpandable] to an arbitrary JSON value. */
@@ -2540,6 +2738,9 @@ private constructor(
                 this.isExpandable = isExpandable
             }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun richtextTags(richtextTags: List<RichtextTag>) =
                 richtextTags(JsonField.of(richtextTags))
 
@@ -3051,28 +3252,52 @@ private constructor(
             mutableMapOf(),
         )
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun id(): String? = id.getNullable("id")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun boundingBox(): BoundingBox? = boundingBox.getNullable("boundingBox")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun country(): String? = country.getNullable("country")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun countryCode(): String? = countryCode.getNullable("countryCode")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun fullName(): String? = fullName.getNullable("fullName")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun name(): String? = name.getNullable("name")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun placeType(): String? = placeType.getNullable("placeType")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun url(): String? = url.getNullable("url")
 
         /**
@@ -3178,11 +3403,17 @@ private constructor(
                 additionalProperties = place.additionalProperties.toMutableMap()
             }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun id(id: String) = id(JsonField.of(id))
 
             /** Sets [Builder.id] to an arbitrary JSON value. */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun boundingBox(boundingBox: BoundingBox) = boundingBox(JsonField.of(boundingBox))
 
             /** Sets [Builder.boundingBox] to an arbitrary JSON value. */
@@ -3190,11 +3421,17 @@ private constructor(
                 this.boundingBox = boundingBox
             }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun country(country: String) = country(JsonField.of(country))
 
             /** Sets [Builder.country] to an arbitrary JSON value. */
             fun country(country: JsonField<String>) = apply { this.country = country }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun countryCode(countryCode: String) = countryCode(JsonField.of(countryCode))
 
             /** Sets [Builder.countryCode] to an arbitrary JSON value. */
@@ -3202,21 +3439,33 @@ private constructor(
                 this.countryCode = countryCode
             }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun fullName(fullName: String) = fullName(JsonField.of(fullName))
 
             /** Sets [Builder.fullName] to an arbitrary JSON value. */
             fun fullName(fullName: JsonField<String>) = apply { this.fullName = fullName }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun name(name: String) = name(JsonField.of(name))
 
             /** Sets [Builder.name] to an arbitrary JSON value. */
             fun name(name: JsonField<String>) = apply { this.name = name }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun placeType(placeType: String) = placeType(JsonField.of(placeType))
 
             /** Sets [Builder.placeType] to an arbitrary JSON value. */
             fun placeType(placeType: JsonField<String>) = apply { this.placeType = placeType }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun url(url: String) = url(JsonField.of(url))
 
             /** Sets [Builder.url] to an arbitrary JSON value. */
@@ -3478,19 +3727,34 @@ private constructor(
             retweetCount: JsonField<Long> = JsonMissing.of(),
         ) : this(bookmarkCount, likeCount, quoteCount, replyCount, retweetCount, mutableMapOf())
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun bookmarkCount(): Long? = bookmarkCount.getNullable("bookmarkCount")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun likeCount(): Long? = likeCount.getNullable("likeCount")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun quoteCount(): Long? = quoteCount.getNullable("quoteCount")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun replyCount(): Long? = replyCount.getNullable("replyCount")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun retweetCount(): Long? = retweetCount.getNullable("retweetCount")
 
         /**
@@ -3571,6 +3835,9 @@ private constructor(
                 additionalProperties = previousCounts.additionalProperties.toMutableMap()
             }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun bookmarkCount(bookmarkCount: Long) = bookmarkCount(JsonField.of(bookmarkCount))
 
             /** Sets [Builder.bookmarkCount] to an arbitrary JSON value. */
@@ -3578,21 +3845,33 @@ private constructor(
                 this.bookmarkCount = bookmarkCount
             }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun likeCount(likeCount: Long) = likeCount(JsonField.of(likeCount))
 
             /** Sets [Builder.likeCount] to an arbitrary JSON value. */
             fun likeCount(likeCount: JsonField<Long>) = apply { this.likeCount = likeCount }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun quoteCount(quoteCount: Long) = quoteCount(JsonField.of(quoteCount))
 
             /** Sets [Builder.quoteCount] to an arbitrary JSON value. */
             fun quoteCount(quoteCount: JsonField<Long>) = apply { this.quoteCount = quoteCount }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun replyCount(replyCount: Long) = replyCount(JsonField.of(replyCount))
 
             /** Sets [Builder.replyCount] to an arbitrary JSON value. */
             fun replyCount(replyCount: JsonField<Long>) = apply { this.replyCount = replyCount }
 
+            /**
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
             fun retweetCount(retweetCount: Long) = retweetCount(JsonField.of(retweetCount))
 
             /** Sets [Builder.retweetCount] to an arbitrary JSON value. */

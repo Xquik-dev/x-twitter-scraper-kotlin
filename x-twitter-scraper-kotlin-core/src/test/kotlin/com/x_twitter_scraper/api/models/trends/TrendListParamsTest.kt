@@ -12,17 +12,35 @@ internal class TrendListParamsTest {
 
     @Test
     fun create() {
-        TrendListParams.builder().count(1L).woeid(0L).build()
+        TrendListParams.builder()
+            .count(30L)
+            .fields("id,text,author.username")
+            .omit("entities,media")
+            .woeid(1L)
+            .build()
     }
 
     @Test
     fun queryParams() {
-        val params = TrendListParams.builder().count(1L).woeid(0L).build()
+        val params =
+            TrendListParams.builder()
+                .count(30L)
+                .fields("id,text,author.username")
+                .omit("entities,media")
+                .woeid(1L)
+                .build()
 
         val queryParams = params._queryParams()
 
         assertThat(queryParams)
-            .isEqualTo(QueryParams.builder().put("count", "1").put("woeid", "0").build())
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("count", "30")
+                    .put("fields", "id,text,author.username")
+                    .put("omit", "entities,media")
+                    .put("woeid", "1")
+                    .build()
+            )
     }
 
     @Test

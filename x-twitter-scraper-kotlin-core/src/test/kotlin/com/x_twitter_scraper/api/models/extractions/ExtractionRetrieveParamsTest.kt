@@ -13,21 +13,22 @@ internal class ExtractionRetrieveParamsTest {
     @Test
     fun create() {
         ExtractionRetrieveParams.builder()
-            .id("id")
+            .id("L3NjAbCdEfGh")
             .cursor("cursor")
             .fieldStyle(ExtractionRetrieveParams.FieldStyle.SOURCE)
             .includeRaw(true)
-            .limit(1L)
+            .limit(100L)
             .outputMode(ExtractionRetrieveParams.OutputMode.COMPACT)
             .outputPreset(ExtractionRetrieveParams.OutputPreset.NESTED)
+            .wait(0L)
             .build()
     }
 
     @Test
     fun pathParams() {
-        val params = ExtractionRetrieveParams.builder().id("id").build()
+        val params = ExtractionRetrieveParams.builder().id("L3NjAbCdEfGh").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("id")
+        assertThat(params._pathParam(0)).isEqualTo("L3NjAbCdEfGh")
         assertThat(params._pathParam(1)).isEqualTo("")
     }
 
@@ -35,13 +36,14 @@ internal class ExtractionRetrieveParamsTest {
     fun queryParams() {
         val params =
             ExtractionRetrieveParams.builder()
-                .id("id")
+                .id("L3NjAbCdEfGh")
                 .cursor("cursor")
                 .fieldStyle(ExtractionRetrieveParams.FieldStyle.SOURCE)
                 .includeRaw(true)
-                .limit(1L)
+                .limit(100L)
                 .outputMode(ExtractionRetrieveParams.OutputMode.COMPACT)
                 .outputPreset(ExtractionRetrieveParams.OutputPreset.NESTED)
+                .wait(0L)
                 .build()
 
         val queryParams = params._queryParams()
@@ -52,16 +54,17 @@ internal class ExtractionRetrieveParamsTest {
                     .put("cursor", "cursor")
                     .put("fieldStyle", "source")
                     .put("includeRaw", "true")
-                    .put("limit", "1")
+                    .put("limit", "100")
                     .put("outputMode", "compact")
                     .put("outputPreset", "nested")
+                    .put("wait", "0")
                     .build()
             )
     }
 
     @Test
     fun queryParamsWithoutOptionalFields() {
-        val params = ExtractionRetrieveParams.builder().id("id").build()
+        val params = ExtractionRetrieveParams.builder().id("L3NjAbCdEfGh").build()
 
         val queryParams = params._queryParams()
 

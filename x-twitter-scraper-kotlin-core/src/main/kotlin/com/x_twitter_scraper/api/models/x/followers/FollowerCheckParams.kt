@@ -15,15 +15,38 @@ class FollowerCheckParams
 private constructor(
     private val source: String,
     private val target: String,
+    private val fields: String?,
+    private val omit: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** Source username, @username, or X or Twitter profile URL */
+    /**
+     * Source user ID, username, @username, or X or Twitter profile URL, such as
+     * x.com/i/user/11348282. A number is a user ID.
+     */
     fun source(): String = source
 
-    /** Target username, @username, or X or Twitter profile URL */
+    /**
+     * Target user ID, username, @username, or X or Twitter profile URL, such as
+     * x.com/i/user/11348282. A number is a user ID.
+     */
     fun target(): String = target
+
+    /**
+     * Fields to keep in each row, comma-separated. Use dots for nested fields, such as
+     * author.username. A list keeps the field in each item. Case & underscores do not matter. A row
+     * that lacks a field leaves it out. Cursors, counts & diagnostics always stay. An unknown name
+     * answers 400 unknown_field with the valid names, before any read. The price stays the same.
+     * SDK row types then hold only the named fields.
+     */
+    fun fields(): String? = fields
+
+    /**
+     * Fields to drop from each row, comma-separated. It takes the same names as fields. With
+     * fields, it drops from the kept fields.
+     */
+    fun omit(): String? = omit
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -52,21 +75,46 @@ private constructor(
 
         private var source: String? = null
         private var target: String? = null
+        private var fields: String? = null
+        private var omit: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(followerCheckParams: FollowerCheckParams) = apply {
             source = followerCheckParams.source
             target = followerCheckParams.target
+            fields = followerCheckParams.fields
+            omit = followerCheckParams.omit
             additionalHeaders = followerCheckParams.additionalHeaders.toBuilder()
             additionalQueryParams = followerCheckParams.additionalQueryParams.toBuilder()
         }
 
-        /** Source username, @username, or X or Twitter profile URL */
+        /**
+         * Source user ID, username, @username, or X or Twitter profile URL, such as
+         * x.com/i/user/11348282. A number is a user ID.
+         */
         fun source(source: String) = apply { this.source = source }
 
-        /** Target username, @username, or X or Twitter profile URL */
+        /**
+         * Target user ID, username, @username, or X or Twitter profile URL, such as
+         * x.com/i/user/11348282. A number is a user ID.
+         */
         fun target(target: String) = apply { this.target = target }
+
+        /**
+         * Fields to keep in each row, comma-separated. Use dots for nested fields, such as
+         * author.username. A list keeps the field in each item. Case & underscores do not matter. A
+         * row that lacks a field leaves it out. Cursors, counts & diagnostics always stay. An
+         * unknown name answers 400 unknown_field with the valid names, before any read. The price
+         * stays the same. SDK row types then hold only the named fields.
+         */
+        fun fields(fields: String?) = apply { this.fields = fields }
+
+        /**
+         * Fields to drop from each row, comma-separated. It takes the same names as fields. With
+         * fields, it drops from the kept fields.
+         */
+        fun omit(omit: String?) = apply { this.omit = omit }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -183,6 +231,8 @@ private constructor(
             FollowerCheckParams(
                 checkRequired("source", source),
                 checkRequired("target", target),
+                fields,
+                omit,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -195,6 +245,8 @@ private constructor(
             .apply {
                 put("source", source)
                 put("target", target)
+                fields?.let { put("fields", it) }
+                omit?.let { put("omit", it) }
                 putAll(additionalQueryParams)
             }
             .build()
@@ -207,13 +259,15 @@ private constructor(
         return other is FollowerCheckParams &&
             source == other.source &&
             target == other.target &&
+            fields == other.fields &&
+            omit == other.omit &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(source, target, additionalHeaders, additionalQueryParams)
+        Objects.hash(source, target, fields, omit, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "FollowerCheckParams{source=$source, target=$target, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "FollowerCheckParams{source=$source, target=$target, fields=$fields, omit=$omit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

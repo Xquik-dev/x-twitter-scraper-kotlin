@@ -16,11 +16,28 @@ import java.util.Objects
 class XGetArticleParams
 private constructor(
     private val tweetId: String?,
+    private val fields: String?,
+    private val omit: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun tweetId(): String? = tweetId
+
+    /**
+     * Fields to keep in each row, comma-separated. Use dots for nested fields, such as
+     * author.username. A list keeps the field in each item. Case & underscores do not matter. A row
+     * that lacks a field leaves it out. Cursors, counts & diagnostics always stay. An unknown name
+     * answers 400 unknown_field with the valid names, before any read. The price stays the same.
+     * SDK row types then hold only the named fields.
+     */
+    fun fields(): String? = fields
+
+    /**
+     * Fields to drop from each row, comma-separated. It takes the same names as fields. With
+     * fields, it drops from the kept fields.
+     */
+    fun omit(): String? = omit
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -42,16 +59,35 @@ private constructor(
     class Builder internal constructor() {
 
         private var tweetId: String? = null
+        private var fields: String? = null
+        private var omit: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(xGetArticleParams: XGetArticleParams) = apply {
             tweetId = xGetArticleParams.tweetId
+            fields = xGetArticleParams.fields
+            omit = xGetArticleParams.omit
             additionalHeaders = xGetArticleParams.additionalHeaders.toBuilder()
             additionalQueryParams = xGetArticleParams.additionalQueryParams.toBuilder()
         }
 
         fun tweetId(tweetId: String?) = apply { this.tweetId = tweetId }
+
+        /**
+         * Fields to keep in each row, comma-separated. Use dots for nested fields, such as
+         * author.username. A list keeps the field in each item. Case & underscores do not matter. A
+         * row that lacks a field leaves it out. Cursors, counts & diagnostics always stay. An
+         * unknown name answers 400 unknown_field with the valid names, before any read. The price
+         * stays the same. SDK row types then hold only the named fields.
+         */
+        fun fields(fields: String?) = apply { this.fields = fields }
+
+        /**
+         * Fields to drop from each row, comma-separated. It takes the same names as fields. With
+         * fields, it drops from the kept fields.
+         */
+        fun omit(omit: String?) = apply { this.omit = omit }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -157,7 +193,13 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          */
         fun build(): XGetArticleParams =
-            XGetArticleParams(tweetId, additionalHeaders.build(), additionalQueryParams.build())
+            XGetArticleParams(
+                tweetId,
+                fields,
+                omit,
+                additionalHeaders.build(),
+                additionalQueryParams.build(),
+            )
     }
 
     fun _pathParam(index: Int): String =
@@ -168,7 +210,14 @@ private constructor(
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                fields?.let { put("fields", it) }
+                omit?.let { put("omit", it) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -177,12 +226,15 @@ private constructor(
 
         return other is XGetArticleParams &&
             tweetId == other.tweetId &&
+            fields == other.fields &&
+            omit == other.omit &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = Objects.hash(tweetId, additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int =
+        Objects.hash(tweetId, fields, omit, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "XGetArticleParams{tweetId=$tweetId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "XGetArticleParams{tweetId=$tweetId, fields=$fields, omit=$omit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
