@@ -272,15 +272,7 @@ private constructor(
     }
 
     override fun hashCode(): Int =
-        Objects.hash(
-            activeOnly,
-            fields,
-            limit,
-            omit,
-            q,
-            additionalHeaders,
-            additionalQueryParams,
-        )
+        Objects.hash(activeOnly, fields, limit, omit, q, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "XGetHashflagsParams{activeOnly=$activeOnly, fields=$fields, limit=$limit, omit=$omit, q=$q, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

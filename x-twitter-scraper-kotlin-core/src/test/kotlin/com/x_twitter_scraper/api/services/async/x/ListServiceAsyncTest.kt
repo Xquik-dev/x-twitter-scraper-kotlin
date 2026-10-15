@@ -150,7 +150,7 @@ internal class ListServiceAsyncTest {
                     .cursor("cursor")
                     .fields("id,text,author.username")
                     .omit("entities,media")
-                    .pageSize(20L)
+                    .pageSize(1L)
                     .build()
             )
 

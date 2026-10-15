@@ -284,15 +284,7 @@ private constructor(
     }
 
     override fun hashCode(): Int =
-        Objects.hash(
-            q,
-            cursor,
-            fields,
-            omit,
-            pageSize,
-            additionalHeaders,
-            additionalQueryParams,
-        )
+        Objects.hash(q, cursor, fields, omit, pageSize, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "CommunityFindParams{q=$q, cursor=$cursor, fields=$fields, omit=$omit, pageSize=$pageSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

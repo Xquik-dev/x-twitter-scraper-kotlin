@@ -290,15 +290,7 @@ private constructor(
     }
 
     override fun hashCode(): Int =
-        Objects.hash(
-            q,
-            fields,
-            limit,
-            omit,
-            types,
-            additionalHeaders,
-            additionalQueryParams,
-        )
+        Objects.hash(q, fields, limit, omit, types, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "XAutocompleteSearchParams{q=$q, fields=$fields, limit=$limit, omit=$omit, types=$types, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

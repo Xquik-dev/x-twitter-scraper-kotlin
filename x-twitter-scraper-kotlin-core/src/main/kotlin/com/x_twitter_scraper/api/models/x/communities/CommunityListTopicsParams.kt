@@ -241,13 +241,7 @@ private constructor(
     }
 
     override fun hashCode(): Int =
-        Objects.hash(
-            fields,
-            limit,
-            omit,
-            additionalHeaders,
-            additionalQueryParams,
-        )
+        Objects.hash(fields, limit, omit, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "CommunityListTopicsParams{fields=$fields, limit=$limit, omit=$omit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

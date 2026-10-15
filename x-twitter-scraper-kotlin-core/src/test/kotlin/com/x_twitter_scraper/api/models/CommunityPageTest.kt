@@ -77,8 +77,8 @@ internal class CommunityPageTest {
                         .question("What are you working on?")
                         .addRule(
                             Community.Rule.builder()
-                                .description("description")
                                 .id("id")
+                                .description("description")
                                 .name("name")
                                 .build()
                         )
@@ -140,8 +140,8 @@ internal class CommunityPageTest {
                     .question("What are you working on?")
                     .addRule(
                         Community.Rule.builder()
-                            .description("description")
                             .id("id")
+                            .description("description")
                             .name("name")
                             .build()
                     )
@@ -219,8 +219,8 @@ internal class CommunityPageTest {
                         .question("What are you working on?")
                         .addRule(
                             Community.Rule.builder()
-                                .description("description")
                                 .id("id")
+                                .description("description")
                                 .name("name")
                                 .build()
                         )

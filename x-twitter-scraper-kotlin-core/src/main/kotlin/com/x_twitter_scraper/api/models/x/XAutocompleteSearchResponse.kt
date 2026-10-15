@@ -412,9 +412,7 @@ private constructor(
             marketCap: JsonField<String> = JsonMissing.of(),
             @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
             @JsonProperty("price") @ExcludeMissing price: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("smartTag")
-            @ExcludeMissing
-            smartTag: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("smartTag") @ExcludeMissing smartTag: JsonField<String> = JsonMissing.of(),
         ) : this(
             ticker,
             chainLogoUrl,
@@ -1122,13 +1120,7 @@ private constructor(
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(
-                hashtag,
-                inline,
-                score,
-                tokens,
-                additionalProperties,
-            )
+            Objects.hash(hashtag, inline, score, tokens, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
@@ -1387,13 +1379,7 @@ private constructor(
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(
-                topic,
-                inline,
-                score,
-                tokens,
-                additionalProperties,
-            )
+            Objects.hash(topic, inline, score, tokens, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
@@ -2208,12 +2194,7 @@ private constructor(
                  * Further updates to this [Builder] will not mutate the returned instance.
                  */
                 fun build(): Badge =
-                    Badge(
-                        badgeType,
-                        badgeUrl,
-                        description,
-                        additionalProperties.toMutableMap(),
-                    )
+                    Badge(badgeType, badgeUrl, description, additionalProperties.toMutableMap())
             }
 
             private var validated: Boolean = false
@@ -2265,12 +2246,7 @@ private constructor(
             }
 
             private val hashCode: Int by lazy {
-                Objects.hash(
-                    badgeType,
-                    badgeUrl,
-                    description,
-                    additionalProperties,
-                )
+                Objects.hash(badgeType, badgeUrl, description, additionalProperties)
             }
 
             override fun hashCode(): Int = hashCode
@@ -2348,15 +2324,7 @@ private constructor(
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(
-            cashtags,
-            count,
-            hashtags,
-            query,
-            topics,
-            users,
-            additionalProperties,
-        )
+        Objects.hash(cashtags, count, hashtags, query, topics, users, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode

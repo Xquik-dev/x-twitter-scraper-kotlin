@@ -49,15 +49,9 @@ internal class XListsExampleTest {
         val params = ListRetrieveParams.builder().id("2102882545427714266").build()
 
         val responses =
-            listOf(
-                client.x().lists().retrieve(params),
-                client.async().x().lists().retrieve(params),
-            )
+            listOf(client.x().lists().retrieve(params), client.async().x().lists().retrieve(params))
 
-        verify(
-            2,
-            getRequestedFor(urlPathEqualTo("/x/lists/2102882545427714266")),
-        )
+        verify(2, getRequestedFor(urlPathEqualTo("/x/lists/2102882545427714266")))
         responses.forEach { response ->
             assertThat(response.list().id()).isEqualTo("4143408")
             assertThat(response.list().name()).isEqualTo("NASA Centers")
@@ -82,7 +76,7 @@ internal class XListsExampleTest {
             get(urlPathEqualTo("/x/lists/search"))
                 .willReturn(okJson(ExampleResponses.read("examples/PaginatedLists.json")))
         )
-        val params = ListRetrieveSearchParams.builder().q("q").pageSize(20L).build()
+        val params = ListRetrieveSearchParams.builder().q("q").pageSize(1L).build()
 
         val responses =
             listOf(
@@ -94,7 +88,7 @@ internal class XListsExampleTest {
             2,
             getRequestedFor(urlPathEqualTo("/x/lists/search"))
                 .withQueryParam("q", equalTo("q"))
-                .withQueryParam("pageSize", equalTo("20")),
+                .withQueryParam("pageSize", equalTo("1")),
         )
         responses.forEach { response ->
             assertThat(response.hasNextPage()).isEqualTo(false)

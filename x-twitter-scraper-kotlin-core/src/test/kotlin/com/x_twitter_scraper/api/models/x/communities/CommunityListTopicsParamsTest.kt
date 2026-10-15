@@ -14,7 +14,7 @@ internal class CommunityListTopicsParamsTest {
     fun create() {
         CommunityListTopicsParams.builder()
             .fields("id,text,author.username")
-            .limit(0L)
+            .limit(1L)
             .omit("entities,media")
             .build()
     }
@@ -24,7 +24,7 @@ internal class CommunityListTopicsParamsTest {
         val params =
             CommunityListTopicsParams.builder()
                 .fields("id,text,author.username")
-                .limit(0L)
+                .limit(1L)
                 .omit("entities,media")
                 .build()
 
@@ -34,7 +34,7 @@ internal class CommunityListTopicsParamsTest {
             .isEqualTo(
                 QueryParams.builder()
                     .put("fields", "id,text,author.username")
-                    .put("limit", "0")
+                    .put("limit", "1")
                     .put("omit", "entities,media")
                     .build()
             )

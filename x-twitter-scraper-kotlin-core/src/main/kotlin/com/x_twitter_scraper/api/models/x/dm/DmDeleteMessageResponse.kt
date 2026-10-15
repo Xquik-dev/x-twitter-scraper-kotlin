@@ -27,12 +27,12 @@ import java.util.Objects
 class DmDeleteMessageResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
+    private val id: JsonField<String>,
     private val account: JsonField<Account>,
     private val action: JsonField<Action>,
     private val billing: JsonField<Billing>,
     private val charged: JsonField<Boolean>,
     private val chargedCredits: JsonField<String>,
-    private val id: JsonField<String>,
     private val nextAction: JsonField<NextAction>,
     private val object_: JsonValue,
     private val pollAfterMs: JsonField<Long>,
@@ -75,6 +75,7 @@ private constructor(
 
     @JsonCreator
     private constructor(
+        @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
         @JsonProperty("account") @ExcludeMissing account: JsonField<Account> = JsonMissing.of(),
         @JsonProperty("action") @ExcludeMissing action: JsonField<Action> = JsonMissing.of(),
         @JsonProperty("billing") @ExcludeMissing billing: JsonField<Billing> = JsonMissing.of(),
@@ -82,7 +83,6 @@ private constructor(
         @JsonProperty("chargedCredits")
         @ExcludeMissing
         chargedCredits: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
         @JsonProperty("nextAction")
         @ExcludeMissing
         nextAction: JsonField<NextAction> = JsonMissing.of(),
@@ -155,12 +155,12 @@ private constructor(
         @ExcludeMissing
         updatedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
     ) : this(
+        id,
         account,
         action,
         billing,
         charged,
         chargedCredits,
-        id,
         nextAction,
         object_,
         pollAfterMs,
@@ -202,6 +202,12 @@ private constructor(
     )
 
     /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null.
+     */
+    fun id(): String = id.getRequired("id")
+
+    /**
      * Connected account selected for the write.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
@@ -234,12 +240,6 @@ private constructor(
      *   unexpectedly missing or null.
      */
     fun chargedCredits(): String = chargedCredits.getRequired("chargedCredits")
-
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null.
-     */
-    fun id(): String = id.getRequired("id")
 
     /**
      * Exact follow-up an API client or agent should perform.
@@ -453,6 +453,13 @@ private constructor(
     fun updatedAt(): OffsetDateTime? = updatedAt.getNullable("updatedAt")
 
     /**
+     * Returns the raw JSON value of [id].
+     *
+     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+    /**
      * Returns the raw JSON value of [account].
      *
      * Unlike [account], this method doesn't throw if the JSON field has an unexpected type.
@@ -488,13 +495,6 @@ private constructor(
     @JsonProperty("chargedCredits")
     @ExcludeMissing
     fun _chargedCredits(): JsonField<String> = chargedCredits
-
-    /**
-     * Returns the raw JSON value of [id].
-     *
-     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
     /**
      * Returns the raw JSON value of [nextAction].
@@ -796,12 +796,12 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
+         * .id()
          * .account()
          * .action()
          * .billing()
          * .charged()
          * .chargedCredits()
-         * .id()
          * .nextAction()
          * .pollAfterMs()
          * .request()
@@ -824,12 +824,12 @@ private constructor(
     /** A builder for [DmDeleteMessageResponse]. */
     class Builder internal constructor() {
 
+        private var id: JsonField<String>? = null
         private var account: JsonField<Account>? = null
         private var action: JsonField<Action>? = null
         private var billing: JsonField<Billing>? = null
         private var charged: JsonField<Boolean>? = null
         private var chargedCredits: JsonField<String>? = null
-        private var id: JsonField<String>? = null
         private var nextAction: JsonField<NextAction>? = null
         private var object_: JsonValue = JsonValue.from("x_write_action")
         private var pollAfterMs: JsonField<Long>? = null
@@ -870,12 +870,12 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(dmDeleteMessageResponse: DmDeleteMessageResponse) = apply {
+            id = dmDeleteMessageResponse.id
             account = dmDeleteMessageResponse.account
             action = dmDeleteMessageResponse.action
             billing = dmDeleteMessageResponse.billing
             charged = dmDeleteMessageResponse.charged
             chargedCredits = dmDeleteMessageResponse.chargedCredits
-            id = dmDeleteMessageResponse.id
             nextAction = dmDeleteMessageResponse.nextAction
             object_ = dmDeleteMessageResponse.object_
             pollAfterMs = dmDeleteMessageResponse.pollAfterMs
@@ -916,6 +916,11 @@ private constructor(
             additionalProperties = dmDeleteMessageResponse.additionalProperties.toMutableMap()
         }
 
+        fun id(id: String) = id(JsonField.of(id))
+
+        /** Sets [Builder.id] to an arbitrary JSON value. */
+        fun id(id: JsonField<String>) = apply { this.id = id }
+
         /** Connected account selected for the write. */
         fun account(account: Account?) = account(JsonField.ofNullable(account))
 
@@ -947,11 +952,6 @@ private constructor(
         fun chargedCredits(chargedCredits: JsonField<String>) = apply {
             this.chargedCredits = chargedCredits
         }
-
-        fun id(id: String) = id(JsonField.of(id))
-
-        /** Sets [Builder.id] to an arbitrary JSON value. */
-        fun id(id: JsonField<String>) = apply { this.id = id }
 
         /** Exact follow-up an API client or agent should perform. */
         fun nextAction(nextAction: NextAction?) = nextAction(JsonField.ofNullable(nextAction))
@@ -1212,12 +1212,12 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
+         * .id()
          * .account()
          * .action()
          * .billing()
          * .charged()
          * .chargedCredits()
-         * .id()
          * .nextAction()
          * .pollAfterMs()
          * .request()
@@ -1238,12 +1238,12 @@ private constructor(
          */
         fun build(): DmDeleteMessageResponse =
             DmDeleteMessageResponse(
+                checkRequired("id", id),
                 checkRequired("account", account),
                 checkRequired("action", action),
                 checkRequired("billing", billing),
                 checkRequired("charged", charged),
                 checkRequired("chargedCredits", chargedCredits),
-                checkRequired("id", id),
                 checkRequired("nextAction", nextAction),
                 object_,
                 checkRequired("pollAfterMs", pollAfterMs),
@@ -1300,12 +1300,12 @@ private constructor(
             return@apply
         }
 
+        id()
         account()?.validate()
         action().validate()
         billing().validate()
         charged()
         chargedCredits()
-        id()
         nextAction()?.validate()
         _object_().let {
             if (it != JsonValue.from("x_write_action")) {
@@ -1359,12 +1359,12 @@ private constructor(
         }
 
     internal fun validity(): Int =
-        (account.asKnown()?.validity() ?: 0) +
+        (if (id.asKnown() == null) 0 else 1) +
+            (account.asKnown()?.validity() ?: 0) +
             (action.asKnown()?.validity() ?: 0) +
             (billing.asKnown()?.validity() ?: 0) +
             (if (charged.asKnown() == null) 0 else 1) +
             (if (chargedCredits.asKnown() == null) 0 else 1) +
-            (if (id.asKnown() == null) 0 else 1) +
             (nextAction.asKnown()?.validity() ?: 0) +
             object_.let { if (it == JsonValue.from("x_write_action")) 1 else 0 } +
             (if (pollAfterMs.asKnown() == null) 0 else 1) +
@@ -1415,9 +1415,7 @@ private constructor(
         @JsonCreator
         private constructor(
             @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("username")
-            @ExcludeMissing
-            username: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("username") @ExcludeMissing username: JsonField<String> = JsonMissing.of(),
         ) : this(id, username, mutableMapOf())
 
         /**
@@ -1579,11 +1577,7 @@ private constructor(
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(
-                id,
-                username,
-                additionalProperties,
-            )
+            Objects.hash(id, username, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
@@ -2191,13 +2185,7 @@ private constructor(
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(
-                charged,
-                chargedCredits,
-                plannedCredits,
-                status,
-                additionalProperties,
-            )
+            Objects.hash(charged, chargedCredits, plannedCredits, status, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
@@ -2562,13 +2550,7 @@ private constructor(
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(
-                type,
-                afterMs,
-                requiresNewIdempotencyKey,
-                url,
-                additionalProperties,
-            )
+            Objects.hash(type, afterMs, requiresNewIdempotencyKey, url, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
@@ -2861,11 +2843,7 @@ private constructor(
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(
-                hash,
-                payload,
-                additionalProperties,
-            )
+            Objects.hash(hash, payload, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
@@ -2993,13 +2971,7 @@ private constructor(
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              */
-            fun build(): Result =
-                Result(
-                    id,
-                    state,
-                    type,
-                    additionalProperties.toMutableMap(),
-                )
+            fun build(): Result = Result(id, state, type, additionalProperties.toMutableMap())
         }
 
         private var validated: Boolean = false
@@ -3182,12 +3154,7 @@ private constructor(
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(
-                id,
-                state,
-                type,
-                additionalProperties,
-            )
+            Objects.hash(id, state, type, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
@@ -3627,11 +3594,7 @@ private constructor(
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(
-                id,
-                type,
-                additionalProperties,
-            )
+            Objects.hash(id, type, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
@@ -3850,12 +3813,12 @@ private constructor(
         }
 
         return other is DmDeleteMessageResponse &&
+            id == other.id &&
             account == other.account &&
             action == other.action &&
             billing == other.billing &&
             charged == other.charged &&
             chargedCredits == other.chargedCredits &&
-            id == other.id &&
             nextAction == other.nextAction &&
             object_ == other.object_ &&
             pollAfterMs == other.pollAfterMs &&
@@ -3898,12 +3861,12 @@ private constructor(
 
     private val hashCode: Int by lazy {
         Objects.hash(
+            id,
             account,
             action,
             billing,
             charged,
             chargedCredits,
-            id,
             nextAction,
             object_,
             pollAfterMs,
@@ -3948,5 +3911,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "DmDeleteMessageResponse{account=$account, action=$action, billing=$billing, charged=$charged, chargedCredits=$chargedCredits, id=$id, nextAction=$nextAction, object_=$object_, pollAfterMs=$pollAfterMs, request=$request, result=$result, retryable=$retryable, safeToRetry=$safeToRetry, sendDispatched=$sendDispatched, status=$status, statusUrl=$statusUrl, success=$success, target=$target, targetId=$targetId, terminal=$terminal, writeActionId=$writeActionId, communityId=$communityId, communityName=$communityName, completedAt=$completedAt, confirmationAttempts=$confirmationAttempts, confirmationCheckedAt=$confirmationCheckedAt, confirmedAt=$confirmedAt, createdAt=$createdAt, details=$details, error=$error, expiresAt=$expiresAt, idempotent=$idempotent, media=$media, mediaId=$mediaId, mediaUrl=$mediaUrl, message=$message, messageId=$messageId, requestHash=$requestHash, requestId=$requestId, resultId=$resultId, sendDispatchedAt=$sendDispatchedAt, tweetId=$tweetId, updatedAt=$updatedAt, additionalProperties=$additionalProperties}"
+        "DmDeleteMessageResponse{id=$id, account=$account, action=$action, billing=$billing, charged=$charged, chargedCredits=$chargedCredits, nextAction=$nextAction, object_=$object_, pollAfterMs=$pollAfterMs, request=$request, result=$result, retryable=$retryable, safeToRetry=$safeToRetry, sendDispatched=$sendDispatched, status=$status, statusUrl=$statusUrl, success=$success, target=$target, targetId=$targetId, terminal=$terminal, writeActionId=$writeActionId, communityId=$communityId, communityName=$communityName, completedAt=$completedAt, confirmationAttempts=$confirmationAttempts, confirmationCheckedAt=$confirmationCheckedAt, confirmedAt=$confirmedAt, createdAt=$createdAt, details=$details, error=$error, expiresAt=$expiresAt, idempotent=$idempotent, media=$media, mediaId=$mediaId, mediaUrl=$mediaUrl, message=$message, messageId=$messageId, requestHash=$requestHash, requestId=$requestId, resultId=$resultId, sendDispatchedAt=$sendDispatchedAt, tweetId=$tweetId, updatedAt=$updatedAt, additionalProperties=$additionalProperties}"
 }

@@ -258,6 +258,7 @@ private constructor(
     class Place
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
+        private val id: JsonField<String>,
         private val attributes: JsonField<Attributes>,
         private val boundingBox: JsonField<BoundingBox>,
         private val centroid: JsonField<List<Double>>,
@@ -265,7 +266,6 @@ private constructor(
         private val country: JsonField<String>,
         private val countryCode: JsonField<String>,
         private val fullName: JsonField<String>,
-        private val id: JsonField<String>,
         private val name: JsonField<String>,
         private val placeType: JsonField<String>,
         private val url: JsonField<String>,
@@ -274,6 +274,7 @@ private constructor(
 
         @JsonCreator
         private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
             @JsonProperty("attributes")
             @ExcludeMissing
             attributes: JsonField<Attributes> = JsonMissing.of(),
@@ -293,13 +294,13 @@ private constructor(
             @JsonProperty("fullName")
             @ExcludeMissing
             fullName: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
             @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
             @JsonProperty("placeType")
             @ExcludeMissing
             placeType: JsonField<String> = JsonMissing.of(),
             @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of(),
         ) : this(
+            id,
             attributes,
             boundingBox,
             centroid,
@@ -307,12 +308,19 @@ private constructor(
             country,
             countryCode,
             fullName,
-            id,
             name,
             placeType,
             url,
             mutableMapOf(),
         )
+
+        /**
+         * Place ID. Pass it as place to /x/tweets/search.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null.
+         */
+        fun id(): String = id.getRequired("id")
 
         /**
          * Public metadata whose fields X defines.
@@ -367,14 +375,6 @@ private constructor(
         fun fullName(): String? = fullName.getNullable("fullName")
 
         /**
-         * Place ID. Pass it as place to /x/tweets/search.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null.
-         */
-        fun id(): String = id.getRequired("id")
-
-        /**
          * Short name of the place.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
@@ -395,6 +395,13 @@ private constructor(
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
         fun url(): String? = url.getNullable("url")
+
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
         /**
          * Returns the raw JSON value of [attributes].
@@ -457,13 +464,6 @@ private constructor(
         @JsonProperty("fullName") @ExcludeMissing fun _fullName(): JsonField<String> = fullName
 
         /**
-         * Returns the raw JSON value of [id].
-         *
-         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
-
-        /**
          * Returns the raw JSON value of [name].
          *
          * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
@@ -503,6 +503,7 @@ private constructor(
              *
              * The following fields are required:
              * ```kotlin
+             * .id()
              * .attributes()
              * .boundingBox()
              * .centroid()
@@ -510,7 +511,6 @@ private constructor(
              * .country()
              * .countryCode()
              * .fullName()
-             * .id()
              * .name()
              * .placeType()
              * .url()
@@ -522,6 +522,7 @@ private constructor(
         /** A builder for [Place]. */
         class Builder internal constructor() {
 
+            private var id: JsonField<String>? = null
             private var attributes: JsonField<Attributes>? = null
             private var boundingBox: JsonField<BoundingBox>? = null
             private var centroid: JsonField<MutableList<Double>>? = null
@@ -529,13 +530,13 @@ private constructor(
             private var country: JsonField<String>? = null
             private var countryCode: JsonField<String>? = null
             private var fullName: JsonField<String>? = null
-            private var id: JsonField<String>? = null
             private var name: JsonField<String>? = null
             private var placeType: JsonField<String>? = null
             private var url: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(place: Place) = apply {
+                id = place.id
                 attributes = place.attributes
                 boundingBox = place.boundingBox
                 centroid = place.centroid.map { it.toMutableList() }
@@ -543,12 +544,17 @@ private constructor(
                 country = place.country
                 countryCode = place.countryCode
                 fullName = place.fullName
-                id = place.id
                 name = place.name
                 placeType = place.placeType
                 url = place.url
                 additionalProperties = place.additionalProperties.toMutableMap()
             }
+
+            /** Place ID. Pass it as place to /x/tweets/search. */
+            fun id(id: String) = id(JsonField.of(id))
+
+            /** Sets [Builder.id] to an arbitrary JSON value. */
+            fun id(id: JsonField<String>) = apply { this.id = id }
 
             /** Public metadata whose fields X defines. */
             fun attributes(attributes: Attributes) = attributes(JsonField.of(attributes))
@@ -628,12 +634,6 @@ private constructor(
             /** Sets [Builder.fullName] to an arbitrary JSON value. */
             fun fullName(fullName: JsonField<String>) = apply { this.fullName = fullName }
 
-            /** Place ID. Pass it as place to /x/tweets/search. */
-            fun id(id: String) = id(JsonField.of(id))
-
-            /** Sets [Builder.id] to an arbitrary JSON value. */
-            fun id(id: JsonField<String>) = apply { this.id = id }
-
             /** Short name of the place. */
             fun name(name: String) = name(JsonField.of(name))
 
@@ -678,6 +678,7 @@ private constructor(
              *
              * The following fields are required:
              * ```kotlin
+             * .id()
              * .attributes()
              * .boundingBox()
              * .centroid()
@@ -685,7 +686,6 @@ private constructor(
              * .country()
              * .countryCode()
              * .fullName()
-             * .id()
              * .name()
              * .placeType()
              * .url()
@@ -695,6 +695,7 @@ private constructor(
              */
             fun build(): Place =
                 Place(
+                    checkRequired("id", id),
                     checkRequired("attributes", attributes),
                     checkRequired("boundingBox", boundingBox),
                     checkRequired("centroid", centroid).map { it.toImmutable() },
@@ -702,7 +703,6 @@ private constructor(
                     checkRequired("country", country),
                     checkRequired("countryCode", countryCode),
                     checkRequired("fullName", fullName),
-                    checkRequired("id", id),
                     checkRequired("name", name),
                     checkRequired("placeType", placeType),
                     checkRequired("url", url),
@@ -726,6 +726,7 @@ private constructor(
                 return@apply
             }
 
+            id()
             attributes().validate()
             boundingBox()?.validate()
             centroid()
@@ -733,7 +734,6 @@ private constructor(
             country()
             countryCode()
             fullName()
-            id()
             name()
             placeType()
             url()
@@ -749,14 +749,14 @@ private constructor(
             }
 
         internal fun validity(): Int =
-            (attributes.asKnown()?.validity() ?: 0) +
+            (if (id.asKnown() == null) 0 else 1) +
+                (attributes.asKnown()?.validity() ?: 0) +
                 (boundingBox.asKnown()?.validity() ?: 0) +
                 (centroid.asKnown()?.size ?: 0) +
                 (containedWithin.asKnown()?.sumOf { it.validity() } ?: 0) +
                 (if (country.asKnown() == null) 0 else 1) +
                 (if (countryCode.asKnown() == null) 0 else 1) +
                 (if (fullName.asKnown() == null) 0 else 1) +
-                (if (id.asKnown() == null) 0 else 1) +
                 (if (name.asKnown() == null) 0 else 1) +
                 (if (placeType.asKnown() == null) 0 else 1) +
                 (if (url.asKnown() == null) 0 else 1)
@@ -1072,11 +1072,7 @@ private constructor(
             }
 
             private val hashCode: Int by lazy {
-                Objects.hash(
-                    coordinates,
-                    type,
-                    additionalProperties,
-                )
+                Objects.hash(coordinates, type, additionalProperties)
             }
 
             override fun hashCode(): Int = hashCode
@@ -1089,13 +1085,13 @@ private constructor(
         class ContainedWithin
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
+            private val id: JsonField<String>,
             private val attributes: JsonField<Attributes>,
             private val boundingBox: JsonField<BoundingBox>,
             private val centroid: JsonField<List<Double>>,
             private val country: JsonField<String>,
             private val countryCode: JsonField<String>,
             private val fullName: JsonField<String>,
-            private val id: JsonField<String>,
             private val name: JsonField<String>,
             private val placeType: JsonField<String>,
             private val url: JsonField<String>,
@@ -1104,6 +1100,7 @@ private constructor(
 
             @JsonCreator
             private constructor(
+                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("attributes")
                 @ExcludeMissing
                 attributes: JsonField<Attributes> = JsonMissing.of(),
@@ -1122,25 +1119,32 @@ private constructor(
                 @JsonProperty("fullName")
                 @ExcludeMissing
                 fullName: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("placeType")
                 @ExcludeMissing
                 placeType: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of(),
             ) : this(
+                id,
                 attributes,
                 boundingBox,
                 centroid,
                 country,
                 countryCode,
                 fullName,
-                id,
                 name,
                 placeType,
                 url,
                 mutableMapOf(),
             )
+
+            /**
+             * Place ID. Pass it as place to /x/tweets/search.
+             *
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
+             *   or is unexpectedly missing or null.
+             */
+            fun id(): String = id.getRequired("id")
 
             /**
              * Public metadata whose fields X defines.
@@ -1186,14 +1190,6 @@ private constructor(
             fun fullName(): String? = fullName.getNullable("fullName")
 
             /**
-             * Place ID. Pass it as place to /x/tweets/search.
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
-             *   or is unexpectedly missing or null.
-             */
-            fun id(): String = id.getRequired("id")
-
-            /**
              * Short name of the place.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
@@ -1214,6 +1210,13 @@ private constructor(
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
              */
             fun url(): String? = url.getNullable("url")
+
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
             /**
              * Returns the raw JSON value of [attributes].
@@ -1271,13 +1274,6 @@ private constructor(
             @JsonProperty("fullName") @ExcludeMissing fun _fullName(): JsonField<String> = fullName
 
             /**
-             * Returns the raw JSON value of [id].
-             *
-             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
-
-            /**
              * Returns the raw JSON value of [name].
              *
              * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
@@ -1320,13 +1316,13 @@ private constructor(
                  *
                  * The following fields are required:
                  * ```kotlin
+                 * .id()
                  * .attributes()
                  * .boundingBox()
                  * .centroid()
                  * .country()
                  * .countryCode()
                  * .fullName()
-                 * .id()
                  * .name()
                  * .placeType()
                  * .url()
@@ -1338,31 +1334,37 @@ private constructor(
             /** A builder for [ContainedWithin]. */
             class Builder internal constructor() {
 
+                private var id: JsonField<String>? = null
                 private var attributes: JsonField<Attributes>? = null
                 private var boundingBox: JsonField<BoundingBox>? = null
                 private var centroid: JsonField<MutableList<Double>>? = null
                 private var country: JsonField<String>? = null
                 private var countryCode: JsonField<String>? = null
                 private var fullName: JsonField<String>? = null
-                private var id: JsonField<String>? = null
                 private var name: JsonField<String>? = null
                 private var placeType: JsonField<String>? = null
                 private var url: JsonField<String>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 internal fun from(containedWithin: ContainedWithin) = apply {
+                    id = containedWithin.id
                     attributes = containedWithin.attributes
                     boundingBox = containedWithin.boundingBox
                     centroid = containedWithin.centroid.map { it.toMutableList() }
                     country = containedWithin.country
                     countryCode = containedWithin.countryCode
                     fullName = containedWithin.fullName
-                    id = containedWithin.id
                     name = containedWithin.name
                     placeType = containedWithin.placeType
                     url = containedWithin.url
                     additionalProperties = containedWithin.additionalProperties.toMutableMap()
                 }
+
+                /** Place ID. Pass it as place to /x/tweets/search. */
+                fun id(id: String) = id(JsonField.of(id))
+
+                /** Sets [Builder.id] to an arbitrary JSON value. */
+                fun id(id: JsonField<String>) = apply { this.id = id }
 
                 /** Public metadata whose fields X defines. */
                 fun attributes(attributes: Attributes) = attributes(JsonField.of(attributes))
@@ -1422,12 +1424,6 @@ private constructor(
                 /** Sets [Builder.fullName] to an arbitrary JSON value. */
                 fun fullName(fullName: JsonField<String>) = apply { this.fullName = fullName }
 
-                /** Place ID. Pass it as place to /x/tweets/search. */
-                fun id(id: String) = id(JsonField.of(id))
-
-                /** Sets [Builder.id] to an arbitrary JSON value. */
-                fun id(id: JsonField<String>) = apply { this.id = id }
-
                 /** Short name of the place. */
                 fun name(name: String) = name(JsonField.of(name))
 
@@ -1475,13 +1471,13 @@ private constructor(
                  *
                  * The following fields are required:
                  * ```kotlin
+                 * .id()
                  * .attributes()
                  * .boundingBox()
                  * .centroid()
                  * .country()
                  * .countryCode()
                  * .fullName()
-                 * .id()
                  * .name()
                  * .placeType()
                  * .url()
@@ -1491,13 +1487,13 @@ private constructor(
                  */
                 fun build(): ContainedWithin =
                     ContainedWithin(
+                        checkRequired("id", id),
                         checkRequired("attributes", attributes),
                         checkRequired("boundingBox", boundingBox),
                         checkRequired("centroid", centroid).map { it.toImmutable() },
                         checkRequired("country", country),
                         checkRequired("countryCode", countryCode),
                         checkRequired("fullName", fullName),
-                        checkRequired("id", id),
                         checkRequired("name", name),
                         checkRequired("placeType", placeType),
                         checkRequired("url", url),
@@ -1522,13 +1518,13 @@ private constructor(
                     return@apply
                 }
 
+                id()
                 attributes().validate()
                 boundingBox()?.validate()
                 centroid()
                 country()
                 countryCode()
                 fullName()
-                id()
                 name()
                 placeType()
                 url()
@@ -1544,13 +1540,13 @@ private constructor(
                 }
 
             internal fun validity(): Int =
-                (attributes.asKnown()?.validity() ?: 0) +
+                (if (id.asKnown() == null) 0 else 1) +
+                    (attributes.asKnown()?.validity() ?: 0) +
                     (boundingBox.asKnown()?.validity() ?: 0) +
                     (centroid.asKnown()?.size ?: 0) +
                     (if (country.asKnown() == null) 0 else 1) +
                     (if (countryCode.asKnown() == null) 0 else 1) +
                     (if (fullName.asKnown() == null) 0 else 1) +
-                    (if (id.asKnown() == null) 0 else 1) +
                     (if (name.asKnown() == null) 0 else 1) +
                     (if (placeType.asKnown() == null) 0 else 1) +
                     (if (url.asKnown() == null) 0 else 1)
@@ -1675,9 +1671,7 @@ private constructor(
                     @JsonProperty("coordinates")
                     @ExcludeMissing
                     coordinates: JsonField<List<List<List<Double>>>> = JsonMissing.of(),
-                    @JsonProperty("type")
-                    @ExcludeMissing
-                    type: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("type") @ExcludeMissing type: JsonField<String> = JsonMissing.of(),
                 ) : this(coordinates, type, mutableMapOf())
 
                 /**
@@ -1869,11 +1863,7 @@ private constructor(
                 }
 
                 private val hashCode: Int by lazy {
-                    Objects.hash(
-                        coordinates,
-                        type,
-                        additionalProperties,
-                    )
+                    Objects.hash(coordinates, type, additionalProperties)
                 }
 
                 override fun hashCode(): Int = hashCode
@@ -1888,13 +1878,13 @@ private constructor(
                 }
 
                 return other is ContainedWithin &&
+                    id == other.id &&
                     attributes == other.attributes &&
                     boundingBox == other.boundingBox &&
                     centroid == other.centroid &&
                     country == other.country &&
                     countryCode == other.countryCode &&
                     fullName == other.fullName &&
-                    id == other.id &&
                     name == other.name &&
                     placeType == other.placeType &&
                     url == other.url &&
@@ -1903,13 +1893,13 @@ private constructor(
 
             private val hashCode: Int by lazy {
                 Objects.hash(
+                    id,
                     attributes,
                     boundingBox,
                     centroid,
                     country,
                     countryCode,
                     fullName,
-                    id,
                     name,
                     placeType,
                     url,
@@ -1920,7 +1910,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "ContainedWithin{attributes=$attributes, boundingBox=$boundingBox, centroid=$centroid, country=$country, countryCode=$countryCode, fullName=$fullName, id=$id, name=$name, placeType=$placeType, url=$url, additionalProperties=$additionalProperties}"
+                "ContainedWithin{id=$id, attributes=$attributes, boundingBox=$boundingBox, centroid=$centroid, country=$country, countryCode=$countryCode, fullName=$fullName, name=$name, placeType=$placeType, url=$url, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
@@ -1929,6 +1919,7 @@ private constructor(
             }
 
             return other is Place &&
+                id == other.id &&
                 attributes == other.attributes &&
                 boundingBox == other.boundingBox &&
                 centroid == other.centroid &&
@@ -1936,7 +1927,6 @@ private constructor(
                 country == other.country &&
                 countryCode == other.countryCode &&
                 fullName == other.fullName &&
-                id == other.id &&
                 name == other.name &&
                 placeType == other.placeType &&
                 url == other.url &&
@@ -1945,6 +1935,7 @@ private constructor(
 
         private val hashCode: Int by lazy {
             Objects.hash(
+                id,
                 attributes,
                 boundingBox,
                 centroid,
@@ -1952,7 +1943,6 @@ private constructor(
                 country,
                 countryCode,
                 fullName,
-                id,
                 name,
                 placeType,
                 url,
@@ -1963,7 +1953,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Place{attributes=$attributes, boundingBox=$boundingBox, centroid=$centroid, containedWithin=$containedWithin, country=$country, countryCode=$countryCode, fullName=$fullName, id=$id, name=$name, placeType=$placeType, url=$url, additionalProperties=$additionalProperties}"
+            "Place{id=$id, attributes=$attributes, boundingBox=$boundingBox, centroid=$centroid, containedWithin=$containedWithin, country=$country, countryCode=$countryCode, fullName=$fullName, name=$name, placeType=$placeType, url=$url, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -1980,13 +1970,7 @@ private constructor(
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(
-            count,
-            places,
-            total,
-            message,
-            additionalProperties,
-        )
+        Objects.hash(count, places, total, message, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode

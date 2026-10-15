@@ -33,10 +33,8 @@ class MediaServiceImpl internal constructor(private val clientOptions: ClientOpt
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): MediaService =
         MediaServiceImpl(clientOptions.toBuilder().apply(modifier).build())
 
-    override fun list(
-        params: MediaListParams,
-        requestOptions: RequestOptions,
-    ): PaginatedTweets = withRawResponse().list(params, requestOptions).parse()
+    override fun list(params: MediaListParams, requestOptions: RequestOptions): PaginatedTweets =
+        withRawResponse().list(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         MediaService.WithRawResponse {

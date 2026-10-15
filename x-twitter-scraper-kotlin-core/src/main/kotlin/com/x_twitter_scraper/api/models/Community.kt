@@ -1275,13 +1275,7 @@ private constructor(
             }
 
             private val hashCode: Int by lazy {
-                Objects.hash(
-                    blue,
-                    green,
-                    percentage,
-                    red,
-                    additionalProperties,
-                )
+                Objects.hash(blue, green, percentage, red, additionalProperties)
             }
 
             override fun hashCode(): Int = hashCode
@@ -1452,13 +1446,7 @@ private constructor(
                  * Further updates to this [Builder] will not mutate the returned instance.
                  */
                 fun build(): Focus =
-                    Focus(
-                        height,
-                        left,
-                        top,
-                        width,
-                        additionalProperties.toMutableMap(),
-                    )
+                    Focus(height, left, top, width, additionalProperties.toMutableMap())
             }
 
             private var validated: Boolean = false
@@ -1513,13 +1501,7 @@ private constructor(
             }
 
             private val hashCode: Int by lazy {
-                Objects.hash(
-                    height,
-                    left,
-                    top,
-                    width,
-                    additionalProperties,
-                )
+                Objects.hash(height, left, top, width, additionalProperties)
             }
 
             override fun hashCode(): Int = hashCode
@@ -1543,14 +1525,7 @@ private constructor(
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(
-                url,
-                colors,
-                focus,
-                height,
-                width,
-                additionalProperties,
-            )
+            Objects.hash(url, colors, focus, height, width, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
@@ -1961,12 +1936,7 @@ private constructor(
             }
 
             private val hashCode: Int by lazy {
-                Objects.hash(
-                    id,
-                    username,
-                    verified,
-                    additionalProperties,
-                )
+                Objects.hash(id, username, verified, additionalProperties)
             }
 
             override fun hashCode(): Int = hashCode
@@ -2398,12 +2368,7 @@ private constructor(
             }
 
             private val hashCode: Int by lazy {
-                Objects.hash(
-                    id,
-                    profilePicture,
-                    profilePictureOriginal,
-                    additionalProperties,
-                )
+                Objects.hash(id, profilePicture, profilePictureOriginal, additionalProperties)
             }
 
             override fun hashCode(): Int = hashCode
@@ -2539,11 +2504,7 @@ private constructor(
              * @throws IllegalStateException if any required field is unset.
              */
             fun build(): PrimaryTopic =
-                PrimaryTopic(
-                    checkRequired("name", name),
-                    id,
-                    additionalProperties.toMutableMap(),
-                )
+                PrimaryTopic(checkRequired("name", name), id, additionalProperties.toMutableMap())
         }
 
         private var validated: Boolean = false
@@ -2590,11 +2551,7 @@ private constructor(
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(
-                name,
-                id,
-                additionalProperties,
-            )
+            Objects.hash(name, id, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
@@ -2606,27 +2563,20 @@ private constructor(
     class Rule
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
-        private val description: JsonField<String>,
         private val id: JsonField<String>,
+        private val description: JsonField<String>,
         private val name: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
         @JsonCreator
         private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
             @JsonProperty("description")
             @ExcludeMissing
             description: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
             @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
-        ) : this(description, id, name, mutableMapOf())
-
-        /**
-         * What the rule asks of members
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun description(): String? = description.getNullable("description")
+        ) : this(id, description, name, mutableMapOf())
 
         /**
          * Rule ID
@@ -2636,11 +2586,25 @@ private constructor(
         fun id(): String? = id.getNullable("id")
 
         /**
+         * What the rule asks of members
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun description(): String? = description.getNullable("description")
+
+        /**
          * Rule title
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
         fun name(): String? = name.getNullable("name")
+
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
         /**
          * Returns the raw JSON value of [description].
@@ -2650,13 +2614,6 @@ private constructor(
         @JsonProperty("description")
         @ExcludeMissing
         fun _description(): JsonField<String> = description
-
-        /**
-         * Returns the raw JSON value of [id].
-         *
-         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
         /**
          * Returns the raw JSON value of [name].
@@ -2686,17 +2643,23 @@ private constructor(
         /** A builder for [Rule]. */
         class Builder internal constructor() {
 
-            private var description: JsonField<String> = JsonMissing.of()
             private var id: JsonField<String> = JsonMissing.of()
+            private var description: JsonField<String> = JsonMissing.of()
             private var name: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(rule: Rule) = apply {
-                description = rule.description
                 id = rule.id
+                description = rule.description
                 name = rule.name
                 additionalProperties = rule.additionalProperties.toMutableMap()
             }
+
+            /** Rule ID */
+            fun id(id: String) = id(JsonField.of(id))
+
+            /** Sets [Builder.id] to an arbitrary JSON value. */
+            fun id(id: JsonField<String>) = apply { this.id = id }
 
             /** What the rule asks of members */
             fun description(description: String) = description(JsonField.of(description))
@@ -2705,12 +2668,6 @@ private constructor(
             fun description(description: JsonField<String>) = apply {
                 this.description = description
             }
-
-            /** Rule ID */
-            fun id(id: String) = id(JsonField.of(id))
-
-            /** Sets [Builder.id] to an arbitrary JSON value. */
-            fun id(id: JsonField<String>) = apply { this.id = id }
 
             /** Rule title */
             fun name(name: String) = name(JsonField.of(name))
@@ -2742,13 +2699,7 @@ private constructor(
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              */
-            fun build(): Rule =
-                Rule(
-                    description,
-                    id,
-                    name,
-                    additionalProperties.toMutableMap(),
-                )
+            fun build(): Rule = Rule(id, description, name, additionalProperties.toMutableMap())
         }
 
         private var validated: Boolean = false
@@ -2767,8 +2718,8 @@ private constructor(
                 return@apply
             }
 
-            description()
             id()
+            description()
             name()
             validated = true
         }
@@ -2782,8 +2733,8 @@ private constructor(
             }
 
         internal fun validity(): Int =
-            (if (description.asKnown() == null) 0 else 1) +
-                (if (id.asKnown() == null) 0 else 1) +
+            (if (id.asKnown() == null) 0 else 1) +
+                (if (description.asKnown() == null) 0 else 1) +
                 (if (name.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {
@@ -2792,25 +2743,20 @@ private constructor(
             }
 
             return other is Rule &&
-                description == other.description &&
                 id == other.id &&
+                description == other.description &&
                 name == other.name &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(
-                description,
-                id,
-                name,
-                additionalProperties,
-            )
+            Objects.hash(id, description, name, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Rule{description=$description, id=$id, name=$name, additionalProperties=$additionalProperties}"
+            "Rule{id=$id, description=$description, name=$name, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

@@ -52,7 +52,7 @@ internal class MediaServiceTest {
                     .minViews(0L)
                     .nativeRetweets(true)
                     .omit("entities,media")
-                    .pageSize(20L)
+                    .pageSize(1L)
                     .quotes(MediaListParams.Quotes.INCLUDE)
                     .quotesOfTweetId("quotesOfTweetId")
                     .replies(MediaListParams.Replies.INCLUDE)

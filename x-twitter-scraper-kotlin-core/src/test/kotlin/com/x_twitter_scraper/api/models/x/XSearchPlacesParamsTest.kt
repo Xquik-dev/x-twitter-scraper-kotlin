@@ -15,7 +15,7 @@ internal class XSearchPlacesParamsTest {
         XSearchPlacesParams.builder()
             .q("q")
             .fields("id,text,author.username")
-            .limit(0L)
+            .limit(1L)
             .omit("entities,media")
             .build()
     }
@@ -26,7 +26,7 @@ internal class XSearchPlacesParamsTest {
             XSearchPlacesParams.builder()
                 .q("q")
                 .fields("id,text,author.username")
-                .limit(0L)
+                .limit(1L)
                 .omit("entities,media")
                 .build()
 
@@ -37,7 +37,7 @@ internal class XSearchPlacesParamsTest {
                 QueryParams.builder()
                     .put("q", "q")
                     .put("fields", "id,text,author.username")
-                    .put("limit", "0")
+                    .put("limit", "1")
                     .put("omit", "entities,media")
                     .build()
             )

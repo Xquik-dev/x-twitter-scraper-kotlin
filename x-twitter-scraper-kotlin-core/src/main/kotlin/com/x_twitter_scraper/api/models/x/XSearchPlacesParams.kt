@@ -265,14 +265,7 @@ private constructor(
     }
 
     override fun hashCode(): Int =
-        Objects.hash(
-            q,
-            fields,
-            limit,
-            omit,
-            additionalHeaders,
-            additionalQueryParams,
-        )
+        Objects.hash(q, fields, limit, omit, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "XSearchPlacesParams{q=$q, fields=$fields, limit=$limit, omit=$omit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

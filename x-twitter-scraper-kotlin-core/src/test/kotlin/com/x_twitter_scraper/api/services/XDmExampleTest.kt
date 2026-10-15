@@ -67,6 +67,7 @@ internal class XDmExampleTest {
                 .withHeader("Idempotency-Key", equalTo("Idempotency-Key")),
         )
         responses.forEach { response ->
+            assertThat(response.id()).isEqualTo("12345")
             assertThat(response.account()!!.id()).isEqualTo("42")
             assertThat(response.account()!!.username()).isEqualTo("example")
             assertThat(response.action()).isEqualTo(DmDeleteMessageResponse.Action.LIKE)
@@ -77,7 +78,6 @@ internal class XDmExampleTest {
                 .isEqualTo(DmDeleteMessageResponse.Billing.Status.CHARGED)
             assertThat(response.charged()).isEqualTo(true)
             assertThat(response.chargedCredits()).isEqualTo("10")
-            assertThat(response.id()).isEqualTo("12345")
             assertThat(response.nextAction()).isNull()
             assertThat(response._object_()).isEqualTo(JsonValue.from("x_write_action"))
             assertThat(response.pollAfterMs()).isNull()

@@ -814,12 +814,7 @@ private constructor(
             }
 
             private val hashCode: Int by lazy {
-                Objects.hash(
-                    assetUrl,
-                    context,
-                    priority,
-                    additionalProperties,
-                )
+                Objects.hash(assetUrl, context, priority, additionalProperties)
             }
 
             override fun hashCode(): Int = hashCode
@@ -875,13 +870,7 @@ private constructor(
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(
-            count,
-            hashflags,
-            total,
-            message,
-            additionalProperties,
-        )
+        Objects.hash(count, hashflags, total, message, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode

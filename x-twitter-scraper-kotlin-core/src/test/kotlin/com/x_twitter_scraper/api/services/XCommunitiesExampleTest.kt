@@ -48,7 +48,7 @@ internal class XCommunitiesExampleTest {
             get(urlPathEqualTo("/x/communities/find"))
                 .willReturn(okJson(ExampleResponses.read("examples/x/communities/find.json")))
         )
-        val params = CommunityFindParams.builder().q("q").pageSize(20L).build()
+        val params = CommunityFindParams.builder().q("q").pageSize(1L).build()
 
         val responses =
             listOf(
@@ -60,16 +60,11 @@ internal class XCommunitiesExampleTest {
             2,
             getRequestedFor(urlPathEqualTo("/x/communities/find"))
                 .withQueryParam("q", equalTo("q"))
-                .withQueryParam("pageSize", equalTo("20")),
+                .withQueryParam("pageSize", equalTo("1")),
         )
         responses.forEach { response ->
             assertThat(response.communities()).hasSize(1)
-            assertThat(response.communities()[0].id()).isEqualTo("1472105760389668865")
-            assertThat(response.communities()[0].name()).isEqualTo("Tech Twitter")
-            assertThat(response.communities()[0].memberCount()).isEqualTo(121468L)
-            assertThat(response.communities()[0].isNsfw()).isEqualTo(false)
-            assertThat(response.communities()[0].bannerUrl())
-                .isEqualTo("https://pbs.twimg.com/community_banner_img/example.jpg")
+            assertCommunityExample(response.communities()[0])
             assertThat(response.hasNextPage()).isEqualTo(true)
             assertThat(response.nextCursor()).isEqualTo("WzM1LjUxMjQ5N10=")
         }
@@ -85,7 +80,7 @@ internal class XCommunitiesExampleTest {
         )
         val params =
             CommunityListPopularParams.builder()
-                .pageSize(20L)
+                .pageSize(1L)
                 .topic("topic")
                 .topicId("topicId")
                 .build()
@@ -99,18 +94,13 @@ internal class XCommunitiesExampleTest {
         verify(
             2,
             getRequestedFor(urlPathEqualTo("/x/communities/popular"))
-                .withQueryParam("pageSize", equalTo("20"))
+                .withQueryParam("pageSize", equalTo("1"))
                 .withQueryParam("topic", equalTo("topic"))
                 .withQueryParam("topicId", equalTo("topicId")),
         )
         responses.forEach { response ->
             assertThat(response.communities()).hasSize(1)
-            assertThat(response.communities()[0].id()).isEqualTo("1472105760389668865")
-            assertThat(response.communities()[0].name()).isEqualTo("Tech Twitter")
-            assertThat(response.communities()[0].memberCount()).isEqualTo(121468L)
-            assertThat(response.communities()[0].isNsfw()).isEqualTo(false)
-            assertThat(response.communities()[0].bannerUrl())
-                .isEqualTo("https://pbs.twimg.com/community_banner_img/example.jpg")
+            assertCommunityExample(response.communities()[0])
             assertThat(response.hasNextPage()).isEqualTo(true)
             assertThat(response.nextCursor()).isEqualTo("WzM1LjUxMjQ5N10=")
         }
@@ -124,7 +114,7 @@ internal class XCommunitiesExampleTest {
                     okJson(ExampleResponses.read("examples/x/communities/listSuggested.json"))
                 )
         )
-        val params = CommunityListSuggestedParams.builder().limit(0L).build()
+        val params = CommunityListSuggestedParams.builder().limit(1L).build()
 
         val responses =
             listOf(
@@ -135,16 +125,11 @@ internal class XCommunitiesExampleTest {
         verify(
             2,
             getRequestedFor(urlPathEqualTo("/x/communities/suggested"))
-                .withQueryParam("limit", equalTo("0")),
+                .withQueryParam("limit", equalTo("1")),
         )
         responses.forEach { response ->
             assertThat(response.communities()).hasSize(1)
-            assertThat(response.communities()[0].id()).isEqualTo("1472105760389668865")
-            assertThat(response.communities()[0].name()).isEqualTo("Tech Twitter")
-            assertThat(response.communities()[0].memberCount()).isEqualTo(121468L)
-            assertThat(response.communities()[0].isNsfw()).isEqualTo(false)
-            assertThat(response.communities()[0].bannerUrl())
-                .isEqualTo("https://pbs.twimg.com/community_banner_img/example.jpg")
+            assertCommunityExample(response.communities()[0])
             assertThat(response.count()).isEqualTo(1L)
         }
     }
@@ -155,7 +140,7 @@ internal class XCommunitiesExampleTest {
             get(urlPathEqualTo("/x/communities/topics"))
                 .willReturn(okJson(ExampleResponses.read("examples/x/communities/listTopics.json")))
         )
-        val params = CommunityListTopicsParams.builder().limit(0L).build()
+        val params = CommunityListTopicsParams.builder().limit(1L).build()
 
         val responses =
             listOf(
@@ -166,13 +151,19 @@ internal class XCommunitiesExampleTest {
         verify(
             2,
             getRequestedFor(urlPathEqualTo("/x/communities/topics"))
-                .withQueryParam("limit", equalTo("0")),
+                .withQueryParam("limit", equalTo("1")),
         )
         responses.forEach { response ->
             assertThat(response.count()).isEqualTo(1L)
             assertThat(response.topics()).hasSize(1)
             assertThat(response.topics()[0].id()).isEqualTo("301")
             assertThat(response.topics()[0].name()).isEqualTo("Technology")
+            assertThat(response.topics()[0].subtopics()).hasSize(2)
+            assertThat(response.topics()[0].subtopics()[0].id()).isEqualTo("302")
+            assertThat(response.topics()[0].subtopics()[0].name())
+                .isEqualTo("Artificial Intelligence")
+            assertThat(response.topics()[0].subtopics()[1].id()).isEqualTo("303")
+            assertThat(response.topics()[0].subtopics()[1].name()).isEqualTo("Software")
         }
     }
 

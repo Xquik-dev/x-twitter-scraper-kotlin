@@ -102,10 +102,8 @@ class CommunityServiceImpl internal constructor(private val clientOptions: Clien
         requestOptions: RequestOptions,
     ): PaginatedTweets = withRawResponse().retrieveSearch(params, requestOptions).parse()
 
-    override fun find(
-        params: CommunityFindParams,
-        requestOptions: RequestOptions,
-    ): CommunityPage = withRawResponse().find(params, requestOptions).parse()
+    override fun find(params: CommunityFindParams, requestOptions: RequestOptions): CommunityPage =
+        withRawResponse().find(params, requestOptions).parse()
 
     override fun listPopular(
         params: CommunityListPopularParams,

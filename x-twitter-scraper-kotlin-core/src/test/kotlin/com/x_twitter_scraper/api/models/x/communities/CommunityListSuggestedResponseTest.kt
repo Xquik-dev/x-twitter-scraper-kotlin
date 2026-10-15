@@ -79,8 +79,8 @@ internal class CommunityListSuggestedResponseTest {
                         .question("What are you working on?")
                         .addRule(
                             Community.Rule.builder()
-                                .description("description")
                                 .id("id")
+                                .description("description")
                                 .name("name")
                                 .build()
                         )
@@ -142,8 +142,8 @@ internal class CommunityListSuggestedResponseTest {
                     .question("What are you working on?")
                     .addRule(
                         Community.Rule.builder()
-                            .description("description")
                             .id("id")
+                            .description("description")
                             .name("name")
                             .build()
                     )
@@ -222,8 +222,8 @@ internal class CommunityListSuggestedResponseTest {
                         .question("What are you working on?")
                         .addRule(
                             Community.Rule.builder()
-                                .description("description")
                                 .id("id")
+                                .description("description")
                                 .name("name")
                                 .build()
                         )

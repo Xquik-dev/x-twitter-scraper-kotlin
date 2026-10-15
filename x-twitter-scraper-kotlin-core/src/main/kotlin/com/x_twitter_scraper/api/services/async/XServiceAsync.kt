@@ -130,7 +130,13 @@ interface XServiceAsync {
     suspend fun getNotifications(requestOptions: RequestOptions): XGetNotificationsResponse =
         getNotifications(XGetNotificationsParams.none(), requestOptions)
 
-    /** Get trending hashtags and topics from X by region */
+    /**
+     * Returns X's current trends for a place you choose. Pick it by woeid, country or location
+     * name. Without one, trends are worldwide. Add at to read what was trending on Twitter at a
+     * past time, such as yesterday. Xquik keeps a Twitter trends archive from 2026-10-13 02:20 UTC
+     * on, with 1 list per place every 5 minutes. Each request costs 1 credit, however many trends
+     * it returns.
+     */
     suspend fun getTrends(
         params: XGetTrendsParams = XGetTrendsParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),

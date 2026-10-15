@@ -77,9 +77,7 @@ interface MediaService {
 
         /** @see list */
         @MustBeClosed
-        fun list(
-            id: String,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<PaginatedTweets> = list(id, MediaListParams.none(), requestOptions)
+        fun list(id: String, requestOptions: RequestOptions): HttpResponseFor<PaginatedTweets> =
+            list(id, MediaListParams.none(), requestOptions)
     }
 }

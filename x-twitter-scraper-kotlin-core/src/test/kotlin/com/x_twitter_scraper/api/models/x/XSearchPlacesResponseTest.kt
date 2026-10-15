@@ -19,6 +19,7 @@ internal class XSearchPlacesResponseTest {
                 .count(1L)
                 .addPlace(
                     XSearchPlacesResponse.Place.builder()
+                        .id("5e02a0f0d91c76d2")
                         .attributes(
                             XSearchPlacesResponse.Place.Attributes.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -33,6 +34,7 @@ internal class XSearchPlacesResponseTest {
                         .addCentroid(28.84318392941324)
                         .addContainedWithin(
                             XSearchPlacesResponse.Place.ContainedWithin.builder()
+                                .id("5e02a0f0d91c76d2")
                                 .attributes(
                                     XSearchPlacesResponse.Place.ContainedWithin.Attributes.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -49,7 +51,6 @@ internal class XSearchPlacesResponseTest {
                                 .country("Turkey")
                                 .countryCode("TR")
                                 .fullName("İstanbul, Türkiye")
-                                .id("5e02a0f0d91c76d2")
                                 .name("İstanbul")
                                 .placeType("city")
                                 .url("https://api.twitter.com/1.1/geo/id/5e02a0f0d91c76d2.json")
@@ -58,7 +59,6 @@ internal class XSearchPlacesResponseTest {
                         .country("Turkey")
                         .countryCode("TR")
                         .fullName("İstanbul, Türkiye")
-                        .id("5e02a0f0d91c76d2")
                         .name("İstanbul")
                         .placeType("city")
                         .url("https://api.twitter.com/1.1/geo/id/5e02a0f0d91c76d2.json")
@@ -72,6 +72,7 @@ internal class XSearchPlacesResponseTest {
         assertThat(xSearchPlacesResponse.places())
             .containsExactly(
                 XSearchPlacesResponse.Place.builder()
+                    .id("5e02a0f0d91c76d2")
                     .attributes(
                         XSearchPlacesResponse.Place.Attributes.builder()
                             .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -86,6 +87,7 @@ internal class XSearchPlacesResponseTest {
                     .addCentroid(28.84318392941324)
                     .addContainedWithin(
                         XSearchPlacesResponse.Place.ContainedWithin.builder()
+                            .id("5e02a0f0d91c76d2")
                             .attributes(
                                 XSearchPlacesResponse.Place.ContainedWithin.Attributes.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -101,7 +103,6 @@ internal class XSearchPlacesResponseTest {
                             .country("Turkey")
                             .countryCode("TR")
                             .fullName("İstanbul, Türkiye")
-                            .id("5e02a0f0d91c76d2")
                             .name("İstanbul")
                             .placeType("city")
                             .url("https://api.twitter.com/1.1/geo/id/5e02a0f0d91c76d2.json")
@@ -110,7 +111,6 @@ internal class XSearchPlacesResponseTest {
                     .country("Turkey")
                     .countryCode("TR")
                     .fullName("İstanbul, Türkiye")
-                    .id("5e02a0f0d91c76d2")
                     .name("İstanbul")
                     .placeType("city")
                     .url("https://api.twitter.com/1.1/geo/id/5e02a0f0d91c76d2.json")
@@ -129,6 +129,7 @@ internal class XSearchPlacesResponseTest {
                 .count(1L)
                 .addPlace(
                     XSearchPlacesResponse.Place.builder()
+                        .id("5e02a0f0d91c76d2")
                         .attributes(
                             XSearchPlacesResponse.Place.Attributes.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -143,6 +144,7 @@ internal class XSearchPlacesResponseTest {
                         .addCentroid(28.84318392941324)
                         .addContainedWithin(
                             XSearchPlacesResponse.Place.ContainedWithin.builder()
+                                .id("5e02a0f0d91c76d2")
                                 .attributes(
                                     XSearchPlacesResponse.Place.ContainedWithin.Attributes.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -159,7 +161,6 @@ internal class XSearchPlacesResponseTest {
                                 .country("Turkey")
                                 .countryCode("TR")
                                 .fullName("İstanbul, Türkiye")
-                                .id("5e02a0f0d91c76d2")
                                 .name("İstanbul")
                                 .placeType("city")
                                 .url("https://api.twitter.com/1.1/geo/id/5e02a0f0d91c76d2.json")
@@ -168,7 +169,6 @@ internal class XSearchPlacesResponseTest {
                         .country("Turkey")
                         .countryCode("TR")
                         .fullName("İstanbul, Türkiye")
-                        .id("5e02a0f0d91c76d2")
                         .name("İstanbul")
                         .placeType("city")
                         .url("https://api.twitter.com/1.1/geo/id/5e02a0f0d91c76d2.json")

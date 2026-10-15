@@ -63,8 +63,8 @@ internal class CommunityTest {
                 .question("What are you working on?")
                 .addRule(
                     Community.Rule.builder()
-                        .description("description")
                         .id("id")
+                        .description("description")
                         .name("name")
                         .build()
                 )
@@ -124,7 +124,7 @@ internal class CommunityTest {
         assertThat(community.question()).isEqualTo("What are you working on?")
         assertThat(community.rules())
             .containsExactly(
-                Community.Rule.builder().description("description").id("id").name("name").build()
+                Community.Rule.builder().id("id").description("description").name("name").build()
             )
         assertThat(community.searchTags()).containsExactly("buildinpublic")
     }
@@ -182,8 +182,8 @@ internal class CommunityTest {
                 .question("What are you working on?")
                 .addRule(
                     Community.Rule.builder()
-                        .description("description")
                         .id("id")
+                        .description("description")
                         .name("name")
                         .build()
                 )
@@ -197,5 +197,37 @@ internal class CommunityTest {
             )
 
         assertThat(roundtrippedCommunity).isEqualTo(community)
+    }
+
+    @Test
+    fun readsPartialCreator() {
+        val community =
+            jsonMapper()
+                .readValue(
+                    """{"id":"1","name":"Builders","member_count":2,"is_nsfw":false,"creator":{"id":"7","username":"maker","verified":true}}""",
+                    jacksonTypeRef<Community>(),
+                )
+
+        val creator = community.creator()!!
+        assertThat(creator.isUnionMember1()).isTrue()
+        assertThat(creator.asUnionMember1().id()).isEqualTo("7")
+        assertThat(creator.asUnionMember1().username()).isEqualTo("maker")
+        assertThat(creator.asUnionMember1().verified()).isEqualTo(true)
+    }
+
+    @Test
+    fun readsFullCreator() {
+        val community =
+            jsonMapper()
+                .readValue(
+                    """{"id":"1","name":"Builders","member_count":2,"is_nsfw":false,"creator":{"id":"7","name":"Maker","username":"maker"}}""",
+                    jacksonTypeRef<Community>(),
+                )
+
+        val creator = community.creator()!!
+        assertThat(creator.isUserProfile()).isTrue()
+        assertThat(creator.asUserProfile().id()).isEqualTo("7")
+        assertThat(creator.asUserProfile().name()).isEqualTo("Maker")
+        assertThat(creator.asUserProfile().username()).isEqualTo("maker")
     }
 }

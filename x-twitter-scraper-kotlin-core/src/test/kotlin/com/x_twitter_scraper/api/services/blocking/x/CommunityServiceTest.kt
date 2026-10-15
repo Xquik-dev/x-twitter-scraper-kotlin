@@ -192,7 +192,7 @@ internal class CommunityServiceTest {
                     .cursor("cursor")
                     .fields("id,text,author.username")
                     .omit("entities,media")
-                    .pageSize(20L)
+                    .pageSize(1L)
                     .build()
             )
 
@@ -215,7 +215,7 @@ internal class CommunityServiceTest {
                     .cursor("cursor")
                     .fields("id,text,author.username")
                     .omit("entities,media")
-                    .pageSize(20L)
+                    .pageSize(1L)
                     .topic("topic")
                     .topicId("topicId")
                     .build()
@@ -238,7 +238,7 @@ internal class CommunityServiceTest {
             communityService.listSuggested(
                 CommunityListSuggestedParams.builder()
                     .fields("id,text,author.username")
-                    .limit(0L)
+                    .limit(1L)
                     .omit("entities,media")
                     .build()
             )
@@ -260,7 +260,7 @@ internal class CommunityServiceTest {
             communityService.listTopics(
                 CommunityListTopicsParams.builder()
                     .fields("id,text,author.username")
-                    .limit(0L)
+                    .limit(1L)
                     .omit("entities,media")
                     .build()
             )

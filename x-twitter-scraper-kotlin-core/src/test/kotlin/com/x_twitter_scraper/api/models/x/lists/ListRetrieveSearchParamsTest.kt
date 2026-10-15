@@ -17,7 +17,7 @@ internal class ListRetrieveSearchParamsTest {
             .cursor("cursor")
             .fields("id,text,author.username")
             .omit("entities,media")
-            .pageSize(20L)
+            .pageSize(1L)
             .build()
     }
 
@@ -29,7 +29,7 @@ internal class ListRetrieveSearchParamsTest {
                 .cursor("cursor")
                 .fields("id,text,author.username")
                 .omit("entities,media")
-                .pageSize(20L)
+                .pageSize(1L)
                 .build()
 
         val queryParams = params._queryParams()
@@ -41,7 +41,7 @@ internal class ListRetrieveSearchParamsTest {
                     .put("cursor", "cursor")
                     .put("fields", "id,text,author.username")
                     .put("omit", "entities,media")
-                    .put("pageSize", "20")
+                    .put("pageSize", "1")
                     .build()
             )
     }

@@ -14,7 +14,7 @@ internal class XGetTrendsParamsTest {
     fun create() {
         XGetTrendsParams.builder()
             .at("2026-10-13T14:00:00Z")
-            .count(30L)
+            .count(1L)
             .country("country")
             .fields("id,text,author.username")
             .location("location")
@@ -28,7 +28,7 @@ internal class XGetTrendsParamsTest {
         val params =
             XGetTrendsParams.builder()
                 .at("2026-10-13T14:00:00Z")
-                .count(30L)
+                .count(1L)
                 .country("country")
                 .fields("id,text,author.username")
                 .location("location")
@@ -42,7 +42,7 @@ internal class XGetTrendsParamsTest {
             .isEqualTo(
                 QueryParams.builder()
                     .put("at", "2026-10-13T14:00:00Z")
-                    .put("count", "30")
+                    .put("count", "1")
                     .put("country", "country")
                     .put("fields", "id,text,author.username")
                     .put("location", "location")

@@ -17,6 +17,7 @@ internal class DmDeleteMessageResponseTest {
     fun create() {
         val dmDeleteMessageResponse =
             DmDeleteMessageResponse.builder()
+                .id("12345")
                 .account(
                     DmDeleteMessageResponse.Account.builder().id("id").username("username").build()
                 )
@@ -31,7 +32,6 @@ internal class DmDeleteMessageResponseTest {
                 )
                 .charged(true)
                 .chargedCredits("10")
-                .id("12345")
                 .nextAction(
                     DmDeleteMessageResponse.NextAction.builder()
                         .type(DmDeleteMessageResponse.NextAction.Type.POLL)
@@ -105,6 +105,7 @@ internal class DmDeleteMessageResponseTest {
                 .updatedAt(OffsetDateTime.parse("2026-07-21T05:00:02Z"))
                 .build()
 
+        assertThat(dmDeleteMessageResponse.id()).isEqualTo("12345")
         assertThat(dmDeleteMessageResponse.account())
             .isEqualTo(
                 DmDeleteMessageResponse.Account.builder().id("id").username("username").build()
@@ -121,7 +122,6 @@ internal class DmDeleteMessageResponseTest {
             )
         assertThat(dmDeleteMessageResponse.charged()).isEqualTo(true)
         assertThat(dmDeleteMessageResponse.chargedCredits()).isEqualTo("10")
-        assertThat(dmDeleteMessageResponse.id()).isEqualTo("12345")
         assertThat(dmDeleteMessageResponse.nextAction())
             .isEqualTo(
                 DmDeleteMessageResponse.NextAction.builder()
@@ -217,6 +217,7 @@ internal class DmDeleteMessageResponseTest {
         val jsonMapper = jsonMapper()
         val dmDeleteMessageResponse =
             DmDeleteMessageResponse.builder()
+                .id("12345")
                 .account(
                     DmDeleteMessageResponse.Account.builder().id("id").username("username").build()
                 )
@@ -231,7 +232,6 @@ internal class DmDeleteMessageResponseTest {
                 )
                 .charged(true)
                 .chargedCredits("10")
-                .id("12345")
                 .nextAction(
                     DmDeleteMessageResponse.NextAction.builder()
                         .type(DmDeleteMessageResponse.NextAction.Type.POLL)

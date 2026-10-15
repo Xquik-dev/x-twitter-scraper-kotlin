@@ -1242,11 +1242,7 @@ private constructor(
                      * Further updates to this [Builder] will not mutate the returned instance.
                      */
                     fun build(): Palette =
-                        Palette(
-                            percentage,
-                            rgb,
-                            additionalProperties.toMutableMap(),
-                        )
+                        Palette(percentage, rgb, additionalProperties.toMutableMap())
                 }
 
                 private var validated: Boolean = false
@@ -1300,9 +1296,7 @@ private constructor(
                         @JsonProperty("green")
                         @ExcludeMissing
                         green: JsonField<Long> = JsonMissing.of(),
-                        @JsonProperty("red")
-                        @ExcludeMissing
-                        red: JsonField<Long> = JsonMissing.of(),
+                        @JsonProperty("red") @ExcludeMissing red: JsonField<Long> = JsonMissing.of(),
                     ) : this(blue, green, red, mutableMapOf())
 
                     /**
@@ -1426,12 +1420,7 @@ private constructor(
                          * Further updates to this [Builder] will not mutate the returned instance.
                          */
                         fun build(): Rgb =
-                            Rgb(
-                                blue,
-                                green,
-                                red,
-                                additionalProperties.toMutableMap(),
-                            )
+                            Rgb(blue, green, red, additionalProperties.toMutableMap())
                     }
 
                     private var validated: Boolean = false
@@ -1483,12 +1472,7 @@ private constructor(
                     }
 
                     private val hashCode: Int by lazy {
-                        Objects.hash(
-                            blue,
-                            green,
-                            red,
-                            additionalProperties,
-                        )
+                        Objects.hash(blue, green, red, additionalProperties)
                     }
 
                     override fun hashCode(): Int = hashCode
@@ -1509,11 +1493,7 @@ private constructor(
                 }
 
                 private val hashCode: Int by lazy {
-                    Objects.hash(
-                        percentage,
-                        rgb,
-                        additionalProperties,
-                    )
+                    Objects.hash(percentage, rgb, additionalProperties)
                 }
 
                 override fun hashCode(): Int = hashCode
@@ -1540,9 +1520,7 @@ private constructor(
                     height: JsonField<Long> = JsonMissing.of(),
                     @JsonProperty("left") @ExcludeMissing left: JsonField<Long> = JsonMissing.of(),
                     @JsonProperty("top") @ExcludeMissing top: JsonField<Long> = JsonMissing.of(),
-                    @JsonProperty("width")
-                    @ExcludeMissing
-                    width: JsonField<Long> = JsonMissing.of(),
+                    @JsonProperty("width") @ExcludeMissing width: JsonField<Long> = JsonMissing.of(),
                 ) : this(height, left, top, width, mutableMapOf())
 
                 /**
@@ -1695,13 +1673,7 @@ private constructor(
                      * Further updates to this [Builder] will not mutate the returned instance.
                      */
                     fun build(): SalientRect =
-                        SalientRect(
-                            height,
-                            left,
-                            top,
-                            width,
-                            additionalProperties.toMutableMap(),
-                        )
+                        SalientRect(height, left, top, width, additionalProperties.toMutableMap())
                 }
 
                 private var validated: Boolean = false
@@ -1756,13 +1728,7 @@ private constructor(
                 }
 
                 private val hashCode: Int by lazy {
-                    Objects.hash(
-                        height,
-                        left,
-                        top,
-                        width,
-                        additionalProperties,
-                    )
+                    Objects.hash(height, left, top, width, additionalProperties)
                 }
 
                 override fun hashCode(): Int = hashCode
@@ -2263,11 +2229,7 @@ private constructor(
                      * Further updates to this [Builder] will not mutate the returned instance.
                      */
                     fun build(): Palette =
-                        Palette(
-                            percentage,
-                            rgb,
-                            additionalProperties.toMutableMap(),
-                        )
+                        Palette(percentage, rgb, additionalProperties.toMutableMap())
                 }
 
                 private var validated: Boolean = false
@@ -2321,9 +2283,7 @@ private constructor(
                         @JsonProperty("green")
                         @ExcludeMissing
                         green: JsonField<Long> = JsonMissing.of(),
-                        @JsonProperty("red")
-                        @ExcludeMissing
-                        red: JsonField<Long> = JsonMissing.of(),
+                        @JsonProperty("red") @ExcludeMissing red: JsonField<Long> = JsonMissing.of(),
                     ) : this(blue, green, red, mutableMapOf())
 
                     /**
@@ -2447,12 +2407,7 @@ private constructor(
                          * Further updates to this [Builder] will not mutate the returned instance.
                          */
                         fun build(): Rgb =
-                            Rgb(
-                                blue,
-                                green,
-                                red,
-                                additionalProperties.toMutableMap(),
-                            )
+                            Rgb(blue, green, red, additionalProperties.toMutableMap())
                     }
 
                     private var validated: Boolean = false
@@ -2504,12 +2459,7 @@ private constructor(
                     }
 
                     private val hashCode: Int by lazy {
-                        Objects.hash(
-                            blue,
-                            green,
-                            red,
-                            additionalProperties,
-                        )
+                        Objects.hash(blue, green, red, additionalProperties)
                     }
 
                     override fun hashCode(): Int = hashCode
@@ -2530,11 +2480,7 @@ private constructor(
                 }
 
                 private val hashCode: Int by lazy {
-                    Objects.hash(
-                        percentage,
-                        rgb,
-                        additionalProperties,
-                    )
+                    Objects.hash(percentage, rgb, additionalProperties)
                 }
 
                 override fun hashCode(): Int = hashCode
@@ -2561,9 +2507,7 @@ private constructor(
                     height: JsonField<Long> = JsonMissing.of(),
                     @JsonProperty("left") @ExcludeMissing left: JsonField<Long> = JsonMissing.of(),
                     @JsonProperty("top") @ExcludeMissing top: JsonField<Long> = JsonMissing.of(),
-                    @JsonProperty("width")
-                    @ExcludeMissing
-                    width: JsonField<Long> = JsonMissing.of(),
+                    @JsonProperty("width") @ExcludeMissing width: JsonField<Long> = JsonMissing.of(),
                 ) : this(height, left, top, width, mutableMapOf())
 
                 /**
@@ -2716,13 +2660,7 @@ private constructor(
                      * Further updates to this [Builder] will not mutate the returned instance.
                      */
                     fun build(): SalientRect =
-                        SalientRect(
-                            height,
-                            left,
-                            top,
-                            width,
-                            additionalProperties.toMutableMap(),
-                        )
+                        SalientRect(height, left, top, width, additionalProperties.toMutableMap())
                 }
 
                 private var validated: Boolean = false
@@ -2777,13 +2715,7 @@ private constructor(
                 }
 
                 private val hashCode: Int by lazy {
-                    Objects.hash(
-                        height,
-                        left,
-                        top,
-                        width,
-                        additionalProperties,
-                    )
+                    Objects.hash(height, left, top, width, additionalProperties)
                 }
 
                 override fun hashCode(): Int = hashCode
@@ -2887,12 +2819,7 @@ private constructor(
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(
-            hasNextPage,
-            lists,
-            nextCursor,
-            additionalProperties,
-        )
+        Objects.hash(hasNextPage, lists, nextCursor, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode

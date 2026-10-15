@@ -1088,15 +1088,7 @@ private constructor(
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(
-            count,
-            trends,
-            woeid,
-            capturedAt,
-            location,
-            requestedAt,
-            additionalProperties,
-        )
+        Objects.hash(count, trends, woeid, capturedAt, location, requestedAt, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode

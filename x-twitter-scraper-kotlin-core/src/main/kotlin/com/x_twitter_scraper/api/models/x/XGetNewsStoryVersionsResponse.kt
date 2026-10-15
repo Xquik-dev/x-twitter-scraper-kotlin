@@ -23,28 +23,20 @@ import java.util.Objects
 class XGetNewsStoryVersionsResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    private val count: JsonField<Long>,
     private val id: JsonField<String>,
+    private val count: JsonField<Long>,
     private val versions: JsonField<List<Version>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("count") @ExcludeMissing count: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("count") @ExcludeMissing count: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("versions")
         @ExcludeMissing
         versions: JsonField<List<Version>> = JsonMissing.of(),
-    ) : this(count, id, versions, mutableMapOf())
-
-    /**
-     * Versions returned.
-     *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null.
-     */
-    fun count(): Long = count.getRequired("count")
+    ) : this(id, count, versions, mutableMapOf())
 
     /**
      * The story's ID, as the request named it.
@@ -55,17 +47,18 @@ private constructor(
     fun id(): String = id.getRequired("id")
 
     /**
+     * Versions returned.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null.
+     */
+    fun count(): Long = count.getRequired("count")
+
+    /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null.
      */
     fun versions(): List<Version> = versions.getRequired("versions")
-
-    /**
-     * Returns the raw JSON value of [count].
-     *
-     * Unlike [count], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("count") @ExcludeMissing fun _count(): JsonField<Long> = count
 
     /**
      * Returns the raw JSON value of [id].
@@ -73,6 +66,13 @@ private constructor(
      * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+    /**
+     * Returns the raw JSON value of [count].
+     *
+     * Unlike [count], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("count") @ExcludeMissing fun _count(): JsonField<Long> = count
 
     /**
      * Returns the raw JSON value of [versions].
@@ -101,8 +101,8 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
-         * .count()
          * .id()
+         * .count()
          * .versions()
          * ```
          */
@@ -112,29 +112,29 @@ private constructor(
     /** A builder for [XGetNewsStoryVersionsResponse]. */
     class Builder internal constructor() {
 
-        private var count: JsonField<Long>? = null
         private var id: JsonField<String>? = null
+        private var count: JsonField<Long>? = null
         private var versions: JsonField<MutableList<Version>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(xGetNewsStoryVersionsResponse: XGetNewsStoryVersionsResponse) = apply {
-            count = xGetNewsStoryVersionsResponse.count
             id = xGetNewsStoryVersionsResponse.id
+            count = xGetNewsStoryVersionsResponse.count
             versions = xGetNewsStoryVersionsResponse.versions.map { it.toMutableList() }
             additionalProperties = xGetNewsStoryVersionsResponse.additionalProperties.toMutableMap()
         }
-
-        /** Versions returned. */
-        fun count(count: Long) = count(JsonField.of(count))
-
-        /** Sets [Builder.count] to an arbitrary JSON value. */
-        fun count(count: JsonField<Long>) = apply { this.count = count }
 
         /** The story's ID, as the request named it. */
         fun id(id: String) = id(JsonField.of(id))
 
         /** Sets [Builder.id] to an arbitrary JSON value. */
         fun id(id: JsonField<String>) = apply { this.id = id }
+
+        /** Versions returned. */
+        fun count(count: Long) = count(JsonField.of(count))
+
+        /** Sets [Builder.count] to an arbitrary JSON value. */
+        fun count(count: JsonField<Long>) = apply { this.count = count }
 
         fun versions(versions: List<Version>) = versions(JsonField.of(versions))
 
@@ -181,8 +181,8 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
-         * .count()
          * .id()
+         * .count()
          * .versions()
          * ```
          *
@@ -190,8 +190,8 @@ private constructor(
          */
         fun build(): XGetNewsStoryVersionsResponse =
             XGetNewsStoryVersionsResponse(
-                checkRequired("count", count),
                 checkRequired("id", id),
+                checkRequired("count", count),
                 checkRequired("versions", versions).map { it.toImmutable() },
                 additionalProperties.toMutableMap(),
             )
@@ -212,8 +212,8 @@ private constructor(
             return@apply
         }
 
-        count()
         id()
+        count()
         versions().forEach { it.validate() }
         validated = true
     }
@@ -227,32 +227,40 @@ private constructor(
         }
 
     internal fun validity(): Int =
-        (if (count.asKnown() == null) 0 else 1) +
-            (if (id.asKnown() == null) 0 else 1) +
+        (if (id.asKnown() == null) 0 else 1) +
+            (if (count.asKnown() == null) 0 else 1) +
             (versions.asKnown()?.sumOf { it.validity() } ?: 0)
 
     /** 1 version X wrote of a news story. */
     class Version
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
+        private val id: JsonField<String>,
         private val createdAt: JsonField<OffsetDateTime>,
         private val headline: JsonField<String>,
-        private val id: JsonField<String>,
         private val text: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
         @JsonCreator
         private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
             @JsonProperty("createdAt")
             @ExcludeMissing
             createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
             @JsonProperty("headline")
             @ExcludeMissing
             headline: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
             @JsonProperty("text") @ExcludeMissing text: JsonField<String> = JsonMissing.of(),
-        ) : this(createdAt, headline, id, text, mutableMapOf())
+        ) : this(id, createdAt, headline, text, mutableMapOf())
+
+        /**
+         * The version's ID.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null.
+         */
+        fun id(): String = id.getRequired("id")
 
         /**
          * When X wrote the version, in UTC, from its ID.
@@ -271,14 +279,6 @@ private constructor(
         fun headline(): String = headline.getRequired("headline")
 
         /**
-         * The version's ID.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null.
-         */
-        fun id(): String = id.getRequired("id")
-
-        /**
          * The story's text in this version, without the time line X writes above it in the reader's
          * time zone.
          *
@@ -286,6 +286,13 @@ private constructor(
          *   is unexpectedly missing or null.
          */
         fun text(): String = text.getRequired("text")
+
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
         /**
          * Returns the raw JSON value of [createdAt].
@@ -302,13 +309,6 @@ private constructor(
          * Unlike [headline], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("headline") @ExcludeMissing fun _headline(): JsonField<String> = headline
-
-        /**
-         * Returns the raw JSON value of [id].
-         *
-         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
         /**
          * Returns the raw JSON value of [text].
@@ -336,9 +336,9 @@ private constructor(
              *
              * The following fields are required:
              * ```kotlin
+             * .id()
              * .createdAt()
              * .headline()
-             * .id()
              * .text()
              * ```
              */
@@ -348,19 +348,25 @@ private constructor(
         /** A builder for [Version]. */
         class Builder internal constructor() {
 
+            private var id: JsonField<String>? = null
             private var createdAt: JsonField<OffsetDateTime>? = null
             private var headline: JsonField<String>? = null
-            private var id: JsonField<String>? = null
             private var text: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(version: Version) = apply {
+                id = version.id
                 createdAt = version.createdAt
                 headline = version.headline
-                id = version.id
                 text = version.text
                 additionalProperties = version.additionalProperties.toMutableMap()
             }
+
+            /** The version's ID. */
+            fun id(id: String) = id(JsonField.of(id))
+
+            /** Sets [Builder.id] to an arbitrary JSON value. */
+            fun id(id: JsonField<String>) = apply { this.id = id }
 
             /** When X wrote the version, in UTC, from its ID. */
             fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
@@ -375,12 +381,6 @@ private constructor(
 
             /** Sets [Builder.headline] to an arbitrary JSON value. */
             fun headline(headline: JsonField<String>) = apply { this.headline = headline }
-
-            /** The version's ID. */
-            fun id(id: String) = id(JsonField.of(id))
-
-            /** Sets [Builder.id] to an arbitrary JSON value. */
-            fun id(id: JsonField<String>) = apply { this.id = id }
 
             /**
              * The story's text in this version, without the time line X writes above it in the
@@ -417,9 +417,9 @@ private constructor(
              *
              * The following fields are required:
              * ```kotlin
+             * .id()
              * .createdAt()
              * .headline()
-             * .id()
              * .text()
              * ```
              *
@@ -427,9 +427,9 @@ private constructor(
              */
             fun build(): Version =
                 Version(
+                    checkRequired("id", id),
                     checkRequired("createdAt", createdAt),
                     checkRequired("headline", headline),
-                    checkRequired("id", id),
                     checkRequired("text", text),
                     additionalProperties.toMutableMap(),
                 )
@@ -451,9 +451,9 @@ private constructor(
                 return@apply
             }
 
+            id()
             createdAt()
             headline()
-            id()
             text()
             validated = true
         }
@@ -467,9 +467,9 @@ private constructor(
             }
 
         internal fun validity(): Int =
-            (if (createdAt.asKnown() == null) 0 else 1) +
+            (if (id.asKnown() == null) 0 else 1) +
+                (if (createdAt.asKnown() == null) 0 else 1) +
                 (if (headline.asKnown() == null) 0 else 1) +
-                (if (id.asKnown() == null) 0 else 1) +
                 (if (text.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {
@@ -478,27 +478,21 @@ private constructor(
             }
 
             return other is Version &&
+                id == other.id &&
                 createdAt == other.createdAt &&
                 headline == other.headline &&
-                id == other.id &&
                 text == other.text &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(
-                createdAt,
-                headline,
-                id,
-                text,
-                additionalProperties,
-            )
+            Objects.hash(id, createdAt, headline, text, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Version{createdAt=$createdAt, headline=$headline, id=$id, text=$text, additionalProperties=$additionalProperties}"
+            "Version{id=$id, createdAt=$createdAt, headline=$headline, text=$text, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -507,23 +501,18 @@ private constructor(
         }
 
         return other is XGetNewsStoryVersionsResponse &&
-            count == other.count &&
             id == other.id &&
+            count == other.count &&
             versions == other.versions &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(
-            count,
-            id,
-            versions,
-            additionalProperties,
-        )
+        Objects.hash(id, count, versions, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "XGetNewsStoryVersionsResponse{count=$count, id=$id, versions=$versions, additionalProperties=$additionalProperties}"
+        "XGetNewsStoryVersionsResponse{id=$id, count=$count, versions=$versions, additionalProperties=$additionalProperties}"
 }
