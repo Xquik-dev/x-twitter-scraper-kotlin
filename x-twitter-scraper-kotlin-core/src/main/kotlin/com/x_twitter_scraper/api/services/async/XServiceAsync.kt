@@ -31,6 +31,7 @@ import com.x_twitter_scraper.api.models.x.XSearchPlacesResponse
 import com.x_twitter_scraper.api.services.async.x.AccountConnectionAttemptServiceAsync
 import com.x_twitter_scraper.api.services.async.x.AccountConnectionChallengeServiceAsync
 import com.x_twitter_scraper.api.services.async.x.AccountServiceAsync
+import com.x_twitter_scraper.api.services.async.x.AnalysisServiceAsync
 import com.x_twitter_scraper.api.services.async.x.BookmarkServiceAsync
 import com.x_twitter_scraper.api.services.async.x.BroadcastServiceAsync
 import com.x_twitter_scraper.api.services.async.x.CommunityNoteServiceAsync
@@ -105,6 +106,9 @@ interface XServiceAsync {
 
     /** Community Notes contributors, their notes, ratings & deleted notes */
     fun communityNotes(): CommunityNoteServiceAsync
+
+    /** AI analysis of posts, at 2 credits per analyzed post */
+    fun analysis(): AnalysisServiceAsync
 
     /**
      * Retrieve the full content of an X Article (long-form post) by numeric tweet ID. Returns
@@ -306,6 +310,9 @@ interface XServiceAsync {
 
         /** Community Notes contributors, their notes, ratings & deleted notes */
         fun communityNotes(): CommunityNoteServiceAsync.WithRawResponse
+
+        /** AI analysis of posts, at 2 credits per analyzed post */
+        fun analysis(): AnalysisServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /x/articles/{tweetId}`, but is otherwise the same as

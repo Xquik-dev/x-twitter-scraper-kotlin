@@ -18,6 +18,11 @@
 * The new `x().spaces()` service has `retrieve`, `retrieveReplay` and `search`.
 * The new `x().broadcasts()` service has `retrieve`.
 * The new `x().communityNotes()` service has `retrieveContributor`, `listContributorNotes` and `listContributorDeletedNotes`.
+* The new `x().analysis()` service has `sentiment`, `viralScore`, `brand`, `news`, `marketSignals` and `classify`.
+* `events()` adds `stream` for server-sent events. The blocking client returns a `StreamResponse<Event>` to close.
+* The async `events().stream` returns a `Flow<Event>`.
+* `webhooks()` adds `createTelegramLink`, and `extractions()` adds `cancel`.
+* The core module exposes kotlinx-coroutines-core as an API dependency for the async event stream.
 
 ## 0.9.4 (2026-10-13)
 
