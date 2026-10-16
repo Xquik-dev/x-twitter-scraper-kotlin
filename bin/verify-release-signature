@@ -8,6 +8,9 @@ set -euo pipefail
 
 cd -- "$(dirname -- "$0")/.."
 
+# shellcheck source=scripts/lib/temp-dirs.sh
+source scripts/lib/temp-dirs.sh
+
 release_ref="${1:-}"
 if [[ ! "$release_ref" =~ ^v[0-9]+\.[0-9]+\.[0-9]+([-+][0-9A-Za-z.+-]+)?$ ]]; then
     echo "Pass a valid v-prefixed release version." >&2
@@ -22,11 +25,9 @@ expected_fingerprint="6965E561C0ACEE32060AB961D2037E4157E62A59"
 verification_timeout_minutes=20
 retry_delay_seconds=15
 max_attempts=$((verification_timeout_minutes * 60 / retry_delay_seconds))
-verification_workspace="$(
-    mktemp -d "/tmp/xquik-kotlin-verify.XXXXXX"
-)"
+verification_workspace="$(mktemp -d "${TMPDIR:-/tmp}/xquik-kotlin-verify.XXXXXX")"
+temp_dirs+=("$verification_workspace")
 verification_gnupg="$verification_workspace/gnupg"
-trap 'rm -rf -- "$verification_workspace"' EXIT
 mkdir -m 700 "$verification_gnupg"
 
 for ((attempt = 1; attempt <= max_attempts; attempt++)); do
