@@ -62,7 +62,7 @@ bin/check-local
 ```
 
 It checks the tools and both JDKs first.
-Then it runs the API coverage check, lint, shellcheck, the script tests, REUSE, build, tests, coverage, 30 seconds of Jazzer fuzzing, the dependency audit, the reproducible artifact check, and CodeQL security-extended queries.
+Then it runs the API coverage check, the API fields check, lint, shellcheck, the script tests, REUSE, build, tests, coverage, 30 seconds of Jazzer fuzzing, the dependency audit, the reproducible artifact check, and CodeQL security-extended queries.
 It stops at the first failure and says what to fix.
 REUSE 6.2.0 runs through `uvx` on every run.
 CodeQL and REUSE are required, and any finding fails the run.
@@ -96,7 +96,7 @@ The script tests in `scripts/tests` run each script in a throwaway folder with f
 Run them alone with `./scripts/test-scripts`.
 
 With push access, `bin/check-local` posts the `xquik-local-checks` commit status for a clean, pushed `HEAD`.
-The status lists only the checks that ran, and it reports success only after every check passed.
+The status counts the checks that passed, and it reports success only after every check passed.
 Pass `--no-status` to skip the status.
 
 Run a single gate with its script in `scripts/`.
@@ -156,6 +156,48 @@ The check reads JSON only.
 
 ```sh
 XQUIK_OPENAPI_SPEC=/path/to/openapi.json ./scripts/api-coverage
+```
+
+## API fields
+
+`scripts/api-fields` fails when a field differs between the API and the SDK.
+It runs right after the coverage check and reads the same spec, from `XQUIK_OPENAPI_SPEC` or https://xquik.com/openapi.json.
+
+It compares every operation the SDK implements.
+That covers query params, JSON body fields at every depth and the 2xx JSON response at every depth.
+Header and path params stay out.
+
+The check reads the SDK from its compiled classes through the Gradle task `:x-twitter-scraper-kotlin-core:apiFields`.
+It calls each service method with a client that records the request instead of sending it, which gives the method and path.
+It reads query param names from the params each builder produces, and fields from the `@JsonProperty` names of each model.
+Builders tell it which fields are required, and getters tell it which required fields may be null.
+The code lives in `x-twitter-scraper-kotlin-core/src/test/kotlin/com/x_twitter_scraper/api/fields`.
+
+Each difference prints as 1 line in this form.
+
+```text
+GET /api/v1/events response missing events[].data.followedAt
+```
+
+- `missing` means the spec has the field and the SDK lacks it.
+- `extra` means the SDK has a field the spec lacks. Fields under a spec object that allows any field are fine.
+- `enum` means both sides list values and the lists differ.
+- `required` and `nullable` mean the flag differs, where the SDK encodes it.
+
+A field missing on 1 side counts once, at its top position.
+Unions merge into 1 object per position, and a merged field is required only when every variant requires it.
+
+Fix a difference in the SDK when you can, without removing or renaming a public field or param.
+List an intended difference in `accepted-field-differences.json` with its reason.
+The check fails on an entry it no longer finds, so the file only holds live differences.
+
+```json
+[
+  {
+    "reason": "Deprecated alias of minLikes, which the API still reads. Kept so existing calls still compile.",
+    "differences": ["GET /api/v1/x/tweets/search request extra minFaves"]
+  }
+]
 ```
 
 ## Submit changes

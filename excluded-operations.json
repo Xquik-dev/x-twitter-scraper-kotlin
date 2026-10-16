@@ -14,29 +14,5 @@
       "DELETE /api/v1/api-keys/{id}",
       "POST /api/v1/credits/quick-topup"
     ]
-  },
-  {
-    "reason": "Not ported yet. https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/78 tracks the port.",
-    "operations": [
-      "DELETE /api/v1/extractions/{id}",
-      "GET /api/v1/events/stream",
-      "GET /api/v1/x/broadcasts/{id}",
-      "GET /api/v1/x/community-notes/contributors/{alias}",
-      "GET /api/v1/x/community-notes/contributors/{alias}/deleted-notes",
-      "GET /api/v1/x/community-notes/contributors/{alias}/notes",
-      "GET /api/v1/x/jobs/locations",
-      "GET /api/v1/x/jobs/search",
-      "GET /api/v1/x/jobs/{id}",
-      "GET /api/v1/x/spaces/search",
-      "GET /api/v1/x/spaces/{id}",
-      "GET /api/v1/x/spaces/{id}/replay",
-      "POST /api/v1/webhooks/telegram",
-      "POST /api/v1/x/analysis/brand",
-      "POST /api/v1/x/analysis/classify",
-      "POST /api/v1/x/analysis/market-signals",
-      "POST /api/v1/x/analysis/news",
-      "POST /api/v1/x/analysis/sentiment",
-      "POST /api/v1/x/analysis/viral-score"
-    ]
   }
 ]

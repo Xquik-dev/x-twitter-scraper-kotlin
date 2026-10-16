@@ -11,6 +11,8 @@ import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.models.webhooks.Webhook
 import com.x_twitter_scraper.api.models.webhooks.WebhookCreateParams
 import com.x_twitter_scraper.api.models.webhooks.WebhookCreateResponse
+import com.x_twitter_scraper.api.models.webhooks.WebhookCreateTelegramLinkParams
+import com.x_twitter_scraper.api.models.webhooks.WebhookCreateTelegramLinkResponse
 import com.x_twitter_scraper.api.models.webhooks.WebhookDeactivateParams
 import com.x_twitter_scraper.api.models.webhooks.WebhookDeactivateResponse
 import com.x_twitter_scraper.api.models.webhooks.WebhookListDeliveriesParams
@@ -142,6 +144,25 @@ interface WebhookServiceAsync {
     /** @see test */
     suspend fun test(id: String, requestOptions: RequestOptions): WebhookTestResponse =
         test(id, WebhookTestParams.none(), requestOptions)
+
+    /**
+     * Returns a t.me link to @XquikBot that connects a Telegram chat to the account's monitor
+     * events. Opening it & pressing Start connects the chat, which then gets each alert as a
+     * message. Alerts that wait together come as 1 digest. A busy chat gets 5 quick messages, then
+     * 1 every 30 s. Only 1 message a minute rings. The link works once, within 15 minutes. The chat
+     * appears in the webhook list with the URL `telegram:<chat ID>`, with deliveries, retries &
+     * resume as any webhook. In the chat, /stop pauses its alerts. It costs no credits.
+     */
+    suspend fun createTelegramLink(
+        params: WebhookCreateTelegramLinkParams = WebhookCreateTelegramLinkParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): WebhookCreateTelegramLinkResponse
+
+    /** @see createTelegramLink */
+    suspend fun createTelegramLink(
+        requestOptions: RequestOptions
+    ): WebhookCreateTelegramLinkResponse =
+        createTelegramLink(WebhookCreateTelegramLinkParams.none(), requestOptions)
 
     /**
      * A view of [WebhookServiceAsync] that provides access to raw HTTP responses for each method.
@@ -311,5 +332,22 @@ interface WebhookServiceAsync {
             id: String,
             requestOptions: RequestOptions,
         ): HttpResponseFor<WebhookTestResponse> = test(id, WebhookTestParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /webhooks/telegram`, but is otherwise the same as
+         * [WebhookServiceAsync.createTelegramLink].
+         */
+        @MustBeClosed
+        suspend fun createTelegramLink(
+            params: WebhookCreateTelegramLinkParams = WebhookCreateTelegramLinkParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<WebhookCreateTelegramLinkResponse>
+
+        /** @see createTelegramLink */
+        @MustBeClosed
+        suspend fun createTelegramLink(
+            requestOptions: RequestOptions
+        ): HttpResponseFor<WebhookCreateTelegramLinkResponse> =
+            createTelegramLink(WebhookCreateTelegramLinkParams.none(), requestOptions)
     }
 }

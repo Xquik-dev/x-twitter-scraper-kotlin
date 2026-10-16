@@ -1,0 +1,10 @@
+id: 42
+event: tweet.new
+data: {"id":"42","type":"tweet.new","monitorId":"7","monitorType":"account","occurredAt":"2025-01-15T12:00:00.000Z","data":{}}
+
+: keep-alive
+
+id: 43
+event: tweet.reply
+data: {"id":"43","type":"tweet.reply","monitorId":"8","monitorType":"keyword","occurredAt":"2025-01-15T12:00:15.000Z","data":{}}
+
