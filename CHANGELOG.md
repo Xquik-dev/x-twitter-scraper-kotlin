@@ -15,6 +15,10 @@
 * 43 read methods add their missing query params or values, such as `fields`, `omit` and `minLikes`.
 * `TweetAuthor.toUserProfile` copies every field the 2 models share.
 
+### Chores
+
+* `bin/check-local` hands its run to the command that `git config checklocal.runner` names. `CHECK_LOCAL_HERE=1` runs the checks here anyway.
+
 ## 0.9.4 (2026-10-13)
 
 [Full changelog from v0.9.3 to v0.9.4](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.9.3...v0.9.4)
