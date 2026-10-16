@@ -43,20 +43,30 @@ import com.x_twitter_scraper.api.services.async.x.AccountConnectionChallengeServ
 import com.x_twitter_scraper.api.services.async.x.AccountConnectionChallengeServiceAsyncImpl
 import com.x_twitter_scraper.api.services.async.x.AccountServiceAsync
 import com.x_twitter_scraper.api.services.async.x.AccountServiceAsyncImpl
+import com.x_twitter_scraper.api.services.async.x.AnalysisServiceAsync
+import com.x_twitter_scraper.api.services.async.x.AnalysisServiceAsyncImpl
 import com.x_twitter_scraper.api.services.async.x.BookmarkServiceAsync
 import com.x_twitter_scraper.api.services.async.x.BookmarkServiceAsyncImpl
+import com.x_twitter_scraper.api.services.async.x.BroadcastServiceAsync
+import com.x_twitter_scraper.api.services.async.x.BroadcastServiceAsyncImpl
+import com.x_twitter_scraper.api.services.async.x.CommunityNoteServiceAsync
+import com.x_twitter_scraper.api.services.async.x.CommunityNoteServiceAsyncImpl
 import com.x_twitter_scraper.api.services.async.x.CommunityServiceAsync
 import com.x_twitter_scraper.api.services.async.x.CommunityServiceAsyncImpl
 import com.x_twitter_scraper.api.services.async.x.DmServiceAsync
 import com.x_twitter_scraper.api.services.async.x.DmServiceAsyncImpl
 import com.x_twitter_scraper.api.services.async.x.FollowerServiceAsync
 import com.x_twitter_scraper.api.services.async.x.FollowerServiceAsyncImpl
+import com.x_twitter_scraper.api.services.async.x.JobServiceAsync
+import com.x_twitter_scraper.api.services.async.x.JobServiceAsyncImpl
 import com.x_twitter_scraper.api.services.async.x.ListServiceAsync
 import com.x_twitter_scraper.api.services.async.x.ListServiceAsyncImpl
 import com.x_twitter_scraper.api.services.async.x.MediaServiceAsync
 import com.x_twitter_scraper.api.services.async.x.MediaServiceAsyncImpl
 import com.x_twitter_scraper.api.services.async.x.ProfileServiceAsync
 import com.x_twitter_scraper.api.services.async.x.ProfileServiceAsyncImpl
+import com.x_twitter_scraper.api.services.async.x.SpaceServiceAsync
+import com.x_twitter_scraper.api.services.async.x.SpaceServiceAsyncImpl
 import com.x_twitter_scraper.api.services.async.x.TweetServiceAsync
 import com.x_twitter_scraper.api.services.async.x.TweetServiceAsyncImpl
 import com.x_twitter_scraper.api.services.async.x.UserServiceAsync
@@ -105,6 +115,20 @@ class XServiceAsyncImpl internal constructor(private val clientOptions: ClientOp
 
     private val lists: ListServiceAsync by lazy { ListServiceAsyncImpl(clientOptions) }
 
+    private val jobs: JobServiceAsync by lazy { JobServiceAsyncImpl(clientOptions) }
+
+    private val spaces: SpaceServiceAsync by lazy { SpaceServiceAsyncImpl(clientOptions) }
+
+    private val analysis: AnalysisServiceAsync by lazy { AnalysisServiceAsyncImpl(clientOptions) }
+
+    private val broadcasts: BroadcastServiceAsync by lazy {
+        BroadcastServiceAsyncImpl(clientOptions)
+    }
+
+    private val communityNotes: CommunityNoteServiceAsync by lazy {
+        CommunityNoteServiceAsyncImpl(clientOptions)
+    }
+
     override fun withRawResponse(): XServiceAsync.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): XServiceAsync =
@@ -145,6 +169,21 @@ class XServiceAsyncImpl internal constructor(private val clientOptions: ClientOp
 
     /** X List followers, members, and tweets */
     override fun lists(): ListServiceAsync = lists
+
+    /** Public X job listings, search and details */
+    override fun jobs(): JobServiceAsync = jobs
+
+    /** X Space details, host, and speakers */
+    override fun spaces(): SpaceServiceAsync = spaces
+
+    /** X live video details, watch counts, and broadcaster */
+    override fun broadcasts(): BroadcastServiceAsync = broadcasts
+
+    /** Community Notes contributors, their notes, ratings & deleted notes */
+    override fun communityNotes(): CommunityNoteServiceAsync = communityNotes
+
+    /** AI analysis of posts, at 2 credits per analyzed post */
+    override fun analysis(): AnalysisServiceAsync = analysis
 
     override suspend fun getArticle(
         params: XGetArticleParams,
@@ -261,6 +300,26 @@ class XServiceAsyncImpl internal constructor(private val clientOptions: ClientOp
             ListServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val jobs: JobServiceAsync.WithRawResponse by lazy {
+            JobServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val spaces: SpaceServiceAsync.WithRawResponse by lazy {
+            SpaceServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val broadcasts: BroadcastServiceAsync.WithRawResponse by lazy {
+            BroadcastServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val communityNotes: CommunityNoteServiceAsync.WithRawResponse by lazy {
+            CommunityNoteServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val analysis: AnalysisServiceAsync.WithRawResponse by lazy {
+            AnalysisServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): XServiceAsync.WithRawResponse =
@@ -301,6 +360,21 @@ class XServiceAsyncImpl internal constructor(private val clientOptions: ClientOp
 
         /** X List followers, members, and tweets */
         override fun lists(): ListServiceAsync.WithRawResponse = lists
+
+        /** Public X job listings, search and details */
+        override fun jobs(): JobServiceAsync.WithRawResponse = jobs
+
+        /** X Space details, host, and speakers */
+        override fun spaces(): SpaceServiceAsync.WithRawResponse = spaces
+
+        /** X live video details, watch counts, and broadcaster */
+        override fun broadcasts(): BroadcastServiceAsync.WithRawResponse = broadcasts
+
+        /** Community Notes contributors, their notes, ratings & deleted notes */
+        override fun communityNotes(): CommunityNoteServiceAsync.WithRawResponse = communityNotes
+
+        /** AI analysis of posts, at 2 credits per analyzed post */
+        override fun analysis(): AnalysisServiceAsync.WithRawResponse = analysis
 
         private val getArticleHandler: Handler<XGetArticleResponse> =
             jsonHandler<XGetArticleResponse>(clientOptions.jsonMapper)

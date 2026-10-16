@@ -358,4 +358,19 @@ internal class ExtractionServiceAsyncTest {
 
         kotlin.test.assertNotNull(response)
     }
+
+    @Test
+    suspend fun cancel() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val extractionServiceAsync = client.extractions()
+
+        val response = extractionServiceAsync.cancel("L3NjAbCdEfGh")
+
+        kotlin.test.assertNotNull(response)
+    }
 }

@@ -14,6 +14,15 @@
 * `UserProfile`, `SearchTweet`, `TweetDetail` and `TweetMedia` add getters for new API fields.
 * 43 read methods add their missing query params or values, such as `fields`, `omit` and `minLikes`.
 * `TweetAuthor.toUserProfile` copies every field the 2 models share.
+* The new `x().jobs()` service has `retrieve`, `listLocations` and `search` for X job listings.
+* The new `x().spaces()` service has `retrieve`, `retrieveReplay` and `search`.
+* The new `x().broadcasts()` service has `retrieve`.
+* The new `x().communityNotes()` service has `retrieveContributor`, `listContributorNotes` and `listContributorDeletedNotes`.
+* The new `x().analysis()` service has `sentiment`, `viralScore`, `brand`, `news`, `marketSignals` and `classify`.
+* `events()` adds `stream` for server-sent events. The blocking client returns a `StreamResponse<Event>` to close.
+* The async `events().stream` returns a `Flow<Event>`.
+* `webhooks()` adds `createTelegramLink`, and `extractions()` adds `cancel`.
+* The core module exposes kotlinx-coroutines-core as an API dependency for the async event stream.
 
 ## 0.9.4 (2026-10-13)
 
