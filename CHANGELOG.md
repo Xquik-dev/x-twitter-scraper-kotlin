@@ -14,6 +14,10 @@
 * `UserProfile`, `SearchTweet`, `TweetDetail` and `TweetMedia` add getters for new API fields.
 * 43 read methods add their missing query params or values, such as `fields`, `omit` and `minLikes`.
 * `TweetAuthor.toUserProfile` copies every field the 2 models share.
+* The new `x().jobs()` service has `retrieve`, `listLocations` and `search` for X job listings.
+* The new `x().spaces()` service has `retrieve`, `retrieveReplay` and `search`.
+* The new `x().broadcasts()` service has `retrieve`.
+* The new `x().communityNotes()` service has `retrieveContributor`, `listContributorNotes` and `listContributorDeletedNotes`.
 
 ## 0.9.4 (2026-10-13)
 
