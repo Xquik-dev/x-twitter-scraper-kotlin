@@ -28,13 +28,13 @@ dependencies {
     api("com.fasterxml.jackson.core:jackson-core:2.22.3")
     api("com.fasterxml.jackson.core:jackson-databind:2.22.3")
     api("com.google.errorprone:error_prone_annotations:2.50.0")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
 
     implementation("com.fasterxml.jackson.core:jackson-annotations:2.22")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.22.3")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.22.3")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.3")
     implementation(kotlin("reflect"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
 
     testImplementation(kotlin("test"))
     testImplementation(project(":x-twitter-scraper-kotlin-client-okhttp"))

@@ -31,6 +31,7 @@ import com.x_twitter_scraper.api.models.x.XSearchPlacesResponse
 import com.x_twitter_scraper.api.services.blocking.x.AccountConnectionAttemptService
 import com.x_twitter_scraper.api.services.blocking.x.AccountConnectionChallengeService
 import com.x_twitter_scraper.api.services.blocking.x.AccountService
+import com.x_twitter_scraper.api.services.blocking.x.AnalysisService
 import com.x_twitter_scraper.api.services.blocking.x.BookmarkService
 import com.x_twitter_scraper.api.services.blocking.x.BroadcastService
 import com.x_twitter_scraper.api.services.blocking.x.CommunityNoteService
@@ -105,6 +106,9 @@ interface XService {
 
     /** Community Notes contributors, their notes, ratings & deleted notes */
     fun communityNotes(): CommunityNoteService
+
+    /** AI analysis of posts, at 2 credits per analyzed post */
+    fun analysis(): AnalysisService
 
     /**
      * Retrieve the full content of an X Article (long-form post) by numeric tweet ID. Returns
@@ -306,6 +310,9 @@ interface XService {
 
         /** Community Notes contributors, their notes, ratings & deleted notes */
         fun communityNotes(): CommunityNoteService.WithRawResponse
+
+        /** AI analysis of posts, at 2 credits per analyzed post */
+        fun analysis(): AnalysisService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /x/articles/{tweetId}`, but is otherwise the same as
