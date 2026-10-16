@@ -38,6 +38,8 @@ private constructor(
     fun id(): String = id.getRequired("id")
 
     /**
+     * Expected to always return the following: ```kotlin JsonValue.from("canceled") ```
+     *
      * Expected to always return the following:
      * ```kotlin
      * JsonValue.from("canceled")

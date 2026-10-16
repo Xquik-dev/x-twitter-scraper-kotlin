@@ -12,7 +12,9 @@ import com.x_twitter_scraper.api.core.ExcludeMissing
 import com.x_twitter_scraper.api.core.JsonField
 import com.x_twitter_scraper.api.core.JsonMissing
 import com.x_twitter_scraper.api.core.JsonValue
+import com.x_twitter_scraper.api.core.checkKnown
 import com.x_twitter_scraper.api.core.checkRequired
+import com.x_twitter_scraper.api.core.toImmutable
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Collections
@@ -27,6 +29,7 @@ private constructor(
     private val text: JsonField<String>,
     private val updatedAt: JsonField<OffsetDateTime>,
     private val goal: JsonField<String>,
+    private val ignoredFields: JsonField<List<String>>,
     private val topic: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
@@ -42,8 +45,11 @@ private constructor(
         @ExcludeMissing
         updatedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("goal") @ExcludeMissing goal: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("ignoredFields")
+        @ExcludeMissing
+        ignoredFields: JsonField<List<String>> = JsonMissing.of(),
         @JsonProperty("topic") @ExcludeMissing topic: JsonField<String> = JsonMissing.of(),
-    ) : this(id, createdAt, text, updatedAt, goal, topic, mutableMapOf())
+    ) : this(id, createdAt, text, updatedAt, goal, ignoredFields, topic, mutableMapOf())
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
@@ -71,6 +77,14 @@ private constructor(
 
     /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun goal(): String? = goal.getNullable("goal")
+
+    /**
+     * Fields the request sent that this route does not read, in the order sent. They changed
+     * nothing. The answer leaves this out when the route read every field.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun ignoredFields(): List<String>? = ignoredFields.getNullable("ignoredFields")
 
     /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun topic(): String? = topic.getNullable("topic")
@@ -115,6 +129,15 @@ private constructor(
     @JsonProperty("goal") @ExcludeMissing fun _goal(): JsonField<String> = goal
 
     /**
+     * Returns the raw JSON value of [ignoredFields].
+     *
+     * Unlike [ignoredFields], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("ignoredFields")
+    @ExcludeMissing
+    fun _ignoredFields(): JsonField<List<String>> = ignoredFields
+
+    /**
      * Returns the raw JSON value of [topic].
      *
      * Unlike [topic], this method doesn't throw if the JSON field has an unexpected type.
@@ -157,6 +180,7 @@ private constructor(
         private var text: JsonField<String>? = null
         private var updatedAt: JsonField<OffsetDateTime>? = null
         private var goal: JsonField<String> = JsonMissing.of()
+        private var ignoredFields: JsonField<MutableList<String>>? = null
         private var topic: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -166,6 +190,7 @@ private constructor(
             text = draftDetail.text
             updatedAt = draftDetail.updatedAt
             goal = draftDetail.goal
+            ignoredFields = draftDetail.ignoredFields.map { it.toMutableList() }
             topic = draftDetail.topic
             additionalProperties = draftDetail.additionalProperties.toMutableMap()
         }
@@ -194,6 +219,29 @@ private constructor(
 
         /** Sets [Builder.goal] to an arbitrary JSON value. */
         fun goal(goal: JsonField<String>) = apply { this.goal = goal }
+
+        /**
+         * Fields the request sent that this route does not read, in the order sent. They changed
+         * nothing. The answer leaves this out when the route read every field.
+         */
+        fun ignoredFields(ignoredFields: List<String>) = ignoredFields(JsonField.of(ignoredFields))
+
+        /** Sets [Builder.ignoredFields] to an arbitrary JSON value. */
+        fun ignoredFields(ignoredFields: JsonField<List<String>>) = apply {
+            this.ignoredFields = ignoredFields.map { it.toMutableList() }
+        }
+
+        /**
+         * Adds a single [String] to [ignoredFields].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addIgnoredField(ignoredField: String) = apply {
+            ignoredFields =
+                (ignoredFields ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("ignoredFields", it).add(ignoredField)
+                }
+        }
 
         fun topic(topic: String) = topic(JsonField.of(topic))
 
@@ -241,6 +289,7 @@ private constructor(
                 checkRequired("text", text),
                 checkRequired("updatedAt", updatedAt),
                 goal,
+                (ignoredFields ?: JsonMissing.of()).map { it.toImmutable() },
                 topic,
                 additionalProperties.toMutableMap(),
             )
@@ -266,6 +315,7 @@ private constructor(
         text()
         updatedAt()
         goal()
+        ignoredFields()
         topic()
         validated = true
     }
@@ -284,6 +334,7 @@ private constructor(
             (if (text.asKnown() == null) 0 else 1) +
             (if (updatedAt.asKnown() == null) 0 else 1) +
             (if (goal.asKnown() == null) 0 else 1) +
+            (ignoredFields.asKnown()?.size ?: 0) +
             (if (topic.asKnown() == null) 0 else 1)
 
     override fun equals(other: Any?): Boolean {
@@ -297,16 +348,26 @@ private constructor(
             text == other.text &&
             updatedAt == other.updatedAt &&
             goal == other.goal &&
+            ignoredFields == other.ignoredFields &&
             topic == other.topic &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(id, createdAt, text, updatedAt, goal, topic, additionalProperties)
+        Objects.hash(
+            id,
+            createdAt,
+            text,
+            updatedAt,
+            goal,
+            ignoredFields,
+            topic,
+            additionalProperties,
+        )
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "DraftDetail{id=$id, createdAt=$createdAt, text=$text, updatedAt=$updatedAt, goal=$goal, topic=$topic, additionalProperties=$additionalProperties}"
+        "DraftDetail{id=$id, createdAt=$createdAt, text=$text, updatedAt=$updatedAt, goal=$goal, ignoredFields=$ignoredFields, topic=$topic, additionalProperties=$additionalProperties}"
 }

@@ -16,14 +16,14 @@ internal class CreditRetrieveTopupStatusResponseTest {
         val creditRetrieveTopupStatusResponse =
             CreditRetrieveTopupStatusResponse.builder()
                 .status(CreditRetrieveTopupStatusResponse.Status.PAID)
-                .amountDollars(25L)
-                .credits("166666")
+                .amountDollars(0L)
+                .credits("credits")
                 .build()
 
         assertThat(creditRetrieveTopupStatusResponse.status())
             .isEqualTo(CreditRetrieveTopupStatusResponse.Status.PAID)
-        assertThat(creditRetrieveTopupStatusResponse.amountDollars()).isEqualTo(25L)
-        assertThat(creditRetrieveTopupStatusResponse.credits()).isEqualTo("166666")
+        assertThat(creditRetrieveTopupStatusResponse.amountDollars()).isEqualTo(0L)
+        assertThat(creditRetrieveTopupStatusResponse.credits()).isEqualTo("credits")
     }
 
     @Test
@@ -32,8 +32,8 @@ internal class CreditRetrieveTopupStatusResponseTest {
         val creditRetrieveTopupStatusResponse =
             CreditRetrieveTopupStatusResponse.builder()
                 .status(CreditRetrieveTopupStatusResponse.Status.PAID)
-                .amountDollars(25L)
-                .credits("166666")
+                .amountDollars(0L)
+                .credits("credits")
                 .build()
 
         val roundtrippedCreditRetrieveTopupStatusResponse =

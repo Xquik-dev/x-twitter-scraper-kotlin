@@ -43,6 +43,8 @@ private constructor(
     fun amountMinor(): Long = amountMinor.getRequired("amount_minor")
 
     /**
+     * Expected to always return the following: ```kotlin JsonValue.from("usd") ```
+     *
      * Expected to always return the following:
      * ```kotlin
      * JsonValue.from("usd")
@@ -197,7 +199,9 @@ private constructor(
             additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(amountMinor, currency, additionalProperties) }
+    private val hashCode: Int by lazy {
+        Objects.hash(amountMinor, currency, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 

@@ -17,25 +17,24 @@ internal class WebhookTest {
     fun create() {
         val webhook =
             Webhook.builder()
-                .id("42")
+                .id("id")
                 .consecutiveFailures(0L)
-                .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .deliveryStatus(Webhook.DeliveryStatus.ACTIVE)
                 .addEventType(EventType.TWEET_NEW)
-                .addEventType(EventType.TWEET_REPLY)
-                .failureHardCap(200L)
+                .failureHardCap(0L)
                 .isActive(true)
-                .url("https://example.com/webhooks/xquik")
+                .url("url")
                 .build()
 
-        assertThat(webhook.id()).isEqualTo("42")
+        assertThat(webhook.id()).isEqualTo("id")
         assertThat(webhook.consecutiveFailures()).isEqualTo(0L)
-        assertThat(webhook.createdAt()).isEqualTo(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+        assertThat(webhook.createdAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(webhook.deliveryStatus()).isEqualTo(Webhook.DeliveryStatus.ACTIVE)
-        assertThat(webhook.eventTypes()).containsExactly(EventType.TWEET_NEW, EventType.TWEET_REPLY)
-        assertThat(webhook.failureHardCap()).isEqualTo(200L)
+        assertThat(webhook.eventTypes()).containsExactly(EventType.TWEET_NEW)
+        assertThat(webhook.failureHardCap()).isEqualTo(0L)
         assertThat(webhook.isActive()).isEqualTo(true)
-        assertThat(webhook.url()).isEqualTo("https://example.com/webhooks/xquik")
+        assertThat(webhook.url()).isEqualTo("url")
     }
 
     @Test
@@ -43,15 +42,14 @@ internal class WebhookTest {
         val jsonMapper = jsonMapper()
         val webhook =
             Webhook.builder()
-                .id("42")
+                .id("id")
                 .consecutiveFailures(0L)
-                .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .deliveryStatus(Webhook.DeliveryStatus.ACTIVE)
                 .addEventType(EventType.TWEET_NEW)
-                .addEventType(EventType.TWEET_REPLY)
-                .failureHardCap(200L)
+                .failureHardCap(0L)
                 .isActive(true)
-                .url("https://example.com/webhooks/xquik")
+                .url("url")
                 .build()
 
         val roundtrippedWebhook =

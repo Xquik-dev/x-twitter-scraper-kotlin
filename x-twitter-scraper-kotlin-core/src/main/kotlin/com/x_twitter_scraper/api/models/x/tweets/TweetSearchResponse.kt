@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 Xquik contributors
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package com.x_twitter_scraper.api.models.x.tweets
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -30,12 +34,6 @@ import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 
-/**
- * No-mode search, user Tweet, user reply, and direct reply reads use automatic coverage. Shape,
- * filters, aliases, and billing stay compatible. Unprefixed cursors remain legacy. Follow
- * next_cursor while has_next_page is true. An empty filtered page can still have has_next_page
- * true.
- */
 @JsonDeserialize(using = TweetSearchResponse.Deserializer::class)
 @JsonSerialize(using = TweetSearchResponse.Serializer::class)
 class TweetSearchResponse
@@ -273,15 +271,23 @@ private constructor(
     class TweetSearchCoverageResponse
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
+        private val diagnostic: JsonField<Diagnostic>,
         private val hasNextPage: JsonField<Boolean>,
         private val nextCursor: JsonField<String>,
         private val tweets: JsonField<List<SearchTweet>>,
-        private val diagnostic: JsonField<Diagnostic>,
+        private val filteredCount: JsonField<Long>,
+        private val readBackTo: JsonField<OffsetDateTime>,
+        private val searchContext: JsonField<SearchContext>,
+        private val searchedQuery: JsonField<String>,
+        private val windowComplete: JsonField<Boolean>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
         @JsonCreator
         private constructor(
+            @JsonProperty("diagnostic")
+            @ExcludeMissing
+            diagnostic: JsonField<Diagnostic> = JsonMissing.of(),
             @JsonProperty("has_next_page")
             @ExcludeMissing
             hasNextPage: JsonField<Boolean> = JsonMissing.of(),
@@ -291,10 +297,33 @@ private constructor(
             @JsonProperty("tweets")
             @ExcludeMissing
             tweets: JsonField<List<SearchTweet>> = JsonMissing.of(),
-            @JsonProperty("diagnostic")
+            @JsonProperty("filtered_count")
             @ExcludeMissing
-            diagnostic: JsonField<Diagnostic> = JsonMissing.of(),
-        ) : this(hasNextPage, nextCursor, tweets, diagnostic, mutableMapOf())
+            filteredCount: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("readBackTo")
+            @ExcludeMissing
+            readBackTo: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("searchContext")
+            @ExcludeMissing
+            searchContext: JsonField<SearchContext> = JsonMissing.of(),
+            @JsonProperty("searchedQuery")
+            @ExcludeMissing
+            searchedQuery: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("windowComplete")
+            @ExcludeMissing
+            windowComplete: JsonField<Boolean> = JsonMissing.of(),
+        ) : this(
+            diagnostic,
+            hasNextPage,
+            nextCursor,
+            tweets,
+            filteredCount,
+            readBackTo,
+            searchContext,
+            searchedQuery,
+            windowComplete,
+            mutableMapOf(),
+        )
 
         fun toPaginatedTweets(): PaginatedTweets =
             PaginatedTweets.builder()
@@ -302,6 +331,14 @@ private constructor(
                 .nextCursor(nextCursor)
                 .tweets(tweets)
                 .build()
+
+        /**
+         * Coverage evidence across parallel search strategies.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null.
+         */
+        fun diagnostic(): Diagnostic = diagnostic.getRequired("diagnostic")
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
@@ -322,12 +359,50 @@ private constructor(
         fun tweets(): List<SearchTweet> = tweets.getRequired("tweets")
 
         /**
-         * Coverage evidence across parallel search strategies.
+         * Whole number from 0.
          *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
-        fun diagnostic(): Diagnostic = diagnostic.getRequired("diagnostic")
+        fun filteredCount(): Long? = filteredCount.getNullable("filtered_count")
+
+        /**
+         * How far back a filtered Latest search has read, in UTC. Xquik checked every newer post,
+         * so an empty page still moves this time back.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun readBackTo(): OffsetDateTime? = readBackTo.getNullable("readBackTo")
+
+        /**
+         * What X shows beside a search's posts that is the same for every reader. Present on a
+         * search for a cashtag X has a card for, such as $BTC.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun searchContext(): SearchContext? = searchContext.getNullable("searchContext")
+
+        /**
+         * Search q as X ran it, when Xquik fixed it.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun searchedQuery(): String? = searchedQuery.getNullable("searchedQuery")
+
+        /**
+         * Present on a last page whose sources all read past its start time.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun windowComplete(): Boolean? = windowComplete.getNullable("windowComplete")
+
+        /**
+         * Returns the raw JSON value of [diagnostic].
+         *
+         * Unlike [diagnostic], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("diagnostic")
+        @ExcludeMissing
+        fun _diagnostic(): JsonField<Diagnostic> = diagnostic
 
         /**
          * Returns the raw JSON value of [hasNextPage].
@@ -355,13 +430,53 @@ private constructor(
         @JsonProperty("tweets") @ExcludeMissing fun _tweets(): JsonField<List<SearchTweet>> = tweets
 
         /**
-         * Returns the raw JSON value of [diagnostic].
+         * Returns the raw JSON value of [filteredCount].
          *
-         * Unlike [diagnostic], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [filteredCount], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
-        @JsonProperty("diagnostic")
+        @JsonProperty("filtered_count")
         @ExcludeMissing
-        fun _diagnostic(): JsonField<Diagnostic> = diagnostic
+        fun _filteredCount(): JsonField<Long> = filteredCount
+
+        /**
+         * Returns the raw JSON value of [readBackTo].
+         *
+         * Unlike [readBackTo], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("readBackTo")
+        @ExcludeMissing
+        fun _readBackTo(): JsonField<OffsetDateTime> = readBackTo
+
+        /**
+         * Returns the raw JSON value of [searchContext].
+         *
+         * Unlike [searchContext], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("searchContext")
+        @ExcludeMissing
+        fun _searchContext(): JsonField<SearchContext> = searchContext
+
+        /**
+         * Returns the raw JSON value of [searchedQuery].
+         *
+         * Unlike [searchedQuery], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("searchedQuery")
+        @ExcludeMissing
+        fun _searchedQuery(): JsonField<String> = searchedQuery
+
+        /**
+         * Returns the raw JSON value of [windowComplete].
+         *
+         * Unlike [windowComplete], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("windowComplete")
+        @ExcludeMissing
+        fun _windowComplete(): JsonField<Boolean> = windowComplete
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -383,10 +498,10 @@ private constructor(
              *
              * The following fields are required:
              * ```kotlin
+             * .diagnostic()
              * .hasNextPage()
              * .nextCursor()
              * .tweets()
-             * .diagnostic()
              * ```
              */
             fun builder() = Builder()
@@ -395,19 +510,37 @@ private constructor(
         /** A builder for [TweetSearchCoverageResponse]. */
         class Builder internal constructor() {
 
+            private var diagnostic: JsonField<Diagnostic>? = null
             private var hasNextPage: JsonField<Boolean>? = null
             private var nextCursor: JsonField<String>? = null
             private var tweets: JsonField<MutableList<SearchTweet>>? = null
-            private var diagnostic: JsonField<Diagnostic>? = null
+            private var filteredCount: JsonField<Long> = JsonMissing.of()
+            private var readBackTo: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var searchContext: JsonField<SearchContext> = JsonMissing.of()
+            private var searchedQuery: JsonField<String> = JsonMissing.of()
+            private var windowComplete: JsonField<Boolean> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(tweetSearchCoverageResponse: TweetSearchCoverageResponse) = apply {
+                diagnostic = tweetSearchCoverageResponse.diagnostic
                 hasNextPage = tweetSearchCoverageResponse.hasNextPage
                 nextCursor = tweetSearchCoverageResponse.nextCursor
                 tweets = tweetSearchCoverageResponse.tweets.map { it.toMutableList() }
-                diagnostic = tweetSearchCoverageResponse.diagnostic
+                filteredCount = tweetSearchCoverageResponse.filteredCount
+                readBackTo = tweetSearchCoverageResponse.readBackTo
+                searchContext = tweetSearchCoverageResponse.searchContext
+                searchedQuery = tweetSearchCoverageResponse.searchedQuery
+                windowComplete = tweetSearchCoverageResponse.windowComplete
                 additionalProperties =
                     tweetSearchCoverageResponse.additionalProperties.toMutableMap()
+            }
+
+            /** Coverage evidence across parallel search strategies. */
+            fun diagnostic(diagnostic: Diagnostic) = diagnostic(JsonField.of(diagnostic))
+
+            /** Sets [Builder.diagnostic] to an arbitrary JSON value. */
+            fun diagnostic(diagnostic: JsonField<Diagnostic>) = apply {
+                this.diagnostic = diagnostic
             }
 
             fun hasNextPage(hasNextPage: Boolean) = hasNextPage(JsonField.of(hasNextPage))
@@ -441,12 +574,52 @@ private constructor(
                     }
             }
 
-            /** Coverage evidence across parallel search strategies. */
-            fun diagnostic(diagnostic: Diagnostic) = diagnostic(JsonField.of(diagnostic))
+            /** Whole number from 0. */
+            fun filteredCount(filteredCount: Long) = filteredCount(JsonField.of(filteredCount))
 
-            /** Sets [Builder.diagnostic] to an arbitrary JSON value. */
-            fun diagnostic(diagnostic: JsonField<Diagnostic>) = apply {
-                this.diagnostic = diagnostic
+            /** Sets [Builder.filteredCount] to an arbitrary JSON value. */
+            fun filteredCount(filteredCount: JsonField<Long>) = apply {
+                this.filteredCount = filteredCount
+            }
+
+            /**
+             * How far back a filtered Latest search has read, in UTC. Xquik checked every newer
+             * post, so an empty page still moves this time back.
+             */
+            fun readBackTo(readBackTo: OffsetDateTime) = readBackTo(JsonField.of(readBackTo))
+
+            /** Sets [Builder.readBackTo] to an arbitrary JSON value. */
+            fun readBackTo(readBackTo: JsonField<OffsetDateTime>) = apply {
+                this.readBackTo = readBackTo
+            }
+
+            /**
+             * What X shows beside a search's posts that is the same for every reader. Present on a
+             * search for a cashtag X has a card for, such as $BTC.
+             */
+            fun searchContext(searchContext: SearchContext) =
+                searchContext(JsonField.of(searchContext))
+
+            /** Sets [Builder.searchContext] to an arbitrary JSON value. */
+            fun searchContext(searchContext: JsonField<SearchContext>) = apply {
+                this.searchContext = searchContext
+            }
+
+            /** Search q as X ran it, when Xquik fixed it. */
+            fun searchedQuery(searchedQuery: String) = searchedQuery(JsonField.of(searchedQuery))
+
+            /** Sets [Builder.searchedQuery] to an arbitrary JSON value. */
+            fun searchedQuery(searchedQuery: JsonField<String>) = apply {
+                this.searchedQuery = searchedQuery
+            }
+
+            /** Present on a last page whose sources all read past its start time. */
+            fun windowComplete(windowComplete: Boolean) =
+                windowComplete(JsonField.of(windowComplete))
+
+            /** Sets [Builder.windowComplete] to an arbitrary JSON value. */
+            fun windowComplete(windowComplete: JsonField<Boolean>) = apply {
+                this.windowComplete = windowComplete
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -475,20 +648,25 @@ private constructor(
              *
              * The following fields are required:
              * ```kotlin
+             * .diagnostic()
              * .hasNextPage()
              * .nextCursor()
              * .tweets()
-             * .diagnostic()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
              */
             fun build(): TweetSearchCoverageResponse =
                 TweetSearchCoverageResponse(
+                    checkRequired("diagnostic", diagnostic),
                     checkRequired("hasNextPage", hasNextPage),
                     checkRequired("nextCursor", nextCursor),
                     checkRequired("tweets", tweets).map { it.toImmutable() },
-                    checkRequired("diagnostic", diagnostic),
+                    filteredCount,
+                    readBackTo,
+                    searchContext,
+                    searchedQuery,
+                    windowComplete,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -509,10 +687,15 @@ private constructor(
                 return@apply
             }
 
+            diagnostic().validate()
             hasNextPage()
             nextCursor()
             tweets().forEach { it.validate() }
-            diagnostic().validate()
+            filteredCount()
+            readBackTo()
+            searchContext()?.validate()
+            searchedQuery()
+            windowComplete()
             validated = true
         }
 
@@ -525,10 +708,15 @@ private constructor(
             }
 
         internal fun validity(): Int =
-            (if (hasNextPage.asKnown() == null) 0 else 1) +
+            (diagnostic.asKnown()?.validity() ?: 0) +
+                (if (hasNextPage.asKnown() == null) 0 else 1) +
                 (if (nextCursor.asKnown() == null) 0 else 1) +
                 (tweets.asKnown()?.sumOf { it.validity() } ?: 0) +
-                (diagnostic.asKnown()?.validity() ?: 0)
+                (if (filteredCount.asKnown() == null) 0 else 1) +
+                (if (readBackTo.asKnown() == null) 0 else 1) +
+                (searchContext.asKnown()?.validity() ?: 0) +
+                (if (searchedQuery.asKnown() == null) 0 else 1) +
+                (if (windowComplete.asKnown() == null) 0 else 1)
 
         /** Coverage evidence across parallel search strategies. */
         class Diagnostic
@@ -619,7 +807,8 @@ private constructor(
             )
 
             /**
-             * True when every strategy exhausted its source.
+             * True after all active strategies exhaust their sources. An empty read of the whole
+             * search window also ends its time slices.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
              *   or is unexpectedly missing or null.
@@ -671,7 +860,7 @@ private constructor(
             fun partitioned(): Boolean = partitioned.getRequired("partitioned")
 
             /**
-             * Whether credits or the requested limit reduced output.
+             * True when credits or the requested limit reduce output.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
              *   or is unexpectedly missing or null.
@@ -941,7 +1130,10 @@ private constructor(
                     additionalProperties = diagnostic.additionalProperties.toMutableMap()
                 }
 
-                /** True when every strategy exhausted its source. */
+                /**
+                 * True after all active strategies exhaust their sources. An empty read of the
+                 * whole search window also ends its time slices.
+                 */
                 fun complete(complete: Boolean) = complete(JsonField.of(complete))
 
                 /** Sets [Builder.complete] to an arbitrary JSON value. */
@@ -1002,7 +1194,7 @@ private constructor(
                     this.partitioned = partitioned
                 }
 
-                /** Whether credits or the requested limit reduced output. */
+                /** True when credits or the requested limit reduce output. */
                 fun responseTruncated(responseTruncated: Boolean) =
                     responseTruncated(JsonField.of(responseTruncated))
 
@@ -1197,6 +1389,7 @@ private constructor(
                     (if (strategyCount.asKnown() == null) 0 else 1) +
                     (if (uniqueTweets.asKnown() == null) 0 else 1)
 
+            /** Result counts and stop reason for 1 Tweet search strategy. */
             class Strategy
             @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
@@ -1831,7 +2024,7 @@ private constructor(
                     override fun toString() = value.toString()
                 }
 
-                /** Non-overlapping time partition used by one strategy. */
+                /** Non-overlapping time partition used by 1 strategy. */
                 class Window
                 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                 private constructor(
@@ -1950,7 +2143,9 @@ private constructor(
 
                         fun putAllAdditionalProperties(
                             additionalProperties: Map<String, JsonValue>
-                        ) = apply { this.additionalProperties.putAll(additionalProperties) }
+                        ) = apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
 
                         fun removeAdditionalProperty(key: String) = apply {
                             additionalProperties.remove(key)
@@ -2120,6 +2315,408 @@ private constructor(
 
             override fun toString() =
                 "Diagnostic{complete=$complete, cursorFailureCount=$cursorFailureCount, deadlineReached=$deadlineReached, duplicateCount=$duplicateCount, failedStrategyCount=$failedStrategyCount, malformedCount=$malformedCount, pagesFetched=$pagesFetched, partitioned=$partitioned, responseTruncated=$responseTruncated, resultLimitReached=$resultLimitReached, returnedTweets=$returnedTweets, stalledStrategyCount=$stalledStrategyCount, strategies=$strategies, strategyCount=$strategyCount, uniqueTweets=$uniqueTweets, additionalProperties=$additionalProperties}"
+        }
+
+        /**
+         * What X shows beside a search's posts that is the same for every reader. Present on a
+         * search for a cashtag X has a card for, such as $BTC.
+         */
+        class SearchContext
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val smartTag: JsonField<SmartTag>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("smartTag")
+                @ExcludeMissing
+                smartTag: JsonField<SmartTag> = JsonMissing.of()
+            ) : this(smartTag, mutableMapOf())
+
+            /**
+             * X's card for the cashtag the search names.
+             *
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
+             *   or is unexpectedly missing or null.
+             */
+            fun smartTag(): SmartTag = smartTag.getRequired("smartTag")
+
+            /**
+             * Returns the raw JSON value of [smartTag].
+             *
+             * Unlike [smartTag], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("smartTag")
+            @ExcludeMissing
+            fun _smartTag(): JsonField<SmartTag> = smartTag
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /**
+                 * Returns a mutable builder for constructing an instance of [SearchContext].
+                 *
+                 * The following fields are required:
+                 * ```kotlin
+                 * .smartTag()
+                 * ```
+                 */
+                fun builder() = Builder()
+            }
+
+            /** A builder for [SearchContext]. */
+            class Builder internal constructor() {
+
+                private var smartTag: JsonField<SmartTag>? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                internal fun from(searchContext: SearchContext) = apply {
+                    smartTag = searchContext.smartTag
+                    additionalProperties = searchContext.additionalProperties.toMutableMap()
+                }
+
+                /** X's card for the cashtag the search names. */
+                fun smartTag(smartTag: SmartTag) = smartTag(JsonField.of(smartTag))
+
+                /** Sets [Builder.smartTag] to an arbitrary JSON value. */
+                fun smartTag(smartTag: JsonField<SmartTag>) = apply { this.smartTag = smartTag }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [SearchContext].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```kotlin
+                 * .smartTag()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
+                fun build(): SearchContext =
+                    SearchContext(
+                        checkRequired("smartTag", smartTag),
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+             *   match its expected type.
+             */
+            fun validate(): SearchContext = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                smartTag().validate()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: XTwitterScraperInvalidDataException) {
+                    false
+                }
+
+            internal fun validity(): Int = (smartTag.asKnown()?.validity() ?: 0)
+
+            /** X's card for the cashtag the search names. */
+            class SmartTag
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+            private constructor(
+                private val id: JsonField<String>,
+                private val active: JsonField<Boolean>,
+                private val supportsOhlc: JsonField<Boolean>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
+            ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("active")
+                    @ExcludeMissing
+                    active: JsonField<Boolean> = JsonMissing.of(),
+                    @JsonProperty("supportsOhlc")
+                    @ExcludeMissing
+                    supportsOhlc: JsonField<Boolean> = JsonMissing.of(),
+                ) : this(id, active, supportsOhlc, mutableMapOf())
+
+                /**
+                 * The ticker X matched.
+                 *
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type or is unexpectedly missing or null.
+                 */
+                fun id(): String = id.getRequired("id")
+
+                /**
+                 * Whether X lists the ticker as active.
+                 *
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun active(): Boolean? = active.getNullable("active")
+
+                /**
+                 * Whether X charts the ticker with open, high, low & close prices.
+                 *
+                 * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
+                 *   type.
+                 */
+                fun supportsOhlc(): Boolean? = supportsOhlc.getNullable("supportsOhlc")
+
+                /**
+                 * Returns the raw JSON value of [id].
+                 *
+                 * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+                 */
+                @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+                /**
+                 * Returns the raw JSON value of [active].
+                 *
+                 * Unlike [active], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("active") @ExcludeMissing fun _active(): JsonField<Boolean> = active
+
+                /**
+                 * Returns the raw JSON value of [supportsOhlc].
+                 *
+                 * Unlike [supportsOhlc], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("supportsOhlc")
+                @ExcludeMissing
+                fun _supportsOhlc(): JsonField<Boolean> = supportsOhlc
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /**
+                     * Returns a mutable builder for constructing an instance of [SmartTag].
+                     *
+                     * The following fields are required:
+                     * ```kotlin
+                     * .id()
+                     * ```
+                     */
+                    fun builder() = Builder()
+                }
+
+                /** A builder for [SmartTag]. */
+                class Builder internal constructor() {
+
+                    private var id: JsonField<String>? = null
+                    private var active: JsonField<Boolean> = JsonMissing.of()
+                    private var supportsOhlc: JsonField<Boolean> = JsonMissing.of()
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    internal fun from(smartTag: SmartTag) = apply {
+                        id = smartTag.id
+                        active = smartTag.active
+                        supportsOhlc = smartTag.supportsOhlc
+                        additionalProperties = smartTag.additionalProperties.toMutableMap()
+                    }
+
+                    /** The ticker X matched. */
+                    fun id(id: String) = id(JsonField.of(id))
+
+                    /** Sets [Builder.id] to an arbitrary JSON value. */
+                    fun id(id: JsonField<String>) = apply { this.id = id }
+
+                    /** Whether X lists the ticker as active. */
+                    fun active(active: Boolean) = active(JsonField.of(active))
+
+                    /** Sets [Builder.active] to an arbitrary JSON value. */
+                    fun active(active: JsonField<Boolean>) = apply { this.active = active }
+
+                    /** Whether X charts the ticker with open, high, low & close prices. */
+                    fun supportsOhlc(supportsOhlc: Boolean) =
+                        supportsOhlc(JsonField.of(supportsOhlc))
+
+                    /** Sets [Builder.supportsOhlc] to an arbitrary JSON value. */
+                    fun supportsOhlc(supportsOhlc: JsonField<Boolean>) = apply {
+                        this.supportsOhlc = supportsOhlc
+                    }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [SmartTag].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```kotlin
+                     * .id()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
+                    fun build(): SmartTag =
+                        SmartTag(
+                            checkRequired("id", id),
+                            active,
+                            supportsOhlc,
+                            additionalProperties.toMutableMap(),
+                        )
+                }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws XTwitterScraperInvalidDataException if any value type in this object
+                 *   doesn't match its expected type.
+                 */
+                fun validate(): SmartTag = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    id()
+                    active()
+                    supportsOhlc()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: XTwitterScraperInvalidDataException) {
+                        false
+                    }
+
+                internal fun validity(): Int =
+                    (if (id.asKnown() == null) 0 else 1) +
+                        (if (active.asKnown() == null) 0 else 1) +
+                        (if (supportsOhlc.asKnown() == null) 0 else 1)
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is SmartTag &&
+                        id == other.id &&
+                        active == other.active &&
+                        supportsOhlc == other.supportsOhlc &&
+                        additionalProperties == other.additionalProperties
+                }
+
+                private val hashCode: Int by lazy {
+                    Objects.hash(id, active, supportsOhlc, additionalProperties)
+                }
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() =
+                    "SmartTag{id=$id, active=$active, supportsOhlc=$supportsOhlc, additionalProperties=$additionalProperties}"
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is SearchContext &&
+                    smartTag == other.smartTag &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(smartTag, additionalProperties)
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "SearchContext{smartTag=$smartTag, additionalProperties=$additionalProperties}"
         }
 
         class HasNextPage @JsonCreator private constructor(private val value: JsonField<Boolean>) :
@@ -2352,20 +2949,36 @@ private constructor(
             }
 
             return other is TweetSearchCoverageResponse &&
+                diagnostic == other.diagnostic &&
                 hasNextPage == other.hasNextPage &&
                 nextCursor == other.nextCursor &&
                 tweets == other.tweets &&
-                diagnostic == other.diagnostic &&
+                filteredCount == other.filteredCount &&
+                readBackTo == other.readBackTo &&
+                searchContext == other.searchContext &&
+                searchedQuery == other.searchedQuery &&
+                windowComplete == other.windowComplete &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(hasNextPage, nextCursor, tweets, diagnostic, additionalProperties)
+            Objects.hash(
+                diagnostic,
+                hasNextPage,
+                nextCursor,
+                tweets,
+                filteredCount,
+                readBackTo,
+                searchContext,
+                searchedQuery,
+                windowComplete,
+                additionalProperties,
+            )
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "TweetSearchCoverageResponse{hasNextPage=$hasNextPage, nextCursor=$nextCursor, tweets=$tweets, diagnostic=$diagnostic, additionalProperties=$additionalProperties}"
+            "TweetSearchCoverageResponse{diagnostic=$diagnostic, hasNextPage=$hasNextPage, nextCursor=$nextCursor, tweets=$tweets, filteredCount=$filteredCount, readBackTo=$readBackTo, searchContext=$searchContext, searchedQuery=$searchedQuery, windowComplete=$windowComplete, additionalProperties=$additionalProperties}"
     }
 }

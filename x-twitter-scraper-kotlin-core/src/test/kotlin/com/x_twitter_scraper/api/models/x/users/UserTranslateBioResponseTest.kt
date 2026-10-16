@@ -27,7 +27,7 @@ internal class UserTranslateBioResponseTest {
                                             UserTranslateBioResponse.Translation.Entities.Hashtag
                                                 .Tag
                                                 .builder()
-                                                .id("U21hcnRUYWc6VFNMQQ==")
+                                                .id("id")
                                                 .info(
                                                     UserTranslateBioResponse.Translation.Entities
                                                         .Hashtag
@@ -43,8 +43,8 @@ internal class UserTranslateBioResponseTest {
                                                                 .InnerInfo
                                                                 .builder()
                                                                 .active(true)
-                                                                .name("Tesla Inc")
-                                                                .ticker("TSLA")
+                                                                .name("name")
+                                                                .ticker("ticker")
                                                                 .build()
                                                         )
                                                         .build()
@@ -61,7 +61,7 @@ internal class UserTranslateBioResponseTest {
                                             UserTranslateBioResponse.Translation.Entities.Smarttag
                                                 .Tag
                                                 .builder()
-                                                .id("U21hcnRUYWc6VFNMQQ==")
+                                                .id("id")
                                                 .info(
                                                     UserTranslateBioResponse.Translation.Entities
                                                         .Smarttag
@@ -77,8 +77,8 @@ internal class UserTranslateBioResponseTest {
                                                                 .InnerInfo
                                                                 .builder()
                                                                 .active(true)
-                                                                .name("Tesla Inc")
-                                                                .ticker("TSLA")
+                                                                .name("name")
+                                                                .ticker("ticker")
                                                                 .build()
                                                         )
                                                         .build()
@@ -95,7 +95,7 @@ internal class UserTranslateBioResponseTest {
                                         .tag(
                                             UserTranslateBioResponse.Translation.Entities.Symbol.Tag
                                                 .builder()
-                                                .id("U21hcnRUYWc6VFNMQQ==")
+                                                .id("id")
                                                 .info(
                                                     UserTranslateBioResponse.Translation.Entities
                                                         .Symbol
@@ -111,8 +111,8 @@ internal class UserTranslateBioResponseTest {
                                                                 .InnerInfo
                                                                 .builder()
                                                                 .active(true)
-                                                                .name("Tesla Inc")
-                                                                .ticker("TSLA")
+                                                                .name("name")
+                                                                .ticker("ticker")
                                                                 .build()
                                                         )
                                                         .build()
@@ -131,7 +131,7 @@ internal class UserTranslateBioResponseTest {
                                             UserTranslateBioResponse.Translation.Entities.Timestamp
                                                 .Tag
                                                 .builder()
-                                                .id("U21hcnRUYWc6VFNMQQ==")
+                                                .id("id")
                                                 .info(
                                                     UserTranslateBioResponse.Translation.Entities
                                                         .Timestamp
@@ -147,8 +147,8 @@ internal class UserTranslateBioResponseTest {
                                                                 .InnerInfo
                                                                 .builder()
                                                                 .active(true)
-                                                                .name("Tesla Inc")
-                                                                .ticker("TSLA")
+                                                                .name("name")
+                                                                .ticker("ticker")
                                                                 .build()
                                                         )
                                                         .build()
@@ -177,14 +177,14 @@ internal class UserTranslateBioResponseTest {
                                 )
                                 .build()
                         )
-                        .language("es")
-                        .text("Haciendo lo aparentemente imposible, posible. ✨")
-                        .userId("11348282")
-                        .userName("NASA")
-                        .sourceLanguage("en")
+                        .language("language")
+                        .text("text")
+                        .userId("userId")
+                        .userName("userName")
+                        .sourceLanguage("sourceLanguage")
                         .build()
                 )
-                .message("This profile has no bio to translate.")
+                .message("message")
                 .build()
 
         assertThat(userTranslateBioResponse.translation())
@@ -199,7 +199,7 @@ internal class UserTranslateBioResponseTest {
                                     .tag(
                                         UserTranslateBioResponse.Translation.Entities.Hashtag.Tag
                                             .builder()
-                                            .id("U21hcnRUYWc6VFNMQQ==")
+                                            .id("id")
                                             .info(
                                                 UserTranslateBioResponse.Translation.Entities
                                                     .Hashtag
@@ -215,8 +215,8 @@ internal class UserTranslateBioResponseTest {
                                                             .InnerInfo
                                                             .builder()
                                                             .active(true)
-                                                            .name("Tesla Inc")
-                                                            .ticker("TSLA")
+                                                            .name("name")
+                                                            .ticker("ticker")
                                                             .build()
                                                     )
                                                     .build()
@@ -232,7 +232,7 @@ internal class UserTranslateBioResponseTest {
                                     .tag(
                                         UserTranslateBioResponse.Translation.Entities.Smarttag.Tag
                                             .builder()
-                                            .id("U21hcnRUYWc6VFNMQQ==")
+                                            .id("id")
                                             .info(
                                                 UserTranslateBioResponse.Translation.Entities
                                                     .Smarttag
@@ -248,8 +248,8 @@ internal class UserTranslateBioResponseTest {
                                                             .InnerInfo
                                                             .builder()
                                                             .active(true)
-                                                            .name("Tesla Inc")
-                                                            .ticker("TSLA")
+                                                            .name("name")
+                                                            .ticker("ticker")
                                                             .build()
                                                     )
                                                     .build()
@@ -266,7 +266,7 @@ internal class UserTranslateBioResponseTest {
                                     .tag(
                                         UserTranslateBioResponse.Translation.Entities.Symbol.Tag
                                             .builder()
-                                            .id("U21hcnRUYWc6VFNMQQ==")
+                                            .id("id")
                                             .info(
                                                 UserTranslateBioResponse.Translation.Entities.Symbol
                                                     .Tag
@@ -281,8 +281,8 @@ internal class UserTranslateBioResponseTest {
                                                             .InnerInfo
                                                             .builder()
                                                             .active(true)
-                                                            .name("Tesla Inc")
-                                                            .ticker("TSLA")
+                                                            .name("name")
+                                                            .ticker("ticker")
                                                             .build()
                                                     )
                                                     .build()
@@ -299,7 +299,7 @@ internal class UserTranslateBioResponseTest {
                                     .tag(
                                         UserTranslateBioResponse.Translation.Entities.Timestamp.Tag
                                             .builder()
-                                            .id("U21hcnRUYWc6VFNMQQ==")
+                                            .id("id")
                                             .info(
                                                 UserTranslateBioResponse.Translation.Entities
                                                     .Timestamp
@@ -315,8 +315,8 @@ internal class UserTranslateBioResponseTest {
                                                             .InnerInfo
                                                             .builder()
                                                             .active(true)
-                                                            .name("Tesla Inc")
-                                                            .ticker("TSLA")
+                                                            .name("name")
+                                                            .ticker("ticker")
                                                             .build()
                                                     )
                                                     .build()
@@ -344,15 +344,14 @@ internal class UserTranslateBioResponseTest {
                             )
                             .build()
                     )
-                    .language("es")
-                    .text("Haciendo lo aparentemente imposible, posible. ✨")
-                    .userId("11348282")
-                    .userName("NASA")
-                    .sourceLanguage("en")
+                    .language("language")
+                    .text("text")
+                    .userId("userId")
+                    .userName("userName")
+                    .sourceLanguage("sourceLanguage")
                     .build()
             )
-        assertThat(userTranslateBioResponse.message())
-            .isEqualTo("This profile has no bio to translate.")
+        assertThat(userTranslateBioResponse.message()).isEqualTo("message")
     }
 
     @Test
@@ -372,7 +371,7 @@ internal class UserTranslateBioResponseTest {
                                             UserTranslateBioResponse.Translation.Entities.Hashtag
                                                 .Tag
                                                 .builder()
-                                                .id("U21hcnRUYWc6VFNMQQ==")
+                                                .id("id")
                                                 .info(
                                                     UserTranslateBioResponse.Translation.Entities
                                                         .Hashtag
@@ -388,8 +387,8 @@ internal class UserTranslateBioResponseTest {
                                                                 .InnerInfo
                                                                 .builder()
                                                                 .active(true)
-                                                                .name("Tesla Inc")
-                                                                .ticker("TSLA")
+                                                                .name("name")
+                                                                .ticker("ticker")
                                                                 .build()
                                                         )
                                                         .build()
@@ -406,7 +405,7 @@ internal class UserTranslateBioResponseTest {
                                             UserTranslateBioResponse.Translation.Entities.Smarttag
                                                 .Tag
                                                 .builder()
-                                                .id("U21hcnRUYWc6VFNMQQ==")
+                                                .id("id")
                                                 .info(
                                                     UserTranslateBioResponse.Translation.Entities
                                                         .Smarttag
@@ -422,8 +421,8 @@ internal class UserTranslateBioResponseTest {
                                                                 .InnerInfo
                                                                 .builder()
                                                                 .active(true)
-                                                                .name("Tesla Inc")
-                                                                .ticker("TSLA")
+                                                                .name("name")
+                                                                .ticker("ticker")
                                                                 .build()
                                                         )
                                                         .build()
@@ -440,7 +439,7 @@ internal class UserTranslateBioResponseTest {
                                         .tag(
                                             UserTranslateBioResponse.Translation.Entities.Symbol.Tag
                                                 .builder()
-                                                .id("U21hcnRUYWc6VFNMQQ==")
+                                                .id("id")
                                                 .info(
                                                     UserTranslateBioResponse.Translation.Entities
                                                         .Symbol
@@ -456,8 +455,8 @@ internal class UserTranslateBioResponseTest {
                                                                 .InnerInfo
                                                                 .builder()
                                                                 .active(true)
-                                                                .name("Tesla Inc")
-                                                                .ticker("TSLA")
+                                                                .name("name")
+                                                                .ticker("ticker")
                                                                 .build()
                                                         )
                                                         .build()
@@ -476,7 +475,7 @@ internal class UserTranslateBioResponseTest {
                                             UserTranslateBioResponse.Translation.Entities.Timestamp
                                                 .Tag
                                                 .builder()
-                                                .id("U21hcnRUYWc6VFNMQQ==")
+                                                .id("id")
                                                 .info(
                                                     UserTranslateBioResponse.Translation.Entities
                                                         .Timestamp
@@ -492,8 +491,8 @@ internal class UserTranslateBioResponseTest {
                                                                 .InnerInfo
                                                                 .builder()
                                                                 .active(true)
-                                                                .name("Tesla Inc")
-                                                                .ticker("TSLA")
+                                                                .name("name")
+                                                                .ticker("ticker")
                                                                 .build()
                                                         )
                                                         .build()
@@ -522,14 +521,14 @@ internal class UserTranslateBioResponseTest {
                                 )
                                 .build()
                         )
-                        .language("es")
-                        .text("Haciendo lo aparentemente imposible, posible. ✨")
-                        .userId("11348282")
-                        .userName("NASA")
-                        .sourceLanguage("en")
+                        .language("language")
+                        .text("text")
+                        .userId("userId")
+                        .userName("userName")
+                        .sourceLanguage("sourceLanguage")
                         .build()
                 )
-                .message("This profile has no bio to translate.")
+                .message("message")
                 .build()
 
         val roundtrippedUserTranslateBioResponse =

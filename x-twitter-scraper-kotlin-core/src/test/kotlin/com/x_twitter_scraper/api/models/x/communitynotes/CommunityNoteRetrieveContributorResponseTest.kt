@@ -18,7 +18,7 @@ internal class CommunityNoteRetrieveContributorResponseTest {
             CommunityNoteRetrieveContributorResponse.builder()
                 .contributor(
                     CommunityNoteRetrieveContributorResponse.Contributor.builder()
-                        .alias("ardent-beach-friarbird")
+                        .alias("alias")
                         .deletedNotesCount(0L)
                         .isApiContributor(true)
                         .isTopWriter(true)
@@ -66,7 +66,7 @@ internal class CommunityNoteRetrieveContributorResponseTest {
         assertThat(communityNoteRetrieveContributorResponse.contributor())
             .isEqualTo(
                 CommunityNoteRetrieveContributorResponse.Contributor.builder()
-                    .alias("ardent-beach-friarbird")
+                    .alias("alias")
                     .deletedNotesCount(0L)
                     .isApiContributor(true)
                     .isTopWriter(true)
@@ -114,7 +114,7 @@ internal class CommunityNoteRetrieveContributorResponseTest {
             CommunityNoteRetrieveContributorResponse.builder()
                 .contributor(
                     CommunityNoteRetrieveContributorResponse.Contributor.builder()
-                        .alias("ardent-beach-friarbird")
+                        .alias("alias")
                         .deletedNotesCount(0L)
                         .isApiContributor(true)
                         .isTopWriter(true)

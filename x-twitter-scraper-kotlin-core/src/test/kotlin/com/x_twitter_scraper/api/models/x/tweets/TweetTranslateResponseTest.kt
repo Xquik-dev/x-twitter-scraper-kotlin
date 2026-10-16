@@ -26,7 +26,7 @@ internal class TweetTranslateResponseTest {
                                         .tag(
                                             TweetTranslateResponse.Translation.Entities.Hashtag.Tag
                                                 .builder()
-                                                .id("U21hcnRUYWc6VFNMQQ==")
+                                                .id("id")
                                                 .info(
                                                     TweetTranslateResponse.Translation.Entities
                                                         .Hashtag
@@ -42,8 +42,8 @@ internal class TweetTranslateResponseTest {
                                                                 .InnerInfo
                                                                 .builder()
                                                                 .active(true)
-                                                                .name("Tesla Inc")
-                                                                .ticker("TSLA")
+                                                                .name("name")
+                                                                .ticker("ticker")
                                                                 .build()
                                                         )
                                                         .build()
@@ -59,7 +59,7 @@ internal class TweetTranslateResponseTest {
                                         .tag(
                                             TweetTranslateResponse.Translation.Entities.Smarttag.Tag
                                                 .builder()
-                                                .id("U21hcnRUYWc6VFNMQQ==")
+                                                .id("id")
                                                 .info(
                                                     TweetTranslateResponse.Translation.Entities
                                                         .Smarttag
@@ -75,8 +75,8 @@ internal class TweetTranslateResponseTest {
                                                                 .InnerInfo
                                                                 .builder()
                                                                 .active(true)
-                                                                .name("Tesla Inc")
-                                                                .ticker("TSLA")
+                                                                .name("name")
+                                                                .ticker("ticker")
                                                                 .build()
                                                         )
                                                         .build()
@@ -93,7 +93,7 @@ internal class TweetTranslateResponseTest {
                                         .tag(
                                             TweetTranslateResponse.Translation.Entities.Symbol.Tag
                                                 .builder()
-                                                .id("U21hcnRUYWc6VFNMQQ==")
+                                                .id("id")
                                                 .info(
                                                     TweetTranslateResponse.Translation.Entities
                                                         .Symbol
@@ -109,8 +109,8 @@ internal class TweetTranslateResponseTest {
                                                                 .InnerInfo
                                                                 .builder()
                                                                 .active(true)
-                                                                .name("Tesla Inc")
-                                                                .ticker("TSLA")
+                                                                .name("name")
+                                                                .ticker("ticker")
                                                                 .build()
                                                         )
                                                         .build()
@@ -128,7 +128,7 @@ internal class TweetTranslateResponseTest {
                                             TweetTranslateResponse.Translation.Entities.Timestamp
                                                 .Tag
                                                 .builder()
-                                                .id("U21hcnRUYWc6VFNMQQ==")
+                                                .id("id")
                                                 .info(
                                                     TweetTranslateResponse.Translation.Entities
                                                         .Timestamp
@@ -144,8 +144,8 @@ internal class TweetTranslateResponseTest {
                                                                 .InnerInfo
                                                                 .builder()
                                                                 .active(true)
-                                                                .name("Tesla Inc")
-                                                                .ticker("TSLA")
+                                                                .name("name")
+                                                                .ticker("ticker")
                                                                 .build()
                                                         )
                                                         .build()
@@ -174,12 +174,10 @@ internal class TweetTranslateResponseTest {
                                 )
                                 .build()
                         )
-                        .language("tr")
-                        .text(
-                            "Artemis Anlaşmaları’na Hoş Geldiniz, Hırvatistan https://t.co/Xe1nm2pkSX"
-                        )
-                        .tweetId("2102882545427714266")
-                        .sourceLanguage("en")
+                        .language("language")
+                        .text("text")
+                        .tweetId("tweetId")
+                        .sourceLanguage("sourceLanguage")
                         .build()
                 )
                 .build()
@@ -196,7 +194,7 @@ internal class TweetTranslateResponseTest {
                                     .tag(
                                         TweetTranslateResponse.Translation.Entities.Hashtag.Tag
                                             .builder()
-                                            .id("U21hcnRUYWc6VFNMQQ==")
+                                            .id("id")
                                             .info(
                                                 TweetTranslateResponse.Translation.Entities.Hashtag
                                                     .Tag
@@ -210,8 +208,8 @@ internal class TweetTranslateResponseTest {
                                                             .InnerInfo
                                                             .builder()
                                                             .active(true)
-                                                            .name("Tesla Inc")
-                                                            .ticker("TSLA")
+                                                            .name("name")
+                                                            .ticker("ticker")
                                                             .build()
                                                     )
                                                     .build()
@@ -227,7 +225,7 @@ internal class TweetTranslateResponseTest {
                                     .tag(
                                         TweetTranslateResponse.Translation.Entities.Smarttag.Tag
                                             .builder()
-                                            .id("U21hcnRUYWc6VFNMQQ==")
+                                            .id("id")
                                             .info(
                                                 TweetTranslateResponse.Translation.Entities.Smarttag
                                                     .Tag
@@ -241,8 +239,8 @@ internal class TweetTranslateResponseTest {
                                                             .InnerInfo
                                                             .builder()
                                                             .active(true)
-                                                            .name("Tesla Inc")
-                                                            .ticker("TSLA")
+                                                            .name("name")
+                                                            .ticker("ticker")
                                                             .build()
                                                     )
                                                     .build()
@@ -259,7 +257,7 @@ internal class TweetTranslateResponseTest {
                                     .tag(
                                         TweetTranslateResponse.Translation.Entities.Symbol.Tag
                                             .builder()
-                                            .id("U21hcnRUYWc6VFNMQQ==")
+                                            .id("id")
                                             .info(
                                                 TweetTranslateResponse.Translation.Entities.Symbol
                                                     .Tag
@@ -273,8 +271,8 @@ internal class TweetTranslateResponseTest {
                                                             .InnerInfo
                                                             .builder()
                                                             .active(true)
-                                                            .name("Tesla Inc")
-                                                            .ticker("TSLA")
+                                                            .name("name")
+                                                            .ticker("ticker")
                                                             .build()
                                                     )
                                                     .build()
@@ -291,7 +289,7 @@ internal class TweetTranslateResponseTest {
                                     .tag(
                                         TweetTranslateResponse.Translation.Entities.Timestamp.Tag
                                             .builder()
-                                            .id("U21hcnRUYWc6VFNMQQ==")
+                                            .id("id")
                                             .info(
                                                 TweetTranslateResponse.Translation.Entities
                                                     .Timestamp
@@ -306,8 +304,8 @@ internal class TweetTranslateResponseTest {
                                                             .InnerInfo
                                                             .builder()
                                                             .active(true)
-                                                            .name("Tesla Inc")
-                                                            .ticker("TSLA")
+                                                            .name("name")
+                                                            .ticker("ticker")
                                                             .build()
                                                     )
                                                     .build()
@@ -335,12 +333,10 @@ internal class TweetTranslateResponseTest {
                             )
                             .build()
                     )
-                    .language("tr")
-                    .text(
-                        "Artemis Anlaşmaları’na Hoş Geldiniz, Hırvatistan https://t.co/Xe1nm2pkSX"
-                    )
-                    .tweetId("2102882545427714266")
-                    .sourceLanguage("en")
+                    .language("language")
+                    .text("text")
+                    .tweetId("tweetId")
+                    .sourceLanguage("sourceLanguage")
                     .build()
             )
     }
@@ -361,7 +357,7 @@ internal class TweetTranslateResponseTest {
                                         .tag(
                                             TweetTranslateResponse.Translation.Entities.Hashtag.Tag
                                                 .builder()
-                                                .id("U21hcnRUYWc6VFNMQQ==")
+                                                .id("id")
                                                 .info(
                                                     TweetTranslateResponse.Translation.Entities
                                                         .Hashtag
@@ -377,8 +373,8 @@ internal class TweetTranslateResponseTest {
                                                                 .InnerInfo
                                                                 .builder()
                                                                 .active(true)
-                                                                .name("Tesla Inc")
-                                                                .ticker("TSLA")
+                                                                .name("name")
+                                                                .ticker("ticker")
                                                                 .build()
                                                         )
                                                         .build()
@@ -394,7 +390,7 @@ internal class TweetTranslateResponseTest {
                                         .tag(
                                             TweetTranslateResponse.Translation.Entities.Smarttag.Tag
                                                 .builder()
-                                                .id("U21hcnRUYWc6VFNMQQ==")
+                                                .id("id")
                                                 .info(
                                                     TweetTranslateResponse.Translation.Entities
                                                         .Smarttag
@@ -410,8 +406,8 @@ internal class TweetTranslateResponseTest {
                                                                 .InnerInfo
                                                                 .builder()
                                                                 .active(true)
-                                                                .name("Tesla Inc")
-                                                                .ticker("TSLA")
+                                                                .name("name")
+                                                                .ticker("ticker")
                                                                 .build()
                                                         )
                                                         .build()
@@ -428,7 +424,7 @@ internal class TweetTranslateResponseTest {
                                         .tag(
                                             TweetTranslateResponse.Translation.Entities.Symbol.Tag
                                                 .builder()
-                                                .id("U21hcnRUYWc6VFNMQQ==")
+                                                .id("id")
                                                 .info(
                                                     TweetTranslateResponse.Translation.Entities
                                                         .Symbol
@@ -444,8 +440,8 @@ internal class TweetTranslateResponseTest {
                                                                 .InnerInfo
                                                                 .builder()
                                                                 .active(true)
-                                                                .name("Tesla Inc")
-                                                                .ticker("TSLA")
+                                                                .name("name")
+                                                                .ticker("ticker")
                                                                 .build()
                                                         )
                                                         .build()
@@ -463,7 +459,7 @@ internal class TweetTranslateResponseTest {
                                             TweetTranslateResponse.Translation.Entities.Timestamp
                                                 .Tag
                                                 .builder()
-                                                .id("U21hcnRUYWc6VFNMQQ==")
+                                                .id("id")
                                                 .info(
                                                     TweetTranslateResponse.Translation.Entities
                                                         .Timestamp
@@ -479,8 +475,8 @@ internal class TweetTranslateResponseTest {
                                                                 .InnerInfo
                                                                 .builder()
                                                                 .active(true)
-                                                                .name("Tesla Inc")
-                                                                .ticker("TSLA")
+                                                                .name("name")
+                                                                .ticker("ticker")
                                                                 .build()
                                                         )
                                                         .build()
@@ -509,12 +505,10 @@ internal class TweetTranslateResponseTest {
                                 )
                                 .build()
                         )
-                        .language("tr")
-                        .text(
-                            "Artemis Anlaşmaları’na Hoş Geldiniz, Hırvatistan https://t.co/Xe1nm2pkSX"
-                        )
-                        .tweetId("2102882545427714266")
-                        .sourceLanguage("en")
+                        .language("language")
+                        .text("text")
+                        .tweetId("tweetId")
+                        .sourceLanguage("sourceLanguage")
                         .build()
                 )
                 .build()

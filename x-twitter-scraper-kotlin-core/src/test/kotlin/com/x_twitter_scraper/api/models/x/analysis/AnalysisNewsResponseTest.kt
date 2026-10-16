@@ -21,23 +21,23 @@ internal class AnalysisNewsResponseTest {
                     AnalysisNewsResponse.AnalysisSummary.builder()
                         .addCashtag(
                             AnalysisNewsResponse.AnalysisSummary.Cashtag.builder()
-                                .cashtag("\$NVDA")
+                                .cashtag("cashtag")
                                 .choices(
                                     AnalysisNewsResponse.AnalysisSummary.Cashtag.Choices.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
-                                .rows(3L)
+                                .rows(0L)
                                 .signal(
                                     AnalysisNewsResponse.AnalysisSummary.Cashtag.Signal.builder()
-                                        .bearish(1L)
-                                        .bullish(2L)
-                                        .score(0.3333)
+                                        .bearish(0L)
+                                        .bullish(0L)
+                                        .score(0.0)
                                         .build()
                                 )
                                 .build()
                         )
-                        .engagement(1840L)
+                        .engagement(0L)
                         .monitor(
                             AnalysisNewsResponse.AnalysisSummary.Monitor.builder()
                                 .addChangedRow(
@@ -47,12 +47,12 @@ internal class AnalysisNewsResponseTest {
                                             AnalysisNewsResponse.AnalysisSummary.Monitor.ChangedRow
                                                 .Change
                                                 .builder()
-                                                .current("negative")
-                                                .previous("positive")
-                                                .questionId("sentiment")
+                                                .current("current")
+                                                .previous("previous")
+                                                .questionId("questionId")
                                                 .build()
                                         )
-                                        .tweetId("1893456789012345678")
+                                        .tweetId("tweetId")
                                         .build()
                                 )
                                 .statuses(
@@ -69,16 +69,16 @@ internal class AnalysisNewsResponseTest {
                         )
                         .rows(
                             AnalysisNewsResponse.AnalysisSummary.Rows.builder()
-                                .analyzed(20L)
+                                .analyzed(0L)
                                 .failed(0L)
                                 .skipped(0L)
                                 .build()
                         )
-                        .schemaVersion(1L)
+                        .schemaVersion(0L)
                         .addSourceDomain(
                             AnalysisNewsResponse.AnalysisSummary.SourceDomain.builder()
-                                .domain("youtube.com")
-                                .posts(4L)
+                                .domain("domain")
+                                .posts(0L)
                                 .build()
                         )
                         .addTarget(
@@ -88,10 +88,10 @@ internal class AnalysisNewsResponseTest {
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
-                                .engagement(1200L)
-                                .mentions(14L)
-                                .name("Sony")
-                                .share(0.7)
+                                .engagement(0L)
+                                .mentions(0L)
+                                .name("name")
+                                .share(0.0)
                                 .top(
                                     AnalysisNewsResponse.AnalysisSummary.Target.Top.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -106,21 +106,21 @@ internal class AnalysisNewsResponseTest {
                         )
                         .build()
                 )
-                .hasNextPage(false)
-                .nextCursor("")
+                .hasNextPage(true)
+                .nextCursor("next_cursor")
                 .addResult(
                     AnalysisNewsResponse.Result.builder()
                         .analysis(
                             AnalysisNewsResponse.Result.Analysis.builder()
                                 .addAnswer(
                                     AnalysisNewsResponse.Result.Analysis.Answer.builder()
-                                        .questionId("sentiment")
-                                        .questionVersion("sentiment:2")
+                                        .questionId("questionId")
+                                        .questionVersion("questionVersion")
                                         .type(
                                             AnalysisNewsResponse.Result.Analysis.Answer.Type.CHOICE
                                         )
-                                        .confidence(0.93)
-                                        .addLevel("No attitude.")
+                                        .confidence(0.0)
+                                        .addLevel("level")
                                         .probabilities(
                                             AnalysisNewsResponse.Result.Analysis.Answer
                                                 .Probabilities
@@ -128,7 +128,7 @@ internal class AnalysisNewsResponseTest {
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
-                                        .probability(0.08)
+                                        .probability(0.0)
                                         .value(
                                             AnalysisNewsResponse.Result.Analysis.Answer.InnerValue
                                                 .ofString("string")
@@ -141,7 +141,7 @@ internal class AnalysisNewsResponseTest {
                                         .article(
                                             AnalysisNewsResponse.Result.Analysis.ContextAvailability
                                                 .Article
-                                                .NOT_SUPPLIED
+                                                .TEXT_BLOCKS
                                         )
                                         .author(
                                             AnalysisNewsResponse.Result.Analysis.ContextAvailability
@@ -151,7 +151,7 @@ internal class AnalysisNewsResponseTest {
                                         .media(
                                             AnalysisNewsResponse.Result.Analysis.ContextAvailability
                                                 .Media
-                                                .NOT_SUPPLIED
+                                                .TEXT_DESCRIPTIONS_ONLY
                                         )
                                         .postText(
                                             AnalysisNewsResponse.Result.Analysis.ContextAvailability
@@ -161,20 +161,20 @@ internal class AnalysisNewsResponseTest {
                                         .quote(
                                             AnalysisNewsResponse.Result.Analysis.ContextAvailability
                                                 .Quote
-                                                .NOT_APPLICABLE
+                                                .AVAILABLE
                                         )
                                         .reply(
                                             AnalysisNewsResponse.Result.Analysis.ContextAvailability
                                                 .Reply
-                                                .NOT_APPLICABLE
+                                                .AVAILABLE
                                         )
                                         .build()
                                 )
-                                .contextBytes(612L)
+                                .contextBytes(0L)
                                 .addQuestion(
                                     AnalysisNewsResponse.Result.Analysis.Question.builder()
-                                        .id("sentiment")
-                                        .version("sentiment:2")
+                                        .id("id")
+                                        .version("version")
                                         .build()
                                 )
                                 .build()
@@ -184,24 +184,22 @@ internal class AnalysisNewsResponseTest {
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
-                        .addCashtag("\$NVDA")
+                        .addCashtag("cashtag")
                         .monitor(
                             AnalysisNewsResponse.Result.Monitor.builder()
-                                .addChangedQuestionId("sentiment")
+                                .addChangedQuestionId("changedQuestionId")
                                 .addChange(
                                     AnalysisNewsResponse.Result.Monitor.Change.builder()
-                                        .current("negative")
-                                        .previous("positive")
-                                        .questionId("sentiment")
+                                        .current("current")
+                                        .previous("previous")
+                                        .questionId("questionId")
                                         .build()
                                 )
-                                .configurationFingerprint(
-                                    "9f2c4e1b7a5d3c8e6f0a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f6a"
-                                )
-                                .status(AnalysisNewsResponse.Result.Monitor.Status.CHANGED)
+                                .configurationFingerprint("configurationFingerprint")
+                                .status(AnalysisNewsResponse.Result.Monitor.Status.FIRST_RUN)
                                 .build()
                         )
-                        .addSourceDomain("youtube.com")
+                        .addSourceDomain("sourceDomain")
                         .tweet(
                             SearchTweet.builder()
                                 .id("id")
@@ -219,17 +217,17 @@ internal class AnalysisNewsResponseTest {
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
-                        .viralActualEngagementRate(1.2874)
-                        .viralAlgorithmScore(18.4)
-                        .viralScore(72L)
+                        .viralActualEngagementRate(0.0)
+                        .viralAlgorithmScore(0.0)
+                        .viralScore(0L)
                         .viralVerdict(AnalysisNewsResponse.Result.ViralVerdict.SEND_IT)
                         .build()
                 )
                 .addUnanalyzed(
                     AnalysisNewsResponse.Unanalyzed.builder()
-                        .id("1893456789012345678")
-                        .reason("post_unavailable")
-                        .status(AnalysisNewsResponse.Unanalyzed.Status.SKIPPED)
+                        .id("id")
+                        .reason("reason")
+                        .status(AnalysisNewsResponse.Unanalyzed.Status.FAILED)
                         .build()
                 )
                 .build()
@@ -239,23 +237,23 @@ internal class AnalysisNewsResponseTest {
                 AnalysisNewsResponse.AnalysisSummary.builder()
                     .addCashtag(
                         AnalysisNewsResponse.AnalysisSummary.Cashtag.builder()
-                            .cashtag("\$NVDA")
+                            .cashtag("cashtag")
                             .choices(
                                 AnalysisNewsResponse.AnalysisSummary.Cashtag.Choices.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("bar"))
                                     .build()
                             )
-                            .rows(3L)
+                            .rows(0L)
                             .signal(
                                 AnalysisNewsResponse.AnalysisSummary.Cashtag.Signal.builder()
-                                    .bearish(1L)
-                                    .bullish(2L)
-                                    .score(0.3333)
+                                    .bearish(0L)
+                                    .bullish(0L)
+                                    .score(0.0)
                                     .build()
                             )
                             .build()
                     )
-                    .engagement(1840L)
+                    .engagement(0L)
                     .monitor(
                         AnalysisNewsResponse.AnalysisSummary.Monitor.builder()
                             .addChangedRow(
@@ -264,12 +262,12 @@ internal class AnalysisNewsResponseTest {
                                         AnalysisNewsResponse.AnalysisSummary.Monitor.ChangedRow
                                             .Change
                                             .builder()
-                                            .current("negative")
-                                            .previous("positive")
-                                            .questionId("sentiment")
+                                            .current("current")
+                                            .previous("previous")
+                                            .questionId("questionId")
                                             .build()
                                     )
-                                    .tweetId("1893456789012345678")
+                                    .tweetId("tweetId")
                                     .build()
                             )
                             .statuses(
@@ -286,16 +284,16 @@ internal class AnalysisNewsResponseTest {
                     )
                     .rows(
                         AnalysisNewsResponse.AnalysisSummary.Rows.builder()
-                            .analyzed(20L)
+                            .analyzed(0L)
                             .failed(0L)
                             .skipped(0L)
                             .build()
                     )
-                    .schemaVersion(1L)
+                    .schemaVersion(0L)
                     .addSourceDomain(
                         AnalysisNewsResponse.AnalysisSummary.SourceDomain.builder()
-                            .domain("youtube.com")
-                            .posts(4L)
+                            .domain("domain")
+                            .posts(0L)
                             .build()
                     )
                     .addTarget(
@@ -305,10 +303,10 @@ internal class AnalysisNewsResponseTest {
                                     .putAdditionalProperty("foo", JsonValue.from("bar"))
                                     .build()
                             )
-                            .engagement(1200L)
-                            .mentions(14L)
-                            .name("Sony")
-                            .share(0.7)
+                            .engagement(0L)
+                            .mentions(0L)
+                            .name("name")
+                            .share(0.0)
                             .top(
                                 AnalysisNewsResponse.AnalysisSummary.Target.Top.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -323,8 +321,8 @@ internal class AnalysisNewsResponseTest {
                     )
                     .build()
             )
-        assertThat(analysisNewsResponse.hasNextPage()).isEqualTo(false)
-        assertThat(analysisNewsResponse.nextCursor()).isEqualTo("")
+        assertThat(analysisNewsResponse.hasNextPage()).isEqualTo(true)
+        assertThat(analysisNewsResponse.nextCursor()).isEqualTo("next_cursor")
         assertThat(analysisNewsResponse.results())
             .containsExactly(
                 AnalysisNewsResponse.Result.builder()
@@ -332,18 +330,18 @@ internal class AnalysisNewsResponseTest {
                         AnalysisNewsResponse.Result.Analysis.builder()
                             .addAnswer(
                                 AnalysisNewsResponse.Result.Analysis.Answer.builder()
-                                    .questionId("sentiment")
-                                    .questionVersion("sentiment:2")
+                                    .questionId("questionId")
+                                    .questionVersion("questionVersion")
                                     .type(AnalysisNewsResponse.Result.Analysis.Answer.Type.CHOICE)
-                                    .confidence(0.93)
-                                    .addLevel("No attitude.")
+                                    .confidence(0.0)
+                                    .addLevel("level")
                                     .probabilities(
                                         AnalysisNewsResponse.Result.Analysis.Answer.Probabilities
                                             .builder()
                                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
                                     )
-                                    .probability(0.08)
+                                    .probability(0.0)
                                     .value(
                                         AnalysisNewsResponse.Result.Analysis.Answer.InnerValue
                                             .ofString("string")
@@ -355,7 +353,7 @@ internal class AnalysisNewsResponseTest {
                                     .article(
                                         AnalysisNewsResponse.Result.Analysis.ContextAvailability
                                             .Article
-                                            .NOT_SUPPLIED
+                                            .TEXT_BLOCKS
                                     )
                                     .author(
                                         AnalysisNewsResponse.Result.Analysis.ContextAvailability
@@ -365,7 +363,7 @@ internal class AnalysisNewsResponseTest {
                                     .media(
                                         AnalysisNewsResponse.Result.Analysis.ContextAvailability
                                             .Media
-                                            .NOT_SUPPLIED
+                                            .TEXT_DESCRIPTIONS_ONLY
                                     )
                                     .postText(
                                         AnalysisNewsResponse.Result.Analysis.ContextAvailability
@@ -375,20 +373,20 @@ internal class AnalysisNewsResponseTest {
                                     .quote(
                                         AnalysisNewsResponse.Result.Analysis.ContextAvailability
                                             .Quote
-                                            .NOT_APPLICABLE
+                                            .AVAILABLE
                                     )
                                     .reply(
                                         AnalysisNewsResponse.Result.Analysis.ContextAvailability
                                             .Reply
-                                            .NOT_APPLICABLE
+                                            .AVAILABLE
                                     )
                                     .build()
                             )
-                            .contextBytes(612L)
+                            .contextBytes(0L)
                             .addQuestion(
                                 AnalysisNewsResponse.Result.Analysis.Question.builder()
-                                    .id("sentiment")
-                                    .version("sentiment:2")
+                                    .id("id")
+                                    .version("version")
                                     .build()
                             )
                             .build()
@@ -398,24 +396,22 @@ internal class AnalysisNewsResponseTest {
                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                             .build()
                     )
-                    .addCashtag("\$NVDA")
+                    .addCashtag("cashtag")
                     .monitor(
                         AnalysisNewsResponse.Result.Monitor.builder()
-                            .addChangedQuestionId("sentiment")
+                            .addChangedQuestionId("changedQuestionId")
                             .addChange(
                                 AnalysisNewsResponse.Result.Monitor.Change.builder()
-                                    .current("negative")
-                                    .previous("positive")
-                                    .questionId("sentiment")
+                                    .current("current")
+                                    .previous("previous")
+                                    .questionId("questionId")
                                     .build()
                             )
-                            .configurationFingerprint(
-                                "9f2c4e1b7a5d3c8e6f0a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f6a"
-                            )
-                            .status(AnalysisNewsResponse.Result.Monitor.Status.CHANGED)
+                            .configurationFingerprint("configurationFingerprint")
+                            .status(AnalysisNewsResponse.Result.Monitor.Status.FIRST_RUN)
                             .build()
                     )
-                    .addSourceDomain("youtube.com")
+                    .addSourceDomain("sourceDomain")
                     .tweet(
                         SearchTweet.builder()
                             .id("id")
@@ -433,18 +429,18 @@ internal class AnalysisNewsResponseTest {
                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                             .build()
                     )
-                    .viralActualEngagementRate(1.2874)
-                    .viralAlgorithmScore(18.4)
-                    .viralScore(72L)
+                    .viralActualEngagementRate(0.0)
+                    .viralAlgorithmScore(0.0)
+                    .viralScore(0L)
                     .viralVerdict(AnalysisNewsResponse.Result.ViralVerdict.SEND_IT)
                     .build()
             )
         assertThat(analysisNewsResponse.unanalyzed())
             .containsExactly(
                 AnalysisNewsResponse.Unanalyzed.builder()
-                    .id("1893456789012345678")
-                    .reason("post_unavailable")
-                    .status(AnalysisNewsResponse.Unanalyzed.Status.SKIPPED)
+                    .id("id")
+                    .reason("reason")
+                    .status(AnalysisNewsResponse.Unanalyzed.Status.FAILED)
                     .build()
             )
     }
@@ -458,23 +454,23 @@ internal class AnalysisNewsResponseTest {
                     AnalysisNewsResponse.AnalysisSummary.builder()
                         .addCashtag(
                             AnalysisNewsResponse.AnalysisSummary.Cashtag.builder()
-                                .cashtag("\$NVDA")
+                                .cashtag("cashtag")
                                 .choices(
                                     AnalysisNewsResponse.AnalysisSummary.Cashtag.Choices.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
-                                .rows(3L)
+                                .rows(0L)
                                 .signal(
                                     AnalysisNewsResponse.AnalysisSummary.Cashtag.Signal.builder()
-                                        .bearish(1L)
-                                        .bullish(2L)
-                                        .score(0.3333)
+                                        .bearish(0L)
+                                        .bullish(0L)
+                                        .score(0.0)
                                         .build()
                                 )
                                 .build()
                         )
-                        .engagement(1840L)
+                        .engagement(0L)
                         .monitor(
                             AnalysisNewsResponse.AnalysisSummary.Monitor.builder()
                                 .addChangedRow(
@@ -484,12 +480,12 @@ internal class AnalysisNewsResponseTest {
                                             AnalysisNewsResponse.AnalysisSummary.Monitor.ChangedRow
                                                 .Change
                                                 .builder()
-                                                .current("negative")
-                                                .previous("positive")
-                                                .questionId("sentiment")
+                                                .current("current")
+                                                .previous("previous")
+                                                .questionId("questionId")
                                                 .build()
                                         )
-                                        .tweetId("1893456789012345678")
+                                        .tweetId("tweetId")
                                         .build()
                                 )
                                 .statuses(
@@ -506,16 +502,16 @@ internal class AnalysisNewsResponseTest {
                         )
                         .rows(
                             AnalysisNewsResponse.AnalysisSummary.Rows.builder()
-                                .analyzed(20L)
+                                .analyzed(0L)
                                 .failed(0L)
                                 .skipped(0L)
                                 .build()
                         )
-                        .schemaVersion(1L)
+                        .schemaVersion(0L)
                         .addSourceDomain(
                             AnalysisNewsResponse.AnalysisSummary.SourceDomain.builder()
-                                .domain("youtube.com")
-                                .posts(4L)
+                                .domain("domain")
+                                .posts(0L)
                                 .build()
                         )
                         .addTarget(
@@ -525,10 +521,10 @@ internal class AnalysisNewsResponseTest {
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
-                                .engagement(1200L)
-                                .mentions(14L)
-                                .name("Sony")
-                                .share(0.7)
+                                .engagement(0L)
+                                .mentions(0L)
+                                .name("name")
+                                .share(0.0)
                                 .top(
                                     AnalysisNewsResponse.AnalysisSummary.Target.Top.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -543,21 +539,21 @@ internal class AnalysisNewsResponseTest {
                         )
                         .build()
                 )
-                .hasNextPage(false)
-                .nextCursor("")
+                .hasNextPage(true)
+                .nextCursor("next_cursor")
                 .addResult(
                     AnalysisNewsResponse.Result.builder()
                         .analysis(
                             AnalysisNewsResponse.Result.Analysis.builder()
                                 .addAnswer(
                                     AnalysisNewsResponse.Result.Analysis.Answer.builder()
-                                        .questionId("sentiment")
-                                        .questionVersion("sentiment:2")
+                                        .questionId("questionId")
+                                        .questionVersion("questionVersion")
                                         .type(
                                             AnalysisNewsResponse.Result.Analysis.Answer.Type.CHOICE
                                         )
-                                        .confidence(0.93)
-                                        .addLevel("No attitude.")
+                                        .confidence(0.0)
+                                        .addLevel("level")
                                         .probabilities(
                                             AnalysisNewsResponse.Result.Analysis.Answer
                                                 .Probabilities
@@ -565,7 +561,7 @@ internal class AnalysisNewsResponseTest {
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
-                                        .probability(0.08)
+                                        .probability(0.0)
                                         .value(
                                             AnalysisNewsResponse.Result.Analysis.Answer.InnerValue
                                                 .ofString("string")
@@ -578,7 +574,7 @@ internal class AnalysisNewsResponseTest {
                                         .article(
                                             AnalysisNewsResponse.Result.Analysis.ContextAvailability
                                                 .Article
-                                                .NOT_SUPPLIED
+                                                .TEXT_BLOCKS
                                         )
                                         .author(
                                             AnalysisNewsResponse.Result.Analysis.ContextAvailability
@@ -588,7 +584,7 @@ internal class AnalysisNewsResponseTest {
                                         .media(
                                             AnalysisNewsResponse.Result.Analysis.ContextAvailability
                                                 .Media
-                                                .NOT_SUPPLIED
+                                                .TEXT_DESCRIPTIONS_ONLY
                                         )
                                         .postText(
                                             AnalysisNewsResponse.Result.Analysis.ContextAvailability
@@ -598,20 +594,20 @@ internal class AnalysisNewsResponseTest {
                                         .quote(
                                             AnalysisNewsResponse.Result.Analysis.ContextAvailability
                                                 .Quote
-                                                .NOT_APPLICABLE
+                                                .AVAILABLE
                                         )
                                         .reply(
                                             AnalysisNewsResponse.Result.Analysis.ContextAvailability
                                                 .Reply
-                                                .NOT_APPLICABLE
+                                                .AVAILABLE
                                         )
                                         .build()
                                 )
-                                .contextBytes(612L)
+                                .contextBytes(0L)
                                 .addQuestion(
                                     AnalysisNewsResponse.Result.Analysis.Question.builder()
-                                        .id("sentiment")
-                                        .version("sentiment:2")
+                                        .id("id")
+                                        .version("version")
                                         .build()
                                 )
                                 .build()
@@ -621,24 +617,22 @@ internal class AnalysisNewsResponseTest {
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
-                        .addCashtag("\$NVDA")
+                        .addCashtag("cashtag")
                         .monitor(
                             AnalysisNewsResponse.Result.Monitor.builder()
-                                .addChangedQuestionId("sentiment")
+                                .addChangedQuestionId("changedQuestionId")
                                 .addChange(
                                     AnalysisNewsResponse.Result.Monitor.Change.builder()
-                                        .current("negative")
-                                        .previous("positive")
-                                        .questionId("sentiment")
+                                        .current("current")
+                                        .previous("previous")
+                                        .questionId("questionId")
                                         .build()
                                 )
-                                .configurationFingerprint(
-                                    "9f2c4e1b7a5d3c8e6f0a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f6a"
-                                )
-                                .status(AnalysisNewsResponse.Result.Monitor.Status.CHANGED)
+                                .configurationFingerprint("configurationFingerprint")
+                                .status(AnalysisNewsResponse.Result.Monitor.Status.FIRST_RUN)
                                 .build()
                         )
-                        .addSourceDomain("youtube.com")
+                        .addSourceDomain("sourceDomain")
                         .tweet(
                             SearchTweet.builder()
                                 .id("id")
@@ -656,17 +650,17 @@ internal class AnalysisNewsResponseTest {
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
-                        .viralActualEngagementRate(1.2874)
-                        .viralAlgorithmScore(18.4)
-                        .viralScore(72L)
+                        .viralActualEngagementRate(0.0)
+                        .viralAlgorithmScore(0.0)
+                        .viralScore(0L)
                         .viralVerdict(AnalysisNewsResponse.Result.ViralVerdict.SEND_IT)
                         .build()
                 )
                 .addUnanalyzed(
                     AnalysisNewsResponse.Unanalyzed.builder()
-                        .id("1893456789012345678")
-                        .reason("post_unavailable")
-                        .status(AnalysisNewsResponse.Unanalyzed.Status.SKIPPED)
+                        .id("id")
+                        .reason("reason")
+                        .status(AnalysisNewsResponse.Unanalyzed.Status.FAILED)
                         .build()
                 )
                 .build()

@@ -16,14 +16,13 @@ internal class WebhookCreateTelegramLinkResponseTest {
     fun create() {
         val webhookCreateTelegramLinkResponse =
             WebhookCreateTelegramLinkResponse.builder()
-                .expiresAt(OffsetDateTime.parse("2025-01-15T12:15:00.000Z"))
-                .url("https://t.me/XquikBot?start=Q2hhdExpbmtDb2RlRXhhbXBsZTAx")
+                .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .url("url")
                 .build()
 
         assertThat(webhookCreateTelegramLinkResponse.expiresAt())
-            .isEqualTo(OffsetDateTime.parse("2025-01-15T12:15:00.000Z"))
-        assertThat(webhookCreateTelegramLinkResponse.url())
-            .isEqualTo("https://t.me/XquikBot?start=Q2hhdExpbmtDb2RlRXhhbXBsZTAx")
+            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(webhookCreateTelegramLinkResponse.url()).isEqualTo("url")
     }
 
     @Test
@@ -31,8 +30,8 @@ internal class WebhookCreateTelegramLinkResponseTest {
         val jsonMapper = jsonMapper()
         val webhookCreateTelegramLinkResponse =
             WebhookCreateTelegramLinkResponse.builder()
-                .expiresAt(OffsetDateTime.parse("2025-01-15T12:15:00.000Z"))
-                .url("https://t.me/XquikBot?start=Q2hhdExpbmtDb2RlRXhhbXBsZTAx")
+                .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .url("url")
                 .build()
 
         val roundtrippedWebhookCreateTelegramLinkResponse =

@@ -21,23 +21,23 @@ internal class AnalysisBrandResponseTest {
                     AnalysisBrandResponse.AnalysisSummary.builder()
                         .addCashtag(
                             AnalysisBrandResponse.AnalysisSummary.Cashtag.builder()
-                                .cashtag("\$NVDA")
+                                .cashtag("cashtag")
                                 .choices(
                                     AnalysisBrandResponse.AnalysisSummary.Cashtag.Choices.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
-                                .rows(3L)
+                                .rows(0L)
                                 .signal(
                                     AnalysisBrandResponse.AnalysisSummary.Cashtag.Signal.builder()
-                                        .bearish(1L)
-                                        .bullish(2L)
-                                        .score(0.3333)
+                                        .bearish(0L)
+                                        .bullish(0L)
+                                        .score(0.0)
                                         .build()
                                 )
                                 .build()
                         )
-                        .engagement(1840L)
+                        .engagement(0L)
                         .monitor(
                             AnalysisBrandResponse.AnalysisSummary.Monitor.builder()
                                 .addChangedRow(
@@ -47,12 +47,12 @@ internal class AnalysisBrandResponseTest {
                                             AnalysisBrandResponse.AnalysisSummary.Monitor.ChangedRow
                                                 .Change
                                                 .builder()
-                                                .current("negative")
-                                                .previous("positive")
-                                                .questionId("sentiment")
+                                                .current("current")
+                                                .previous("previous")
+                                                .questionId("questionId")
                                                 .build()
                                         )
-                                        .tweetId("1893456789012345678")
+                                        .tweetId("tweetId")
                                         .build()
                                 )
                                 .statuses(
@@ -69,16 +69,16 @@ internal class AnalysisBrandResponseTest {
                         )
                         .rows(
                             AnalysisBrandResponse.AnalysisSummary.Rows.builder()
-                                .analyzed(20L)
+                                .analyzed(0L)
                                 .failed(0L)
                                 .skipped(0L)
                                 .build()
                         )
-                        .schemaVersion(1L)
+                        .schemaVersion(0L)
                         .addSourceDomain(
                             AnalysisBrandResponse.AnalysisSummary.SourceDomain.builder()
-                                .domain("youtube.com")
-                                .posts(4L)
+                                .domain("domain")
+                                .posts(0L)
                                 .build()
                         )
                         .addTarget(
@@ -88,10 +88,10 @@ internal class AnalysisBrandResponseTest {
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
-                                .engagement(1200L)
-                                .mentions(14L)
-                                .name("Sony")
-                                .share(0.7)
+                                .engagement(0L)
+                                .mentions(0L)
+                                .name("name")
+                                .share(0.0)
                                 .top(
                                     AnalysisBrandResponse.AnalysisSummary.Target.Top.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -106,21 +106,21 @@ internal class AnalysisBrandResponseTest {
                         )
                         .build()
                 )
-                .hasNextPage(false)
-                .nextCursor("")
+                .hasNextPage(true)
+                .nextCursor("next_cursor")
                 .addResult(
                     AnalysisBrandResponse.Result.builder()
                         .analysis(
                             AnalysisBrandResponse.Result.Analysis.builder()
                                 .addAnswer(
                                     AnalysisBrandResponse.Result.Analysis.Answer.builder()
-                                        .questionId("sentiment")
-                                        .questionVersion("sentiment:2")
+                                        .questionId("questionId")
+                                        .questionVersion("questionVersion")
                                         .type(
                                             AnalysisBrandResponse.Result.Analysis.Answer.Type.CHOICE
                                         )
-                                        .confidence(0.93)
-                                        .addLevel("No attitude.")
+                                        .confidence(0.0)
+                                        .addLevel("level")
                                         .probabilities(
                                             AnalysisBrandResponse.Result.Analysis.Answer
                                                 .Probabilities
@@ -128,7 +128,7 @@ internal class AnalysisBrandResponseTest {
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
-                                        .probability(0.08)
+                                        .probability(0.0)
                                         .value(
                                             AnalysisBrandResponse.Result.Analysis.Answer.InnerValue
                                                 .ofString("string")
@@ -142,7 +142,7 @@ internal class AnalysisBrandResponseTest {
                                             AnalysisBrandResponse.Result.Analysis
                                                 .ContextAvailability
                                                 .Article
-                                                .NOT_SUPPLIED
+                                                .TEXT_BLOCKS
                                         )
                                         .author(
                                             AnalysisBrandResponse.Result.Analysis
@@ -154,7 +154,7 @@ internal class AnalysisBrandResponseTest {
                                             AnalysisBrandResponse.Result.Analysis
                                                 .ContextAvailability
                                                 .Media
-                                                .NOT_SUPPLIED
+                                                .TEXT_DESCRIPTIONS_ONLY
                                         )
                                         .postText(
                                             AnalysisBrandResponse.Result.Analysis
@@ -166,21 +166,21 @@ internal class AnalysisBrandResponseTest {
                                             AnalysisBrandResponse.Result.Analysis
                                                 .ContextAvailability
                                                 .Quote
-                                                .NOT_APPLICABLE
+                                                .AVAILABLE
                                         )
                                         .reply(
                                             AnalysisBrandResponse.Result.Analysis
                                                 .ContextAvailability
                                                 .Reply
-                                                .NOT_APPLICABLE
+                                                .AVAILABLE
                                         )
                                         .build()
                                 )
-                                .contextBytes(612L)
+                                .contextBytes(0L)
                                 .addQuestion(
                                     AnalysisBrandResponse.Result.Analysis.Question.builder()
-                                        .id("sentiment")
-                                        .version("sentiment:2")
+                                        .id("id")
+                                        .version("version")
                                         .build()
                                 )
                                 .build()
@@ -190,24 +190,22 @@ internal class AnalysisBrandResponseTest {
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
-                        .addCashtag("\$NVDA")
+                        .addCashtag("cashtag")
                         .monitor(
                             AnalysisBrandResponse.Result.Monitor.builder()
-                                .addChangedQuestionId("sentiment")
+                                .addChangedQuestionId("changedQuestionId")
                                 .addChange(
                                     AnalysisBrandResponse.Result.Monitor.Change.builder()
-                                        .current("negative")
-                                        .previous("positive")
-                                        .questionId("sentiment")
+                                        .current("current")
+                                        .previous("previous")
+                                        .questionId("questionId")
                                         .build()
                                 )
-                                .configurationFingerprint(
-                                    "9f2c4e1b7a5d3c8e6f0a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f6a"
-                                )
-                                .status(AnalysisBrandResponse.Result.Monitor.Status.CHANGED)
+                                .configurationFingerprint("configurationFingerprint")
+                                .status(AnalysisBrandResponse.Result.Monitor.Status.FIRST_RUN)
                                 .build()
                         )
-                        .addSourceDomain("youtube.com")
+                        .addSourceDomain("sourceDomain")
                         .tweet(
                             SearchTweet.builder()
                                 .id("id")
@@ -225,17 +223,17 @@ internal class AnalysisBrandResponseTest {
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
-                        .viralActualEngagementRate(1.2874)
-                        .viralAlgorithmScore(18.4)
-                        .viralScore(72L)
+                        .viralActualEngagementRate(0.0)
+                        .viralAlgorithmScore(0.0)
+                        .viralScore(0L)
                         .viralVerdict(AnalysisBrandResponse.Result.ViralVerdict.SEND_IT)
                         .build()
                 )
                 .addUnanalyzed(
                     AnalysisBrandResponse.Unanalyzed.builder()
-                        .id("1893456789012345678")
-                        .reason("post_unavailable")
-                        .status(AnalysisBrandResponse.Unanalyzed.Status.SKIPPED)
+                        .id("id")
+                        .reason("reason")
+                        .status(AnalysisBrandResponse.Unanalyzed.Status.FAILED)
                         .build()
                 )
                 .build()
@@ -245,23 +243,23 @@ internal class AnalysisBrandResponseTest {
                 AnalysisBrandResponse.AnalysisSummary.builder()
                     .addCashtag(
                         AnalysisBrandResponse.AnalysisSummary.Cashtag.builder()
-                            .cashtag("\$NVDA")
+                            .cashtag("cashtag")
                             .choices(
                                 AnalysisBrandResponse.AnalysisSummary.Cashtag.Choices.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("bar"))
                                     .build()
                             )
-                            .rows(3L)
+                            .rows(0L)
                             .signal(
                                 AnalysisBrandResponse.AnalysisSummary.Cashtag.Signal.builder()
-                                    .bearish(1L)
-                                    .bullish(2L)
-                                    .score(0.3333)
+                                    .bearish(0L)
+                                    .bullish(0L)
+                                    .score(0.0)
                                     .build()
                             )
                             .build()
                     )
-                    .engagement(1840L)
+                    .engagement(0L)
                     .monitor(
                         AnalysisBrandResponse.AnalysisSummary.Monitor.builder()
                             .addChangedRow(
@@ -270,12 +268,12 @@ internal class AnalysisBrandResponseTest {
                                         AnalysisBrandResponse.AnalysisSummary.Monitor.ChangedRow
                                             .Change
                                             .builder()
-                                            .current("negative")
-                                            .previous("positive")
-                                            .questionId("sentiment")
+                                            .current("current")
+                                            .previous("previous")
+                                            .questionId("questionId")
                                             .build()
                                     )
-                                    .tweetId("1893456789012345678")
+                                    .tweetId("tweetId")
                                     .build()
                             )
                             .statuses(
@@ -292,16 +290,16 @@ internal class AnalysisBrandResponseTest {
                     )
                     .rows(
                         AnalysisBrandResponse.AnalysisSummary.Rows.builder()
-                            .analyzed(20L)
+                            .analyzed(0L)
                             .failed(0L)
                             .skipped(0L)
                             .build()
                     )
-                    .schemaVersion(1L)
+                    .schemaVersion(0L)
                     .addSourceDomain(
                         AnalysisBrandResponse.AnalysisSummary.SourceDomain.builder()
-                            .domain("youtube.com")
-                            .posts(4L)
+                            .domain("domain")
+                            .posts(0L)
                             .build()
                     )
                     .addTarget(
@@ -311,10 +309,10 @@ internal class AnalysisBrandResponseTest {
                                     .putAdditionalProperty("foo", JsonValue.from("bar"))
                                     .build()
                             )
-                            .engagement(1200L)
-                            .mentions(14L)
-                            .name("Sony")
-                            .share(0.7)
+                            .engagement(0L)
+                            .mentions(0L)
+                            .name("name")
+                            .share(0.0)
                             .top(
                                 AnalysisBrandResponse.AnalysisSummary.Target.Top.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -329,8 +327,8 @@ internal class AnalysisBrandResponseTest {
                     )
                     .build()
             )
-        assertThat(analysisBrandResponse.hasNextPage()).isEqualTo(false)
-        assertThat(analysisBrandResponse.nextCursor()).isEqualTo("")
+        assertThat(analysisBrandResponse.hasNextPage()).isEqualTo(true)
+        assertThat(analysisBrandResponse.nextCursor()).isEqualTo("next_cursor")
         assertThat(analysisBrandResponse.results())
             .containsExactly(
                 AnalysisBrandResponse.Result.builder()
@@ -338,18 +336,18 @@ internal class AnalysisBrandResponseTest {
                         AnalysisBrandResponse.Result.Analysis.builder()
                             .addAnswer(
                                 AnalysisBrandResponse.Result.Analysis.Answer.builder()
-                                    .questionId("sentiment")
-                                    .questionVersion("sentiment:2")
+                                    .questionId("questionId")
+                                    .questionVersion("questionVersion")
                                     .type(AnalysisBrandResponse.Result.Analysis.Answer.Type.CHOICE)
-                                    .confidence(0.93)
-                                    .addLevel("No attitude.")
+                                    .confidence(0.0)
+                                    .addLevel("level")
                                     .probabilities(
                                         AnalysisBrandResponse.Result.Analysis.Answer.Probabilities
                                             .builder()
                                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
                                     )
-                                    .probability(0.08)
+                                    .probability(0.0)
                                     .value(
                                         AnalysisBrandResponse.Result.Analysis.Answer.InnerValue
                                             .ofString("string")
@@ -361,7 +359,7 @@ internal class AnalysisBrandResponseTest {
                                     .article(
                                         AnalysisBrandResponse.Result.Analysis.ContextAvailability
                                             .Article
-                                            .NOT_SUPPLIED
+                                            .TEXT_BLOCKS
                                     )
                                     .author(
                                         AnalysisBrandResponse.Result.Analysis.ContextAvailability
@@ -371,7 +369,7 @@ internal class AnalysisBrandResponseTest {
                                     .media(
                                         AnalysisBrandResponse.Result.Analysis.ContextAvailability
                                             .Media
-                                            .NOT_SUPPLIED
+                                            .TEXT_DESCRIPTIONS_ONLY
                                     )
                                     .postText(
                                         AnalysisBrandResponse.Result.Analysis.ContextAvailability
@@ -381,20 +379,20 @@ internal class AnalysisBrandResponseTest {
                                     .quote(
                                         AnalysisBrandResponse.Result.Analysis.ContextAvailability
                                             .Quote
-                                            .NOT_APPLICABLE
+                                            .AVAILABLE
                                     )
                                     .reply(
                                         AnalysisBrandResponse.Result.Analysis.ContextAvailability
                                             .Reply
-                                            .NOT_APPLICABLE
+                                            .AVAILABLE
                                     )
                                     .build()
                             )
-                            .contextBytes(612L)
+                            .contextBytes(0L)
                             .addQuestion(
                                 AnalysisBrandResponse.Result.Analysis.Question.builder()
-                                    .id("sentiment")
-                                    .version("sentiment:2")
+                                    .id("id")
+                                    .version("version")
                                     .build()
                             )
                             .build()
@@ -404,24 +402,22 @@ internal class AnalysisBrandResponseTest {
                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                             .build()
                     )
-                    .addCashtag("\$NVDA")
+                    .addCashtag("cashtag")
                     .monitor(
                         AnalysisBrandResponse.Result.Monitor.builder()
-                            .addChangedQuestionId("sentiment")
+                            .addChangedQuestionId("changedQuestionId")
                             .addChange(
                                 AnalysisBrandResponse.Result.Monitor.Change.builder()
-                                    .current("negative")
-                                    .previous("positive")
-                                    .questionId("sentiment")
+                                    .current("current")
+                                    .previous("previous")
+                                    .questionId("questionId")
                                     .build()
                             )
-                            .configurationFingerprint(
-                                "9f2c4e1b7a5d3c8e6f0a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f6a"
-                            )
-                            .status(AnalysisBrandResponse.Result.Monitor.Status.CHANGED)
+                            .configurationFingerprint("configurationFingerprint")
+                            .status(AnalysisBrandResponse.Result.Monitor.Status.FIRST_RUN)
                             .build()
                     )
-                    .addSourceDomain("youtube.com")
+                    .addSourceDomain("sourceDomain")
                     .tweet(
                         SearchTweet.builder()
                             .id("id")
@@ -439,18 +435,18 @@ internal class AnalysisBrandResponseTest {
                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                             .build()
                     )
-                    .viralActualEngagementRate(1.2874)
-                    .viralAlgorithmScore(18.4)
-                    .viralScore(72L)
+                    .viralActualEngagementRate(0.0)
+                    .viralAlgorithmScore(0.0)
+                    .viralScore(0L)
                     .viralVerdict(AnalysisBrandResponse.Result.ViralVerdict.SEND_IT)
                     .build()
             )
         assertThat(analysisBrandResponse.unanalyzed())
             .containsExactly(
                 AnalysisBrandResponse.Unanalyzed.builder()
-                    .id("1893456789012345678")
-                    .reason("post_unavailable")
-                    .status(AnalysisBrandResponse.Unanalyzed.Status.SKIPPED)
+                    .id("id")
+                    .reason("reason")
+                    .status(AnalysisBrandResponse.Unanalyzed.Status.FAILED)
                     .build()
             )
     }
@@ -464,23 +460,23 @@ internal class AnalysisBrandResponseTest {
                     AnalysisBrandResponse.AnalysisSummary.builder()
                         .addCashtag(
                             AnalysisBrandResponse.AnalysisSummary.Cashtag.builder()
-                                .cashtag("\$NVDA")
+                                .cashtag("cashtag")
                                 .choices(
                                     AnalysisBrandResponse.AnalysisSummary.Cashtag.Choices.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
-                                .rows(3L)
+                                .rows(0L)
                                 .signal(
                                     AnalysisBrandResponse.AnalysisSummary.Cashtag.Signal.builder()
-                                        .bearish(1L)
-                                        .bullish(2L)
-                                        .score(0.3333)
+                                        .bearish(0L)
+                                        .bullish(0L)
+                                        .score(0.0)
                                         .build()
                                 )
                                 .build()
                         )
-                        .engagement(1840L)
+                        .engagement(0L)
                         .monitor(
                             AnalysisBrandResponse.AnalysisSummary.Monitor.builder()
                                 .addChangedRow(
@@ -490,12 +486,12 @@ internal class AnalysisBrandResponseTest {
                                             AnalysisBrandResponse.AnalysisSummary.Monitor.ChangedRow
                                                 .Change
                                                 .builder()
-                                                .current("negative")
-                                                .previous("positive")
-                                                .questionId("sentiment")
+                                                .current("current")
+                                                .previous("previous")
+                                                .questionId("questionId")
                                                 .build()
                                         )
-                                        .tweetId("1893456789012345678")
+                                        .tweetId("tweetId")
                                         .build()
                                 )
                                 .statuses(
@@ -512,16 +508,16 @@ internal class AnalysisBrandResponseTest {
                         )
                         .rows(
                             AnalysisBrandResponse.AnalysisSummary.Rows.builder()
-                                .analyzed(20L)
+                                .analyzed(0L)
                                 .failed(0L)
                                 .skipped(0L)
                                 .build()
                         )
-                        .schemaVersion(1L)
+                        .schemaVersion(0L)
                         .addSourceDomain(
                             AnalysisBrandResponse.AnalysisSummary.SourceDomain.builder()
-                                .domain("youtube.com")
-                                .posts(4L)
+                                .domain("domain")
+                                .posts(0L)
                                 .build()
                         )
                         .addTarget(
@@ -531,10 +527,10 @@ internal class AnalysisBrandResponseTest {
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
-                                .engagement(1200L)
-                                .mentions(14L)
-                                .name("Sony")
-                                .share(0.7)
+                                .engagement(0L)
+                                .mentions(0L)
+                                .name("name")
+                                .share(0.0)
                                 .top(
                                     AnalysisBrandResponse.AnalysisSummary.Target.Top.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -549,21 +545,21 @@ internal class AnalysisBrandResponseTest {
                         )
                         .build()
                 )
-                .hasNextPage(false)
-                .nextCursor("")
+                .hasNextPage(true)
+                .nextCursor("next_cursor")
                 .addResult(
                     AnalysisBrandResponse.Result.builder()
                         .analysis(
                             AnalysisBrandResponse.Result.Analysis.builder()
                                 .addAnswer(
                                     AnalysisBrandResponse.Result.Analysis.Answer.builder()
-                                        .questionId("sentiment")
-                                        .questionVersion("sentiment:2")
+                                        .questionId("questionId")
+                                        .questionVersion("questionVersion")
                                         .type(
                                             AnalysisBrandResponse.Result.Analysis.Answer.Type.CHOICE
                                         )
-                                        .confidence(0.93)
-                                        .addLevel("No attitude.")
+                                        .confidence(0.0)
+                                        .addLevel("level")
                                         .probabilities(
                                             AnalysisBrandResponse.Result.Analysis.Answer
                                                 .Probabilities
@@ -571,7 +567,7 @@ internal class AnalysisBrandResponseTest {
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
-                                        .probability(0.08)
+                                        .probability(0.0)
                                         .value(
                                             AnalysisBrandResponse.Result.Analysis.Answer.InnerValue
                                                 .ofString("string")
@@ -585,7 +581,7 @@ internal class AnalysisBrandResponseTest {
                                             AnalysisBrandResponse.Result.Analysis
                                                 .ContextAvailability
                                                 .Article
-                                                .NOT_SUPPLIED
+                                                .TEXT_BLOCKS
                                         )
                                         .author(
                                             AnalysisBrandResponse.Result.Analysis
@@ -597,7 +593,7 @@ internal class AnalysisBrandResponseTest {
                                             AnalysisBrandResponse.Result.Analysis
                                                 .ContextAvailability
                                                 .Media
-                                                .NOT_SUPPLIED
+                                                .TEXT_DESCRIPTIONS_ONLY
                                         )
                                         .postText(
                                             AnalysisBrandResponse.Result.Analysis
@@ -609,21 +605,21 @@ internal class AnalysisBrandResponseTest {
                                             AnalysisBrandResponse.Result.Analysis
                                                 .ContextAvailability
                                                 .Quote
-                                                .NOT_APPLICABLE
+                                                .AVAILABLE
                                         )
                                         .reply(
                                             AnalysisBrandResponse.Result.Analysis
                                                 .ContextAvailability
                                                 .Reply
-                                                .NOT_APPLICABLE
+                                                .AVAILABLE
                                         )
                                         .build()
                                 )
-                                .contextBytes(612L)
+                                .contextBytes(0L)
                                 .addQuestion(
                                     AnalysisBrandResponse.Result.Analysis.Question.builder()
-                                        .id("sentiment")
-                                        .version("sentiment:2")
+                                        .id("id")
+                                        .version("version")
                                         .build()
                                 )
                                 .build()
@@ -633,24 +629,22 @@ internal class AnalysisBrandResponseTest {
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
-                        .addCashtag("\$NVDA")
+                        .addCashtag("cashtag")
                         .monitor(
                             AnalysisBrandResponse.Result.Monitor.builder()
-                                .addChangedQuestionId("sentiment")
+                                .addChangedQuestionId("changedQuestionId")
                                 .addChange(
                                     AnalysisBrandResponse.Result.Monitor.Change.builder()
-                                        .current("negative")
-                                        .previous("positive")
-                                        .questionId("sentiment")
+                                        .current("current")
+                                        .previous("previous")
+                                        .questionId("questionId")
                                         .build()
                                 )
-                                .configurationFingerprint(
-                                    "9f2c4e1b7a5d3c8e6f0a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f6a"
-                                )
-                                .status(AnalysisBrandResponse.Result.Monitor.Status.CHANGED)
+                                .configurationFingerprint("configurationFingerprint")
+                                .status(AnalysisBrandResponse.Result.Monitor.Status.FIRST_RUN)
                                 .build()
                         )
-                        .addSourceDomain("youtube.com")
+                        .addSourceDomain("sourceDomain")
                         .tweet(
                             SearchTweet.builder()
                                 .id("id")
@@ -668,17 +662,17 @@ internal class AnalysisBrandResponseTest {
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
-                        .viralActualEngagementRate(1.2874)
-                        .viralAlgorithmScore(18.4)
-                        .viralScore(72L)
+                        .viralActualEngagementRate(0.0)
+                        .viralAlgorithmScore(0.0)
+                        .viralScore(0L)
                         .viralVerdict(AnalysisBrandResponse.Result.ViralVerdict.SEND_IT)
                         .build()
                 )
                 .addUnanalyzed(
                     AnalysisBrandResponse.Unanalyzed.builder()
-                        .id("1893456789012345678")
-                        .reason("post_unavailable")
-                        .status(AnalysisBrandResponse.Unanalyzed.Status.SKIPPED)
+                        .id("id")
+                        .reason("reason")
+                        .status(AnalysisBrandResponse.Unanalyzed.Status.FAILED)
                         .build()
                 )
                 .build()

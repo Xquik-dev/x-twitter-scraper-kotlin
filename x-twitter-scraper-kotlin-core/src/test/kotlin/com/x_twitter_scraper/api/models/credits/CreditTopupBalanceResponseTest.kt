@@ -14,33 +14,17 @@ internal class CreditTopupBalanceResponseTest {
     @Test
     fun create() {
         val creditTopupBalanceResponse =
-            CreditTopupBalanceResponse.builder()
-                .redirectUrl(
-                    "https://xquik.com/api/v1/credits/topup/redirect?session_id=checkout_example"
-                )
-                .url("https://xquik.com/api/v1/credits/topup/redirect?session_id=checkout_example")
-                .build()
+            CreditTopupBalanceResponse.builder().redirectUrl("redirect_url").url("url").build()
 
-        assertThat(creditTopupBalanceResponse.redirectUrl())
-            .isEqualTo(
-                "https://xquik.com/api/v1/credits/topup/redirect?session_id=checkout_example"
-            )
-        assertThat(creditTopupBalanceResponse.url())
-            .isEqualTo(
-                "https://xquik.com/api/v1/credits/topup/redirect?session_id=checkout_example"
-            )
+        assertThat(creditTopupBalanceResponse.redirectUrl()).isEqualTo("redirect_url")
+        assertThat(creditTopupBalanceResponse.url()).isEqualTo("url")
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
         val creditTopupBalanceResponse =
-            CreditTopupBalanceResponse.builder()
-                .redirectUrl(
-                    "https://xquik.com/api/v1/credits/topup/redirect?session_id=checkout_example"
-                )
-                .url("https://xquik.com/api/v1/credits/topup/redirect?session_id=checkout_example")
-                .build()
+            CreditTopupBalanceResponse.builder().redirectUrl("redirect_url").url("url").build()
 
         val roundtrippedCreditTopupBalanceResponse =
             jsonMapper.readValue(

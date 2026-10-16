@@ -17,26 +17,24 @@ internal class MonitorCreateResponseTest {
     fun create() {
         val monitorCreateResponse =
             MonitorCreateResponse.builder()
-                .id("42")
-                .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                .id("id")
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .addEventType(EventType.TWEET_NEW)
-                .addEventType(EventType.TWEET_REPLY)
                 .isActive(true)
-                .nextBillingAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
-                .username("elonmusk")
-                .xUserId("1234567890")
+                .nextBillingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .username("username")
+                .xUserId("xUserId")
                 .build()
 
-        assertThat(monitorCreateResponse.id()).isEqualTo("42")
+        assertThat(monitorCreateResponse.id()).isEqualTo("id")
         assertThat(monitorCreateResponse.createdAt())
-            .isEqualTo(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
-        assertThat(monitorCreateResponse.eventTypes())
-            .containsExactly(EventType.TWEET_NEW, EventType.TWEET_REPLY)
+            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(monitorCreateResponse.eventTypes()).containsExactly(EventType.TWEET_NEW)
         assertThat(monitorCreateResponse.isActive()).isEqualTo(true)
         assertThat(monitorCreateResponse.nextBillingAt())
-            .isEqualTo(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
-        assertThat(monitorCreateResponse.username()).isEqualTo("elonmusk")
-        assertThat(monitorCreateResponse.xUserId()).isEqualTo("1234567890")
+            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(monitorCreateResponse.username()).isEqualTo("username")
+        assertThat(monitorCreateResponse.xUserId()).isEqualTo("xUserId")
     }
 
     @Test
@@ -44,14 +42,13 @@ internal class MonitorCreateResponseTest {
         val jsonMapper = jsonMapper()
         val monitorCreateResponse =
             MonitorCreateResponse.builder()
-                .id("42")
-                .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                .id("id")
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .addEventType(EventType.TWEET_NEW)
-                .addEventType(EventType.TWEET_REPLY)
                 .isActive(true)
-                .nextBillingAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
-                .username("elonmusk")
-                .xUserId("1234567890")
+                .nextBillingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .username("username")
+                .xUserId("xUserId")
                 .build()
 
         val roundtrippedMonitorCreateResponse =

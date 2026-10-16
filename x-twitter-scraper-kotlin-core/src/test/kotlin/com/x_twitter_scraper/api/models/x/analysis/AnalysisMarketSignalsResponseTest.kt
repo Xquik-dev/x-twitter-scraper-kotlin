@@ -21,25 +21,25 @@ internal class AnalysisMarketSignalsResponseTest {
                     AnalysisMarketSignalsResponse.AnalysisSummary.builder()
                         .addCashtag(
                             AnalysisMarketSignalsResponse.AnalysisSummary.Cashtag.builder()
-                                .cashtag("\$NVDA")
+                                .cashtag("cashtag")
                                 .choices(
                                     AnalysisMarketSignalsResponse.AnalysisSummary.Cashtag.Choices
                                         .builder()
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
-                                .rows(3L)
+                                .rows(0L)
                                 .signal(
                                     AnalysisMarketSignalsResponse.AnalysisSummary.Cashtag.Signal
                                         .builder()
-                                        .bearish(1L)
-                                        .bullish(2L)
-                                        .score(0.3333)
+                                        .bearish(0L)
+                                        .bullish(0L)
+                                        .score(0.0)
                                         .build()
                                 )
                                 .build()
                         )
-                        .engagement(1840L)
+                        .engagement(0L)
                         .monitor(
                             AnalysisMarketSignalsResponse.AnalysisSummary.Monitor.builder()
                                 .addChangedRow(
@@ -50,12 +50,12 @@ internal class AnalysisMarketSignalsResponseTest {
                                                 .ChangedRow
                                                 .Change
                                                 .builder()
-                                                .current("negative")
-                                                .previous("positive")
-                                                .questionId("sentiment")
+                                                .current("current")
+                                                .previous("previous")
+                                                .questionId("questionId")
                                                 .build()
                                         )
-                                        .tweetId("1893456789012345678")
+                                        .tweetId("tweetId")
                                         .build()
                                 )
                                 .statuses(
@@ -73,16 +73,16 @@ internal class AnalysisMarketSignalsResponseTest {
                         )
                         .rows(
                             AnalysisMarketSignalsResponse.AnalysisSummary.Rows.builder()
-                                .analyzed(20L)
+                                .analyzed(0L)
                                 .failed(0L)
                                 .skipped(0L)
                                 .build()
                         )
-                        .schemaVersion(1L)
+                        .schemaVersion(0L)
                         .addSourceDomain(
                             AnalysisMarketSignalsResponse.AnalysisSummary.SourceDomain.builder()
-                                .domain("youtube.com")
-                                .posts(4L)
+                                .domain("domain")
+                                .posts(0L)
                                 .build()
                         )
                         .addTarget(
@@ -93,10 +93,10 @@ internal class AnalysisMarketSignalsResponseTest {
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
-                                .engagement(1200L)
-                                .mentions(14L)
-                                .name("Sony")
-                                .share(0.7)
+                                .engagement(0L)
+                                .mentions(0L)
+                                .name("name")
+                                .share(0.0)
                                 .top(
                                     AnalysisMarketSignalsResponse.AnalysisSummary.Target.Top
                                         .builder()
@@ -112,23 +112,23 @@ internal class AnalysisMarketSignalsResponseTest {
                         )
                         .build()
                 )
-                .hasNextPage(false)
-                .nextCursor("")
+                .hasNextPage(true)
+                .nextCursor("next_cursor")
                 .addResult(
                     AnalysisMarketSignalsResponse.Result.builder()
                         .analysis(
                             AnalysisMarketSignalsResponse.Result.Analysis.builder()
                                 .addAnswer(
                                     AnalysisMarketSignalsResponse.Result.Analysis.Answer.builder()
-                                        .questionId("sentiment")
-                                        .questionVersion("sentiment:2")
+                                        .questionId("questionId")
+                                        .questionVersion("questionVersion")
                                         .type(
                                             AnalysisMarketSignalsResponse.Result.Analysis.Answer
                                                 .Type
                                                 .CHOICE
                                         )
-                                        .confidence(0.93)
-                                        .addLevel("No attitude.")
+                                        .confidence(0.0)
+                                        .addLevel("level")
                                         .probabilities(
                                             AnalysisMarketSignalsResponse.Result.Analysis.Answer
                                                 .Probabilities
@@ -136,7 +136,7 @@ internal class AnalysisMarketSignalsResponseTest {
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
-                                        .probability(0.08)
+                                        .probability(0.0)
                                         .value(
                                             AnalysisMarketSignalsResponse.Result.Analysis.Answer
                                                 .InnerValue
@@ -152,7 +152,7 @@ internal class AnalysisMarketSignalsResponseTest {
                                             AnalysisMarketSignalsResponse.Result.Analysis
                                                 .ContextAvailability
                                                 .Article
-                                                .NOT_SUPPLIED
+                                                .TEXT_BLOCKS
                                         )
                                         .author(
                                             AnalysisMarketSignalsResponse.Result.Analysis
@@ -164,7 +164,7 @@ internal class AnalysisMarketSignalsResponseTest {
                                             AnalysisMarketSignalsResponse.Result.Analysis
                                                 .ContextAvailability
                                                 .Media
-                                                .NOT_SUPPLIED
+                                                .TEXT_DESCRIPTIONS_ONLY
                                         )
                                         .postText(
                                             AnalysisMarketSignalsResponse.Result.Analysis
@@ -176,21 +176,21 @@ internal class AnalysisMarketSignalsResponseTest {
                                             AnalysisMarketSignalsResponse.Result.Analysis
                                                 .ContextAvailability
                                                 .Quote
-                                                .NOT_APPLICABLE
+                                                .AVAILABLE
                                         )
                                         .reply(
                                             AnalysisMarketSignalsResponse.Result.Analysis
                                                 .ContextAvailability
                                                 .Reply
-                                                .NOT_APPLICABLE
+                                                .AVAILABLE
                                         )
                                         .build()
                                 )
-                                .contextBytes(612L)
+                                .contextBytes(0L)
                                 .addQuestion(
                                     AnalysisMarketSignalsResponse.Result.Analysis.Question.builder()
-                                        .id("sentiment")
-                                        .version("sentiment:2")
+                                        .id("id")
+                                        .version("version")
                                         .build()
                                 )
                                 .build()
@@ -200,24 +200,24 @@ internal class AnalysisMarketSignalsResponseTest {
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
-                        .addCashtag("\$NVDA")
+                        .addCashtag("cashtag")
                         .monitor(
                             AnalysisMarketSignalsResponse.Result.Monitor.builder()
-                                .addChangedQuestionId("sentiment")
+                                .addChangedQuestionId("changedQuestionId")
                                 .addChange(
                                     AnalysisMarketSignalsResponse.Result.Monitor.Change.builder()
-                                        .current("negative")
-                                        .previous("positive")
-                                        .questionId("sentiment")
+                                        .current("current")
+                                        .previous("previous")
+                                        .questionId("questionId")
                                         .build()
                                 )
-                                .configurationFingerprint(
-                                    "9f2c4e1b7a5d3c8e6f0a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f6a"
+                                .configurationFingerprint("configurationFingerprint")
+                                .status(
+                                    AnalysisMarketSignalsResponse.Result.Monitor.Status.FIRST_RUN
                                 )
-                                .status(AnalysisMarketSignalsResponse.Result.Monitor.Status.CHANGED)
                                 .build()
                         )
-                        .addSourceDomain("youtube.com")
+                        .addSourceDomain("sourceDomain")
                         .tweet(
                             SearchTweet.builder()
                                 .id("id")
@@ -235,17 +235,17 @@ internal class AnalysisMarketSignalsResponseTest {
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
-                        .viralActualEngagementRate(1.2874)
-                        .viralAlgorithmScore(18.4)
-                        .viralScore(72L)
+                        .viralActualEngagementRate(0.0)
+                        .viralAlgorithmScore(0.0)
+                        .viralScore(0L)
                         .viralVerdict(AnalysisMarketSignalsResponse.Result.ViralVerdict.SEND_IT)
                         .build()
                 )
                 .addUnanalyzed(
                     AnalysisMarketSignalsResponse.Unanalyzed.builder()
-                        .id("1893456789012345678")
-                        .reason("post_unavailable")
-                        .status(AnalysisMarketSignalsResponse.Unanalyzed.Status.SKIPPED)
+                        .id("id")
+                        .reason("reason")
+                        .status(AnalysisMarketSignalsResponse.Unanalyzed.Status.FAILED)
                         .build()
                 )
                 .build()
@@ -255,25 +255,25 @@ internal class AnalysisMarketSignalsResponseTest {
                 AnalysisMarketSignalsResponse.AnalysisSummary.builder()
                     .addCashtag(
                         AnalysisMarketSignalsResponse.AnalysisSummary.Cashtag.builder()
-                            .cashtag("\$NVDA")
+                            .cashtag("cashtag")
                             .choices(
                                 AnalysisMarketSignalsResponse.AnalysisSummary.Cashtag.Choices
                                     .builder()
                                     .putAdditionalProperty("foo", JsonValue.from("bar"))
                                     .build()
                             )
-                            .rows(3L)
+                            .rows(0L)
                             .signal(
                                 AnalysisMarketSignalsResponse.AnalysisSummary.Cashtag.Signal
                                     .builder()
-                                    .bearish(1L)
-                                    .bullish(2L)
-                                    .score(0.3333)
+                                    .bearish(0L)
+                                    .bullish(0L)
+                                    .score(0.0)
                                     .build()
                             )
                             .build()
                     )
-                    .engagement(1840L)
+                    .engagement(0L)
                     .monitor(
                         AnalysisMarketSignalsResponse.AnalysisSummary.Monitor.builder()
                             .addChangedRow(
@@ -284,12 +284,12 @@ internal class AnalysisMarketSignalsResponseTest {
                                             .ChangedRow
                                             .Change
                                             .builder()
-                                            .current("negative")
-                                            .previous("positive")
-                                            .questionId("sentiment")
+                                            .current("current")
+                                            .previous("previous")
+                                            .questionId("questionId")
                                             .build()
                                     )
-                                    .tweetId("1893456789012345678")
+                                    .tweetId("tweetId")
                                     .build()
                             )
                             .statuses(
@@ -307,16 +307,16 @@ internal class AnalysisMarketSignalsResponseTest {
                     )
                     .rows(
                         AnalysisMarketSignalsResponse.AnalysisSummary.Rows.builder()
-                            .analyzed(20L)
+                            .analyzed(0L)
                             .failed(0L)
                             .skipped(0L)
                             .build()
                     )
-                    .schemaVersion(1L)
+                    .schemaVersion(0L)
                     .addSourceDomain(
                         AnalysisMarketSignalsResponse.AnalysisSummary.SourceDomain.builder()
-                            .domain("youtube.com")
-                            .posts(4L)
+                            .domain("domain")
+                            .posts(0L)
                             .build()
                     )
                     .addTarget(
@@ -327,10 +327,10 @@ internal class AnalysisMarketSignalsResponseTest {
                                     .putAdditionalProperty("foo", JsonValue.from("bar"))
                                     .build()
                             )
-                            .engagement(1200L)
-                            .mentions(14L)
-                            .name("Sony")
-                            .share(0.7)
+                            .engagement(0L)
+                            .mentions(0L)
+                            .name("name")
+                            .share(0.0)
                             .top(
                                 AnalysisMarketSignalsResponse.AnalysisSummary.Target.Top.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -345,8 +345,8 @@ internal class AnalysisMarketSignalsResponseTest {
                     )
                     .build()
             )
-        assertThat(analysisMarketSignalsResponse.hasNextPage()).isEqualTo(false)
-        assertThat(analysisMarketSignalsResponse.nextCursor()).isEqualTo("")
+        assertThat(analysisMarketSignalsResponse.hasNextPage()).isEqualTo(true)
+        assertThat(analysisMarketSignalsResponse.nextCursor()).isEqualTo("next_cursor")
         assertThat(analysisMarketSignalsResponse.results())
             .containsExactly(
                 AnalysisMarketSignalsResponse.Result.builder()
@@ -354,14 +354,14 @@ internal class AnalysisMarketSignalsResponseTest {
                         AnalysisMarketSignalsResponse.Result.Analysis.builder()
                             .addAnswer(
                                 AnalysisMarketSignalsResponse.Result.Analysis.Answer.builder()
-                                    .questionId("sentiment")
-                                    .questionVersion("sentiment:2")
+                                    .questionId("questionId")
+                                    .questionVersion("questionVersion")
                                     .type(
                                         AnalysisMarketSignalsResponse.Result.Analysis.Answer.Type
                                             .CHOICE
                                     )
-                                    .confidence(0.93)
-                                    .addLevel("No attitude.")
+                                    .confidence(0.0)
+                                    .addLevel("level")
                                     .probabilities(
                                         AnalysisMarketSignalsResponse.Result.Analysis.Answer
                                             .Probabilities
@@ -369,7 +369,7 @@ internal class AnalysisMarketSignalsResponseTest {
                                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
                                     )
-                                    .probability(0.08)
+                                    .probability(0.0)
                                     .value(
                                         AnalysisMarketSignalsResponse.Result.Analysis.Answer
                                             .InnerValue
@@ -384,7 +384,7 @@ internal class AnalysisMarketSignalsResponseTest {
                                         AnalysisMarketSignalsResponse.Result.Analysis
                                             .ContextAvailability
                                             .Article
-                                            .NOT_SUPPLIED
+                                            .TEXT_BLOCKS
                                     )
                                     .author(
                                         AnalysisMarketSignalsResponse.Result.Analysis
@@ -396,7 +396,7 @@ internal class AnalysisMarketSignalsResponseTest {
                                         AnalysisMarketSignalsResponse.Result.Analysis
                                             .ContextAvailability
                                             .Media
-                                            .NOT_SUPPLIED
+                                            .TEXT_DESCRIPTIONS_ONLY
                                     )
                                     .postText(
                                         AnalysisMarketSignalsResponse.Result.Analysis
@@ -408,21 +408,21 @@ internal class AnalysisMarketSignalsResponseTest {
                                         AnalysisMarketSignalsResponse.Result.Analysis
                                             .ContextAvailability
                                             .Quote
-                                            .NOT_APPLICABLE
+                                            .AVAILABLE
                                     )
                                     .reply(
                                         AnalysisMarketSignalsResponse.Result.Analysis
                                             .ContextAvailability
                                             .Reply
-                                            .NOT_APPLICABLE
+                                            .AVAILABLE
                                     )
                                     .build()
                             )
-                            .contextBytes(612L)
+                            .contextBytes(0L)
                             .addQuestion(
                                 AnalysisMarketSignalsResponse.Result.Analysis.Question.builder()
-                                    .id("sentiment")
-                                    .version("sentiment:2")
+                                    .id("id")
+                                    .version("version")
                                     .build()
                             )
                             .build()
@@ -432,24 +432,22 @@ internal class AnalysisMarketSignalsResponseTest {
                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                             .build()
                     )
-                    .addCashtag("\$NVDA")
+                    .addCashtag("cashtag")
                     .monitor(
                         AnalysisMarketSignalsResponse.Result.Monitor.builder()
-                            .addChangedQuestionId("sentiment")
+                            .addChangedQuestionId("changedQuestionId")
                             .addChange(
                                 AnalysisMarketSignalsResponse.Result.Monitor.Change.builder()
-                                    .current("negative")
-                                    .previous("positive")
-                                    .questionId("sentiment")
+                                    .current("current")
+                                    .previous("previous")
+                                    .questionId("questionId")
                                     .build()
                             )
-                            .configurationFingerprint(
-                                "9f2c4e1b7a5d3c8e6f0a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f6a"
-                            )
-                            .status(AnalysisMarketSignalsResponse.Result.Monitor.Status.CHANGED)
+                            .configurationFingerprint("configurationFingerprint")
+                            .status(AnalysisMarketSignalsResponse.Result.Monitor.Status.FIRST_RUN)
                             .build()
                     )
-                    .addSourceDomain("youtube.com")
+                    .addSourceDomain("sourceDomain")
                     .tweet(
                         SearchTweet.builder()
                             .id("id")
@@ -467,18 +465,18 @@ internal class AnalysisMarketSignalsResponseTest {
                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                             .build()
                     )
-                    .viralActualEngagementRate(1.2874)
-                    .viralAlgorithmScore(18.4)
-                    .viralScore(72L)
+                    .viralActualEngagementRate(0.0)
+                    .viralAlgorithmScore(0.0)
+                    .viralScore(0L)
                     .viralVerdict(AnalysisMarketSignalsResponse.Result.ViralVerdict.SEND_IT)
                     .build()
             )
         assertThat(analysisMarketSignalsResponse.unanalyzed())
             .containsExactly(
                 AnalysisMarketSignalsResponse.Unanalyzed.builder()
-                    .id("1893456789012345678")
-                    .reason("post_unavailable")
-                    .status(AnalysisMarketSignalsResponse.Unanalyzed.Status.SKIPPED)
+                    .id("id")
+                    .reason("reason")
+                    .status(AnalysisMarketSignalsResponse.Unanalyzed.Status.FAILED)
                     .build()
             )
     }
@@ -492,25 +490,25 @@ internal class AnalysisMarketSignalsResponseTest {
                     AnalysisMarketSignalsResponse.AnalysisSummary.builder()
                         .addCashtag(
                             AnalysisMarketSignalsResponse.AnalysisSummary.Cashtag.builder()
-                                .cashtag("\$NVDA")
+                                .cashtag("cashtag")
                                 .choices(
                                     AnalysisMarketSignalsResponse.AnalysisSummary.Cashtag.Choices
                                         .builder()
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
-                                .rows(3L)
+                                .rows(0L)
                                 .signal(
                                     AnalysisMarketSignalsResponse.AnalysisSummary.Cashtag.Signal
                                         .builder()
-                                        .bearish(1L)
-                                        .bullish(2L)
-                                        .score(0.3333)
+                                        .bearish(0L)
+                                        .bullish(0L)
+                                        .score(0.0)
                                         .build()
                                 )
                                 .build()
                         )
-                        .engagement(1840L)
+                        .engagement(0L)
                         .monitor(
                             AnalysisMarketSignalsResponse.AnalysisSummary.Monitor.builder()
                                 .addChangedRow(
@@ -521,12 +519,12 @@ internal class AnalysisMarketSignalsResponseTest {
                                                 .ChangedRow
                                                 .Change
                                                 .builder()
-                                                .current("negative")
-                                                .previous("positive")
-                                                .questionId("sentiment")
+                                                .current("current")
+                                                .previous("previous")
+                                                .questionId("questionId")
                                                 .build()
                                         )
-                                        .tweetId("1893456789012345678")
+                                        .tweetId("tweetId")
                                         .build()
                                 )
                                 .statuses(
@@ -544,16 +542,16 @@ internal class AnalysisMarketSignalsResponseTest {
                         )
                         .rows(
                             AnalysisMarketSignalsResponse.AnalysisSummary.Rows.builder()
-                                .analyzed(20L)
+                                .analyzed(0L)
                                 .failed(0L)
                                 .skipped(0L)
                                 .build()
                         )
-                        .schemaVersion(1L)
+                        .schemaVersion(0L)
                         .addSourceDomain(
                             AnalysisMarketSignalsResponse.AnalysisSummary.SourceDomain.builder()
-                                .domain("youtube.com")
-                                .posts(4L)
+                                .domain("domain")
+                                .posts(0L)
                                 .build()
                         )
                         .addTarget(
@@ -564,10 +562,10 @@ internal class AnalysisMarketSignalsResponseTest {
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
-                                .engagement(1200L)
-                                .mentions(14L)
-                                .name("Sony")
-                                .share(0.7)
+                                .engagement(0L)
+                                .mentions(0L)
+                                .name("name")
+                                .share(0.0)
                                 .top(
                                     AnalysisMarketSignalsResponse.AnalysisSummary.Target.Top
                                         .builder()
@@ -583,23 +581,23 @@ internal class AnalysisMarketSignalsResponseTest {
                         )
                         .build()
                 )
-                .hasNextPage(false)
-                .nextCursor("")
+                .hasNextPage(true)
+                .nextCursor("next_cursor")
                 .addResult(
                     AnalysisMarketSignalsResponse.Result.builder()
                         .analysis(
                             AnalysisMarketSignalsResponse.Result.Analysis.builder()
                                 .addAnswer(
                                     AnalysisMarketSignalsResponse.Result.Analysis.Answer.builder()
-                                        .questionId("sentiment")
-                                        .questionVersion("sentiment:2")
+                                        .questionId("questionId")
+                                        .questionVersion("questionVersion")
                                         .type(
                                             AnalysisMarketSignalsResponse.Result.Analysis.Answer
                                                 .Type
                                                 .CHOICE
                                         )
-                                        .confidence(0.93)
-                                        .addLevel("No attitude.")
+                                        .confidence(0.0)
+                                        .addLevel("level")
                                         .probabilities(
                                             AnalysisMarketSignalsResponse.Result.Analysis.Answer
                                                 .Probabilities
@@ -607,7 +605,7 @@ internal class AnalysisMarketSignalsResponseTest {
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
-                                        .probability(0.08)
+                                        .probability(0.0)
                                         .value(
                                             AnalysisMarketSignalsResponse.Result.Analysis.Answer
                                                 .InnerValue
@@ -623,7 +621,7 @@ internal class AnalysisMarketSignalsResponseTest {
                                             AnalysisMarketSignalsResponse.Result.Analysis
                                                 .ContextAvailability
                                                 .Article
-                                                .NOT_SUPPLIED
+                                                .TEXT_BLOCKS
                                         )
                                         .author(
                                             AnalysisMarketSignalsResponse.Result.Analysis
@@ -635,7 +633,7 @@ internal class AnalysisMarketSignalsResponseTest {
                                             AnalysisMarketSignalsResponse.Result.Analysis
                                                 .ContextAvailability
                                                 .Media
-                                                .NOT_SUPPLIED
+                                                .TEXT_DESCRIPTIONS_ONLY
                                         )
                                         .postText(
                                             AnalysisMarketSignalsResponse.Result.Analysis
@@ -647,21 +645,21 @@ internal class AnalysisMarketSignalsResponseTest {
                                             AnalysisMarketSignalsResponse.Result.Analysis
                                                 .ContextAvailability
                                                 .Quote
-                                                .NOT_APPLICABLE
+                                                .AVAILABLE
                                         )
                                         .reply(
                                             AnalysisMarketSignalsResponse.Result.Analysis
                                                 .ContextAvailability
                                                 .Reply
-                                                .NOT_APPLICABLE
+                                                .AVAILABLE
                                         )
                                         .build()
                                 )
-                                .contextBytes(612L)
+                                .contextBytes(0L)
                                 .addQuestion(
                                     AnalysisMarketSignalsResponse.Result.Analysis.Question.builder()
-                                        .id("sentiment")
-                                        .version("sentiment:2")
+                                        .id("id")
+                                        .version("version")
                                         .build()
                                 )
                                 .build()
@@ -671,24 +669,24 @@ internal class AnalysisMarketSignalsResponseTest {
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
-                        .addCashtag("\$NVDA")
+                        .addCashtag("cashtag")
                         .monitor(
                             AnalysisMarketSignalsResponse.Result.Monitor.builder()
-                                .addChangedQuestionId("sentiment")
+                                .addChangedQuestionId("changedQuestionId")
                                 .addChange(
                                     AnalysisMarketSignalsResponse.Result.Monitor.Change.builder()
-                                        .current("negative")
-                                        .previous("positive")
-                                        .questionId("sentiment")
+                                        .current("current")
+                                        .previous("previous")
+                                        .questionId("questionId")
                                         .build()
                                 )
-                                .configurationFingerprint(
-                                    "9f2c4e1b7a5d3c8e6f0a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f6a"
+                                .configurationFingerprint("configurationFingerprint")
+                                .status(
+                                    AnalysisMarketSignalsResponse.Result.Monitor.Status.FIRST_RUN
                                 )
-                                .status(AnalysisMarketSignalsResponse.Result.Monitor.Status.CHANGED)
                                 .build()
                         )
-                        .addSourceDomain("youtube.com")
+                        .addSourceDomain("sourceDomain")
                         .tweet(
                             SearchTweet.builder()
                                 .id("id")
@@ -706,17 +704,17 @@ internal class AnalysisMarketSignalsResponseTest {
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
-                        .viralActualEngagementRate(1.2874)
-                        .viralAlgorithmScore(18.4)
-                        .viralScore(72L)
+                        .viralActualEngagementRate(0.0)
+                        .viralAlgorithmScore(0.0)
+                        .viralScore(0L)
                         .viralVerdict(AnalysisMarketSignalsResponse.Result.ViralVerdict.SEND_IT)
                         .build()
                 )
                 .addUnanalyzed(
                     AnalysisMarketSignalsResponse.Unanalyzed.builder()
-                        .id("1893456789012345678")
-                        .reason("post_unavailable")
-                        .status(AnalysisMarketSignalsResponse.Unanalyzed.Status.SKIPPED)
+                        .id("id")
+                        .reason("reason")
+                        .status(AnalysisMarketSignalsResponse.Unanalyzed.Status.FAILED)
                         .build()
                 )
                 .build()

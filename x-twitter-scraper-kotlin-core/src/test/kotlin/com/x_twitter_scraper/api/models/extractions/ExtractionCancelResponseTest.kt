@@ -13,15 +13,15 @@ internal class ExtractionCancelResponseTest {
 
     @Test
     fun create() {
-        val extractionCancelResponse = ExtractionCancelResponse.builder().id("aB3dE6gH9jK2").build()
+        val extractionCancelResponse = ExtractionCancelResponse.builder().id("id").build()
 
-        assertThat(extractionCancelResponse.id()).isEqualTo("aB3dE6gH9jK2")
+        assertThat(extractionCancelResponse.id()).isEqualTo("id")
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val extractionCancelResponse = ExtractionCancelResponse.builder().id("aB3dE6gH9jK2").build()
+        val extractionCancelResponse = ExtractionCancelResponse.builder().id("id").build()
 
         val roundtrippedExtractionCancelResponse =
             jsonMapper.readValue(

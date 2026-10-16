@@ -3965,6 +3965,8 @@ private constructor(
             fun questions(): List<Question> = questions.getRequired("questions")
 
             /**
+             * Expected to always return the following: ```kotlin JsonValue.from("succeeded") ```
+             *
              * Expected to always return the following:
              * ```kotlin
              * JsonValue.from("succeeded")
@@ -6509,19 +6511,16 @@ private constructor(
         class Monitor
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
-            private val baselineDatasetId: JsonValue,
             private val changedQuestionIds: JsonField<List<String>>,
             private val changes: JsonField<List<Change>>,
             private val configurationFingerprint: JsonField<String>,
             private val status: JsonField<Status>,
+            private val baselineDatasetId: JsonValue,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
             @JsonCreator
             private constructor(
-                @JsonProperty("baselineDatasetId")
-                @ExcludeMissing
-                baselineDatasetId: JsonValue = JsonMissing.of(),
                 @JsonProperty("changedQuestionIds")
                 @ExcludeMissing
                 changedQuestionIds: JsonField<List<String>> = JsonMissing.of(),
@@ -6534,26 +6533,17 @@ private constructor(
                 @JsonProperty("status")
                 @ExcludeMissing
                 status: JsonField<Status> = JsonMissing.of(),
+                @JsonProperty("baselineDatasetId")
+                @ExcludeMissing
+                baselineDatasetId: JsonValue = JsonMissing.of(),
             ) : this(
-                baselineDatasetId,
                 changedQuestionIds,
                 changes,
                 configurationFingerprint,
                 status,
+                baselineDatasetId,
                 mutableMapOf(),
             )
-
-            /**
-             * Always null. The baseline is the rows you sent.
-             *
-             * Expected to always return the following:
-             * ```kotlin
-             * JsonValue.from(null)
-             * ```
-             */
-            @JsonProperty("baselineDatasetId")
-            @ExcludeMissing
-            fun _baselineDatasetId(): JsonValue = baselineDatasetId
 
             /**
              * IDs of the questions whose decision changed.
@@ -6590,6 +6580,18 @@ private constructor(
              *   or is unexpectedly missing or null.
              */
             fun status(): Status = status.getRequired("status")
+
+            /**
+             * Always null. The baseline is the rows you sent.
+             *
+             * Expected to always return the following:
+             * ```kotlin
+             * JsonValue.from(null)
+             * ```
+             */
+            @JsonProperty("baselineDatasetId")
+            @ExcludeMissing
+            fun _baselineDatasetId(): JsonValue = baselineDatasetId
 
             /**
              * Returns the raw JSON value of [changedQuestionIds].
@@ -6658,32 +6660,20 @@ private constructor(
             /** A builder for [Monitor]. */
             class Builder internal constructor() {
 
-                private var baselineDatasetId: JsonValue = JsonValue.from(null)
                 private var changedQuestionIds: JsonField<MutableList<String>>? = null
                 private var changes: JsonField<MutableList<Change>>? = null
                 private var configurationFingerprint: JsonField<String>? = null
                 private var status: JsonField<Status>? = null
+                private var baselineDatasetId: JsonValue = JsonValue.from(null)
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 internal fun from(monitor: Monitor) = apply {
-                    baselineDatasetId = monitor.baselineDatasetId
                     changedQuestionIds = monitor.changedQuestionIds.map { it.toMutableList() }
                     changes = monitor.changes.map { it.toMutableList() }
                     configurationFingerprint = monitor.configurationFingerprint
                     status = monitor.status
+                    baselineDatasetId = monitor.baselineDatasetId
                     additionalProperties = monitor.additionalProperties.toMutableMap()
-                }
-
-                /**
-                 * Sets the field to an arbitrary JSON value.
-                 *
-                 * Defaults to the following:
-                 * ```kotlin
-                 * JsonValue.from(null)
-                 * ```
-                 */
-                fun baselineDatasetId(baselineDatasetId: JsonValue) = apply {
-                    this.baselineDatasetId = baselineDatasetId
                 }
 
                 /** IDs of the questions whose decision changed. */
@@ -6749,6 +6739,18 @@ private constructor(
                 /** Sets [Builder.status] to an arbitrary JSON value. */
                 fun status(status: JsonField<Status>) = apply { this.status = status }
 
+                /**
+                 * Sets the field to an arbitrary JSON value.
+                 *
+                 * Defaults to the following:
+                 * ```kotlin
+                 * JsonValue.from(null)
+                 * ```
+                 */
+                fun baselineDatasetId(baselineDatasetId: JsonValue) = apply {
+                    this.baselineDatasetId = baselineDatasetId
+                }
+
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
                     putAllAdditionalProperties(additionalProperties)
@@ -6788,13 +6790,13 @@ private constructor(
                  */
                 fun build(): Monitor =
                     Monitor(
-                        baselineDatasetId,
                         checkRequired("changedQuestionIds", changedQuestionIds).map {
                             it.toImmutable()
                         },
                         checkRequired("changes", changes).map { it.toImmutable() },
                         checkRequired("configurationFingerprint", configurationFingerprint),
                         checkRequired("status", status),
+                        baselineDatasetId,
                         additionalProperties.toMutableMap(),
                     )
             }
@@ -6816,6 +6818,10 @@ private constructor(
                     return@apply
                 }
 
+                changedQuestionIds()
+                changes().forEach { it.validate() }
+                configurationFingerprint()
+                status().validate()
                 _baselineDatasetId().let {
                     if (it != JsonValue.from(null)) {
                         throw XTwitterScraperInvalidDataException(
@@ -6823,10 +6829,6 @@ private constructor(
                         )
                     }
                 }
-                changedQuestionIds()
-                changes().forEach { it.validate() }
-                configurationFingerprint()
-                status().validate()
                 validated = true
             }
 
@@ -6839,11 +6841,11 @@ private constructor(
                 }
 
             internal fun validity(): Int =
-                baselineDatasetId.let { if (it == JsonValue.from(null)) 1 else 0 } +
-                    (changedQuestionIds.asKnown()?.size ?: 0) +
+                (changedQuestionIds.asKnown()?.size ?: 0) +
                     (changes.asKnown()?.sumOf { it.validity() } ?: 0) +
                     (if (configurationFingerprint.asKnown() == null) 0 else 1) +
-                    (status.asKnown()?.validity() ?: 0)
+                    (status.asKnown()?.validity() ?: 0) +
+                    baselineDatasetId.let { if (it == JsonValue.from(null)) 1 else 0 }
 
             class Change
             @JsonCreator(mode = JsonCreator.Mode.DISABLED)
@@ -7228,21 +7230,21 @@ private constructor(
                 }
 
                 return other is Monitor &&
-                    baselineDatasetId == other.baselineDatasetId &&
                     changedQuestionIds == other.changedQuestionIds &&
                     changes == other.changes &&
                     configurationFingerprint == other.configurationFingerprint &&
                     status == other.status &&
+                    baselineDatasetId == other.baselineDatasetId &&
                     additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy {
                 Objects.hash(
-                    baselineDatasetId,
                     changedQuestionIds,
                     changes,
                     configurationFingerprint,
                     status,
+                    baselineDatasetId,
                     additionalProperties,
                 )
             }
@@ -7250,7 +7252,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Monitor{baselineDatasetId=$baselineDatasetId, changedQuestionIds=$changedQuestionIds, changes=$changes, configurationFingerprint=$configurationFingerprint, status=$status, additionalProperties=$additionalProperties}"
+                "Monitor{changedQuestionIds=$changedQuestionIds, changes=$changes, configurationFingerprint=$configurationFingerprint, status=$status, baselineDatasetId=$baselineDatasetId, additionalProperties=$additionalProperties}"
         }
 
         /**
@@ -7735,6 +7737,11 @@ private constructor(
                 (if (reason.asKnown() == null) 0 else 1) +
                 (status.asKnown()?.validity() ?: 0)
 
+        /**
+         * first_run without baseline. new_to_baseline for a post baseline lacks. changed when an
+         * answer clearly left its earlier decision. not_comparable when other settings made the
+         * earlier row or it answers none of these questions.
+         */
         class Status @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
             /** Returns this class instance's raw value. */

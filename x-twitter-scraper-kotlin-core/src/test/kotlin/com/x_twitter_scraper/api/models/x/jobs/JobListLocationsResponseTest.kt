@@ -15,22 +15,16 @@ internal class JobListLocationsResponseTest {
     fun create() {
         val jobListLocationsResponse =
             JobListLocationsResponse.builder()
-                .count(1L)
+                .count(0L)
                 .addLocation(
-                    JobListLocationsResponse.Location.builder()
-                        .id("1720462281849397612")
-                        .name("New York, US")
-                        .build()
+                    JobListLocationsResponse.Location.builder().id("id").name("name").build()
                 )
                 .build()
 
-        assertThat(jobListLocationsResponse.count()).isEqualTo(1L)
+        assertThat(jobListLocationsResponse.count()).isEqualTo(0L)
         assertThat(jobListLocationsResponse.locations())
             .containsExactly(
-                JobListLocationsResponse.Location.builder()
-                    .id("1720462281849397612")
-                    .name("New York, US")
-                    .build()
+                JobListLocationsResponse.Location.builder().id("id").name("name").build()
             )
     }
 
@@ -39,12 +33,9 @@ internal class JobListLocationsResponseTest {
         val jsonMapper = jsonMapper()
         val jobListLocationsResponse =
             JobListLocationsResponse.builder()
-                .count(1L)
+                .count(0L)
                 .addLocation(
-                    JobListLocationsResponse.Location.builder()
-                        .id("1720462281849397612")
-                        .name("New York, US")
-                        .build()
+                    JobListLocationsResponse.Location.builder().id("id").name("name").build()
                 )
                 .build()
 

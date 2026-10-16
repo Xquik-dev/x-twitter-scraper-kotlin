@@ -105,7 +105,7 @@ internal class UserRetrieveListMembershipsResponseTest {
                         .url("url")
                         .build()
                 )
-                .nextCursor("DAACCgACGRElMJcAAA")
+                .nextCursor("next_cursor")
                 .build()
 
         assertThat(userRetrieveListMembershipsResponse.hasNextPage()).isEqualTo(true)
@@ -193,7 +193,7 @@ internal class UserRetrieveListMembershipsResponseTest {
                     .url("url")
                     .build()
             )
-        assertThat(userRetrieveListMembershipsResponse.nextCursor()).isEqualTo("DAACCgACGRElMJcAAA")
+        assertThat(userRetrieveListMembershipsResponse.nextCursor()).isEqualTo("next_cursor")
     }
 
     @Test
@@ -289,7 +289,7 @@ internal class UserRetrieveListMembershipsResponseTest {
                         .url("url")
                         .build()
                 )
-                .nextCursor("DAACCgACGRElMJcAAA")
+                .nextCursor("next_cursor")
                 .build()
 
         val roundtrippedUserRetrieveListMembershipsResponse =

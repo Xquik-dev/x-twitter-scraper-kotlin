@@ -323,7 +323,7 @@ private constructor(
         fun id(): String = id.getRequired("id")
 
         /**
-         * Public metadata whose fields X defines.
+         * Extra details X attaches to some places. Often empty.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -556,7 +556,7 @@ private constructor(
             /** Sets [Builder.id] to an arbitrary JSON value. */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
-            /** Public metadata whose fields X defines. */
+            /** Extra details X attaches to some places. Often empty. */
             fun attributes(attributes: Attributes) = attributes(JsonField.of(attributes))
 
             /** Sets [Builder.attributes] to an arbitrary JSON value. */
@@ -1147,7 +1147,7 @@ private constructor(
             fun id(): String = id.getRequired("id")
 
             /**
-             * Public metadata whose fields X defines.
+             * Extra details X attaches to some places. Often empty.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
              *   or is unexpectedly missing or null.
@@ -1366,7 +1366,7 @@ private constructor(
                 /** Sets [Builder.id] to an arbitrary JSON value. */
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
-                /** Public metadata whose fields X defines. */
+                /** Extra details X attaches to some places. Often empty. */
                 fun attributes(attributes: Attributes) = attributes(JsonField.of(attributes))
 
                 /** Sets [Builder.attributes] to an arbitrary JSON value. */

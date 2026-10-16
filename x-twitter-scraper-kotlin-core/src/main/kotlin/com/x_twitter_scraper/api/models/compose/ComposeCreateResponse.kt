@@ -238,6 +238,7 @@ private constructor(
         }
     }
 
+    /** Rules, questions, and research guidance for drafting a post. */
     class ComposePrepareResult
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
@@ -314,7 +315,7 @@ private constructor(
         )
 
         /**
-         * Xquik editorial heuristics, ordered for the goal.
+         * Facts derived only from xai-org/x-algorithm.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -322,7 +323,7 @@ private constructor(
         fun contentRules(): List<ContentRule> = contentRules.getRequired("contentRules")
 
         /**
-         * Published engagement signal names. Production multipliers are not published.
+         * Source ranking signals. Repository defaults may vary in production.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -359,7 +360,7 @@ private constructor(
         fun nextStep(): String = nextStep.getRequired("nextStep")
 
         /**
-         * Sources and guidance for researching a fresh post angle.
+         * Deprecated compatibility field. Always empty.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -368,7 +369,7 @@ private constructor(
             radarRecommendations.getRequired("radarRecommendations")
 
         /**
-         * Published signal names with unpublished weights as null.
+         * Source signals with production values withheld as null.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -600,7 +601,7 @@ private constructor(
                 additionalProperties = composePrepareResult.additionalProperties.toMutableMap()
             }
 
-            /** Xquik editorial heuristics, ordered for the goal. */
+            /** Facts derived only from xai-org/x-algorithm. */
             fun contentRules(contentRules: List<ContentRule>) =
                 contentRules(JsonField.of(contentRules))
 
@@ -621,7 +622,7 @@ private constructor(
                     }
             }
 
-            /** Published engagement signal names. Production multipliers are not published. */
+            /** Source ranking signals. Repository defaults may vary in production. */
             fun engagementMultipliers(engagementMultipliers: List<EngagementMultiplier>) =
                 engagementMultipliers(JsonField.of(engagementMultipliers))
 
@@ -684,7 +685,7 @@ private constructor(
             /** Sets [Builder.nextStep] to an arbitrary JSON value. */
             fun nextStep(nextStep: JsonField<String>) = apply { this.nextStep = nextStep }
 
-            /** Sources and guidance for researching a fresh post angle. */
+            /** Deprecated compatibility field. Always empty. */
             fun radarRecommendations(radarRecommendations: List<RadarRecommendation>) =
                 radarRecommendations(JsonField.of(radarRecommendations))
 
@@ -706,7 +707,7 @@ private constructor(
                     }
             }
 
-            /** Published signal names with unpublished weights as null. */
+            /** Source signals with production values withheld as null. */
             fun scorerWeights(scorerWeights: List<ScorerWeight>) =
                 scorerWeights(JsonField.of(scorerWeights))
 
@@ -917,6 +918,7 @@ private constructor(
                 (if (styleNote.asKnown() == null) 0 else 1) +
                 (styleTweets.asKnown()?.size ?: 0)
 
+        /** 1 source-backed ranking fact returned during preparation. */
         class ContentRule
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
@@ -1062,7 +1064,9 @@ private constructor(
                     additionalProperties == other.additionalProperties
             }
 
-            private val hashCode: Int by lazy { Objects.hash(rule, additionalProperties) }
+            private val hashCode: Int by lazy {
+                Objects.hash(rule, additionalProperties)
+            }
 
             override fun hashCode(): Int = hashCode
 
@@ -1070,6 +1074,7 @@ private constructor(
                 "ContentRule{rule=$rule, additionalProperties=$additionalProperties}"
         }
 
+        /** 1 ranking signal and its source-value limit. */
         class EngagementMultiplier
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
@@ -1097,6 +1102,9 @@ private constructor(
             fun action(): String = action.getRequired("action")
 
             /**
+             * Expected to always return the following: ```kotlin JsonValue.from("Production weight
+             * not published by X") ```
+             *
              * Expected to always return the following:
              * ```kotlin
              * JsonValue.from("Production weight not published by X")
@@ -1271,6 +1279,7 @@ private constructor(
                 "EngagementMultiplier{action=$action, multiplier=$multiplier, additionalProperties=$additionalProperties}"
         }
 
+        /** Deprecated compatibility schema. The response array is empty. */
         class RadarRecommendation
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
@@ -1681,6 +1690,7 @@ private constructor(
                 "RadarRecommendation{endpoint=$endpoint, guidance=$guidance, source=$source, useFor=$useFor, additionalProperties=$additionalProperties}"
         }
 
+        /** 1 source ranking signal without a production claim. */
         class ScorerWeight
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
@@ -1702,7 +1712,7 @@ private constructor(
             ) : this(context, signal, weight, mutableMapOf())
 
             /**
-             * Signal direction and publication limit.
+             * Signal direction and production limit.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
              *   or is unexpectedly missing or null.
@@ -1718,7 +1728,7 @@ private constructor(
             fun signal(): String = signal.getRequired("signal")
 
             /**
-             * X does not publish the production weight.
+             * Null prevents source defaults becoming production claims.
              *
              * Expected to always return the following:
              * ```kotlin
@@ -1782,7 +1792,7 @@ private constructor(
                     additionalProperties = scorerWeight.additionalProperties.toMutableMap()
                 }
 
-                /** Signal direction and publication limit. */
+                /** Signal direction and production limit. */
                 fun context(context: String) = context(JsonField.of(context))
 
                 /** Sets [Builder.context] to an arbitrary JSON value. */
@@ -1912,6 +1922,7 @@ private constructor(
                 "ScorerWeight{context=$context, signal=$signal, weight=$weight, additionalProperties=$additionalProperties}"
         }
 
+        /** A saved username style and analyzed post count. */
         class SavedStyle
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
@@ -2154,6 +2165,7 @@ private constructor(
             "ComposePrepareResult{contentRules=$contentRules, engagementMultipliers=$engagementMultipliers, engagementVelocity=$engagementVelocity, followUpQuestions=$followUpQuestions, intentUrl=$intentUrl, nextStep=$nextStep, radarRecommendations=$radarRecommendations, scorerWeights=$scorerWeights, source=$source, topPenalties=$topPenalties, savedStyles=$savedStyles, styleNote=$styleNote, styleTweets=$styleTweets, additionalProperties=$additionalProperties}"
     }
 
+    /** Source-backed guidance for refining a post. */
     class ComposeRefineResult
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
@@ -2181,7 +2193,7 @@ private constructor(
         ) : this(compositionGuidance, examplePatterns, intentUrl, nextStep, mutableMapOf())
 
         /**
-         * Goal, tone, media, and editorial guidance.
+         * Request context and xai-org/x-algorithm guidance.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -2196,7 +2208,7 @@ private constructor(
         fun examplePatterns(): List<ExamplePattern> = examplePatterns.getRequired("examplePatterns")
 
         /**
-         * X post intent seeded with the topic.
+         * X post intent generated for the refined topic.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -2289,7 +2301,7 @@ private constructor(
                 additionalProperties = composeRefineResult.additionalProperties.toMutableMap()
             }
 
-            /** Goal, tone, media, and editorial guidance. */
+            /** Request context and xai-org/x-algorithm guidance. */
             fun compositionGuidance(compositionGuidance: List<String>) =
                 compositionGuidance(JsonField.of(compositionGuidance))
 
@@ -2299,7 +2311,7 @@ private constructor(
             }
 
             /**
-             * Adds a single [String] to [Builder.compositionGuidance].
+             * Adds a single [String] to [compositionGuidance].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
@@ -2330,7 +2342,7 @@ private constructor(
                     }
             }
 
-            /** X post intent seeded with the topic. */
+            /** X post intent generated for the refined topic. */
             fun intentUrl(intentUrl: String) = intentUrl(JsonField.of(intentUrl))
 
             /** Sets [Builder.intentUrl] to an arbitrary JSON value. */
@@ -2424,6 +2436,7 @@ private constructor(
                 (if (intentUrl.asKnown() == null) 0 else 1) +
                 (if (nextStep.asKnown() == null) 0 else 1)
 
+        /** Deprecated example-pattern schema. The response array is empty. */
         class ExamplePattern
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
@@ -2649,6 +2662,7 @@ private constructor(
             "ComposeRefineResult{compositionGuidance=$compositionGuidance, examplePatterns=$examplePatterns, intentUrl=$intentUrl, nextStep=$nextStep, additionalProperties=$additionalProperties}"
     }
 
+    /** Posting validation without a fabricated ranking score. */
     class ComposeScoreResult
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
@@ -2657,8 +2671,8 @@ private constructor(
         private val passed: JsonField<Boolean>,
         private val passedCount: JsonField<Long>,
         private val topSuggestion: JsonField<String>,
-        private val totalChecks: JsonValue,
         private val intentUrl: JsonField<String>,
+        private val totalChecks: JsonValue,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -2677,23 +2691,23 @@ private constructor(
             @JsonProperty("topSuggestion")
             @ExcludeMissing
             topSuggestion: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("totalChecks") @ExcludeMissing totalChecks: JsonValue = JsonMissing.of(),
             @JsonProperty("intentUrl")
             @ExcludeMissing
             intentUrl: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("totalChecks") @ExcludeMissing totalChecks: JsonValue = JsonMissing.of(),
         ) : this(
             checklist,
             nextStep,
             passed,
             passedCount,
             topSuggestion,
-            totalChecks,
             intentUrl,
+            totalChecks,
             mutableMapOf(),
         )
 
         /**
-         * Deterministic editorial checks. Not a reach prediction.
+         * Deterministic input validation. Not a reach prediction.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -2725,19 +2739,21 @@ private constructor(
         fun topSuggestion(): String = topSuggestion.getRequired("topSuggestion")
 
         /**
+         * Present only when every check passes.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun intentUrl(): String? = intentUrl.getNullable("intentUrl")
+
+        /**
+         * Expected to always return the following: ```kotlin JsonValue.from(9) ```
+         *
          * Expected to always return the following:
          * ```kotlin
          * JsonValue.from(9)
          * ```
          */
         @JsonProperty("totalChecks") @ExcludeMissing fun _totalChecks(): JsonValue = totalChecks
-
-        /**
-         * Present only when every check passes.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun intentUrl(): String? = intentUrl.getNullable("intentUrl")
 
         /**
          * Returns the raw JSON value of [checklist].
@@ -2825,8 +2841,8 @@ private constructor(
             private var passed: JsonField<Boolean>? = null
             private var passedCount: JsonField<Long>? = null
             private var topSuggestion: JsonField<String>? = null
-            private var totalChecks: JsonValue = JsonValue.from(9)
             private var intentUrl: JsonField<String> = JsonMissing.of()
+            private var totalChecks: JsonValue = JsonValue.from(9)
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(composeScoreResult: ComposeScoreResult) = apply {
@@ -2835,12 +2851,12 @@ private constructor(
                 passed = composeScoreResult.passed
                 passedCount = composeScoreResult.passedCount
                 topSuggestion = composeScoreResult.topSuggestion
-                totalChecks = composeScoreResult.totalChecks
                 intentUrl = composeScoreResult.intentUrl
+                totalChecks = composeScoreResult.totalChecks
                 additionalProperties = composeScoreResult.additionalProperties.toMutableMap()
             }
 
-            /** Deterministic editorial checks. Not a reach prediction. */
+            /** Deterministic input validation. Not a reach prediction. */
             fun checklist(checklist: List<Checklist>) = checklist(JsonField.of(checklist))
 
             /** Sets [Builder.checklist] to an arbitrary JSON value. */
@@ -2849,7 +2865,7 @@ private constructor(
             }
 
             /**
-             * Adds a single [Checklist] to [Builder.checklist].
+             * Adds a single [Checklist] to [checklist].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
@@ -2882,6 +2898,12 @@ private constructor(
                 this.topSuggestion = topSuggestion
             }
 
+            /** Present only when every check passes. */
+            fun intentUrl(intentUrl: String) = intentUrl(JsonField.of(intentUrl))
+
+            /** Sets [Builder.intentUrl] to an arbitrary JSON value. */
+            fun intentUrl(intentUrl: JsonField<String>) = apply { this.intentUrl = intentUrl }
+
             /**
              * Sets the field to an arbitrary JSON value.
              *
@@ -2891,12 +2913,6 @@ private constructor(
              * ```
              */
             fun totalChecks(totalChecks: JsonValue) = apply { this.totalChecks = totalChecks }
-
-            /** Present only when every check passes. */
-            fun intentUrl(intentUrl: String) = intentUrl(JsonField.of(intentUrl))
-
-            /** Sets [Builder.intentUrl] to an arbitrary JSON value. */
-            fun intentUrl(intentUrl: JsonField<String>) = apply { this.intentUrl = intentUrl }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -2940,8 +2956,8 @@ private constructor(
                     checkRequired("passed", passed),
                     checkRequired("passedCount", passedCount),
                     checkRequired("topSuggestion", topSuggestion),
-                    totalChecks,
                     intentUrl,
+                    totalChecks,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -2967,6 +2983,7 @@ private constructor(
             passed()
             passedCount()
             topSuggestion()
+            intentUrl()
             _totalChecks().let {
                 if (it != JsonValue.from(9)) {
                     throw XTwitterScraperInvalidDataException(
@@ -2974,7 +2991,6 @@ private constructor(
                     )
                 }
             }
-            intentUrl()
             validated = true
         }
 
@@ -2992,9 +3008,10 @@ private constructor(
                 (if (passed.asKnown() == null) 0 else 1) +
                 (if (passedCount.asKnown() == null) 0 else 1) +
                 (if (topSuggestion.asKnown() == null) 0 else 1) +
-                totalChecks.let { if (it == JsonValue.from(9)) 1 else 0 } +
-                (if (intentUrl.asKnown() == null) 0 else 1)
+                (if (intentUrl.asKnown() == null) 0 else 1) +
+                totalChecks.let { if (it == JsonValue.from(9)) 1 else 0 }
 
+        /** 1 deterministic draft check. */
         class Checklist
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
@@ -3232,8 +3249,8 @@ private constructor(
                 passed == other.passed &&
                 passedCount == other.passedCount &&
                 topSuggestion == other.topSuggestion &&
-                totalChecks == other.totalChecks &&
                 intentUrl == other.intentUrl &&
+                totalChecks == other.totalChecks &&
                 additionalProperties == other.additionalProperties
         }
 
@@ -3244,8 +3261,8 @@ private constructor(
                 passed,
                 passedCount,
                 topSuggestion,
-                totalChecks,
                 intentUrl,
+                totalChecks,
                 additionalProperties,
             )
         }
@@ -3253,6 +3270,6 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ComposeScoreResult{checklist=$checklist, nextStep=$nextStep, passed=$passed, passedCount=$passedCount, topSuggestion=$topSuggestion, totalChecks=$totalChecks, intentUrl=$intentUrl, additionalProperties=$additionalProperties}"
+            "ComposeScoreResult{checklist=$checklist, nextStep=$nextStep, passed=$passed, passedCount=$passedCount, topSuggestion=$topSuggestion, intentUrl=$intentUrl, totalChecks=$totalChecks, additionalProperties=$additionalProperties}"
     }
 }

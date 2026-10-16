@@ -15,10 +15,10 @@ internal class DrawRunResponseTest {
     fun create() {
         val drawRunResponse =
             DrawRunResponse.builder()
-                .id("f4bd00a2-7b4e-4e59-8e1b-72e2c9f12345")
-                .totalEntries(250L)
-                .tweetId("1234567890")
-                .validEntries(200L)
+                .id("id")
+                .totalEntries(0L)
+                .tweetId("tweetId")
+                .validEntries(0L)
                 .addWinner(
                     Winner.builder()
                         .authorUsername("authorUsername")
@@ -29,10 +29,10 @@ internal class DrawRunResponseTest {
                 )
                 .build()
 
-        assertThat(drawRunResponse.id()).isEqualTo("f4bd00a2-7b4e-4e59-8e1b-72e2c9f12345")
-        assertThat(drawRunResponse.totalEntries()).isEqualTo(250L)
-        assertThat(drawRunResponse.tweetId()).isEqualTo("1234567890")
-        assertThat(drawRunResponse.validEntries()).isEqualTo(200L)
+        assertThat(drawRunResponse.id()).isEqualTo("id")
+        assertThat(drawRunResponse.totalEntries()).isEqualTo(0L)
+        assertThat(drawRunResponse.tweetId()).isEqualTo("tweetId")
+        assertThat(drawRunResponse.validEntries()).isEqualTo(0L)
         assertThat(drawRunResponse.winners())
             .containsExactly(
                 Winner.builder()
@@ -49,10 +49,10 @@ internal class DrawRunResponseTest {
         val jsonMapper = jsonMapper()
         val drawRunResponse =
             DrawRunResponse.builder()
-                .id("f4bd00a2-7b4e-4e59-8e1b-72e2c9f12345")
-                .totalEntries(250L)
-                .tweetId("1234567890")
-                .validEntries(200L)
+                .id("id")
+                .totalEntries(0L)
+                .tweetId("tweetId")
+                .validEntries(0L)
                 .addWinner(
                     Winner.builder()
                         .authorUsername("authorUsername")

@@ -16,13 +16,13 @@ internal class TweetGetRetweeterIdsResponseTest {
         val tweetGetRetweeterIdsResponse =
             TweetGetRetweeterIdsResponse.builder()
                 .hasNextPage(true)
-                .addId("9876543210")
-                .nextCursor("DAACCgACGRElMJcAAA")
+                .addId("id")
+                .nextCursor("next_cursor")
                 .build()
 
         assertThat(tweetGetRetweeterIdsResponse.hasNextPage()).isEqualTo(true)
-        assertThat(tweetGetRetweeterIdsResponse.ids()).containsExactly("9876543210")
-        assertThat(tweetGetRetweeterIdsResponse.nextCursor()).isEqualTo("DAACCgACGRElMJcAAA")
+        assertThat(tweetGetRetweeterIdsResponse.ids()).containsExactly("id")
+        assertThat(tweetGetRetweeterIdsResponse.nextCursor()).isEqualTo("next_cursor")
     }
 
     @Test
@@ -31,8 +31,8 @@ internal class TweetGetRetweeterIdsResponseTest {
         val tweetGetRetweeterIdsResponse =
             TweetGetRetweeterIdsResponse.builder()
                 .hasNextPage(true)
-                .addId("9876543210")
-                .nextCursor("DAACCgACGRElMJcAAA")
+                .addId("id")
+                .nextCursor("next_cursor")
                 .build()
 
         val roundtrippedTweetGetRetweeterIdsResponse =

@@ -16,18 +16,18 @@ internal class DraftTest {
     fun create() {
         val draft =
             Draft.builder()
-                .id("42")
-                .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
-                .text("Draft tweet about AI trends")
-                .goal("Engagement")
-                .topic("Technology")
+                .id("id")
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .text("text")
+                .goal("goal")
+                .topic("topic")
                 .build()
 
-        assertThat(draft.id()).isEqualTo("42")
-        assertThat(draft.createdAt()).isEqualTo(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
-        assertThat(draft.text()).isEqualTo("Draft tweet about AI trends")
-        assertThat(draft.goal()).isEqualTo("Engagement")
-        assertThat(draft.topic()).isEqualTo("Technology")
+        assertThat(draft.id()).isEqualTo("id")
+        assertThat(draft.createdAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(draft.text()).isEqualTo("text")
+        assertThat(draft.goal()).isEqualTo("goal")
+        assertThat(draft.topic()).isEqualTo("topic")
     }
 
     @Test
@@ -35,11 +35,11 @@ internal class DraftTest {
         val jsonMapper = jsonMapper()
         val draft =
             Draft.builder()
-                .id("42")
-                .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
-                .text("Draft tweet about AI trends")
-                .goal("Engagement")
-                .topic("Technology")
+                .id("id")
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .text("text")
+                .goal("goal")
+                .topic("topic")
                 .build()
 
         val roundtrippedDraft =

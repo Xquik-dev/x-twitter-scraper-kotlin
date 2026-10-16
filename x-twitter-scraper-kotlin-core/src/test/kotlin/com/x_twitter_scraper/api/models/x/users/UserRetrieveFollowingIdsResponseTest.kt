@@ -16,13 +16,13 @@ internal class UserRetrieveFollowingIdsResponseTest {
         val userRetrieveFollowingIdsResponse =
             UserRetrieveFollowingIdsResponse.builder()
                 .hasNextPage(true)
-                .addId("9876543210")
-                .nextCursor("DAACCgACGRElMJcAAA")
+                .addId("id")
+                .nextCursor("next_cursor")
                 .build()
 
         assertThat(userRetrieveFollowingIdsResponse.hasNextPage()).isEqualTo(true)
-        assertThat(userRetrieveFollowingIdsResponse.ids()).containsExactly("9876543210")
-        assertThat(userRetrieveFollowingIdsResponse.nextCursor()).isEqualTo("DAACCgACGRElMJcAAA")
+        assertThat(userRetrieveFollowingIdsResponse.ids()).containsExactly("id")
+        assertThat(userRetrieveFollowingIdsResponse.nextCursor()).isEqualTo("next_cursor")
     }
 
     @Test
@@ -31,8 +31,8 @@ internal class UserRetrieveFollowingIdsResponseTest {
         val userRetrieveFollowingIdsResponse =
             UserRetrieveFollowingIdsResponse.builder()
                 .hasNextPage(true)
-                .addId("9876543210")
-                .nextCursor("DAACCgACGRElMJcAAA")
+                .addId("id")
+                .nextCursor("next_cursor")
                 .build()
 
         val roundtrippedUserRetrieveFollowingIdsResponse =

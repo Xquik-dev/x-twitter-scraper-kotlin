@@ -72,15 +72,16 @@ private constructor(
     fun capturedAt(): OffsetDateTime? = capturedAt.getNullable("capturedAt")
 
     /**
-     * A place X offers trends for.
+     * The place country or location named. Absent when woeid picked the place or the request named
+     * none.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun location(): Location? = location.getNullable("location")
 
     /**
-     * The time at asked for, as Xquik read it. A span such as 24h shows here as the time it counted
-     * back to. Present only with at.
+     * The time the at parameter asked for, as Xquik read it. A span such as 24h shows here as the
+     * time it counted back to. Present only with at.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
@@ -219,15 +220,18 @@ private constructor(
             this.capturedAt = capturedAt
         }
 
-        /** A place X offers trends for. */
+        /**
+         * The place country or location named. Absent when woeid picked the place or the request
+         * named none.
+         */
         fun location(location: Location) = location(JsonField.of(location))
 
         /** Sets [Builder.location] to an arbitrary JSON value. */
         fun location(location: JsonField<Location>) = apply { this.location = location }
 
         /**
-         * The time at asked for, as Xquik read it. A span such as 24h shows here as the time it
-         * counted back to. Present only with at.
+         * The time the at parameter asked for, as Xquik read it. A span such as 24h shows here as
+         * the time it counted back to. Present only with at.
          */
         fun requestedAt(requestedAt: OffsetDateTime) = requestedAt(JsonField.of(requestedAt))
 

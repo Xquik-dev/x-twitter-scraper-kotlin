@@ -23,6 +23,12 @@
 * The async `events().stream` returns a `Flow<Event>`.
 * `webhooks()` adds `createTelegramLink`, and `extractions()` adds `cancel`.
 * The core module exposes kotlinx-coroutines-core as an API dependency for the async event stream.
+* Response models add getters for the API fields they lacked, at every depth.
+* Monitor and extraction requests accept `name` and the email filters the API reads.
+
+### Compatibility
+
+* `XAccount` and `XAccountDetail` drop a timestamp field the API stopped returning. It always read empty.
 
 ## 0.9.4 (2026-10-13)
 

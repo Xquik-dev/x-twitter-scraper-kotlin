@@ -15,12 +15,12 @@ internal class TicketUpdateResponseTest {
     fun create() {
         val ticketUpdateResponse =
             TicketUpdateResponse.builder()
-                .publicId("tkt_a1b2c3d4e5f6a1b2c3d4e5f6")
-                .status(TicketUpdateResponse.Status.RESOLVED)
+                .publicId("publicId")
+                .status(TicketUpdateResponse.Status.OPEN)
                 .build()
 
-        assertThat(ticketUpdateResponse.publicId()).isEqualTo("tkt_a1b2c3d4e5f6a1b2c3d4e5f6")
-        assertThat(ticketUpdateResponse.status()).isEqualTo(TicketUpdateResponse.Status.RESOLVED)
+        assertThat(ticketUpdateResponse.publicId()).isEqualTo("publicId")
+        assertThat(ticketUpdateResponse.status()).isEqualTo(TicketUpdateResponse.Status.OPEN)
     }
 
     @Test
@@ -28,8 +28,8 @@ internal class TicketUpdateResponseTest {
         val jsonMapper = jsonMapper()
         val ticketUpdateResponse =
             TicketUpdateResponse.builder()
-                .publicId("tkt_a1b2c3d4e5f6a1b2c3d4e5f6")
-                .status(TicketUpdateResponse.Status.RESOLVED)
+                .publicId("publicId")
+                .status(TicketUpdateResponse.Status.OPEN)
                 .build()
 
         val roundtrippedTicketUpdateResponse =

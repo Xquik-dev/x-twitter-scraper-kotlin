@@ -17,22 +17,30 @@ internal class KeywordUpdateResponseTest {
     fun create() {
         val keywordUpdateResponse =
             KeywordUpdateResponse.builder()
-                .id("21")
-                .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                .id("id")
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .addEventType(EventType.TWEET_NEW)
                 .isActive(true)
-                .nextBillingAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
-                .query("xquik OR \"x api\"")
+                .nextBillingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .query("query")
+                .name("Launch mentions")
+                .pausedAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                .pausedReason(KeywordUpdateResponse.PausedReason.INSUFFICIENT_CREDITS)
                 .build()
 
-        assertThat(keywordUpdateResponse.id()).isEqualTo("21")
+        assertThat(keywordUpdateResponse.id()).isEqualTo("id")
         assertThat(keywordUpdateResponse.createdAt())
-            .isEqualTo(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(keywordUpdateResponse.eventTypes()).containsExactly(EventType.TWEET_NEW)
         assertThat(keywordUpdateResponse.isActive()).isEqualTo(true)
         assertThat(keywordUpdateResponse.nextBillingAt())
+            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(keywordUpdateResponse.query()).isEqualTo("query")
+        assertThat(keywordUpdateResponse.name()).isEqualTo("Launch mentions")
+        assertThat(keywordUpdateResponse.pausedAt())
             .isEqualTo(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
-        assertThat(keywordUpdateResponse.query()).isEqualTo("xquik OR \"x api\"")
+        assertThat(keywordUpdateResponse.pausedReason())
+            .isEqualTo(KeywordUpdateResponse.PausedReason.INSUFFICIENT_CREDITS)
     }
 
     @Test
@@ -40,12 +48,15 @@ internal class KeywordUpdateResponseTest {
         val jsonMapper = jsonMapper()
         val keywordUpdateResponse =
             KeywordUpdateResponse.builder()
-                .id("21")
-                .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                .id("id")
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .addEventType(EventType.TWEET_NEW)
                 .isActive(true)
-                .nextBillingAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
-                .query("xquik OR \"x api\"")
+                .nextBillingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .query("query")
+                .name("Launch mentions")
+                .pausedAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                .pausedReason(KeywordUpdateResponse.PausedReason.INSUFFICIENT_CREDITS)
                 .build()
 
         val roundtrippedKeywordUpdateResponse =

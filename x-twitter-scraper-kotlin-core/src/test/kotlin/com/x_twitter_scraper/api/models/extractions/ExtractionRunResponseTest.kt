@@ -20,7 +20,13 @@ internal class ExtractionRunResponseTest {
                 .creditsRequired("creditsRequired")
                 .estimatedResults(0L)
                 .source("source")
+                .id("ext_123")
+                .pollAfterMs(1000L)
                 .resolvedXUserId("resolvedXUserId")
+                .status(ExtractionRunResponse.Status.RUNNING)
+                .statusUrl("/api/v1/extractions/a1b2c3d4")
+                .toolType(ExtractionRunResponse.ToolType.FOLLOWER_EXPLORER)
+                .waitUrl("/api/v1/extractions/id?wait=10&limit=1&outputMode=compact")
                 .build()
 
         assertThat(extractionRunResponse.allowed()).isEqualTo(true)
@@ -28,7 +34,15 @@ internal class ExtractionRunResponseTest {
         assertThat(extractionRunResponse.creditsRequired()).isEqualTo("creditsRequired")
         assertThat(extractionRunResponse.estimatedResults()).isEqualTo(0L)
         assertThat(extractionRunResponse.source()).isEqualTo("source")
+        assertThat(extractionRunResponse.id()).isEqualTo("ext_123")
+        assertThat(extractionRunResponse.pollAfterMs()).isEqualTo(1000L)
         assertThat(extractionRunResponse.resolvedXUserId()).isEqualTo("resolvedXUserId")
+        assertThat(extractionRunResponse.status()).isEqualTo(ExtractionRunResponse.Status.RUNNING)
+        assertThat(extractionRunResponse.statusUrl()).isEqualTo("/api/v1/extractions/a1b2c3d4")
+        assertThat(extractionRunResponse.toolType())
+            .isEqualTo(ExtractionRunResponse.ToolType.FOLLOWER_EXPLORER)
+        assertThat(extractionRunResponse.waitUrl())
+            .isEqualTo("/api/v1/extractions/id?wait=10&limit=1&outputMode=compact")
     }
 
     @Test
@@ -41,7 +55,13 @@ internal class ExtractionRunResponseTest {
                 .creditsRequired("creditsRequired")
                 .estimatedResults(0L)
                 .source("source")
+                .id("ext_123")
+                .pollAfterMs(1000L)
                 .resolvedXUserId("resolvedXUserId")
+                .status(ExtractionRunResponse.Status.RUNNING)
+                .statusUrl("/api/v1/extractions/a1b2c3d4")
+                .toolType(ExtractionRunResponse.ToolType.FOLLOWER_EXPLORER)
+                .waitUrl("/api/v1/extractions/id?wait=10&limit=1&outputMode=compact")
                 .build()
 
         val roundtrippedExtractionRunResponse =

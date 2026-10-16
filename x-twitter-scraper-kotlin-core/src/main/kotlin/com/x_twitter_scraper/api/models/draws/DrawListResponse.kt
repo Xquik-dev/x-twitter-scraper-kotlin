@@ -130,7 +130,9 @@ private constructor(
          */
         fun addDraw(draw: DrawListItem) = apply {
             draws =
-                (draws ?: JsonField.of(mutableListOf())).also { checkKnown("draws", it).add(draw) }
+                (draws ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("draws", it).add(draw)
+                }
         }
 
         fun hasMore(hasMore: Boolean) = hasMore(JsonField.of(hasMore))

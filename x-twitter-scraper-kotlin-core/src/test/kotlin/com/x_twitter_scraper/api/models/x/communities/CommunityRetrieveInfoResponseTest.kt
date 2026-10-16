@@ -5,7 +5,10 @@
 package com.x_twitter_scraper.api.models.x.communities
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.x_twitter_scraper.api.core.JsonValue
 import com.x_twitter_scraper.api.core.jsonMapper
+import com.x_twitter_scraper.api.models.UserProfile
+import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -17,7 +20,33 @@ internal class CommunityRetrieveInfoResponseTest {
             CommunityRetrieveInfoResponse.builder()
                 .community(
                     CommunityRetrieveInfoResponse.Community.builder()
-                        .id("1500000000000000000")
+                        .id("id")
+                        .admin(
+                            UserProfile.builder().id("id").name("name").username("username").build()
+                        )
+                        .banner(
+                            CommunityRetrieveInfoResponse.Community.Banner.builder()
+                                .url("url")
+                                .addColor(
+                                    CommunityRetrieveInfoResponse.Community.Banner.Color.builder()
+                                        .blue(0L)
+                                        .green(0L)
+                                        .percentage(0.0)
+                                        .red(0L)
+                                        .build()
+                                )
+                                .focus(
+                                    CommunityRetrieveInfoResponse.Community.Banner.Focus.builder()
+                                        .height(0L)
+                                        .left(0L)
+                                        .top(0L)
+                                        .width(0L)
+                                        .build()
+                                )
+                                .height(0L)
+                                .width(0L)
+                                .build()
+                        )
                         .bannerUrl("banner_url")
                         .createdAt("created_at")
                         .creator(
@@ -25,7 +54,246 @@ internal class CommunityRetrieveInfoResponseTest {
                                 .id("id")
                                 .username("username")
                                 .verified(true)
+                                .accountBasedIn(
+                                    CommunityRetrieveInfoResponse.Community.Creator.AccountBasedIn
+                                        .builder()
+                                        .level(
+                                            CommunityRetrieveInfoResponse.Community.Creator
+                                                .AccountBasedIn
+                                                .Level
+                                                .COUNTRY
+                                        )
+                                        .observedAt(OffsetDateTime.parse("2026-08-21T10:00:00Z"))
+                                        .value("United States")
+                                        .build()
+                                )
+                                .accountBasedInAccurate(true)
+                                .accountBasedInUnavailable(true)
+                                .addAdvertiserAccountServiceLevel("advertiserAccountServiceLevel")
+                                .advertiserAccountType("none")
+                                .affiliateUsername("BBCNews")
+                                .affiliatesHighlightedLabel(
+                                    CommunityRetrieveInfoResponse.Community.Creator
+                                        .AffiliatesHighlightedLabel
+                                        .builder()
+                                        .badgeUrl("badgeUrl")
+                                        .description("description")
+                                        .longDescription(
+                                            CommunityRetrieveInfoResponse.Community.Creator
+                                                .AffiliatesHighlightedLabel
+                                                .LongDescription
+                                                .builder()
+                                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                                .build()
+                                        )
+                                        .url("url")
+                                        .urlType("urlType")
+                                        .userLabelDisplayType("userLabelDisplayType")
+                                        .userLabelType("userLabelType")
+                                        .build()
+                                )
+                                .automatedBy("example_user")
+                                .birthdate(
+                                    CommunityRetrieveInfoResponse.Community.Creator.Birthdate
+                                        .builder()
+                                        .day(1L)
+                                        .month(1L)
+                                        .year(1L)
+                                        .build()
+                                )
+                                .businessAccountAffiliatesCount(0L)
+                                .businessProfileState("none")
+                                .communityRole("Member")
+                                .connectedVia("United States App Store")
+                                .connectedViaAccurate(true)
+                                .contactInfo(
+                                    CommunityRetrieveInfoResponse.Community.Creator.ContactInfo
+                                        .builder()
+                                        .addEmail(
+                                            CommunityRetrieveInfoResponse.Community.Creator
+                                                .ContactInfo
+                                                .Email
+                                                .builder()
+                                                .domain("example.com")
+                                                .source(
+                                                    CommunityRetrieveInfoResponse.Community.Creator
+                                                        .ContactInfo
+                                                        .Email
+                                                        .Source
+                                                        .BIO
+                                                )
+                                                .value("press@example.com")
+                                                .writtenAs("press [at] example [dot] com")
+                                                .build()
+                                        )
+                                        .addLink(
+                                            CommunityRetrieveInfoResponse.Community.Creator
+                                                .ContactInfo
+                                                .Link
+                                                .builder()
+                                                .network("linkedin")
+                                                .source(
+                                                    CommunityRetrieveInfoResponse.Community.Creator
+                                                        .ContactInfo
+                                                        .Link
+                                                        .Source
+                                                        .URL
+                                                )
+                                                .url("https://www.linkedin.com/company/acme")
+                                                .build()
+                                        )
+                                        .addPhone(
+                                            CommunityRetrieveInfoResponse.Community.Creator
+                                                .ContactInfo
+                                                .Phone
+                                                .builder()
+                                                .source(
+                                                    CommunityRetrieveInfoResponse.Community.Creator
+                                                        .ContactInfo
+                                                        .Phone
+                                                        .Source
+                                                        .BIO
+                                                )
+                                                .value("+14155550123")
+                                                .writtenAs("+1 (415) 555-0123")
+                                                .build()
+                                        )
+                                        .build()
+                                )
+                                .coverPicture("https://pbs.twimg.com/profile_banners/example.jpg")
+                                .createdAt("2009-06-02T20:12:29Z")
+                                .creatorSubscriptionsCount(0L)
+                                .defaultProfile(true)
+                                .defaultProfileImage(true)
+                                .description("CEO of Tesla, SpaceX, and X")
+                                .email("press@example.com")
+                                .fastFollowersCount(0L)
+                                .favouritesCount(18000L)
+                                .followers(150000000L)
+                                .following(500L)
+                                .geoEnabled(true)
+                                .grokTranslatedBio(
+                                    CommunityRetrieveInfoResponse.Community.Creator
+                                        .GrokTranslatedBio
+                                        .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .build()
+                                )
+                                .hasCustomTimelines(true)
+                                .hasExtendedProfile(true)
+                                .hasGraduatedAccess(true)
+                                .hasHiddenSubscriptionsOnProfile(true)
+                                .highlightsInfo(
+                                    CommunityRetrieveInfoResponse.Community.Creator.HighlightsInfo
+                                        .builder()
+                                        .canHighlightTweets(true)
+                                        .highlightedTweets("highlightedTweets")
+                                        .build()
+                                )
+                                .identityVerification(
+                                    CommunityRetrieveInfoResponse.Community.Creator
+                                        .IdentityVerification
+                                        .builder()
+                                        .description("description")
+                                        .isIdentityVerified(true)
+                                        .verifiedSinceMsec("1507188387580")
+                                        .build()
+                                )
+                                .isAutomated(false)
+                                .isBlueVerified(true)
+                                .isProfileTranslatable(true)
+                                .isTranslationEnabled(true)
+                                .isTranslator(false)
+                                .isVerified(true)
+                                .listedCount(3051L)
+                                .location("Austin, TX")
+                                .mediaCount(1200L)
                                 .name("name")
+                                .normalFollowersCount(0L)
+                                .parodyCommentaryFanLabel("parodyCommentaryFanLabel")
+                                .addPinnedTweetId("1234567890")
+                                .possiblySensitive(false)
+                                .professional(
+                                    CommunityRetrieveInfoResponse.Community.Creator.Professional
+                                        .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .build()
+                                )
+                                .profileBannerUrl(
+                                    "https://pbs.twimg.com/profile_banners/example.jpg"
+                                )
+                                .profileDescriptionLanguage("profileDescriptionLanguage")
+                                .profileImageShape("profileImageShape")
+                                .profileInterstitialType("profileInterstitialType")
+                                .profilePicture(
+                                    "https://pbs.twimg.com/profile_images/example_normal.jpg"
+                                )
+                                .profilePictureOriginal(
+                                    "https://pbs.twimg.com/profile_images/example.jpg"
+                                )
+                                .profileSortEnabled(true)
+                                .profileTranslatorType("profileTranslatorType")
+                                .profileBio(
+                                    CommunityRetrieveInfoResponse.Community.Creator.ProfileBio
+                                        .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .build()
+                                )
+                                .protected(false)
+                                .redirectsToUsername("spacexsi")
+                                .retweetedAt(OffsetDateTime.parse("2026-09-11T20:24:45.000Z"))
+                                .statusesCount(35000L)
+                                .subscribersCount(0L)
+                                .superFollowEligible(true)
+                                .superFollowsUserProfileActive(true)
+                                .tipJar(
+                                    CommunityRetrieveInfoResponse.Community.Creator.TipJar.builder()
+                                        .bandcampHandle("bandcampHandle")
+                                        .bitcoinHandle("bitcoinHandle")
+                                        .cashAppHandle("cashAppHandle")
+                                        .ethereumHandle("ethereumHandle")
+                                        .gofundmeHandle("gofundmeHandle")
+                                        .isEnabled(true)
+                                        .patreonHandle("patreonHandle")
+                                        .payPalHandle("payPalHandle")
+                                        .venmoHandle("venmoHandle")
+                                        .build()
+                                )
+                                .unavailable(false)
+                                .unavailableReason("suspended")
+                                .url("https://xquik.com")
+                                .usernameChanges(
+                                    CommunityRetrieveInfoResponse.Community.Creator.UsernameChanges
+                                        .builder()
+                                        .count(0L)
+                                        .lastChangedAt(
+                                            OffsetDateTime.parse("2016-05-14T00:22:47.057Z")
+                                        )
+                                        .build()
+                                )
+                                .verificationReason(
+                                    CommunityRetrieveInfoResponse.Community.Creator
+                                        .VerificationReason
+                                        .builder()
+                                        .addEntity(
+                                            CommunityRetrieveInfoResponse.Community.Creator
+                                                .VerificationReason
+                                                .Entity
+                                                .builder()
+                                                .fromIndex(0L)
+                                                .toIndex(0L)
+                                                .url("url")
+                                                .urlType("urlType")
+                                                .build()
+                                        )
+                                        .text(
+                                            "This account is verified because it's an official organization on X."
+                                        )
+                                        .build()
+                                )
+                                .verifiedType("Business")
+                                .addWithheldInCountry("DE")
+                                .withheldScope("user")
                                 .build()
                         )
                         .description("description")
@@ -33,14 +301,24 @@ internal class CommunityRetrieveInfoResponseTest {
                         .isNsfw(true)
                         .joinPolicy("join_policy")
                         .memberCount(0L)
+                        .addMembersFacepile(
+                            CommunityRetrieveInfoResponse.Community.MembersFacepile.ofUserProfile(
+                                UserProfile.builder()
+                                    .id("id")
+                                    .name("name")
+                                    .username("username")
+                                    .build()
+                            )
+                        )
                         .moderatorCount(0L)
-                        .name("Tesla Fans")
+                        .name("name")
                         .primaryTopic(
                             CommunityRetrieveInfoResponse.Community.PrimaryTopic.builder()
                                 .id("id")
                                 .name("name")
                                 .build()
                         )
+                        .question("What are you working on?")
                         .addRule(
                             CommunityRetrieveInfoResponse.Community.Rule.builder()
                                 .id("id")
@@ -48,6 +326,7 @@ internal class CommunityRetrieveInfoResponseTest {
                                 .name("name")
                                 .build()
                         )
+                        .addSearchTag("buildinpublic")
                         .build()
                 )
                 .build()
@@ -55,7 +334,31 @@ internal class CommunityRetrieveInfoResponseTest {
         assertThat(communityRetrieveInfoResponse.community())
             .isEqualTo(
                 CommunityRetrieveInfoResponse.Community.builder()
-                    .id("1500000000000000000")
+                    .id("id")
+                    .admin(UserProfile.builder().id("id").name("name").username("username").build())
+                    .banner(
+                        CommunityRetrieveInfoResponse.Community.Banner.builder()
+                            .url("url")
+                            .addColor(
+                                CommunityRetrieveInfoResponse.Community.Banner.Color.builder()
+                                    .blue(0L)
+                                    .green(0L)
+                                    .percentage(0.0)
+                                    .red(0L)
+                                    .build()
+                            )
+                            .focus(
+                                CommunityRetrieveInfoResponse.Community.Banner.Focus.builder()
+                                    .height(0L)
+                                    .left(0L)
+                                    .top(0L)
+                                    .width(0L)
+                                    .build()
+                            )
+                            .height(0L)
+                            .width(0L)
+                            .build()
+                    )
                     .bannerUrl("banner_url")
                     .createdAt("created_at")
                     .creator(
@@ -63,7 +366,234 @@ internal class CommunityRetrieveInfoResponseTest {
                             .id("id")
                             .username("username")
                             .verified(true)
+                            .accountBasedIn(
+                                CommunityRetrieveInfoResponse.Community.Creator.AccountBasedIn
+                                    .builder()
+                                    .level(
+                                        CommunityRetrieveInfoResponse.Community.Creator
+                                            .AccountBasedIn
+                                            .Level
+                                            .COUNTRY
+                                    )
+                                    .observedAt(OffsetDateTime.parse("2026-08-21T10:00:00Z"))
+                                    .value("United States")
+                                    .build()
+                            )
+                            .accountBasedInAccurate(true)
+                            .accountBasedInUnavailable(true)
+                            .addAdvertiserAccountServiceLevel("advertiserAccountServiceLevel")
+                            .advertiserAccountType("none")
+                            .affiliateUsername("BBCNews")
+                            .affiliatesHighlightedLabel(
+                                CommunityRetrieveInfoResponse.Community.Creator
+                                    .AffiliatesHighlightedLabel
+                                    .builder()
+                                    .badgeUrl("badgeUrl")
+                                    .description("description")
+                                    .longDescription(
+                                        CommunityRetrieveInfoResponse.Community.Creator
+                                            .AffiliatesHighlightedLabel
+                                            .LongDescription
+                                            .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                            .build()
+                                    )
+                                    .url("url")
+                                    .urlType("urlType")
+                                    .userLabelDisplayType("userLabelDisplayType")
+                                    .userLabelType("userLabelType")
+                                    .build()
+                            )
+                            .automatedBy("example_user")
+                            .birthdate(
+                                CommunityRetrieveInfoResponse.Community.Creator.Birthdate.builder()
+                                    .day(1L)
+                                    .month(1L)
+                                    .year(1L)
+                                    .build()
+                            )
+                            .businessAccountAffiliatesCount(0L)
+                            .businessProfileState("none")
+                            .communityRole("Member")
+                            .connectedVia("United States App Store")
+                            .connectedViaAccurate(true)
+                            .contactInfo(
+                                CommunityRetrieveInfoResponse.Community.Creator.ContactInfo
+                                    .builder()
+                                    .addEmail(
+                                        CommunityRetrieveInfoResponse.Community.Creator.ContactInfo
+                                            .Email
+                                            .builder()
+                                            .domain("example.com")
+                                            .source(
+                                                CommunityRetrieveInfoResponse.Community.Creator
+                                                    .ContactInfo
+                                                    .Email
+                                                    .Source
+                                                    .BIO
+                                            )
+                                            .value("press@example.com")
+                                            .writtenAs("press [at] example [dot] com")
+                                            .build()
+                                    )
+                                    .addLink(
+                                        CommunityRetrieveInfoResponse.Community.Creator.ContactInfo
+                                            .Link
+                                            .builder()
+                                            .network("linkedin")
+                                            .source(
+                                                CommunityRetrieveInfoResponse.Community.Creator
+                                                    .ContactInfo
+                                                    .Link
+                                                    .Source
+                                                    .URL
+                                            )
+                                            .url("https://www.linkedin.com/company/acme")
+                                            .build()
+                                    )
+                                    .addPhone(
+                                        CommunityRetrieveInfoResponse.Community.Creator.ContactInfo
+                                            .Phone
+                                            .builder()
+                                            .source(
+                                                CommunityRetrieveInfoResponse.Community.Creator
+                                                    .ContactInfo
+                                                    .Phone
+                                                    .Source
+                                                    .BIO
+                                            )
+                                            .value("+14155550123")
+                                            .writtenAs("+1 (415) 555-0123")
+                                            .build()
+                                    )
+                                    .build()
+                            )
+                            .coverPicture("https://pbs.twimg.com/profile_banners/example.jpg")
+                            .createdAt("2009-06-02T20:12:29Z")
+                            .creatorSubscriptionsCount(0L)
+                            .defaultProfile(true)
+                            .defaultProfileImage(true)
+                            .description("CEO of Tesla, SpaceX, and X")
+                            .email("press@example.com")
+                            .fastFollowersCount(0L)
+                            .favouritesCount(18000L)
+                            .followers(150000000L)
+                            .following(500L)
+                            .geoEnabled(true)
+                            .grokTranslatedBio(
+                                CommunityRetrieveInfoResponse.Community.Creator.GrokTranslatedBio
+                                    .builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                    .build()
+                            )
+                            .hasCustomTimelines(true)
+                            .hasExtendedProfile(true)
+                            .hasGraduatedAccess(true)
+                            .hasHiddenSubscriptionsOnProfile(true)
+                            .highlightsInfo(
+                                CommunityRetrieveInfoResponse.Community.Creator.HighlightsInfo
+                                    .builder()
+                                    .canHighlightTweets(true)
+                                    .highlightedTweets("highlightedTweets")
+                                    .build()
+                            )
+                            .identityVerification(
+                                CommunityRetrieveInfoResponse.Community.Creator.IdentityVerification
+                                    .builder()
+                                    .description("description")
+                                    .isIdentityVerified(true)
+                                    .verifiedSinceMsec("1507188387580")
+                                    .build()
+                            )
+                            .isAutomated(false)
+                            .isBlueVerified(true)
+                            .isProfileTranslatable(true)
+                            .isTranslationEnabled(true)
+                            .isTranslator(false)
+                            .isVerified(true)
+                            .listedCount(3051L)
+                            .location("Austin, TX")
+                            .mediaCount(1200L)
                             .name("name")
+                            .normalFollowersCount(0L)
+                            .parodyCommentaryFanLabel("parodyCommentaryFanLabel")
+                            .addPinnedTweetId("1234567890")
+                            .possiblySensitive(false)
+                            .professional(
+                                CommunityRetrieveInfoResponse.Community.Creator.Professional
+                                    .builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                    .build()
+                            )
+                            .profileBannerUrl("https://pbs.twimg.com/profile_banners/example.jpg")
+                            .profileDescriptionLanguage("profileDescriptionLanguage")
+                            .profileImageShape("profileImageShape")
+                            .profileInterstitialType("profileInterstitialType")
+                            .profilePicture(
+                                "https://pbs.twimg.com/profile_images/example_normal.jpg"
+                            )
+                            .profilePictureOriginal(
+                                "https://pbs.twimg.com/profile_images/example.jpg"
+                            )
+                            .profileSortEnabled(true)
+                            .profileTranslatorType("profileTranslatorType")
+                            .profileBio(
+                                CommunityRetrieveInfoResponse.Community.Creator.ProfileBio.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                    .build()
+                            )
+                            .protected(false)
+                            .redirectsToUsername("spacexsi")
+                            .retweetedAt(OffsetDateTime.parse("2026-09-11T20:24:45.000Z"))
+                            .statusesCount(35000L)
+                            .subscribersCount(0L)
+                            .superFollowEligible(true)
+                            .superFollowsUserProfileActive(true)
+                            .tipJar(
+                                CommunityRetrieveInfoResponse.Community.Creator.TipJar.builder()
+                                    .bandcampHandle("bandcampHandle")
+                                    .bitcoinHandle("bitcoinHandle")
+                                    .cashAppHandle("cashAppHandle")
+                                    .ethereumHandle("ethereumHandle")
+                                    .gofundmeHandle("gofundmeHandle")
+                                    .isEnabled(true)
+                                    .patreonHandle("patreonHandle")
+                                    .payPalHandle("payPalHandle")
+                                    .venmoHandle("venmoHandle")
+                                    .build()
+                            )
+                            .unavailable(false)
+                            .unavailableReason("suspended")
+                            .url("https://xquik.com")
+                            .usernameChanges(
+                                CommunityRetrieveInfoResponse.Community.Creator.UsernameChanges
+                                    .builder()
+                                    .count(0L)
+                                    .lastChangedAt(OffsetDateTime.parse("2016-05-14T00:22:47.057Z"))
+                                    .build()
+                            )
+                            .verificationReason(
+                                CommunityRetrieveInfoResponse.Community.Creator.VerificationReason
+                                    .builder()
+                                    .addEntity(
+                                        CommunityRetrieveInfoResponse.Community.Creator
+                                            .VerificationReason
+                                            .Entity
+                                            .builder()
+                                            .fromIndex(0L)
+                                            .toIndex(0L)
+                                            .url("url")
+                                            .urlType("urlType")
+                                            .build()
+                                    )
+                                    .text(
+                                        "This account is verified because it's an official organization on X."
+                                    )
+                                    .build()
+                            )
+                            .verifiedType("Business")
+                            .addWithheldInCountry("DE")
+                            .withheldScope("user")
                             .build()
                     )
                     .description("description")
@@ -71,14 +601,20 @@ internal class CommunityRetrieveInfoResponseTest {
                     .isNsfw(true)
                     .joinPolicy("join_policy")
                     .memberCount(0L)
+                    .addMembersFacepile(
+                        CommunityRetrieveInfoResponse.Community.MembersFacepile.ofUserProfile(
+                            UserProfile.builder().id("id").name("name").username("username").build()
+                        )
+                    )
                     .moderatorCount(0L)
-                    .name("Tesla Fans")
+                    .name("name")
                     .primaryTopic(
                         CommunityRetrieveInfoResponse.Community.PrimaryTopic.builder()
                             .id("id")
                             .name("name")
                             .build()
                     )
+                    .question("What are you working on?")
                     .addRule(
                         CommunityRetrieveInfoResponse.Community.Rule.builder()
                             .id("id")
@@ -86,6 +622,7 @@ internal class CommunityRetrieveInfoResponseTest {
                             .name("name")
                             .build()
                     )
+                    .addSearchTag("buildinpublic")
                     .build()
             )
     }
@@ -97,7 +634,33 @@ internal class CommunityRetrieveInfoResponseTest {
             CommunityRetrieveInfoResponse.builder()
                 .community(
                     CommunityRetrieveInfoResponse.Community.builder()
-                        .id("1500000000000000000")
+                        .id("id")
+                        .admin(
+                            UserProfile.builder().id("id").name("name").username("username").build()
+                        )
+                        .banner(
+                            CommunityRetrieveInfoResponse.Community.Banner.builder()
+                                .url("url")
+                                .addColor(
+                                    CommunityRetrieveInfoResponse.Community.Banner.Color.builder()
+                                        .blue(0L)
+                                        .green(0L)
+                                        .percentage(0.0)
+                                        .red(0L)
+                                        .build()
+                                )
+                                .focus(
+                                    CommunityRetrieveInfoResponse.Community.Banner.Focus.builder()
+                                        .height(0L)
+                                        .left(0L)
+                                        .top(0L)
+                                        .width(0L)
+                                        .build()
+                                )
+                                .height(0L)
+                                .width(0L)
+                                .build()
+                        )
                         .bannerUrl("banner_url")
                         .createdAt("created_at")
                         .creator(
@@ -105,7 +668,246 @@ internal class CommunityRetrieveInfoResponseTest {
                                 .id("id")
                                 .username("username")
                                 .verified(true)
+                                .accountBasedIn(
+                                    CommunityRetrieveInfoResponse.Community.Creator.AccountBasedIn
+                                        .builder()
+                                        .level(
+                                            CommunityRetrieveInfoResponse.Community.Creator
+                                                .AccountBasedIn
+                                                .Level
+                                                .COUNTRY
+                                        )
+                                        .observedAt(OffsetDateTime.parse("2026-08-21T10:00:00Z"))
+                                        .value("United States")
+                                        .build()
+                                )
+                                .accountBasedInAccurate(true)
+                                .accountBasedInUnavailable(true)
+                                .addAdvertiserAccountServiceLevel("advertiserAccountServiceLevel")
+                                .advertiserAccountType("none")
+                                .affiliateUsername("BBCNews")
+                                .affiliatesHighlightedLabel(
+                                    CommunityRetrieveInfoResponse.Community.Creator
+                                        .AffiliatesHighlightedLabel
+                                        .builder()
+                                        .badgeUrl("badgeUrl")
+                                        .description("description")
+                                        .longDescription(
+                                            CommunityRetrieveInfoResponse.Community.Creator
+                                                .AffiliatesHighlightedLabel
+                                                .LongDescription
+                                                .builder()
+                                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                                .build()
+                                        )
+                                        .url("url")
+                                        .urlType("urlType")
+                                        .userLabelDisplayType("userLabelDisplayType")
+                                        .userLabelType("userLabelType")
+                                        .build()
+                                )
+                                .automatedBy("example_user")
+                                .birthdate(
+                                    CommunityRetrieveInfoResponse.Community.Creator.Birthdate
+                                        .builder()
+                                        .day(1L)
+                                        .month(1L)
+                                        .year(1L)
+                                        .build()
+                                )
+                                .businessAccountAffiliatesCount(0L)
+                                .businessProfileState("none")
+                                .communityRole("Member")
+                                .connectedVia("United States App Store")
+                                .connectedViaAccurate(true)
+                                .contactInfo(
+                                    CommunityRetrieveInfoResponse.Community.Creator.ContactInfo
+                                        .builder()
+                                        .addEmail(
+                                            CommunityRetrieveInfoResponse.Community.Creator
+                                                .ContactInfo
+                                                .Email
+                                                .builder()
+                                                .domain("example.com")
+                                                .source(
+                                                    CommunityRetrieveInfoResponse.Community.Creator
+                                                        .ContactInfo
+                                                        .Email
+                                                        .Source
+                                                        .BIO
+                                                )
+                                                .value("press@example.com")
+                                                .writtenAs("press [at] example [dot] com")
+                                                .build()
+                                        )
+                                        .addLink(
+                                            CommunityRetrieveInfoResponse.Community.Creator
+                                                .ContactInfo
+                                                .Link
+                                                .builder()
+                                                .network("linkedin")
+                                                .source(
+                                                    CommunityRetrieveInfoResponse.Community.Creator
+                                                        .ContactInfo
+                                                        .Link
+                                                        .Source
+                                                        .URL
+                                                )
+                                                .url("https://www.linkedin.com/company/acme")
+                                                .build()
+                                        )
+                                        .addPhone(
+                                            CommunityRetrieveInfoResponse.Community.Creator
+                                                .ContactInfo
+                                                .Phone
+                                                .builder()
+                                                .source(
+                                                    CommunityRetrieveInfoResponse.Community.Creator
+                                                        .ContactInfo
+                                                        .Phone
+                                                        .Source
+                                                        .BIO
+                                                )
+                                                .value("+14155550123")
+                                                .writtenAs("+1 (415) 555-0123")
+                                                .build()
+                                        )
+                                        .build()
+                                )
+                                .coverPicture("https://pbs.twimg.com/profile_banners/example.jpg")
+                                .createdAt("2009-06-02T20:12:29Z")
+                                .creatorSubscriptionsCount(0L)
+                                .defaultProfile(true)
+                                .defaultProfileImage(true)
+                                .description("CEO of Tesla, SpaceX, and X")
+                                .email("press@example.com")
+                                .fastFollowersCount(0L)
+                                .favouritesCount(18000L)
+                                .followers(150000000L)
+                                .following(500L)
+                                .geoEnabled(true)
+                                .grokTranslatedBio(
+                                    CommunityRetrieveInfoResponse.Community.Creator
+                                        .GrokTranslatedBio
+                                        .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .build()
+                                )
+                                .hasCustomTimelines(true)
+                                .hasExtendedProfile(true)
+                                .hasGraduatedAccess(true)
+                                .hasHiddenSubscriptionsOnProfile(true)
+                                .highlightsInfo(
+                                    CommunityRetrieveInfoResponse.Community.Creator.HighlightsInfo
+                                        .builder()
+                                        .canHighlightTweets(true)
+                                        .highlightedTweets("highlightedTweets")
+                                        .build()
+                                )
+                                .identityVerification(
+                                    CommunityRetrieveInfoResponse.Community.Creator
+                                        .IdentityVerification
+                                        .builder()
+                                        .description("description")
+                                        .isIdentityVerified(true)
+                                        .verifiedSinceMsec("1507188387580")
+                                        .build()
+                                )
+                                .isAutomated(false)
+                                .isBlueVerified(true)
+                                .isProfileTranslatable(true)
+                                .isTranslationEnabled(true)
+                                .isTranslator(false)
+                                .isVerified(true)
+                                .listedCount(3051L)
+                                .location("Austin, TX")
+                                .mediaCount(1200L)
                                 .name("name")
+                                .normalFollowersCount(0L)
+                                .parodyCommentaryFanLabel("parodyCommentaryFanLabel")
+                                .addPinnedTweetId("1234567890")
+                                .possiblySensitive(false)
+                                .professional(
+                                    CommunityRetrieveInfoResponse.Community.Creator.Professional
+                                        .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .build()
+                                )
+                                .profileBannerUrl(
+                                    "https://pbs.twimg.com/profile_banners/example.jpg"
+                                )
+                                .profileDescriptionLanguage("profileDescriptionLanguage")
+                                .profileImageShape("profileImageShape")
+                                .profileInterstitialType("profileInterstitialType")
+                                .profilePicture(
+                                    "https://pbs.twimg.com/profile_images/example_normal.jpg"
+                                )
+                                .profilePictureOriginal(
+                                    "https://pbs.twimg.com/profile_images/example.jpg"
+                                )
+                                .profileSortEnabled(true)
+                                .profileTranslatorType("profileTranslatorType")
+                                .profileBio(
+                                    CommunityRetrieveInfoResponse.Community.Creator.ProfileBio
+                                        .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .build()
+                                )
+                                .protected(false)
+                                .redirectsToUsername("spacexsi")
+                                .retweetedAt(OffsetDateTime.parse("2026-09-11T20:24:45.000Z"))
+                                .statusesCount(35000L)
+                                .subscribersCount(0L)
+                                .superFollowEligible(true)
+                                .superFollowsUserProfileActive(true)
+                                .tipJar(
+                                    CommunityRetrieveInfoResponse.Community.Creator.TipJar.builder()
+                                        .bandcampHandle("bandcampHandle")
+                                        .bitcoinHandle("bitcoinHandle")
+                                        .cashAppHandle("cashAppHandle")
+                                        .ethereumHandle("ethereumHandle")
+                                        .gofundmeHandle("gofundmeHandle")
+                                        .isEnabled(true)
+                                        .patreonHandle("patreonHandle")
+                                        .payPalHandle("payPalHandle")
+                                        .venmoHandle("venmoHandle")
+                                        .build()
+                                )
+                                .unavailable(false)
+                                .unavailableReason("suspended")
+                                .url("https://xquik.com")
+                                .usernameChanges(
+                                    CommunityRetrieveInfoResponse.Community.Creator.UsernameChanges
+                                        .builder()
+                                        .count(0L)
+                                        .lastChangedAt(
+                                            OffsetDateTime.parse("2016-05-14T00:22:47.057Z")
+                                        )
+                                        .build()
+                                )
+                                .verificationReason(
+                                    CommunityRetrieveInfoResponse.Community.Creator
+                                        .VerificationReason
+                                        .builder()
+                                        .addEntity(
+                                            CommunityRetrieveInfoResponse.Community.Creator
+                                                .VerificationReason
+                                                .Entity
+                                                .builder()
+                                                .fromIndex(0L)
+                                                .toIndex(0L)
+                                                .url("url")
+                                                .urlType("urlType")
+                                                .build()
+                                        )
+                                        .text(
+                                            "This account is verified because it's an official organization on X."
+                                        )
+                                        .build()
+                                )
+                                .verifiedType("Business")
+                                .addWithheldInCountry("DE")
+                                .withheldScope("user")
                                 .build()
                         )
                         .description("description")
@@ -113,14 +915,24 @@ internal class CommunityRetrieveInfoResponseTest {
                         .isNsfw(true)
                         .joinPolicy("join_policy")
                         .memberCount(0L)
+                        .addMembersFacepile(
+                            CommunityRetrieveInfoResponse.Community.MembersFacepile.ofUserProfile(
+                                UserProfile.builder()
+                                    .id("id")
+                                    .name("name")
+                                    .username("username")
+                                    .build()
+                            )
+                        )
                         .moderatorCount(0L)
-                        .name("Tesla Fans")
+                        .name("name")
                         .primaryTopic(
                             CommunityRetrieveInfoResponse.Community.PrimaryTopic.builder()
                                 .id("id")
                                 .name("name")
                                 .build()
                         )
+                        .question("What are you working on?")
                         .addRule(
                             CommunityRetrieveInfoResponse.Community.Rule.builder()
                                 .id("id")
@@ -128,6 +940,7 @@ internal class CommunityRetrieveInfoResponseTest {
                                 .name("name")
                                 .build()
                         )
+                        .addSearchTag("buildinpublic")
                         .build()
                 )
                 .build()

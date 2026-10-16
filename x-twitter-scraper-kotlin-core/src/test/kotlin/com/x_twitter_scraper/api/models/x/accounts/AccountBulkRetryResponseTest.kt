@@ -13,15 +13,15 @@ internal class AccountBulkRetryResponseTest {
 
     @Test
     fun create() {
-        val accountBulkRetryResponse = AccountBulkRetryResponse.builder().cleared(3L).build()
+        val accountBulkRetryResponse = AccountBulkRetryResponse.builder().cleared(0L).build()
 
-        assertThat(accountBulkRetryResponse.cleared()).isEqualTo(3L)
+        assertThat(accountBulkRetryResponse.cleared()).isEqualTo(0L)
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val accountBulkRetryResponse = AccountBulkRetryResponse.builder().cleared(3L).build()
+        val accountBulkRetryResponse = AccountBulkRetryResponse.builder().cleared(0L).build()
 
         val roundtrippedAccountBulkRetryResponse =
             jsonMapper.readValue(

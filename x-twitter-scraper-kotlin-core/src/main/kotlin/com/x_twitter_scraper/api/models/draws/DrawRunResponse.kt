@@ -52,8 +52,7 @@ private constructor(
     fun id(): String = id.getRequired("id")
 
     /**
-     * Candidate entries inspected for this draw after the credit-derived cap. This may be lower
-     * than the source tweet's full reply count.
+     * Entries inspected after the credit cap, which can be fewer than the post's replies.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null.
@@ -67,8 +66,7 @@ private constructor(
     fun tweetId(): String = tweetId.getRequired("tweetId")
 
     /**
-     * Entries from the inspected candidate set that passed all filters. This is not necessarily
-     * every valid reply on the source tweet when credits cap inspection.
+     * Inspected entries that passed every filter. A credit cap can leave valid replies uninspected.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null.
@@ -173,10 +171,7 @@ private constructor(
         /** Sets [Builder.id] to an arbitrary JSON value. */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
-        /**
-         * Candidate entries inspected for this draw after the credit-derived cap. This may be lower
-         * than the source tweet's full reply count.
-         */
+        /** Entries inspected after the credit cap, which can be fewer than the post's replies. */
         fun totalEntries(totalEntries: Long) = totalEntries(JsonField.of(totalEntries))
 
         /** Sets [Builder.totalEntries] to an arbitrary JSON value. */
@@ -188,8 +183,8 @@ private constructor(
         fun tweetId(tweetId: JsonField<String>) = apply { this.tweetId = tweetId }
 
         /**
-         * Entries from the inspected candidate set that passed all filters. This is not necessarily
-         * every valid reply on the source tweet when credits cap inspection.
+         * Inspected entries that passed every filter. A credit cap can leave valid replies
+         * uninspected.
          */
         fun validEntries(validEntries: Long) = validEntries(JsonField.of(validEntries))
 

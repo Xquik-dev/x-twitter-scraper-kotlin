@@ -17,11 +17,9 @@ internal class SpaceRetrieveReplayResponseTest {
             SpaceRetrieveReplayResponse.builder()
                 .replay(
                     SpaceRetrieveReplayResponse.Replay.builder()
-                        .url(
-                            "https://prod-fastly-us-east-1.video.pscp.tv/Transcoding/v1/hls/example/audio-space/playlist.m3u8?type=replay"
-                        )
-                        .status("LIVE_PUBLIC")
-                        .streamType("HLS")
+                        .url("url")
+                        .status("status")
+                        .streamType("streamType")
                         .build()
                 )
                 .build()
@@ -29,11 +27,9 @@ internal class SpaceRetrieveReplayResponseTest {
         assertThat(spaceRetrieveReplayResponse.replay())
             .isEqualTo(
                 SpaceRetrieveReplayResponse.Replay.builder()
-                    .url(
-                        "https://prod-fastly-us-east-1.video.pscp.tv/Transcoding/v1/hls/example/audio-space/playlist.m3u8?type=replay"
-                    )
-                    .status("LIVE_PUBLIC")
-                    .streamType("HLS")
+                    .url("url")
+                    .status("status")
+                    .streamType("streamType")
                     .build()
             )
     }
@@ -45,11 +41,9 @@ internal class SpaceRetrieveReplayResponseTest {
             SpaceRetrieveReplayResponse.builder()
                 .replay(
                     SpaceRetrieveReplayResponse.Replay.builder()
-                        .url(
-                            "https://prod-fastly-us-east-1.video.pscp.tv/Transcoding/v1/hls/example/audio-space/playlist.m3u8?type=replay"
-                        )
-                        .status("LIVE_PUBLIC")
-                        .streamType("HLS")
+                        .url("url")
+                        .status("status")
+                        .streamType("streamType")
                         .build()
                 )
                 .build()

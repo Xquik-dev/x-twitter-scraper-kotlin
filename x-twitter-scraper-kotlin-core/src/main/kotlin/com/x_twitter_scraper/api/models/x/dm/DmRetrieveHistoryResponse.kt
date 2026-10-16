@@ -288,7 +288,11 @@ private constructor(
          */
         fun mediaUrl(): String? = mediaUrl.getNullable("mediaUrl")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * Text as x.com shows it, with `&`, `<` & `>` decoded.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun text(): String? = text.getNullable("text")
 
         /**
@@ -412,6 +416,7 @@ private constructor(
             /** Sets [Builder.mediaUrl] to an arbitrary JSON value. */
             fun mediaUrl(mediaUrl: JsonField<String>) = apply { this.mediaUrl = mediaUrl }
 
+            /** Text as x.com shows it, with `&`, `<` & `>` decoded. */
             fun text(text: String) = text(JsonField.of(text))
 
             /** Sets [Builder.text] to an arbitrary JSON value. */

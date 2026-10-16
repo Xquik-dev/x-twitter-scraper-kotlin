@@ -16,7 +16,7 @@ internal class UserRetrieveBatchTweetsResponseTest {
     fun create() {
         val userRetrieveBatchTweetsResponse =
             UserRetrieveBatchTweetsResponse.builder()
-                .nextCursor("")
+                .nextCursor("next_cursor")
                 .addTweet(
                     SearchTweet.builder()
                         .id("id")
@@ -29,11 +29,11 @@ internal class UserRetrieveBatchTweetsResponseTest {
                         .viewCount(0L)
                         .build()
                 )
-                .addUnavailableId("1234567890")
+                .addUnavailableId("unavailableId")
                 .addUnprocessedId("unprocessedId")
                 .build()
 
-        assertThat(userRetrieveBatchTweetsResponse.nextCursor()).isEqualTo("")
+        assertThat(userRetrieveBatchTweetsResponse.nextCursor()).isEqualTo("next_cursor")
         assertThat(userRetrieveBatchTweetsResponse.tweets())
             .containsExactly(
                 SearchTweet.builder()
@@ -47,7 +47,8 @@ internal class UserRetrieveBatchTweetsResponseTest {
                     .viewCount(0L)
                     .build()
             )
-        assertThat(userRetrieveBatchTweetsResponse.unavailableIds()).containsExactly("1234567890")
+        assertThat(userRetrieveBatchTweetsResponse.unavailableIds())
+            .containsExactly("unavailableId")
         assertThat(userRetrieveBatchTweetsResponse.unprocessedIds())
             .containsExactly("unprocessedId")
     }
@@ -57,7 +58,7 @@ internal class UserRetrieveBatchTweetsResponseTest {
         val jsonMapper = jsonMapper()
         val userRetrieveBatchTweetsResponse =
             UserRetrieveBatchTweetsResponse.builder()
-                .nextCursor("")
+                .nextCursor("next_cursor")
                 .addTweet(
                     SearchTweet.builder()
                         .id("id")
@@ -70,7 +71,7 @@ internal class UserRetrieveBatchTweetsResponseTest {
                         .viewCount(0L)
                         .build()
                 )
-                .addUnavailableId("1234567890")
+                .addUnavailableId("unavailableId")
                 .addUnprocessedId("unprocessedId")
                 .build()
 

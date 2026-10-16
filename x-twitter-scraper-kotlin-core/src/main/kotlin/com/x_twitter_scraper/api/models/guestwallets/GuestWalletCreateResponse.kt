@@ -23,29 +23,26 @@ import java.util.Objects
 class GuestWalletCreateResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    private val accountRequired: JsonValue,
     private val amount: JsonField<GuestWalletAmount>,
     private val apiKey: JsonField<String>,
     private val authorization: JsonField<Authorization>,
     private val checkoutUrl: JsonField<String>,
-    private val credentialNotice: JsonValue,
     private val credits: JsonField<String>,
     private val expiresAt: JsonField<OffsetDateTime>,
     private val instructions: JsonField<String>,
-    private val pollAfterSeconds: JsonValue,
     private val purchaseId: JsonField<String>,
-    private val requiresUserInteraction: JsonValue,
     private val status: JsonField<Status>,
-    private val statusUrl: JsonValue,
     private val walletId: JsonField<String>,
+    private val accountRequired: JsonValue,
+    private val credentialNotice: JsonValue,
+    private val pollAfterSeconds: JsonValue,
+    private val requiresUserInteraction: JsonValue,
+    private val statusUrl: JsonValue,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("account_required")
-        @ExcludeMissing
-        accountRequired: JsonValue = JsonMissing.of(),
         @JsonProperty("amount")
         @ExcludeMissing
         amount: JsonField<GuestWalletAmount> = JsonMissing.of(),
@@ -56,9 +53,6 @@ private constructor(
         @JsonProperty("checkout_url")
         @ExcludeMissing
         checkoutUrl: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("credential_notice")
-        @ExcludeMissing
-        credentialNotice: JsonValue = JsonMissing.of(),
         @JsonProperty("credits") @ExcludeMissing credits: JsonField<String> = JsonMissing.of(),
         @JsonProperty("expires_at")
         @ExcludeMissing
@@ -66,46 +60,42 @@ private constructor(
         @JsonProperty("instructions")
         @ExcludeMissing
         instructions: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("poll_after_seconds")
-        @ExcludeMissing
-        pollAfterSeconds: JsonValue = JsonMissing.of(),
         @JsonProperty("purchase_id")
         @ExcludeMissing
         purchaseId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("status") @ExcludeMissing status: JsonField<Status> = JsonMissing.of(),
+        @JsonProperty("wallet_id") @ExcludeMissing walletId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("account_required")
+        @ExcludeMissing
+        accountRequired: JsonValue = JsonMissing.of(),
+        @JsonProperty("credential_notice")
+        @ExcludeMissing
+        credentialNotice: JsonValue = JsonMissing.of(),
+        @JsonProperty("poll_after_seconds")
+        @ExcludeMissing
+        pollAfterSeconds: JsonValue = JsonMissing.of(),
         @JsonProperty("requires_user_interaction")
         @ExcludeMissing
         requiresUserInteraction: JsonValue = JsonMissing.of(),
-        @JsonProperty("status") @ExcludeMissing status: JsonField<Status> = JsonMissing.of(),
         @JsonProperty("status_url") @ExcludeMissing statusUrl: JsonValue = JsonMissing.of(),
-        @JsonProperty("wallet_id") @ExcludeMissing walletId: JsonField<String> = JsonMissing.of(),
     ) : this(
-        accountRequired,
         amount,
         apiKey,
         authorization,
         checkoutUrl,
-        credentialNotice,
         credits,
         expiresAt,
         instructions,
-        pollAfterSeconds,
         purchaseId,
-        requiresUserInteraction,
         status,
-        statusUrl,
         walletId,
+        accountRequired,
+        credentialNotice,
+        pollAfterSeconds,
+        requiresUserInteraction,
+        statusUrl,
         mutableMapOf(),
     )
-
-    /**
-     * Expected to always return the following:
-     * ```kotlin
-     * JsonValue.from(false)
-     * ```
-     */
-    @JsonProperty("account_required")
-    @ExcludeMissing
-    fun _accountRequired(): JsonValue = accountRequired
 
     /**
      * Confirmed USD amount for a guest wallet purchase.
@@ -139,16 +129,6 @@ private constructor(
     fun checkoutUrl(): String = checkoutUrl.getRequired("checkout_url")
 
     /**
-     * Expected to always return the following:
-     * ```kotlin
-     * JsonValue.from("Store api_key and the Idempotency-Key securely before sharing checkout_url. No email recovery is available.")
-     * ```
-     */
-    @JsonProperty("credential_notice")
-    @ExcludeMissing
-    fun _credentialNotice(): JsonValue = credentialNotice
-
-    /**
      * Credits granted after verified payment.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
@@ -173,6 +153,49 @@ private constructor(
     fun instructions(): String = instructions.getRequired("instructions")
 
     /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null.
+     */
+    fun purchaseId(): String = purchaseId.getRequired("purchase_id")
+
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null.
+     */
+    fun status(): Status = status.getRequired("status")
+
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null.
+     */
+    fun walletId(): String = walletId.getRequired("wallet_id")
+
+    /**
+     * Expected to always return the following: ```kotlin JsonValue.from(false) ```
+     *
+     * Expected to always return the following:
+     * ```kotlin
+     * JsonValue.from(false)
+     * ```
+     */
+    @JsonProperty("account_required")
+    @ExcludeMissing
+    fun _accountRequired(): JsonValue = accountRequired
+
+    /**
+     * Expected to always return the following: ```kotlin JsonValue.from("Store api_key and the
+     * Idempotency-Key securely before sharing checkout_url. No email recovery is available.") ```
+     *
+     * Expected to always return the following:
+     * ```kotlin
+     * JsonValue.from("Store api_key and the Idempotency-Key securely before sharing checkout_url. No email recovery is available.")
+     * ```
+     */
+    @JsonProperty("credential_notice")
+    @ExcludeMissing
+    fun _credentialNotice(): JsonValue = credentialNotice
+
+    /**
      * Wait at least this long before polling status_url.
      *
      * Expected to always return the following:
@@ -185,12 +208,8 @@ private constructor(
     fun _pollAfterSeconds(): JsonValue = pollAfterSeconds
 
     /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null.
-     */
-    fun purchaseId(): String = purchaseId.getRequired("purchase_id")
-
-    /**
+     * Expected to always return the following: ```kotlin JsonValue.from(true) ```
+     *
      * Expected to always return the following:
      * ```kotlin
      * JsonValue.from(true)
@@ -201,24 +220,15 @@ private constructor(
     fun _requiresUserInteraction(): JsonValue = requiresUserInteraction
 
     /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null.
-     */
-    fun status(): Status = status.getRequired("status")
-
-    /**
+     * Expected to always return the following: ```kotlin
+     * JsonValue.from("https://xquik.com/api/v1/guest-wallets/status") ```
+     *
      * Expected to always return the following:
      * ```kotlin
      * JsonValue.from("https://xquik.com/api/v1/guest-wallets/status")
      * ```
      */
     @JsonProperty("status_url") @ExcludeMissing fun _statusUrl(): JsonValue = statusUrl
-
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null.
-     */
-    fun walletId(): String = walletId.getRequired("wallet_id")
 
     /**
      * Returns the raw JSON value of [amount].
@@ -335,56 +345,44 @@ private constructor(
     /** A builder for [GuestWalletCreateResponse]. */
     class Builder internal constructor() {
 
-        private var accountRequired: JsonValue = JsonValue.from(false)
         private var amount: JsonField<GuestWalletAmount>? = null
         private var apiKey: JsonField<String>? = null
         private var authorization: JsonField<Authorization>? = null
         private var checkoutUrl: JsonField<String>? = null
+        private var credits: JsonField<String>? = null
+        private var expiresAt: JsonField<OffsetDateTime>? = null
+        private var instructions: JsonField<String>? = null
+        private var purchaseId: JsonField<String>? = null
+        private var status: JsonField<Status>? = null
+        private var walletId: JsonField<String>? = null
+        private var accountRequired: JsonValue = JsonValue.from(false)
         private var credentialNotice: JsonValue =
             JsonValue.from(
                 "Store api_key and the Idempotency-Key securely before sharing checkout_url. No email recovery is available."
             )
-        private var credits: JsonField<String>? = null
-        private var expiresAt: JsonField<OffsetDateTime>? = null
-        private var instructions: JsonField<String>? = null
         private var pollAfterSeconds: JsonValue = JsonValue.from(2)
-        private var purchaseId: JsonField<String>? = null
         private var requiresUserInteraction: JsonValue = JsonValue.from(true)
-        private var status: JsonField<Status>? = null
         private var statusUrl: JsonValue =
             JsonValue.from("https://xquik.com/api/v1/guest-wallets/status")
-        private var walletId: JsonField<String>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(guestWalletCreateResponse: GuestWalletCreateResponse) = apply {
-            accountRequired = guestWalletCreateResponse.accountRequired
             amount = guestWalletCreateResponse.amount
             apiKey = guestWalletCreateResponse.apiKey
             authorization = guestWalletCreateResponse.authorization
             checkoutUrl = guestWalletCreateResponse.checkoutUrl
-            credentialNotice = guestWalletCreateResponse.credentialNotice
             credits = guestWalletCreateResponse.credits
             expiresAt = guestWalletCreateResponse.expiresAt
             instructions = guestWalletCreateResponse.instructions
-            pollAfterSeconds = guestWalletCreateResponse.pollAfterSeconds
             purchaseId = guestWalletCreateResponse.purchaseId
-            requiresUserInteraction = guestWalletCreateResponse.requiresUserInteraction
             status = guestWalletCreateResponse.status
-            statusUrl = guestWalletCreateResponse.statusUrl
             walletId = guestWalletCreateResponse.walletId
+            accountRequired = guestWalletCreateResponse.accountRequired
+            credentialNotice = guestWalletCreateResponse.credentialNotice
+            pollAfterSeconds = guestWalletCreateResponse.pollAfterSeconds
+            requiresUserInteraction = guestWalletCreateResponse.requiresUserInteraction
+            statusUrl = guestWalletCreateResponse.statusUrl
             additionalProperties = guestWalletCreateResponse.additionalProperties.toMutableMap()
-        }
-
-        /**
-         * Sets the field to an arbitrary JSON value.
-         *
-         * Defaults to the following:
-         * ```kotlin
-         * JsonValue.from(false)
-         * ```
-         */
-        fun accountRequired(accountRequired: JsonValue) = apply {
-            this.accountRequired = accountRequired
         }
 
         /** Confirmed USD amount for a guest wallet purchase. */
@@ -415,18 +413,6 @@ private constructor(
         /** Sets [Builder.checkoutUrl] to an arbitrary JSON value. */
         fun checkoutUrl(checkoutUrl: JsonField<String>) = apply { this.checkoutUrl = checkoutUrl }
 
-        /**
-         * Sets the field to an arbitrary JSON value.
-         *
-         * Defaults to the following:
-         * ```kotlin
-         * JsonValue.from("Store api_key and the Idempotency-Key securely before sharing checkout_url. No email recovery is available.")
-         * ```
-         */
-        fun credentialNotice(credentialNotice: JsonValue) = apply {
-            this.credentialNotice = credentialNotice
-        }
-
         /** Credits granted after verified payment. */
         fun credits(credits: String) = credits(JsonField.of(credits))
 
@@ -447,6 +433,45 @@ private constructor(
             this.instructions = instructions
         }
 
+        fun purchaseId(purchaseId: String) = purchaseId(JsonField.of(purchaseId))
+
+        /** Sets [Builder.purchaseId] to an arbitrary JSON value. */
+        fun purchaseId(purchaseId: JsonField<String>) = apply { this.purchaseId = purchaseId }
+
+        fun status(status: Status) = status(JsonField.of(status))
+
+        /** Sets [Builder.status] to an arbitrary JSON value. */
+        fun status(status: JsonField<Status>) = apply { this.status = status }
+
+        fun walletId(walletId: String) = walletId(JsonField.of(walletId))
+
+        /** Sets [Builder.walletId] to an arbitrary JSON value. */
+        fun walletId(walletId: JsonField<String>) = apply { this.walletId = walletId }
+
+        /**
+         * Sets the field to an arbitrary JSON value.
+         *
+         * Defaults to the following:
+         * ```kotlin
+         * JsonValue.from(false)
+         * ```
+         */
+        fun accountRequired(accountRequired: JsonValue) = apply {
+            this.accountRequired = accountRequired
+        }
+
+        /**
+         * Sets the field to an arbitrary JSON value.
+         *
+         * Defaults to the following:
+         * ```kotlin
+         * JsonValue.from("Store api_key and the Idempotency-Key securely before sharing checkout_url. No email recovery is available.")
+         * ```
+         */
+        fun credentialNotice(credentialNotice: JsonValue) = apply {
+            this.credentialNotice = credentialNotice
+        }
+
         /**
          * Sets the field to an arbitrary JSON value.
          *
@@ -458,11 +483,6 @@ private constructor(
         fun pollAfterSeconds(pollAfterSeconds: JsonValue) = apply {
             this.pollAfterSeconds = pollAfterSeconds
         }
-
-        fun purchaseId(purchaseId: String) = purchaseId(JsonField.of(purchaseId))
-
-        /** Sets [Builder.purchaseId] to an arbitrary JSON value. */
-        fun purchaseId(purchaseId: JsonField<String>) = apply { this.purchaseId = purchaseId }
 
         /**
          * Sets the field to an arbitrary JSON value.
@@ -476,11 +496,6 @@ private constructor(
             this.requiresUserInteraction = requiresUserInteraction
         }
 
-        fun status(status: Status) = status(JsonField.of(status))
-
-        /** Sets [Builder.status] to an arbitrary JSON value. */
-        fun status(status: JsonField<Status>) = apply { this.status = status }
-
         /**
          * Sets the field to an arbitrary JSON value.
          *
@@ -490,11 +505,6 @@ private constructor(
          * ```
          */
         fun statusUrl(statusUrl: JsonValue) = apply { this.statusUrl = statusUrl }
-
-        fun walletId(walletId: String) = walletId(JsonField.of(walletId))
-
-        /** Sets [Builder.walletId] to an arbitrary JSON value. */
-        fun walletId(walletId: JsonField<String>) = apply { this.walletId = walletId }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -538,21 +548,21 @@ private constructor(
          */
         fun build(): GuestWalletCreateResponse =
             GuestWalletCreateResponse(
-                accountRequired,
                 checkRequired("amount", amount),
                 checkRequired("apiKey", apiKey),
                 checkRequired("authorization", authorization),
                 checkRequired("checkoutUrl", checkoutUrl),
-                credentialNotice,
                 checkRequired("credits", credits),
                 checkRequired("expiresAt", expiresAt),
                 checkRequired("instructions", instructions),
-                pollAfterSeconds,
                 checkRequired("purchaseId", purchaseId),
-                requiresUserInteraction,
                 checkRequired("status", status),
-                statusUrl,
                 checkRequired("walletId", walletId),
+                accountRequired,
+                credentialNotice,
+                pollAfterSeconds,
+                requiresUserInteraction,
+                statusUrl,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -572,6 +582,16 @@ private constructor(
             return@apply
         }
 
+        amount().validate()
+        apiKey()
+        authorization().validate()
+        checkoutUrl()
+        credits()
+        expiresAt()
+        instructions()
+        purchaseId()
+        status().validate()
+        walletId()
         _accountRequired().let {
             if (it != JsonValue.from(false)) {
                 throw XTwitterScraperInvalidDataException(
@@ -579,10 +599,6 @@ private constructor(
                 )
             }
         }
-        amount().validate()
-        apiKey()
-        authorization().validate()
-        checkoutUrl()
         _credentialNotice().let {
             if (
                 it !=
@@ -595,9 +611,6 @@ private constructor(
                 )
             }
         }
-        credits()
-        expiresAt()
-        instructions()
         _pollAfterSeconds().let {
             if (it != JsonValue.from(2)) {
                 throw XTwitterScraperInvalidDataException(
@@ -605,7 +618,6 @@ private constructor(
                 )
             }
         }
-        purchaseId()
         _requiresUserInteraction().let {
             if (it != JsonValue.from(true)) {
                 throw XTwitterScraperInvalidDataException(
@@ -613,13 +625,11 @@ private constructor(
                 )
             }
         }
-        status().validate()
         _statusUrl().let {
             if (it != JsonValue.from("https://xquik.com/api/v1/guest-wallets/status")) {
                 throw XTwitterScraperInvalidDataException("'statusUrl' is invalid, received $it")
             }
         }
-        walletId()
         validated = true
     }
 
@@ -632,11 +642,17 @@ private constructor(
         }
 
     internal fun validity(): Int =
-        accountRequired.let { if (it == JsonValue.from(false)) 1 else 0 } +
-            (amount.asKnown()?.validity() ?: 0) +
+        (amount.asKnown()?.validity() ?: 0) +
             (if (apiKey.asKnown() == null) 0 else 1) +
             (authorization.asKnown()?.validity() ?: 0) +
             (if (checkoutUrl.asKnown() == null) 0 else 1) +
+            (if (credits.asKnown() == null) 0 else 1) +
+            (if (expiresAt.asKnown() == null) 0 else 1) +
+            (if (instructions.asKnown() == null) 0 else 1) +
+            (if (purchaseId.asKnown() == null) 0 else 1) +
+            (status.asKnown()?.validity() ?: 0) +
+            (if (walletId.asKnown() == null) 0 else 1) +
+            accountRequired.let { if (it == JsonValue.from(false)) 1 else 0 } +
             credentialNotice.let {
                 if (
                     it ==
@@ -647,17 +663,11 @@ private constructor(
                     1
                 else 0
             } +
-            (if (credits.asKnown() == null) 0 else 1) +
-            (if (expiresAt.asKnown() == null) 0 else 1) +
-            (if (instructions.asKnown() == null) 0 else 1) +
             pollAfterSeconds.let { if (it == JsonValue.from(2)) 1 else 0 } +
-            (if (purchaseId.asKnown() == null) 0 else 1) +
             requiresUserInteraction.let { if (it == JsonValue.from(true)) 1 else 0 } +
-            (status.asKnown()?.validity() ?: 0) +
             statusUrl.let {
                 if (it == JsonValue.from("https://xquik.com/api/v1/guest-wallets/status")) 1 else 0
-            } +
-            (if (walletId.asKnown() == null) 0 else 1)
+            }
 
     class Authorization
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
@@ -1051,7 +1061,9 @@ private constructor(
                 additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(header, scheme, additionalProperties) }
+        private val hashCode: Int by lazy {
+            Objects.hash(header, scheme, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -1208,41 +1220,41 @@ private constructor(
         }
 
         return other is GuestWalletCreateResponse &&
-            accountRequired == other.accountRequired &&
             amount == other.amount &&
             apiKey == other.apiKey &&
             authorization == other.authorization &&
             checkoutUrl == other.checkoutUrl &&
-            credentialNotice == other.credentialNotice &&
             credits == other.credits &&
             expiresAt == other.expiresAt &&
             instructions == other.instructions &&
-            pollAfterSeconds == other.pollAfterSeconds &&
             purchaseId == other.purchaseId &&
-            requiresUserInteraction == other.requiresUserInteraction &&
             status == other.status &&
-            statusUrl == other.statusUrl &&
             walletId == other.walletId &&
+            accountRequired == other.accountRequired &&
+            credentialNotice == other.credentialNotice &&
+            pollAfterSeconds == other.pollAfterSeconds &&
+            requiresUserInteraction == other.requiresUserInteraction &&
+            statusUrl == other.statusUrl &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
         Objects.hash(
-            accountRequired,
             amount,
             apiKey,
             authorization,
             checkoutUrl,
-            credentialNotice,
             credits,
             expiresAt,
             instructions,
-            pollAfterSeconds,
             purchaseId,
-            requiresUserInteraction,
             status,
-            statusUrl,
             walletId,
+            accountRequired,
+            credentialNotice,
+            pollAfterSeconds,
+            requiresUserInteraction,
+            statusUrl,
             additionalProperties,
         )
     }
@@ -1250,5 +1262,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "GuestWalletCreateResponse{accountRequired=$accountRequired, amount=$amount, apiKey=$apiKey, authorization=$authorization, checkoutUrl=$checkoutUrl, credentialNotice=$credentialNotice, credits=$credits, expiresAt=$expiresAt, instructions=$instructions, pollAfterSeconds=$pollAfterSeconds, purchaseId=$purchaseId, requiresUserInteraction=$requiresUserInteraction, status=$status, statusUrl=$statusUrl, walletId=$walletId, additionalProperties=$additionalProperties}"
+        "GuestWalletCreateResponse{amount=$amount, apiKey=$apiKey, authorization=$authorization, checkoutUrl=$checkoutUrl, credits=$credits, expiresAt=$expiresAt, instructions=$instructions, purchaseId=$purchaseId, status=$status, walletId=$walletId, accountRequired=$accountRequired, credentialNotice=$credentialNotice, pollAfterSeconds=$pollAfterSeconds, requiresUserInteraction=$requiresUserInteraction, statusUrl=$statusUrl, additionalProperties=$additionalProperties}"
 }

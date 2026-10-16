@@ -99,7 +99,7 @@ internal class ListRetrieveSearchResponseTest {
                         .url("url")
                         .build()
                 )
-                .nextCursor("DAACCgACGRElMJcAAA")
+                .nextCursor("next_cursor")
                 .build()
 
         assertThat(listRetrieveSearchResponse.hasNextPage()).isEqualTo(true)
@@ -179,7 +179,7 @@ internal class ListRetrieveSearchResponseTest {
                     .url("url")
                     .build()
             )
-        assertThat(listRetrieveSearchResponse.nextCursor()).isEqualTo("DAACCgACGRElMJcAAA")
+        assertThat(listRetrieveSearchResponse.nextCursor()).isEqualTo("next_cursor")
     }
 
     @Test
@@ -269,7 +269,7 @@ internal class ListRetrieveSearchResponseTest {
                         .url("url")
                         .build()
                 )
-                .nextCursor("DAACCgACGRElMJcAAA")
+                .nextCursor("next_cursor")
                 .build()
 
         val roundtrippedListRetrieveSearchResponse =

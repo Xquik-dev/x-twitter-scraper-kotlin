@@ -123,7 +123,8 @@ private constructor(
     fun woeid(): Long = woeid.getRequired("woeid")
 
     /**
-     * A place X offers trends for.
+     * The place the request named by country or location. Absent when it sent a woeid or named no
+     * place.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
@@ -306,7 +307,10 @@ private constructor(
         /** Sets [Builder.woeid] to an arbitrary JSON value. */
         fun woeid(woeid: JsonField<Long>) = apply { this.woeid = woeid }
 
-        /** A place X offers trends for. */
+        /**
+         * The place the request named by country or location. Absent when it sent a woeid or named
+         * no place.
+         */
         fun location(location: Location) = location(JsonField.of(location))
 
         /** Sets [Builder.location] to an arbitrary JSON value. */
