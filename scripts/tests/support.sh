@@ -89,26 +89,57 @@ add_origin() {
     sandbox_git push --quiet origin main
 }
 
-run_in_repo() {
-    run_status=0
-    (
-        cd -- "$sandbox_repo"
-        env -i \
-            FAKE_LOGS="$sandbox_logs" \
-            GIT_AUTHOR_EMAIL="tester@example.com" \
-            GIT_AUTHOR_NAME="Script Tester" \
-            GIT_COMMITTER_EMAIL="tester@example.com" \
-            GIT_COMMITTER_NAME="Script Tester" \
-            GIT_CONFIG_GLOBAL=/dev/null \
-            GIT_CONFIG_NOSYSTEM=1 \
-            HOME="$sandbox/home" \
-            PATH="$sandbox_bin:/usr/bin:/bin" \
-            TMPDIR="$sandbox/tmp" \
-            ${run_env[@]+"${run_env[@]}"} \
-            "$@"
-    ) >"$sandbox/stdout" 2>"$sandbox/stderr" </dev/null || run_status=$?
+exec_in_repo() {
+    cd -- "$sandbox_repo"
+    exec env -i \
+        FAKE_LOGS="$sandbox_logs" \
+        GIT_AUTHOR_EMAIL="tester@example.com" \
+        GIT_AUTHOR_NAME="Script Tester" \
+        GIT_COMMITTER_EMAIL="tester@example.com" \
+        GIT_COMMITTER_NAME="Script Tester" \
+        GIT_CONFIG_GLOBAL=/dev/null \
+        GIT_CONFIG_NOSYSTEM=1 \
+        HOME="$sandbox/home" \
+        PATH="$sandbox_bin:/usr/bin:/bin" \
+        TMPDIR="$sandbox/tmp" \
+        ${run_env[@]+"${run_env[@]}"} \
+        "$@"
+}
+
+read_run_output() {
     run_stdout="$(cat "$sandbox/stdout")"
     run_stderr="$(cat "$sandbox/stderr")"
+}
+
+run_in_repo() {
+    run_status=0
+    (exec_in_repo "$@") >"$sandbox/stdout" 2>"$sandbox/stderr" </dev/null || run_status=$?
+    read_run_output
+}
+
+run_in_repo_and_terminate_at() {
+    local marker="$1" pid tries=0
+    shift
+    run_status=0
+    (exec_in_repo "$@") >"$sandbox/stdout" 2>"$sandbox/stderr" </dev/null &
+    pid=$!
+    until [[ -e "$sandbox_logs/$marker" ]]; do
+        if ((tries >= 200)) || ! kill -0 "$pid" 2>/dev/null; then
+            kill -KILL "$pid" 2>/dev/null || true
+            wait "$pid" || true
+            read_run_output
+            fail_test "The run never reached the step that writes $marker."
+        fi
+        sleep 0.05
+        tries=$((tries + 1))
+    done
+    kill -TERM "$pid"
+    wait "$pid" || run_status=$?
+    read_run_output
+}
+
+assert_no_temporary_entries() {
+    assert_equal "" "$(ls -A "$sandbox/tmp")" "the temporary folder after the run"
 }
 
 log_of() {

@@ -8,10 +8,11 @@ set -euo pipefail
 
 cd -- "$(dirname -- "$0")/.."
 
-reproducibility_workspace="$(
-    mktemp -d "${TMPDIR:-/tmp}/xquik-kotlin-reproducibility.XXXXXX"
-)"
-trap 'rm -rf -- "$reproducibility_workspace"' EXIT
+# shellcheck source=scripts/lib/temp-dirs.sh
+source scripts/lib/temp-dirs.sh
+
+reproducibility_workspace="$(mktemp -d "${TMPDIR:-/tmp}/xquik-kotlin-reproducibility.XXXXXX")"
+temp_dirs+=("$reproducibility_workspace")
 
 copy_source() {
     local destination="$1"
