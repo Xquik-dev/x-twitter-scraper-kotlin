@@ -18,23 +18,27 @@ internal class StyleListResponseTest {
             StyleListResponse.builder()
                 .addStyle(
                     StyleProfileSummary.builder()
-                        .fetchedAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                        .fetchedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .isOwnAccount(true)
-                        .tweetCount(50L)
-                        .xUsername("elonmusk")
+                        .tweetCount(0L)
+                        .xUsername("xUsername")
                         .build()
                 )
+                .hasMore(false)
+                .nextCursor("abc123")
                 .build()
 
         assertThat(styleListResponse.styles())
             .containsExactly(
                 StyleProfileSummary.builder()
-                    .fetchedAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                    .fetchedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .isOwnAccount(true)
-                    .tweetCount(50L)
-                    .xUsername("elonmusk")
+                    .tweetCount(0L)
+                    .xUsername("xUsername")
                     .build()
             )
+        assertThat(styleListResponse.hasMore()).isEqualTo(false)
+        assertThat(styleListResponse.nextCursor()).isEqualTo("abc123")
     }
 
     @Test
@@ -44,12 +48,14 @@ internal class StyleListResponseTest {
             StyleListResponse.builder()
                 .addStyle(
                     StyleProfileSummary.builder()
-                        .fetchedAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                        .fetchedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .isOwnAccount(true)
-                        .tweetCount(50L)
-                        .xUsername("elonmusk")
+                        .tweetCount(0L)
+                        .xUsername("xUsername")
                         .build()
                 )
+                .hasMore(false)
+                .nextCursor("abc123")
                 .build()
 
         val roundtrippedStyleListResponse =

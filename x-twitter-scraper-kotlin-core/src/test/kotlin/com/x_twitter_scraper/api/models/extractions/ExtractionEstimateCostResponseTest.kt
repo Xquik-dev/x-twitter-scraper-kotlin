@@ -16,20 +16,20 @@ internal class ExtractionEstimateCostResponseTest {
         val extractionEstimateCostResponse =
             ExtractionEstimateCostResponse.builder()
                 .allowed(true)
-                .creditsAvailable("50000")
-                .creditsRequired("500")
-                .estimatedResults(500L)
-                .source(ExtractionEstimateCostResponse.Source.REPLY_COUNT)
-                .resolvedXUserId("123456")
+                .creditsAvailable("creditsAvailable")
+                .creditsRequired("creditsRequired")
+                .estimatedResults(0L)
+                .source(ExtractionEstimateCostResponse.Source.FOLLOWERS)
+                .resolvedXUserId("resolvedXUserId")
                 .build()
 
         assertThat(extractionEstimateCostResponse.allowed()).isEqualTo(true)
-        assertThat(extractionEstimateCostResponse.creditsAvailable()).isEqualTo("50000")
-        assertThat(extractionEstimateCostResponse.creditsRequired()).isEqualTo("500")
-        assertThat(extractionEstimateCostResponse.estimatedResults()).isEqualTo(500L)
+        assertThat(extractionEstimateCostResponse.creditsAvailable()).isEqualTo("creditsAvailable")
+        assertThat(extractionEstimateCostResponse.creditsRequired()).isEqualTo("creditsRequired")
+        assertThat(extractionEstimateCostResponse.estimatedResults()).isEqualTo(0L)
         assertThat(extractionEstimateCostResponse.source())
-            .isEqualTo(ExtractionEstimateCostResponse.Source.REPLY_COUNT)
-        assertThat(extractionEstimateCostResponse.resolvedXUserId()).isEqualTo("123456")
+            .isEqualTo(ExtractionEstimateCostResponse.Source.FOLLOWERS)
+        assertThat(extractionEstimateCostResponse.resolvedXUserId()).isEqualTo("resolvedXUserId")
     }
 
     @Test
@@ -38,11 +38,11 @@ internal class ExtractionEstimateCostResponseTest {
         val extractionEstimateCostResponse =
             ExtractionEstimateCostResponse.builder()
                 .allowed(true)
-                .creditsAvailable("50000")
-                .creditsRequired("500")
-                .estimatedResults(500L)
-                .source(ExtractionEstimateCostResponse.Source.REPLY_COUNT)
-                .resolvedXUserId("123456")
+                .creditsAvailable("creditsAvailable")
+                .creditsRequired("creditsRequired")
+                .estimatedResults(0L)
+                .source(ExtractionEstimateCostResponse.Source.FOLLOWERS)
+                .resolvedXUserId("resolvedXUserId")
                 .build()
 
         val roundtrippedExtractionEstimateCostResponse =

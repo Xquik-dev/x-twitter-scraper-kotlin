@@ -16,19 +16,19 @@ internal class AccountReauthResponseTest {
     fun create() {
         val accountReauthResponse =
             AccountReauthResponse.builder()
-                .id("42")
-                .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                .id("id")
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .health(AccountReauthResponse.Health.HEALTHY)
-                .xUserId("9876543210")
-                .xUsername("elonmusk")
+                .xUserId("xUserId")
+                .xUsername("xUsername")
                 .build()
 
-        assertThat(accountReauthResponse.id()).isEqualTo("42")
+        assertThat(accountReauthResponse.id()).isEqualTo("id")
         assertThat(accountReauthResponse.createdAt())
-            .isEqualTo(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(accountReauthResponse.health()).isEqualTo(AccountReauthResponse.Health.HEALTHY)
-        assertThat(accountReauthResponse.xUserId()).isEqualTo("9876543210")
-        assertThat(accountReauthResponse.xUsername()).isEqualTo("elonmusk")
+        assertThat(accountReauthResponse.xUserId()).isEqualTo("xUserId")
+        assertThat(accountReauthResponse.xUsername()).isEqualTo("xUsername")
     }
 
     @Test
@@ -36,11 +36,11 @@ internal class AccountReauthResponseTest {
         val jsonMapper = jsonMapper()
         val accountReauthResponse =
             AccountReauthResponse.builder()
-                .id("42")
-                .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                .id("id")
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .health(AccountReauthResponse.Health.HEALTHY)
-                .xUserId("9876543210")
-                .xUsername("elonmusk")
+                .xUserId("xUserId")
+                .xUsername("xUsername")
                 .build()
 
         val roundtrippedAccountReauthResponse =

@@ -90,7 +90,8 @@ private constructor(
     fun createdAt(): OffsetDateTime = createdAt.getRequired("createdAt")
 
     /**
-     * Endpoint delivery state. needs_attention means delivery stopped after repeated failures.
+     * Endpoint delivery state. paused means the user paused delivery. needs_attention marks
+     * repeated failures. Delivery attempts continue.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null.
@@ -106,7 +107,7 @@ private constructor(
     fun eventTypes(): List<EventType> = eventTypes.getRequired("eventTypes")
 
     /**
-     * Consecutive delivery failures that pause the endpoint.
+     * Maximum reported failures before needs_attention. It does not pause delivery.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null.
@@ -269,7 +270,8 @@ private constructor(
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
         /**
-         * Endpoint delivery state. needs_attention means delivery stopped after repeated failures.
+         * Endpoint delivery state. paused means the user paused delivery. needs_attention marks
+         * repeated failures. Delivery attempts continue.
          */
         fun deliveryStatus(deliveryStatus: DeliveryStatus) =
             deliveryStatus(JsonField.of(deliveryStatus))
@@ -299,7 +301,7 @@ private constructor(
                 }
         }
 
-        /** Consecutive delivery failures that pause the endpoint. */
+        /** Maximum reported failures before needs_attention. It does not pause delivery. */
         fun failureHardCap(failureHardCap: Long) = failureHardCap(JsonField.of(failureHardCap))
 
         /** Sets [Builder.failureHardCap] to an arbitrary JSON value. */

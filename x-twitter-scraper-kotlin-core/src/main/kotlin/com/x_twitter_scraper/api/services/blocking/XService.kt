@@ -31,13 +31,18 @@ import com.x_twitter_scraper.api.models.x.XSearchPlacesResponse
 import com.x_twitter_scraper.api.services.blocking.x.AccountConnectionAttemptService
 import com.x_twitter_scraper.api.services.blocking.x.AccountConnectionChallengeService
 import com.x_twitter_scraper.api.services.blocking.x.AccountService
+import com.x_twitter_scraper.api.services.blocking.x.AnalysisService
 import com.x_twitter_scraper.api.services.blocking.x.BookmarkService
+import com.x_twitter_scraper.api.services.blocking.x.BroadcastService
+import com.x_twitter_scraper.api.services.blocking.x.CommunityNoteService
 import com.x_twitter_scraper.api.services.blocking.x.CommunityService
 import com.x_twitter_scraper.api.services.blocking.x.DmService
 import com.x_twitter_scraper.api.services.blocking.x.FollowerService
+import com.x_twitter_scraper.api.services.blocking.x.JobService
 import com.x_twitter_scraper.api.services.blocking.x.ListService
 import com.x_twitter_scraper.api.services.blocking.x.MediaService
 import com.x_twitter_scraper.api.services.blocking.x.ProfileService
+import com.x_twitter_scraper.api.services.blocking.x.SpaceService
 import com.x_twitter_scraper.api.services.blocking.x.TweetService
 import com.x_twitter_scraper.api.services.blocking.x.UserService
 import com.x_twitter_scraper.api.services.blocking.x.WriteActionService
@@ -89,6 +94,21 @@ interface XService {
 
     /** X List followers, members, and tweets */
     fun lists(): ListService
+
+    /** Public X job listings, search and details */
+    fun jobs(): JobService
+
+    /** X Space details, host, and speakers */
+    fun spaces(): SpaceService
+
+    /** X live video details, watch counts, and broadcaster */
+    fun broadcasts(): BroadcastService
+
+    /** Community Notes contributors, their notes, ratings & deleted notes */
+    fun communityNotes(): CommunityNoteService
+
+    /** AI analysis of posts, at 2 credits per analyzed post */
+    fun analysis(): AnalysisService
 
     /**
      * Retrieve the full content of an X Article (long-form post) by numeric tweet ID. Returns
@@ -278,6 +298,21 @@ interface XService {
 
         /** X List followers, members, and tweets */
         fun lists(): ListService.WithRawResponse
+
+        /** Public X job listings, search and details */
+        fun jobs(): JobService.WithRawResponse
+
+        /** X Space details, host, and speakers */
+        fun spaces(): SpaceService.WithRawResponse
+
+        /** X live video details, watch counts, and broadcaster */
+        fun broadcasts(): BroadcastService.WithRawResponse
+
+        /** Community Notes contributors, their notes, ratings & deleted notes */
+        fun communityNotes(): CommunityNoteService.WithRawResponse
+
+        /** AI analysis of posts, at 2 credits per analyzed post */
+        fun analysis(): AnalysisService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /x/articles/{tweetId}`, but is otherwise the same as

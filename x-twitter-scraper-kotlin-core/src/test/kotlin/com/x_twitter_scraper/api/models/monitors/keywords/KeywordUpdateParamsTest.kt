@@ -16,6 +16,7 @@ internal class KeywordUpdateParamsTest {
             .id("id")
             .addEventType(EventType.TWEET_NEW)
             .isActive(true)
+            .name("Launch mentions")
             .build()
     }
 
@@ -34,18 +35,13 @@ internal class KeywordUpdateParamsTest {
                 .id("id")
                 .addEventType(EventType.TWEET_NEW)
                 .isActive(true)
+                .name("Launch mentions")
                 .build()
 
         val body = params._body()
 
         assertThat(body.eventTypes()).containsExactly(EventType.TWEET_NEW)
         assertThat(body.isActive()).isEqualTo(true)
-    }
-
-    @Test
-    fun bodyWithoutOptionalFields() {
-        val params = KeywordUpdateParams.builder().id("id").build()
-
-        val body = params._body()
+        assertThat(body.name()).isEqualTo("Launch mentions")
     }
 }

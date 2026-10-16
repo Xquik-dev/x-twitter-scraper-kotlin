@@ -16,20 +16,24 @@ internal class DraftDetailTest {
     fun create() {
         val draftDetail =
             DraftDetail.builder()
-                .id("42")
-                .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
-                .text("Draft tweet about AI trends")
-                .updatedAt(OffsetDateTime.parse("2025-01-16T09:30:00Z"))
-                .goal("Engagement")
-                .topic("Technology")
+                .id("id")
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .text("text")
+                .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .goal("goal")
+                .addIgnoredField("plan")
+                .topic("topic")
                 .build()
 
-        assertThat(draftDetail.id()).isEqualTo("42")
-        assertThat(draftDetail.createdAt()).isEqualTo(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
-        assertThat(draftDetail.text()).isEqualTo("Draft tweet about AI trends")
-        assertThat(draftDetail.updatedAt()).isEqualTo(OffsetDateTime.parse("2025-01-16T09:30:00Z"))
-        assertThat(draftDetail.goal()).isEqualTo("Engagement")
-        assertThat(draftDetail.topic()).isEqualTo("Technology")
+        assertThat(draftDetail.id()).isEqualTo("id")
+        assertThat(draftDetail.createdAt())
+            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(draftDetail.text()).isEqualTo("text")
+        assertThat(draftDetail.updatedAt())
+            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(draftDetail.goal()).isEqualTo("goal")
+        assertThat(draftDetail.ignoredFields()).containsExactly("plan")
+        assertThat(draftDetail.topic()).isEqualTo("topic")
     }
 
     @Test
@@ -37,12 +41,13 @@ internal class DraftDetailTest {
         val jsonMapper = jsonMapper()
         val draftDetail =
             DraftDetail.builder()
-                .id("42")
-                .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
-                .text("Draft tweet about AI trends")
-                .updatedAt(OffsetDateTime.parse("2025-01-16T09:30:00Z"))
-                .goal("Engagement")
-                .topic("Technology")
+                .id("id")
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .text("text")
+                .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .goal("goal")
+                .addIgnoredField("plan")
+                .topic("topic")
                 .build()
 
         val roundtrippedDraftDetail =

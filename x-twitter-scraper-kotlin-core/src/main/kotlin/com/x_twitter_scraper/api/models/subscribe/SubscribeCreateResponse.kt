@@ -47,6 +47,8 @@ private constructor(
     fun status(): Status = status.getRequired("status")
 
     /**
+     * Checkout URL, or the dashboard billing page for an account with a plan.
+     *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null.
      */
@@ -125,6 +127,7 @@ private constructor(
         /** Sets [Builder.status] to an arbitrary JSON value. */
         fun status(status: JsonField<Status>) = apply { this.status = status }
 
+        /** Checkout URL, or the dashboard billing page for an account with a plan. */
         fun url(url: String) = url(JsonField.of(url))
 
         /** Sets [Builder.url] to an arbitrary JSON value. */
@@ -337,7 +340,9 @@ private constructor(
             additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(message, status, url, additionalProperties) }
+    private val hashCode: Int by lazy {
+        Objects.hash(message, status, url, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 

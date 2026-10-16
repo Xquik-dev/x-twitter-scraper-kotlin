@@ -16,7 +16,7 @@ internal class DrawDetailTest {
     fun create() {
         val drawDetail =
             DrawDetail.builder()
-                .id("f4bd00a2-7b4e-4e59-8e1b-72e2c9f12345")
+                .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .status("status")
                 .totalEntries(0L)
@@ -27,12 +27,12 @@ internal class DrawDetailTest {
                 .tweetReplyCount(0L)
                 .tweetRetweetCount(0L)
                 .tweetText("tweetText")
-                .tweetUrl("https://example.com")
+                .tweetUrl("tweetUrl")
                 .validEntries(0L)
                 .drawnAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
 
-        assertThat(drawDetail.id()).isEqualTo("f4bd00a2-7b4e-4e59-8e1b-72e2c9f12345")
+        assertThat(drawDetail.id()).isEqualTo("id")
         assertThat(drawDetail.createdAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(drawDetail.status()).isEqualTo("status")
@@ -44,7 +44,7 @@ internal class DrawDetailTest {
         assertThat(drawDetail.tweetReplyCount()).isEqualTo(0L)
         assertThat(drawDetail.tweetRetweetCount()).isEqualTo(0L)
         assertThat(drawDetail.tweetText()).isEqualTo("tweetText")
-        assertThat(drawDetail.tweetUrl()).isEqualTo("https://example.com")
+        assertThat(drawDetail.tweetUrl()).isEqualTo("tweetUrl")
         assertThat(drawDetail.validEntries()).isEqualTo(0L)
         assertThat(drawDetail.drawnAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
     }
@@ -54,7 +54,7 @@ internal class DrawDetailTest {
         val jsonMapper = jsonMapper()
         val drawDetail =
             DrawDetail.builder()
-                .id("f4bd00a2-7b4e-4e59-8e1b-72e2c9f12345")
+                .id("id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .status("status")
                 .totalEntries(0L)
@@ -65,7 +65,7 @@ internal class DrawDetailTest {
                 .tweetReplyCount(0L)
                 .tweetRetweetCount(0L)
                 .tweetText("tweetText")
-                .tweetUrl("https://example.com")
+                .tweetUrl("tweetUrl")
                 .validEntries(0L)
                 .drawnAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()

@@ -16,30 +16,31 @@ internal class CommunityListTopicsResponseTest {
     fun create() {
         val communityListTopicsResponse =
             CommunityListTopicsResponse.builder()
-                .count(1L)
+                .count(0L)
                 .addTopic(
                     CommunityTopic.builder()
                         .id("id")
                         .name("name")
-                        .addSubtopic(
-                            CommunityTopic.Subtopic.builder().id("id").name("name").build()
+                        .subtopics(
+                            listOf(CommunityTopic.Subtopic.builder().id("id").name("name").build())
                         )
                         .build()
                 )
-                .message("X listed no community topics. Try again soon.")
+                .message("message")
                 .build()
 
-        assertThat(communityListTopicsResponse.count()).isEqualTo(1L)
+        assertThat(communityListTopicsResponse.count()).isEqualTo(0L)
         assertThat(communityListTopicsResponse.topics())
             .containsExactly(
                 CommunityTopic.builder()
                     .id("id")
                     .name("name")
-                    .addSubtopic(CommunityTopic.Subtopic.builder().id("id").name("name").build())
+                    .subtopics(
+                        listOf(CommunityTopic.Subtopic.builder().id("id").name("name").build())
+                    )
                     .build()
             )
-        assertThat(communityListTopicsResponse.message())
-            .isEqualTo("X listed no community topics. Try again soon.")
+        assertThat(communityListTopicsResponse.message()).isEqualTo("message")
     }
 
     @Test
@@ -47,17 +48,17 @@ internal class CommunityListTopicsResponseTest {
         val jsonMapper = jsonMapper()
         val communityListTopicsResponse =
             CommunityListTopicsResponse.builder()
-                .count(1L)
+                .count(0L)
                 .addTopic(
                     CommunityTopic.builder()
                         .id("id")
                         .name("name")
-                        .addSubtopic(
-                            CommunityTopic.Subtopic.builder().id("id").name("name").build()
+                        .subtopics(
+                            listOf(CommunityTopic.Subtopic.builder().id("id").name("name").build())
                         )
                         .build()
                 )
-                .message("X listed no community topics. Try again soon.")
+                .message("message")
                 .build()
 
         val roundtrippedCommunityListTopicsResponse =

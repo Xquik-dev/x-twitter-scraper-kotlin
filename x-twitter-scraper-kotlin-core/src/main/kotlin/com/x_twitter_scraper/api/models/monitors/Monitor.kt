@@ -33,6 +33,7 @@ private constructor(
     private val nextBillingAt: JsonField<OffsetDateTime>,
     private val username: JsonField<String>,
     private val xUserId: JsonField<String>,
+    private val name: JsonField<String>,
     private val pausedAt: JsonField<OffsetDateTime>,
     private val pausedReason: JsonField<PausedReason>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -53,6 +54,7 @@ private constructor(
         nextBillingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("username") @ExcludeMissing username: JsonField<String> = JsonMissing.of(),
         @JsonProperty("xUserId") @ExcludeMissing xUserId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
         @JsonProperty("pausedAt")
         @ExcludeMissing
         pausedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -67,6 +69,7 @@ private constructor(
         nextBillingAt,
         username,
         xUserId,
+        name,
         pausedAt,
         pausedReason,
         mutableMapOf(),
@@ -119,14 +122,23 @@ private constructor(
     fun xUserId(): String = xUserId.getRequired("xUserId")
 
     /**
-     * When Xquik automatically paused this monitor.
+     * Customer-set label of the account monitor, when set.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun name(): String? = name.getNullable("name")
+
+    /**
+     * When Xquik paused this account monitor.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun pausedAt(): OffsetDateTime? = pausedAt.getNullable("pausedAt")
 
     /**
-     * Why Xquik automatically paused this monitor.
+     * Why Xquik paused this account monitor. `insufficient_credits` means the balance could not pay
+     * an hour, so add credits & resume. The other 2 mean X stopped showing the account. Absent when
+     * the monitor is active or you paused it yourself.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
@@ -188,6 +200,13 @@ private constructor(
     @JsonProperty("xUserId") @ExcludeMissing fun _xUserId(): JsonField<String> = xUserId
 
     /**
+     * Returns the raw JSON value of [name].
+     *
+     * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+    /**
      * Returns the raw JSON value of [pausedAt].
      *
      * Unlike [pausedAt], this method doesn't throw if the JSON field has an unexpected type.
@@ -244,6 +263,7 @@ private constructor(
         private var nextBillingAt: JsonField<OffsetDateTime>? = null
         private var username: JsonField<String>? = null
         private var xUserId: JsonField<String>? = null
+        private var name: JsonField<String> = JsonMissing.of()
         private var pausedAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var pausedReason: JsonField<PausedReason> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -256,6 +276,7 @@ private constructor(
             nextBillingAt = monitor.nextBillingAt
             username = monitor.username
             xUserId = monitor.xUserId
+            name = monitor.name
             pausedAt = monitor.pausedAt
             pausedReason = monitor.pausedReason
             additionalProperties = monitor.additionalProperties.toMutableMap()
@@ -315,13 +336,23 @@ private constructor(
         /** Sets [Builder.xUserId] to an arbitrary JSON value. */
         fun xUserId(xUserId: JsonField<String>) = apply { this.xUserId = xUserId }
 
-        /** When Xquik automatically paused this monitor. */
+        /** Customer-set label of the account monitor, when set. */
+        fun name(name: String) = name(JsonField.of(name))
+
+        /** Sets [Builder.name] to an arbitrary JSON value. */
+        fun name(name: JsonField<String>) = apply { this.name = name }
+
+        /** When Xquik paused this account monitor. */
         fun pausedAt(pausedAt: OffsetDateTime) = pausedAt(JsonField.of(pausedAt))
 
         /** Sets [Builder.pausedAt] to an arbitrary JSON value. */
         fun pausedAt(pausedAt: JsonField<OffsetDateTime>) = apply { this.pausedAt = pausedAt }
 
-        /** Why Xquik automatically paused this monitor. */
+        /**
+         * Why Xquik paused this account monitor. `insufficient_credits` means the balance could not
+         * pay an hour, so add credits & resume. The other 2 mean X stopped showing the account.
+         * Absent when the monitor is active or you paused it yourself.
+         */
         fun pausedReason(pausedReason: PausedReason) = pausedReason(JsonField.of(pausedReason))
 
         /** Sets [Builder.pausedReason] to an arbitrary JSON value. */
@@ -375,6 +406,7 @@ private constructor(
                 checkRequired("nextBillingAt", nextBillingAt),
                 checkRequired("username", username),
                 checkRequired("xUserId", xUserId),
+                name,
                 pausedAt,
                 pausedReason,
                 additionalProperties.toMutableMap(),
@@ -403,6 +435,7 @@ private constructor(
         nextBillingAt()
         username()
         xUserId()
+        name()
         pausedAt()
         pausedReason()?.validate()
         validated = true
@@ -424,6 +457,7 @@ private constructor(
             (if (nextBillingAt.asKnown() == null) 0 else 1) +
             (if (username.asKnown() == null) 0 else 1) +
             (if (xUserId.asKnown() == null) 0 else 1) +
+            (if (name.asKnown() == null) 0 else 1) +
             (if (pausedAt.asKnown() == null) 0 else 1) +
             (pausedReason.asKnown()?.validity() ?: 0)
 
@@ -438,12 +472,18 @@ private constructor(
 
             val X_USER_NOT_FOUND = of("x_user_not_found")
 
+            val INSUFFICIENT_CREDITS = of("insufficient_credits")
+
+            val X_ACCOUNT_PROTECTED = of("x_account_protected")
+
             fun of(value: String) = PausedReason(JsonField.of(value))
         }
 
         /** An enum containing [PausedReason]'s known values. */
         enum class Known {
-            X_USER_NOT_FOUND
+            X_USER_NOT_FOUND,
+            INSUFFICIENT_CREDITS,
+            X_ACCOUNT_PROTECTED,
         }
 
         /**
@@ -457,6 +497,8 @@ private constructor(
          */
         enum class Value {
             X_USER_NOT_FOUND,
+            INSUFFICIENT_CREDITS,
+            X_ACCOUNT_PROTECTED,
             /**
              * An enum member indicating that [PausedReason] was instantiated with an unknown value.
              */
@@ -470,6 +512,8 @@ private constructor(
         fun value(): Value =
             when (this) {
                 X_USER_NOT_FOUND -> Value.X_USER_NOT_FOUND
+                INSUFFICIENT_CREDITS -> Value.INSUFFICIENT_CREDITS
+                X_ACCOUNT_PROTECTED -> Value.X_ACCOUNT_PROTECTED
                 else -> Value._UNKNOWN
             }
 
@@ -482,6 +526,8 @@ private constructor(
         fun known(): Known =
             when (this) {
                 X_USER_NOT_FOUND -> Known.X_USER_NOT_FOUND
+                INSUFFICIENT_CREDITS -> Known.INSUFFICIENT_CREDITS
+                X_ACCOUNT_PROTECTED -> Known.X_ACCOUNT_PROTECTED
                 else -> throw XTwitterScraperInvalidDataException("Unknown PausedReason: $value")
             }
 
@@ -551,6 +597,7 @@ private constructor(
             nextBillingAt == other.nextBillingAt &&
             username == other.username &&
             xUserId == other.xUserId &&
+            name == other.name &&
             pausedAt == other.pausedAt &&
             pausedReason == other.pausedReason &&
             additionalProperties == other.additionalProperties
@@ -565,6 +612,7 @@ private constructor(
             nextBillingAt,
             username,
             xUserId,
+            name,
             pausedAt,
             pausedReason,
             additionalProperties,
@@ -574,5 +622,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Monitor{id=$id, createdAt=$createdAt, eventTypes=$eventTypes, isActive=$isActive, nextBillingAt=$nextBillingAt, username=$username, xUserId=$xUserId, pausedAt=$pausedAt, pausedReason=$pausedReason, additionalProperties=$additionalProperties}"
+        "Monitor{id=$id, createdAt=$createdAt, eventTypes=$eventTypes, isActive=$isActive, nextBillingAt=$nextBillingAt, username=$username, xUserId=$xUserId, name=$name, pausedAt=$pausedAt, pausedReason=$pausedReason, additionalProperties=$additionalProperties}"
 }

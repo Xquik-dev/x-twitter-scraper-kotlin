@@ -28,6 +28,8 @@ private constructor(
     ) : this(success, mutableMapOf())
 
     /**
+     * Expected to always return the following: ```kotlin JsonValue.from(true) ```
+     *
      * Expected to always return the following:
      * ```kotlin
      * JsonValue.from(true)
@@ -147,7 +149,9 @@ private constructor(
             additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(success, additionalProperties) }
+    private val hashCode: Int by lazy {
+        Objects.hash(success, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 

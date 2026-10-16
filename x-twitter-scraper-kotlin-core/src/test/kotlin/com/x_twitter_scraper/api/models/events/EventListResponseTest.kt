@@ -5,7 +5,6 @@
 package com.x_twitter_scraper.api.models.events
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
-import com.x_twitter_scraper.api.core.JsonValue
 import com.x_twitter_scraper.api.core.jsonMapper
 import com.x_twitter_scraper.api.models.EventType
 import java.time.OffsetDateTime
@@ -21,44 +20,30 @@ internal class EventListResponseTest {
                 .addEvent(
                     Event.builder()
                         .id("id")
-                        .data(
-                            Event.Data.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("bar"))
-                                .build()
-                        )
+                        .data(Event.Data.builder().build())
                         .monitorId("monitorId")
                         .monitorType(Event.MonitorType.ACCOUNT)
                         .occurredAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .type(EventType.TWEET_NEW)
-                        .keywordMonitorId("keywordMonitorId")
-                        .query("query")
-                        .username("username")
                         .build()
                 )
-                .hasMore(false)
-                .nextCursor("abc123")
+                .hasMore(true)
+                .nextCursor("nextCursor")
                 .build()
 
         assertThat(eventListResponse.events())
             .containsExactly(
                 Event.builder()
                     .id("id")
-                    .data(
-                        Event.Data.builder()
-                            .putAdditionalProperty("foo", JsonValue.from("bar"))
-                            .build()
-                    )
+                    .data(Event.Data.builder().build())
                     .monitorId("monitorId")
                     .monitorType(Event.MonitorType.ACCOUNT)
                     .occurredAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .type(EventType.TWEET_NEW)
-                    .keywordMonitorId("keywordMonitorId")
-                    .query("query")
-                    .username("username")
                     .build()
             )
-        assertThat(eventListResponse.hasMore()).isEqualTo(false)
-        assertThat(eventListResponse.nextCursor()).isEqualTo("abc123")
+        assertThat(eventListResponse.hasMore()).isEqualTo(true)
+        assertThat(eventListResponse.nextCursor()).isEqualTo("nextCursor")
     }
 
     @Test
@@ -69,22 +54,15 @@ internal class EventListResponseTest {
                 .addEvent(
                     Event.builder()
                         .id("id")
-                        .data(
-                            Event.Data.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("bar"))
-                                .build()
-                        )
+                        .data(Event.Data.builder().build())
                         .monitorId("monitorId")
                         .monitorType(Event.MonitorType.ACCOUNT)
                         .occurredAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .type(EventType.TWEET_NEW)
-                        .keywordMonitorId("keywordMonitorId")
-                        .query("query")
-                        .username("username")
                         .build()
                 )
-                .hasMore(false)
-                .nextCursor("abc123")
+                .hasMore(true)
+                .nextCursor("nextCursor")
                 .build()
 
         val roundtrippedEventListResponse =

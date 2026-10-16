@@ -13,15 +13,15 @@ internal class GuestWalletAmountTest {
 
     @Test
     fun create() {
-        val guestWalletAmount = GuestWalletAmount.builder().amountMinor(1000L).build()
+        val guestWalletAmount = GuestWalletAmount.builder().amountMinor(0L).build()
 
-        assertThat(guestWalletAmount.amountMinor()).isEqualTo(1000L)
+        assertThat(guestWalletAmount.amountMinor()).isEqualTo(0L)
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val guestWalletAmount = GuestWalletAmount.builder().amountMinor(1000L).build()
+        val guestWalletAmount = GuestWalletAmount.builder().amountMinor(0L).build()
 
         val roundtrippedGuestWalletAmount =
             jsonMapper.readValue(

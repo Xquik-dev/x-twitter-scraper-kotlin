@@ -23,11 +23,10 @@ internal class WebhookListDeliveriesResponseTest {
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .status("status")
                         .streamEventId("streamEventId")
-                        .deliveredAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .lastError("lastError")
-                        .lastStatusCode(0L)
                         .build()
                 )
+                .hasMore(false)
+                .nextCursor("abc123")
                 .build()
 
         assertThat(webhookListDeliveriesResponse.deliveries())
@@ -38,11 +37,10 @@ internal class WebhookListDeliveriesResponseTest {
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .status("status")
                     .streamEventId("streamEventId")
-                    .deliveredAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .lastError("lastError")
-                    .lastStatusCode(0L)
                     .build()
             )
+        assertThat(webhookListDeliveriesResponse.hasMore()).isEqualTo(false)
+        assertThat(webhookListDeliveriesResponse.nextCursor()).isEqualTo("abc123")
     }
 
     @Test
@@ -57,11 +55,10 @@ internal class WebhookListDeliveriesResponseTest {
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .status("status")
                         .streamEventId("streamEventId")
-                        .deliveredAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .lastError("lastError")
-                        .lastStatusCode(0L)
                         .build()
                 )
+                .hasMore(false)
+                .nextCursor("abc123")
                 .build()
 
         val roundtrippedWebhookListDeliveriesResponse =

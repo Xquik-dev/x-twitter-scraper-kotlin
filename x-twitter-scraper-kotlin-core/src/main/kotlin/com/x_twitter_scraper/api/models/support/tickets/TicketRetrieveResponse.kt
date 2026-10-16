@@ -1457,6 +1457,7 @@ private constructor(
             "Message{attachments=$attachments, body=$body, createdAt=$createdAt, sender=$sender, additionalProperties=$additionalProperties}"
     }
 
+    /** Storage processing state. */
     class Status @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /** Returns this class instance's raw value. */

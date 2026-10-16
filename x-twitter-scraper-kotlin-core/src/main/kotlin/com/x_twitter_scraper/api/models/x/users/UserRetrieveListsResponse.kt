@@ -337,14 +337,15 @@ private constructor(
         fun createdAt(): OffsetDateTime? = createdAt.getNullable("createdAt")
 
         /**
-         * Banner image of an X List.
+         * Banner the owner uploaded.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
         fun customBanner(): CustomBanner? = customBanner.getNullable("customBanner")
 
         /**
-         * Banner image of an X List.
+         * Banner X shows when the owner uploaded none. X picks it per reading account, so 2 calls
+         * can return different ones.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
@@ -379,7 +380,7 @@ private constructor(
         fun membersContext(): String? = membersContext.getNullable("membersContext")
 
         /**
-         * Public X profile.
+         * Public profile of the account that owns the List.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
@@ -598,7 +599,7 @@ private constructor(
                 this.createdAt = createdAt
             }
 
-            /** Banner image of an X List. */
+            /** Banner the owner uploaded. */
             fun customBanner(customBanner: CustomBanner) = customBanner(JsonField.of(customBanner))
 
             /** Sets [Builder.customBanner] to an arbitrary JSON value. */
@@ -606,7 +607,10 @@ private constructor(
                 this.customBanner = customBanner
             }
 
-            /** Banner image of an X List. */
+            /**
+             * Banner X shows when the owner uploaded none. X picks it per reading account, so 2
+             * calls can return different ones.
+             */
             fun defaultBanner(defaultBanner: DefaultBanner) =
                 defaultBanner(JsonField.of(defaultBanner))
 
@@ -658,7 +662,7 @@ private constructor(
                 this.membersContext = membersContext
             }
 
-            /** Public X profile. */
+            /** Public profile of the account that owns the List. */
             fun owner(owner: UserProfile) = owner(JsonField.of(owner))
 
             /** Sets [Builder.owner] to an arbitrary JSON value. */
@@ -1137,7 +1141,7 @@ private constructor(
                 ) : this(percentage, rgb, mutableMapOf())
 
                 /**
-                 * Share of the banner
+                 * Share of the banner, from 0 to 100.
                  *
                  * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
                  *   type.
@@ -1200,7 +1204,7 @@ private constructor(
                         additionalProperties = palette.additionalProperties.toMutableMap()
                     }
 
-                    /** Share of the banner */
+                    /** Share of the banner, from 0 to 100. */
                     fun percentage(percentage: Double) = percentage(JsonField.of(percentage))
 
                     /** Sets [Builder.percentage] to an arbitrary JSON value. */
@@ -2128,7 +2132,7 @@ private constructor(
                 ) : this(percentage, rgb, mutableMapOf())
 
                 /**
-                 * Share of the banner
+                 * Share of the banner, from 0 to 100.
                  *
                  * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected
                  *   type.
@@ -2191,7 +2195,7 @@ private constructor(
                         additionalProperties = palette.additionalProperties.toMutableMap()
                     }
 
-                    /** Share of the banner */
+                    /** Share of the banner, from 0 to 100. */
                     fun percentage(percentage: Double) = percentage(JsonField.of(percentage))
 
                     /** Sets [Builder.percentage] to an arbitrary JSON value. */

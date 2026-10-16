@@ -15,22 +15,22 @@ internal class TweetCheckRepostResponseTest {
     fun create() {
         val tweetCheckRepostResponse =
             TweetCheckRepostResponse.builder()
-                .checkedPosts(20L)
-                .complete(false)
+                .checkedPosts(0L)
+                .complete(true)
                 .isRetweeted(true)
-                .retweetId("2098456494362460375")
-                .retweetedAt("2026-09-11T16:59:50.000Z")
-                .tweetId("2098439298617856319")
-                .userId("3065618342")
+                .retweetId("retweetId")
+                .retweetedAt("retweetedAt")
+                .tweetId("tweetId")
+                .userId("userId")
                 .build()
 
-        assertThat(tweetCheckRepostResponse.checkedPosts()).isEqualTo(20L)
-        assertThat(tweetCheckRepostResponse.complete()).isEqualTo(false)
+        assertThat(tweetCheckRepostResponse.checkedPosts()).isEqualTo(0L)
+        assertThat(tweetCheckRepostResponse.complete()).isEqualTo(true)
         assertThat(tweetCheckRepostResponse.isRetweeted()).isEqualTo(true)
-        assertThat(tweetCheckRepostResponse.retweetId()).isEqualTo("2098456494362460375")
-        assertThat(tweetCheckRepostResponse.retweetedAt()).isEqualTo("2026-09-11T16:59:50.000Z")
-        assertThat(tweetCheckRepostResponse.tweetId()).isEqualTo("2098439298617856319")
-        assertThat(tweetCheckRepostResponse.userId()).isEqualTo("3065618342")
+        assertThat(tweetCheckRepostResponse.retweetId()).isEqualTo("retweetId")
+        assertThat(tweetCheckRepostResponse.retweetedAt()).isEqualTo("retweetedAt")
+        assertThat(tweetCheckRepostResponse.tweetId()).isEqualTo("tweetId")
+        assertThat(tweetCheckRepostResponse.userId()).isEqualTo("userId")
     }
 
     @Test
@@ -38,13 +38,13 @@ internal class TweetCheckRepostResponseTest {
         val jsonMapper = jsonMapper()
         val tweetCheckRepostResponse =
             TweetCheckRepostResponse.builder()
-                .checkedPosts(20L)
-                .complete(false)
+                .checkedPosts(0L)
+                .complete(true)
                 .isRetweeted(true)
-                .retweetId("2098456494362460375")
-                .retweetedAt("2026-09-11T16:59:50.000Z")
-                .tweetId("2098439298617856319")
-                .userId("3065618342")
+                .retweetId("retweetId")
+                .retweetedAt("retweetedAt")
+                .tweetId("tweetId")
+                .userId("userId")
                 .build()
 
         val roundtrippedTweetCheckRepostResponse =

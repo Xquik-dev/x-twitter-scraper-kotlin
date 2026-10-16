@@ -16,56 +16,47 @@ internal class XGetHashflagsResponseTest {
     fun create() {
         val xGetHashflagsResponse =
             XGetHashflagsResponse.builder()
-                .count(1L)
+                .count(0L)
                 .addHashflag(
                     XGetHashflagsResponse.Hashflag.builder()
                         .addAnimation(
                             XGetHashflagsResponse.Hashflag.Animation.builder()
-                                .assetUrl(
-                                    "https://abs.twimg.com/hashflags/2026FootballCustomLikeEvergreenv3/2026FootballCustomLikeEvergreenv3_sakura_0.json"
-                                )
-                                .context("Like")
-                                .priority(1.0)
+                                .assetUrl("assetUrl")
+                                .context("context")
+                                .priority(0.0)
                                 .build()
                         )
-                        .assetUrl(
-                            "https://abs.twimg.com/hashflags/BF-16692_AIon2_jp_Hashmoji_v3/BF-16692_AIon2_jp_Hashmoji_v3.png"
-                        )
-                        .endsAt(OffsetDateTime.parse("2027-01-03T14:59:00.000Z"))
-                        .hashtag("AION2")
-                        .isHashfettiEnabled(false)
-                        .startsAt(OffsetDateTime.parse("2026-10-02T10:00:00.000Z"))
+                        .assetUrl("assetUrl")
+                        .endsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .hashtag("hashtag")
+                        .isHashfettiEnabled(true)
+                        .startsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .build()
                 )
-                .total(1L)
-                .message("No hashflag runs now. Send activeOnly=false to list the rest.")
+                .total(0L)
+                .message("message")
                 .build()
 
-        assertThat(xGetHashflagsResponse.count()).isEqualTo(1L)
+        assertThat(xGetHashflagsResponse.count()).isEqualTo(0L)
         assertThat(xGetHashflagsResponse.hashflags())
             .containsExactly(
                 XGetHashflagsResponse.Hashflag.builder()
                     .addAnimation(
                         XGetHashflagsResponse.Hashflag.Animation.builder()
-                            .assetUrl(
-                                "https://abs.twimg.com/hashflags/2026FootballCustomLikeEvergreenv3/2026FootballCustomLikeEvergreenv3_sakura_0.json"
-                            )
-                            .context("Like")
-                            .priority(1.0)
+                            .assetUrl("assetUrl")
+                            .context("context")
+                            .priority(0.0)
                             .build()
                     )
-                    .assetUrl(
-                        "https://abs.twimg.com/hashflags/BF-16692_AIon2_jp_Hashmoji_v3/BF-16692_AIon2_jp_Hashmoji_v3.png"
-                    )
-                    .endsAt(OffsetDateTime.parse("2027-01-03T14:59:00.000Z"))
-                    .hashtag("AION2")
-                    .isHashfettiEnabled(false)
-                    .startsAt(OffsetDateTime.parse("2026-10-02T10:00:00.000Z"))
+                    .assetUrl("assetUrl")
+                    .endsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .hashtag("hashtag")
+                    .isHashfettiEnabled(true)
+                    .startsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .build()
             )
-        assertThat(xGetHashflagsResponse.total()).isEqualTo(1L)
-        assertThat(xGetHashflagsResponse.message())
-            .isEqualTo("No hashflag runs now. Send activeOnly=false to list the rest.")
+        assertThat(xGetHashflagsResponse.total()).isEqualTo(0L)
+        assertThat(xGetHashflagsResponse.message()).isEqualTo("message")
     }
 
     @Test
@@ -73,29 +64,25 @@ internal class XGetHashflagsResponseTest {
         val jsonMapper = jsonMapper()
         val xGetHashflagsResponse =
             XGetHashflagsResponse.builder()
-                .count(1L)
+                .count(0L)
                 .addHashflag(
                     XGetHashflagsResponse.Hashflag.builder()
                         .addAnimation(
                             XGetHashflagsResponse.Hashflag.Animation.builder()
-                                .assetUrl(
-                                    "https://abs.twimg.com/hashflags/2026FootballCustomLikeEvergreenv3/2026FootballCustomLikeEvergreenv3_sakura_0.json"
-                                )
-                                .context("Like")
-                                .priority(1.0)
+                                .assetUrl("assetUrl")
+                                .context("context")
+                                .priority(0.0)
                                 .build()
                         )
-                        .assetUrl(
-                            "https://abs.twimg.com/hashflags/BF-16692_AIon2_jp_Hashmoji_v3/BF-16692_AIon2_jp_Hashmoji_v3.png"
-                        )
-                        .endsAt(OffsetDateTime.parse("2027-01-03T14:59:00.000Z"))
-                        .hashtag("AION2")
-                        .isHashfettiEnabled(false)
-                        .startsAt(OffsetDateTime.parse("2026-10-02T10:00:00.000Z"))
+                        .assetUrl("assetUrl")
+                        .endsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .hashtag("hashtag")
+                        .isHashfettiEnabled(true)
+                        .startsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .build()
                 )
-                .total(1L)
-                .message("No hashflag runs now. Send activeOnly=false to list the rest.")
+                .total(0L)
+                .message("message")
                 .build()
 
         val roundtrippedXGetHashflagsResponse =

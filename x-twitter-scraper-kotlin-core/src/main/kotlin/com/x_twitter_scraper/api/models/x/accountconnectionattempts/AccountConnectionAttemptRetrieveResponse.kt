@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 Xquik contributors
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package com.x_twitter_scraper.api.models.x.accountconnectionattempts
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -24,7 +28,6 @@ import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 
-/** The connection is still in progress. */
 @JsonDeserialize(using = AccountConnectionAttemptRetrieveResponse.Deserializer::class)
 @JsonSerialize(using = AccountConnectionAttemptRetrieveResponse.Serializer::class)
 class AccountConnectionAttemptRetrieveResponse
@@ -303,8 +306,8 @@ private constructor(
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
-        private val object_: JsonValue,
         private val pollAfterMs: JsonField<Long>,
+        private val object_: JsonValue,
         private val status: JsonValue,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -312,12 +315,12 @@ private constructor(
         @JsonCreator
         private constructor(
             @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("object") @ExcludeMissing object_: JsonValue = JsonMissing.of(),
             @JsonProperty("pollAfterMs")
             @ExcludeMissing
             pollAfterMs: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("object") @ExcludeMissing object_: JsonValue = JsonMissing.of(),
             @JsonProperty("status") @ExcludeMissing status: JsonValue = JsonMissing.of(),
-        ) : this(id, object_, pollAfterMs, status, mutableMapOf())
+        ) : this(id, pollAfterMs, object_, status, mutableMapOf())
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
@@ -326,6 +329,15 @@ private constructor(
         fun id(): String = id.getRequired("id")
 
         /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null.
+         */
+        fun pollAfterMs(): Long = pollAfterMs.getRequired("pollAfterMs")
+
+        /**
+         * Expected to always return the following: ```kotlin
+         * JsonValue.from("x_account_connection_attempt") ```
+         *
          * Expected to always return the following:
          * ```kotlin
          * JsonValue.from("x_account_connection_attempt")
@@ -334,12 +346,8 @@ private constructor(
         @JsonProperty("object") @ExcludeMissing fun _object_(): JsonValue = object_
 
         /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null.
-         */
-        fun pollAfterMs(): Long = pollAfterMs.getRequired("pollAfterMs")
-
-        /**
+         * Expected to always return the following: ```kotlin JsonValue.from("pending") ```
+         *
          * Expected to always return the following:
          * ```kotlin
          * JsonValue.from("pending")
@@ -393,15 +401,15 @@ private constructor(
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
-            private var object_: JsonValue = JsonValue.from("x_account_connection_attempt")
             private var pollAfterMs: JsonField<Long>? = null
+            private var object_: JsonValue = JsonValue.from("x_account_connection_attempt")
             private var status: JsonValue = JsonValue.from("pending")
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(pending: Pending) = apply {
                 id = pending.id
-                object_ = pending.object_
                 pollAfterMs = pending.pollAfterMs
+                object_ = pending.object_
                 status = pending.status
                 additionalProperties = pending.additionalProperties.toMutableMap()
             }
@@ -410,6 +418,11 @@ private constructor(
 
             /** Sets [Builder.id] to an arbitrary JSON value. */
             fun id(id: JsonField<String>) = apply { this.id = id }
+
+            fun pollAfterMs(pollAfterMs: Long) = pollAfterMs(JsonField.of(pollAfterMs))
+
+            /** Sets [Builder.pollAfterMs] to an arbitrary JSON value. */
+            fun pollAfterMs(pollAfterMs: JsonField<Long>) = apply { this.pollAfterMs = pollAfterMs }
 
             /**
              * Sets the field to an arbitrary JSON value.
@@ -420,11 +433,6 @@ private constructor(
              * ```
              */
             fun object_(object_: JsonValue) = apply { this.object_ = object_ }
-
-            fun pollAfterMs(pollAfterMs: Long) = pollAfterMs(JsonField.of(pollAfterMs))
-
-            /** Sets [Builder.pollAfterMs] to an arbitrary JSON value. */
-            fun pollAfterMs(pollAfterMs: JsonField<Long>) = apply { this.pollAfterMs = pollAfterMs }
 
             /**
              * Sets the field to an arbitrary JSON value.
@@ -471,8 +479,8 @@ private constructor(
             fun build(): Pending =
                 Pending(
                     checkRequired("id", id),
-                    object_,
                     checkRequired("pollAfterMs", pollAfterMs),
+                    object_,
                     status,
                     additionalProperties.toMutableMap(),
                 )
@@ -495,12 +503,12 @@ private constructor(
             }
 
             id()
+            pollAfterMs()
             _object_().let {
                 if (it != JsonValue.from("x_account_connection_attempt")) {
                     throw XTwitterScraperInvalidDataException("'object_' is invalid, received $it")
                 }
             }
-            pollAfterMs()
             _status().let {
                 if (it != JsonValue.from("pending")) {
                     throw XTwitterScraperInvalidDataException("'status' is invalid, received $it")
@@ -519,8 +527,8 @@ private constructor(
 
         internal fun validity(): Int =
             (if (id.asKnown() == null) 0 else 1) +
-                object_.let { if (it == JsonValue.from("x_account_connection_attempt")) 1 else 0 } +
                 (if (pollAfterMs.asKnown() == null) 0 else 1) +
+                object_.let { if (it == JsonValue.from("x_account_connection_attempt")) 1 else 0 } +
                 status.let { if (it == JsonValue.from("pending")) 1 else 0 }
 
         override fun equals(other: Any?): Boolean {
@@ -530,28 +538,29 @@ private constructor(
 
             return other is Pending &&
                 id == other.id &&
-                object_ == other.object_ &&
                 pollAfterMs == other.pollAfterMs &&
+                object_ == other.object_ &&
                 status == other.status &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(id, object_, pollAfterMs, status, additionalProperties)
+            Objects.hash(id, pollAfterMs, object_, status, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Pending{id=$id, object_=$object_, pollAfterMs=$pollAfterMs, status=$status, additionalProperties=$additionalProperties}"
+            "Pending{id=$id, pollAfterMs=$pollAfterMs, object_=$object_, status=$status, additionalProperties=$additionalProperties}"
     }
 
-    /** The account connected successfully. */
+    /** The connection is still in progress. */
     class Success
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val object_: JsonValue,
+        private val pollAfterMs: JsonField<Long>,
         private val status: JsonValue,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -560,8 +569,11 @@ private constructor(
         private constructor(
             @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
             @JsonProperty("object") @ExcludeMissing object_: JsonValue = JsonMissing.of(),
+            @JsonProperty("pollAfterMs")
+            @ExcludeMissing
+            pollAfterMs: JsonField<Long> = JsonMissing.of(),
             @JsonProperty("status") @ExcludeMissing status: JsonValue = JsonMissing.of(),
-        ) : this(id, object_, status, mutableMapOf())
+        ) : this(id, object_, pollAfterMs, status, mutableMapOf())
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
@@ -570,6 +582,9 @@ private constructor(
         fun id(): String = id.getRequired("id")
 
         /**
+         * Expected to always return the following: ```kotlin
+         * JsonValue.from("x_account_connection_attempt") ```
+         *
          * Expected to always return the following:
          * ```kotlin
          * JsonValue.from("x_account_connection_attempt")
@@ -577,7 +592,12 @@ private constructor(
          */
         @JsonProperty("object") @ExcludeMissing fun _object_(): JsonValue = object_
 
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        fun pollAfterMs(): Long? = pollAfterMs.getNullable("pollAfterMs")
+
         /**
+         * Expected to always return the following: ```kotlin JsonValue.from("success") ```
+         *
          * Expected to always return the following:
          * ```kotlin
          * JsonValue.from("success")
@@ -591,6 +611,15 @@ private constructor(
          * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        /**
+         * Returns the raw JSON value of [pollAfterMs].
+         *
+         * Unlike [pollAfterMs], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("pollAfterMs")
+        @ExcludeMissing
+        fun _pollAfterMs(): JsonField<Long> = pollAfterMs
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -622,12 +651,14 @@ private constructor(
 
             private var id: JsonField<String>? = null
             private var object_: JsonValue = JsonValue.from("x_account_connection_attempt")
+            private var pollAfterMs: JsonField<Long> = JsonMissing.of()
             private var status: JsonValue = JsonValue.from("success")
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(success: Success) = apply {
                 id = success.id
                 object_ = success.object_
+                pollAfterMs = success.pollAfterMs
                 status = success.status
                 additionalProperties = success.additionalProperties.toMutableMap()
             }
@@ -646,6 +677,11 @@ private constructor(
              * ```
              */
             fun object_(object_: JsonValue) = apply { this.object_ = object_ }
+
+            fun pollAfterMs(pollAfterMs: Long) = pollAfterMs(JsonField.of(pollAfterMs))
+
+            /** Sets [Builder.pollAfterMs] to an arbitrary JSON value. */
+            fun pollAfterMs(pollAfterMs: JsonField<Long>) = apply { this.pollAfterMs = pollAfterMs }
 
             /**
              * Sets the field to an arbitrary JSON value.
@@ -692,6 +728,7 @@ private constructor(
                 Success(
                     checkRequired("id", id),
                     object_,
+                    pollAfterMs,
                     status,
                     additionalProperties.toMutableMap(),
                 )
@@ -719,6 +756,7 @@ private constructor(
                     throw XTwitterScraperInvalidDataException("'object_' is invalid, received $it")
                 }
             }
+            pollAfterMs()
             _status().let {
                 if (it != JsonValue.from("success")) {
                     throw XTwitterScraperInvalidDataException("'status' is invalid, received $it")
@@ -738,6 +776,7 @@ private constructor(
         internal fun validity(): Int =
             (if (id.asKnown() == null) 0 else 1) +
                 object_.let { if (it == JsonValue.from("x_account_connection_attempt")) 1 else 0 } +
+                (if (pollAfterMs.asKnown() == null) 0 else 1) +
                 status.let { if (it == JsonValue.from("success")) 1 else 0 }
 
         override fun equals(other: Any?): Boolean {
@@ -748,18 +787,19 @@ private constructor(
             return other is Success &&
                 id == other.id &&
                 object_ == other.object_ &&
+                pollAfterMs == other.pollAfterMs &&
                 status == other.status &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(id, object_, status, additionalProperties)
+            Objects.hash(id, object_, pollAfterMs, status, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Success{id=$id, object_=$object_, status=$status, additionalProperties=$additionalProperties}"
+            "Success{id=$id, object_=$object_, pollAfterMs=$pollAfterMs, status=$status, additionalProperties=$additionalProperties}"
     }
 
     /** The connection reached a final failure. */
@@ -768,10 +808,10 @@ private constructor(
     private constructor(
         private val id: JsonField<String>,
         private val error: JsonField<String>,
-        private val object_: JsonValue,
         private val retryable: JsonField<Boolean>,
-        private val status: JsonValue,
+        private val object_: JsonValue,
         private val reason: JsonField<String>,
+        private val status: JsonValue,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -779,13 +819,13 @@ private constructor(
         private constructor(
             @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
             @JsonProperty("error") @ExcludeMissing error: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("object") @ExcludeMissing object_: JsonValue = JsonMissing.of(),
             @JsonProperty("retryable")
             @ExcludeMissing
             retryable: JsonField<Boolean> = JsonMissing.of(),
-            @JsonProperty("status") @ExcludeMissing status: JsonValue = JsonMissing.of(),
+            @JsonProperty("object") @ExcludeMissing object_: JsonValue = JsonMissing.of(),
             @JsonProperty("reason") @ExcludeMissing reason: JsonField<String> = JsonMissing.of(),
-        ) : this(id, error, object_, retryable, status, reason, mutableMapOf())
+            @JsonProperty("status") @ExcludeMissing status: JsonValue = JsonMissing.of(),
+        ) : this(id, error, retryable, object_, reason, status, mutableMapOf())
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
@@ -800,6 +840,15 @@ private constructor(
         fun error(): String = error.getRequired("error")
 
         /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null.
+         */
+        fun retryable(): Boolean = retryable.getRequired("retryable")
+
+        /**
+         * Expected to always return the following: ```kotlin
+         * JsonValue.from("x_account_connection_attempt") ```
+         *
          * Expected to always return the following:
          * ```kotlin
          * JsonValue.from("x_account_connection_attempt")
@@ -807,22 +856,18 @@ private constructor(
          */
         @JsonProperty("object") @ExcludeMissing fun _object_(): JsonValue = object_
 
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null.
-         */
-        fun retryable(): Boolean = retryable.getRequired("retryable")
+        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        fun reason(): String? = reason.getNullable("reason")
 
         /**
+         * Expected to always return the following: ```kotlin JsonValue.from("failed") ```
+         *
          * Expected to always return the following:
          * ```kotlin
          * JsonValue.from("failed")
          * ```
          */
         @JsonProperty("status") @ExcludeMissing fun _status(): JsonValue = status
-
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
-        fun reason(): String? = reason.getNullable("reason")
 
         /**
          * Returns the raw JSON value of [id].
@@ -884,19 +929,19 @@ private constructor(
 
             private var id: JsonField<String>? = null
             private var error: JsonField<String>? = null
-            private var object_: JsonValue = JsonValue.from("x_account_connection_attempt")
             private var retryable: JsonField<Boolean>? = null
-            private var status: JsonValue = JsonValue.from("failed")
+            private var object_: JsonValue = JsonValue.from("x_account_connection_attempt")
             private var reason: JsonField<String> = JsonMissing.of()
+            private var status: JsonValue = JsonValue.from("failed")
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(failed: Failed) = apply {
                 id = failed.id
                 error = failed.error
-                object_ = failed.object_
                 retryable = failed.retryable
-                status = failed.status
+                object_ = failed.object_
                 reason = failed.reason
+                status = failed.status
                 additionalProperties = failed.additionalProperties.toMutableMap()
             }
 
@@ -910,16 +955,6 @@ private constructor(
             /** Sets [Builder.error] to an arbitrary JSON value. */
             fun error(error: JsonField<String>) = apply { this.error = error }
 
-            /**
-             * Sets the field to an arbitrary JSON value.
-             *
-             * Defaults to the following:
-             * ```kotlin
-             * JsonValue.from("x_account_connection_attempt")
-             * ```
-             */
-            fun object_(object_: JsonValue) = apply { this.object_ = object_ }
-
             fun retryable(retryable: Boolean) = retryable(JsonField.of(retryable))
 
             /** Sets [Builder.retryable] to an arbitrary JSON value. */
@@ -930,15 +965,25 @@ private constructor(
              *
              * Defaults to the following:
              * ```kotlin
-             * JsonValue.from("failed")
+             * JsonValue.from("x_account_connection_attempt")
              * ```
              */
-            fun status(status: JsonValue) = apply { this.status = status }
+            fun object_(object_: JsonValue) = apply { this.object_ = object_ }
 
             fun reason(reason: String) = reason(JsonField.of(reason))
 
             /** Sets [Builder.reason] to an arbitrary JSON value. */
             fun reason(reason: JsonField<String>) = apply { this.reason = reason }
+
+            /**
+             * Sets the field to an arbitrary JSON value.
+             *
+             * Defaults to the following:
+             * ```kotlin
+             * JsonValue.from("failed")
+             * ```
+             */
+            fun status(status: JsonValue) = apply { this.status = status }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -977,10 +1022,10 @@ private constructor(
                 Failed(
                     checkRequired("id", id),
                     checkRequired("error", error),
-                    object_,
                     checkRequired("retryable", retryable),
-                    status,
+                    object_,
                     reason,
+                    status,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -1003,18 +1048,18 @@ private constructor(
 
             id()
             error()
+            retryable()
             _object_().let {
                 if (it != JsonValue.from("x_account_connection_attempt")) {
                     throw XTwitterScraperInvalidDataException("'object_' is invalid, received $it")
                 }
             }
-            retryable()
+            reason()
             _status().let {
                 if (it != JsonValue.from("failed")) {
                     throw XTwitterScraperInvalidDataException("'status' is invalid, received $it")
                 }
             }
-            reason()
             validated = true
         }
 
@@ -1029,10 +1074,10 @@ private constructor(
         internal fun validity(): Int =
             (if (id.asKnown() == null) 0 else 1) +
                 (if (error.asKnown() == null) 0 else 1) +
-                object_.let { if (it == JsonValue.from("x_account_connection_attempt")) 1 else 0 } +
                 (if (retryable.asKnown() == null) 0 else 1) +
-                status.let { if (it == JsonValue.from("failed")) 1 else 0 } +
-                (if (reason.asKnown() == null) 0 else 1)
+                object_.let { if (it == JsonValue.from("x_account_connection_attempt")) 1 else 0 } +
+                (if (reason.asKnown() == null) 0 else 1) +
+                status.let { if (it == JsonValue.from("failed")) 1 else 0 }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -1042,21 +1087,21 @@ private constructor(
             return other is Failed &&
                 id == other.id &&
                 error == other.error &&
-                object_ == other.object_ &&
                 retryable == other.retryable &&
-                status == other.status &&
+                object_ == other.object_ &&
                 reason == other.reason &&
+                status == other.status &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(id, error, object_, retryable, status, reason, additionalProperties)
+            Objects.hash(id, error, retryable, object_, reason, status, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Failed{id=$id, error=$error, object_=$object_, retryable=$retryable, status=$status, reason=$reason, additionalProperties=$additionalProperties}"
+            "Failed{id=$id, error=$error, retryable=$retryable, object_=$object_, reason=$reason, status=$status, additionalProperties=$additionalProperties}"
     }
 
     /**
@@ -1069,9 +1114,9 @@ private constructor(
         private val id: JsonField<String>,
         private val expiresAt: JsonField<OffsetDateTime>,
         private val message: JsonField<String>,
+        private val username: JsonField<String>,
         private val object_: JsonValue,
         private val status: JsonValue,
-        private val username: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -1082,12 +1127,12 @@ private constructor(
             @ExcludeMissing
             expiresAt: JsonField<OffsetDateTime> = JsonMissing.of(),
             @JsonProperty("message") @ExcludeMissing message: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("object") @ExcludeMissing object_: JsonValue = JsonMissing.of(),
-            @JsonProperty("status") @ExcludeMissing status: JsonValue = JsonMissing.of(),
             @JsonProperty("username")
             @ExcludeMissing
             username: JsonField<String> = JsonMissing.of(),
-        ) : this(id, expiresAt, message, object_, status, username, mutableMapOf())
+            @JsonProperty("object") @ExcludeMissing object_: JsonValue = JsonMissing.of(),
+            @JsonProperty("status") @ExcludeMissing status: JsonValue = JsonMissing.of(),
+        ) : this(id, expiresAt, message, username, object_, status, mutableMapOf())
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
@@ -1108,6 +1153,15 @@ private constructor(
         fun message(): String = message.getRequired("message")
 
         /**
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null.
+         */
+        fun username(): String = username.getRequired("username")
+
+        /**
+         * Expected to always return the following: ```kotlin
+         * JsonValue.from("x_account_connection_challenge") ```
+         *
          * Expected to always return the following:
          * ```kotlin
          * JsonValue.from("x_account_connection_challenge")
@@ -1116,18 +1170,15 @@ private constructor(
         @JsonProperty("object") @ExcludeMissing fun _object_(): JsonValue = object_
 
         /**
+         * Expected to always return the following: ```kotlin
+         * JsonValue.from("requires_email_code") ```
+         *
          * Expected to always return the following:
          * ```kotlin
          * JsonValue.from("requires_email_code")
          * ```
          */
         @JsonProperty("status") @ExcludeMissing fun _status(): JsonValue = status
-
-        /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null.
-         */
-        fun username(): String = username.getRequired("username")
 
         /**
          * Returns the raw JSON value of [id].
@@ -1193,18 +1244,18 @@ private constructor(
             private var id: JsonField<String>? = null
             private var expiresAt: JsonField<OffsetDateTime>? = null
             private var message: JsonField<String>? = null
+            private var username: JsonField<String>? = null
             private var object_: JsonValue = JsonValue.from("x_account_connection_challenge")
             private var status: JsonValue = JsonValue.from("requires_email_code")
-            private var username: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(requiresEmailCode: RequiresEmailCode) = apply {
                 id = requiresEmailCode.id
                 expiresAt = requiresEmailCode.expiresAt
                 message = requiresEmailCode.message
+                username = requiresEmailCode.username
                 object_ = requiresEmailCode.object_
                 status = requiresEmailCode.status
-                username = requiresEmailCode.username
                 additionalProperties = requiresEmailCode.additionalProperties.toMutableMap()
             }
 
@@ -1225,6 +1276,11 @@ private constructor(
             /** Sets [Builder.message] to an arbitrary JSON value. */
             fun message(message: JsonField<String>) = apply { this.message = message }
 
+            fun username(username: String) = username(JsonField.of(username))
+
+            /** Sets [Builder.username] to an arbitrary JSON value. */
+            fun username(username: JsonField<String>) = apply { this.username = username }
+
             /**
              * Sets the field to an arbitrary JSON value.
              *
@@ -1244,11 +1300,6 @@ private constructor(
              * ```
              */
             fun status(status: JsonValue) = apply { this.status = status }
-
-            fun username(username: String) = username(JsonField.of(username))
-
-            /** Sets [Builder.username] to an arbitrary JSON value. */
-            fun username(username: JsonField<String>) = apply { this.username = username }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -1289,9 +1340,9 @@ private constructor(
                     checkRequired("id", id),
                     checkRequired("expiresAt", expiresAt),
                     checkRequired("message", message),
+                    checkRequired("username", username),
                     object_,
                     status,
-                    checkRequired("username", username),
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -1315,6 +1366,7 @@ private constructor(
             id()
             expiresAt()
             message()
+            username()
             _object_().let {
                 if (it != JsonValue.from("x_account_connection_challenge")) {
                     throw XTwitterScraperInvalidDataException("'object_' is invalid, received $it")
@@ -1325,7 +1377,6 @@ private constructor(
                     throw XTwitterScraperInvalidDataException("'status' is invalid, received $it")
                 }
             }
-            username()
             validated = true
         }
 
@@ -1341,11 +1392,11 @@ private constructor(
             (if (id.asKnown() == null) 0 else 1) +
                 (if (expiresAt.asKnown() == null) 0 else 1) +
                 (if (message.asKnown() == null) 0 else 1) +
+                (if (username.asKnown() == null) 0 else 1) +
                 object_.let {
                     if (it == JsonValue.from("x_account_connection_challenge")) 1 else 0
                 } +
-                status.let { if (it == JsonValue.from("requires_email_code")) 1 else 0 } +
-                (if (username.asKnown() == null) 0 else 1)
+                status.let { if (it == JsonValue.from("requires_email_code")) 1 else 0 }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -1356,19 +1407,19 @@ private constructor(
                 id == other.id &&
                 expiresAt == other.expiresAt &&
                 message == other.message &&
+                username == other.username &&
                 object_ == other.object_ &&
                 status == other.status &&
-                username == other.username &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(id, expiresAt, message, object_, status, username, additionalProperties)
+            Objects.hash(id, expiresAt, message, username, object_, status, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "RequiresEmailCode{id=$id, expiresAt=$expiresAt, message=$message, object_=$object_, status=$status, username=$username, additionalProperties=$additionalProperties}"
+            "RequiresEmailCode{id=$id, expiresAt=$expiresAt, message=$message, username=$username, object_=$object_, status=$status, additionalProperties=$additionalProperties}"
     }
 }

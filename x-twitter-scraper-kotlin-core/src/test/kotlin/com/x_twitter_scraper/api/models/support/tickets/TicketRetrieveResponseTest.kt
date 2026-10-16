@@ -16,7 +16,7 @@ internal class TicketRetrieveResponseTest {
     fun create() {
         val ticketRetrieveResponse =
             TicketRetrieveResponse.builder()
-                .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .addMessage(
                     TicketRetrieveResponse.Message.builder()
                         .addAttachment(
@@ -24,27 +24,27 @@ internal class TicketRetrieveResponseTest {
                                 .contentType(
                                     TicketRetrieveResponse.Message.Attachment.ContentType.IMAGE_JPEG
                                 )
-                                .filename("screen.png")
+                                .filename("filename")
                                 .kind(TicketRetrieveResponse.Message.Attachment.Kind.IMAGE)
-                                .publicId("att_a1b2c3d4e5f6a1b2c3d4e5f6")
-                                .sizeBytes(204800L)
-                                .status(TicketRetrieveResponse.Message.Attachment.Status.READY)
-                                .url("/api/v1/support/attachments/att_a1b2c3d4e5f6a1b2c3d4e5f6")
+                                .publicId("publicId")
+                                .sizeBytes(0L)
+                                .status(TicketRetrieveResponse.Message.Attachment.Status.PENDING)
+                                .url("url")
                                 .build()
                         )
-                        .body("I am unable to connect my X account.")
-                        .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                        .body("body")
+                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .sender(TicketRetrieveResponse.Message.Sender.USER)
                         .build()
                 )
-                .publicId("tkt_a1b2c3d4e5f6a1b2c3d4e5f6")
+                .publicId("publicId")
                 .status(TicketRetrieveResponse.Status.OPEN)
-                .subject("Cannot connect X account")
-                .updatedAt(OffsetDateTime.parse("2025-01-16T09:30:00Z"))
+                .subject("subject")
+                .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
 
         assertThat(ticketRetrieveResponse.createdAt())
-            .isEqualTo(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(ticketRetrieveResponse.messages())
             .containsExactly(
                 TicketRetrieveResponse.Message.builder()
@@ -53,24 +53,24 @@ internal class TicketRetrieveResponseTest {
                             .contentType(
                                 TicketRetrieveResponse.Message.Attachment.ContentType.IMAGE_JPEG
                             )
-                            .filename("screen.png")
+                            .filename("filename")
                             .kind(TicketRetrieveResponse.Message.Attachment.Kind.IMAGE)
-                            .publicId("att_a1b2c3d4e5f6a1b2c3d4e5f6")
-                            .sizeBytes(204800L)
-                            .status(TicketRetrieveResponse.Message.Attachment.Status.READY)
-                            .url("/api/v1/support/attachments/att_a1b2c3d4e5f6a1b2c3d4e5f6")
+                            .publicId("publicId")
+                            .sizeBytes(0L)
+                            .status(TicketRetrieveResponse.Message.Attachment.Status.PENDING)
+                            .url("url")
                             .build()
                     )
-                    .body("I am unable to connect my X account.")
-                    .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                    .body("body")
+                    .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .sender(TicketRetrieveResponse.Message.Sender.USER)
                     .build()
             )
-        assertThat(ticketRetrieveResponse.publicId()).isEqualTo("tkt_a1b2c3d4e5f6a1b2c3d4e5f6")
+        assertThat(ticketRetrieveResponse.publicId()).isEqualTo("publicId")
         assertThat(ticketRetrieveResponse.status()).isEqualTo(TicketRetrieveResponse.Status.OPEN)
-        assertThat(ticketRetrieveResponse.subject()).isEqualTo("Cannot connect X account")
+        assertThat(ticketRetrieveResponse.subject()).isEqualTo("subject")
         assertThat(ticketRetrieveResponse.updatedAt())
-            .isEqualTo(OffsetDateTime.parse("2025-01-16T09:30:00Z"))
+            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
     }
 
     @Test
@@ -78,7 +78,7 @@ internal class TicketRetrieveResponseTest {
         val jsonMapper = jsonMapper()
         val ticketRetrieveResponse =
             TicketRetrieveResponse.builder()
-                .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .addMessage(
                     TicketRetrieveResponse.Message.builder()
                         .addAttachment(
@@ -86,23 +86,23 @@ internal class TicketRetrieveResponseTest {
                                 .contentType(
                                     TicketRetrieveResponse.Message.Attachment.ContentType.IMAGE_JPEG
                                 )
-                                .filename("screen.png")
+                                .filename("filename")
                                 .kind(TicketRetrieveResponse.Message.Attachment.Kind.IMAGE)
-                                .publicId("att_a1b2c3d4e5f6a1b2c3d4e5f6")
-                                .sizeBytes(204800L)
-                                .status(TicketRetrieveResponse.Message.Attachment.Status.READY)
-                                .url("/api/v1/support/attachments/att_a1b2c3d4e5f6a1b2c3d4e5f6")
+                                .publicId("publicId")
+                                .sizeBytes(0L)
+                                .status(TicketRetrieveResponse.Message.Attachment.Status.PENDING)
+                                .url("url")
                                 .build()
                         )
-                        .body("I am unable to connect my X account.")
-                        .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                        .body("body")
+                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .sender(TicketRetrieveResponse.Message.Sender.USER)
                         .build()
                 )
-                .publicId("tkt_a1b2c3d4e5f6a1b2c3d4e5f6")
+                .publicId("publicId")
                 .status(TicketRetrieveResponse.Status.OPEN)
-                .subject("Cannot connect X account")
-                .updatedAt(OffsetDateTime.parse("2025-01-16T09:30:00Z"))
+                .subject("subject")
+                .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
 
         val roundtrippedTicketRetrieveResponse =

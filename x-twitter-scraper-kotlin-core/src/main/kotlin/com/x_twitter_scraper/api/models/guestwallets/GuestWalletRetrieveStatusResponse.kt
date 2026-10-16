@@ -26,11 +26,11 @@ private constructor(
     private val balance: JsonField<String>,
     private val latestPurchase: JsonField<LatestPurchase>,
     private val pollAfterSeconds: JsonField<PollAfterSeconds>,
-    private val scope: JsonValue,
     private val status: JsonField<Status>,
     private val topUp: JsonField<TopUp>,
     private val usable: JsonField<Boolean>,
     private val walletId: JsonField<String>,
+    private val scope: JsonValue,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -43,20 +43,20 @@ private constructor(
         @JsonProperty("poll_after_seconds")
         @ExcludeMissing
         pollAfterSeconds: JsonField<PollAfterSeconds> = JsonMissing.of(),
-        @JsonProperty("scope") @ExcludeMissing scope: JsonValue = JsonMissing.of(),
         @JsonProperty("status") @ExcludeMissing status: JsonField<Status> = JsonMissing.of(),
         @JsonProperty("top_up") @ExcludeMissing topUp: JsonField<TopUp> = JsonMissing.of(),
         @JsonProperty("usable") @ExcludeMissing usable: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("wallet_id") @ExcludeMissing walletId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("scope") @ExcludeMissing scope: JsonValue = JsonMissing.of(),
     ) : this(
         balance,
         latestPurchase,
         pollAfterSeconds,
-        scope,
         status,
         topUp,
         usable,
         walletId,
+        scope,
         mutableMapOf(),
     )
 
@@ -67,7 +67,7 @@ private constructor(
     fun balance(): String = balance.getRequired("balance")
 
     /**
-     * Latest guest wallet purchase fulfillment state.
+     * Latest purchase state. This does not determine usability.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
@@ -79,14 +79,6 @@ private constructor(
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun pollAfterSeconds(): PollAfterSeconds? = pollAfterSeconds.getNullable("poll_after_seconds")
-
-    /**
-     * Expected to always return the following:
-     * ```kotlin
-     * JsonValue.from("paid_reads")
-     * ```
-     */
-    @JsonProperty("scope") @ExcludeMissing fun _scope(): JsonValue = scope
 
     /**
      * Combined wallet and pending-checkout state. A pending top-up can coexist with usable true.
@@ -105,7 +97,7 @@ private constructor(
     fun topUp(): TopUp? = topUp.getNullable("top_up")
 
     /**
-     * Authoritative paid-read readiness. Use instead of status.
+     * Whether paid reads can run. Use it instead of status.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null.
@@ -117,6 +109,16 @@ private constructor(
      *   unexpectedly missing or null.
      */
     fun walletId(): String = walletId.getRequired("wallet_id")
+
+    /**
+     * Expected to always return the following: ```kotlin JsonValue.from("paid_reads") ```
+     *
+     * Expected to always return the following:
+     * ```kotlin
+     * JsonValue.from("paid_reads")
+     * ```
+     */
+    @JsonProperty("scope") @ExcludeMissing fun _scope(): JsonValue = scope
 
     /**
      * Returns the raw JSON value of [balance].
@@ -210,11 +212,11 @@ private constructor(
         private var balance: JsonField<String>? = null
         private var latestPurchase: JsonField<LatestPurchase>? = null
         private var pollAfterSeconds: JsonField<PollAfterSeconds>? = null
-        private var scope: JsonValue = JsonValue.from("paid_reads")
         private var status: JsonField<Status>? = null
         private var topUp: JsonField<TopUp>? = null
         private var usable: JsonField<Boolean>? = null
         private var walletId: JsonField<String>? = null
+        private var scope: JsonValue = JsonValue.from("paid_reads")
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(guestWalletRetrieveStatusResponse: GuestWalletRetrieveStatusResponse) =
@@ -222,11 +224,11 @@ private constructor(
                 balance = guestWalletRetrieveStatusResponse.balance
                 latestPurchase = guestWalletRetrieveStatusResponse.latestPurchase
                 pollAfterSeconds = guestWalletRetrieveStatusResponse.pollAfterSeconds
-                scope = guestWalletRetrieveStatusResponse.scope
                 status = guestWalletRetrieveStatusResponse.status
                 topUp = guestWalletRetrieveStatusResponse.topUp
                 usable = guestWalletRetrieveStatusResponse.usable
                 walletId = guestWalletRetrieveStatusResponse.walletId
+                scope = guestWalletRetrieveStatusResponse.scope
                 additionalProperties =
                     guestWalletRetrieveStatusResponse.additionalProperties.toMutableMap()
             }
@@ -236,7 +238,7 @@ private constructor(
         /** Sets [Builder.balance] to an arbitrary JSON value. */
         fun balance(balance: JsonField<String>) = apply { this.balance = balance }
 
-        /** Latest guest wallet purchase fulfillment state. */
+        /** Latest purchase state. This does not determine usability. */
         fun latestPurchase(latestPurchase: LatestPurchase?) =
             latestPurchase(JsonField.ofNullable(latestPurchase))
 
@@ -255,16 +257,6 @@ private constructor(
         }
 
         /**
-         * Sets the field to an arbitrary JSON value.
-         *
-         * Defaults to the following:
-         * ```kotlin
-         * JsonValue.from("paid_reads")
-         * ```
-         */
-        fun scope(scope: JsonValue) = apply { this.scope = scope }
-
-        /**
          * Combined wallet and pending-checkout state. A pending top-up can coexist with usable
          * true. Terminal expired or failed states require a new guest wallet.
          */
@@ -279,7 +271,7 @@ private constructor(
         /** Sets [Builder.topUp] to an arbitrary JSON value. */
         fun topUp(topUp: JsonField<TopUp>) = apply { this.topUp = topUp }
 
-        /** Authoritative paid-read readiness. Use instead of status. */
+        /** Whether paid reads can run. Use it instead of status. */
         fun usable(usable: Boolean) = usable(JsonField.of(usable))
 
         /** Sets [Builder.usable] to an arbitrary JSON value. */
@@ -289,6 +281,16 @@ private constructor(
 
         /** Sets [Builder.walletId] to an arbitrary JSON value. */
         fun walletId(walletId: JsonField<String>) = apply { this.walletId = walletId }
+
+        /**
+         * Sets the field to an arbitrary JSON value.
+         *
+         * Defaults to the following:
+         * ```kotlin
+         * JsonValue.from("paid_reads")
+         * ```
+         */
+        fun scope(scope: JsonValue) = apply { this.scope = scope }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -332,11 +334,11 @@ private constructor(
                 checkRequired("balance", balance),
                 checkRequired("latestPurchase", latestPurchase),
                 checkRequired("pollAfterSeconds", pollAfterSeconds),
-                scope,
                 checkRequired("status", status),
                 checkRequired("topUp", topUp),
                 checkRequired("usable", usable),
                 checkRequired("walletId", walletId),
+                scope,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -359,15 +361,15 @@ private constructor(
         balance()
         latestPurchase()?.validate()
         pollAfterSeconds()?.validate()
+        status().validate()
+        topUp()?.validate()
+        usable()
+        walletId()
         _scope().let {
             if (it != JsonValue.from("paid_reads")) {
                 throw XTwitterScraperInvalidDataException("'scope' is invalid, received $it")
             }
         }
-        status().validate()
-        topUp()?.validate()
-        usable()
-        walletId()
         validated = true
     }
 
@@ -383,11 +385,11 @@ private constructor(
         (if (balance.asKnown() == null) 0 else 1) +
             (latestPurchase.asKnown()?.validity() ?: 0) +
             (pollAfterSeconds.asKnown()?.validity() ?: 0) +
-            scope.let { if (it == JsonValue.from("paid_reads")) 1 else 0 } +
             (status.asKnown()?.validity() ?: 0) +
             (topUp.asKnown()?.validity() ?: 0) +
             (if (usable.asKnown() == null) 0 else 1) +
-            (if (walletId.asKnown() == null) 0 else 1)
+            (if (walletId.asKnown() == null) 0 else 1) +
+            scope.let { if (it == JsonValue.from("paid_reads")) 1 else 0 }
 
     /** Latest guest wallet purchase fulfillment state. */
     class LatestPurchase
@@ -1132,6 +1134,8 @@ private constructor(
         ) : this(method, path, mutableMapOf())
 
         /**
+         * Expected to always return the following: ```kotlin JsonValue.from("POST") ```
+         *
          * Expected to always return the following:
          * ```kotlin
          * JsonValue.from("POST")
@@ -1140,6 +1144,9 @@ private constructor(
         @JsonProperty("method") @ExcludeMissing fun _method(): JsonValue = method
 
         /**
+         * Expected to always return the following: ```kotlin
+         * JsonValue.from("/api/v1/guest-wallets/topups") ```
+         *
          * Expected to always return the following:
          * ```kotlin
          * JsonValue.from("/api/v1/guest-wallets/topups")
@@ -1277,7 +1284,9 @@ private constructor(
                 additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(method, path, additionalProperties) }
+        private val hashCode: Int by lazy {
+            Objects.hash(method, path, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -1294,11 +1303,11 @@ private constructor(
             balance == other.balance &&
             latestPurchase == other.latestPurchase &&
             pollAfterSeconds == other.pollAfterSeconds &&
-            scope == other.scope &&
             status == other.status &&
             topUp == other.topUp &&
             usable == other.usable &&
             walletId == other.walletId &&
+            scope == other.scope &&
             additionalProperties == other.additionalProperties
     }
 
@@ -1307,11 +1316,11 @@ private constructor(
             balance,
             latestPurchase,
             pollAfterSeconds,
-            scope,
             status,
             topUp,
             usable,
             walletId,
+            scope,
             additionalProperties,
         )
     }
@@ -1319,5 +1328,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "GuestWalletRetrieveStatusResponse{balance=$balance, latestPurchase=$latestPurchase, pollAfterSeconds=$pollAfterSeconds, scope=$scope, status=$status, topUp=$topUp, usable=$usable, walletId=$walletId, additionalProperties=$additionalProperties}"
+        "GuestWalletRetrieveStatusResponse{balance=$balance, latestPurchase=$latestPurchase, pollAfterSeconds=$pollAfterSeconds, status=$status, topUp=$topUp, usable=$usable, walletId=$walletId, scope=$scope, additionalProperties=$additionalProperties}"
 }

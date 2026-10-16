@@ -209,7 +209,9 @@ private constructor(
             additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(draw, winners, additionalProperties) }
+    private val hashCode: Int by lazy {
+        Objects.hash(draw, winners, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 

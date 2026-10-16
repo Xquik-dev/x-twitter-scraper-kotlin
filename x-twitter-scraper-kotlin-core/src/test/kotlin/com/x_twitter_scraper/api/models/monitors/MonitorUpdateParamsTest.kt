@@ -16,6 +16,7 @@ internal class MonitorUpdateParamsTest {
             .id("id")
             .addEventType(EventType.TWEET_NEW)
             .isActive(true)
+            .name("Launch watch")
             .build()
     }
 
@@ -34,18 +35,13 @@ internal class MonitorUpdateParamsTest {
                 .id("id")
                 .addEventType(EventType.TWEET_NEW)
                 .isActive(true)
+                .name("Launch watch")
                 .build()
 
         val body = params._body()
 
         assertThat(body.eventTypes()).containsExactly(EventType.TWEET_NEW)
         assertThat(body.isActive()).isEqualTo(true)
-    }
-
-    @Test
-    fun bodyWithoutOptionalFields() {
-        val params = MonitorUpdateParams.builder().id("id").build()
-
-        val body = params._body()
+        assertThat(body.name()).isEqualTo("Launch watch")
     }
 }

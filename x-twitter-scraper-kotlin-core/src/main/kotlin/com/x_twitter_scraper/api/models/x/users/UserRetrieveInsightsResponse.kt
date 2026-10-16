@@ -42,7 +42,7 @@ private constructor(
     fun insights(): Insights = insights.getRequired("insights")
 
     /**
-     * Says why the report has counts only.
+     * Says why the report has counts only. Sent only when postsPrivate is true.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
@@ -109,7 +109,7 @@ private constructor(
         /** Sets [Builder.insights] to an arbitrary JSON value. */
         fun insights(insights: JsonField<Insights>) = apply { this.insights = insights }
 
-        /** Says why the report has counts only. */
+        /** Says why the report has counts only. Sent only when postsPrivate is true. */
         fun message(message: String) = message(JsonField.of(message))
 
         /** Sets [Builder.message] to an arbitrary JSON value. */

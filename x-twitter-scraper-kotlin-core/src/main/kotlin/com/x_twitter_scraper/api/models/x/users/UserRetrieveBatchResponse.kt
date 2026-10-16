@@ -21,14 +21,12 @@ import java.util.Collections
 import java.util.Objects
 
 /**
- * Batch user lookup results. Duplicate requested IDs are ignored while preserving first-seen order.
- * unavailable_ids identifies processed IDs with no returned profile. unprocessed_ids identifies IDs
- * skipped when available credits limit processing.
+ * Batch lookup preserves first-seen order and ignores duplicates. The ID lists name the requested
+ * IDs or usernames. They name a profile link by its username.
  */
 class UserRetrieveBatchResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    private val hasNextPage: JsonValue,
     private val nextCursor: JsonField<String>,
     private val processedCount: JsonField<Long>,
     private val requestedCount: JsonField<Long>,
@@ -36,12 +34,14 @@ private constructor(
     private val unavailableIds: JsonField<List<String>>,
     private val unprocessedIds: JsonField<List<String>>,
     private val users: JsonField<List<UserProfile>>,
+    private val failedIds: JsonField<List<String>>,
+    private val filteredCount: JsonField<Long>,
+    private val hasNextPage: JsonValue,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("has_next_page") @ExcludeMissing hasNextPage: JsonValue = JsonMissing.of(),
         @JsonProperty("next_cursor")
         @ExcludeMissing
         nextCursor: JsonField<String> = JsonMissing.of(),
@@ -63,8 +63,14 @@ private constructor(
         @JsonProperty("users")
         @ExcludeMissing
         users: JsonField<List<UserProfile>> = JsonMissing.of(),
+        @JsonProperty("failed_ids")
+        @ExcludeMissing
+        failedIds: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("filtered_count")
+        @ExcludeMissing
+        filteredCount: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("has_next_page") @ExcludeMissing hasNextPage: JsonValue = JsonMissing.of(),
     ) : this(
-        hasNextPage,
         nextCursor,
         processedCount,
         requestedCount,
@@ -72,18 +78,11 @@ private constructor(
         unavailableIds,
         unprocessedIds,
         users,
+        failedIds,
+        filteredCount,
+        hasNextPage,
         mutableMapOf(),
     )
-
-    /**
-     * Batch lookups never paginate.
-     *
-     * Expected to always return the following:
-     * ```kotlin
-     * JsonValue.from(false)
-     * ```
-     */
-    @JsonProperty("has_next_page") @ExcludeMissing fun _hasNextPage(): JsonValue = hasNextPage
 
     /**
      * Empty because batch lookups never paginate.
@@ -118,7 +117,7 @@ private constructor(
     fun returnedCount(): Long = returnedCount.getRequired("returned_count")
 
     /**
-     * Processed IDs with no returned profile, in first-seen request order.
+     * Processed IDs with no profile on X, in first-seen request order.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null.
@@ -126,8 +125,7 @@ private constructor(
     fun unavailableIds(): List<String> = unavailableIds.getRequired("unavailable_ids")
 
     /**
-     * Requested IDs skipped because available credits limited processing. Retry these IDs after
-     * adding credits.
+     * Requested IDs skipped because your credits ran out. Retry them after adding credits.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null.
@@ -139,6 +137,31 @@ private constructor(
      *   unexpectedly missing or null.
      */
     fun users(): List<UserProfile> = users.getRequired("users")
+
+    /**
+     * Processed IDs that failed to load, in first-seen request order. They cost nothing. Retry
+     * them.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun failedIds(): List<String>? = failedIds.getNullable("failed_ids")
+
+    /**
+     * Profiles rejected by the requested filters.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun filteredCount(): Long? = filteredCount.getNullable("filtered_count")
+
+    /**
+     * Batch lookups never paginate.
+     *
+     * Expected to always return the following:
+     * ```kotlin
+     * JsonValue.from(false)
+     * ```
+     */
+    @JsonProperty("has_next_page") @ExcludeMissing fun _hasNextPage(): JsonValue = hasNextPage
 
     /**
      * Returns the raw JSON value of [nextCursor].
@@ -199,6 +222,24 @@ private constructor(
      */
     @JsonProperty("users") @ExcludeMissing fun _users(): JsonField<List<UserProfile>> = users
 
+    /**
+     * Returns the raw JSON value of [failedIds].
+     *
+     * Unlike [failedIds], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("failed_ids")
+    @ExcludeMissing
+    fun _failedIds(): JsonField<List<String>> = failedIds
+
+    /**
+     * Returns the raw JSON value of [filteredCount].
+     *
+     * Unlike [filteredCount], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("filtered_count")
+    @ExcludeMissing
+    fun _filteredCount(): JsonField<Long> = filteredCount
+
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -233,7 +274,6 @@ private constructor(
     /** A builder for [UserRetrieveBatchResponse]. */
     class Builder internal constructor() {
 
-        private var hasNextPage: JsonValue = JsonValue.from(false)
         private var nextCursor: JsonField<String>? = null
         private var processedCount: JsonField<Long>? = null
         private var requestedCount: JsonField<Long>? = null
@@ -241,10 +281,12 @@ private constructor(
         private var unavailableIds: JsonField<MutableList<String>>? = null
         private var unprocessedIds: JsonField<MutableList<String>>? = null
         private var users: JsonField<MutableList<UserProfile>>? = null
+        private var failedIds: JsonField<MutableList<String>>? = null
+        private var filteredCount: JsonField<Long> = JsonMissing.of()
+        private var hasNextPage: JsonValue = JsonValue.from(false)
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(userRetrieveBatchResponse: UserRetrieveBatchResponse) = apply {
-            hasNextPage = userRetrieveBatchResponse.hasNextPage
             nextCursor = userRetrieveBatchResponse.nextCursor
             processedCount = userRetrieveBatchResponse.processedCount
             requestedCount = userRetrieveBatchResponse.requestedCount
@@ -252,18 +294,11 @@ private constructor(
             unavailableIds = userRetrieveBatchResponse.unavailableIds.map { it.toMutableList() }
             unprocessedIds = userRetrieveBatchResponse.unprocessedIds.map { it.toMutableList() }
             users = userRetrieveBatchResponse.users.map { it.toMutableList() }
+            failedIds = userRetrieveBatchResponse.failedIds.map { it.toMutableList() }
+            filteredCount = userRetrieveBatchResponse.filteredCount
+            hasNextPage = userRetrieveBatchResponse.hasNextPage
             additionalProperties = userRetrieveBatchResponse.additionalProperties.toMutableMap()
         }
-
-        /**
-         * Sets the field to an arbitrary JSON value.
-         *
-         * Defaults to the following:
-         * ```kotlin
-         * JsonValue.from(false)
-         * ```
-         */
-        fun hasNextPage(hasNextPage: JsonValue) = apply { this.hasNextPage = hasNextPage }
 
         /** Empty because batch lookups never paginate. */
         fun nextCursor(nextCursor: String) = nextCursor(JsonField.of(nextCursor))
@@ -295,7 +330,7 @@ private constructor(
             this.returnedCount = returnedCount
         }
 
-        /** Processed IDs with no returned profile, in first-seen request order. */
+        /** Processed IDs with no profile on X, in first-seen request order. */
         fun unavailableIds(unavailableIds: List<String>) =
             unavailableIds(JsonField.of(unavailableIds))
 
@@ -316,10 +351,7 @@ private constructor(
                 }
         }
 
-        /**
-         * Requested IDs skipped because available credits limited processing. Retry these IDs after
-         * adding credits.
-         */
+        /** Requested IDs skipped because your credits ran out. Retry them after adding credits. */
         fun unprocessedIds(unprocessedIds: List<String>) =
             unprocessedIds(JsonField.of(unprocessedIds))
 
@@ -354,8 +386,51 @@ private constructor(
          */
         fun addUser(user: UserProfile) = apply {
             users =
-                (users ?: JsonField.of(mutableListOf())).also { checkKnown("users", it).add(user) }
+                (users ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("users", it).add(user)
+                }
         }
+
+        /**
+         * Processed IDs that failed to load, in first-seen request order. They cost nothing. Retry
+         * them.
+         */
+        fun failedIds(failedIds: List<String>) = failedIds(JsonField.of(failedIds))
+
+        /** Sets [Builder.failedIds] to an arbitrary JSON value. */
+        fun failedIds(failedIds: JsonField<List<String>>) = apply {
+            this.failedIds = failedIds.map { it.toMutableList() }
+        }
+
+        /**
+         * Adds a single [String] to [failedIds].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addFailedId(failedId: String) = apply {
+            failedIds =
+                (failedIds ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("failedIds", it).add(failedId)
+                }
+        }
+
+        /** Profiles rejected by the requested filters. */
+        fun filteredCount(filteredCount: Long) = filteredCount(JsonField.of(filteredCount))
+
+        /** Sets [Builder.filteredCount] to an arbitrary JSON value. */
+        fun filteredCount(filteredCount: JsonField<Long>) = apply {
+            this.filteredCount = filteredCount
+        }
+
+        /**
+         * Sets the field to an arbitrary JSON value.
+         *
+         * Defaults to the following:
+         * ```kotlin
+         * JsonValue.from(false)
+         * ```
+         */
+        fun hasNextPage(hasNextPage: JsonValue) = apply { this.hasNextPage = hasNextPage }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -396,7 +471,6 @@ private constructor(
          */
         fun build(): UserRetrieveBatchResponse =
             UserRetrieveBatchResponse(
-                hasNextPage,
                 checkRequired("nextCursor", nextCursor),
                 checkRequired("processedCount", processedCount),
                 checkRequired("requestedCount", requestedCount),
@@ -404,6 +478,9 @@ private constructor(
                 checkRequired("unavailableIds", unavailableIds).map { it.toImmutable() },
                 checkRequired("unprocessedIds", unprocessedIds).map { it.toImmutable() },
                 checkRequired("users", users).map { it.toImmutable() },
+                (failedIds ?: JsonMissing.of()).map { it.toImmutable() },
+                filteredCount,
+                hasNextPage,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -423,11 +500,6 @@ private constructor(
             return@apply
         }
 
-        _hasNextPage().let {
-            if (it != JsonValue.from(false)) {
-                throw XTwitterScraperInvalidDataException("'hasNextPage' is invalid, received $it")
-            }
-        }
         nextCursor()
         processedCount()
         requestedCount()
@@ -435,6 +507,13 @@ private constructor(
         unavailableIds()
         unprocessedIds()
         users().forEach { it.validate() }
+        failedIds()
+        filteredCount()
+        _hasNextPage().let {
+            if (it != JsonValue.from(false)) {
+                throw XTwitterScraperInvalidDataException("'hasNextPage' is invalid, received $it")
+            }
+        }
         validated = true
     }
 
@@ -447,14 +526,16 @@ private constructor(
         }
 
     internal fun validity(): Int =
-        hasNextPage.let { if (it == JsonValue.from(false)) 1 else 0 } +
-            (if (nextCursor.asKnown() == null) 0 else 1) +
+        (if (nextCursor.asKnown() == null) 0 else 1) +
             (if (processedCount.asKnown() == null) 0 else 1) +
             (if (requestedCount.asKnown() == null) 0 else 1) +
             (if (returnedCount.asKnown() == null) 0 else 1) +
             (unavailableIds.asKnown()?.size ?: 0) +
             (unprocessedIds.asKnown()?.size ?: 0) +
-            (users.asKnown()?.sumOf { it.validity() } ?: 0)
+            (users.asKnown()?.sumOf { it.validity() } ?: 0) +
+            (failedIds.asKnown()?.size ?: 0) +
+            (if (filteredCount.asKnown() == null) 0 else 1) +
+            hasNextPage.let { if (it == JsonValue.from(false)) 1 else 0 }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -462,7 +543,6 @@ private constructor(
         }
 
         return other is UserRetrieveBatchResponse &&
-            hasNextPage == other.hasNextPage &&
             nextCursor == other.nextCursor &&
             processedCount == other.processedCount &&
             requestedCount == other.requestedCount &&
@@ -470,12 +550,14 @@ private constructor(
             unavailableIds == other.unavailableIds &&
             unprocessedIds == other.unprocessedIds &&
             users == other.users &&
+            failedIds == other.failedIds &&
+            filteredCount == other.filteredCount &&
+            hasNextPage == other.hasNextPage &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
         Objects.hash(
-            hasNextPage,
             nextCursor,
             processedCount,
             requestedCount,
@@ -483,6 +565,9 @@ private constructor(
             unavailableIds,
             unprocessedIds,
             users,
+            failedIds,
+            filteredCount,
+            hasNextPage,
             additionalProperties,
         )
     }
@@ -490,5 +575,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "UserRetrieveBatchResponse{hasNextPage=$hasNextPage, nextCursor=$nextCursor, processedCount=$processedCount, requestedCount=$requestedCount, returnedCount=$returnedCount, unavailableIds=$unavailableIds, unprocessedIds=$unprocessedIds, users=$users, additionalProperties=$additionalProperties}"
+        "UserRetrieveBatchResponse{nextCursor=$nextCursor, processedCount=$processedCount, requestedCount=$requestedCount, returnedCount=$returnedCount, unavailableIds=$unavailableIds, unprocessedIds=$unprocessedIds, users=$users, failedIds=$failedIds, filteredCount=$filteredCount, hasNextPage=$hasNextPage, additionalProperties=$additionalProperties}"
 }

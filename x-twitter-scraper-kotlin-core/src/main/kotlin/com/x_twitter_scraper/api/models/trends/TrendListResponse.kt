@@ -261,7 +261,7 @@ private constructor(
         fun description(): String? = description.getNullable("description")
 
         /**
-         * Promotion identifier from X. Null for organic trends.
+         * Promotion ID for this trend, or null when organic.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
@@ -274,14 +274,14 @@ private constructor(
         fun rank(): Long? = rank.getNullable("rank")
 
         /**
-         * Approximate public post volume when X supplies it.
+         * Estimated post volume for this trend.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
         fun tweetVolume(): Long? = tweetVolume.getNullable("tweetVolume")
 
         /**
-         * X search URL for the trend.
+         * Search URL associated with this trend.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
@@ -403,7 +403,7 @@ private constructor(
                 this.description = description
             }
 
-            /** Promotion identifier from X. Null for organic trends. */
+            /** Promotion ID for this trend, or null when organic. */
             fun promotedContent(promotedContent: String?) =
                 promotedContent(JsonField.ofNullable(promotedContent))
 
@@ -422,7 +422,7 @@ private constructor(
             /** Sets [Builder.rank] to an arbitrary JSON value. */
             fun rank(rank: JsonField<Long>) = apply { this.rank = rank }
 
-            /** Approximate public post volume when X supplies it. */
+            /** Estimated post volume for this trend. */
             fun tweetVolume(tweetVolume: Long?) = tweetVolume(JsonField.ofNullable(tweetVolume))
 
             /** Alias for [Builder.tweetVolume]. */
@@ -431,7 +431,7 @@ private constructor(
             /** Sets [Builder.tweetVolume] to an arbitrary JSON value. */
             fun tweetVolume(tweetVolume: JsonField<Long>) = apply { this.tweetVolume = tweetVolume }
 
-            /** X search URL for the trend. */
+            /** Search URL associated with this trend. */
             fun url(url: String) = url(JsonField.of(url))
 
             /** Sets [Builder.url] to an arbitrary JSON value. */
@@ -571,7 +571,9 @@ private constructor(
             additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(total, trends, woeid, additionalProperties) }
+    private val hashCode: Int by lazy {
+        Objects.hash(total, trends, woeid, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 

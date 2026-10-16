@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 Xquik contributors
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package com.x_twitter_scraper.api.models.x.tweets
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -15,6 +19,7 @@ import com.x_twitter_scraper.api.core.toImmutable
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
 import com.x_twitter_scraper.api.models.PaginatedTweets
 import com.x_twitter_scraper.api.models.SearchTweet
+import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 
@@ -29,7 +34,17 @@ private constructor(
     private val nextCursor: JsonField<String>,
     private val tweets: JsonField<List<SearchTweet>>,
     private val diagnostic: JsonField<Diagnostic>,
+    private val filteredCount: JsonField<Long>,
+    private val hiddenReplies: JsonField<Long>,
+    private val limitReached: JsonField<Boolean>,
+    private val message: JsonField<String>,
     private val nestedReplies: JsonField<List<SearchTweet>>,
+    private val orderPartial: JsonField<Boolean>,
+    private val partialBefore: JsonField<OffsetDateTime>,
+    private val readBackTo: JsonField<OffsetDateTime>,
+    private val searchContext: JsonField<SearchContext>,
+    private val searchedQuery: JsonField<String>,
+    private val windowComplete: JsonField<Boolean>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -47,10 +62,55 @@ private constructor(
         @JsonProperty("diagnostic")
         @ExcludeMissing
         diagnostic: JsonField<Diagnostic> = JsonMissing.of(),
+        @JsonProperty("filtered_count")
+        @ExcludeMissing
+        filteredCount: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("hiddenReplies")
+        @ExcludeMissing
+        hiddenReplies: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("limit_reached")
+        @ExcludeMissing
+        limitReached: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("message") @ExcludeMissing message: JsonField<String> = JsonMissing.of(),
         @JsonProperty("nested_replies")
         @ExcludeMissing
         nestedReplies: JsonField<List<SearchTweet>> = JsonMissing.of(),
-    ) : this(hasNextPage, nextCursor, tweets, diagnostic, nestedReplies, mutableMapOf())
+        @JsonProperty("orderPartial")
+        @ExcludeMissing
+        orderPartial: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("partialBefore")
+        @ExcludeMissing
+        partialBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("readBackTo")
+        @ExcludeMissing
+        readBackTo: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("searchContext")
+        @ExcludeMissing
+        searchContext: JsonField<SearchContext> = JsonMissing.of(),
+        @JsonProperty("searchedQuery")
+        @ExcludeMissing
+        searchedQuery: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("windowComplete")
+        @ExcludeMissing
+        windowComplete: JsonField<Boolean> = JsonMissing.of(),
+    ) : this(
+        hasNextPage,
+        nextCursor,
+        tweets,
+        diagnostic,
+        filteredCount,
+        hiddenReplies,
+        limitReached,
+        message,
+        nestedReplies,
+        orderPartial,
+        partialBefore,
+        readBackTo,
+        searchContext,
+        searchedQuery,
+        windowComplete,
+        mutableMapOf(),
+    )
 
     fun toPaginatedTweets(): PaginatedTweets =
         PaginatedTweets.builder()
@@ -85,11 +145,89 @@ private constructor(
     fun diagnostic(): Diagnostic? = diagnostic.getNullable("diagnostic")
 
     /**
+     * Whole number from 0.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun filteredCount(): Long? = filteredCount.getNullable("filtered_count")
+
+    /**
+     * Present on the last automatic page, and on a complete-mode answer without rows. X counts this
+     * many more replies but shows them to nobody. They may be hidden, protected or deleted. A retry
+     * returns the same replies.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun hiddenReplies(): Long? = hiddenReplies.getNullable("hiddenReplies")
+
+    /**
+     * Present when your limit cut a complete-mode answer. The post has more replies. Raise limit to
+     * get them all.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun limitReached(): Boolean? = limitReached.getNullable("limit_reached")
+
+    /**
+     * Explains an answer cut by your limit.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun message(): String? = message.getNullable("message")
+
+    /**
      * Nested replies. Excluded from direct coverage.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun nestedReplies(): List<SearchTweet>? = nestedReplies.getNullable("nested_replies")
+
+    /**
+     * Present with latest or oldest sort. The read stopped before it held every reply X shows. Rows
+     * stay sorted by date, but replies may be missing between them. Retry later for a gap-free
+     * order. Complete mode and automatic pages set it alike.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun orderPartial(): Boolean? = orderPartial.getNullable("orderPartial")
+
+    /**
+     * Present on an answer that lacks replies of a large thread posted before this time. X shows
+     * only part of the replies older than 7 days. A retry returns about the same replies.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun partialBefore(): OffsetDateTime? = partialBefore.getNullable("partialBefore")
+
+    /**
+     * How far back a filtered Latest search has read, in UTC. Xquik checked every newer post, so an
+     * empty page still moves this time back.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun readBackTo(): OffsetDateTime? = readBackTo.getNullable("readBackTo")
+
+    /**
+     * What X shows beside a search's posts that is the same for every reader. Present on a search
+     * for a cashtag X has a card for, such as $BTC.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun searchContext(): SearchContext? = searchContext.getNullable("searchContext")
+
+    /**
+     * Search q as X ran it, when Xquik fixed it.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun searchedQuery(): String? = searchedQuery.getNullable("searchedQuery")
+
+    /**
+     * Present on a last page whose sources all read past its start time.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun windowComplete(): Boolean? = windowComplete.getNullable("windowComplete")
 
     /**
      * Returns the raw JSON value of [hasNextPage].
@@ -124,6 +262,40 @@ private constructor(
     fun _diagnostic(): JsonField<Diagnostic> = diagnostic
 
     /**
+     * Returns the raw JSON value of [filteredCount].
+     *
+     * Unlike [filteredCount], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("filtered_count")
+    @ExcludeMissing
+    fun _filteredCount(): JsonField<Long> = filteredCount
+
+    /**
+     * Returns the raw JSON value of [hiddenReplies].
+     *
+     * Unlike [hiddenReplies], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("hiddenReplies")
+    @ExcludeMissing
+    fun _hiddenReplies(): JsonField<Long> = hiddenReplies
+
+    /**
+     * Returns the raw JSON value of [limitReached].
+     *
+     * Unlike [limitReached], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("limit_reached")
+    @ExcludeMissing
+    fun _limitReached(): JsonField<Boolean> = limitReached
+
+    /**
+     * Returns the raw JSON value of [message].
+     *
+     * Unlike [message], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("message") @ExcludeMissing fun _message(): JsonField<String> = message
+
+    /**
      * Returns the raw JSON value of [nestedReplies].
      *
      * Unlike [nestedReplies], this method doesn't throw if the JSON field has an unexpected type.
@@ -131,6 +303,60 @@ private constructor(
     @JsonProperty("nested_replies")
     @ExcludeMissing
     fun _nestedReplies(): JsonField<List<SearchTweet>> = nestedReplies
+
+    /**
+     * Returns the raw JSON value of [orderPartial].
+     *
+     * Unlike [orderPartial], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("orderPartial")
+    @ExcludeMissing
+    fun _orderPartial(): JsonField<Boolean> = orderPartial
+
+    /**
+     * Returns the raw JSON value of [partialBefore].
+     *
+     * Unlike [partialBefore], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("partialBefore")
+    @ExcludeMissing
+    fun _partialBefore(): JsonField<OffsetDateTime> = partialBefore
+
+    /**
+     * Returns the raw JSON value of [readBackTo].
+     *
+     * Unlike [readBackTo], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("readBackTo")
+    @ExcludeMissing
+    fun _readBackTo(): JsonField<OffsetDateTime> = readBackTo
+
+    /**
+     * Returns the raw JSON value of [searchContext].
+     *
+     * Unlike [searchContext], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("searchContext")
+    @ExcludeMissing
+    fun _searchContext(): JsonField<SearchContext> = searchContext
+
+    /**
+     * Returns the raw JSON value of [searchedQuery].
+     *
+     * Unlike [searchedQuery], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("searchedQuery")
+    @ExcludeMissing
+    fun _searchedQuery(): JsonField<String> = searchedQuery
+
+    /**
+     * Returns the raw JSON value of [windowComplete].
+     *
+     * Unlike [windowComplete], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("windowComplete")
+    @ExcludeMissing
+    fun _windowComplete(): JsonField<Boolean> = windowComplete
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -166,7 +392,17 @@ private constructor(
         private var nextCursor: JsonField<String>? = null
         private var tweets: JsonField<MutableList<SearchTweet>>? = null
         private var diagnostic: JsonField<Diagnostic> = JsonMissing.of()
+        private var filteredCount: JsonField<Long> = JsonMissing.of()
+        private var hiddenReplies: JsonField<Long> = JsonMissing.of()
+        private var limitReached: JsonField<Boolean> = JsonMissing.of()
+        private var message: JsonField<String> = JsonMissing.of()
         private var nestedReplies: JsonField<MutableList<SearchTweet>>? = null
+        private var orderPartial: JsonField<Boolean> = JsonMissing.of()
+        private var partialBefore: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var readBackTo: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var searchContext: JsonField<SearchContext> = JsonMissing.of()
+        private var searchedQuery: JsonField<String> = JsonMissing.of()
+        private var windowComplete: JsonField<Boolean> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(tweetGetRepliesResponse: TweetGetRepliesResponse) = apply {
@@ -174,7 +410,17 @@ private constructor(
             nextCursor = tweetGetRepliesResponse.nextCursor
             tweets = tweetGetRepliesResponse.tweets.map { it.toMutableList() }
             diagnostic = tweetGetRepliesResponse.diagnostic
+            filteredCount = tweetGetRepliesResponse.filteredCount
+            hiddenReplies = tweetGetRepliesResponse.hiddenReplies
+            limitReached = tweetGetRepliesResponse.limitReached
+            message = tweetGetRepliesResponse.message
             nestedReplies = tweetGetRepliesResponse.nestedReplies.map { it.toMutableList() }
+            orderPartial = tweetGetRepliesResponse.orderPartial
+            partialBefore = tweetGetRepliesResponse.partialBefore
+            readBackTo = tweetGetRepliesResponse.readBackTo
+            searchContext = tweetGetRepliesResponse.searchContext
+            searchedQuery = tweetGetRepliesResponse.searchedQuery
+            windowComplete = tweetGetRepliesResponse.windowComplete
             additionalProperties = tweetGetRepliesResponse.additionalProperties.toMutableMap()
         }
 
@@ -213,6 +459,43 @@ private constructor(
         /** Sets [Builder.diagnostic] to an arbitrary JSON value. */
         fun diagnostic(diagnostic: JsonField<Diagnostic>) = apply { this.diagnostic = diagnostic }
 
+        /** Whole number from 0. */
+        fun filteredCount(filteredCount: Long) = filteredCount(JsonField.of(filteredCount))
+
+        /** Sets [Builder.filteredCount] to an arbitrary JSON value. */
+        fun filteredCount(filteredCount: JsonField<Long>) = apply {
+            this.filteredCount = filteredCount
+        }
+
+        /**
+         * Present on the last automatic page, and on a complete-mode answer without rows. X counts
+         * this many more replies but shows them to nobody. They may be hidden, protected or
+         * deleted. A retry returns the same replies.
+         */
+        fun hiddenReplies(hiddenReplies: Long) = hiddenReplies(JsonField.of(hiddenReplies))
+
+        /** Sets [Builder.hiddenReplies] to an arbitrary JSON value. */
+        fun hiddenReplies(hiddenReplies: JsonField<Long>) = apply {
+            this.hiddenReplies = hiddenReplies
+        }
+
+        /**
+         * Present when your limit cut a complete-mode answer. The post has more replies. Raise
+         * limit to get them all.
+         */
+        fun limitReached(limitReached: Boolean) = limitReached(JsonField.of(limitReached))
+
+        /** Sets [Builder.limitReached] to an arbitrary JSON value. */
+        fun limitReached(limitReached: JsonField<Boolean>) = apply {
+            this.limitReached = limitReached
+        }
+
+        /** Explains an answer cut by your limit. */
+        fun message(message: String) = message(JsonField.of(message))
+
+        /** Sets [Builder.message] to an arbitrary JSON value. */
+        fun message(message: JsonField<String>) = apply { this.message = message }
+
         /** Nested replies. Excluded from direct coverage. */
         fun nestedReplies(nestedReplies: List<SearchTweet>) =
             nestedReplies(JsonField.of(nestedReplies))
@@ -232,6 +515,68 @@ private constructor(
                 (nestedReplies ?: JsonField.of(mutableListOf())).also {
                     checkKnown("nestedReplies", it).add(nestedReply)
                 }
+        }
+
+        /**
+         * Present with latest or oldest sort. The read stopped before it held every reply X shows.
+         * Rows stay sorted by date, but replies may be missing between them. Retry later for a
+         * gap-free order. Complete mode and automatic pages set it alike.
+         */
+        fun orderPartial(orderPartial: Boolean) = orderPartial(JsonField.of(orderPartial))
+
+        /** Sets [Builder.orderPartial] to an arbitrary JSON value. */
+        fun orderPartial(orderPartial: JsonField<Boolean>) = apply {
+            this.orderPartial = orderPartial
+        }
+
+        /**
+         * Present on an answer that lacks replies of a large thread posted before this time. X
+         * shows only part of the replies older than 7 days. A retry returns about the same replies.
+         */
+        fun partialBefore(partialBefore: OffsetDateTime) =
+            partialBefore(JsonField.of(partialBefore))
+
+        /** Sets [Builder.partialBefore] to an arbitrary JSON value. */
+        fun partialBefore(partialBefore: JsonField<OffsetDateTime>) = apply {
+            this.partialBefore = partialBefore
+        }
+
+        /**
+         * How far back a filtered Latest search has read, in UTC. Xquik checked every newer post,
+         * so an empty page still moves this time back.
+         */
+        fun readBackTo(readBackTo: OffsetDateTime) = readBackTo(JsonField.of(readBackTo))
+
+        /** Sets [Builder.readBackTo] to an arbitrary JSON value. */
+        fun readBackTo(readBackTo: JsonField<OffsetDateTime>) = apply {
+            this.readBackTo = readBackTo
+        }
+
+        /**
+         * What X shows beside a search's posts that is the same for every reader. Present on a
+         * search for a cashtag X has a card for, such as $BTC.
+         */
+        fun searchContext(searchContext: SearchContext) = searchContext(JsonField.of(searchContext))
+
+        /** Sets [Builder.searchContext] to an arbitrary JSON value. */
+        fun searchContext(searchContext: JsonField<SearchContext>) = apply {
+            this.searchContext = searchContext
+        }
+
+        /** Search q as X ran it, when Xquik fixed it. */
+        fun searchedQuery(searchedQuery: String) = searchedQuery(JsonField.of(searchedQuery))
+
+        /** Sets [Builder.searchedQuery] to an arbitrary JSON value. */
+        fun searchedQuery(searchedQuery: JsonField<String>) = apply {
+            this.searchedQuery = searchedQuery
+        }
+
+        /** Present on a last page whose sources all read past its start time. */
+        fun windowComplete(windowComplete: Boolean) = windowComplete(JsonField.of(windowComplete))
+
+        /** Sets [Builder.windowComplete] to an arbitrary JSON value. */
+        fun windowComplete(windowComplete: JsonField<Boolean>) = apply {
+            this.windowComplete = windowComplete
         }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -273,7 +618,17 @@ private constructor(
                 checkRequired("nextCursor", nextCursor),
                 checkRequired("tweets", tweets).map { it.toImmutable() },
                 diagnostic,
+                filteredCount,
+                hiddenReplies,
+                limitReached,
+                message,
                 (nestedReplies ?: JsonMissing.of()).map { it.toImmutable() },
+                orderPartial,
+                partialBefore,
+                readBackTo,
+                searchContext,
+                searchedQuery,
+                windowComplete,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -297,7 +652,17 @@ private constructor(
         nextCursor()
         tweets().forEach { it.validate() }
         diagnostic()?.validate()
+        filteredCount()
+        hiddenReplies()
+        limitReached()
+        message()
         nestedReplies()?.forEach { it.validate() }
+        orderPartial()
+        partialBefore()
+        readBackTo()
+        searchContext()?.validate()
+        searchedQuery()
+        windowComplete()
         validated = true
     }
 
@@ -314,9 +679,19 @@ private constructor(
             (if (nextCursor.asKnown() == null) 0 else 1) +
             (tweets.asKnown()?.sumOf { it.validity() } ?: 0) +
             (diagnostic.asKnown()?.validity() ?: 0) +
-            (nestedReplies.asKnown()?.sumOf { it.validity() } ?: 0)
+            (if (filteredCount.asKnown() == null) 0 else 1) +
+            (if (hiddenReplies.asKnown() == null) 0 else 1) +
+            (if (limitReached.asKnown() == null) 0 else 1) +
+            (if (message.asKnown() == null) 0 else 1) +
+            (nestedReplies.asKnown()?.sumOf { it.validity() } ?: 0) +
+            (if (orderPartial.asKnown() == null) 0 else 1) +
+            (if (partialBefore.asKnown() == null) 0 else 1) +
+            (if (readBackTo.asKnown() == null) 0 else 1) +
+            (searchContext.asKnown()?.validity() ?: 0) +
+            (if (searchedQuery.asKnown() == null) 0 else 1) +
+            (if (windowComplete.asKnown() == null) 0 else 1)
 
-    /** Evidence for direct-reply coverage and collector behavior. */
+    /** Direct-reply coverage & collection evidence. */
     class Diagnostic
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
@@ -338,6 +713,9 @@ private constructor(
         private val targetDirectReplies: JsonField<Long>,
         private val uniqueDirectReplies: JsonField<Long>,
         private val unrelatedCount: JsonField<Long>,
+        private val replyScopeComplete: JsonField<Boolean>,
+        private val replyTreeComplete: JsonField<Boolean>,
+        private val sourcesEnded: JsonField<Boolean>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -397,6 +775,15 @@ private constructor(
             @JsonProperty("unrelatedCount")
             @ExcludeMissing
             unrelatedCount: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("replyScopeComplete")
+            @ExcludeMissing
+            replyScopeComplete: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("replyTreeComplete")
+            @ExcludeMissing
+            replyTreeComplete: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("sourcesEnded")
+            @ExcludeMissing
+            sourcesEnded: JsonField<Boolean> = JsonMissing.of(),
         ) : this(
             complete,
             coveragePercentage,
@@ -416,11 +803,15 @@ private constructor(
             targetDirectReplies,
             uniqueDirectReplies,
             unrelatedCount,
+            replyScopeComplete,
+            replyTreeComplete,
+            sourcesEnded,
             mutableMapOf(),
         )
 
         /**
-         * Whether coverage met the target without truncation.
+         * Coverage met its target, or read the whole time window, without truncation. Protected
+         * accounts' replies count but aren't returned.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -428,7 +819,7 @@ private constructor(
         fun complete(): Boolean = complete.getRequired("complete")
 
         /**
-         * Unique direct replies as a percentage of the reported count.
+         * Unique direct replies divided by the reported count, as a percentage.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -444,7 +835,7 @@ private constructor(
         fun cursorFailures(): Long = cursorFailures.getRequired("cursorFailures")
 
         /**
-         * Duplicate tweet IDs removed across pages and strategies.
+         * Duplicate IDs removed across pages & strategies.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -452,7 +843,7 @@ private constructor(
         fun duplicateCount(): Long = duplicateCount.getRequired("duplicateCount")
 
         /**
-         * Empty pages rejected because they did not make progress.
+         * Empty pages rejected for no progress.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -469,7 +860,7 @@ private constructor(
         fun malformedCount(): Long = malformedCount.getRequired("malformedCount")
 
         /**
-         * Expected response modules or fields missing from X.
+         * Expected X modules or fields missing.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -478,7 +869,7 @@ private constructor(
             missingResponseModulesOrFields.getRequired("missingResponseModulesOrFields")
 
         /**
-         * Unique nested replies kept outside direct coverage.
+         * Unique nested replies, excluded from direct coverage.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -486,7 +877,7 @@ private constructor(
         fun nestedReplyCount(): Long = nestedReplyCount.getRequired("nestedReplyCount")
 
         /**
-         * Total pages attempted across all strategies.
+         * Pages attempted across strategies.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -502,7 +893,7 @@ private constructor(
         fun recommendedFallback(): String = recommendedFallback.getRequired("recommendedFallback")
 
         /**
-         * Repeated cursors rejected to prevent loops.
+         * Looping cursors rejected.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -510,7 +901,7 @@ private constructor(
         fun repeatedCursorCount(): Long = repeatedCursorCount.getRequired("repeatedCursorCount")
 
         /**
-         * Reply count reported on the source post.
+         * Source post reply count.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -518,7 +909,7 @@ private constructor(
         fun reportedReplyCount(): Long = reportedReplyCount.getRequired("reportedReplyCount")
 
         /**
-         * Whether the requested row limit truncated safe results.
+         * Requested row limit truncated safe results.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -534,7 +925,7 @@ private constructor(
         fun richness(): Richness = richness.getRequired("richness")
 
         /**
-         * Per-strategy pagination and contribution evidence.
+         * Pagination & contribution evidence per strategy.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -543,7 +934,7 @@ private constructor(
             strategiesAttempted.getRequired("strategiesAttempted")
 
         /**
-         * Minimum direct replies required for the coverage target.
+         * Direct replies required to meet the target.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -551,7 +942,7 @@ private constructor(
         fun targetDirectReplies(): Long = targetDirectReplies.getRequired("targetDirectReplies")
 
         /**
-         * Unique replies whose parent ID equals the source post ID.
+         * Unique direct replies to the source post.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -559,12 +950,34 @@ private constructor(
         fun uniqueDirectReplies(): Long = uniqueDirectReplies.getRequired("uniqueDirectReplies")
 
         /**
-         * Tweets rejected because they belonged elsewhere.
+         * Tweets rejected from other conversations.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
          */
         fun unrelatedCount(): Long = unrelatedCount.getRequired("unrelatedCount")
+
+        /**
+         * Replies are accounted for through the requested scope & depth. Source errors remain
+         * separate.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun replyScopeComplete(): Boolean? = replyScopeComplete.getNullable("replyScopeComplete")
+
+        /**
+         * All child counts are known & match collected replies.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun replyTreeComplete(): Boolean? = replyTreeComplete.getNullable("replyTreeComplete")
+
+        /**
+         * Every source ended, or no reply view shows a reply. A retry returns the same rows.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun sourcesEnded(): Boolean? = sourcesEnded.getNullable("sourcesEnded")
 
         /**
          * Returns the raw JSON value of [complete].
@@ -741,6 +1154,36 @@ private constructor(
         @ExcludeMissing
         fun _unrelatedCount(): JsonField<Long> = unrelatedCount
 
+        /**
+         * Returns the raw JSON value of [replyScopeComplete].
+         *
+         * Unlike [replyScopeComplete], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("replyScopeComplete")
+        @ExcludeMissing
+        fun _replyScopeComplete(): JsonField<Boolean> = replyScopeComplete
+
+        /**
+         * Returns the raw JSON value of [replyTreeComplete].
+         *
+         * Unlike [replyTreeComplete], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("replyTreeComplete")
+        @ExcludeMissing
+        fun _replyTreeComplete(): JsonField<Boolean> = replyTreeComplete
+
+        /**
+         * Returns the raw JSON value of [sourcesEnded].
+         *
+         * Unlike [sourcesEnded], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("sourcesEnded")
+        @ExcludeMissing
+        fun _sourcesEnded(): JsonField<Boolean> = sourcesEnded
+
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
             additionalProperties.put(key, value)
@@ -804,6 +1247,9 @@ private constructor(
             private var targetDirectReplies: JsonField<Long>? = null
             private var uniqueDirectReplies: JsonField<Long>? = null
             private var unrelatedCount: JsonField<Long>? = null
+            private var replyScopeComplete: JsonField<Boolean> = JsonMissing.of()
+            private var replyTreeComplete: JsonField<Boolean> = JsonMissing.of()
+            private var sourcesEnded: JsonField<Boolean> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(diagnostic: Diagnostic) = apply {
@@ -826,16 +1272,22 @@ private constructor(
                 targetDirectReplies = diagnostic.targetDirectReplies
                 uniqueDirectReplies = diagnostic.uniqueDirectReplies
                 unrelatedCount = diagnostic.unrelatedCount
+                replyScopeComplete = diagnostic.replyScopeComplete
+                replyTreeComplete = diagnostic.replyTreeComplete
+                sourcesEnded = diagnostic.sourcesEnded
                 additionalProperties = diagnostic.additionalProperties.toMutableMap()
             }
 
-            /** Whether coverage met the target without truncation. */
+            /**
+             * Coverage met its target, or read the whole time window, without truncation. Protected
+             * accounts' replies count but aren't returned.
+             */
             fun complete(complete: Boolean) = complete(JsonField.of(complete))
 
             /** Sets [Builder.complete] to an arbitrary JSON value. */
             fun complete(complete: JsonField<Boolean>) = apply { this.complete = complete }
 
-            /** Unique direct replies as a percentage of the reported count. */
+            /** Unique direct replies divided by the reported count, as a percentage. */
             fun coveragePercentage(coveragePercentage: Double) =
                 coveragePercentage(JsonField.of(coveragePercentage))
 
@@ -852,7 +1304,7 @@ private constructor(
                 this.cursorFailures = cursorFailures
             }
 
-            /** Duplicate tweet IDs removed across pages and strategies. */
+            /** Duplicate IDs removed across pages & strategies. */
             fun duplicateCount(duplicateCount: Long) = duplicateCount(JsonField.of(duplicateCount))
 
             /** Sets [Builder.duplicateCount] to an arbitrary JSON value. */
@@ -860,7 +1312,7 @@ private constructor(
                 this.duplicateCount = duplicateCount
             }
 
-            /** Empty pages rejected because they did not make progress. */
+            /** Empty pages rejected for no progress. */
             fun emptyFalseProgressPages(emptyFalseProgressPages: Long) =
                 emptyFalseProgressPages(JsonField.of(emptyFalseProgressPages))
 
@@ -877,7 +1329,7 @@ private constructor(
                 this.malformedCount = malformedCount
             }
 
-            /** Expected response modules or fields missing from X. */
+            /** Expected X modules or fields missing. */
             fun missingResponseModulesOrFields(missingResponseModulesOrFields: List<String>) =
                 missingResponseModulesOrFields(JsonField.of(missingResponseModulesOrFields))
 
@@ -903,7 +1355,7 @@ private constructor(
                     }
             }
 
-            /** Unique nested replies kept outside direct coverage. */
+            /** Unique nested replies, excluded from direct coverage. */
             fun nestedReplyCount(nestedReplyCount: Long) =
                 nestedReplyCount(JsonField.of(nestedReplyCount))
 
@@ -912,7 +1364,7 @@ private constructor(
                 this.nestedReplyCount = nestedReplyCount
             }
 
-            /** Total pages attempted across all strategies. */
+            /** Pages attempted across strategies. */
             fun pagesAttempted(pagesAttempted: Long) = pagesAttempted(JsonField.of(pagesAttempted))
 
             /** Sets [Builder.pagesAttempted] to an arbitrary JSON value. */
@@ -929,7 +1381,7 @@ private constructor(
                 this.recommendedFallback = recommendedFallback
             }
 
-            /** Repeated cursors rejected to prevent loops. */
+            /** Looping cursors rejected. */
             fun repeatedCursorCount(repeatedCursorCount: Long) =
                 repeatedCursorCount(JsonField.of(repeatedCursorCount))
 
@@ -938,7 +1390,7 @@ private constructor(
                 this.repeatedCursorCount = repeatedCursorCount
             }
 
-            /** Reply count reported on the source post. */
+            /** Source post reply count. */
             fun reportedReplyCount(reportedReplyCount: Long) =
                 reportedReplyCount(JsonField.of(reportedReplyCount))
 
@@ -947,7 +1399,7 @@ private constructor(
                 this.reportedReplyCount = reportedReplyCount
             }
 
-            /** Whether the requested row limit truncated safe results. */
+            /** Requested row limit truncated safe results. */
             fun responseTruncated(responseTruncated: Boolean) =
                 responseTruncated(JsonField.of(responseTruncated))
 
@@ -962,7 +1414,7 @@ private constructor(
             /** Sets [Builder.richness] to an arbitrary JSON value. */
             fun richness(richness: JsonField<Richness>) = apply { this.richness = richness }
 
-            /** Per-strategy pagination and contribution evidence. */
+            /** Pagination & contribution evidence per strategy. */
             fun strategiesAttempted(strategiesAttempted: List<StrategiesAttempted>) =
                 strategiesAttempted(JsonField.of(strategiesAttempted))
 
@@ -973,7 +1425,7 @@ private constructor(
                 }
 
             /**
-             * Adds a single [StrategiesAttempted] to [Builder.strategiesAttempted].
+             * Adds a single [StrategiesAttempted] to [strategiesAttempted].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
@@ -984,7 +1436,7 @@ private constructor(
                     }
             }
 
-            /** Minimum direct replies required for the coverage target. */
+            /** Direct replies required to meet the target. */
             fun targetDirectReplies(targetDirectReplies: Long) =
                 targetDirectReplies(JsonField.of(targetDirectReplies))
 
@@ -993,7 +1445,7 @@ private constructor(
                 this.targetDirectReplies = targetDirectReplies
             }
 
-            /** Unique replies whose parent ID equals the source post ID. */
+            /** Unique direct replies to the source post. */
             fun uniqueDirectReplies(uniqueDirectReplies: Long) =
                 uniqueDirectReplies(JsonField.of(uniqueDirectReplies))
 
@@ -1002,12 +1454,43 @@ private constructor(
                 this.uniqueDirectReplies = uniqueDirectReplies
             }
 
-            /** Tweets rejected because they belonged elsewhere. */
+            /** Tweets rejected from other conversations. */
             fun unrelatedCount(unrelatedCount: Long) = unrelatedCount(JsonField.of(unrelatedCount))
 
             /** Sets [Builder.unrelatedCount] to an arbitrary JSON value. */
             fun unrelatedCount(unrelatedCount: JsonField<Long>) = apply {
                 this.unrelatedCount = unrelatedCount
+            }
+
+            /**
+             * Replies are accounted for through the requested scope & depth. Source errors remain
+             * separate.
+             */
+            fun replyScopeComplete(replyScopeComplete: Boolean) =
+                replyScopeComplete(JsonField.of(replyScopeComplete))
+
+            /** Sets [Builder.replyScopeComplete] to an arbitrary JSON value. */
+            fun replyScopeComplete(replyScopeComplete: JsonField<Boolean>) = apply {
+                this.replyScopeComplete = replyScopeComplete
+            }
+
+            /** All child counts are known & match collected replies. */
+            fun replyTreeComplete(replyTreeComplete: Boolean) =
+                replyTreeComplete(JsonField.of(replyTreeComplete))
+
+            /** Sets [Builder.replyTreeComplete] to an arbitrary JSON value. */
+            fun replyTreeComplete(replyTreeComplete: JsonField<Boolean>) = apply {
+                this.replyTreeComplete = replyTreeComplete
+            }
+
+            /**
+             * Every source ended, or no reply view shows a reply. A retry returns the same rows.
+             */
+            fun sourcesEnded(sourcesEnded: Boolean) = sourcesEnded(JsonField.of(sourcesEnded))
+
+            /** Sets [Builder.sourcesEnded] to an arbitrary JSON value. */
+            fun sourcesEnded(sourcesEnded: JsonField<Boolean>) = apply {
+                this.sourcesEnded = sourcesEnded
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1081,6 +1564,9 @@ private constructor(
                     checkRequired("targetDirectReplies", targetDirectReplies),
                     checkRequired("uniqueDirectReplies", uniqueDirectReplies),
                     checkRequired("unrelatedCount", unrelatedCount),
+                    replyScopeComplete,
+                    replyTreeComplete,
+                    sourcesEnded,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -1119,6 +1605,9 @@ private constructor(
             targetDirectReplies()
             uniqueDirectReplies()
             unrelatedCount()
+            replyScopeComplete()
+            replyTreeComplete()
+            sourcesEnded()
             validated = true
         }
 
@@ -1148,9 +1637,12 @@ private constructor(
                 (strategiesAttempted.asKnown()?.sumOf { it.validity() } ?: 0) +
                 (if (targetDirectReplies.asKnown() == null) 0 else 1) +
                 (if (uniqueDirectReplies.asKnown() == null) 0 else 1) +
-                (if (unrelatedCount.asKnown() == null) 0 else 1)
+                (if (unrelatedCount.asKnown() == null) 0 else 1) +
+                (if (replyScopeComplete.asKnown() == null) 0 else 1) +
+                (if (replyTreeComplete.asKnown() == null) 0 else 1) +
+                (if (sourcesEnded.asKnown() == null) 0 else 1)
 
-        /** Field-presence counts across the collected direct replies. */
+        /** Field counts across collected direct replies. */
         class Richness
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
@@ -1219,7 +1711,7 @@ private constructor(
             )
 
             /**
-             * Replies with article content.
+             * Replies with articles.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
              *   or is unexpectedly missing or null.
@@ -1235,7 +1727,7 @@ private constructor(
             fun author(): Long = author.getRequired("author")
 
             /**
-             * Replies with card metadata.
+             * Replies with cards.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
              *   or is unexpectedly missing or null.
@@ -1243,7 +1735,7 @@ private constructor(
             fun card(): Long = card.getRequired("card")
 
             /**
-             * Replies with community-note data.
+             * Replies with community notes.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
              *   or is unexpectedly missing or null.
@@ -1251,7 +1743,7 @@ private constructor(
             fun communityNote(): Long = communityNote.getRequired("communityNote")
 
             /**
-             * Replies with a creation timestamp.
+             * Replies with creation timestamps.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
              *   or is unexpectedly missing or null.
@@ -1267,7 +1759,7 @@ private constructor(
             fun engagementCounts(): Long = engagementCounts.getRequired("engagementCounts")
 
             /**
-             * Replies with entity metadata.
+             * Replies with entities.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
              *   or is unexpectedly missing or null.
@@ -1275,7 +1767,7 @@ private constructor(
             fun entities(): Long = entities.getRequired("entities")
 
             /**
-             * Replies with a language value.
+             * Replies with language.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
              *   or is unexpectedly missing or null.
@@ -1283,7 +1775,7 @@ private constructor(
             fun language(): Long = language.getRequired("language")
 
             /**
-             * Replies with media metadata.
+             * Replies with media.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
              *   or is unexpectedly missing or null.
@@ -1291,7 +1783,7 @@ private constructor(
             fun media(): Long = media.getRequired("media")
 
             /**
-             * Replies with quoted or reposted tweet data.
+             * Replies with quotes or reposts.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
              *   or is unexpectedly missing or null.
@@ -1308,7 +1800,7 @@ private constructor(
             fun text(): Long = text.getRequired("text")
 
             /**
-             * Total unique direct replies evaluated for richness.
+             * Unique direct replies evaluated.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
              *   or is unexpectedly missing or null.
@@ -1316,7 +1808,7 @@ private constructor(
             fun totalReplies(): Long = totalReplies.getRequired("totalReplies")
 
             /**
-             * Replies with a canonical URL.
+             * Replies with canonical URLs.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
              *   or is unexpectedly missing or null.
@@ -1501,7 +1993,7 @@ private constructor(
                     additionalProperties = richness.additionalProperties.toMutableMap()
                 }
 
-                /** Replies with article content. */
+                /** Replies with articles. */
                 fun article(article: Long) = article(JsonField.of(article))
 
                 /** Sets [Builder.article] to an arbitrary JSON value. */
@@ -1513,13 +2005,13 @@ private constructor(
                 /** Sets [Builder.author] to an arbitrary JSON value. */
                 fun author(author: JsonField<Long>) = apply { this.author = author }
 
-                /** Replies with card metadata. */
+                /** Replies with cards. */
                 fun card(card: Long) = card(JsonField.of(card))
 
                 /** Sets [Builder.card] to an arbitrary JSON value. */
                 fun card(card: JsonField<Long>) = apply { this.card = card }
 
-                /** Replies with community-note data. */
+                /** Replies with community notes. */
                 fun communityNote(communityNote: Long) = communityNote(JsonField.of(communityNote))
 
                 /** Sets [Builder.communityNote] to an arbitrary JSON value. */
@@ -1527,7 +2019,7 @@ private constructor(
                     this.communityNote = communityNote
                 }
 
-                /** Replies with a creation timestamp. */
+                /** Replies with creation timestamps. */
                 fun createdAt(createdAt: Long) = createdAt(JsonField.of(createdAt))
 
                 /** Sets [Builder.createdAt] to an arbitrary JSON value. */
@@ -1542,25 +2034,25 @@ private constructor(
                     this.engagementCounts = engagementCounts
                 }
 
-                /** Replies with entity metadata. */
+                /** Replies with entities. */
                 fun entities(entities: Long) = entities(JsonField.of(entities))
 
                 /** Sets [Builder.entities] to an arbitrary JSON value. */
                 fun entities(entities: JsonField<Long>) = apply { this.entities = entities }
 
-                /** Replies with a language value. */
+                /** Replies with language. */
                 fun language(language: Long) = language(JsonField.of(language))
 
                 /** Sets [Builder.language] to an arbitrary JSON value. */
                 fun language(language: JsonField<Long>) = apply { this.language = language }
 
-                /** Replies with media metadata. */
+                /** Replies with media. */
                 fun media(media: Long) = media(JsonField.of(media))
 
                 /** Sets [Builder.media] to an arbitrary JSON value. */
                 fun media(media: JsonField<Long>) = apply { this.media = media }
 
-                /** Replies with quoted or reposted tweet data. */
+                /** Replies with quotes or reposts. */
                 fun quotedOrRepostedTweet(quotedOrRepostedTweet: Long) =
                     quotedOrRepostedTweet(JsonField.of(quotedOrRepostedTweet))
 
@@ -1575,7 +2067,7 @@ private constructor(
                 /** Sets [Builder.text] to an arbitrary JSON value. */
                 fun text(text: JsonField<Long>) = apply { this.text = text }
 
-                /** Total unique direct replies evaluated for richness. */
+                /** Unique direct replies evaluated. */
                 fun totalReplies(totalReplies: Long) = totalReplies(JsonField.of(totalReplies))
 
                 /** Sets [Builder.totalReplies] to an arbitrary JSON value. */
@@ -1583,7 +2075,7 @@ private constructor(
                     this.totalReplies = totalReplies
                 }
 
-                /** Replies with a canonical URL. */
+                /** Replies with canonical URLs. */
                 fun url(url: Long) = url(JsonField.of(url))
 
                 /** Sets [Builder.url] to an arbitrary JSON value. */
@@ -1757,6 +2249,7 @@ private constructor(
                 "Richness{article=$article, author=$author, card=$card, communityNote=$communityNote, createdAt=$createdAt, engagementCounts=$engagementCounts, entities=$entities, language=$language, media=$media, quotedOrRepostedTweet=$quotedOrRepostedTweet, text=$text, totalReplies=$totalReplies, url=$url, additionalProperties=$additionalProperties}"
         }
 
+        /** Reply counts & stop reason per strategy. */
         class StrategiesAttempted
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
@@ -1765,6 +2258,7 @@ private constructor(
             private val newNestedReplies: JsonField<Long>,
             private val pagesAttempted: JsonField<Long>,
             private val stopReason: JsonField<StopReason>,
+            private val newDirectReplyPages: JsonField<List<Long>>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
@@ -1783,12 +2277,16 @@ private constructor(
                 @JsonProperty("stopReason")
                 @ExcludeMissing
                 stopReason: JsonField<StopReason> = JsonMissing.of(),
+                @JsonProperty("newDirectReplyPages")
+                @ExcludeMissing
+                newDirectReplyPages: JsonField<List<Long>> = JsonMissing.of(),
             ) : this(
                 name,
                 newDirectReplies,
                 newNestedReplies,
                 pagesAttempted,
                 stopReason,
+                newDirectReplyPages,
                 mutableMapOf(),
             )
 
@@ -1821,6 +2319,15 @@ private constructor(
              *   or is unexpectedly missing or null.
              */
             fun stopReason(): StopReason = stopReason.getRequired("stopReason")
+
+            /**
+             * For a search of the post's conversation, the page that listed each new direct reply,
+             * from 1.
+             *
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun newDirectReplyPages(): List<Long>? =
+                newDirectReplyPages.getNullable("newDirectReplyPages")
 
             /**
              * Returns the raw JSON value of [name].
@@ -1869,6 +2376,16 @@ private constructor(
             @ExcludeMissing
             fun _stopReason(): JsonField<StopReason> = stopReason
 
+            /**
+             * Returns the raw JSON value of [newDirectReplyPages].
+             *
+             * Unlike [newDirectReplyPages], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("newDirectReplyPages")
+            @ExcludeMissing
+            fun _newDirectReplyPages(): JsonField<List<Long>> = newDirectReplyPages
+
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
                 additionalProperties.put(key, value)
@@ -1906,6 +2423,7 @@ private constructor(
                 private var newNestedReplies: JsonField<Long>? = null
                 private var pagesAttempted: JsonField<Long>? = null
                 private var stopReason: JsonField<StopReason>? = null
+                private var newDirectReplyPages: JsonField<MutableList<Long>>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 internal fun from(strategiesAttempted: StrategiesAttempted) = apply {
@@ -1914,6 +2432,8 @@ private constructor(
                     newNestedReplies = strategiesAttempted.newNestedReplies
                     pagesAttempted = strategiesAttempted.pagesAttempted
                     stopReason = strategiesAttempted.stopReason
+                    newDirectReplyPages =
+                        strategiesAttempted.newDirectReplyPages.map { it.toMutableList() }
                     additionalProperties = strategiesAttempted.additionalProperties.toMutableMap()
                 }
 
@@ -1951,6 +2471,30 @@ private constructor(
                 /** Sets [Builder.stopReason] to an arbitrary JSON value. */
                 fun stopReason(stopReason: JsonField<StopReason>) = apply {
                     this.stopReason = stopReason
+                }
+
+                /**
+                 * For a search of the post's conversation, the page that listed each new direct
+                 * reply, from 1.
+                 */
+                fun newDirectReplyPages(newDirectReplyPages: List<Long>) =
+                    newDirectReplyPages(JsonField.of(newDirectReplyPages))
+
+                /** Sets [Builder.newDirectReplyPages] to an arbitrary JSON value. */
+                fun newDirectReplyPages(newDirectReplyPages: JsonField<List<Long>>) = apply {
+                    this.newDirectReplyPages = newDirectReplyPages.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [Long] to [newDirectReplyPages].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addNewDirectReplyPage(newDirectReplyPage: Long) = apply {
+                    newDirectReplyPages =
+                        (newDirectReplyPages ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("newDirectReplyPages", it).add(newDirectReplyPage)
+                        }
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1998,6 +2542,7 @@ private constructor(
                         checkRequired("newNestedReplies", newNestedReplies),
                         checkRequired("pagesAttempted", pagesAttempted),
                         checkRequired("stopReason", stopReason),
+                        (newDirectReplyPages ?: JsonMissing.of()).map { it.toImmutable() },
                         additionalProperties.toMutableMap(),
                     )
             }
@@ -2024,6 +2569,7 @@ private constructor(
                 newNestedReplies()
                 pagesAttempted()
                 stopReason().validate()
+                newDirectReplyPages()
                 validated = true
             }
 
@@ -2040,7 +2586,8 @@ private constructor(
                     (if (newDirectReplies.asKnown() == null) 0 else 1) +
                     (if (newNestedReplies.asKnown() == null) 0 else 1) +
                     (if (pagesAttempted.asKnown() == null) 0 else 1) +
-                    (stopReason.asKnown()?.validity() ?: 0)
+                    (stopReason.asKnown()?.validity() ?: 0) +
+                    (newDirectReplyPages.asKnown()?.size ?: 0)
 
             class StopReason
             @JsonCreator
@@ -2065,6 +2612,12 @@ private constructor(
 
                     val REPEATED_CURSOR = of("repeated_cursor")
 
+                    val PARTIAL_VIEW = of("partial_view")
+
+                    val WINDOW_COVERED = of("window_covered")
+
+                    val WINDOW_PASSED = of("window_passed")
+
                     fun of(value: String) = StopReason(JsonField.of(value))
                 }
 
@@ -2077,6 +2630,9 @@ private constructor(
                     NO_NEXT_PAGE,
                     PAGE_CAP,
                     REPEATED_CURSOR,
+                    PARTIAL_VIEW,
+                    WINDOW_COVERED,
+                    WINDOW_PASSED,
                 }
 
                 /**
@@ -2096,6 +2652,9 @@ private constructor(
                     NO_NEXT_PAGE,
                     PAGE_CAP,
                     REPEATED_CURSOR,
+                    PARTIAL_VIEW,
+                    WINDOW_COVERED,
+                    WINDOW_PASSED,
                     /**
                      * An enum member indicating that [StopReason] was instantiated with an unknown
                      * value.
@@ -2116,6 +2675,9 @@ private constructor(
                         NO_NEXT_PAGE -> Value.NO_NEXT_PAGE
                         PAGE_CAP -> Value.PAGE_CAP
                         REPEATED_CURSOR -> Value.REPEATED_CURSOR
+                        PARTIAL_VIEW -> Value.PARTIAL_VIEW
+                        WINDOW_COVERED -> Value.WINDOW_COVERED
+                        WINDOW_PASSED -> Value.WINDOW_PASSED
                         else -> Value._UNKNOWN
                     }
 
@@ -2134,6 +2696,9 @@ private constructor(
                         NO_NEXT_PAGE -> Known.NO_NEXT_PAGE
                         PAGE_CAP -> Known.PAGE_CAP
                         REPEATED_CURSOR -> Known.REPEATED_CURSOR
+                        PARTIAL_VIEW -> Known.PARTIAL_VIEW
+                        WINDOW_COVERED -> Known.WINDOW_COVERED
+                        WINDOW_PASSED -> Known.WINDOW_PASSED
                         else ->
                             throw XTwitterScraperInvalidDataException("Unknown StopReason: $value")
                     }
@@ -2203,6 +2768,7 @@ private constructor(
                     newNestedReplies == other.newNestedReplies &&
                     pagesAttempted == other.pagesAttempted &&
                     stopReason == other.stopReason &&
+                    newDirectReplyPages == other.newDirectReplyPages &&
                     additionalProperties == other.additionalProperties
             }
 
@@ -2213,6 +2779,7 @@ private constructor(
                     newNestedReplies,
                     pagesAttempted,
                     stopReason,
+                    newDirectReplyPages,
                     additionalProperties,
                 )
             }
@@ -2220,7 +2787,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "StrategiesAttempted{name=$name, newDirectReplies=$newDirectReplies, newNestedReplies=$newNestedReplies, pagesAttempted=$pagesAttempted, stopReason=$stopReason, additionalProperties=$additionalProperties}"
+                "StrategiesAttempted{name=$name, newDirectReplies=$newDirectReplies, newNestedReplies=$newNestedReplies, pagesAttempted=$pagesAttempted, stopReason=$stopReason, newDirectReplyPages=$newDirectReplyPages, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
@@ -2247,6 +2814,9 @@ private constructor(
                 targetDirectReplies == other.targetDirectReplies &&
                 uniqueDirectReplies == other.uniqueDirectReplies &&
                 unrelatedCount == other.unrelatedCount &&
+                replyScopeComplete == other.replyScopeComplete &&
+                replyTreeComplete == other.replyTreeComplete &&
+                sourcesEnded == other.sourcesEnded &&
                 additionalProperties == other.additionalProperties
         }
 
@@ -2270,6 +2840,9 @@ private constructor(
                 targetDirectReplies,
                 uniqueDirectReplies,
                 unrelatedCount,
+                replyScopeComplete,
+                replyTreeComplete,
+                sourcesEnded,
                 additionalProperties,
             )
         }
@@ -2277,7 +2850,398 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Diagnostic{complete=$complete, coveragePercentage=$coveragePercentage, cursorFailures=$cursorFailures, duplicateCount=$duplicateCount, emptyFalseProgressPages=$emptyFalseProgressPages, malformedCount=$malformedCount, missingResponseModulesOrFields=$missingResponseModulesOrFields, nestedReplyCount=$nestedReplyCount, pagesAttempted=$pagesAttempted, recommendedFallback=$recommendedFallback, repeatedCursorCount=$repeatedCursorCount, reportedReplyCount=$reportedReplyCount, responseTruncated=$responseTruncated, richness=$richness, strategiesAttempted=$strategiesAttempted, targetDirectReplies=$targetDirectReplies, uniqueDirectReplies=$uniqueDirectReplies, unrelatedCount=$unrelatedCount, additionalProperties=$additionalProperties}"
+            "Diagnostic{complete=$complete, coveragePercentage=$coveragePercentage, cursorFailures=$cursorFailures, duplicateCount=$duplicateCount, emptyFalseProgressPages=$emptyFalseProgressPages, malformedCount=$malformedCount, missingResponseModulesOrFields=$missingResponseModulesOrFields, nestedReplyCount=$nestedReplyCount, pagesAttempted=$pagesAttempted, recommendedFallback=$recommendedFallback, repeatedCursorCount=$repeatedCursorCount, reportedReplyCount=$reportedReplyCount, responseTruncated=$responseTruncated, richness=$richness, strategiesAttempted=$strategiesAttempted, targetDirectReplies=$targetDirectReplies, uniqueDirectReplies=$uniqueDirectReplies, unrelatedCount=$unrelatedCount, replyScopeComplete=$replyScopeComplete, replyTreeComplete=$replyTreeComplete, sourcesEnded=$sourcesEnded, additionalProperties=$additionalProperties}"
+    }
+
+    /**
+     * What X shows beside a search's posts that is the same for every reader. Present on a search
+     * for a cashtag X has a card for, such as $BTC.
+     */
+    class SearchContext
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
+        private val smartTag: JsonField<SmartTag>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("smartTag")
+            @ExcludeMissing
+            smartTag: JsonField<SmartTag> = JsonMissing.of()
+        ) : this(smartTag, mutableMapOf())
+
+        /**
+         * X's card for the cashtag the search names.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null.
+         */
+        fun smartTag(): SmartTag = smartTag.getRequired("smartTag")
+
+        /**
+         * Returns the raw JSON value of [smartTag].
+         *
+         * Unlike [smartTag], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("smartTag") @ExcludeMissing fun _smartTag(): JsonField<SmartTag> = smartTag
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [SearchContext].
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .smartTag()
+             * ```
+             */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [SearchContext]. */
+        class Builder internal constructor() {
+
+            private var smartTag: JsonField<SmartTag>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(searchContext: SearchContext) = apply {
+                smartTag = searchContext.smartTag
+                additionalProperties = searchContext.additionalProperties.toMutableMap()
+            }
+
+            /** X's card for the cashtag the search names. */
+            fun smartTag(smartTag: SmartTag) = smartTag(JsonField.of(smartTag))
+
+            /** Sets [Builder.smartTag] to an arbitrary JSON value. */
+            fun smartTag(smartTag: JsonField<SmartTag>) = apply { this.smartTag = smartTag }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [SearchContext].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .smartTag()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): SearchContext =
+                SearchContext(
+                    checkRequired("smartTag", smartTag),
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+         *   match its expected type.
+         */
+        fun validate(): SearchContext = apply {
+            if (validated) {
+                return@apply
+            }
+
+            smartTag().validate()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: XTwitterScraperInvalidDataException) {
+                false
+            }
+
+        internal fun validity(): Int = (smartTag.asKnown()?.validity() ?: 0)
+
+        /** X's card for the cashtag the search names. */
+        class SmartTag
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val id: JsonField<String>,
+            private val active: JsonField<Boolean>,
+            private val supportsOhlc: JsonField<Boolean>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("active")
+                @ExcludeMissing
+                active: JsonField<Boolean> = JsonMissing.of(),
+                @JsonProperty("supportsOhlc")
+                @ExcludeMissing
+                supportsOhlc: JsonField<Boolean> = JsonMissing.of(),
+            ) : this(id, active, supportsOhlc, mutableMapOf())
+
+            /**
+             * The ticker X matched.
+             *
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
+             *   or is unexpectedly missing or null.
+             */
+            fun id(): String = id.getRequired("id")
+
+            /**
+             * Whether X lists the ticker as active.
+             *
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun active(): Boolean? = active.getNullable("active")
+
+            /**
+             * Whether X charts the ticker with open, high, low & close prices.
+             *
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun supportsOhlc(): Boolean? = supportsOhlc.getNullable("supportsOhlc")
+
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+            /**
+             * Returns the raw JSON value of [active].
+             *
+             * Unlike [active], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("active") @ExcludeMissing fun _active(): JsonField<Boolean> = active
+
+            /**
+             * Returns the raw JSON value of [supportsOhlc].
+             *
+             * Unlike [supportsOhlc], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("supportsOhlc")
+            @ExcludeMissing
+            fun _supportsOhlc(): JsonField<Boolean> = supportsOhlc
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /**
+                 * Returns a mutable builder for constructing an instance of [SmartTag].
+                 *
+                 * The following fields are required:
+                 * ```kotlin
+                 * .id()
+                 * ```
+                 */
+                fun builder() = Builder()
+            }
+
+            /** A builder for [SmartTag]. */
+            class Builder internal constructor() {
+
+                private var id: JsonField<String>? = null
+                private var active: JsonField<Boolean> = JsonMissing.of()
+                private var supportsOhlc: JsonField<Boolean> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                internal fun from(smartTag: SmartTag) = apply {
+                    id = smartTag.id
+                    active = smartTag.active
+                    supportsOhlc = smartTag.supportsOhlc
+                    additionalProperties = smartTag.additionalProperties.toMutableMap()
+                }
+
+                /** The ticker X matched. */
+                fun id(id: String) = id(JsonField.of(id))
+
+                /** Sets [Builder.id] to an arbitrary JSON value. */
+                fun id(id: JsonField<String>) = apply { this.id = id }
+
+                /** Whether X lists the ticker as active. */
+                fun active(active: Boolean) = active(JsonField.of(active))
+
+                /** Sets [Builder.active] to an arbitrary JSON value. */
+                fun active(active: JsonField<Boolean>) = apply { this.active = active }
+
+                /** Whether X charts the ticker with open, high, low & close prices. */
+                fun supportsOhlc(supportsOhlc: Boolean) = supportsOhlc(JsonField.of(supportsOhlc))
+
+                /** Sets [Builder.supportsOhlc] to an arbitrary JSON value. */
+                fun supportsOhlc(supportsOhlc: JsonField<Boolean>) = apply {
+                    this.supportsOhlc = supportsOhlc
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [SmartTag].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```kotlin
+                 * .id()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
+                fun build(): SmartTag =
+                    SmartTag(
+                        checkRequired("id", id),
+                        active,
+                        supportsOhlc,
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+             *   match its expected type.
+             */
+            fun validate(): SmartTag = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                id()
+                active()
+                supportsOhlc()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: XTwitterScraperInvalidDataException) {
+                    false
+                }
+
+            internal fun validity(): Int =
+                (if (id.asKnown() == null) 0 else 1) +
+                    (if (active.asKnown() == null) 0 else 1) +
+                    (if (supportsOhlc.asKnown() == null) 0 else 1)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is SmartTag &&
+                    id == other.id &&
+                    active == other.active &&
+                    supportsOhlc == other.supportsOhlc &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(id, active, supportsOhlc, additionalProperties)
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "SmartTag{id=$id, active=$active, supportsOhlc=$supportsOhlc, additionalProperties=$additionalProperties}"
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is SearchContext &&
+                smartTag == other.smartTag &&
+                additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy {
+            Objects.hash(smartTag, additionalProperties)
+        }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "SearchContext{smartTag=$smartTag, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -2290,7 +3254,17 @@ private constructor(
             nextCursor == other.nextCursor &&
             tweets == other.tweets &&
             diagnostic == other.diagnostic &&
+            filteredCount == other.filteredCount &&
+            hiddenReplies == other.hiddenReplies &&
+            limitReached == other.limitReached &&
+            message == other.message &&
             nestedReplies == other.nestedReplies &&
+            orderPartial == other.orderPartial &&
+            partialBefore == other.partialBefore &&
+            readBackTo == other.readBackTo &&
+            searchContext == other.searchContext &&
+            searchedQuery == other.searchedQuery &&
+            windowComplete == other.windowComplete &&
             additionalProperties == other.additionalProperties
     }
 
@@ -2300,7 +3274,17 @@ private constructor(
             nextCursor,
             tweets,
             diagnostic,
+            filteredCount,
+            hiddenReplies,
+            limitReached,
+            message,
             nestedReplies,
+            orderPartial,
+            partialBefore,
+            readBackTo,
+            searchContext,
+            searchedQuery,
+            windowComplete,
             additionalProperties,
         )
     }
@@ -2308,5 +3292,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "TweetGetRepliesResponse{hasNextPage=$hasNextPage, nextCursor=$nextCursor, tweets=$tweets, diagnostic=$diagnostic, nestedReplies=$nestedReplies, additionalProperties=$additionalProperties}"
+        "TweetGetRepliesResponse{hasNextPage=$hasNextPage, nextCursor=$nextCursor, tweets=$tweets, diagnostic=$diagnostic, filteredCount=$filteredCount, hiddenReplies=$hiddenReplies, limitReached=$limitReached, message=$message, nestedReplies=$nestedReplies, orderPartial=$orderPartial, partialBefore=$partialBefore, readBackTo=$readBackTo, searchContext=$searchContext, searchedQuery=$searchedQuery, windowComplete=$windowComplete, additionalProperties=$additionalProperties}"
 }

@@ -35,7 +35,6 @@ private constructor(
     private val charged: JsonField<Boolean>,
     private val chargedCredits: JsonField<String>,
     private val nextAction: JsonField<NextAction>,
-    private val object_: JsonValue,
     private val pollAfterMs: JsonField<Long>,
     private val request: JsonField<Request>,
     private val result: JsonField<Result>,
@@ -65,6 +64,7 @@ private constructor(
     private val mediaUrl: JsonField<String>,
     private val message: JsonField<String>,
     private val messageId: JsonField<String>,
+    private val object_: JsonValue,
     private val requestHash: JsonField<String>,
     private val requestId: JsonField<String>,
     private val resultId: JsonField<String>,
@@ -87,7 +87,6 @@ private constructor(
         @JsonProperty("nextAction")
         @ExcludeMissing
         nextAction: JsonField<NextAction> = JsonMissing.of(),
-        @JsonProperty("object") @ExcludeMissing object_: JsonValue = JsonMissing.of(),
         @JsonProperty("pollAfterMs")
         @ExcludeMissing
         pollAfterMs: JsonField<Long> = JsonMissing.of(),
@@ -143,6 +142,7 @@ private constructor(
         @JsonProperty("mediaUrl") @ExcludeMissing mediaUrl: JsonField<String> = JsonMissing.of(),
         @JsonProperty("message") @ExcludeMissing message: JsonField<String> = JsonMissing.of(),
         @JsonProperty("messageId") @ExcludeMissing messageId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("object") @ExcludeMissing object_: JsonValue = JsonMissing.of(),
         @JsonProperty("requestHash")
         @ExcludeMissing
         requestHash: JsonField<String> = JsonMissing.of(),
@@ -163,7 +163,6 @@ private constructor(
         charged,
         chargedCredits,
         nextAction,
-        object_,
         pollAfterMs,
         request,
         result,
@@ -193,6 +192,7 @@ private constructor(
         mediaUrl,
         message,
         messageId,
+        object_,
         requestHash,
         requestId,
         resultId,
@@ -249,14 +249,6 @@ private constructor(
      */
     fun nextAction(): NextAction? = nextAction.getNullable("nextAction")
 
-    /**
-     * Expected to always return the following:
-     * ```kotlin
-     * JsonValue.from("x_write_action")
-     * ```
-     */
-    @JsonProperty("object") @ExcludeMissing fun _object_(): JsonValue = object_
-
     /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun pollAfterMs(): Long? = pollAfterMs.getNullable("pollAfterMs")
 
@@ -276,7 +268,7 @@ private constructor(
     fun result(): Result? = result.getNullable("result")
 
     /**
-     * True only when a new attempt can reasonably succeed.
+     * True only when a new attempt is likely to succeed.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null.
@@ -284,7 +276,7 @@ private constructor(
     fun retryable(): Boolean = retryable.getRequired("retryable")
 
     /**
-     * True only when no write was dispatched and a new idempotency key may be used.
+     * True only when X did not get the write and a new idempotency key may be used.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null.
@@ -385,7 +377,11 @@ private constructor(
      */
     fun expiresAt(): OffsetDateTime? = expiresAt.getNullable("expiresAt")
 
-    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    /**
+     * True when this answers a retry of an earlier request with the same Idempotency-Key.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
     fun idempotent(): Boolean? = idempotent.getNullable("idempotent")
 
     /**
@@ -418,6 +414,16 @@ private constructor(
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun messageId(): String? = messageId.getNullable("messageId")
+
+    /**
+     * Expected to always return the following: ```kotlin JsonValue.from("x_write_action") ```
+     *
+     * Expected to always return the following:
+     * ```kotlin
+     * JsonValue.from("x_write_action")
+     * ```
+     */
+    @JsonProperty("object") @ExcludeMissing fun _object_(): JsonValue = object_
 
     /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun requestHash(): String? = requestHash.getNullable("requestHash")
@@ -828,7 +834,6 @@ private constructor(
         private var charged: JsonField<Boolean>? = null
         private var chargedCredits: JsonField<String>? = null
         private var nextAction: JsonField<NextAction>? = null
-        private var object_: JsonValue = JsonValue.from("x_write_action")
         private var pollAfterMs: JsonField<Long>? = null
         private var request: JsonField<Request>? = null
         private var result: JsonField<Result>? = null
@@ -858,6 +863,7 @@ private constructor(
         private var mediaUrl: JsonField<String> = JsonMissing.of()
         private var message: JsonField<String> = JsonMissing.of()
         private var messageId: JsonField<String> = JsonMissing.of()
+        private var object_: JsonValue = JsonValue.from("x_write_action")
         private var requestHash: JsonField<String> = JsonMissing.of()
         private var requestId: JsonField<String> = JsonMissing.of()
         private var resultId: JsonField<String> = JsonMissing.of()
@@ -874,7 +880,6 @@ private constructor(
             charged = userRemoveFollowerResponse.charged
             chargedCredits = userRemoveFollowerResponse.chargedCredits
             nextAction = userRemoveFollowerResponse.nextAction
-            object_ = userRemoveFollowerResponse.object_
             pollAfterMs = userRemoveFollowerResponse.pollAfterMs
             request = userRemoveFollowerResponse.request
             result = userRemoveFollowerResponse.result
@@ -904,6 +909,7 @@ private constructor(
             mediaUrl = userRemoveFollowerResponse.mediaUrl
             message = userRemoveFollowerResponse.message
             messageId = userRemoveFollowerResponse.messageId
+            object_ = userRemoveFollowerResponse.object_
             requestHash = userRemoveFollowerResponse.requestHash
             requestId = userRemoveFollowerResponse.requestId
             resultId = userRemoveFollowerResponse.resultId
@@ -956,16 +962,6 @@ private constructor(
         /** Sets [Builder.nextAction] to an arbitrary JSON value. */
         fun nextAction(nextAction: JsonField<NextAction>) = apply { this.nextAction = nextAction }
 
-        /**
-         * Sets the field to an arbitrary JSON value.
-         *
-         * Defaults to the following:
-         * ```kotlin
-         * JsonValue.from("x_write_action")
-         * ```
-         */
-        fun object_(object_: JsonValue) = apply { this.object_ = object_ }
-
         fun pollAfterMs(pollAfterMs: Long?) = pollAfterMs(JsonField.ofNullable(pollAfterMs))
 
         /** Alias for [Builder.pollAfterMs]. */
@@ -986,13 +982,13 @@ private constructor(
         /** Sets [Builder.result] to an arbitrary JSON value. */
         fun result(result: JsonField<Result>) = apply { this.result = result }
 
-        /** True only when a new attempt can reasonably succeed. */
+        /** True only when a new attempt is likely to succeed. */
         fun retryable(retryable: Boolean) = retryable(JsonField.of(retryable))
 
         /** Sets [Builder.retryable] to an arbitrary JSON value. */
         fun retryable(retryable: JsonField<Boolean>) = apply { this.retryable = retryable }
 
-        /** True only when no write was dispatched and a new idempotency key may be used. */
+        /** True only when X did not get the write and a new idempotency key may be used. */
         fun safeToRetry(safeToRetry: Boolean) = safeToRetry(JsonField.of(safeToRetry))
 
         /** Sets [Builder.safeToRetry] to an arbitrary JSON value. */
@@ -1112,6 +1108,7 @@ private constructor(
         /** Sets [Builder.expiresAt] to an arbitrary JSON value. */
         fun expiresAt(expiresAt: JsonField<OffsetDateTime>) = apply { this.expiresAt = expiresAt }
 
+        /** True when this answers a retry of an earlier request with the same Idempotency-Key. */
         fun idempotent(idempotent: Boolean) = idempotent(JsonField.of(idempotent))
 
         /** Sets [Builder.idempotent] to an arbitrary JSON value. */
@@ -1145,6 +1142,16 @@ private constructor(
 
         /** Sets [Builder.messageId] to an arbitrary JSON value. */
         fun messageId(messageId: JsonField<String>) = apply { this.messageId = messageId }
+
+        /**
+         * Sets the field to an arbitrary JSON value.
+         *
+         * Defaults to the following:
+         * ```kotlin
+         * JsonValue.from("x_write_action")
+         * ```
+         */
+        fun object_(object_: JsonValue) = apply { this.object_ = object_ }
 
         fun requestHash(requestHash: String) = requestHash(JsonField.of(requestHash))
 
@@ -1241,7 +1248,6 @@ private constructor(
                 checkRequired("charged", charged),
                 checkRequired("chargedCredits", chargedCredits),
                 checkRequired("nextAction", nextAction),
-                object_,
                 checkRequired("pollAfterMs", pollAfterMs),
                 checkRequired("request", request),
                 checkRequired("result", result),
@@ -1271,6 +1277,7 @@ private constructor(
                 mediaUrl,
                 message,
                 messageId,
+                object_,
                 requestHash,
                 requestId,
                 resultId,
@@ -1303,11 +1310,6 @@ private constructor(
         charged()
         chargedCredits()
         nextAction()?.validate()
-        _object_().let {
-            if (it != JsonValue.from("x_write_action")) {
-                throw XTwitterScraperInvalidDataException("'object_' is invalid, received $it")
-            }
-        }
         pollAfterMs()
         request().validate()
         result()?.validate()
@@ -1337,6 +1339,11 @@ private constructor(
         mediaUrl()
         message()
         messageId()
+        _object_().let {
+            if (it != JsonValue.from("x_write_action")) {
+                throw XTwitterScraperInvalidDataException("'object_' is invalid, received $it")
+            }
+        }
         requestHash()
         requestId()
         resultId()
@@ -1362,7 +1369,6 @@ private constructor(
             (if (charged.asKnown() == null) 0 else 1) +
             (if (chargedCredits.asKnown() == null) 0 else 1) +
             (nextAction.asKnown()?.validity() ?: 0) +
-            object_.let { if (it == JsonValue.from("x_write_action")) 1 else 0 } +
             (if (pollAfterMs.asKnown() == null) 0 else 1) +
             (request.asKnown()?.validity() ?: 0) +
             (result.asKnown()?.validity() ?: 0) +
@@ -1392,6 +1398,7 @@ private constructor(
             (if (mediaUrl.asKnown() == null) 0 else 1) +
             (if (message.asKnown() == null) 0 else 1) +
             (if (messageId.asKnown() == null) 0 else 1) +
+            object_.let { if (it == JsonValue.from("x_write_action")) 1 else 0 } +
             (if (requestHash.asKnown() == null) 0 else 1) +
             (if (requestId.asKnown() == null) 0 else 1) +
             (if (resultId.asKnown() == null) 0 else 1) +
@@ -1574,7 +1581,9 @@ private constructor(
                 additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(id, username, additionalProperties) }
+        private val hashCode: Int by lazy {
+            Objects.hash(id, username, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -1625,6 +1634,8 @@ private constructor(
 
             val LEAVE_COMMUNITY = of("leave_community")
 
+            val DELETE_DM = of("delete_dm")
+
             fun of(value: String) = Action(JsonField.of(value))
         }
 
@@ -1648,6 +1659,7 @@ private constructor(
             DELETE_COMMUNITY,
             JOIN_COMMUNITY,
             LEAVE_COMMUNITY,
+            DELETE_DM,
         }
 
         /**
@@ -1678,6 +1690,7 @@ private constructor(
             DELETE_COMMUNITY,
             JOIN_COMMUNITY,
             LEAVE_COMMUNITY,
+            DELETE_DM,
             /** An enum member indicating that [Action] was instantiated with an unknown value. */
             _UNKNOWN,
         }
@@ -1706,6 +1719,7 @@ private constructor(
                 DELETE_COMMUNITY -> Value.DELETE_COMMUNITY
                 JOIN_COMMUNITY -> Value.JOIN_COMMUNITY
                 LEAVE_COMMUNITY -> Value.LEAVE_COMMUNITY
+                DELETE_DM -> Value.DELETE_DM
                 else -> Value._UNKNOWN
             }
 
@@ -1735,6 +1749,7 @@ private constructor(
                 DELETE_COMMUNITY -> Known.DELETE_COMMUNITY
                 JOIN_COMMUNITY -> Known.JOIN_COMMUNITY
                 LEAVE_COMMUNITY -> Known.LEAVE_COMMUNITY
+                DELETE_DM -> Known.DELETE_DM
                 else -> throw XTwitterScraperInvalidDataException("Unknown Action: $value")
             }
 
@@ -1793,7 +1808,7 @@ private constructor(
 
     /**
      * plannedCredits is the approved maximum. chargedCredits comes from the settled credit ledger.
-     * Pending or failed writes are not charged.
+     * Xquik charges nothing for pending or failed writes.
      */
     class Billing
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
@@ -2211,7 +2226,11 @@ private constructor(
          */
         fun type(): Type = type.getRequired("type")
 
-        /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+        /**
+         * Milliseconds to wait before you poll or retry.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
         fun afterMs(): Long? = afterMs.getNullable("afterMs")
 
         /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
@@ -2299,6 +2318,7 @@ private constructor(
             /** Sets [Builder.type] to an arbitrary JSON value. */
             fun type(type: JsonField<Type>) = apply { this.type = type }
 
+            /** Milliseconds to wait before you poll or retry. */
             fun afterMs(afterMs: Long) = afterMs(JsonField.of(afterMs))
 
             /** Sets [Builder.afterMs] to an arbitrary JSON value. */
@@ -2827,7 +2847,9 @@ private constructor(
                 additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(hash, payload, additionalProperties) }
+        private val hashCode: Int by lazy {
+            Objects.hash(hash, payload, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -3136,7 +3158,9 @@ private constructor(
                 additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(id, state, type, additionalProperties) }
+        private val hashCode: Int by lazy {
+            Objects.hash(id, state, type, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -3574,7 +3598,9 @@ private constructor(
                 additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(id, type, additionalProperties) }
+        private val hashCode: Int by lazy {
+            Objects.hash(id, type, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -3799,7 +3825,6 @@ private constructor(
             charged == other.charged &&
             chargedCredits == other.chargedCredits &&
             nextAction == other.nextAction &&
-            object_ == other.object_ &&
             pollAfterMs == other.pollAfterMs &&
             request == other.request &&
             result == other.result &&
@@ -3829,6 +3854,7 @@ private constructor(
             mediaUrl == other.mediaUrl &&
             message == other.message &&
             messageId == other.messageId &&
+            object_ == other.object_ &&
             requestHash == other.requestHash &&
             requestId == other.requestId &&
             resultId == other.resultId &&
@@ -3847,7 +3873,6 @@ private constructor(
             charged,
             chargedCredits,
             nextAction,
-            object_,
             pollAfterMs,
             request,
             result,
@@ -3877,6 +3902,7 @@ private constructor(
             mediaUrl,
             message,
             messageId,
+            object_,
             requestHash,
             requestId,
             resultId,
@@ -3890,5 +3916,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "UserRemoveFollowerResponse{id=$id, account=$account, action=$action, billing=$billing, charged=$charged, chargedCredits=$chargedCredits, nextAction=$nextAction, object_=$object_, pollAfterMs=$pollAfterMs, request=$request, result=$result, retryable=$retryable, safeToRetry=$safeToRetry, sendDispatched=$sendDispatched, status=$status, statusUrl=$statusUrl, success=$success, target=$target, targetId=$targetId, terminal=$terminal, writeActionId=$writeActionId, communityId=$communityId, communityName=$communityName, completedAt=$completedAt, confirmationAttempts=$confirmationAttempts, confirmationCheckedAt=$confirmationCheckedAt, confirmedAt=$confirmedAt, createdAt=$createdAt, details=$details, error=$error, expiresAt=$expiresAt, idempotent=$idempotent, media=$media, mediaId=$mediaId, mediaUrl=$mediaUrl, message=$message, messageId=$messageId, requestHash=$requestHash, requestId=$requestId, resultId=$resultId, sendDispatchedAt=$sendDispatchedAt, tweetId=$tweetId, updatedAt=$updatedAt, additionalProperties=$additionalProperties}"
+        "UserRemoveFollowerResponse{id=$id, account=$account, action=$action, billing=$billing, charged=$charged, chargedCredits=$chargedCredits, nextAction=$nextAction, pollAfterMs=$pollAfterMs, request=$request, result=$result, retryable=$retryable, safeToRetry=$safeToRetry, sendDispatched=$sendDispatched, status=$status, statusUrl=$statusUrl, success=$success, target=$target, targetId=$targetId, terminal=$terminal, writeActionId=$writeActionId, communityId=$communityId, communityName=$communityName, completedAt=$completedAt, confirmationAttempts=$confirmationAttempts, confirmationCheckedAt=$confirmationCheckedAt, confirmedAt=$confirmedAt, createdAt=$createdAt, details=$details, error=$error, expiresAt=$expiresAt, idempotent=$idempotent, media=$media, mediaId=$mediaId, mediaUrl=$mediaUrl, message=$message, messageId=$messageId, object_=$object_, requestHash=$requestHash, requestId=$requestId, resultId=$resultId, sendDispatchedAt=$sendDispatchedAt, tweetId=$tweetId, updatedAt=$updatedAt, additionalProperties=$additionalProperties}"
 }

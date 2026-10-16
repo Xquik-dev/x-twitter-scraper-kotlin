@@ -141,7 +141,9 @@ private constructor(
          */
         fun addItem(item: RadarItem) = apply {
             items =
-                (items ?: JsonField.of(mutableListOf())).also { checkKnown("items", it).add(item) }
+                (items ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("items", it).add(item)
+                }
         }
 
         /** Opaque cursor for the next page (present only when hasMore is true). */

@@ -17,21 +17,21 @@ internal class TicketCreateResponseTest {
             TicketCreateResponse.builder()
                 .addAttachment(
                     TicketCreateResponse.Attachment.builder()
-                        .publicId("att_a1b2c3d4e5f6a1b2c3d4e5f6")
+                        .publicId("publicId")
                         .status(TicketCreateResponse.Attachment.Status.PENDING)
                         .build()
                 )
-                .publicId("tkt_a1b2c3d4e5f6a1b2c3d4e5f6")
+                .publicId("publicId")
                 .build()
 
         assertThat(ticketCreateResponse.attachments())
             .containsExactly(
                 TicketCreateResponse.Attachment.builder()
-                    .publicId("att_a1b2c3d4e5f6a1b2c3d4e5f6")
+                    .publicId("publicId")
                     .status(TicketCreateResponse.Attachment.Status.PENDING)
                     .build()
             )
-        assertThat(ticketCreateResponse.publicId()).isEqualTo("tkt_a1b2c3d4e5f6a1b2c3d4e5f6")
+        assertThat(ticketCreateResponse.publicId()).isEqualTo("publicId")
     }
 
     @Test
@@ -41,11 +41,11 @@ internal class TicketCreateResponseTest {
             TicketCreateResponse.builder()
                 .addAttachment(
                     TicketCreateResponse.Attachment.builder()
-                        .publicId("att_a1b2c3d4e5f6a1b2c3d4e5f6")
+                        .publicId("publicId")
                         .status(TicketCreateResponse.Attachment.Status.PENDING)
                         .build()
                 )
-                .publicId("tkt_a1b2c3d4e5f6a1b2c3d4e5f6")
+                .publicId("publicId")
                 .build()
 
         val roundtrippedTicketCreateResponse =

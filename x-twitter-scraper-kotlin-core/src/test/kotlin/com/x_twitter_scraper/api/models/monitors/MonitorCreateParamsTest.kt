@@ -14,8 +14,8 @@ internal class MonitorCreateParamsTest {
     fun create() {
         MonitorCreateParams.builder()
             .addEventType(EventType.TWEET_NEW)
-            .addEventType(EventType.TWEET_REPLY)
-            .username("elonmusk")
+            .username("username")
+            .name("Launch watch")
             .build()
     }
 
@@ -24,13 +24,14 @@ internal class MonitorCreateParamsTest {
         val params =
             MonitorCreateParams.builder()
                 .addEventType(EventType.TWEET_NEW)
-                .addEventType(EventType.TWEET_REPLY)
-                .username("elonmusk")
+                .username("username")
+                .name("Launch watch")
                 .build()
 
         val body = params._body()
 
-        assertThat(body.eventTypes()).containsExactly(EventType.TWEET_NEW, EventType.TWEET_REPLY)
-        assertThat(body.username()).isEqualTo("elonmusk")
+        assertThat(body.eventTypes()).containsExactly(EventType.TWEET_NEW)
+        assertThat(body.username()).isEqualTo("username")
+        assertThat(body.name()).isEqualTo("Launch watch")
     }
 }

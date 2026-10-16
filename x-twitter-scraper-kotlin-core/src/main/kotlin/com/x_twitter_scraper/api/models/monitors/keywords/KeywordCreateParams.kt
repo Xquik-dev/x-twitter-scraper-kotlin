@@ -44,12 +44,19 @@ private constructor(
     fun eventTypes(): List<EventType> = body.eventTypes()
 
     /**
-     * X search query to monitor. Whitespace is normalized.
+     * X search query to monitor. Xquik normalizes whitespace.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null.
      */
     fun query(): String = body.query()
+
+    /**
+     * Your own label for the keyword monitor. Its events carry it as monitorName.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun name(): String? = body.name()
 
     /**
      * Returns the raw JSON value of [eventTypes].
@@ -64,6 +71,13 @@ private constructor(
      * Unlike [query], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _query(): JsonField<String> = body._query()
+
+    /**
+     * Returns the raw JSON value of [name].
+     *
+     * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _name(): JsonField<String> = body._name()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -120,11 +134,17 @@ private constructor(
          */
         fun addEventType(eventType: EventType) = apply { body.addEventType(eventType) }
 
-        /** X search query to monitor. Whitespace is normalized. */
+        /** X search query to monitor. Xquik normalizes whitespace. */
         fun query(query: String) = apply { body.query(query) }
 
         /** Sets [Builder.query] to an arbitrary JSON value. */
         fun query(query: JsonField<String>) = apply { body.query(query) }
+
+        /** Your own label for the keyword monitor. Its events carry it as monitorName. */
+        fun name(name: String) = apply { body.name(name) }
+
+        /** Sets [Builder.name] to an arbitrary JSON value. */
+        fun name(name: JsonField<String>) = apply { body.name(name) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -275,6 +295,7 @@ private constructor(
     private constructor(
         private val eventTypes: JsonField<List<EventType>>,
         private val query: JsonField<String>,
+        private val name: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -284,7 +305,8 @@ private constructor(
             @ExcludeMissing
             eventTypes: JsonField<List<EventType>> = JsonMissing.of(),
             @JsonProperty("query") @ExcludeMissing query: JsonField<String> = JsonMissing.of(),
-        ) : this(eventTypes, query, mutableMapOf())
+            @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+        ) : this(eventTypes, query, name, mutableMapOf())
 
         /**
          * Array of event types to subscribe to.
@@ -295,12 +317,19 @@ private constructor(
         fun eventTypes(): List<EventType> = eventTypes.getRequired("eventTypes")
 
         /**
-         * X search query to monitor. Whitespace is normalized.
+         * X search query to monitor. Xquik normalizes whitespace.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
          */
         fun query(): String = query.getRequired("query")
+
+        /**
+         * Your own label for the keyword monitor. Its events carry it as monitorName.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun name(): String? = name.getNullable("name")
 
         /**
          * Returns the raw JSON value of [eventTypes].
@@ -317,6 +346,13 @@ private constructor(
          * Unlike [query], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("query") @ExcludeMissing fun _query(): JsonField<String> = query
+
+        /**
+         * Returns the raw JSON value of [name].
+         *
+         * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -349,11 +385,13 @@ private constructor(
 
             private var eventTypes: JsonField<MutableList<EventType>>? = null
             private var query: JsonField<String>? = null
+            private var name: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(body: Body) = apply {
                 eventTypes = body.eventTypes.map { it.toMutableList() }
                 query = body.query
+                name = body.name
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
@@ -377,11 +415,17 @@ private constructor(
                     }
             }
 
-            /** X search query to monitor. Whitespace is normalized. */
+            /** X search query to monitor. Xquik normalizes whitespace. */
             fun query(query: String) = query(JsonField.of(query))
 
             /** Sets [Builder.query] to an arbitrary JSON value. */
             fun query(query: JsonField<String>) = apply { this.query = query }
+
+            /** Your own label for the keyword monitor. Its events carry it as monitorName. */
+            fun name(name: String) = name(JsonField.of(name))
+
+            /** Sets [Builder.name] to an arbitrary JSON value. */
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -419,6 +463,7 @@ private constructor(
                 Body(
                     checkRequired("eventTypes", eventTypes).map { it.toImmutable() },
                     checkRequired("query", query),
+                    name,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -441,6 +486,7 @@ private constructor(
 
             eventTypes().forEach { it.validate() }
             query()
+            name()
             validated = true
         }
 
@@ -454,7 +500,8 @@ private constructor(
 
         internal fun validity(): Int =
             (eventTypes.asKnown()?.sumOf { it.validity() } ?: 0) +
-                (if (query.asKnown() == null) 0 else 1)
+                (if (query.asKnown() == null) 0 else 1) +
+                (if (name.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -464,15 +511,18 @@ private constructor(
             return other is Body &&
                 eventTypes == other.eventTypes &&
                 query == other.query &&
+                name == other.name &&
                 additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(eventTypes, query, additionalProperties) }
+        private val hashCode: Int by lazy {
+            Objects.hash(eventTypes, query, name, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{eventTypes=$eventTypes, query=$query, additionalProperties=$additionalProperties}"
+            "Body{eventTypes=$eventTypes, query=$query, name=$name, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

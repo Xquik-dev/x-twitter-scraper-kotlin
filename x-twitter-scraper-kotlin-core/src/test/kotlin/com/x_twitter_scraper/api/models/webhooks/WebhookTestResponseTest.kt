@@ -14,18 +14,18 @@ internal class WebhookTestResponseTest {
     @Test
     fun create() {
         val webhookTestResponse =
-            WebhookTestResponse.builder().statusCode(200L).success(true).error("").build()
+            WebhookTestResponse.builder().statusCode(0L).success(true).error("error").build()
 
-        assertThat(webhookTestResponse.statusCode()).isEqualTo(200L)
+        assertThat(webhookTestResponse.statusCode()).isEqualTo(0L)
         assertThat(webhookTestResponse.success()).isEqualTo(true)
-        assertThat(webhookTestResponse.error()).isEqualTo("")
+        assertThat(webhookTestResponse.error()).isEqualTo("error")
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
         val webhookTestResponse =
-            WebhookTestResponse.builder().statusCode(200L).success(true).error("").build()
+            WebhookTestResponse.builder().statusCode(0L).success(true).error("error").build()
 
         val roundtrippedWebhookTestResponse =
             jsonMapper.readValue(

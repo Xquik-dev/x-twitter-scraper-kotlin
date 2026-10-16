@@ -34,7 +34,6 @@ private constructor(
     private val charged: JsonField<Boolean>,
     private val chargedCredits: JsonField<String>,
     private val nextAction: JsonField<NextAction>,
-    private val object_: JsonValue,
     private val pollAfterMs: JsonField<Long>,
     private val request: JsonField<Request>,
     private val result: JsonField<Result>,
@@ -64,6 +63,7 @@ private constructor(
     private val mediaUrl: JsonField<String>,
     private val message: JsonField<String>,
     private val messageId: JsonField<String>,
+    private val object_: JsonValue,
     private val requestHash: JsonField<String>,
     private val requestId: JsonField<String>,
     private val resultId: JsonField<String>,
@@ -86,7 +86,6 @@ private constructor(
         @JsonProperty("nextAction")
         @ExcludeMissing
         nextAction: JsonField<NextAction> = JsonMissing.of(),
-        @JsonProperty("object") @ExcludeMissing object_: JsonValue = JsonMissing.of(),
         @JsonProperty("pollAfterMs")
         @ExcludeMissing
         pollAfterMs: JsonField<Long> = JsonMissing.of(),
@@ -142,6 +141,7 @@ private constructor(
         @JsonProperty("mediaUrl") @ExcludeMissing mediaUrl: JsonField<String> = JsonMissing.of(),
         @JsonProperty("message") @ExcludeMissing message: JsonField<String> = JsonMissing.of(),
         @JsonProperty("messageId") @ExcludeMissing messageId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("object") @ExcludeMissing object_: JsonValue = JsonMissing.of(),
         @JsonProperty("requestHash")
         @ExcludeMissing
         requestHash: JsonField<String> = JsonMissing.of(),
@@ -162,7 +162,6 @@ private constructor(
         charged,
         chargedCredits,
         nextAction,
-        object_,
         pollAfterMs,
         request,
         result,
@@ -192,6 +191,7 @@ private constructor(
         mediaUrl,
         message,
         messageId,
+        object_,
         requestHash,
         requestId,
         resultId,
@@ -247,14 +247,6 @@ private constructor(
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun nextAction(): NextAction? = nextAction.getNullable("nextAction")
-
-    /**
-     * Expected to always return the following:
-     * ```kotlin
-     * JsonValue.from("x_write_action")
-     * ```
-     */
-    @JsonProperty("object") @ExcludeMissing fun _object_(): JsonValue = object_
 
     /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun pollAfterMs(): Long? = pollAfterMs.getNullable("pollAfterMs")
@@ -421,6 +413,16 @@ private constructor(
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun messageId(): String? = messageId.getNullable("messageId")
+
+    /**
+     * Expected to always return the following: ```kotlin JsonValue.from("x_write_action") ```
+     *
+     * Expected to always return the following:
+     * ```kotlin
+     * JsonValue.from("x_write_action")
+     * ```
+     */
+    @JsonProperty("object") @ExcludeMissing fun _object_(): JsonValue = object_
 
     /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun requestHash(): String? = requestHash.getNullable("requestHash")
@@ -831,7 +833,6 @@ private constructor(
         private var charged: JsonField<Boolean>? = null
         private var chargedCredits: JsonField<String>? = null
         private var nextAction: JsonField<NextAction>? = null
-        private var object_: JsonValue = JsonValue.from("x_write_action")
         private var pollAfterMs: JsonField<Long>? = null
         private var request: JsonField<Request>? = null
         private var result: JsonField<Result>? = null
@@ -861,6 +862,7 @@ private constructor(
         private var mediaUrl: JsonField<String> = JsonMissing.of()
         private var message: JsonField<String> = JsonMissing.of()
         private var messageId: JsonField<String> = JsonMissing.of()
+        private var object_: JsonValue = JsonValue.from("x_write_action")
         private var requestHash: JsonField<String> = JsonMissing.of()
         private var requestId: JsonField<String> = JsonMissing.of()
         private var resultId: JsonField<String> = JsonMissing.of()
@@ -877,7 +879,6 @@ private constructor(
             charged = dmDeleteMessageResponse.charged
             chargedCredits = dmDeleteMessageResponse.chargedCredits
             nextAction = dmDeleteMessageResponse.nextAction
-            object_ = dmDeleteMessageResponse.object_
             pollAfterMs = dmDeleteMessageResponse.pollAfterMs
             request = dmDeleteMessageResponse.request
             result = dmDeleteMessageResponse.result
@@ -907,6 +908,7 @@ private constructor(
             mediaUrl = dmDeleteMessageResponse.mediaUrl
             message = dmDeleteMessageResponse.message
             messageId = dmDeleteMessageResponse.messageId
+            object_ = dmDeleteMessageResponse.object_
             requestHash = dmDeleteMessageResponse.requestHash
             requestId = dmDeleteMessageResponse.requestId
             resultId = dmDeleteMessageResponse.resultId
@@ -958,16 +960,6 @@ private constructor(
 
         /** Sets [Builder.nextAction] to an arbitrary JSON value. */
         fun nextAction(nextAction: JsonField<NextAction>) = apply { this.nextAction = nextAction }
-
-        /**
-         * Sets the field to an arbitrary JSON value.
-         *
-         * Defaults to the following:
-         * ```kotlin
-         * JsonValue.from("x_write_action")
-         * ```
-         */
-        fun object_(object_: JsonValue) = apply { this.object_ = object_ }
 
         fun pollAfterMs(pollAfterMs: Long?) = pollAfterMs(JsonField.ofNullable(pollAfterMs))
 
@@ -1150,6 +1142,16 @@ private constructor(
         /** Sets [Builder.messageId] to an arbitrary JSON value. */
         fun messageId(messageId: JsonField<String>) = apply { this.messageId = messageId }
 
+        /**
+         * Sets the field to an arbitrary JSON value.
+         *
+         * Defaults to the following:
+         * ```kotlin
+         * JsonValue.from("x_write_action")
+         * ```
+         */
+        fun object_(object_: JsonValue) = apply { this.object_ = object_ }
+
         fun requestHash(requestHash: String) = requestHash(JsonField.of(requestHash))
 
         /** Sets [Builder.requestHash] to an arbitrary JSON value. */
@@ -1245,7 +1247,6 @@ private constructor(
                 checkRequired("charged", charged),
                 checkRequired("chargedCredits", chargedCredits),
                 checkRequired("nextAction", nextAction),
-                object_,
                 checkRequired("pollAfterMs", pollAfterMs),
                 checkRequired("request", request),
                 checkRequired("result", result),
@@ -1275,6 +1276,7 @@ private constructor(
                 mediaUrl,
                 message,
                 messageId,
+                object_,
                 requestHash,
                 requestId,
                 resultId,
@@ -1307,11 +1309,6 @@ private constructor(
         charged()
         chargedCredits()
         nextAction()?.validate()
-        _object_().let {
-            if (it != JsonValue.from("x_write_action")) {
-                throw XTwitterScraperInvalidDataException("'object_' is invalid, received $it")
-            }
-        }
         pollAfterMs()
         request().validate()
         result()?.validate()
@@ -1341,6 +1338,11 @@ private constructor(
         mediaUrl()
         message()
         messageId()
+        _object_().let {
+            if (it != JsonValue.from("x_write_action")) {
+                throw XTwitterScraperInvalidDataException("'object_' is invalid, received $it")
+            }
+        }
         requestHash()
         requestId()
         resultId()
@@ -1366,7 +1368,6 @@ private constructor(
             (if (charged.asKnown() == null) 0 else 1) +
             (if (chargedCredits.asKnown() == null) 0 else 1) +
             (nextAction.asKnown()?.validity() ?: 0) +
-            object_.let { if (it == JsonValue.from("x_write_action")) 1 else 0 } +
             (if (pollAfterMs.asKnown() == null) 0 else 1) +
             (request.asKnown()?.validity() ?: 0) +
             (result.asKnown()?.validity() ?: 0) +
@@ -1396,6 +1397,7 @@ private constructor(
             (if (mediaUrl.asKnown() == null) 0 else 1) +
             (if (message.asKnown() == null) 0 else 1) +
             (if (messageId.asKnown() == null) 0 else 1) +
+            object_.let { if (it == JsonValue.from("x_write_action")) 1 else 0 } +
             (if (requestHash.asKnown() == null) 0 else 1) +
             (if (requestId.asKnown() == null) 0 else 1) +
             (if (resultId.asKnown() == null) 0 else 1) +
@@ -3822,7 +3824,6 @@ private constructor(
             charged == other.charged &&
             chargedCredits == other.chargedCredits &&
             nextAction == other.nextAction &&
-            object_ == other.object_ &&
             pollAfterMs == other.pollAfterMs &&
             request == other.request &&
             result == other.result &&
@@ -3852,6 +3853,7 @@ private constructor(
             mediaUrl == other.mediaUrl &&
             message == other.message &&
             messageId == other.messageId &&
+            object_ == other.object_ &&
             requestHash == other.requestHash &&
             requestId == other.requestId &&
             resultId == other.resultId &&
@@ -3870,7 +3872,6 @@ private constructor(
             charged,
             chargedCredits,
             nextAction,
-            object_,
             pollAfterMs,
             request,
             result,
@@ -3900,6 +3901,7 @@ private constructor(
             mediaUrl,
             message,
             messageId,
+            object_,
             requestHash,
             requestId,
             resultId,
@@ -3913,5 +3915,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "DmDeleteMessageResponse{id=$id, account=$account, action=$action, billing=$billing, charged=$charged, chargedCredits=$chargedCredits, nextAction=$nextAction, object_=$object_, pollAfterMs=$pollAfterMs, request=$request, result=$result, retryable=$retryable, safeToRetry=$safeToRetry, sendDispatched=$sendDispatched, status=$status, statusUrl=$statusUrl, success=$success, target=$target, targetId=$targetId, terminal=$terminal, writeActionId=$writeActionId, communityId=$communityId, communityName=$communityName, completedAt=$completedAt, confirmationAttempts=$confirmationAttempts, confirmationCheckedAt=$confirmationCheckedAt, confirmedAt=$confirmedAt, createdAt=$createdAt, details=$details, error=$error, expiresAt=$expiresAt, idempotent=$idempotent, media=$media, mediaId=$mediaId, mediaUrl=$mediaUrl, message=$message, messageId=$messageId, requestHash=$requestHash, requestId=$requestId, resultId=$resultId, sendDispatchedAt=$sendDispatchedAt, tweetId=$tweetId, updatedAt=$updatedAt, additionalProperties=$additionalProperties}"
+        "DmDeleteMessageResponse{id=$id, account=$account, action=$action, billing=$billing, charged=$charged, chargedCredits=$chargedCredits, nextAction=$nextAction, pollAfterMs=$pollAfterMs, request=$request, result=$result, retryable=$retryable, safeToRetry=$safeToRetry, sendDispatched=$sendDispatched, status=$status, statusUrl=$statusUrl, success=$success, target=$target, targetId=$targetId, terminal=$terminal, writeActionId=$writeActionId, communityId=$communityId, communityName=$communityName, completedAt=$completedAt, confirmationAttempts=$confirmationAttempts, confirmationCheckedAt=$confirmationCheckedAt, confirmedAt=$confirmedAt, createdAt=$createdAt, details=$details, error=$error, expiresAt=$expiresAt, idempotent=$idempotent, media=$media, mediaId=$mediaId, mediaUrl=$mediaUrl, message=$message, messageId=$messageId, object_=$object_, requestHash=$requestHash, requestId=$requestId, resultId=$resultId, sendDispatchedAt=$sendDispatchedAt, tweetId=$tweetId, updatedAt=$updatedAt, additionalProperties=$additionalProperties}"
 }
