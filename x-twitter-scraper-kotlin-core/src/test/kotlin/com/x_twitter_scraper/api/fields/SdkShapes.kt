@@ -393,7 +393,8 @@ internal class SdkShapes(private val client: XTwitterScraperClient = recordingCl
                     requires != null -> {
                         val (name, dependency) = requires.destructured
                         dependencies.getOrPut(model) { mutableMapOf() }[name] = dependency
-                        set(builder, name, Sample.MISSING)
+                        if (name !in values) throw e
+                        return build(model, values - name)
                     }
                     else -> throw e
                 }
