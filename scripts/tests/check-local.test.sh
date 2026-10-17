@@ -107,7 +107,7 @@ EOF
 Not a script.
 EOF
     sandbox_git add --all
-    save_repo "Add files"
+    sandbox_git commit --quiet --message "Add files"
 
     run_in_repo bin/check-local --no-status
 
@@ -251,7 +251,7 @@ echo "coverage" >>"$FAKE_LOGS/order"
 echo "left behind" >leftover.txt
 EOF
     sandbox_git add --all
-    save_repo "Use a check that changes the tree"
+    sandbox_git commit --quiet --message "Use a check that changes the tree"
     head="$(sandbox_git rev-parse HEAD)"
 
     run_in_repo bin/check-local

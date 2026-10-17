@@ -28,8 +28,8 @@ fail() {
 
 command -v jq >/dev/null 2>&1 || fail "jq is not installed. Install it, then rerun."
 
-audit_workspace="$(mktemp -d "${TMPDIR:-/tmp}/xquik-kotlin-audit.XXXXXX")"
-temp_paths+=("$audit_workspace")
+declare audit_workspace
+temp_path audit_workspace xquik-kotlin-audit
 
 today="$(date -u +%Y-%m-%d)"
 latest_recheck="$(jq -nr 'now + 30 * 86400 | strftime("%Y-%m-%d")')"

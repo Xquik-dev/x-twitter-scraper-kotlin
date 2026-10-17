@@ -191,27 +191,10 @@ EOF
     run_env=("FAKE_MAVEN_FIXTURE=$sandbox/maven-fixture")
     commit_repo
     add_origin
-    fake git <<EOF
-#!/bin/sh
-case "\$1" in
-    fetch) exit 0 ;;
-    ls-remote)
-        exec "$(command -v git)" --git-dir="$sandbox/origin.git" for-each-ref \
-            --format='%(objectname) %(refname)' "\$4"
-        ;;
-    push)
-        cp -R -f "$sandbox_repo/.git/objects/." "$sandbox/origin.git/objects/"
-        revision="\$("$(command -v git)" rev-parse "\$3")"
-        exec "$(command -v git)" --git-dir="$sandbox/origin.git" update-ref "\$3" "\$revision"
-        ;;
-    *) exec "$(command -v git)" "\$@" ;;
-esac
-EOF
 }
 
 origin_tags() {
-    sandbox_git --git-dir="$sandbox/origin.git" for-each-ref \
-        --format='%(refname)%(if)%(tag)%(then)%0a%(refname)^{}%(end)' refs/tags
+    sandbox_git ls-remote --tags origin | sed 's/^[^[:space:]]*[[:space:]]*//'
 }
 
 assert_nothing_released() {
@@ -380,7 +363,7 @@ test_a_central_error_stops_the_release_before_the_checks() {
 test_a_tag_that_origin_already_has_stops_the_run() {
     prepare_release
     sandbox_git tag --annotate v9.9.9 --message v9.9.9
-    sync_origin refs/tags/v9.9.9
+    sandbox_git push --quiet origin refs/tags/v9.9.9
     sandbox_git tag --delete v9.9.9 >/dev/null
 
     run_in_repo bin/release-local --dry-run
@@ -405,8 +388,7 @@ EOF
 
 test_a_branch_other_than_main_stops_the_run() {
     prepare_release
-    sandbox_git update-ref refs/heads/topic HEAD
-    sandbox_git symbolic-ref HEAD refs/heads/topic
+    sandbox_git switch --quiet --create topic
 
     run_in_repo bin/release-local --dry-run
 
@@ -420,7 +402,7 @@ test_a_main_that_origin_lacks_stops_the_run() {
 A commit that origin lacks.
 EOF
     sandbox_git add --all
-    save_repo "Add a file"
+    sandbox_git commit --quiet --message "Add a file"
 
     run_in_repo bin/release-local --dry-run
 
@@ -438,8 +420,8 @@ test_a_version_without_a_changelog_section_stops_the_run() {
 * Older note.
 EOF
     sandbox_git add --all
-    save_repo "Drop the changelog section"
-    sync_origin
+    sandbox_git commit --quiet --message "Drop the changelog section"
+    sandbox_git push --quiet origin main
 
     run_in_repo bin/release-local --dry-run
 
@@ -471,8 +453,8 @@ test_release_local_removes_read_only_temp_paths_after_a_failing_step() {
     prepare_release
     replace_step "$sandbox_repo/scripts/audit"
     sandbox_git add --all
-    save_repo "Replace the audit step"
-    sync_origin
+    sandbox_git commit --quiet --message "Replace the audit step"
+    sandbox_git push --quiet origin main
 
     run_in_repo bin/release-local --dry-run
 
@@ -485,8 +467,8 @@ test_release_local_removes_read_only_temp_paths_after_sigterm() {
     prepare_release
     replace_step "$sandbox_repo/scripts/audit"
     sandbox_git add --all
-    save_repo "Replace the audit step"
-    sync_origin
+    sandbox_git commit --quiet --message "Replace the audit step"
+    sandbox_git push --quiet origin main
     run_env+=("FAKE_STEP_STATUS=wait")
 
     run_in_repo_and_terminate_at step-ready bin/release-local --dry-run

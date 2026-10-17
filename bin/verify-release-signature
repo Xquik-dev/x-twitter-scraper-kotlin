@@ -27,8 +27,8 @@ expected_fingerprint="6965E561C0ACEE32060AB961D2037E4157E62A59"
 verification_timeout_minutes=20
 retry_delay_seconds=15
 max_attempts=$((verification_timeout_minutes * 60 / retry_delay_seconds))
-verification_workspace="$(mktemp -d "${TMPDIR:-/tmp}/xquik-kotlin-verify.XXXXXX")"
-temp_paths+=("$verification_workspace")
+declare verification_workspace
+temp_path verification_workspace xquik-kotlin-verify
 verification_gnupg="$verification_workspace/gnupg"
 mkdir -m 700 "$verification_gnupg"
 

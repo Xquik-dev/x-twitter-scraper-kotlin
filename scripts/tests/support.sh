@@ -8,7 +8,6 @@ tests_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
 readonly tests_root
 
 source "$tests_root/scripts/lib/temp-paths.bash"
-trap remove_temp_paths EXIT
 exit_on_signals
 
 readonly local_tools=(bash git jq)
@@ -17,8 +16,7 @@ readonly remote_tools=(codeql curl gh gpg java security shellcheck uvx)
 
 create_sandbox() {
     local tool tool_path
-    sandbox="$(mktemp -d "${TMPDIR:-/tmp}/xquik-kotlin-script-test.XXXXXX")"
-    temp_paths+=("$sandbox")
+    temp_path sandbox xquik-kotlin-script-test
     sandbox="$(cd -- "$sandbox" && pwd -P)"
     sandbox_pid=""
     sandbox_repo="$sandbox/repo"
@@ -91,34 +89,13 @@ sandbox_git() {
 commit_repo() {
     sandbox_git init --quiet --initial-branch=main
     sandbox_git add --all
-    save_repo "Test commit"
-}
-
-save_repo() {
-    local tree parent revision
-    tree="$(sandbox_git write-tree)"
-    parent="$(sandbox_git rev-parse --verify HEAD 2>/dev/null || true)"
-    if [[ -n "$parent" ]]; then
-        revision="$(sandbox_git commit-tree "$tree" -p "$parent" -m "$1")"
-    else
-        revision="$(sandbox_git commit-tree "$tree" -m "Test commit")"
-    fi
-    sandbox_git update-ref HEAD "$revision"
-}
-
-sync_origin() {
-    local ref="${1:-refs/heads/main}"
-    cp -R -f "$sandbox_repo/.git/objects/." "$sandbox/origin.git/objects/"
-    sandbox_git --git-dir="$sandbox/origin.git" update-ref "$ref" "$(sandbox_git rev-parse "$ref")"
-    if [[ "$ref" == refs/heads/main ]]; then
-        sandbox_git update-ref refs/remotes/origin/main "$(sandbox_git rev-parse "$ref")"
-    fi
+    sandbox_git commit --quiet --message "Test commit"
 }
 
 add_origin() {
     sandbox_git init --quiet --bare "$sandbox/origin.git"
     sandbox_git remote add origin "$sandbox/origin.git"
-    sync_origin
+    sandbox_git push --quiet origin main
 }
 
 exec_in_repo() {

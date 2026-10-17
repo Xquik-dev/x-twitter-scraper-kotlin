@@ -34,8 +34,8 @@ check_label=""
 check_hint="Fix the error above, then rerun."
 passed_checks=()
 status_sha=""
-workspace="$(mktemp -d "${TMPDIR:-/tmp}/xquik-kotlin-check.XXXXXX")"
-temp_paths+=("$workspace")
+declare workspace
+temp_path workspace xquik-kotlin-check
 
 post_status() {
     if [[ -z "$status_sha" ]]; then

@@ -49,8 +49,8 @@ if [[ "$dry_run" == false ]]; then
         refuse "MAVEN_SIGNING_KEYCHAIN_SERVICE is unset or empty. Set it to the Keychain service that holds the signing key passphrase, then run bin/release-local again."
 fi
 
-workspace="$(mktemp -d "${TMPDIR:-/tmp}/xquik-kotlin-release.XXXXXX")"
-temp_paths+=("$workspace")
+declare workspace
+temp_path workspace xquik-kotlin-release
 
 central_has_version() {
     local status

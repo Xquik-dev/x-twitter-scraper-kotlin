@@ -33,8 +33,8 @@ fail() {
     exit 1
 }
 
-coverage_workspace="$(mktemp -d "${TMPDIR:-/tmp}/xquik-kotlin-api-coverage.XXXXXX")"
-temp_paths+=("$coverage_workspace")
+declare coverage_workspace
+temp_path coverage_workspace xquik-kotlin-api-coverage
 readonly spec_file="$coverage_workspace/spec.json"
 readonly requests_file="$coverage_workspace/requests.json"
 
