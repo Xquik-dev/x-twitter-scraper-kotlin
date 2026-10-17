@@ -10,17 +10,27 @@ import com.x_twitter_scraper.api.core.checkRequired
 import com.x_twitter_scraper.api.core.handlers.errorBodyHandler
 import com.x_twitter_scraper.api.core.handlers.errorHandler
 import com.x_twitter_scraper.api.core.handlers.jsonHandler
+import com.x_twitter_scraper.api.core.handlers.mapJson
+import com.x_twitter_scraper.api.core.handlers.sseHandler
 import com.x_twitter_scraper.api.core.http.HttpMethod
 import com.x_twitter_scraper.api.core.http.HttpRequest
 import com.x_twitter_scraper.api.core.http.HttpResponse
 import com.x_twitter_scraper.api.core.http.HttpResponse.Handler
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
+import com.x_twitter_scraper.api.core.http.StreamResponse
+import com.x_twitter_scraper.api.core.http.asFlow
+import com.x_twitter_scraper.api.core.http.map
 import com.x_twitter_scraper.api.core.http.parseable
 import com.x_twitter_scraper.api.core.prepareAsync
+import com.x_twitter_scraper.api.models.events.Event
 import com.x_twitter_scraper.api.models.events.EventDetail
 import com.x_twitter_scraper.api.models.events.EventListParams
 import com.x_twitter_scraper.api.models.events.EventListResponse
 import com.x_twitter_scraper.api.models.events.EventRetrieveParams
+import com.x_twitter_scraper.api.models.events.EventStreamParams
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
 
 /** Activity events from monitored accounts */
 class EventServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -44,6 +54,11 @@ class EventServiceAsyncImpl internal constructor(private val clientOptions: Clie
         params: EventListParams,
         requestOptions: RequestOptions,
     ): EventListResponse = withRawResponse().list(params, requestOptions).parse()
+
+    override fun stream(params: EventStreamParams, requestOptions: RequestOptions): Flow<Event> =
+        flow {
+            emitAll(withRawResponse().stream(params, requestOptions).parse())
+        }
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         EventServiceAsync.WithRawResponse {
@@ -110,6 +125,38 @@ class EventServiceAsyncImpl internal constructor(private val clientOptions: Clie
                             it.validate()
                         }
                     }
+            }
+        }
+
+        private val streamHandler: Handler<StreamResponse<Event>> =
+            sseHandler().mapJson<Event>(clientOptions.jsonMapper)
+
+        override suspend fun stream(
+            params: EventStreamParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<Flow<Event>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("events", "stream")
+                    .putHeader("Accept", "text/event-stream")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions =
+                requestOptions.applyDefaults(RequestOptions.forStream(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                streamHandler
+                    .handle(response)
+                    .let { streamResponse ->
+                        if (requestOptions.responseValidation!!) {
+                            streamResponse.map { it.validate() }
+                        } else {
+                            streamResponse
+                        }
+                    }
+                    .asFlow()
             }
         }
     }

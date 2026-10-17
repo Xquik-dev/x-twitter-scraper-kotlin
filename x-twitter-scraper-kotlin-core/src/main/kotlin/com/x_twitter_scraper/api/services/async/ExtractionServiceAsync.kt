@@ -9,6 +9,8 @@ import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.http.HttpResponse
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
+import com.x_twitter_scraper.api.models.extractions.ExtractionCancelParams
+import com.x_twitter_scraper.api.models.extractions.ExtractionCancelResponse
 import com.x_twitter_scraper.api.models.extractions.ExtractionEstimateCostParams
 import com.x_twitter_scraper.api.models.extractions.ExtractionEstimateCostResponse
 import com.x_twitter_scraper.api.models.extractions.ExtractionExportResultsParams
@@ -87,6 +89,23 @@ interface ExtractionServiceAsync {
         params: ExtractionRunParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ExtractionRunResponse
+
+    /** Cancels an active extraction without charging or saving rows. */
+    suspend fun cancel(
+        id: String,
+        params: ExtractionCancelParams = ExtractionCancelParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ExtractionCancelResponse = cancel(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see cancel */
+    suspend fun cancel(
+        params: ExtractionCancelParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ExtractionCancelResponse
+
+    /** @see cancel */
+    suspend fun cancel(id: String, requestOptions: RequestOptions): ExtractionCancelResponse =
+        cancel(id, ExtractionCancelParams.none(), requestOptions)
 
     /**
      * A view of [ExtractionServiceAsync] that provides access to raw HTTP responses for each
@@ -182,5 +201,32 @@ interface ExtractionServiceAsync {
             params: ExtractionRunParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ExtractionRunResponse>
+
+        /**
+         * Returns a raw HTTP response for `delete /extractions/{id}`, but is otherwise the same as
+         * [ExtractionServiceAsync.cancel].
+         */
+        @MustBeClosed
+        suspend fun cancel(
+            id: String,
+            params: ExtractionCancelParams = ExtractionCancelParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ExtractionCancelResponse> =
+            cancel(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see cancel */
+        @MustBeClosed
+        suspend fun cancel(
+            params: ExtractionCancelParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ExtractionCancelResponse>
+
+        /** @see cancel */
+        @MustBeClosed
+        suspend fun cancel(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<ExtractionCancelResponse> =
+            cancel(id, ExtractionCancelParams.none(), requestOptions)
     }
 }

@@ -43,6 +43,8 @@ import com.x_twitter_scraper.api.services.async.x.AccountConnectionChallengeServ
 import com.x_twitter_scraper.api.services.async.x.AccountConnectionChallengeServiceAsyncImpl
 import com.x_twitter_scraper.api.services.async.x.AccountServiceAsync
 import com.x_twitter_scraper.api.services.async.x.AccountServiceAsyncImpl
+import com.x_twitter_scraper.api.services.async.x.AnalysisServiceAsync
+import com.x_twitter_scraper.api.services.async.x.AnalysisServiceAsyncImpl
 import com.x_twitter_scraper.api.services.async.x.BookmarkServiceAsync
 import com.x_twitter_scraper.api.services.async.x.BookmarkServiceAsyncImpl
 import com.x_twitter_scraper.api.services.async.x.BroadcastServiceAsync
@@ -117,6 +119,8 @@ class XServiceAsyncImpl internal constructor(private val clientOptions: ClientOp
 
     private val spaces: SpaceServiceAsync by lazy { SpaceServiceAsyncImpl(clientOptions) }
 
+    private val analysis: AnalysisServiceAsync by lazy { AnalysisServiceAsyncImpl(clientOptions) }
+
     private val broadcasts: BroadcastServiceAsync by lazy {
         BroadcastServiceAsyncImpl(clientOptions)
     }
@@ -177,6 +181,9 @@ class XServiceAsyncImpl internal constructor(private val clientOptions: ClientOp
 
     /** Community Notes contributors, their notes, ratings & deleted notes */
     override fun communityNotes(): CommunityNoteServiceAsync = communityNotes
+
+    /** AI analysis of posts, at 2 credits per analyzed post */
+    override fun analysis(): AnalysisServiceAsync = analysis
 
     override suspend fun getArticle(
         params: XGetArticleParams,
@@ -309,6 +316,10 @@ class XServiceAsyncImpl internal constructor(private val clientOptions: ClientOp
             CommunityNoteServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val analysis: AnalysisServiceAsync.WithRawResponse by lazy {
+            AnalysisServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): XServiceAsync.WithRawResponse =
@@ -361,6 +372,9 @@ class XServiceAsyncImpl internal constructor(private val clientOptions: ClientOp
 
         /** Community Notes contributors, their notes, ratings & deleted notes */
         override fun communityNotes(): CommunityNoteServiceAsync.WithRawResponse = communityNotes
+
+        /** AI analysis of posts, at 2 credits per analyzed post */
+        override fun analysis(): AnalysisServiceAsync.WithRawResponse = analysis
 
         private val getArticleHandler: Handler<XGetArticleResponse> =
             jsonHandler<XGetArticleResponse>(clientOptions.jsonMapper)

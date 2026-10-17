@@ -43,6 +43,8 @@ import com.x_twitter_scraper.api.services.blocking.x.AccountConnectionChallengeS
 import com.x_twitter_scraper.api.services.blocking.x.AccountConnectionChallengeServiceImpl
 import com.x_twitter_scraper.api.services.blocking.x.AccountService
 import com.x_twitter_scraper.api.services.blocking.x.AccountServiceImpl
+import com.x_twitter_scraper.api.services.blocking.x.AnalysisService
+import com.x_twitter_scraper.api.services.blocking.x.AnalysisServiceImpl
 import com.x_twitter_scraper.api.services.blocking.x.BookmarkService
 import com.x_twitter_scraper.api.services.blocking.x.BookmarkServiceImpl
 import com.x_twitter_scraper.api.services.blocking.x.BroadcastService
@@ -114,6 +116,8 @@ class XServiceImpl internal constructor(private val clientOptions: ClientOptions
 
     private val broadcasts: BroadcastService by lazy { BroadcastServiceImpl(clientOptions) }
 
+    private val analysis: AnalysisService by lazy { AnalysisServiceImpl(clientOptions) }
+
     private val communityNotes: CommunityNoteService by lazy {
         CommunityNoteServiceImpl(clientOptions)
     }
@@ -170,6 +174,9 @@ class XServiceImpl internal constructor(private val clientOptions: ClientOptions
 
     /** Community Notes contributors, their notes, ratings & deleted notes */
     override fun communityNotes(): CommunityNoteService = communityNotes
+
+    /** AI analysis of posts, at 2 credits per analyzed post */
+    override fun analysis(): AnalysisService = analysis
 
     override fun getArticle(
         params: XGetArticleParams,
@@ -302,6 +309,10 @@ class XServiceImpl internal constructor(private val clientOptions: ClientOptions
             CommunityNoteServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val analysis: AnalysisService.WithRawResponse by lazy {
+            AnalysisServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): XService.WithRawResponse =
@@ -354,6 +365,9 @@ class XServiceImpl internal constructor(private val clientOptions: ClientOptions
 
         /** Community Notes contributors, their notes, ratings & deleted notes */
         override fun communityNotes(): CommunityNoteService.WithRawResponse = communityNotes
+
+        /** AI analysis of posts, at 2 credits per analyzed post */
+        override fun analysis(): AnalysisService.WithRawResponse = analysis
 
         private val getArticleHandler: Handler<XGetArticleResponse> =
             jsonHandler<XGetArticleResponse>(clientOptions.jsonMapper)

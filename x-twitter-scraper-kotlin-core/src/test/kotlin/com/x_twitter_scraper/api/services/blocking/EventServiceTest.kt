@@ -7,6 +7,7 @@ package com.x_twitter_scraper.api.services.blocking
 import com.x_twitter_scraper.api.client.okhttp.XTwitterScraperOkHttpClient
 import com.x_twitter_scraper.api.models.EventType
 import com.x_twitter_scraper.api.models.events.EventListParams
+import com.x_twitter_scraper.api.models.events.EventStreamParams
 import org.junit.jupiter.api.Test
 
 internal class EventServiceTest {
@@ -48,5 +49,20 @@ internal class EventServiceTest {
             )
 
         kotlin.test.assertNotNull(events)
+    }
+
+    @Test
+    fun stream() {
+        val client =
+            XTwitterScraperOkHttpClient.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val eventService = client.events()
+
+        eventService.stream(EventStreamParams.builder().lastEventId("42").build()).use { stream ->
+            kotlin.test.assertNotNull(stream.asSequence().toList())
+        }
     }
 }

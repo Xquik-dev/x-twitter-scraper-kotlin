@@ -21,6 +21,8 @@ import com.x_twitter_scraper.api.core.prepareAsync
 import com.x_twitter_scraper.api.models.webhooks.Webhook
 import com.x_twitter_scraper.api.models.webhooks.WebhookCreateParams
 import com.x_twitter_scraper.api.models.webhooks.WebhookCreateResponse
+import com.x_twitter_scraper.api.models.webhooks.WebhookCreateTelegramLinkParams
+import com.x_twitter_scraper.api.models.webhooks.WebhookCreateTelegramLinkResponse
 import com.x_twitter_scraper.api.models.webhooks.WebhookDeactivateParams
 import com.x_twitter_scraper.api.models.webhooks.WebhookDeactivateResponse
 import com.x_twitter_scraper.api.models.webhooks.WebhookListDeliveriesParams
@@ -81,6 +83,12 @@ class WebhookServiceAsyncImpl internal constructor(private val clientOptions: Cl
         params: WebhookTestParams,
         requestOptions: RequestOptions,
     ): WebhookTestResponse = withRawResponse().test(params, requestOptions).parse()
+
+    override suspend fun createTelegramLink(
+        params: WebhookCreateTelegramLinkParams,
+        requestOptions: RequestOptions,
+    ): WebhookCreateTelegramLinkResponse =
+        withRawResponse().createTelegramLink(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         WebhookServiceAsync.WithRawResponse {
@@ -285,6 +293,34 @@ class WebhookServiceAsyncImpl internal constructor(private val clientOptions: Cl
             return errorHandler.handle(response).parseable {
                 response
                     .use { testHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val createTelegramLinkHandler: Handler<WebhookCreateTelegramLinkResponse> =
+            jsonHandler<WebhookCreateTelegramLinkResponse>(clientOptions.jsonMapper)
+
+        override suspend fun createTelegramLink(
+            params: WebhookCreateTelegramLinkParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<WebhookCreateTelegramLinkResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("webhooks", "telegram")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { createTelegramLinkHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()
