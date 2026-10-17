@@ -16,7 +16,6 @@ readonly spec_source
 
 cd -- "$(dirname -- "$0")/.."
 
-# shellcheck source=scripts/lib/temp-paths.bash
 source scripts/lib/temp-paths.bash
 trap remove_temp_paths EXIT
 exit_on_signals
