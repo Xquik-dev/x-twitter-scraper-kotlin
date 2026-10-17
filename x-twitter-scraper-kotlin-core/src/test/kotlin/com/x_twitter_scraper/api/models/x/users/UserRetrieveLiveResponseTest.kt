@@ -6,6 +6,7 @@ package com.x_twitter_scraper.api.models.x.users
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.x_twitter_scraper.api.core.jsonMapper
+import com.x_twitter_scraper.api.models.Broadcast
 import com.x_twitter_scraper.api.models.SearchTweet
 import com.x_twitter_scraper.api.models.UserProfile
 import java.time.OffsetDateTime
@@ -19,7 +20,7 @@ internal class UserRetrieveLiveResponseTest {
         val userRetrieveLiveResponse =
             UserRetrieveLiveResponse.builder()
                 .broadcast(
-                    UserRetrieveLiveResponse.Broadcast.builder()
+                    Broadcast.builder()
                         .id("id")
                         .cameraRotation(0L)
                         .chatOption(0L)
@@ -35,7 +36,7 @@ internal class UserRetrieveLiveResponseTest {
                         .lastPingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .mediaKey("mediaKey")
                         .periscopeUser(
-                            UserRetrieveLiveResponse.Broadcast.PeriscopeUser.builder()
+                            Broadcast.PeriscopeUser.builder()
                                 .id("id")
                                 .displayName("displayName")
                                 .profilePicture("profilePicture")
@@ -75,7 +76,7 @@ internal class UserRetrieveLiveResponseTest {
 
         assertThat(userRetrieveLiveResponse.broadcast())
             .isEqualTo(
-                UserRetrieveLiveResponse.Broadcast.builder()
+                Broadcast.builder()
                     .id("id")
                     .cameraRotation(0L)
                     .chatOption(0L)
@@ -91,7 +92,7 @@ internal class UserRetrieveLiveResponseTest {
                     .lastPingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .mediaKey("mediaKey")
                     .periscopeUser(
-                        UserRetrieveLiveResponse.Broadcast.PeriscopeUser.builder()
+                        Broadcast.PeriscopeUser.builder()
                             .id("id")
                             .displayName("displayName")
                             .profilePicture("profilePicture")
@@ -135,7 +136,7 @@ internal class UserRetrieveLiveResponseTest {
         val userRetrieveLiveResponse =
             UserRetrieveLiveResponse.builder()
                 .broadcast(
-                    UserRetrieveLiveResponse.Broadcast.builder()
+                    Broadcast.builder()
                         .id("id")
                         .cameraRotation(0L)
                         .chatOption(0L)
@@ -151,7 +152,7 @@ internal class UserRetrieveLiveResponseTest {
                         .lastPingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .mediaKey("mediaKey")
                         .periscopeUser(
-                            UserRetrieveLiveResponse.Broadcast.PeriscopeUser.builder()
+                            Broadcast.PeriscopeUser.builder()
                                 .id("id")
                                 .displayName("displayName")
                                 .profilePicture("profilePicture")

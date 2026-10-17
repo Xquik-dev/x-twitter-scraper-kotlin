@@ -17,14 +17,13 @@ internal class CommunityNoteRetrieveContributorResponseTest {
         val communityNoteRetrieveContributorResponse =
             CommunityNoteRetrieveContributorResponse.builder()
                 .contributor(
-                    CommunityNoteRetrieveContributorResponse.Contributor.builder()
+                    CommunityNotesContributor.builder()
                         .alias("ardent-beach-friarbird")
                         .deletedNotesCount(0L)
                         .isApiContributor(true)
                         .isTopWriter(true)
                         .notesCount(
-                            CommunityNoteRetrieveContributorResponse.Contributor.NotesCount
-                                .builder()
+                            CommunityNotesContributor.NotesCount.builder()
                                 .awaitingMoreRatings(0L)
                                 .currentlyRatedHelpful(0L)
                                 .currentlyRatedNotHelpful(0L)
@@ -32,25 +31,18 @@ internal class CommunityNoteRetrieveContributorResponseTest {
                                 .build()
                         )
                         .ratingsCount(
-                            CommunityNoteRetrieveContributorResponse.Contributor.RatingsCount
-                                .builder()
+                            CommunityNotesContributor.RatingsCount.builder()
                                 .awaitingMoreRatings(0L)
                                 .ratedAfterDecision(0L)
                                 .successful(
-                                    CommunityNoteRetrieveContributorResponse.Contributor
-                                        .RatingsCount
-                                        .Successful
-                                        .builder()
+                                    CommunityNotesRatingOutcome.builder()
                                         .helpfulCount(0L)
                                         .notHelpfulCount(0L)
                                         .total(0L)
                                         .build()
                                 )
                                 .unsuccessful(
-                                    CommunityNoteRetrieveContributorResponse.Contributor
-                                        .RatingsCount
-                                        .Unsuccessful
-                                        .builder()
+                                    CommunityNotesRatingOutcome.builder()
                                         .helpfulCount(0L)
                                         .notHelpfulCount(0L)
                                         .total(0L)
@@ -65,13 +57,13 @@ internal class CommunityNoteRetrieveContributorResponseTest {
 
         assertThat(communityNoteRetrieveContributorResponse.contributor())
             .isEqualTo(
-                CommunityNoteRetrieveContributorResponse.Contributor.builder()
+                CommunityNotesContributor.builder()
                     .alias("ardent-beach-friarbird")
                     .deletedNotesCount(0L)
                     .isApiContributor(true)
                     .isTopWriter(true)
                     .notesCount(
-                        CommunityNoteRetrieveContributorResponse.Contributor.NotesCount.builder()
+                        CommunityNotesContributor.NotesCount.builder()
                             .awaitingMoreRatings(0L)
                             .currentlyRatedHelpful(0L)
                             .currentlyRatedNotHelpful(0L)
@@ -79,22 +71,18 @@ internal class CommunityNoteRetrieveContributorResponseTest {
                             .build()
                     )
                     .ratingsCount(
-                        CommunityNoteRetrieveContributorResponse.Contributor.RatingsCount.builder()
+                        CommunityNotesContributor.RatingsCount.builder()
                             .awaitingMoreRatings(0L)
                             .ratedAfterDecision(0L)
                             .successful(
-                                CommunityNoteRetrieveContributorResponse.Contributor.RatingsCount
-                                    .Successful
-                                    .builder()
+                                CommunityNotesRatingOutcome.builder()
                                     .helpfulCount(0L)
                                     .notHelpfulCount(0L)
                                     .total(0L)
                                     .build()
                             )
                             .unsuccessful(
-                                CommunityNoteRetrieveContributorResponse.Contributor.RatingsCount
-                                    .Unsuccessful
-                                    .builder()
+                                CommunityNotesRatingOutcome.builder()
                                     .helpfulCount(0L)
                                     .notHelpfulCount(0L)
                                     .total(0L)
@@ -113,14 +101,13 @@ internal class CommunityNoteRetrieveContributorResponseTest {
         val communityNoteRetrieveContributorResponse =
             CommunityNoteRetrieveContributorResponse.builder()
                 .contributor(
-                    CommunityNoteRetrieveContributorResponse.Contributor.builder()
+                    CommunityNotesContributor.builder()
                         .alias("ardent-beach-friarbird")
                         .deletedNotesCount(0L)
                         .isApiContributor(true)
                         .isTopWriter(true)
                         .notesCount(
-                            CommunityNoteRetrieveContributorResponse.Contributor.NotesCount
-                                .builder()
+                            CommunityNotesContributor.NotesCount.builder()
                                 .awaitingMoreRatings(0L)
                                 .currentlyRatedHelpful(0L)
                                 .currentlyRatedNotHelpful(0L)
@@ -128,25 +115,18 @@ internal class CommunityNoteRetrieveContributorResponseTest {
                                 .build()
                         )
                         .ratingsCount(
-                            CommunityNoteRetrieveContributorResponse.Contributor.RatingsCount
-                                .builder()
+                            CommunityNotesContributor.RatingsCount.builder()
                                 .awaitingMoreRatings(0L)
                                 .ratedAfterDecision(0L)
                                 .successful(
-                                    CommunityNoteRetrieveContributorResponse.Contributor
-                                        .RatingsCount
-                                        .Successful
-                                        .builder()
+                                    CommunityNotesRatingOutcome.builder()
                                         .helpfulCount(0L)
                                         .notHelpfulCount(0L)
                                         .total(0L)
                                         .build()
                                 )
                                 .unsuccessful(
-                                    CommunityNoteRetrieveContributorResponse.Contributor
-                                        .RatingsCount
-                                        .Unsuccessful
-                                        .builder()
+                                    CommunityNotesRatingOutcome.builder()
                                         .helpfulCount(0L)
                                         .notHelpfulCount(0L)
                                         .total(0L)

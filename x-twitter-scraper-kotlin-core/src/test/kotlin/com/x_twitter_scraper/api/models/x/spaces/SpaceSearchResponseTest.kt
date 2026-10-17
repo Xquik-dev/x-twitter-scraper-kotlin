@@ -22,21 +22,19 @@ internal class SpaceSearchResponseTest {
                 .hasNextPage(true)
                 .nextCursor("DAACCgACGRElMJcAAA")
                 .addSpace(
-                    SpaceSearchResponse.Space.builder()
+                    Space.builder()
                         .id("1OGwblLjnQMKB")
                         .addAdmin(
-                            SpaceSearchResponse.Space.Admin.builder()
+                            SpaceParticipant.builder()
                                 .id("9876543210")
                                 .name("Solana")
                                 .username("elonmusk")
                                 .affiliatesHighlightedLabel(
-                                    SpaceSearchResponse.Space.Admin.AffiliatesHighlightedLabel
-                                        .builder()
+                                    SpaceParticipant.AffiliatesHighlightedLabel.builder()
                                         .badgeUrl("badgeUrl")
                                         .description("description")
                                         .longDescription(
-                                            SpaceSearchResponse.Space.Admin
-                                                .AffiliatesHighlightedLabel
+                                            SpaceParticipant.AffiliatesHighlightedLabel
                                                 .LongDescription
                                                 .builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -64,18 +62,16 @@ internal class SpaceSearchResponseTest {
                                 .build()
                         )
                         .addListener(
-                            SpaceSearchResponse.Space.Listener.builder()
+                            SpaceParticipant.builder()
                                 .id("9876543210")
                                 .name("Solana")
                                 .username("elonmusk")
                                 .affiliatesHighlightedLabel(
-                                    SpaceSearchResponse.Space.Listener.AffiliatesHighlightedLabel
-                                        .builder()
+                                    SpaceParticipant.AffiliatesHighlightedLabel.builder()
                                         .badgeUrl("badgeUrl")
                                         .description("description")
                                         .longDescription(
-                                            SpaceSearchResponse.Space.Listener
-                                                .AffiliatesHighlightedLabel
+                                            SpaceParticipant.AffiliatesHighlightedLabel
                                                 .LongDescription
                                                 .builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -103,18 +99,16 @@ internal class SpaceSearchResponseTest {
                                 .build()
                         )
                         .addSpeaker(
-                            SpaceSearchResponse.Space.Speaker.builder()
+                            SpaceParticipant.builder()
                                 .id("9876543210")
                                 .name("Solana")
                                 .username("elonmusk")
                                 .affiliatesHighlightedLabel(
-                                    SpaceSearchResponse.Space.Speaker.AffiliatesHighlightedLabel
-                                        .builder()
+                                    SpaceParticipant.AffiliatesHighlightedLabel.builder()
                                         .badgeUrl("badgeUrl")
                                         .description("description")
                                         .longDescription(
-                                            SpaceSearchResponse.Space.Speaker
-                                                .AffiliatesHighlightedLabel
+                                            SpaceParticipant.AffiliatesHighlightedLabel
                                                 .LongDescription
                                                 .builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -160,7 +154,7 @@ internal class SpaceSearchResponseTest {
                         .participantCount(67L)
                         .scheduledStart(OffsetDateTime.parse("2026-03-11T17:00:00.000Z"))
                         .addSharing(
-                            SpaceSearchResponse.Space.Sharing.builder()
+                            Space.Sharing.builder()
                                 .id("2106511178339881415")
                                 .sharedAt(OffsetDateTime.parse("2026-10-03T22:26:16.658Z"))
                                 .sharedBy(
@@ -212,20 +206,19 @@ internal class SpaceSearchResponseTest {
         assertThat(spaceSearchResponse.nextCursor()).isEqualTo("DAACCgACGRElMJcAAA")
         assertThat(spaceSearchResponse.spaces())
             .containsExactly(
-                SpaceSearchResponse.Space.builder()
+                Space.builder()
                     .id("1OGwblLjnQMKB")
                     .addAdmin(
-                        SpaceSearchResponse.Space.Admin.builder()
+                        SpaceParticipant.builder()
                             .id("9876543210")
                             .name("Solana")
                             .username("elonmusk")
                             .affiliatesHighlightedLabel(
-                                SpaceSearchResponse.Space.Admin.AffiliatesHighlightedLabel.builder()
+                                SpaceParticipant.AffiliatesHighlightedLabel.builder()
                                     .badgeUrl("badgeUrl")
                                     .description("description")
                                     .longDescription(
-                                        SpaceSearchResponse.Space.Admin.AffiliatesHighlightedLabel
-                                            .LongDescription
+                                        SpaceParticipant.AffiliatesHighlightedLabel.LongDescription
                                             .builder()
                                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
@@ -252,19 +245,16 @@ internal class SpaceSearchResponseTest {
                             .build()
                     )
                     .addListener(
-                        SpaceSearchResponse.Space.Listener.builder()
+                        SpaceParticipant.builder()
                             .id("9876543210")
                             .name("Solana")
                             .username("elonmusk")
                             .affiliatesHighlightedLabel(
-                                SpaceSearchResponse.Space.Listener.AffiliatesHighlightedLabel
-                                    .builder()
+                                SpaceParticipant.AffiliatesHighlightedLabel.builder()
                                     .badgeUrl("badgeUrl")
                                     .description("description")
                                     .longDescription(
-                                        SpaceSearchResponse.Space.Listener
-                                            .AffiliatesHighlightedLabel
-                                            .LongDescription
+                                        SpaceParticipant.AffiliatesHighlightedLabel.LongDescription
                                             .builder()
                                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
@@ -291,18 +281,16 @@ internal class SpaceSearchResponseTest {
                             .build()
                     )
                     .addSpeaker(
-                        SpaceSearchResponse.Space.Speaker.builder()
+                        SpaceParticipant.builder()
                             .id("9876543210")
                             .name("Solana")
                             .username("elonmusk")
                             .affiliatesHighlightedLabel(
-                                SpaceSearchResponse.Space.Speaker.AffiliatesHighlightedLabel
-                                    .builder()
+                                SpaceParticipant.AffiliatesHighlightedLabel.builder()
                                     .badgeUrl("badgeUrl")
                                     .description("description")
                                     .longDescription(
-                                        SpaceSearchResponse.Space.Speaker.AffiliatesHighlightedLabel
-                                            .LongDescription
+                                        SpaceParticipant.AffiliatesHighlightedLabel.LongDescription
                                             .builder()
                                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
@@ -347,7 +335,7 @@ internal class SpaceSearchResponseTest {
                     .participantCount(67L)
                     .scheduledStart(OffsetDateTime.parse("2026-03-11T17:00:00.000Z"))
                     .addSharing(
-                        SpaceSearchResponse.Space.Sharing.builder()
+                        Space.Sharing.builder()
                             .id("2106511178339881415")
                             .sharedAt(OffsetDateTime.parse("2026-10-03T22:26:16.658Z"))
                             .sharedBy(
@@ -403,21 +391,19 @@ internal class SpaceSearchResponseTest {
                 .hasNextPage(true)
                 .nextCursor("DAACCgACGRElMJcAAA")
                 .addSpace(
-                    SpaceSearchResponse.Space.builder()
+                    Space.builder()
                         .id("1OGwblLjnQMKB")
                         .addAdmin(
-                            SpaceSearchResponse.Space.Admin.builder()
+                            SpaceParticipant.builder()
                                 .id("9876543210")
                                 .name("Solana")
                                 .username("elonmusk")
                                 .affiliatesHighlightedLabel(
-                                    SpaceSearchResponse.Space.Admin.AffiliatesHighlightedLabel
-                                        .builder()
+                                    SpaceParticipant.AffiliatesHighlightedLabel.builder()
                                         .badgeUrl("badgeUrl")
                                         .description("description")
                                         .longDescription(
-                                            SpaceSearchResponse.Space.Admin
-                                                .AffiliatesHighlightedLabel
+                                            SpaceParticipant.AffiliatesHighlightedLabel
                                                 .LongDescription
                                                 .builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -445,18 +431,16 @@ internal class SpaceSearchResponseTest {
                                 .build()
                         )
                         .addListener(
-                            SpaceSearchResponse.Space.Listener.builder()
+                            SpaceParticipant.builder()
                                 .id("9876543210")
                                 .name("Solana")
                                 .username("elonmusk")
                                 .affiliatesHighlightedLabel(
-                                    SpaceSearchResponse.Space.Listener.AffiliatesHighlightedLabel
-                                        .builder()
+                                    SpaceParticipant.AffiliatesHighlightedLabel.builder()
                                         .badgeUrl("badgeUrl")
                                         .description("description")
                                         .longDescription(
-                                            SpaceSearchResponse.Space.Listener
-                                                .AffiliatesHighlightedLabel
+                                            SpaceParticipant.AffiliatesHighlightedLabel
                                                 .LongDescription
                                                 .builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -484,18 +468,16 @@ internal class SpaceSearchResponseTest {
                                 .build()
                         )
                         .addSpeaker(
-                            SpaceSearchResponse.Space.Speaker.builder()
+                            SpaceParticipant.builder()
                                 .id("9876543210")
                                 .name("Solana")
                                 .username("elonmusk")
                                 .affiliatesHighlightedLabel(
-                                    SpaceSearchResponse.Space.Speaker.AffiliatesHighlightedLabel
-                                        .builder()
+                                    SpaceParticipant.AffiliatesHighlightedLabel.builder()
                                         .badgeUrl("badgeUrl")
                                         .description("description")
                                         .longDescription(
-                                            SpaceSearchResponse.Space.Speaker
-                                                .AffiliatesHighlightedLabel
+                                            SpaceParticipant.AffiliatesHighlightedLabel
                                                 .LongDescription
                                                 .builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -541,7 +523,7 @@ internal class SpaceSearchResponseTest {
                         .participantCount(67L)
                         .scheduledStart(OffsetDateTime.parse("2026-03-11T17:00:00.000Z"))
                         .addSharing(
-                            SpaceSearchResponse.Space.Sharing.builder()
+                            Space.Sharing.builder()
                                 .id("2106511178339881415")
                                 .sharedAt(OffsetDateTime.parse("2026-10-03T22:26:16.658Z"))
                                 .sharedBy(

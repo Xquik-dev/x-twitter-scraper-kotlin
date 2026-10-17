@@ -16,27 +16,23 @@ internal class CommunityNoteListContributorDeletedNotesResponseTest {
     @Test
     fun create() {
         val communityNoteListContributorDeletedNotesResponse =
-            CommunityNoteListContributorDeletedNotesResponse.builder()
+            PaginatedCommunityNotes.builder()
                 .hasNextPage(true)
                 .nextCursor("DAACCgACGRElMJcAAA")
                 .addNote(
-                    CommunityNoteListContributorDeletedNotesResponse.Note.builder()
+                    PaginatedCommunityNotes.Note.builder()
                         .id("2026375778254868976")
                         .abovePcrhThreshold(true)
                         .appealStatus("NotAppealed")
                         .classification("MisinformedOrPotentiallyMisleading")
                         .contributor(
-                            CommunityNoteListContributorDeletedNotesResponse.Note.Contributor
-                                .builder()
+                            CommunityNotesContributor.builder()
                                 .alias("ardent-beach-friarbird")
                                 .deletedNotesCount(0L)
                                 .isApiContributor(true)
                                 .isTopWriter(true)
                                 .notesCount(
-                                    CommunityNoteListContributorDeletedNotesResponse.Note
-                                        .Contributor
-                                        .NotesCount
-                                        .builder()
+                                    CommunityNotesContributor.NotesCount.builder()
                                         .awaitingMoreRatings(0L)
                                         .currentlyRatedHelpful(0L)
                                         .currentlyRatedNotHelpful(0L)
@@ -44,29 +40,18 @@ internal class CommunityNoteListContributorDeletedNotesResponseTest {
                                         .build()
                                 )
                                 .ratingsCount(
-                                    CommunityNoteListContributorDeletedNotesResponse.Note
-                                        .Contributor
-                                        .RatingsCount
-                                        .builder()
+                                    CommunityNotesContributor.RatingsCount.builder()
                                         .awaitingMoreRatings(0L)
                                         .ratedAfterDecision(0L)
                                         .successful(
-                                            CommunityNoteListContributorDeletedNotesResponse.Note
-                                                .Contributor
-                                                .RatingsCount
-                                                .Successful
-                                                .builder()
+                                            CommunityNotesRatingOutcome.builder()
                                                 .helpfulCount(0L)
                                                 .notHelpfulCount(0L)
                                                 .total(0L)
                                                 .build()
                                         )
                                         .unsuccessful(
-                                            CommunityNoteListContributorDeletedNotesResponse.Note
-                                                .Contributor
-                                                .RatingsCount
-                                                .Unsuccessful
-                                                .builder()
+                                            CommunityNotesRatingOutcome.builder()
                                                 .helpfulCount(0L)
                                                 .notHelpfulCount(0L)
                                                 .total(0L)
@@ -82,11 +67,10 @@ internal class CommunityNoteListContributorDeletedNotesResponseTest {
                         .deleted(true)
                         .displayUrl("displayUrl")
                         .addEntity(
-                            CommunityNoteListContributorDeletedNotesResponse.Note.Entity.builder()
+                            PaginatedCommunityNotes.Note.Entity.builder()
                                 .fromIndex(0L)
                                 .ref(
-                                    CommunityNoteListContributorDeletedNotesResponse.Note.Entity.Ref
-                                        .builder()
+                                    PaginatedCommunityNotes.Note.Entity.Ref.builder()
                                         .screenName("screenName")
                                         .text("text")
                                         .type("TimelineUrl")
@@ -121,8 +105,7 @@ internal class CommunityNoteListContributorDeletedNotesResponseTest {
                         )
                         .postId("2026359315657805939")
                         .postUnavailable(
-                            CommunityNoteListContributorDeletedNotesResponse.Note.PostUnavailable
-                                .builder()
+                            PaginatedCommunityNotes.Note.PostUnavailable.builder()
                                 .reason("Suspended")
                                 .build()
                         )
@@ -140,21 +123,19 @@ internal class CommunityNoteListContributorDeletedNotesResponseTest {
             .isEqualTo("DAACCgACGRElMJcAAA")
         assertThat(communityNoteListContributorDeletedNotesResponse.notes())
             .containsExactly(
-                CommunityNoteListContributorDeletedNotesResponse.Note.builder()
+                PaginatedCommunityNotes.Note.builder()
                     .id("2026375778254868976")
                     .abovePcrhThreshold(true)
                     .appealStatus("NotAppealed")
                     .classification("MisinformedOrPotentiallyMisleading")
                     .contributor(
-                        CommunityNoteListContributorDeletedNotesResponse.Note.Contributor.builder()
+                        CommunityNotesContributor.builder()
                             .alias("ardent-beach-friarbird")
                             .deletedNotesCount(0L)
                             .isApiContributor(true)
                             .isTopWriter(true)
                             .notesCount(
-                                CommunityNoteListContributorDeletedNotesResponse.Note.Contributor
-                                    .NotesCount
-                                    .builder()
+                                CommunityNotesContributor.NotesCount.builder()
                                     .awaitingMoreRatings(0L)
                                     .currentlyRatedHelpful(0L)
                                     .currentlyRatedNotHelpful(0L)
@@ -162,28 +143,18 @@ internal class CommunityNoteListContributorDeletedNotesResponseTest {
                                     .build()
                             )
                             .ratingsCount(
-                                CommunityNoteListContributorDeletedNotesResponse.Note.Contributor
-                                    .RatingsCount
-                                    .builder()
+                                CommunityNotesContributor.RatingsCount.builder()
                                     .awaitingMoreRatings(0L)
                                     .ratedAfterDecision(0L)
                                     .successful(
-                                        CommunityNoteListContributorDeletedNotesResponse.Note
-                                            .Contributor
-                                            .RatingsCount
-                                            .Successful
-                                            .builder()
+                                        CommunityNotesRatingOutcome.builder()
                                             .helpfulCount(0L)
                                             .notHelpfulCount(0L)
                                             .total(0L)
                                             .build()
                                     )
                                     .unsuccessful(
-                                        CommunityNoteListContributorDeletedNotesResponse.Note
-                                            .Contributor
-                                            .RatingsCount
-                                            .Unsuccessful
-                                            .builder()
+                                        CommunityNotesRatingOutcome.builder()
                                             .helpfulCount(0L)
                                             .notHelpfulCount(0L)
                                             .total(0L)
@@ -199,11 +170,10 @@ internal class CommunityNoteListContributorDeletedNotesResponseTest {
                     .deleted(true)
                     .displayUrl("displayUrl")
                     .addEntity(
-                        CommunityNoteListContributorDeletedNotesResponse.Note.Entity.builder()
+                        PaginatedCommunityNotes.Note.Entity.builder()
                             .fromIndex(0L)
                             .ref(
-                                CommunityNoteListContributorDeletedNotesResponse.Note.Entity.Ref
-                                    .builder()
+                                PaginatedCommunityNotes.Note.Entity.Ref.builder()
                                     .screenName("screenName")
                                     .text("text")
                                     .type("TimelineUrl")
@@ -238,8 +208,7 @@ internal class CommunityNoteListContributorDeletedNotesResponseTest {
                     )
                     .postId("2026359315657805939")
                     .postUnavailable(
-                        CommunityNoteListContributorDeletedNotesResponse.Note.PostUnavailable
-                            .builder()
+                        PaginatedCommunityNotes.Note.PostUnavailable.builder()
                             .reason("Suspended")
                             .build()
                     )
@@ -256,27 +225,23 @@ internal class CommunityNoteListContributorDeletedNotesResponseTest {
     fun roundtrip() {
         val jsonMapper = jsonMapper()
         val communityNoteListContributorDeletedNotesResponse =
-            CommunityNoteListContributorDeletedNotesResponse.builder()
+            PaginatedCommunityNotes.builder()
                 .hasNextPage(true)
                 .nextCursor("DAACCgACGRElMJcAAA")
                 .addNote(
-                    CommunityNoteListContributorDeletedNotesResponse.Note.builder()
+                    PaginatedCommunityNotes.Note.builder()
                         .id("2026375778254868976")
                         .abovePcrhThreshold(true)
                         .appealStatus("NotAppealed")
                         .classification("MisinformedOrPotentiallyMisleading")
                         .contributor(
-                            CommunityNoteListContributorDeletedNotesResponse.Note.Contributor
-                                .builder()
+                            CommunityNotesContributor.builder()
                                 .alias("ardent-beach-friarbird")
                                 .deletedNotesCount(0L)
                                 .isApiContributor(true)
                                 .isTopWriter(true)
                                 .notesCount(
-                                    CommunityNoteListContributorDeletedNotesResponse.Note
-                                        .Contributor
-                                        .NotesCount
-                                        .builder()
+                                    CommunityNotesContributor.NotesCount.builder()
                                         .awaitingMoreRatings(0L)
                                         .currentlyRatedHelpful(0L)
                                         .currentlyRatedNotHelpful(0L)
@@ -284,29 +249,18 @@ internal class CommunityNoteListContributorDeletedNotesResponseTest {
                                         .build()
                                 )
                                 .ratingsCount(
-                                    CommunityNoteListContributorDeletedNotesResponse.Note
-                                        .Contributor
-                                        .RatingsCount
-                                        .builder()
+                                    CommunityNotesContributor.RatingsCount.builder()
                                         .awaitingMoreRatings(0L)
                                         .ratedAfterDecision(0L)
                                         .successful(
-                                            CommunityNoteListContributorDeletedNotesResponse.Note
-                                                .Contributor
-                                                .RatingsCount
-                                                .Successful
-                                                .builder()
+                                            CommunityNotesRatingOutcome.builder()
                                                 .helpfulCount(0L)
                                                 .notHelpfulCount(0L)
                                                 .total(0L)
                                                 .build()
                                         )
                                         .unsuccessful(
-                                            CommunityNoteListContributorDeletedNotesResponse.Note
-                                                .Contributor
-                                                .RatingsCount
-                                                .Unsuccessful
-                                                .builder()
+                                            CommunityNotesRatingOutcome.builder()
                                                 .helpfulCount(0L)
                                                 .notHelpfulCount(0L)
                                                 .total(0L)
@@ -322,11 +276,10 @@ internal class CommunityNoteListContributorDeletedNotesResponseTest {
                         .deleted(true)
                         .displayUrl("displayUrl")
                         .addEntity(
-                            CommunityNoteListContributorDeletedNotesResponse.Note.Entity.builder()
+                            PaginatedCommunityNotes.Note.Entity.builder()
                                 .fromIndex(0L)
                                 .ref(
-                                    CommunityNoteListContributorDeletedNotesResponse.Note.Entity.Ref
-                                        .builder()
+                                    PaginatedCommunityNotes.Note.Entity.Ref.builder()
                                         .screenName("screenName")
                                         .text("text")
                                         .type("TimelineUrl")
@@ -361,8 +314,7 @@ internal class CommunityNoteListContributorDeletedNotesResponseTest {
                         )
                         .postId("2026359315657805939")
                         .postUnavailable(
-                            CommunityNoteListContributorDeletedNotesResponse.Note.PostUnavailable
-                                .builder()
+                            PaginatedCommunityNotes.Note.PostUnavailable.builder()
                                 .reason("Suspended")
                                 .build()
                         )
@@ -378,7 +330,7 @@ internal class CommunityNoteListContributorDeletedNotesResponseTest {
         val roundtrippedCommunityNoteListContributorDeletedNotesResponse =
             jsonMapper.readValue(
                 jsonMapper.writeValueAsString(communityNoteListContributorDeletedNotesResponse),
-                jacksonTypeRef<CommunityNoteListContributorDeletedNotesResponse>(),
+                jacksonTypeRef<PaginatedCommunityNotes>(),
             )
 
         assertThat(roundtrippedCommunityNoteListContributorDeletedNotesResponse)

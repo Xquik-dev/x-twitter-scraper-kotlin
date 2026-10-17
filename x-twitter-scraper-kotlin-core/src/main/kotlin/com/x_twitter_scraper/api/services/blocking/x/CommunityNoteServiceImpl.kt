@@ -18,11 +18,10 @@ import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.core.http.parseable
 import com.x_twitter_scraper.api.core.prepare
 import com.x_twitter_scraper.api.models.x.communitynotes.CommunityNoteListContributorDeletedNotesParams
-import com.x_twitter_scraper.api.models.x.communitynotes.CommunityNoteListContributorDeletedNotesResponse
 import com.x_twitter_scraper.api.models.x.communitynotes.CommunityNoteListContributorNotesParams
-import com.x_twitter_scraper.api.models.x.communitynotes.CommunityNoteListContributorNotesResponse
 import com.x_twitter_scraper.api.models.x.communitynotes.CommunityNoteRetrieveContributorParams
 import com.x_twitter_scraper.api.models.x.communitynotes.CommunityNoteRetrieveContributorResponse
+import com.x_twitter_scraper.api.models.x.communitynotes.PaginatedCommunityNotes
 
 /** Community Notes contributors, their notes, ratings & deleted notes */
 class CommunityNoteServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -46,13 +45,13 @@ class CommunityNoteServiceImpl internal constructor(private val clientOptions: C
     override fun listContributorNotes(
         params: CommunityNoteListContributorNotesParams,
         requestOptions: RequestOptions,
-    ): CommunityNoteListContributorNotesResponse =
+    ): PaginatedCommunityNotes =
         withRawResponse().listContributorNotes(params, requestOptions).parse()
 
     override fun listContributorDeletedNotes(
         params: CommunityNoteListContributorDeletedNotesParams,
         requestOptions: RequestOptions,
-    ): CommunityNoteListContributorDeletedNotesResponse =
+    ): PaginatedCommunityNotes =
         withRawResponse().listContributorDeletedNotes(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -96,14 +95,13 @@ class CommunityNoteServiceImpl internal constructor(private val clientOptions: C
             }
         }
 
-        private val listContributorNotesHandler:
-            Handler<CommunityNoteListContributorNotesResponse> =
-            jsonHandler<CommunityNoteListContributorNotesResponse>(clientOptions.jsonMapper)
+        private val listContributorNotesHandler: Handler<PaginatedCommunityNotes> =
+            jsonHandler<PaginatedCommunityNotes>(clientOptions.jsonMapper)
 
         override fun listContributorNotes(
             params: CommunityNoteListContributorNotesParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<CommunityNoteListContributorNotesResponse> {
+        ): HttpResponseFor<PaginatedCommunityNotes> {
             checkRequired("alias", params.alias())
             val request =
                 HttpRequest.builder()
@@ -131,14 +129,13 @@ class CommunityNoteServiceImpl internal constructor(private val clientOptions: C
             }
         }
 
-        private val listContributorDeletedNotesHandler:
-            Handler<CommunityNoteListContributorDeletedNotesResponse> =
-            jsonHandler<CommunityNoteListContributorDeletedNotesResponse>(clientOptions.jsonMapper)
+        private val listContributorDeletedNotesHandler: Handler<PaginatedCommunityNotes> =
+            jsonHandler<PaginatedCommunityNotes>(clientOptions.jsonMapper)
 
         override fun listContributorDeletedNotes(
             params: CommunityNoteListContributorDeletedNotesParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<CommunityNoteListContributorDeletedNotesResponse> {
+        ): HttpResponseFor<PaginatedCommunityNotes> {
             checkRequired("alias", params.alias())
             val request =
                 HttpRequest.builder()

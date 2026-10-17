@@ -4,6 +4,7 @@
 
 ### Features
 
+* `Job`, `Space`, `SpaceParticipant`, `PaginatedCommunityNotes`, `CommunityNotesContributor`, `CommunityNotesRatingOutcome` and `Broadcast` are named models shared by the operations that return them. Their nested copies are gone, and Community info returns the shared `Community` model.
 * `UserProfile.IdentityVerification` adds the optional `overrideVerifiedYear` field for the verification start year X shows.
 * `x().tweets()` adds `listTop`, `embed`, `getHiddenReplies`, `getInsights`, `getRetweeterIds`, `checkRepost`, `getSubtitles`, `translate` and `resolveLinks`, with typed params and responses.
 * `x().users()` adds `retrieveBatchTweets`, `retrieveAffiliates`, `retrieveArticles`, `retrieveFollowerIds`, `retrieveFollowingIds`, `retrieveHighlights`, `retrieveInsights`, `retrieveListMemberships`, `retrieveLists`, `retrieveLive`, `retrieveSimilar`, `retrieveSubscriptions` and `translateBio`, with typed params and responses.
