@@ -75,7 +75,7 @@ Full Changelog: [v0.7.3...v0.9.0](https://github.com/Xquik-dev/x-twitter-scraper
 
 ### Features
 
-* **api:** align reply extraction contracts ([#29](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/29)) ([91e7009](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/91e70090ac1c16f90a81b5a8c2c2cb2ef5250940))
+* **api:** align reply extraction contracts ([91e7009](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/91e70090ac1c16f90a81b5a8c2c2cb2ef5250940))
 * **api:** api update ([65b66bb](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/65b66bb9d60560b5d3397ede885c9f4995f5dcb5))
 * **api:** api update ([35a2e75](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/35a2e75249544679c3d25e77e86397f4340eb2a6))
 * **api:** api update ([ffc259e](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/ffc259e017cf627020fe7f745230bdc3d39e6eaf))
@@ -91,7 +91,7 @@ Full Changelog: [v0.7.3...v0.9.0](https://github.com/Xquik-dev/x-twitter-scraper
 ### Bug Fixes
 
 * escape ampersand in OpenAPI summaries for C# XML docs ([05daa0f](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/05daa0fbe01669f2d2fa48c4b5ee3b15a2229cb2))
-* **release:** allow Maven publication propagation ([#31](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/31)) ([fe0a5fb](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/fe0a5fb29b74c97f2d0f89783b3e4d5e496ab191))
+* **release:** allow Maven publication propagation ([fe0a5fb](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/fe0a5fb29b74c97f2d0f89783b3e4d5e496ab191))
 
 
 ### Chores
@@ -112,7 +112,7 @@ Full Changelog: [v0.7.3...v0.9.0](https://github.com/Xquik-dev/x-twitter-scraper
 
 * add Contributor Covenant 2.1 Code of Conduct ([5b5de80](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/5b5de80476afcf2bce31ad3b786c55a46184ad84))
 * add DeepWiki badge ([16d59b2](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/16d59b2ee8f442e33f52d9e8b9278d06c9e27537))
-* map common X data tasks ([#12](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/12)) ([62064ba](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/62064ba72a08b95917a09845e126b5cd3cf5d22e))
+* map common X data tasks ([62064ba](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/62064ba72a08b95917a09845e126b5cd3cf5d22e))
 * mark Maven publication pending ([ffbec89](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/ffbec89b4e5001c3cf70b345d2d165f5e50fcedb))
 
 ## [0.8.1](https://github.com/stainless-sdks/x-twitter-scraper-kotlin/compare/v0.8.0...v0.8.1) (2026-08-11)
@@ -154,7 +154,7 @@ Full Changelog: [v0.7.0...v0.7.1](https://github.com/Xquik-dev/x-twitter-scraper
 
 ### Bug Fixes
 
-* **release:** allow Maven publication propagation ([#31](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/31)) ([fe0a5fb](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/fe0a5fb29b74c97f2d0f89783b3e4d5e496ab191))
+* **release:** allow Maven publication propagation ([fe0a5fb](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/fe0a5fb29b74c97f2d0f89783b3e4d5e496ab191))
 
 ## 0.7.0 (2026-07-31)
 
@@ -162,7 +162,7 @@ Full Changelog: [v0.6.1...v0.7.0](https://github.com/Xquik-dev/x-twitter-scraper
 
 ### Features
 
-* **api:** align reply extraction contracts ([#29](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/29)) ([91e7009](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/91e70090ac1c16f90a81b5a8c2c2cb2ef5250940))
+* **api:** align reply extraction contracts ([91e7009](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/91e70090ac1c16f90a81b5a8c2c2cb2ef5250940))
 
 ## 0.6.1 (2026-07-30)
 
@@ -199,7 +199,7 @@ Full Changelog: [v0.5.1...v0.5.2](https://github.com/Xquik-dev/x-twitter-scraper
 
 ### Documentation
 
-* map common X data tasks ([#12](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/issues/12)) ([62064ba](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/62064ba72a08b95917a09845e126b5cd3cf5d22e))
+* map common X data tasks ([62064ba](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/commit/62064ba72a08b95917a09845e126b5cd3cf5d22e))
 
 ## 0.5.1 (2026-07-22)
 
