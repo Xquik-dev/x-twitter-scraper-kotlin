@@ -256,7 +256,8 @@ private constructor(
          * .subject()
          * ```
          *
-         * @throws IllegalStateException if any required field is unset.
+         * @throws IllegalStateException if `subject` is unset or neither `body` nor `attachments`
+         *   is set.
          */
         fun build(): TicketCreateParams =
             TicketCreateParams(
@@ -383,14 +384,9 @@ private constructor(
             /** Sets [Builder.subject] to an arbitrary multipart value. */
             fun subject(subject: MultipartField<String>) = apply { this.subject = subject }
 
-            fun attachments(attachments: List<InputStream>) =
-                attachments(
-                    MultipartField.builder<List<InputStream>>()
-                        .value(attachments)
-                        .filename("attachment")
-                        .contentType("application/octet-stream")
-                        .build()
-                )
+            fun attachments(attachments: List<InputStream>) = apply {
+                this.attachments = attachmentField(attachments)
+            }
 
             fun attachments(attachments: MultipartField<List<InputStream>>) = apply {
                 this.attachments = attachments.map { it.toMutableList() }
@@ -398,14 +394,17 @@ private constructor(
 
             fun addAttachment(attachment: InputStream) = apply {
                 attachments =
-                    (attachments
-                            ?: MultipartField.builder<MutableList<InputStream>>()
-                                .value(mutableListOf())
-                                .filename("attachment")
-                                .contentType("application/octet-stream")
-                                .build())
-                        .also { checkKnown("attachments", it).add(attachment) }
+                    (attachments ?: attachmentField(emptyList())).also {
+                        checkKnown("attachments", it).add(attachment)
+                    }
             }
+
+            private fun attachmentField(attachments: List<InputStream>) =
+                MultipartField.builder<MutableList<InputStream>>()
+                    .value(attachments.toMutableList())
+                    .filename("attachment")
+                    .contentType("application/octet-stream")
+                    .build()
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -436,7 +435,8 @@ private constructor(
              * .subject()
              * ```
              *
-             * @throws IllegalStateException if any required field is unset.
+             * @throws IllegalStateException if `subject` is unset or neither `body` nor
+             *   `attachments` is set.
              */
             fun build(): Body {
                 checkAtLeastOne("body", body, "attachments", attachments)
