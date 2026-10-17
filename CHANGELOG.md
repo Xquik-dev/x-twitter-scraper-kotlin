@@ -4,6 +4,7 @@
 
 ### Features
 
+* Bulk retry can target specific accounts with `accountIds`.
 * Embedded parent, quoted and retweeted posts carry every tweet field and the author.
 * `UserProfile.IdentityVerification` adds the optional `overrideVerifiedYear` field for the verification start year X shows.
 * `x().tweets()` adds `listTop`, `embed`, `getHiddenReplies`, `getInsights`, `getRetweeterIds`, `checkRepost`, `getSubtitles`, `translate` and `resolveLinks`, with typed params and responses.
