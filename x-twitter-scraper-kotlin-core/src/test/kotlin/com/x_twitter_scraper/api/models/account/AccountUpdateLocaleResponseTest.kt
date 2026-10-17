@@ -13,13 +13,17 @@ internal class AccountUpdateLocaleResponseTest {
 
     @Test
     fun create() {
-        val accountUpdateLocaleResponse = AccountUpdateLocaleResponse.builder().build()
+        val accountUpdateLocaleResponse =
+            AccountUpdateLocaleResponse.builder().addIgnoredField("plan").build()
+
+        assertThat(accountUpdateLocaleResponse.ignoredFields()).containsExactly("plan")
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val accountUpdateLocaleResponse = AccountUpdateLocaleResponse.builder().build()
+        val accountUpdateLocaleResponse =
+            AccountUpdateLocaleResponse.builder().addIgnoredField("plan").build()
 
         val roundtrippedAccountUpdateLocaleResponse =
             jsonMapper.readValue(

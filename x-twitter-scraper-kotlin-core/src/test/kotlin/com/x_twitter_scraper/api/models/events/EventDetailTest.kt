@@ -5,6 +5,7 @@
 package com.x_twitter_scraper.api.models.events
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.x_twitter_scraper.api.core.JsonMissing
 import com.x_twitter_scraper.api.core.JsonValue
 import com.x_twitter_scraper.api.core.jsonMapper
 import com.x_twitter_scraper.api.models.EventType
@@ -29,6 +30,8 @@ internal class EventDetailTest {
                 .occurredAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
                 .type(EventType.TWEET_NEW)
                 .keywordMonitorId("21")
+                .monitorName("monitorName")
+                .xUserId("xUserId")
                 .query("xquik OR \"x api\"")
                 .username("elonmusk")
                 .xEventId("1234567890")
@@ -46,6 +49,8 @@ internal class EventDetailTest {
         assertThat(eventDetail.occurredAt()).isEqualTo(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
         assertThat(eventDetail.type()).isEqualTo(EventType.TWEET_NEW)
         assertThat(eventDetail.keywordMonitorId()).isEqualTo("21")
+        assertThat(eventDetail.monitorName()).isEqualTo("monitorName")
+        assertThat(eventDetail.xUserId()).isEqualTo("xUserId")
         assertThat(eventDetail.query()).isEqualTo("xquik OR \"x api\"")
         assertThat(eventDetail.username()).isEqualTo("elonmusk")
         assertThat(eventDetail.xEventId()).isEqualTo("1234567890")
@@ -67,6 +72,8 @@ internal class EventDetailTest {
                 .occurredAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
                 .type(EventType.TWEET_NEW)
                 .keywordMonitorId("21")
+                .monitorName("monitorName")
+                .xUserId("xUserId")
                 .query("xquik OR \"x api\"")
                 .username("elonmusk")
                 .xEventId("1234567890")
@@ -79,5 +86,35 @@ internal class EventDetailTest {
             )
 
         assertThat(roundtrippedEventDetail).isEqualTo(eventDetail)
+    }
+
+    @Test
+    fun readsAdditionalFields() {
+        val jsonMapper = jsonMapper()
+
+        val eventDetail0 =
+            jsonMapper.readValue(
+                """{"monitorName":"value","xUserId":"value"}""",
+                jacksonTypeRef<EventDetail>(),
+            )
+        assertThat(eventDetail0.monitorName()).isNotNull()
+        assertThat(eventDetail0.xUserId()).isNotNull()
+        assertThat(jsonMapper.readTree(jsonMapper.writeValueAsString(eventDetail0)))
+            .isEqualTo(jsonMapper.readTree("""{"monitorName":"value","xUserId":"value"}"""))
+    }
+
+    @Test
+    fun keepsAdditionalFieldsOptional() {
+        val eventDetail0 =
+            EventDetail.builder()
+                .id(JsonMissing.of())
+                .data(JsonMissing.of())
+                .monitorId(JsonMissing.of())
+                .monitorType(JsonMissing.of())
+                .occurredAt(JsonMissing.of())
+                .type(JsonMissing.of())
+                .build()
+        assertThat(eventDetail0.monitorName()).isNull()
+        assertThat(eventDetail0.xUserId()).isNull()
     }
 }

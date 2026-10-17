@@ -5,12 +5,32 @@
 package com.x_twitter_scraper.api.models
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.x_twitter_scraper.api.core.JsonMissing
 import com.x_twitter_scraper.api.core.jsonMapper
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 internal class PaginatedTweetsTest {
+
+    @Test
+    fun addSkipped() {
+        val skipped =
+            PaginatedTweets.Skipped.builder().entry("x.com/nasa").reason("profile link").build()
+        val paginatedTweets =
+            PaginatedTweets.builder()
+                .hasNextPage(false)
+                .nextCursor("")
+                .tweets(emptyList())
+                .addSkipped(skipped)
+                .build()
+
+        paginatedTweets.validate()
+        assertThat(paginatedTweets.skipped()).containsExactly(skipped)
+        assertThat(paginatedTweets.toBuilder().build()).isEqualTo(paginatedTweets)
+        assertThat(paginatedTweets.toBuilder().build().hashCode())
+            .isEqualTo(paginatedTweets.hashCode())
+    }
 
     @Test
     fun create() {
@@ -124,5 +144,30 @@ internal class PaginatedTweetsTest {
             )
 
         assertThat(roundtrippedPaginatedTweets).isEqualTo(paginatedTweets)
+    }
+
+    @Test
+    fun readsAdditionalFields() {
+        val jsonMapper = jsonMapper()
+
+        val paginatedTweets0 =
+            jsonMapper.readValue(
+                """{"skipped":[]}""",
+                jacksonTypeRef<PaginatedTweets>(),
+            )
+        assertThat(paginatedTweets0.skipped()).isNotNull()
+        assertThat(jsonMapper.readTree(jsonMapper.writeValueAsString(paginatedTweets0)))
+            .isEqualTo(jsonMapper.readTree("""{"skipped":[]}"""))
+    }
+
+    @Test
+    fun keepsAdditionalFieldsOptional() {
+        val paginatedTweets0 =
+            PaginatedTweets.builder()
+                .hasNextPage(JsonMissing.of())
+                .nextCursor(JsonMissing.of())
+                .tweets(JsonMissing.of())
+                .build()
+        assertThat(paginatedTweets0.skipped()).isNull()
     }
 }

@@ -26,6 +26,7 @@ private constructor(
     private val balance: JsonField<String>,
     private val lifetimePurchased: JsonField<String>,
     private val lifetimeUsed: JsonField<String>,
+    private val autoTopupStopped: JsonField<Boolean>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -47,6 +48,9 @@ private constructor(
         @JsonProperty("lifetime_used")
         @ExcludeMissing
         lifetimeUsed: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("auto_topup_stopped")
+        @ExcludeMissing
+        autoTopupStopped: JsonField<Boolean> = JsonMissing.of(),
     ) : this(
         autoTopupAmountDollars,
         autoTopupEnabled,
@@ -54,6 +58,7 @@ private constructor(
         balance,
         lifetimePurchased,
         lifetimeUsed,
+        autoTopupStopped,
         mutableMapOf(),
     )
 
@@ -105,6 +110,15 @@ private constructor(
      *   unexpectedly missing or null.
      */
     fun lifetimeUsed(): String = lifetimeUsed.getRequired("lifetime_used")
+
+    /**
+     * Whether declined charges stopped automatic top-up while it is enabled. It stops after 3
+     * declines in a row on 1 card. A paid top-up, a paid plan renewal, or the next automatic top-up
+     * on a new card clears it.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun autoTopupStopped(): Boolean? = autoTopupStopped.getNullable("auto_topup_stopped")
 
     /**
      * Returns the raw JSON value of [autoTopupAmountDollars].
@@ -162,6 +176,16 @@ private constructor(
     @ExcludeMissing
     fun _lifetimeUsed(): JsonField<String> = lifetimeUsed
 
+    /**
+     * Returns the raw JSON value of [autoTopupStopped].
+     *
+     * Unlike [autoTopupStopped], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("auto_topup_stopped")
+    @ExcludeMissing
+    fun _autoTopupStopped(): JsonField<Boolean> = autoTopupStopped
+
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -202,6 +226,7 @@ private constructor(
         private var balance: JsonField<String>? = null
         private var lifetimePurchased: JsonField<String>? = null
         private var lifetimeUsed: JsonField<String>? = null
+        private var autoTopupStopped: JsonField<Boolean> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(creditRetrieveBalanceResponse: CreditRetrieveBalanceResponse) = apply {
@@ -211,6 +236,7 @@ private constructor(
             balance = creditRetrieveBalanceResponse.balance
             lifetimePurchased = creditRetrieveBalanceResponse.lifetimePurchased
             lifetimeUsed = creditRetrieveBalanceResponse.lifetimeUsed
+            autoTopupStopped = creditRetrieveBalanceResponse.autoTopupStopped
             additionalProperties = creditRetrieveBalanceResponse.additionalProperties.toMutableMap()
         }
 
@@ -269,6 +295,19 @@ private constructor(
             this.lifetimeUsed = lifetimeUsed
         }
 
+        /**
+         * Whether declined charges stopped automatic top-up while it is enabled. It stops after 3
+         * declines in a row on 1 card. A paid top-up, a paid plan renewal, or the next automatic
+         * top-up on a new card clears it.
+         */
+        fun autoTopupStopped(autoTopupStopped: Boolean) =
+            autoTopupStopped(JsonField.of(autoTopupStopped))
+
+        /** Sets [Builder.autoTopupStopped] to an arbitrary JSON value. */
+        fun autoTopupStopped(autoTopupStopped: JsonField<Boolean>) = apply {
+            this.autoTopupStopped = autoTopupStopped
+        }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -313,6 +352,7 @@ private constructor(
                 checkRequired("balance", balance),
                 checkRequired("lifetimePurchased", lifetimePurchased),
                 checkRequired("lifetimeUsed", lifetimeUsed),
+                autoTopupStopped,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -338,6 +378,7 @@ private constructor(
         balance()
         lifetimePurchased()
         lifetimeUsed()
+        autoTopupStopped()
         validated = true
     }
 
@@ -355,7 +396,8 @@ private constructor(
             (if (autoTopupThreshold.asKnown() == null) 0 else 1) +
             (if (balance.asKnown() == null) 0 else 1) +
             (if (lifetimePurchased.asKnown() == null) 0 else 1) +
-            (if (lifetimeUsed.asKnown() == null) 0 else 1)
+            (if (lifetimeUsed.asKnown() == null) 0 else 1) +
+            (if (autoTopupStopped.asKnown() == null) 0 else 1)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -369,6 +411,7 @@ private constructor(
             balance == other.balance &&
             lifetimePurchased == other.lifetimePurchased &&
             lifetimeUsed == other.lifetimeUsed &&
+            autoTopupStopped == other.autoTopupStopped &&
             additionalProperties == other.additionalProperties
     }
 
@@ -380,6 +423,7 @@ private constructor(
             balance,
             lifetimePurchased,
             lifetimeUsed,
+            autoTopupStopped,
             additionalProperties,
         )
     }
@@ -387,5 +431,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CreditRetrieveBalanceResponse{autoTopupAmountDollars=$autoTopupAmountDollars, autoTopupEnabled=$autoTopupEnabled, autoTopupThreshold=$autoTopupThreshold, balance=$balance, lifetimePurchased=$lifetimePurchased, lifetimeUsed=$lifetimeUsed, additionalProperties=$additionalProperties}"
+        "CreditRetrieveBalanceResponse{autoTopupAmountDollars=$autoTopupAmountDollars, autoTopupEnabled=$autoTopupEnabled, autoTopupThreshold=$autoTopupThreshold, balance=$balance, lifetimePurchased=$lifetimePurchased, lifetimeUsed=$lifetimeUsed, autoTopupStopped=$autoTopupStopped, additionalProperties=$additionalProperties}"
 }

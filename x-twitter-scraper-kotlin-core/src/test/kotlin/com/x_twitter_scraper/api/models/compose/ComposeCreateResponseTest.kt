@@ -17,6 +17,30 @@ import org.junit.jupiter.params.provider.EnumSource
 internal class ComposeCreateResponseTest {
 
     @Test
+    fun acceptsCurrentConstantValues() {
+        val engagementMultiplier =
+            ComposeCreateResponse.ComposePrepareResult.EngagementMultiplier.builder()
+                .action("like")
+                .multiplier(JsonValue.from("Source default. Production value can vary."))
+                .build()
+        val scoreResult =
+            ComposeCreateResponse.ComposeScoreResult.builder()
+                .checklist(emptyList())
+                .nextStep("nextStep")
+                .passed(true)
+                .passedCount(1L)
+                .topSuggestion("topSuggestion")
+                .totalChecks(JsonValue.from(1))
+                .build()
+
+        engagementMultiplier.validate()
+        scoreResult.validate()
+        assertThat(engagementMultiplier._multiplier())
+            .isEqualTo(JsonValue.from("Source default. Production value can vary."))
+        assertThat(scoreResult._totalChecks()).isEqualTo(JsonValue.from(1))
+    }
+
+    @Test
     fun ofPrepareResult() {
         val prepareResult =
             ComposeCreateResponse.ComposePrepareResult.builder()

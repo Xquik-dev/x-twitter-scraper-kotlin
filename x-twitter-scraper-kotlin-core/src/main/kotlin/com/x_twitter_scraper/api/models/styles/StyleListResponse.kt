@@ -23,6 +23,8 @@ class StyleListResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val styles: JsonField<List<StyleProfileSummary>>,
+    private val hasMore: JsonField<Boolean>,
+    private val nextCursor: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -30,14 +32,24 @@ private constructor(
     private constructor(
         @JsonProperty("styles")
         @ExcludeMissing
-        styles: JsonField<List<StyleProfileSummary>> = JsonMissing.of()
-    ) : this(styles, mutableMapOf())
+        styles: JsonField<List<StyleProfileSummary>> = JsonMissing.of(),
+        @JsonProperty("hasMore") @ExcludeMissing hasMore: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("nextCursor")
+        @ExcludeMissing
+        nextCursor: JsonField<String> = JsonMissing.of(),
+    ) : this(styles, hasMore, nextCursor, mutableMapOf())
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null.
      */
     fun styles(): List<StyleProfileSummary> = styles.getRequired("styles")
+
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    fun hasMore(): Boolean? = hasMore.getNullable("hasMore")
+
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    fun nextCursor(): String? = nextCursor.getNullable("nextCursor")
 
     /**
      * Returns the raw JSON value of [styles].
@@ -47,6 +59,20 @@ private constructor(
     @JsonProperty("styles")
     @ExcludeMissing
     fun _styles(): JsonField<List<StyleProfileSummary>> = styles
+
+    /**
+     * Returns the raw JSON value of [hasMore].
+     *
+     * Unlike [hasMore], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("hasMore") @ExcludeMissing fun _hasMore(): JsonField<Boolean> = hasMore
+
+    /**
+     * Returns the raw JSON value of [nextCursor].
+     *
+     * Unlike [nextCursor], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("nextCursor") @ExcludeMissing fun _nextCursor(): JsonField<String> = nextCursor
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -77,10 +103,14 @@ private constructor(
     class Builder internal constructor() {
 
         private var styles: JsonField<MutableList<StyleProfileSummary>>? = null
+        private var hasMore: JsonField<Boolean> = JsonMissing.of()
+        private var nextCursor: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(styleListResponse: StyleListResponse) = apply {
             styles = styleListResponse.styles.map { it.toMutableList() }
+            hasMore = styleListResponse.hasMore
+            nextCursor = styleListResponse.nextCursor
             additionalProperties = styleListResponse.additionalProperties.toMutableMap()
         }
 
@@ -102,6 +132,16 @@ private constructor(
                     checkKnown("styles", it).add(style)
                 }
         }
+
+        fun hasMore(hasMore: Boolean) = hasMore(JsonField.of(hasMore))
+
+        /** Sets [Builder.hasMore] to an arbitrary JSON value. */
+        fun hasMore(hasMore: JsonField<Boolean>) = apply { this.hasMore = hasMore }
+
+        fun nextCursor(nextCursor: String) = nextCursor(JsonField.of(nextCursor))
+
+        /** Sets [Builder.nextCursor] to an arbitrary JSON value. */
+        fun nextCursor(nextCursor: JsonField<String>) = apply { this.nextCursor = nextCursor }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -137,6 +177,8 @@ private constructor(
         fun build(): StyleListResponse =
             StyleListResponse(
                 checkRequired("styles", styles).map { it.toImmutable() },
+                hasMore,
+                nextCursor,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -157,6 +199,8 @@ private constructor(
         }
 
         styles().forEach { it.validate() }
+        hasMore()
+        nextCursor()
         validated = true
     }
 
@@ -168,7 +212,10 @@ private constructor(
             false
         }
 
-    internal fun validity(): Int = (styles.asKnown()?.sumOf { it.validity() } ?: 0)
+    internal fun validity(): Int =
+        (styles.asKnown()?.sumOf { it.validity() } ?: 0) +
+            (if (hasMore.asKnown() == null) 0 else 1) +
+            (if (nextCursor.asKnown() == null) 0 else 1)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -177,13 +224,17 @@ private constructor(
 
         return other is StyleListResponse &&
             styles == other.styles &&
+            hasMore == other.hasMore &&
+            nextCursor == other.nextCursor &&
             additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(styles, additionalProperties) }
+    private val hashCode: Int by lazy {
+        Objects.hash(styles, hasMore, nextCursor, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "StyleListResponse{styles=$styles, additionalProperties=$additionalProperties}"
+        "StyleListResponse{styles=$styles, hasMore=$hasMore, nextCursor=$nextCursor, additionalProperties=$additionalProperties}"
 }

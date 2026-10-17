@@ -14,7 +14,8 @@ internal class KeywordCreateParamsTest {
     fun create() {
         KeywordCreateParams.builder()
             .addEventType(EventType.TWEET_NEW)
-            .query("xquik OR \"x api\"")
+            .query("query")
+            .name("Launch mentions")
             .build()
     }
 
@@ -23,12 +24,14 @@ internal class KeywordCreateParamsTest {
         val params =
             KeywordCreateParams.builder()
                 .addEventType(EventType.TWEET_NEW)
-                .query("xquik OR \"x api\"")
+                .query("query")
+                .name("Launch mentions")
                 .build()
 
         val body = params._body()
 
         assertThat(body.eventTypes()).containsExactly(EventType.TWEET_NEW)
-        assertThat(body.query()).isEqualTo("xquik OR \"x api\"")
+        assertThat(body.query()).isEqualTo("query")
+        assertThat(body.name()).isEqualTo("Launch mentions")
     }
 }

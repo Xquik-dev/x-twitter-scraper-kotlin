@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.x_twitter_scraper.api.core.ExcludeMissing
+import com.x_twitter_scraper.api.core.JsonField
 import com.x_twitter_scraper.api.core.JsonMissing
 import com.x_twitter_scraper.api.core.JsonValue
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
@@ -18,14 +19,30 @@ import java.util.Objects
 class KeywordDeactivateResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
+    private val deletionStatus: JsonField<String>,
+    private val statusUrl: JsonField<String>,
     private val success: JsonValue,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("success") @ExcludeMissing success: JsonValue = JsonMissing.of()
-    ) : this(success, mutableMapOf())
+        @JsonProperty("deletionStatus")
+        @ExcludeMissing
+        deletionStatus: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("statusUrl") @ExcludeMissing statusUrl: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("success") @ExcludeMissing success: JsonValue = JsonMissing.of(),
+    ) : this(deletionStatus, statusUrl, success, mutableMapOf())
+
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    fun deletionStatus(): String? = deletionStatus.getNullable("deletionStatus")
+
+    /**
+     * Poll this monitor URL until it returns 404.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun statusUrl(): String? = statusUrl.getNullable("statusUrl")
 
     /**
      * Expected to always return the following:
@@ -34,6 +51,22 @@ private constructor(
      * ```
      */
     @JsonProperty("success") @ExcludeMissing fun _success(): JsonValue = success
+
+    /**
+     * Returns the raw JSON value of [deletionStatus].
+     *
+     * Unlike [deletionStatus], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("deletionStatus")
+    @ExcludeMissing
+    fun _deletionStatus(): JsonField<String> = deletionStatus
+
+    /**
+     * Returns the raw JSON value of [statusUrl].
+     *
+     * Unlike [statusUrl], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("statusUrl") @ExcludeMissing fun _statusUrl(): JsonField<String> = statusUrl
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -58,13 +91,30 @@ private constructor(
     /** A builder for [KeywordDeactivateResponse]. */
     class Builder internal constructor() {
 
+        private var deletionStatus: JsonField<String> = JsonMissing.of()
+        private var statusUrl: JsonField<String> = JsonMissing.of()
         private var success: JsonValue = JsonValue.from(true)
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(keywordDeactivateResponse: KeywordDeactivateResponse) = apply {
+            deletionStatus = keywordDeactivateResponse.deletionStatus
+            statusUrl = keywordDeactivateResponse.statusUrl
             success = keywordDeactivateResponse.success
             additionalProperties = keywordDeactivateResponse.additionalProperties.toMutableMap()
         }
+
+        fun deletionStatus(deletionStatus: String) = deletionStatus(JsonField.of(deletionStatus))
+
+        /** Sets [Builder.deletionStatus] to an arbitrary JSON value. */
+        fun deletionStatus(deletionStatus: JsonField<String>) = apply {
+            this.deletionStatus = deletionStatus
+        }
+
+        /** Poll this monitor URL until it returns 404. */
+        fun statusUrl(statusUrl: String) = statusUrl(JsonField.of(statusUrl))
+
+        /** Sets [Builder.statusUrl] to an arbitrary JSON value. */
+        fun statusUrl(statusUrl: JsonField<String>) = apply { this.statusUrl = statusUrl }
 
         /**
          * Sets the field to an arbitrary JSON value.
@@ -101,7 +151,12 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          */
         fun build(): KeywordDeactivateResponse =
-            KeywordDeactivateResponse(success, additionalProperties.toMutableMap())
+            KeywordDeactivateResponse(
+                deletionStatus,
+                statusUrl,
+                success,
+                additionalProperties.toMutableMap(),
+            )
     }
 
     private var validated: Boolean = false
@@ -119,6 +174,8 @@ private constructor(
             return@apply
         }
 
+        deletionStatus()
+        statusUrl()
         _success().let {
             if (it != JsonValue.from(true)) {
                 throw XTwitterScraperInvalidDataException("'success' is invalid, received $it")
@@ -135,7 +192,10 @@ private constructor(
             false
         }
 
-    internal fun validity(): Int = success.let { if (it == JsonValue.from(true)) 1 else 0 }
+    internal fun validity(): Int =
+        (if (deletionStatus.asKnown() == null) 0 else 1) +
+            (if (statusUrl.asKnown() == null) 0 else 1) +
+            success.let { if (it == JsonValue.from(true)) 1 else 0 }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -143,14 +203,18 @@ private constructor(
         }
 
         return other is KeywordDeactivateResponse &&
+            deletionStatus == other.deletionStatus &&
+            statusUrl == other.statusUrl &&
             success == other.success &&
             additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(success, additionalProperties) }
+    private val hashCode: Int by lazy {
+        Objects.hash(deletionStatus, statusUrl, success, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "KeywordDeactivateResponse{success=$success, additionalProperties=$additionalProperties}"
+        "KeywordDeactivateResponse{deletionStatus=$deletionStatus, statusUrl=$statusUrl, success=$success, additionalProperties=$additionalProperties}"
 }

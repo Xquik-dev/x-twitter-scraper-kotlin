@@ -5,6 +5,7 @@
 package com.x_twitter_scraper.api.models.x.accounts
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.x_twitter_scraper.api.core.JsonMissing
 import com.x_twitter_scraper.api.core.jsonMapper
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -18,31 +19,34 @@ internal class AccountListResponseTest {
             AccountListResponse.builder()
                 .addAccount(
                     XAccount.builder()
-                        .id("42")
-                        .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                        .id("id")
+                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .health(XAccount.Health.HEALTHY)
-                        .status("active")
-                        .updatedAt(OffsetDateTime.parse("2025-03-10T08:30:00Z"))
-                        .xUserId("9876543210")
-                        .xUsername("elonmusk")
-                        .cookiesObtainedAt(OffsetDateTime.parse("2025-03-10T08:30:00Z"))
+                        .status("status")
+                        .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .xUserId("xUserId")
+                        .xUsername("xUsername")
                         .build()
                 )
+                .hasMore(false)
+                .nextCursor("MjAyNi0wMS0wMVQwMDowMDowMC4wMDBafDQy")
                 .build()
 
         assertThat(accountListResponse.accounts())
             .containsExactly(
                 XAccount.builder()
-                    .id("42")
-                    .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                    .id("id")
+                    .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .health(XAccount.Health.HEALTHY)
-                    .status("active")
-                    .updatedAt(OffsetDateTime.parse("2025-03-10T08:30:00Z"))
-                    .xUserId("9876543210")
-                    .xUsername("elonmusk")
-                    .cookiesObtainedAt(OffsetDateTime.parse("2025-03-10T08:30:00Z"))
+                    .status("status")
+                    .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .xUserId("xUserId")
+                    .xUsername("xUsername")
                     .build()
             )
+        assertThat(accountListResponse.hasMore()).isEqualTo(false)
+        assertThat(accountListResponse.nextCursor())
+            .isEqualTo("MjAyNi0wMS0wMVQwMDowMDowMC4wMDBafDQy")
     }
 
     @Test
@@ -52,16 +56,17 @@ internal class AccountListResponseTest {
             AccountListResponse.builder()
                 .addAccount(
                     XAccount.builder()
-                        .id("42")
-                        .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                        .id("id")
+                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .health(XAccount.Health.HEALTHY)
-                        .status("active")
-                        .updatedAt(OffsetDateTime.parse("2025-03-10T08:30:00Z"))
-                        .xUserId("9876543210")
-                        .xUsername("elonmusk")
-                        .cookiesObtainedAt(OffsetDateTime.parse("2025-03-10T08:30:00Z"))
+                        .status("status")
+                        .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .xUserId("xUserId")
+                        .xUsername("xUsername")
                         .build()
                 )
+                .hasMore(false)
+                .nextCursor("MjAyNi0wMS0wMVQwMDowMDowMC4wMDBafDQy")
                 .build()
 
         val roundtrippedAccountListResponse =
@@ -71,5 +76,27 @@ internal class AccountListResponseTest {
             )
 
         assertThat(roundtrippedAccountListResponse).isEqualTo(accountListResponse)
+    }
+
+    @Test
+    fun readsAdditionalFields() {
+        val jsonMapper = jsonMapper()
+
+        val accountListResponse0 =
+            jsonMapper.readValue(
+                """{"hasMore":true,"nextCursor":"value"}""",
+                jacksonTypeRef<AccountListResponse>(),
+            )
+        assertThat(accountListResponse0.hasMore()).isNotNull()
+        assertThat(accountListResponse0.nextCursor()).isNotNull()
+        assertThat(jsonMapper.readTree(jsonMapper.writeValueAsString(accountListResponse0)))
+            .isEqualTo(jsonMapper.readTree("""{"hasMore":true,"nextCursor":"value"}"""))
+    }
+
+    @Test
+    fun keepsAdditionalFieldsOptional() {
+        val accountListResponse0 = AccountListResponse.builder().accounts(JsonMissing.of()).build()
+        assertThat(accountListResponse0.hasMore()).isNull()
+        assertThat(accountListResponse0.nextCursor()).isNull()
     }
 }

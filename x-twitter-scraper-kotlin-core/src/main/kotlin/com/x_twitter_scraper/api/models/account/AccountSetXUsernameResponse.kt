@@ -20,16 +20,22 @@ import java.util.Objects
 class AccountSetXUsernameResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    private val success: JsonValue,
     private val xUsername: JsonField<String>,
+    private val success: JsonValue,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("success") @ExcludeMissing success: JsonValue = JsonMissing.of(),
         @JsonProperty("xUsername") @ExcludeMissing xUsername: JsonField<String> = JsonMissing.of(),
-    ) : this(success, xUsername, mutableMapOf())
+        @JsonProperty("success") @ExcludeMissing success: JsonValue = JsonMissing.of(),
+    ) : this(xUsername, success, mutableMapOf())
+
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null.
+     */
+    fun xUsername(): String = xUsername.getRequired("xUsername")
 
     /**
      * Expected to always return the following:
@@ -38,12 +44,6 @@ private constructor(
      * ```
      */
     @JsonProperty("success") @ExcludeMissing fun _success(): JsonValue = success
-
-    /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null.
-     */
-    fun xUsername(): String = xUsername.getRequired("xUsername")
 
     /**
      * Returns the raw JSON value of [xUsername].
@@ -80,15 +80,20 @@ private constructor(
     /** A builder for [AccountSetXUsernameResponse]. */
     class Builder internal constructor() {
 
-        private var success: JsonValue = JsonValue.from(true)
         private var xUsername: JsonField<String>? = null
+        private var success: JsonValue = JsonValue.from(true)
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(accountSetXUsernameResponse: AccountSetXUsernameResponse) = apply {
-            success = accountSetXUsernameResponse.success
             xUsername = accountSetXUsernameResponse.xUsername
+            success = accountSetXUsernameResponse.success
             additionalProperties = accountSetXUsernameResponse.additionalProperties.toMutableMap()
         }
+
+        fun xUsername(xUsername: String) = xUsername(JsonField.of(xUsername))
+
+        /** Sets [Builder.xUsername] to an arbitrary JSON value. */
+        fun xUsername(xUsername: JsonField<String>) = apply { this.xUsername = xUsername }
 
         /**
          * Sets the field to an arbitrary JSON value.
@@ -99,11 +104,6 @@ private constructor(
          * ```
          */
         fun success(success: JsonValue) = apply { this.success = success }
-
-        fun xUsername(xUsername: String) = xUsername(JsonField.of(xUsername))
-
-        /** Sets [Builder.xUsername] to an arbitrary JSON value. */
-        fun xUsername(xUsername: JsonField<String>) = apply { this.xUsername = xUsername }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -138,8 +138,8 @@ private constructor(
          */
         fun build(): AccountSetXUsernameResponse =
             AccountSetXUsernameResponse(
-                success,
                 checkRequired("xUsername", xUsername),
+                success,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -159,12 +159,12 @@ private constructor(
             return@apply
         }
 
+        xUsername()
         _success().let {
             if (it != JsonValue.from(true)) {
                 throw XTwitterScraperInvalidDataException("'success' is invalid, received $it")
             }
         }
-        xUsername()
         validated = true
     }
 
@@ -177,8 +177,8 @@ private constructor(
         }
 
     internal fun validity(): Int =
-        success.let { if (it == JsonValue.from(true)) 1 else 0 } +
-            (if (xUsername.asKnown() == null) 0 else 1)
+        (if (xUsername.asKnown() == null) 0 else 1) +
+            success.let { if (it == JsonValue.from(true)) 1 else 0 }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -186,15 +186,17 @@ private constructor(
         }
 
         return other is AccountSetXUsernameResponse &&
-            success == other.success &&
             xUsername == other.xUsername &&
+            success == other.success &&
             additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(success, xUsername, additionalProperties) }
+    private val hashCode: Int by lazy {
+        Objects.hash(xUsername, success, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "AccountSetXUsernameResponse{success=$success, xUsername=$xUsername, additionalProperties=$additionalProperties}"
+        "AccountSetXUsernameResponse{xUsername=$xUsername, success=$success, additionalProperties=$additionalProperties}"
 }

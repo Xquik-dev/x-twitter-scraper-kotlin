@@ -4,6 +4,10 @@
 
 package com.x_twitter_scraper.api.fields
 
+import com.x_twitter_scraper.api.models.EventType
+import com.x_twitter_scraper.api.models.PaginatedTweets
+import com.x_twitter_scraper.api.models.PaginatedUsers
+import com.x_twitter_scraper.api.models.SearchTweet
 import com.x_twitter_scraper.api.models.account.AccountUpdateLocaleResponse
 import com.x_twitter_scraper.api.models.guestwallets.GuestWalletRetrieveStatusResponse
 import org.assertj.core.api.Assertions.assertThat
@@ -75,6 +79,40 @@ internal class SdkShapesTest {
             .isEqualTo(Shape.Leaf(setOf("2")))
         assertThat(locale.props.getValue("success"))
             .isEqualTo(Prop(Shape.Leaf(setOf("true")), null, null))
+    }
+
+    @Test
+    fun readsAdditionalFieldsWithoutMakingThemRequired() {
+        val reader = SdkShapes()
+        val tweets = reader.shapeOf(PaginatedTweets::class.java) as Shape.Fields
+        val users = reader.shapeOf(PaginatedUsers::class.java) as Shape.Fields
+        val tweet = reader.shapeOf(SearchTweet::class.java) as Shape.Fields
+
+        assertThat(tweets.props.getValue("skipped").required).isFalse()
+        assertThat(users.props.getValue("scanLimit").required).isFalse()
+        assertThat(users.props.getValue("diagnostic").required).isFalse()
+        assertThat(tweet.props.getValue("hiddenByAuthor"))
+            .isEqualTo(Prop(Shape.Leaf(), false, null))
+        assertThat(operation("x().users().retrieveBatch").query.props.getValue("usernames"))
+            .isEqualTo(Prop(Shape.Leaf(), false, null))
+    }
+
+    @Test
+    fun readsTheAdditionalMonitorEventTypes() {
+        val eventType = SdkShapes().shapeOf(EventType::class.java) as Shape.Leaf
+
+        assertThat(eventType.values)
+            .contains(
+                "tweet.deleted",
+                "broadcast.started",
+                "space.started",
+                "following.added",
+                "following.removed",
+                "follower.added",
+                "follower.removed",
+                "profile.followers.changed",
+                "profile.following.changed",
+            )
     }
 
     companion object {

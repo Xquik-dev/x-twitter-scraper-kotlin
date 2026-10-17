@@ -5,6 +5,7 @@
 package com.x_twitter_scraper.api.models
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.x_twitter_scraper.api.core.JsonMissing
 import com.x_twitter_scraper.api.core.JsonValue
 import com.x_twitter_scraper.api.core.jsonMapper
 import java.time.OffsetDateTime
@@ -1970,5 +1971,41 @@ internal class SearchTweetTest {
             )
 
         assertThat(roundtrippedSearchTweet).isEqualTo(searchTweet)
+    }
+
+    @Test
+    fun readsAdditionalFields() {
+        val jsonMapper = jsonMapper()
+
+        val searchTweet0 =
+            jsonMapper.readValue(
+                """{"hiddenByAuthor":true}""",
+                jacksonTypeRef<SearchTweet>(),
+            )
+        assertThat(searchTweet0.hiddenByAuthor()).isNotNull()
+        assertThat(jsonMapper.readTree(jsonMapper.writeValueAsString(searchTweet0)))
+            .isEqualTo(jsonMapper.readTree("""{"hiddenByAuthor":true}"""))
+    }
+
+    @Test
+    fun keepsAdditionalFieldsOptional() {
+        val searchTweet0 =
+            SearchTweet.builder()
+                .id(JsonMissing.of())
+                .bookmarkCount(JsonMissing.of())
+                .likeCount(JsonMissing.of())
+                .quoteCount(JsonMissing.of())
+                .replyCount(JsonMissing.of())
+                .retweetCount(JsonMissing.of())
+                .text(JsonMissing.of())
+                .viewCount(JsonMissing.of())
+                .cashtagAttachments(JsonMissing.of())
+                .displayTextRange(JsonMissing.of())
+                .limitedActions(JsonMissing.of())
+                .media(JsonMissing.of())
+                .textHighlights(JsonMissing.of())
+                .unmentionedUserIds(JsonMissing.of())
+                .build()
+        assertThat(searchTweet0.hiddenByAuthor()).isNull()
     }
 }

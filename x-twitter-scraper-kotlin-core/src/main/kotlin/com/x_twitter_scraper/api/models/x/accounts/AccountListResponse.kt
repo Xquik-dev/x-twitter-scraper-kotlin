@@ -23,6 +23,8 @@ class AccountListResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val accounts: JsonField<List<XAccount>>,
+    private val hasMore: JsonField<Boolean>,
+    private val nextCursor: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -30,8 +32,12 @@ private constructor(
     private constructor(
         @JsonProperty("accounts")
         @ExcludeMissing
-        accounts: JsonField<List<XAccount>> = JsonMissing.of()
-    ) : this(accounts, mutableMapOf())
+        accounts: JsonField<List<XAccount>> = JsonMissing.of(),
+        @JsonProperty("hasMore") @ExcludeMissing hasMore: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("nextCursor")
+        @ExcludeMissing
+        nextCursor: JsonField<String> = JsonMissing.of(),
+    ) : this(accounts, hasMore, nextCursor, mutableMapOf())
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
@@ -40,11 +46,39 @@ private constructor(
     fun accounts(): List<XAccount> = accounts.getRequired("accounts")
 
     /**
+     * Present on cursor-paginated responses.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun hasMore(): Boolean? = hasMore.getNullable("hasMore")
+
+    /**
+     * Pass unchanged as cursor when hasMore is true.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun nextCursor(): String? = nextCursor.getNullable("nextCursor")
+
+    /**
      * Returns the raw JSON value of [accounts].
      *
      * Unlike [accounts], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("accounts") @ExcludeMissing fun _accounts(): JsonField<List<XAccount>> = accounts
+
+    /**
+     * Returns the raw JSON value of [hasMore].
+     *
+     * Unlike [hasMore], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("hasMore") @ExcludeMissing fun _hasMore(): JsonField<Boolean> = hasMore
+
+    /**
+     * Returns the raw JSON value of [nextCursor].
+     *
+     * Unlike [nextCursor], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("nextCursor") @ExcludeMissing fun _nextCursor(): JsonField<String> = nextCursor
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -75,10 +109,14 @@ private constructor(
     class Builder internal constructor() {
 
         private var accounts: JsonField<MutableList<XAccount>>? = null
+        private var hasMore: JsonField<Boolean> = JsonMissing.of()
+        private var nextCursor: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(accountListResponse: AccountListResponse) = apply {
             accounts = accountListResponse.accounts.map { it.toMutableList() }
+            hasMore = accountListResponse.hasMore
+            nextCursor = accountListResponse.nextCursor
             additionalProperties = accountListResponse.additionalProperties.toMutableMap()
         }
 
@@ -100,6 +138,18 @@ private constructor(
                     checkKnown("accounts", it).add(account)
                 }
         }
+
+        /** Present on cursor-paginated responses. */
+        fun hasMore(hasMore: Boolean) = hasMore(JsonField.of(hasMore))
+
+        /** Sets [Builder.hasMore] to an arbitrary JSON value. */
+        fun hasMore(hasMore: JsonField<Boolean>) = apply { this.hasMore = hasMore }
+
+        /** Pass unchanged as cursor when hasMore is true. */
+        fun nextCursor(nextCursor: String) = nextCursor(JsonField.of(nextCursor))
+
+        /** Sets [Builder.nextCursor] to an arbitrary JSON value. */
+        fun nextCursor(nextCursor: JsonField<String>) = apply { this.nextCursor = nextCursor }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -135,6 +185,8 @@ private constructor(
         fun build(): AccountListResponse =
             AccountListResponse(
                 checkRequired("accounts", accounts).map { it.toImmutable() },
+                hasMore,
+                nextCursor,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -155,6 +207,8 @@ private constructor(
         }
 
         accounts().forEach { it.validate() }
+        hasMore()
+        nextCursor()
         validated = true
     }
 
@@ -166,7 +220,10 @@ private constructor(
             false
         }
 
-    internal fun validity(): Int = (accounts.asKnown()?.sumOf { it.validity() } ?: 0)
+    internal fun validity(): Int =
+        (accounts.asKnown()?.sumOf { it.validity() } ?: 0) +
+            (if (hasMore.asKnown() == null) 0 else 1) +
+            (if (nextCursor.asKnown() == null) 0 else 1)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -175,13 +232,17 @@ private constructor(
 
         return other is AccountListResponse &&
             accounts == other.accounts &&
+            hasMore == other.hasMore &&
+            nextCursor == other.nextCursor &&
             additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(accounts, additionalProperties) }
+    private val hashCode: Int by lazy {
+        Objects.hash(accounts, hasMore, nextCursor, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "AccountListResponse{accounts=$accounts, additionalProperties=$additionalProperties}"
+        "AccountListResponse{accounts=$accounts, hasMore=$hasMore, nextCursor=$nextCursor, additionalProperties=$additionalProperties}"
 }

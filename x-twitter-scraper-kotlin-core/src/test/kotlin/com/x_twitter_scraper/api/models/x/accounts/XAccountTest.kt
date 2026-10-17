@@ -5,6 +5,7 @@
 package com.x_twitter_scraper.api.models.x.accounts
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.x_twitter_scraper.api.core.JsonMissing
 import com.x_twitter_scraper.api.core.jsonMapper
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -16,25 +17,24 @@ internal class XAccountTest {
     fun create() {
         val xAccount =
             XAccount.builder()
-                .id("42")
-                .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                .id("id")
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .health(XAccount.Health.HEALTHY)
-                .status("active")
-                .updatedAt(OffsetDateTime.parse("2025-03-10T08:30:00Z"))
-                .xUserId("9876543210")
-                .xUsername("elonmusk")
-                .cookiesObtainedAt(OffsetDateTime.parse("2025-03-10T08:30:00Z"))
+                .status("status")
+                .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .xUserId("xUserId")
+                .xUsername("xUsername")
+                .connectedAt(OffsetDateTime.parse("2025-03-10T08:30:00Z"))
                 .build()
 
-        assertThat(xAccount.id()).isEqualTo("42")
-        assertThat(xAccount.createdAt()).isEqualTo(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+        assertThat(xAccount.id()).isEqualTo("id")
+        assertThat(xAccount.createdAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(xAccount.health()).isEqualTo(XAccount.Health.HEALTHY)
-        assertThat(xAccount.status()).isEqualTo("active")
-        assertThat(xAccount.updatedAt()).isEqualTo(OffsetDateTime.parse("2025-03-10T08:30:00Z"))
-        assertThat(xAccount.xUserId()).isEqualTo("9876543210")
-        assertThat(xAccount.xUsername()).isEqualTo("elonmusk")
-        assertThat(xAccount.cookiesObtainedAt())
-            .isEqualTo(OffsetDateTime.parse("2025-03-10T08:30:00Z"))
+        assertThat(xAccount.status()).isEqualTo("status")
+        assertThat(xAccount.updatedAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(xAccount.xUserId()).isEqualTo("xUserId")
+        assertThat(xAccount.xUsername()).isEqualTo("xUsername")
+        assertThat(xAccount.connectedAt()).isEqualTo(OffsetDateTime.parse("2025-03-10T08:30:00Z"))
     }
 
     @Test
@@ -42,14 +42,14 @@ internal class XAccountTest {
         val jsonMapper = jsonMapper()
         val xAccount =
             XAccount.builder()
-                .id("42")
-                .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                .id("id")
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .health(XAccount.Health.HEALTHY)
-                .status("active")
-                .updatedAt(OffsetDateTime.parse("2025-03-10T08:30:00Z"))
-                .xUserId("9876543210")
-                .xUsername("elonmusk")
-                .cookiesObtainedAt(OffsetDateTime.parse("2025-03-10T08:30:00Z"))
+                .status("status")
+                .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .xUserId("xUserId")
+                .xUsername("xUsername")
+                .connectedAt(OffsetDateTime.parse("2025-03-10T08:30:00Z"))
                 .build()
 
         val roundtrippedXAccount =
@@ -59,5 +59,34 @@ internal class XAccountTest {
             )
 
         assertThat(roundtrippedXAccount).isEqualTo(xAccount)
+    }
+
+    @Test
+    fun readsAdditionalFields() {
+        val jsonMapper = jsonMapper()
+
+        val xAccount0 =
+            jsonMapper.readValue(
+                """{"connectedAt":"2026-10-17T00:00:00Z"}""",
+                jacksonTypeRef<XAccount>(),
+            )
+        assertThat(xAccount0.connectedAt()).isNotNull()
+        assertThat(jsonMapper.readTree(jsonMapper.writeValueAsString(xAccount0)))
+            .isEqualTo(jsonMapper.readTree("""{"connectedAt":"2026-10-17T00:00:00Z"}"""))
+    }
+
+    @Test
+    fun keepsAdditionalFieldsOptional() {
+        val xAccount0 =
+            XAccount.builder()
+                .id(JsonMissing.of())
+                .createdAt(JsonMissing.of())
+                .health(JsonMissing.of())
+                .status(JsonMissing.of())
+                .updatedAt(JsonMissing.of())
+                .xUserId(JsonMissing.of())
+                .xUsername(JsonMissing.of())
+                .build()
+        assertThat(xAccount0.connectedAt()).isNull()
     }
 }

@@ -5,6 +5,7 @@
 package com.x_twitter_scraper.api.models.styles
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.x_twitter_scraper.api.core.JsonMissing
 import com.x_twitter_scraper.api.core.jsonMapper
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -18,23 +19,27 @@ internal class StyleListResponseTest {
             StyleListResponse.builder()
                 .addStyle(
                     StyleProfileSummary.builder()
-                        .fetchedAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                        .fetchedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .isOwnAccount(true)
-                        .tweetCount(50L)
-                        .xUsername("elonmusk")
+                        .tweetCount(0L)
+                        .xUsername("xUsername")
                         .build()
                 )
+                .hasMore(false)
+                .nextCursor("abc123")
                 .build()
 
         assertThat(styleListResponse.styles())
             .containsExactly(
                 StyleProfileSummary.builder()
-                    .fetchedAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                    .fetchedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .isOwnAccount(true)
-                    .tweetCount(50L)
-                    .xUsername("elonmusk")
+                    .tweetCount(0L)
+                    .xUsername("xUsername")
                     .build()
             )
+        assertThat(styleListResponse.hasMore()).isEqualTo(false)
+        assertThat(styleListResponse.nextCursor()).isEqualTo("abc123")
     }
 
     @Test
@@ -44,12 +49,14 @@ internal class StyleListResponseTest {
             StyleListResponse.builder()
                 .addStyle(
                     StyleProfileSummary.builder()
-                        .fetchedAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                        .fetchedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .isOwnAccount(true)
-                        .tweetCount(50L)
-                        .xUsername("elonmusk")
+                        .tweetCount(0L)
+                        .xUsername("xUsername")
                         .build()
                 )
+                .hasMore(false)
+                .nextCursor("abc123")
                 .build()
 
         val roundtrippedStyleListResponse =
@@ -59,5 +66,27 @@ internal class StyleListResponseTest {
             )
 
         assertThat(roundtrippedStyleListResponse).isEqualTo(styleListResponse)
+    }
+
+    @Test
+    fun readsAdditionalFields() {
+        val jsonMapper = jsonMapper()
+
+        val styleListResponse0 =
+            jsonMapper.readValue(
+                """{"hasMore":true,"nextCursor":"value"}""",
+                jacksonTypeRef<StyleListResponse>(),
+            )
+        assertThat(styleListResponse0.hasMore()).isNotNull()
+        assertThat(styleListResponse0.nextCursor()).isNotNull()
+        assertThat(jsonMapper.readTree(jsonMapper.writeValueAsString(styleListResponse0)))
+            .isEqualTo(jsonMapper.readTree("""{"hasMore":true,"nextCursor":"value"}"""))
+    }
+
+    @Test
+    fun keepsAdditionalFieldsOptional() {
+        val styleListResponse0 = StyleListResponse.builder().styles(JsonMissing.of()).build()
+        assertThat(styleListResponse0.hasMore()).isNull()
+        assertThat(styleListResponse0.nextCursor()).isNull()
     }
 }

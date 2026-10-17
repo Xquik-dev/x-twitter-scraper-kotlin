@@ -4,6 +4,7 @@
 
 ### Features
 
+* `UserProfile.IdentityVerification` adds the optional `overrideVerifiedYear` field for the verification start year X shows.
 * `x().tweets()` adds `listTop`, `embed`, `getHiddenReplies`, `getInsights`, `getRetweeterIds`, `checkRepost`, `getSubtitles`, `translate` and `resolveLinks`, with typed params and responses.
 * `x().users()` adds `retrieveBatchTweets`, `retrieveAffiliates`, `retrieveArticles`, `retrieveFollowerIds`, `retrieveFollowingIds`, `retrieveHighlights`, `retrieveInsights`, `retrieveListMemberships`, `retrieveLists`, `retrieveLive`, `retrieveSimilar`, `retrieveSubscriptions` and `translateBio`, with typed params and responses.
 * `x().communities()` adds `find`, `listPopular`, `listSuggested`, `listTopics` and `searchMembers`, and the new `x().communities().media()` service lists a Community's media posts.
@@ -23,6 +24,13 @@
 * The async `events().stream` returns a `Flow<Event>`.
 * `webhooks()` adds `createTelegramLink`, and `extractions()` adds `cancel`.
 * The core module exposes kotlinx-coroutines-core as an API dependency for the async event stream.
+* Response models add getters for missing API fields at every depth, and enum models add the API's new values.
+* Monitor and extraction requests accept `name` and email filters, and batch user requests accept `usernames`.
+
+### Compatibility
+
+* `XAccount` and `XAccountDetail` drop a timestamp field the API stopped returning.
+* `accepted-field-differences.json` records the fields, required flags and values kept for existing callers.
 
 ## 0.9.4 (2026-10-13)
 

@@ -27,17 +27,16 @@ import java.util.Objects
 class UserRetrieveBatchTweetsResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    private val hasNextPage: JsonValue,
     private val nextCursor: JsonField<String>,
     private val tweets: JsonField<List<SearchTweet>>,
     private val unavailableIds: JsonField<List<String>>,
     private val unprocessedIds: JsonField<List<String>>,
+    private val hasNextPage: JsonValue,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("has_next_page") @ExcludeMissing hasNextPage: JsonValue = JsonMissing.of(),
         @JsonProperty("next_cursor")
         @ExcludeMissing
         nextCursor: JsonField<String> = JsonMissing.of(),
@@ -50,17 +49,8 @@ private constructor(
         @JsonProperty("unprocessed_ids")
         @ExcludeMissing
         unprocessedIds: JsonField<List<String>> = JsonMissing.of(),
-    ) : this(hasNextPage, nextCursor, tweets, unavailableIds, unprocessedIds, mutableMapOf())
-
-    /**
-     * Always false. The answer holds every post in 1 page.
-     *
-     * Expected to always return the following:
-     * ```kotlin
-     * JsonValue.from(false)
-     * ```
-     */
-    @JsonProperty("has_next_page") @ExcludeMissing fun _hasNextPage(): JsonValue = hasNextPage
+        @JsonProperty("has_next_page") @ExcludeMissing hasNextPage: JsonValue = JsonMissing.of(),
+    ) : this(nextCursor, tweets, unavailableIds, unprocessedIds, hasNextPage, mutableMapOf())
 
     /**
      * Always empty. The answer holds every post in 1 page.
@@ -93,6 +83,16 @@ private constructor(
      *   unexpectedly missing or null.
      */
     fun unprocessedIds(): List<String> = unprocessedIds.getRequired("unprocessed_ids")
+
+    /**
+     * Always false. The answer holds every post in 1 page.
+     *
+     * Expected to always return the following:
+     * ```kotlin
+     * JsonValue.from(false)
+     * ```
+     */
+    @JsonProperty("has_next_page") @ExcludeMissing fun _hasNextPage(): JsonValue = hasNextPage
 
     /**
      * Returns the raw JSON value of [nextCursor].
@@ -158,35 +158,25 @@ private constructor(
     /** A builder for [UserRetrieveBatchTweetsResponse]. */
     class Builder internal constructor() {
 
-        private var hasNextPage: JsonValue = JsonValue.from(false)
         private var nextCursor: JsonField<String>? = null
         private var tweets: JsonField<MutableList<SearchTweet>>? = null
         private var unavailableIds: JsonField<MutableList<String>>? = null
         private var unprocessedIds: JsonField<MutableList<String>>? = null
+        private var hasNextPage: JsonValue = JsonValue.from(false)
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(userRetrieveBatchTweetsResponse: UserRetrieveBatchTweetsResponse) =
             apply {
-                hasNextPage = userRetrieveBatchTweetsResponse.hasNextPage
                 nextCursor = userRetrieveBatchTweetsResponse.nextCursor
                 tweets = userRetrieveBatchTweetsResponse.tweets.map { it.toMutableList() }
                 unavailableIds =
                     userRetrieveBatchTweetsResponse.unavailableIds.map { it.toMutableList() }
                 unprocessedIds =
                     userRetrieveBatchTweetsResponse.unprocessedIds.map { it.toMutableList() }
+                hasNextPage = userRetrieveBatchTweetsResponse.hasNextPage
                 additionalProperties =
                     userRetrieveBatchTweetsResponse.additionalProperties.toMutableMap()
             }
-
-        /**
-         * Sets the field to an arbitrary JSON value.
-         *
-         * Defaults to the following:
-         * ```kotlin
-         * JsonValue.from(false)
-         * ```
-         */
-        fun hasNextPage(hasNextPage: JsonValue) = apply { this.hasNextPage = hasNextPage }
 
         /** Always empty. The answer holds every post in 1 page. */
         fun nextCursor(nextCursor: String) = nextCursor(JsonField.of(nextCursor))
@@ -261,6 +251,16 @@ private constructor(
                 }
         }
 
+        /**
+         * Sets the field to an arbitrary JSON value.
+         *
+         * Defaults to the following:
+         * ```kotlin
+         * JsonValue.from(false)
+         * ```
+         */
+        fun hasNextPage(hasNextPage: JsonValue) = apply { this.hasNextPage = hasNextPage }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -297,11 +297,11 @@ private constructor(
          */
         fun build(): UserRetrieveBatchTweetsResponse =
             UserRetrieveBatchTweetsResponse(
-                hasNextPage,
                 checkRequired("nextCursor", nextCursor),
                 checkRequired("tweets", tweets).map { it.toImmutable() },
                 checkRequired("unavailableIds", unavailableIds).map { it.toImmutable() },
                 checkRequired("unprocessedIds", unprocessedIds).map { it.toImmutable() },
+                hasNextPage,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -321,15 +321,15 @@ private constructor(
             return@apply
         }
 
+        nextCursor()
+        tweets().forEach { it.validate() }
+        unavailableIds()
+        unprocessedIds()
         _hasNextPage().let {
             if (it != JsonValue.from(false)) {
                 throw XTwitterScraperInvalidDataException("'hasNextPage' is invalid, received $it")
             }
         }
-        nextCursor()
-        tweets().forEach { it.validate() }
-        unavailableIds()
-        unprocessedIds()
         validated = true
     }
 
@@ -342,11 +342,11 @@ private constructor(
         }
 
     internal fun validity(): Int =
-        hasNextPage.let { if (it == JsonValue.from(false)) 1 else 0 } +
-            (if (nextCursor.asKnown() == null) 0 else 1) +
+        (if (nextCursor.asKnown() == null) 0 else 1) +
             (tweets.asKnown()?.sumOf { it.validity() } ?: 0) +
             (unavailableIds.asKnown()?.size ?: 0) +
-            (unprocessedIds.asKnown()?.size ?: 0)
+            (unprocessedIds.asKnown()?.size ?: 0) +
+            hasNextPage.let { if (it == JsonValue.from(false)) 1 else 0 }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -354,21 +354,21 @@ private constructor(
         }
 
         return other is UserRetrieveBatchTweetsResponse &&
-            hasNextPage == other.hasNextPage &&
             nextCursor == other.nextCursor &&
             tweets == other.tweets &&
             unavailableIds == other.unavailableIds &&
             unprocessedIds == other.unprocessedIds &&
+            hasNextPage == other.hasNextPage &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
         Objects.hash(
-            hasNextPage,
             nextCursor,
             tweets,
             unavailableIds,
             unprocessedIds,
+            hasNextPage,
             additionalProperties,
         )
     }
@@ -376,5 +376,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "UserRetrieveBatchTweetsResponse{hasNextPage=$hasNextPage, nextCursor=$nextCursor, tweets=$tweets, unavailableIds=$unavailableIds, unprocessedIds=$unprocessedIds, additionalProperties=$additionalProperties}"
+        "UserRetrieveBatchTweetsResponse{nextCursor=$nextCursor, tweets=$tweets, unavailableIds=$unavailableIds, unprocessedIds=$unprocessedIds, hasNextPage=$hasNextPage, additionalProperties=$additionalProperties}"
 }
