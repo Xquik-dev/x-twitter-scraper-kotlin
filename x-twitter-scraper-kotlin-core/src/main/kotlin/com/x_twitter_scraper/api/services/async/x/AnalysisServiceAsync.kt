@@ -9,17 +9,12 @@ import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.models.x.analysis.AnalysisBrandParams
-import com.x_twitter_scraper.api.models.x.analysis.AnalysisBrandResponse
 import com.x_twitter_scraper.api.models.x.analysis.AnalysisClassifyParams
-import com.x_twitter_scraper.api.models.x.analysis.AnalysisClassifyResponse
 import com.x_twitter_scraper.api.models.x.analysis.AnalysisMarketSignalsParams
-import com.x_twitter_scraper.api.models.x.analysis.AnalysisMarketSignalsResponse
 import com.x_twitter_scraper.api.models.x.analysis.AnalysisNewsParams
-import com.x_twitter_scraper.api.models.x.analysis.AnalysisNewsResponse
 import com.x_twitter_scraper.api.models.x.analysis.AnalysisSentimentParams
-import com.x_twitter_scraper.api.models.x.analysis.AnalysisSentimentResponse
 import com.x_twitter_scraper.api.models.x.analysis.AnalysisViralScoreParams
-import com.x_twitter_scraper.api.models.x.analysis.AnalysisViralScoreResponse
+import com.x_twitter_scraper.api.models.x.analysis.TweetAnalysisPage
 
 /** AI analysis of posts, at 2 credits per analyzed post */
 interface AnalysisServiceAsync {
@@ -44,10 +39,10 @@ interface AnalysisServiceAsync {
     suspend fun sentiment(
         params: AnalysisSentimentParams = AnalysisSentimentParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): AnalysisSentimentResponse
+    ): TweetAnalysisPage
 
     /** @see sentiment */
-    suspend fun sentiment(requestOptions: RequestOptions): AnalysisSentimentResponse =
+    suspend fun sentiment(requestOptions: RequestOptions): TweetAnalysisPage =
         sentiment(AnalysisSentimentParams.none(), requestOptions)
 
     /**
@@ -58,10 +53,10 @@ interface AnalysisServiceAsync {
     suspend fun viralScore(
         params: AnalysisViralScoreParams = AnalysisViralScoreParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): AnalysisViralScoreResponse
+    ): TweetAnalysisPage
 
     /** @see viralScore */
-    suspend fun viralScore(requestOptions: RequestOptions): AnalysisViralScoreResponse =
+    suspend fun viralScore(requestOptions: RequestOptions): TweetAnalysisPage =
         viralScore(AnalysisViralScoreParams.none(), requestOptions)
 
     /**
@@ -71,10 +66,10 @@ interface AnalysisServiceAsync {
     suspend fun brand(
         params: AnalysisBrandParams = AnalysisBrandParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): AnalysisBrandResponse
+    ): TweetAnalysisPage
 
     /** @see brand */
-    suspend fun brand(requestOptions: RequestOptions): AnalysisBrandResponse =
+    suspend fun brand(requestOptions: RequestOptions): TweetAnalysisPage =
         brand(AnalysisBrandParams.none(), requestOptions)
 
     /**
@@ -85,10 +80,10 @@ interface AnalysisServiceAsync {
     suspend fun news(
         params: AnalysisNewsParams = AnalysisNewsParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): AnalysisNewsResponse
+    ): TweetAnalysisPage
 
     /** @see news */
-    suspend fun news(requestOptions: RequestOptions): AnalysisNewsResponse =
+    suspend fun news(requestOptions: RequestOptions): TweetAnalysisPage =
         news(AnalysisNewsParams.none(), requestOptions)
 
     /**
@@ -99,10 +94,10 @@ interface AnalysisServiceAsync {
     suspend fun marketSignals(
         params: AnalysisMarketSignalsParams = AnalysisMarketSignalsParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): AnalysisMarketSignalsResponse
+    ): TweetAnalysisPage
 
     /** @see marketSignals */
-    suspend fun marketSignals(requestOptions: RequestOptions): AnalysisMarketSignalsResponse =
+    suspend fun marketSignals(requestOptions: RequestOptions): TweetAnalysisPage =
         marketSignals(AnalysisMarketSignalsParams.none(), requestOptions)
 
     /**
@@ -113,10 +108,10 @@ interface AnalysisServiceAsync {
     suspend fun classify(
         params: AnalysisClassifyParams = AnalysisClassifyParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): AnalysisClassifyResponse
+    ): TweetAnalysisPage
 
     /** @see classify */
-    suspend fun classify(requestOptions: RequestOptions): AnalysisClassifyResponse =
+    suspend fun classify(requestOptions: RequestOptions): TweetAnalysisPage =
         classify(AnalysisClassifyParams.none(), requestOptions)
 
     /**
@@ -141,13 +136,11 @@ interface AnalysisServiceAsync {
         suspend fun sentiment(
             params: AnalysisSentimentParams = AnalysisSentimentParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<AnalysisSentimentResponse>
+        ): HttpResponseFor<TweetAnalysisPage>
 
         /** @see sentiment */
         @MustBeClosed
-        suspend fun sentiment(
-            requestOptions: RequestOptions
-        ): HttpResponseFor<AnalysisSentimentResponse> =
+        suspend fun sentiment(requestOptions: RequestOptions): HttpResponseFor<TweetAnalysisPage> =
             sentiment(AnalysisSentimentParams.none(), requestOptions)
 
         /**
@@ -158,13 +151,11 @@ interface AnalysisServiceAsync {
         suspend fun viralScore(
             params: AnalysisViralScoreParams = AnalysisViralScoreParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<AnalysisViralScoreResponse>
+        ): HttpResponseFor<TweetAnalysisPage>
 
         /** @see viralScore */
         @MustBeClosed
-        suspend fun viralScore(
-            requestOptions: RequestOptions
-        ): HttpResponseFor<AnalysisViralScoreResponse> =
+        suspend fun viralScore(requestOptions: RequestOptions): HttpResponseFor<TweetAnalysisPage> =
             viralScore(AnalysisViralScoreParams.none(), requestOptions)
 
         /**
@@ -175,11 +166,11 @@ interface AnalysisServiceAsync {
         suspend fun brand(
             params: AnalysisBrandParams = AnalysisBrandParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<AnalysisBrandResponse>
+        ): HttpResponseFor<TweetAnalysisPage>
 
         /** @see brand */
         @MustBeClosed
-        suspend fun brand(requestOptions: RequestOptions): HttpResponseFor<AnalysisBrandResponse> =
+        suspend fun brand(requestOptions: RequestOptions): HttpResponseFor<TweetAnalysisPage> =
             brand(AnalysisBrandParams.none(), requestOptions)
 
         /**
@@ -190,11 +181,11 @@ interface AnalysisServiceAsync {
         suspend fun news(
             params: AnalysisNewsParams = AnalysisNewsParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<AnalysisNewsResponse>
+        ): HttpResponseFor<TweetAnalysisPage>
 
         /** @see news */
         @MustBeClosed
-        suspend fun news(requestOptions: RequestOptions): HttpResponseFor<AnalysisNewsResponse> =
+        suspend fun news(requestOptions: RequestOptions): HttpResponseFor<TweetAnalysisPage> =
             news(AnalysisNewsParams.none(), requestOptions)
 
         /**
@@ -205,13 +196,13 @@ interface AnalysisServiceAsync {
         suspend fun marketSignals(
             params: AnalysisMarketSignalsParams = AnalysisMarketSignalsParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<AnalysisMarketSignalsResponse>
+        ): HttpResponseFor<TweetAnalysisPage>
 
         /** @see marketSignals */
         @MustBeClosed
         suspend fun marketSignals(
             requestOptions: RequestOptions
-        ): HttpResponseFor<AnalysisMarketSignalsResponse> =
+        ): HttpResponseFor<TweetAnalysisPage> =
             marketSignals(AnalysisMarketSignalsParams.none(), requestOptions)
 
         /**
@@ -222,13 +213,11 @@ interface AnalysisServiceAsync {
         suspend fun classify(
             params: AnalysisClassifyParams = AnalysisClassifyParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<AnalysisClassifyResponse>
+        ): HttpResponseFor<TweetAnalysisPage>
 
         /** @see classify */
         @MustBeClosed
-        suspend fun classify(
-            requestOptions: RequestOptions
-        ): HttpResponseFor<AnalysisClassifyResponse> =
+        suspend fun classify(requestOptions: RequestOptions): HttpResponseFor<TweetAnalysisPage> =
             classify(AnalysisClassifyParams.none(), requestOptions)
     }
 }

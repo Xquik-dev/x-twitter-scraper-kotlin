@@ -12,6 +12,7 @@ import com.x_twitter_scraper.api.models.x.analysis.AnalysisMarketSignalsParams
 import com.x_twitter_scraper.api.models.x.analysis.AnalysisNewsParams
 import com.x_twitter_scraper.api.models.x.analysis.AnalysisSentimentParams
 import com.x_twitter_scraper.api.models.x.analysis.AnalysisViralScoreParams
+import com.x_twitter_scraper.api.models.x.analysis.TweetAnalysisPage
 import org.junit.jupiter.api.Test
 
 internal class AnalysisServiceAsyncTest {
@@ -101,7 +102,7 @@ internal class AnalysisServiceAsyncTest {
                     .build()
             )
 
-        kotlin.test.assertNotNull(response)
+        kotlin.test.assertIs<TweetAnalysisPage>(response)
     }
 
     @Test
@@ -190,7 +191,7 @@ internal class AnalysisServiceAsyncTest {
                     .build()
             )
 
-        kotlin.test.assertNotNull(response)
+        kotlin.test.assertIs<TweetAnalysisPage>(response)
     }
 
     @Test
@@ -277,7 +278,7 @@ internal class AnalysisServiceAsyncTest {
                     .build()
             )
 
-        kotlin.test.assertNotNull(response)
+        kotlin.test.assertIs<TweetAnalysisPage>(response)
     }
 
     @Test
@@ -364,7 +365,7 @@ internal class AnalysisServiceAsyncTest {
                     .build()
             )
 
-        kotlin.test.assertNotNull(response)
+        kotlin.test.assertIs<TweetAnalysisPage>(response)
     }
 
     @Test
@@ -453,7 +454,7 @@ internal class AnalysisServiceAsyncTest {
                     .build()
             )
 
-        kotlin.test.assertNotNull(response)
+        kotlin.test.assertIs<TweetAnalysisPage>(response)
     }
 
     @Test
@@ -541,6 +542,6 @@ internal class AnalysisServiceAsyncTest {
                     .build()
             )
 
-        kotlin.test.assertNotNull(response)
+        kotlin.test.assertIs<TweetAnalysisPage>(response)
     }
 }

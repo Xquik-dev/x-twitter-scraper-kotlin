@@ -135,7 +135,8 @@ class EventServiceImpl internal constructor(private val clientOptions: ClientOpt
                     .putHeader("Accept", "text/event-stream")
                     .build()
                     .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val requestOptions =
+                requestOptions.applyDefaults(RequestOptions.forStream(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
                 streamHandler.handle(response).let { streamResponse ->

@@ -143,7 +143,8 @@ class EventServiceAsyncImpl internal constructor(private val clientOptions: Clie
                     .putHeader("Accept", "text/event-stream")
                     .build()
                     .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val requestOptions =
+                requestOptions.applyDefaults(RequestOptions.forStream(clientOptions))
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
             return errorHandler.handle(response).parseable {
                 streamHandler

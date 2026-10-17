@@ -18,17 +18,12 @@ import com.x_twitter_scraper.api.core.http.json
 import com.x_twitter_scraper.api.core.http.parseable
 import com.x_twitter_scraper.api.core.prepareAsync
 import com.x_twitter_scraper.api.models.x.analysis.AnalysisBrandParams
-import com.x_twitter_scraper.api.models.x.analysis.AnalysisBrandResponse
 import com.x_twitter_scraper.api.models.x.analysis.AnalysisClassifyParams
-import com.x_twitter_scraper.api.models.x.analysis.AnalysisClassifyResponse
 import com.x_twitter_scraper.api.models.x.analysis.AnalysisMarketSignalsParams
-import com.x_twitter_scraper.api.models.x.analysis.AnalysisMarketSignalsResponse
 import com.x_twitter_scraper.api.models.x.analysis.AnalysisNewsParams
-import com.x_twitter_scraper.api.models.x.analysis.AnalysisNewsResponse
 import com.x_twitter_scraper.api.models.x.analysis.AnalysisSentimentParams
-import com.x_twitter_scraper.api.models.x.analysis.AnalysisSentimentResponse
 import com.x_twitter_scraper.api.models.x.analysis.AnalysisViralScoreParams
-import com.x_twitter_scraper.api.models.x.analysis.AnalysisViralScoreResponse
+import com.x_twitter_scraper.api.models.x.analysis.TweetAnalysisPage
 
 /** AI analysis of posts, at 2 credits per analyzed post */
 class AnalysisServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -46,33 +41,32 @@ class AnalysisServiceAsyncImpl internal constructor(private val clientOptions: C
     override suspend fun sentiment(
         params: AnalysisSentimentParams,
         requestOptions: RequestOptions,
-    ): AnalysisSentimentResponse = withRawResponse().sentiment(params, requestOptions).parse()
+    ): TweetAnalysisPage = withRawResponse().sentiment(params, requestOptions).parse()
 
     override suspend fun viralScore(
         params: AnalysisViralScoreParams,
         requestOptions: RequestOptions,
-    ): AnalysisViralScoreResponse = withRawResponse().viralScore(params, requestOptions).parse()
+    ): TweetAnalysisPage = withRawResponse().viralScore(params, requestOptions).parse()
 
     override suspend fun brand(
         params: AnalysisBrandParams,
         requestOptions: RequestOptions,
-    ): AnalysisBrandResponse = withRawResponse().brand(params, requestOptions).parse()
+    ): TweetAnalysisPage = withRawResponse().brand(params, requestOptions).parse()
 
     override suspend fun news(
         params: AnalysisNewsParams,
         requestOptions: RequestOptions,
-    ): AnalysisNewsResponse = withRawResponse().news(params, requestOptions).parse()
+    ): TweetAnalysisPage = withRawResponse().news(params, requestOptions).parse()
 
     override suspend fun marketSignals(
         params: AnalysisMarketSignalsParams,
         requestOptions: RequestOptions,
-    ): AnalysisMarketSignalsResponse =
-        withRawResponse().marketSignals(params, requestOptions).parse()
+    ): TweetAnalysisPage = withRawResponse().marketSignals(params, requestOptions).parse()
 
     override suspend fun classify(
         params: AnalysisClassifyParams,
         requestOptions: RequestOptions,
-    ): AnalysisClassifyResponse = withRawResponse().classify(params, requestOptions).parse()
+    ): TweetAnalysisPage = withRawResponse().classify(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         AnalysisServiceAsync.WithRawResponse {
@@ -87,13 +81,13 @@ class AnalysisServiceAsyncImpl internal constructor(private val clientOptions: C
                 clientOptions.toBuilder().apply(modifier).build()
             )
 
-        private val sentimentHandler: Handler<AnalysisSentimentResponse> =
-            jsonHandler<AnalysisSentimentResponse>(clientOptions.jsonMapper)
+        private val sentimentHandler: Handler<TweetAnalysisPage> =
+            jsonHandler<TweetAnalysisPage>(clientOptions.jsonMapper)
 
         override suspend fun sentiment(
             params: AnalysisSentimentParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<AnalysisSentimentResponse> {
+        ): HttpResponseFor<TweetAnalysisPage> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -115,13 +109,13 @@ class AnalysisServiceAsyncImpl internal constructor(private val clientOptions: C
             }
         }
 
-        private val viralScoreHandler: Handler<AnalysisViralScoreResponse> =
-            jsonHandler<AnalysisViralScoreResponse>(clientOptions.jsonMapper)
+        private val viralScoreHandler: Handler<TweetAnalysisPage> =
+            jsonHandler<TweetAnalysisPage>(clientOptions.jsonMapper)
 
         override suspend fun viralScore(
             params: AnalysisViralScoreParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<AnalysisViralScoreResponse> {
+        ): HttpResponseFor<TweetAnalysisPage> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -143,13 +137,13 @@ class AnalysisServiceAsyncImpl internal constructor(private val clientOptions: C
             }
         }
 
-        private val brandHandler: Handler<AnalysisBrandResponse> =
-            jsonHandler<AnalysisBrandResponse>(clientOptions.jsonMapper)
+        private val brandHandler: Handler<TweetAnalysisPage> =
+            jsonHandler<TweetAnalysisPage>(clientOptions.jsonMapper)
 
         override suspend fun brand(
             params: AnalysisBrandParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<AnalysisBrandResponse> {
+        ): HttpResponseFor<TweetAnalysisPage> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -171,13 +165,13 @@ class AnalysisServiceAsyncImpl internal constructor(private val clientOptions: C
             }
         }
 
-        private val newsHandler: Handler<AnalysisNewsResponse> =
-            jsonHandler<AnalysisNewsResponse>(clientOptions.jsonMapper)
+        private val newsHandler: Handler<TweetAnalysisPage> =
+            jsonHandler<TweetAnalysisPage>(clientOptions.jsonMapper)
 
         override suspend fun news(
             params: AnalysisNewsParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<AnalysisNewsResponse> {
+        ): HttpResponseFor<TweetAnalysisPage> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -199,13 +193,13 @@ class AnalysisServiceAsyncImpl internal constructor(private val clientOptions: C
             }
         }
 
-        private val marketSignalsHandler: Handler<AnalysisMarketSignalsResponse> =
-            jsonHandler<AnalysisMarketSignalsResponse>(clientOptions.jsonMapper)
+        private val marketSignalsHandler: Handler<TweetAnalysisPage> =
+            jsonHandler<TweetAnalysisPage>(clientOptions.jsonMapper)
 
         override suspend fun marketSignals(
             params: AnalysisMarketSignalsParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<AnalysisMarketSignalsResponse> {
+        ): HttpResponseFor<TweetAnalysisPage> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -227,13 +221,13 @@ class AnalysisServiceAsyncImpl internal constructor(private val clientOptions: C
             }
         }
 
-        private val classifyHandler: Handler<AnalysisClassifyResponse> =
-            jsonHandler<AnalysisClassifyResponse>(clientOptions.jsonMapper)
+        private val classifyHandler: Handler<TweetAnalysisPage> =
+            jsonHandler<TweetAnalysisPage>(clientOptions.jsonMapper)
 
         override suspend fun classify(
             params: AnalysisClassifyParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<AnalysisClassifyResponse> {
+        ): HttpResponseFor<TweetAnalysisPage> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)

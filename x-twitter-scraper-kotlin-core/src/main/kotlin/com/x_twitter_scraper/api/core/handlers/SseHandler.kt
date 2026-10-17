@@ -15,51 +15,10 @@ import com.x_twitter_scraper.api.core.http.StreamResponse
 import com.x_twitter_scraper.api.core.http.map
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
 
-internal fun sseHandler(): Handler<StreamResponse<SseMessage>> = SseHandlerInternal
-
-private object SseHandlerInternal : Handler<StreamResponse<SseMessage>> {
-
-    override fun handle(response: HttpResponse): StreamResponse<SseMessage> {
-        val reader = response.body().bufferedReader(Charsets.UTF_8)
-        val messages = sequence {
-            var event: String? = null
-            var id: String? = null
-            val data = StringBuilder()
-            var hasData = false
-            for (line in reader.lineSequence()) {
-                if (line.isEmpty()) {
-                    if (hasData) {
-                        yield(SseMessage(event, data.toString(), id))
-                    }
-                    event = null
-                    data.setLength(0)
-                    hasData = false
-                    continue
-                }
-                if (line.startsWith(":")) {
-                    continue
-                }
-                val colon = line.indexOf(':')
-                val field = if (colon == -1) line else line.substring(0, colon)
-                val value = if (colon == -1) "" else line.substring(colon + 1).removePrefix(" ")
-                when (field) {
-                    "event" -> event = value
-                    "data" -> {
-                        if (hasData) {
-                            data.append('\n')
-                        }
-                        data.append(value)
-                        hasData = true
-                    }
-                    "id" -> if ('\u0000' !in value) id = value
-                }
-            }
-        }
-        return object : StreamResponse<SseMessage> {
-            override fun asSequence(): Sequence<SseMessage> = messages
-
-            override fun close() = response.close()
-        }
+internal fun sseHandler(): Handler<StreamResponse<SseMessage>> = streamHandler { _, lines ->
+    val state = SseState()
+    for ((index, line) in lines.withIndex()) {
+        state.decode(if (index == 0) line.removePrefix("\uFEFF") else line)?.let { yield(it) }
     }
 }
 
@@ -76,5 +35,38 @@ internal inline fun <reified T> Handler<StreamResponse<SseMessage>>.mapJson(
                     throw XTwitterScraperInvalidDataException("Error reading server-sent event", e)
                 }
             }
+    }
+}
+
+private class SseState {
+
+    private var event: String? = null
+    private val data = mutableListOf<String>()
+    private var lastId: String? = null
+
+    fun decode(line: String): SseMessage? {
+        if (line.isEmpty()) {
+            return dispatch()
+        }
+        if (line.startsWith(':')) {
+            return null
+        }
+        val colon = line.indexOf(':')
+        val field = if (colon == -1) line else line.substring(0, colon)
+        val value = if (colon == -1) "" else line.substring(colon + 1).removePrefix(" ")
+        when (field) {
+            "event" -> event = value
+            "data" -> data.add(value)
+            "id" -> if (!value.contains('\u0000')) lastId = value
+        }
+        return null
+    }
+
+    private fun dispatch(): SseMessage? {
+        val message =
+            if (data.isEmpty()) null else SseMessage(event, data.joinToString("\n"), lastId)
+        event = null
+        data.clear()
+        return message
     }
 }

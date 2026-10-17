@@ -11,8 +11,14 @@ import com.x_twitter_scraper.api.core.jsonMapper
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
 import com.x_twitter_scraper.api.models.EventType
 import com.x_twitter_scraper.api.models.events.Event
+import java.io.IOException
 import java.io.InputStream
 import java.time.OffsetDateTime
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicInteger
+import kotlin.concurrent.thread
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
@@ -104,5 +110,81 @@ internal class SseHandlerTest {
             }
             .isInstanceOf(XTwitterScraperInvalidDataException::class.java)
             .hasMessage("Error reading server-sent event")
+    }
+
+    @Test
+    fun closingDuringAReadEndsTheSequenceWithoutAnError() {
+        val reading = CountDownLatch(1)
+        val resume = CountDownLatch(1)
+        val closes = AtomicInteger()
+        val body =
+            object : InputStream() {
+                override fun read(): Int {
+                    reading.countDown()
+                    check(resume.await(10, TimeUnit.SECONDS))
+                    throw IOException("Read failed after close")
+                }
+            }
+        val response =
+            object : HttpResponse {
+                override fun statusCode(): Int = 200
+
+                override fun headers(): Headers = Headers.builder().build()
+
+                override fun body(): InputStream = body
+
+                override fun close() {
+                    closes.incrementAndGet()
+                }
+            }
+        val stream = sseHandler().handle(response)
+        val messages = CompletableFuture<List<SseMessage>>()
+        val reader =
+            thread(isDaemon = true) {
+                try {
+                    messages.complete(stream.asSequence().toList())
+                } catch (e: Exception) {
+                    messages.completeExceptionally(e)
+                }
+            }
+
+        try {
+            assertThat(reading.await(10, TimeUnit.SECONDS)).isTrue()
+            stream.close()
+            assertThat(closes.get()).isZero()
+            resume.countDown()
+
+            assertThat(messages.get(10, TimeUnit.SECONDS)).isEmpty()
+            assertThat(closes.get()).isEqualTo(1)
+            stream.close()
+            assertThat(closes.get()).isEqualTo(1)
+        } finally {
+            resume.countDown()
+            reader.join(10_000)
+            stream.close()
+        }
+    }
+
+    @Test
+    fun releasesTheResponseAtTheEndOfTheSequence() {
+        val response = StubResponse("data: complete\n\n")
+
+        val messages = sseHandler().handle(response).asSequence().toList()
+
+        assertThat(messages).containsExactly(SseMessage(null, "complete", null))
+        assertThat(response.closed).isTrue()
+    }
+
+    @Test
+    fun ignoresAByteOrderMarkBeforeTheFirstField() {
+        val response = StubResponse("\uFEFFdata: first\n\ndata: \uFEFFsecond\n\n")
+
+        val messages = sseHandler().handle(response).use { it.asSequence().toList() }
+
+        assertThat(messages)
+            .containsExactly(
+                SseMessage(null, "first", null),
+                SseMessage(null, "\uFEFFsecond", null),
+            )
     }
 }

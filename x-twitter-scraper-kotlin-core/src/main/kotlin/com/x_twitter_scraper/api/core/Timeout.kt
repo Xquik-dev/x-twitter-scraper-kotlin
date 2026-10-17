@@ -127,6 +127,9 @@ private constructor(
         fun build(): Timeout = Timeout(connect, read, write, request)
     }
 
+    internal fun forStream(): Timeout =
+        Timeout(connect, read ?: Duration.ofMinutes(1), write ?: request(), Duration.ZERO)
+
     internal fun assign(target: Timeout): Timeout =
         target
             .toBuilder()

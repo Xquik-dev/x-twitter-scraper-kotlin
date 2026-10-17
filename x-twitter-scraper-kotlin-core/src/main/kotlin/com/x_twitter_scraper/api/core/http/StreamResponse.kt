@@ -4,10 +4,12 @@
 
 package com.x_twitter_scraper.api.core.http
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.launch
 
 interface StreamResponse<T> : AutoCloseable {
 
@@ -23,6 +25,19 @@ internal fun <T, R> StreamResponse<T>.map(transform: (T) -> R): StreamResponse<R
 
 internal fun <T> StreamResponse<T>.asFlow(): Flow<T> {
     val response = this
-    return flow { response.use { stream -> stream.asSequence().forEach { emit(it) } } }
-        .flowOn(Dispatchers.IO)
+    return callbackFlow {
+        val reader =
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    response.use { stream -> stream.asSequence().forEach { send(it) } }
+                    close()
+                } catch (e: Exception) {
+                    close(e)
+                }
+            }
+        awaitClose {
+            reader.cancel()
+            runCatching { response.close() }
+        }
+    }
 }

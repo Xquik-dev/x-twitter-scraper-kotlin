@@ -11,27 +11,25 @@ import com.x_twitter_scraper.api.models.SearchTweet
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class AnalysisSentimentResponseTest {
+internal class TweetAnalysisPageTest {
 
     @Test
     fun create() {
-        val analysisSentimentResponse =
-            AnalysisSentimentResponse.builder()
+        val tweetAnalysisPage =
+            TweetAnalysisPage.builder()
                 .analysisSummary(
-                    AnalysisSentimentResponse.AnalysisSummary.builder()
+                    TweetAnalysisPage.AnalysisSummary.builder()
                         .addCashtag(
-                            AnalysisSentimentResponse.AnalysisSummary.Cashtag.builder()
+                            TweetAnalysisPage.AnalysisSummary.Cashtag.builder()
                                 .cashtag("\$NVDA")
                                 .choices(
-                                    AnalysisSentimentResponse.AnalysisSummary.Cashtag.Choices
-                                        .builder()
+                                    TweetAnalysisPage.AnalysisSummary.Cashtag.Choices.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .rows(3L)
                                 .signal(
-                                    AnalysisSentimentResponse.AnalysisSummary.Cashtag.Signal
-                                        .builder()
+                                    TweetAnalysisPage.AnalysisSummary.Cashtag.Signal.builder()
                                         .bearish(1L)
                                         .bullish(2L)
                                         .score(0.3333)
@@ -41,13 +39,11 @@ internal class AnalysisSentimentResponseTest {
                         )
                         .engagement(1840L)
                         .monitor(
-                            AnalysisSentimentResponse.AnalysisSummary.Monitor.builder()
+                            TweetAnalysisPage.AnalysisSummary.Monitor.builder()
                                 .addChangedRow(
-                                    AnalysisSentimentResponse.AnalysisSummary.Monitor.ChangedRow
-                                        .builder()
+                                    TweetAnalysisPage.AnalysisSummary.Monitor.ChangedRow.builder()
                                         .addChange(
-                                            AnalysisSentimentResponse.AnalysisSummary.Monitor
-                                                .ChangedRow
+                                            TweetAnalysisPage.AnalysisSummary.Monitor.ChangedRow
                                                 .Change
                                                 .builder()
                                                 .current("negative")
@@ -59,20 +55,19 @@ internal class AnalysisSentimentResponseTest {
                                         .build()
                                 )
                                 .statuses(
-                                    AnalysisSentimentResponse.AnalysisSummary.Monitor.Statuses
-                                        .builder()
+                                    TweetAnalysisPage.AnalysisSummary.Monitor.Statuses.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .build()
                         )
                         .questions(
-                            AnalysisSentimentResponse.AnalysisSummary.Questions.builder()
+                            TweetAnalysisPage.AnalysisSummary.Questions.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
                         .rows(
-                            AnalysisSentimentResponse.AnalysisSummary.Rows.builder()
+                            TweetAnalysisPage.AnalysisSummary.Rows.builder()
                                 .analyzed(20L)
                                 .failed(0L)
                                 .skipped(0L)
@@ -80,16 +75,15 @@ internal class AnalysisSentimentResponseTest {
                         )
                         .schemaVersion(1L)
                         .addSourceDomain(
-                            AnalysisSentimentResponse.AnalysisSummary.SourceDomain.builder()
+                            TweetAnalysisPage.AnalysisSummary.SourceDomain.builder()
                                 .domain("youtube.com")
                                 .posts(4L)
                                 .build()
                         )
                         .addTarget(
-                            AnalysisSentimentResponse.AnalysisSummary.Target.builder()
+                            TweetAnalysisPage.AnalysisSummary.Target.builder()
                                 .choices(
-                                    AnalysisSentimentResponse.AnalysisSummary.Target.Choices
-                                        .builder()
+                                    TweetAnalysisPage.AnalysisSummary.Target.Choices.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
@@ -98,14 +92,14 @@ internal class AnalysisSentimentResponseTest {
                                 .name("Sony")
                                 .share(0.7)
                                 .top(
-                                    AnalysisSentimentResponse.AnalysisSummary.Target.Top.builder()
+                                    TweetAnalysisPage.AnalysisSummary.Target.Top.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .build()
                         )
                         .viral(
-                            AnalysisSentimentResponse.AnalysisSummary.Viral.builder()
+                            TweetAnalysisPage.AnalysisSummary.Viral.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
@@ -114,70 +108,58 @@ internal class AnalysisSentimentResponseTest {
                 .hasNextPage(false)
                 .nextCursor("")
                 .addResult(
-                    AnalysisSentimentResponse.Result.builder()
+                    TweetAnalysisPage.Result.builder()
                         .analysis(
-                            AnalysisSentimentResponse.Result.Analysis.builder()
+                            TweetAnalysisPage.Result.Analysis.builder()
                                 .addAnswer(
-                                    AnalysisSentimentResponse.Result.Analysis.Answer.builder()
+                                    TweetAnalysisPage.Result.Analysis.Answer.builder()
                                         .questionId("sentiment")
                                         .questionVersion("sentiment:2")
-                                        .type(
-                                            AnalysisSentimentResponse.Result.Analysis.Answer.Type
-                                                .CHOICE
-                                        )
+                                        .type(TweetAnalysisPage.Result.Analysis.Answer.Type.CHOICE)
                                         .confidence(0.93)
                                         .addLevel("No attitude.")
                                         .probabilities(
-                                            AnalysisSentimentResponse.Result.Analysis.Answer
-                                                .Probabilities
+                                            TweetAnalysisPage.Result.Analysis.Answer.Probabilities
                                                 .builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
                                         .probability(0.08)
                                         .value(
-                                            AnalysisSentimentResponse.Result.Analysis.Answer
-                                                .InnerValue
+                                            TweetAnalysisPage.Result.Analysis.Answer.InnerValue
                                                 .ofString("string")
                                         )
                                         .build()
                                 )
                                 .contextAvailability(
-                                    AnalysisSentimentResponse.Result.Analysis.ContextAvailability
-                                        .builder()
+                                    TweetAnalysisPage.Result.Analysis.ContextAvailability.builder()
                                         .article(
-                                            AnalysisSentimentResponse.Result.Analysis
-                                                .ContextAvailability
+                                            TweetAnalysisPage.Result.Analysis.ContextAvailability
                                                 .Article
                                                 .NOT_SUPPLIED
                                         )
                                         .author(
-                                            AnalysisSentimentResponse.Result.Analysis
-                                                .ContextAvailability
+                                            TweetAnalysisPage.Result.Analysis.ContextAvailability
                                                 .Author
                                                 .AVAILABLE
                                         )
                                         .media(
-                                            AnalysisSentimentResponse.Result.Analysis
-                                                .ContextAvailability
+                                            TweetAnalysisPage.Result.Analysis.ContextAvailability
                                                 .Media
                                                 .NOT_SUPPLIED
                                         )
                                         .postText(
-                                            AnalysisSentimentResponse.Result.Analysis
-                                                .ContextAvailability
+                                            TweetAnalysisPage.Result.Analysis.ContextAvailability
                                                 .PostText
                                                 .FULL
                                         )
                                         .quote(
-                                            AnalysisSentimentResponse.Result.Analysis
-                                                .ContextAvailability
+                                            TweetAnalysisPage.Result.Analysis.ContextAvailability
                                                 .Quote
                                                 .NOT_APPLICABLE
                                         )
                                         .reply(
-                                            AnalysisSentimentResponse.Result.Analysis
-                                                .ContextAvailability
+                                            TweetAnalysisPage.Result.Analysis.ContextAvailability
                                                 .Reply
                                                 .NOT_APPLICABLE
                                         )
@@ -185,7 +167,7 @@ internal class AnalysisSentimentResponseTest {
                                 )
                                 .contextBytes(612L)
                                 .addQuestion(
-                                    AnalysisSentimentResponse.Result.Analysis.Question.builder()
+                                    TweetAnalysisPage.Result.Analysis.Question.builder()
                                         .id("sentiment")
                                         .version("sentiment:2")
                                         .build()
@@ -193,16 +175,16 @@ internal class AnalysisSentimentResponseTest {
                                 .build()
                         )
                         .answers(
-                            AnalysisSentimentResponse.Result.Answers.builder()
+                            TweetAnalysisPage.Result.Answers.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
                         .addCashtag("\$NVDA")
                         .monitor(
-                            AnalysisSentimentResponse.Result.Monitor.builder()
+                            TweetAnalysisPage.Result.Monitor.builder()
                                 .addChangedQuestionId("sentiment")
                                 .addChange(
-                                    AnalysisSentimentResponse.Result.Monitor.Change.builder()
+                                    TweetAnalysisPage.Result.Monitor.Change.builder()
                                         .current("negative")
                                         .previous("positive")
                                         .questionId("sentiment")
@@ -211,7 +193,7 @@ internal class AnalysisSentimentResponseTest {
                                 .configurationFingerprint(
                                     "9f2c4e1b7a5d3c8e6f0a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f6a"
                                 )
-                                .status(AnalysisSentimentResponse.Result.Monitor.Status.CHANGED)
+                                .status(TweetAnalysisPage.Result.Monitor.Status.CHANGED)
                                 .build()
                         )
                         .addSourceDomain("youtube.com")
@@ -228,39 +210,39 @@ internal class AnalysisSentimentResponseTest {
                                 .build()
                         )
                         .viral(
-                            AnalysisSentimentResponse.Result.Viral.builder()
+                            TweetAnalysisPage.Result.Viral.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
                         .viralActualEngagementRate(1.2874)
                         .viralAlgorithmScore(18.4)
                         .viralScore(72L)
-                        .viralVerdict(AnalysisSentimentResponse.Result.ViralVerdict.SEND_IT)
+                        .viralVerdict(TweetAnalysisPage.Result.ViralVerdict.SEND_IT)
                         .build()
                 )
                 .addUnanalyzed(
-                    AnalysisSentimentResponse.Unanalyzed.builder()
+                    TweetAnalysisPage.Unanalyzed.builder()
                         .id("1893456789012345678")
                         .reason("post_unavailable")
-                        .status(AnalysisSentimentResponse.Unanalyzed.Status.SKIPPED)
+                        .status(TweetAnalysisPage.Unanalyzed.Status.SKIPPED)
                         .build()
                 )
                 .build()
 
-        assertThat(analysisSentimentResponse.analysisSummary())
+        assertThat(tweetAnalysisPage.analysisSummary())
             .isEqualTo(
-                AnalysisSentimentResponse.AnalysisSummary.builder()
+                TweetAnalysisPage.AnalysisSummary.builder()
                     .addCashtag(
-                        AnalysisSentimentResponse.AnalysisSummary.Cashtag.builder()
+                        TweetAnalysisPage.AnalysisSummary.Cashtag.builder()
                             .cashtag("\$NVDA")
                             .choices(
-                                AnalysisSentimentResponse.AnalysisSummary.Cashtag.Choices.builder()
+                                TweetAnalysisPage.AnalysisSummary.Cashtag.Choices.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("bar"))
                                     .build()
                             )
                             .rows(3L)
                             .signal(
-                                AnalysisSentimentResponse.AnalysisSummary.Cashtag.Signal.builder()
+                                TweetAnalysisPage.AnalysisSummary.Cashtag.Signal.builder()
                                     .bearish(1L)
                                     .bullish(2L)
                                     .score(0.3333)
@@ -270,13 +252,11 @@ internal class AnalysisSentimentResponseTest {
                     )
                     .engagement(1840L)
                     .monitor(
-                        AnalysisSentimentResponse.AnalysisSummary.Monitor.builder()
+                        TweetAnalysisPage.AnalysisSummary.Monitor.builder()
                             .addChangedRow(
-                                AnalysisSentimentResponse.AnalysisSummary.Monitor.ChangedRow
-                                    .builder()
+                                TweetAnalysisPage.AnalysisSummary.Monitor.ChangedRow.builder()
                                     .addChange(
-                                        AnalysisSentimentResponse.AnalysisSummary.Monitor.ChangedRow
-                                            .Change
+                                        TweetAnalysisPage.AnalysisSummary.Monitor.ChangedRow.Change
                                             .builder()
                                             .current("negative")
                                             .previous("positive")
@@ -287,19 +267,19 @@ internal class AnalysisSentimentResponseTest {
                                     .build()
                             )
                             .statuses(
-                                AnalysisSentimentResponse.AnalysisSummary.Monitor.Statuses.builder()
+                                TweetAnalysisPage.AnalysisSummary.Monitor.Statuses.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("bar"))
                                     .build()
                             )
                             .build()
                     )
                     .questions(
-                        AnalysisSentimentResponse.AnalysisSummary.Questions.builder()
+                        TweetAnalysisPage.AnalysisSummary.Questions.builder()
                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                             .build()
                     )
                     .rows(
-                        AnalysisSentimentResponse.AnalysisSummary.Rows.builder()
+                        TweetAnalysisPage.AnalysisSummary.Rows.builder()
                             .analyzed(20L)
                             .failed(0L)
                             .skipped(0L)
@@ -307,15 +287,15 @@ internal class AnalysisSentimentResponseTest {
                     )
                     .schemaVersion(1L)
                     .addSourceDomain(
-                        AnalysisSentimentResponse.AnalysisSummary.SourceDomain.builder()
+                        TweetAnalysisPage.AnalysisSummary.SourceDomain.builder()
                             .domain("youtube.com")
                             .posts(4L)
                             .build()
                     )
                     .addTarget(
-                        AnalysisSentimentResponse.AnalysisSummary.Target.builder()
+                        TweetAnalysisPage.AnalysisSummary.Target.builder()
                             .choices(
-                                AnalysisSentimentResponse.AnalysisSummary.Target.Choices.builder()
+                                TweetAnalysisPage.AnalysisSummary.Target.Choices.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("bar"))
                                     .build()
                             )
@@ -324,93 +304,79 @@ internal class AnalysisSentimentResponseTest {
                             .name("Sony")
                             .share(0.7)
                             .top(
-                                AnalysisSentimentResponse.AnalysisSummary.Target.Top.builder()
+                                TweetAnalysisPage.AnalysisSummary.Target.Top.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("bar"))
                                     .build()
                             )
                             .build()
                     )
                     .viral(
-                        AnalysisSentimentResponse.AnalysisSummary.Viral.builder()
+                        TweetAnalysisPage.AnalysisSummary.Viral.builder()
                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                             .build()
                     )
                     .build()
             )
-        assertThat(analysisSentimentResponse.hasNextPage()).isEqualTo(false)
-        assertThat(analysisSentimentResponse.nextCursor()).isEqualTo("")
-        assertThat(analysisSentimentResponse.results())
+        assertThat(tweetAnalysisPage.hasNextPage()).isEqualTo(false)
+        assertThat(tweetAnalysisPage.nextCursor()).isEqualTo("")
+        assertThat(tweetAnalysisPage.results())
             .containsExactly(
-                AnalysisSentimentResponse.Result.builder()
+                TweetAnalysisPage.Result.builder()
                     .analysis(
-                        AnalysisSentimentResponse.Result.Analysis.builder()
+                        TweetAnalysisPage.Result.Analysis.builder()
                             .addAnswer(
-                                AnalysisSentimentResponse.Result.Analysis.Answer.builder()
+                                TweetAnalysisPage.Result.Analysis.Answer.builder()
                                     .questionId("sentiment")
                                     .questionVersion("sentiment:2")
-                                    .type(
-                                        AnalysisSentimentResponse.Result.Analysis.Answer.Type.CHOICE
-                                    )
+                                    .type(TweetAnalysisPage.Result.Analysis.Answer.Type.CHOICE)
                                     .confidence(0.93)
                                     .addLevel("No attitude.")
                                     .probabilities(
-                                        AnalysisSentimentResponse.Result.Analysis.Answer
-                                            .Probabilities
+                                        TweetAnalysisPage.Result.Analysis.Answer.Probabilities
                                             .builder()
                                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
                                     )
                                     .probability(0.08)
                                     .value(
-                                        AnalysisSentimentResponse.Result.Analysis.Answer.InnerValue
+                                        TweetAnalysisPage.Result.Analysis.Answer.InnerValue
                                             .ofString("string")
                                     )
                                     .build()
                             )
                             .contextAvailability(
-                                AnalysisSentimentResponse.Result.Analysis.ContextAvailability
-                                    .builder()
+                                TweetAnalysisPage.Result.Analysis.ContextAvailability.builder()
                                     .article(
-                                        AnalysisSentimentResponse.Result.Analysis
-                                            .ContextAvailability
+                                        TweetAnalysisPage.Result.Analysis.ContextAvailability
                                             .Article
                                             .NOT_SUPPLIED
                                     )
                                     .author(
-                                        AnalysisSentimentResponse.Result.Analysis
-                                            .ContextAvailability
-                                            .Author
+                                        TweetAnalysisPage.Result.Analysis.ContextAvailability.Author
                                             .AVAILABLE
                                     )
                                     .media(
-                                        AnalysisSentimentResponse.Result.Analysis
-                                            .ContextAvailability
-                                            .Media
+                                        TweetAnalysisPage.Result.Analysis.ContextAvailability.Media
                                             .NOT_SUPPLIED
                                     )
                                     .postText(
-                                        AnalysisSentimentResponse.Result.Analysis
-                                            .ContextAvailability
+                                        TweetAnalysisPage.Result.Analysis.ContextAvailability
                                             .PostText
                                             .FULL
                                     )
                                     .quote(
-                                        AnalysisSentimentResponse.Result.Analysis
-                                            .ContextAvailability
-                                            .Quote
+                                        TweetAnalysisPage.Result.Analysis.ContextAvailability.Quote
                                             .NOT_APPLICABLE
                                     )
                                     .reply(
-                                        AnalysisSentimentResponse.Result.Analysis
-                                            .ContextAvailability
-                                            .Reply
+                                        TweetAnalysisPage.Result.Analysis.ContextAvailability.Reply
                                             .NOT_APPLICABLE
                                     )
                                     .build()
                             )
                             .contextBytes(612L)
                             .addQuestion(
-                                AnalysisSentimentResponse.Result.Analysis.Question.builder()
+                                TweetAnalysisPage.Result.Analysis.Question.builder()
                                     .id("sentiment")
                                     .version("sentiment:2")
                                     .build()
@@ -418,16 +384,16 @@ internal class AnalysisSentimentResponseTest {
                             .build()
                     )
                     .answers(
-                        AnalysisSentimentResponse.Result.Answers.builder()
+                        TweetAnalysisPage.Result.Answers.builder()
                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                             .build()
                     )
                     .addCashtag("\$NVDA")
                     .monitor(
-                        AnalysisSentimentResponse.Result.Monitor.builder()
+                        TweetAnalysisPage.Result.Monitor.builder()
                             .addChangedQuestionId("sentiment")
                             .addChange(
-                                AnalysisSentimentResponse.Result.Monitor.Change.builder()
+                                TweetAnalysisPage.Result.Monitor.Change.builder()
                                     .current("negative")
                                     .previous("positive")
                                     .questionId("sentiment")
@@ -436,7 +402,7 @@ internal class AnalysisSentimentResponseTest {
                             .configurationFingerprint(
                                 "9f2c4e1b7a5d3c8e6f0a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f6a"
                             )
-                            .status(AnalysisSentimentResponse.Result.Monitor.Status.CHANGED)
+                            .status(TweetAnalysisPage.Result.Monitor.Status.CHANGED)
                             .build()
                     )
                     .addSourceDomain("youtube.com")
@@ -453,22 +419,22 @@ internal class AnalysisSentimentResponseTest {
                             .build()
                     )
                     .viral(
-                        AnalysisSentimentResponse.Result.Viral.builder()
+                        TweetAnalysisPage.Result.Viral.builder()
                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                             .build()
                     )
                     .viralActualEngagementRate(1.2874)
                     .viralAlgorithmScore(18.4)
                     .viralScore(72L)
-                    .viralVerdict(AnalysisSentimentResponse.Result.ViralVerdict.SEND_IT)
+                    .viralVerdict(TweetAnalysisPage.Result.ViralVerdict.SEND_IT)
                     .build()
             )
-        assertThat(analysisSentimentResponse.unanalyzed())
+        assertThat(tweetAnalysisPage.unanalyzed())
             .containsExactly(
-                AnalysisSentimentResponse.Unanalyzed.builder()
+                TweetAnalysisPage.Unanalyzed.builder()
                     .id("1893456789012345678")
                     .reason("post_unavailable")
-                    .status(AnalysisSentimentResponse.Unanalyzed.Status.SKIPPED)
+                    .status(TweetAnalysisPage.Unanalyzed.Status.SKIPPED)
                     .build()
             )
     }
@@ -476,23 +442,21 @@ internal class AnalysisSentimentResponseTest {
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val analysisSentimentResponse =
-            AnalysisSentimentResponse.builder()
+        val tweetAnalysisPage =
+            TweetAnalysisPage.builder()
                 .analysisSummary(
-                    AnalysisSentimentResponse.AnalysisSummary.builder()
+                    TweetAnalysisPage.AnalysisSummary.builder()
                         .addCashtag(
-                            AnalysisSentimentResponse.AnalysisSummary.Cashtag.builder()
+                            TweetAnalysisPage.AnalysisSummary.Cashtag.builder()
                                 .cashtag("\$NVDA")
                                 .choices(
-                                    AnalysisSentimentResponse.AnalysisSummary.Cashtag.Choices
-                                        .builder()
+                                    TweetAnalysisPage.AnalysisSummary.Cashtag.Choices.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .rows(3L)
                                 .signal(
-                                    AnalysisSentimentResponse.AnalysisSummary.Cashtag.Signal
-                                        .builder()
+                                    TweetAnalysisPage.AnalysisSummary.Cashtag.Signal.builder()
                                         .bearish(1L)
                                         .bullish(2L)
                                         .score(0.3333)
@@ -502,13 +466,11 @@ internal class AnalysisSentimentResponseTest {
                         )
                         .engagement(1840L)
                         .monitor(
-                            AnalysisSentimentResponse.AnalysisSummary.Monitor.builder()
+                            TweetAnalysisPage.AnalysisSummary.Monitor.builder()
                                 .addChangedRow(
-                                    AnalysisSentimentResponse.AnalysisSummary.Monitor.ChangedRow
-                                        .builder()
+                                    TweetAnalysisPage.AnalysisSummary.Monitor.ChangedRow.builder()
                                         .addChange(
-                                            AnalysisSentimentResponse.AnalysisSummary.Monitor
-                                                .ChangedRow
+                                            TweetAnalysisPage.AnalysisSummary.Monitor.ChangedRow
                                                 .Change
                                                 .builder()
                                                 .current("negative")
@@ -520,20 +482,19 @@ internal class AnalysisSentimentResponseTest {
                                         .build()
                                 )
                                 .statuses(
-                                    AnalysisSentimentResponse.AnalysisSummary.Monitor.Statuses
-                                        .builder()
+                                    TweetAnalysisPage.AnalysisSummary.Monitor.Statuses.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .build()
                         )
                         .questions(
-                            AnalysisSentimentResponse.AnalysisSummary.Questions.builder()
+                            TweetAnalysisPage.AnalysisSummary.Questions.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
                         .rows(
-                            AnalysisSentimentResponse.AnalysisSummary.Rows.builder()
+                            TweetAnalysisPage.AnalysisSummary.Rows.builder()
                                 .analyzed(20L)
                                 .failed(0L)
                                 .skipped(0L)
@@ -541,16 +502,15 @@ internal class AnalysisSentimentResponseTest {
                         )
                         .schemaVersion(1L)
                         .addSourceDomain(
-                            AnalysisSentimentResponse.AnalysisSummary.SourceDomain.builder()
+                            TweetAnalysisPage.AnalysisSummary.SourceDomain.builder()
                                 .domain("youtube.com")
                                 .posts(4L)
                                 .build()
                         )
                         .addTarget(
-                            AnalysisSentimentResponse.AnalysisSummary.Target.builder()
+                            TweetAnalysisPage.AnalysisSummary.Target.builder()
                                 .choices(
-                                    AnalysisSentimentResponse.AnalysisSummary.Target.Choices
-                                        .builder()
+                                    TweetAnalysisPage.AnalysisSummary.Target.Choices.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
@@ -559,14 +519,14 @@ internal class AnalysisSentimentResponseTest {
                                 .name("Sony")
                                 .share(0.7)
                                 .top(
-                                    AnalysisSentimentResponse.AnalysisSummary.Target.Top.builder()
+                                    TweetAnalysisPage.AnalysisSummary.Target.Top.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .build()
                         )
                         .viral(
-                            AnalysisSentimentResponse.AnalysisSummary.Viral.builder()
+                            TweetAnalysisPage.AnalysisSummary.Viral.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
@@ -575,70 +535,58 @@ internal class AnalysisSentimentResponseTest {
                 .hasNextPage(false)
                 .nextCursor("")
                 .addResult(
-                    AnalysisSentimentResponse.Result.builder()
+                    TweetAnalysisPage.Result.builder()
                         .analysis(
-                            AnalysisSentimentResponse.Result.Analysis.builder()
+                            TweetAnalysisPage.Result.Analysis.builder()
                                 .addAnswer(
-                                    AnalysisSentimentResponse.Result.Analysis.Answer.builder()
+                                    TweetAnalysisPage.Result.Analysis.Answer.builder()
                                         .questionId("sentiment")
                                         .questionVersion("sentiment:2")
-                                        .type(
-                                            AnalysisSentimentResponse.Result.Analysis.Answer.Type
-                                                .CHOICE
-                                        )
+                                        .type(TweetAnalysisPage.Result.Analysis.Answer.Type.CHOICE)
                                         .confidence(0.93)
                                         .addLevel("No attitude.")
                                         .probabilities(
-                                            AnalysisSentimentResponse.Result.Analysis.Answer
-                                                .Probabilities
+                                            TweetAnalysisPage.Result.Analysis.Answer.Probabilities
                                                 .builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
                                         .probability(0.08)
                                         .value(
-                                            AnalysisSentimentResponse.Result.Analysis.Answer
-                                                .InnerValue
+                                            TweetAnalysisPage.Result.Analysis.Answer.InnerValue
                                                 .ofString("string")
                                         )
                                         .build()
                                 )
                                 .contextAvailability(
-                                    AnalysisSentimentResponse.Result.Analysis.ContextAvailability
-                                        .builder()
+                                    TweetAnalysisPage.Result.Analysis.ContextAvailability.builder()
                                         .article(
-                                            AnalysisSentimentResponse.Result.Analysis
-                                                .ContextAvailability
+                                            TweetAnalysisPage.Result.Analysis.ContextAvailability
                                                 .Article
                                                 .NOT_SUPPLIED
                                         )
                                         .author(
-                                            AnalysisSentimentResponse.Result.Analysis
-                                                .ContextAvailability
+                                            TweetAnalysisPage.Result.Analysis.ContextAvailability
                                                 .Author
                                                 .AVAILABLE
                                         )
                                         .media(
-                                            AnalysisSentimentResponse.Result.Analysis
-                                                .ContextAvailability
+                                            TweetAnalysisPage.Result.Analysis.ContextAvailability
                                                 .Media
                                                 .NOT_SUPPLIED
                                         )
                                         .postText(
-                                            AnalysisSentimentResponse.Result.Analysis
-                                                .ContextAvailability
+                                            TweetAnalysisPage.Result.Analysis.ContextAvailability
                                                 .PostText
                                                 .FULL
                                         )
                                         .quote(
-                                            AnalysisSentimentResponse.Result.Analysis
-                                                .ContextAvailability
+                                            TweetAnalysisPage.Result.Analysis.ContextAvailability
                                                 .Quote
                                                 .NOT_APPLICABLE
                                         )
                                         .reply(
-                                            AnalysisSentimentResponse.Result.Analysis
-                                                .ContextAvailability
+                                            TweetAnalysisPage.Result.Analysis.ContextAvailability
                                                 .Reply
                                                 .NOT_APPLICABLE
                                         )
@@ -646,7 +594,7 @@ internal class AnalysisSentimentResponseTest {
                                 )
                                 .contextBytes(612L)
                                 .addQuestion(
-                                    AnalysisSentimentResponse.Result.Analysis.Question.builder()
+                                    TweetAnalysisPage.Result.Analysis.Question.builder()
                                         .id("sentiment")
                                         .version("sentiment:2")
                                         .build()
@@ -654,16 +602,16 @@ internal class AnalysisSentimentResponseTest {
                                 .build()
                         )
                         .answers(
-                            AnalysisSentimentResponse.Result.Answers.builder()
+                            TweetAnalysisPage.Result.Answers.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
                         .addCashtag("\$NVDA")
                         .monitor(
-                            AnalysisSentimentResponse.Result.Monitor.builder()
+                            TweetAnalysisPage.Result.Monitor.builder()
                                 .addChangedQuestionId("sentiment")
                                 .addChange(
-                                    AnalysisSentimentResponse.Result.Monitor.Change.builder()
+                                    TweetAnalysisPage.Result.Monitor.Change.builder()
                                         .current("negative")
                                         .previous("positive")
                                         .questionId("sentiment")
@@ -672,7 +620,7 @@ internal class AnalysisSentimentResponseTest {
                                 .configurationFingerprint(
                                     "9f2c4e1b7a5d3c8e6f0a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f6a"
                                 )
-                                .status(AnalysisSentimentResponse.Result.Monitor.Status.CHANGED)
+                                .status(TweetAnalysisPage.Result.Monitor.Status.CHANGED)
                                 .build()
                         )
                         .addSourceDomain("youtube.com")
@@ -689,31 +637,31 @@ internal class AnalysisSentimentResponseTest {
                                 .build()
                         )
                         .viral(
-                            AnalysisSentimentResponse.Result.Viral.builder()
+                            TweetAnalysisPage.Result.Viral.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
                         .viralActualEngagementRate(1.2874)
                         .viralAlgorithmScore(18.4)
                         .viralScore(72L)
-                        .viralVerdict(AnalysisSentimentResponse.Result.ViralVerdict.SEND_IT)
+                        .viralVerdict(TweetAnalysisPage.Result.ViralVerdict.SEND_IT)
                         .build()
                 )
                 .addUnanalyzed(
-                    AnalysisSentimentResponse.Unanalyzed.builder()
+                    TweetAnalysisPage.Unanalyzed.builder()
                         .id("1893456789012345678")
                         .reason("post_unavailable")
-                        .status(AnalysisSentimentResponse.Unanalyzed.Status.SKIPPED)
+                        .status(TweetAnalysisPage.Unanalyzed.Status.SKIPPED)
                         .build()
                 )
                 .build()
 
-        val roundtrippedAnalysisSentimentResponse =
+        val roundtrippedTweetAnalysisPage =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(analysisSentimentResponse),
-                jacksonTypeRef<AnalysisSentimentResponse>(),
+                jsonMapper.writeValueAsString(tweetAnalysisPage),
+                jacksonTypeRef<TweetAnalysisPage>(),
             )
 
-        assertThat(roundtrippedAnalysisSentimentResponse).isEqualTo(analysisSentimentResponse)
+        assertThat(roundtrippedTweetAnalysisPage).isEqualTo(tweetAnalysisPage)
     }
 }

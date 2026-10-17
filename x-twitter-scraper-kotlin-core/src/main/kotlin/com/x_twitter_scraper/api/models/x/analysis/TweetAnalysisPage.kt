@@ -36,7 +36,7 @@ import java.util.Objects
  * Analyzed posts, the posts without an analysis & the totals of the answers. Each row in results
  * costs 2 credits.
  */
-class AnalysisNewsResponse
+class TweetAnalysisPage
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val analysisSummary: JsonField<AnalysisSummary>,
@@ -162,7 +162,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [AnalysisNewsResponse].
+         * Returns a mutable builder for constructing an instance of [TweetAnalysisPage].
          *
          * The following fields are required:
          * ```kotlin
@@ -176,7 +176,7 @@ private constructor(
         fun builder() = Builder()
     }
 
-    /** A builder for [AnalysisNewsResponse]. */
+    /** A builder for [TweetAnalysisPage]. */
     class Builder internal constructor() {
 
         private var analysisSummary: JsonField<AnalysisSummary>? = null
@@ -186,13 +186,13 @@ private constructor(
         private var unanalyzed: JsonField<MutableList<Unanalyzed>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-        internal fun from(analysisNewsResponse: AnalysisNewsResponse) = apply {
-            analysisSummary = analysisNewsResponse.analysisSummary
-            hasNextPage = analysisNewsResponse.hasNextPage
-            nextCursor = analysisNewsResponse.nextCursor
-            results = analysisNewsResponse.results.map { it.toMutableList() }
-            unanalyzed = analysisNewsResponse.unanalyzed.map { it.toMutableList() }
-            additionalProperties = analysisNewsResponse.additionalProperties.toMutableMap()
+        internal fun from(tweetAnalysisPage: TweetAnalysisPage) = apply {
+            analysisSummary = tweetAnalysisPage.analysisSummary
+            hasNextPage = tweetAnalysisPage.hasNextPage
+            nextCursor = tweetAnalysisPage.nextCursor
+            results = tweetAnalysisPage.results.map { it.toMutableList() }
+            unanalyzed = tweetAnalysisPage.unanalyzed.map { it.toMutableList() }
+            additionalProperties = tweetAnalysisPage.additionalProperties.toMutableMap()
         }
 
         /** Totals of the answers across the analyzed posts. */
@@ -276,7 +276,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [AnalysisNewsResponse].
+         * Returns an immutable instance of [TweetAnalysisPage].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -291,8 +291,8 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): AnalysisNewsResponse =
-            AnalysisNewsResponse(
+        fun build(): TweetAnalysisPage =
+            TweetAnalysisPage(
                 checkRequired("analysisSummary", analysisSummary),
                 checkRequired("hasNextPage", hasNextPage),
                 checkRequired("nextCursor", nextCursor),
@@ -312,7 +312,7 @@ private constructor(
      * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't match
      *   its expected type.
      */
-    fun validate(): AnalysisNewsResponse = apply {
+    fun validate(): TweetAnalysisPage = apply {
         if (validated) {
             return@apply
         }
@@ -7877,7 +7877,7 @@ private constructor(
             return true
         }
 
-        return other is AnalysisNewsResponse &&
+        return other is TweetAnalysisPage &&
             analysisSummary == other.analysisSummary &&
             hasNextPage == other.hasNextPage &&
             nextCursor == other.nextCursor &&
@@ -7900,5 +7900,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "AnalysisNewsResponse{analysisSummary=$analysisSummary, hasNextPage=$hasNextPage, nextCursor=$nextCursor, results=$results, unanalyzed=$unanalyzed, additionalProperties=$additionalProperties}"
+        "TweetAnalysisPage{analysisSummary=$analysisSummary, hasNextPage=$hasNextPage, nextCursor=$nextCursor, results=$results, unanalyzed=$unanalyzed, additionalProperties=$additionalProperties}"
 }

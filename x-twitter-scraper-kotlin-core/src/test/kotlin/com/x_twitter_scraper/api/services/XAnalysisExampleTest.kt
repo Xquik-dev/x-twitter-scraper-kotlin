@@ -17,17 +17,12 @@ import com.x_twitter_scraper.api.client.XTwitterScraperClient
 import com.x_twitter_scraper.api.client.okhttp.XTwitterScraperOkHttpClient
 import com.x_twitter_scraper.api.core.JsonValue
 import com.x_twitter_scraper.api.models.x.analysis.AnalysisBrandParams
-import com.x_twitter_scraper.api.models.x.analysis.AnalysisBrandResponse
 import com.x_twitter_scraper.api.models.x.analysis.AnalysisClassifyParams
-import com.x_twitter_scraper.api.models.x.analysis.AnalysisClassifyResponse
 import com.x_twitter_scraper.api.models.x.analysis.AnalysisMarketSignalsParams
-import com.x_twitter_scraper.api.models.x.analysis.AnalysisMarketSignalsResponse
 import com.x_twitter_scraper.api.models.x.analysis.AnalysisNewsParams
-import com.x_twitter_scraper.api.models.x.analysis.AnalysisNewsResponse
 import com.x_twitter_scraper.api.models.x.analysis.AnalysisSentimentParams
-import com.x_twitter_scraper.api.models.x.analysis.AnalysisSentimentResponse
 import com.x_twitter_scraper.api.models.x.analysis.AnalysisViralScoreParams
-import com.x_twitter_scraper.api.models.x.analysis.AnalysisViralScoreResponse
+import com.x_twitter_scraper.api.models.x.analysis.TweetAnalysisPage
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -54,7 +49,7 @@ internal class XAnalysisExampleTest {
     suspend fun sentiment() {
         stubFor(
             post(urlPathEqualTo("/x/analysis/sentiment"))
-                .willReturn(okJson(ExampleResponses.read("examples/x/analysis/sentiment.json")))
+                .willReturn(okJson(ExampleResponses.read("examples/TweetAnalysisPage.json")))
         )
         val params =
             AnalysisSentimentParams.builder()
@@ -117,48 +112,39 @@ internal class XAnalysisExampleTest {
             assertThat(response.results()[0].analysis().answers()[0].questionVersion())
                 .isEqualTo("sentiment:2")
             assertThat(response.results()[0].analysis().answers()[0].type())
-                .isEqualTo(AnalysisSentimentResponse.Result.Analysis.Answer.Type.CHOICE)
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.Answer.Type.CHOICE)
             assertThat(response.results()[0].analysis().answers()[0].confidence()).isEqualTo(0.88)
             assertThat(response.results()[0].analysis().answers()[1].questionId())
                 .isEqualTo("intensity")
             assertThat(response.results()[0].analysis().answers()[1].questionVersion())
                 .isEqualTo("sentiment:2")
             assertThat(response.results()[0].analysis().answers()[1].type())
-                .isEqualTo(AnalysisSentimentResponse.Result.Analysis.Answer.Type.SCORE)
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.Answer.Type.SCORE)
             assertThat(response.results()[0].analysis().answers()[1].confidence()).isEqualTo(0.81)
             assertThat(response.results()[0].analysis().answers()[2].questionId())
                 .isEqualTo("sarcasm")
             assertThat(response.results()[0].analysis().answers()[2].questionVersion())
                 .isEqualTo("sentiment:2")
             assertThat(response.results()[0].analysis().answers()[2].type())
-                .isEqualTo(AnalysisSentimentResponse.Result.Analysis.Answer.Type.PROBABILITY)
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.Answer.Type.PROBABILITY)
             assertThat(response.results()[0].analysis().answers()[2].probability()).isEqualTo(0.03)
             assertThat(response.results()[0].analysis().contextAvailability().article())
                 .isEqualTo(
-                    AnalysisSentimentResponse.Result.Analysis.ContextAvailability.Article
-                        .NOT_SUPPLIED
+                    TweetAnalysisPage.Result.Analysis.ContextAvailability.Article.NOT_SUPPLIED
                 )
             assertThat(response.results()[0].analysis().contextAvailability().author())
-                .isEqualTo(
-                    AnalysisSentimentResponse.Result.Analysis.ContextAvailability.Author.AVAILABLE
-                )
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.ContextAvailability.Author.AVAILABLE)
             assertThat(response.results()[0].analysis().contextAvailability().media())
-                .isEqualTo(
-                    AnalysisSentimentResponse.Result.Analysis.ContextAvailability.Media.NOT_SUPPLIED
-                )
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.ContextAvailability.Media.NOT_SUPPLIED)
             assertThat(response.results()[0].analysis().contextAvailability().postText())
-                .isEqualTo(
-                    AnalysisSentimentResponse.Result.Analysis.ContextAvailability.PostText.FULL
-                )
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.ContextAvailability.PostText.FULL)
             assertThat(response.results()[0].analysis().contextAvailability().quote())
                 .isEqualTo(
-                    AnalysisSentimentResponse.Result.Analysis.ContextAvailability.Quote
-                        .NOT_APPLICABLE
+                    TweetAnalysisPage.Result.Analysis.ContextAvailability.Quote.NOT_APPLICABLE
                 )
             assertThat(response.results()[0].analysis().contextAvailability().reply())
                 .isEqualTo(
-                    AnalysisSentimentResponse.Result.Analysis.ContextAvailability.Reply
-                        .NOT_APPLICABLE
+                    TweetAnalysisPage.Result.Analysis.ContextAvailability.Reply.NOT_APPLICABLE
                 )
             assertThat(response.results()[0].analysis().contextBytes()).isEqualTo(612L)
             assertThat(response.results()[0].analysis().questions()).hasSize(3)
@@ -185,7 +171,7 @@ internal class XAnalysisExampleTest {
     suspend fun viralScore() {
         stubFor(
             post(urlPathEqualTo("/x/analysis/viral-score"))
-                .willReturn(okJson(ExampleResponses.read("examples/x/analysis/viralScore.json")))
+                .willReturn(okJson(ExampleResponses.read("examples/TweetAnalysisPage.json")))
         )
         val params =
             AnalysisViralScoreParams.builder()
@@ -248,49 +234,39 @@ internal class XAnalysisExampleTest {
             assertThat(response.results()[0].analysis().answers()[0].questionVersion())
                 .isEqualTo("sentiment:2")
             assertThat(response.results()[0].analysis().answers()[0].type())
-                .isEqualTo(AnalysisViralScoreResponse.Result.Analysis.Answer.Type.CHOICE)
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.Answer.Type.CHOICE)
             assertThat(response.results()[0].analysis().answers()[0].confidence()).isEqualTo(0.88)
             assertThat(response.results()[0].analysis().answers()[1].questionId())
                 .isEqualTo("intensity")
             assertThat(response.results()[0].analysis().answers()[1].questionVersion())
                 .isEqualTo("sentiment:2")
             assertThat(response.results()[0].analysis().answers()[1].type())
-                .isEqualTo(AnalysisViralScoreResponse.Result.Analysis.Answer.Type.SCORE)
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.Answer.Type.SCORE)
             assertThat(response.results()[0].analysis().answers()[1].confidence()).isEqualTo(0.81)
             assertThat(response.results()[0].analysis().answers()[2].questionId())
                 .isEqualTo("sarcasm")
             assertThat(response.results()[0].analysis().answers()[2].questionVersion())
                 .isEqualTo("sentiment:2")
             assertThat(response.results()[0].analysis().answers()[2].type())
-                .isEqualTo(AnalysisViralScoreResponse.Result.Analysis.Answer.Type.PROBABILITY)
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.Answer.Type.PROBABILITY)
             assertThat(response.results()[0].analysis().answers()[2].probability()).isEqualTo(0.03)
             assertThat(response.results()[0].analysis().contextAvailability().article())
                 .isEqualTo(
-                    AnalysisViralScoreResponse.Result.Analysis.ContextAvailability.Article
-                        .NOT_SUPPLIED
+                    TweetAnalysisPage.Result.Analysis.ContextAvailability.Article.NOT_SUPPLIED
                 )
             assertThat(response.results()[0].analysis().contextAvailability().author())
-                .isEqualTo(
-                    AnalysisViralScoreResponse.Result.Analysis.ContextAvailability.Author.AVAILABLE
-                )
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.ContextAvailability.Author.AVAILABLE)
             assertThat(response.results()[0].analysis().contextAvailability().media())
-                .isEqualTo(
-                    AnalysisViralScoreResponse.Result.Analysis.ContextAvailability.Media
-                        .NOT_SUPPLIED
-                )
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.ContextAvailability.Media.NOT_SUPPLIED)
             assertThat(response.results()[0].analysis().contextAvailability().postText())
-                .isEqualTo(
-                    AnalysisViralScoreResponse.Result.Analysis.ContextAvailability.PostText.FULL
-                )
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.ContextAvailability.PostText.FULL)
             assertThat(response.results()[0].analysis().contextAvailability().quote())
                 .isEqualTo(
-                    AnalysisViralScoreResponse.Result.Analysis.ContextAvailability.Quote
-                        .NOT_APPLICABLE
+                    TweetAnalysisPage.Result.Analysis.ContextAvailability.Quote.NOT_APPLICABLE
                 )
             assertThat(response.results()[0].analysis().contextAvailability().reply())
                 .isEqualTo(
-                    AnalysisViralScoreResponse.Result.Analysis.ContextAvailability.Reply
-                        .NOT_APPLICABLE
+                    TweetAnalysisPage.Result.Analysis.ContextAvailability.Reply.NOT_APPLICABLE
                 )
             assertThat(response.results()[0].analysis().contextBytes()).isEqualTo(612L)
             assertThat(response.results()[0].analysis().questions()).hasSize(3)
@@ -317,7 +293,7 @@ internal class XAnalysisExampleTest {
     suspend fun brand() {
         stubFor(
             post(urlPathEqualTo("/x/analysis/brand"))
-                .willReturn(okJson(ExampleResponses.read("examples/x/analysis/brand.json")))
+                .willReturn(okJson(ExampleResponses.read("examples/TweetAnalysisPage.json")))
         )
         val params =
             AnalysisBrandParams.builder()
@@ -377,43 +353,39 @@ internal class XAnalysisExampleTest {
             assertThat(response.results()[0].analysis().answers()[0].questionVersion())
                 .isEqualTo("sentiment:2")
             assertThat(response.results()[0].analysis().answers()[0].type())
-                .isEqualTo(AnalysisBrandResponse.Result.Analysis.Answer.Type.CHOICE)
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.Answer.Type.CHOICE)
             assertThat(response.results()[0].analysis().answers()[0].confidence()).isEqualTo(0.88)
             assertThat(response.results()[0].analysis().answers()[1].questionId())
                 .isEqualTo("intensity")
             assertThat(response.results()[0].analysis().answers()[1].questionVersion())
                 .isEqualTo("sentiment:2")
             assertThat(response.results()[0].analysis().answers()[1].type())
-                .isEqualTo(AnalysisBrandResponse.Result.Analysis.Answer.Type.SCORE)
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.Answer.Type.SCORE)
             assertThat(response.results()[0].analysis().answers()[1].confidence()).isEqualTo(0.81)
             assertThat(response.results()[0].analysis().answers()[2].questionId())
                 .isEqualTo("sarcasm")
             assertThat(response.results()[0].analysis().answers()[2].questionVersion())
                 .isEqualTo("sentiment:2")
             assertThat(response.results()[0].analysis().answers()[2].type())
-                .isEqualTo(AnalysisBrandResponse.Result.Analysis.Answer.Type.PROBABILITY)
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.Answer.Type.PROBABILITY)
             assertThat(response.results()[0].analysis().answers()[2].probability()).isEqualTo(0.03)
             assertThat(response.results()[0].analysis().contextAvailability().article())
                 .isEqualTo(
-                    AnalysisBrandResponse.Result.Analysis.ContextAvailability.Article.NOT_SUPPLIED
+                    TweetAnalysisPage.Result.Analysis.ContextAvailability.Article.NOT_SUPPLIED
                 )
             assertThat(response.results()[0].analysis().contextAvailability().author())
-                .isEqualTo(
-                    AnalysisBrandResponse.Result.Analysis.ContextAvailability.Author.AVAILABLE
-                )
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.ContextAvailability.Author.AVAILABLE)
             assertThat(response.results()[0].analysis().contextAvailability().media())
-                .isEqualTo(
-                    AnalysisBrandResponse.Result.Analysis.ContextAvailability.Media.NOT_SUPPLIED
-                )
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.ContextAvailability.Media.NOT_SUPPLIED)
             assertThat(response.results()[0].analysis().contextAvailability().postText())
-                .isEqualTo(AnalysisBrandResponse.Result.Analysis.ContextAvailability.PostText.FULL)
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.ContextAvailability.PostText.FULL)
             assertThat(response.results()[0].analysis().contextAvailability().quote())
                 .isEqualTo(
-                    AnalysisBrandResponse.Result.Analysis.ContextAvailability.Quote.NOT_APPLICABLE
+                    TweetAnalysisPage.Result.Analysis.ContextAvailability.Quote.NOT_APPLICABLE
                 )
             assertThat(response.results()[0].analysis().contextAvailability().reply())
                 .isEqualTo(
-                    AnalysisBrandResponse.Result.Analysis.ContextAvailability.Reply.NOT_APPLICABLE
+                    TweetAnalysisPage.Result.Analysis.ContextAvailability.Reply.NOT_APPLICABLE
                 )
             assertThat(response.results()[0].analysis().contextBytes()).isEqualTo(612L)
             assertThat(response.results()[0].analysis().questions()).hasSize(3)
@@ -440,7 +412,7 @@ internal class XAnalysisExampleTest {
     suspend fun news() {
         stubFor(
             post(urlPathEqualTo("/x/analysis/news"))
-                .willReturn(okJson(ExampleResponses.read("examples/x/analysis/news.json")))
+                .willReturn(okJson(ExampleResponses.read("examples/TweetAnalysisPage.json")))
         )
         val params =
             AnalysisNewsParams.builder()
@@ -500,43 +472,39 @@ internal class XAnalysisExampleTest {
             assertThat(response.results()[0].analysis().answers()[0].questionVersion())
                 .isEqualTo("sentiment:2")
             assertThat(response.results()[0].analysis().answers()[0].type())
-                .isEqualTo(AnalysisNewsResponse.Result.Analysis.Answer.Type.CHOICE)
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.Answer.Type.CHOICE)
             assertThat(response.results()[0].analysis().answers()[0].confidence()).isEqualTo(0.88)
             assertThat(response.results()[0].analysis().answers()[1].questionId())
                 .isEqualTo("intensity")
             assertThat(response.results()[0].analysis().answers()[1].questionVersion())
                 .isEqualTo("sentiment:2")
             assertThat(response.results()[0].analysis().answers()[1].type())
-                .isEqualTo(AnalysisNewsResponse.Result.Analysis.Answer.Type.SCORE)
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.Answer.Type.SCORE)
             assertThat(response.results()[0].analysis().answers()[1].confidence()).isEqualTo(0.81)
             assertThat(response.results()[0].analysis().answers()[2].questionId())
                 .isEqualTo("sarcasm")
             assertThat(response.results()[0].analysis().answers()[2].questionVersion())
                 .isEqualTo("sentiment:2")
             assertThat(response.results()[0].analysis().answers()[2].type())
-                .isEqualTo(AnalysisNewsResponse.Result.Analysis.Answer.Type.PROBABILITY)
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.Answer.Type.PROBABILITY)
             assertThat(response.results()[0].analysis().answers()[2].probability()).isEqualTo(0.03)
             assertThat(response.results()[0].analysis().contextAvailability().article())
                 .isEqualTo(
-                    AnalysisNewsResponse.Result.Analysis.ContextAvailability.Article.NOT_SUPPLIED
+                    TweetAnalysisPage.Result.Analysis.ContextAvailability.Article.NOT_SUPPLIED
                 )
             assertThat(response.results()[0].analysis().contextAvailability().author())
-                .isEqualTo(
-                    AnalysisNewsResponse.Result.Analysis.ContextAvailability.Author.AVAILABLE
-                )
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.ContextAvailability.Author.AVAILABLE)
             assertThat(response.results()[0].analysis().contextAvailability().media())
-                .isEqualTo(
-                    AnalysisNewsResponse.Result.Analysis.ContextAvailability.Media.NOT_SUPPLIED
-                )
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.ContextAvailability.Media.NOT_SUPPLIED)
             assertThat(response.results()[0].analysis().contextAvailability().postText())
-                .isEqualTo(AnalysisNewsResponse.Result.Analysis.ContextAvailability.PostText.FULL)
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.ContextAvailability.PostText.FULL)
             assertThat(response.results()[0].analysis().contextAvailability().quote())
                 .isEqualTo(
-                    AnalysisNewsResponse.Result.Analysis.ContextAvailability.Quote.NOT_APPLICABLE
+                    TweetAnalysisPage.Result.Analysis.ContextAvailability.Quote.NOT_APPLICABLE
                 )
             assertThat(response.results()[0].analysis().contextAvailability().reply())
                 .isEqualTo(
-                    AnalysisNewsResponse.Result.Analysis.ContextAvailability.Reply.NOT_APPLICABLE
+                    TweetAnalysisPage.Result.Analysis.ContextAvailability.Reply.NOT_APPLICABLE
                 )
             assertThat(response.results()[0].analysis().contextBytes()).isEqualTo(612L)
             assertThat(response.results()[0].analysis().questions()).hasSize(3)
@@ -563,7 +531,7 @@ internal class XAnalysisExampleTest {
     suspend fun marketSignals() {
         stubFor(
             post(urlPathEqualTo("/x/analysis/market-signals"))
-                .willReturn(okJson(ExampleResponses.read("examples/x/analysis/marketSignals.json")))
+                .willReturn(okJson(ExampleResponses.read("examples/TweetAnalysisPage.json")))
         )
         val params =
             AnalysisMarketSignalsParams.builder()
@@ -626,50 +594,39 @@ internal class XAnalysisExampleTest {
             assertThat(response.results()[0].analysis().answers()[0].questionVersion())
                 .isEqualTo("sentiment:2")
             assertThat(response.results()[0].analysis().answers()[0].type())
-                .isEqualTo(AnalysisMarketSignalsResponse.Result.Analysis.Answer.Type.CHOICE)
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.Answer.Type.CHOICE)
             assertThat(response.results()[0].analysis().answers()[0].confidence()).isEqualTo(0.88)
             assertThat(response.results()[0].analysis().answers()[1].questionId())
                 .isEqualTo("intensity")
             assertThat(response.results()[0].analysis().answers()[1].questionVersion())
                 .isEqualTo("sentiment:2")
             assertThat(response.results()[0].analysis().answers()[1].type())
-                .isEqualTo(AnalysisMarketSignalsResponse.Result.Analysis.Answer.Type.SCORE)
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.Answer.Type.SCORE)
             assertThat(response.results()[0].analysis().answers()[1].confidence()).isEqualTo(0.81)
             assertThat(response.results()[0].analysis().answers()[2].questionId())
                 .isEqualTo("sarcasm")
             assertThat(response.results()[0].analysis().answers()[2].questionVersion())
                 .isEqualTo("sentiment:2")
             assertThat(response.results()[0].analysis().answers()[2].type())
-                .isEqualTo(AnalysisMarketSignalsResponse.Result.Analysis.Answer.Type.PROBABILITY)
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.Answer.Type.PROBABILITY)
             assertThat(response.results()[0].analysis().answers()[2].probability()).isEqualTo(0.03)
             assertThat(response.results()[0].analysis().contextAvailability().article())
                 .isEqualTo(
-                    AnalysisMarketSignalsResponse.Result.Analysis.ContextAvailability.Article
-                        .NOT_SUPPLIED
+                    TweetAnalysisPage.Result.Analysis.ContextAvailability.Article.NOT_SUPPLIED
                 )
             assertThat(response.results()[0].analysis().contextAvailability().author())
-                .isEqualTo(
-                    AnalysisMarketSignalsResponse.Result.Analysis.ContextAvailability.Author
-                        .AVAILABLE
-                )
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.ContextAvailability.Author.AVAILABLE)
             assertThat(response.results()[0].analysis().contextAvailability().media())
-                .isEqualTo(
-                    AnalysisMarketSignalsResponse.Result.Analysis.ContextAvailability.Media
-                        .NOT_SUPPLIED
-                )
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.ContextAvailability.Media.NOT_SUPPLIED)
             assertThat(response.results()[0].analysis().contextAvailability().postText())
-                .isEqualTo(
-                    AnalysisMarketSignalsResponse.Result.Analysis.ContextAvailability.PostText.FULL
-                )
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.ContextAvailability.PostText.FULL)
             assertThat(response.results()[0].analysis().contextAvailability().quote())
                 .isEqualTo(
-                    AnalysisMarketSignalsResponse.Result.Analysis.ContextAvailability.Quote
-                        .NOT_APPLICABLE
+                    TweetAnalysisPage.Result.Analysis.ContextAvailability.Quote.NOT_APPLICABLE
                 )
             assertThat(response.results()[0].analysis().contextAvailability().reply())
                 .isEqualTo(
-                    AnalysisMarketSignalsResponse.Result.Analysis.ContextAvailability.Reply
-                        .NOT_APPLICABLE
+                    TweetAnalysisPage.Result.Analysis.ContextAvailability.Reply.NOT_APPLICABLE
                 )
             assertThat(response.results()[0].analysis().contextBytes()).isEqualTo(612L)
             assertThat(response.results()[0].analysis().questions()).hasSize(3)
@@ -696,7 +653,7 @@ internal class XAnalysisExampleTest {
     suspend fun classify() {
         stubFor(
             post(urlPathEqualTo("/x/analysis/classify"))
-                .willReturn(okJson(ExampleResponses.read("examples/x/analysis/classify.json")))
+                .willReturn(okJson(ExampleResponses.read("examples/TweetAnalysisPage.json")))
         )
         val params =
             AnalysisClassifyParams.builder()
@@ -759,48 +716,39 @@ internal class XAnalysisExampleTest {
             assertThat(response.results()[0].analysis().answers()[0].questionVersion())
                 .isEqualTo("sentiment:2")
             assertThat(response.results()[0].analysis().answers()[0].type())
-                .isEqualTo(AnalysisClassifyResponse.Result.Analysis.Answer.Type.CHOICE)
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.Answer.Type.CHOICE)
             assertThat(response.results()[0].analysis().answers()[0].confidence()).isEqualTo(0.88)
             assertThat(response.results()[0].analysis().answers()[1].questionId())
                 .isEqualTo("intensity")
             assertThat(response.results()[0].analysis().answers()[1].questionVersion())
                 .isEqualTo("sentiment:2")
             assertThat(response.results()[0].analysis().answers()[1].type())
-                .isEqualTo(AnalysisClassifyResponse.Result.Analysis.Answer.Type.SCORE)
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.Answer.Type.SCORE)
             assertThat(response.results()[0].analysis().answers()[1].confidence()).isEqualTo(0.81)
             assertThat(response.results()[0].analysis().answers()[2].questionId())
                 .isEqualTo("sarcasm")
             assertThat(response.results()[0].analysis().answers()[2].questionVersion())
                 .isEqualTo("sentiment:2")
             assertThat(response.results()[0].analysis().answers()[2].type())
-                .isEqualTo(AnalysisClassifyResponse.Result.Analysis.Answer.Type.PROBABILITY)
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.Answer.Type.PROBABILITY)
             assertThat(response.results()[0].analysis().answers()[2].probability()).isEqualTo(0.03)
             assertThat(response.results()[0].analysis().contextAvailability().article())
                 .isEqualTo(
-                    AnalysisClassifyResponse.Result.Analysis.ContextAvailability.Article
-                        .NOT_SUPPLIED
+                    TweetAnalysisPage.Result.Analysis.ContextAvailability.Article.NOT_SUPPLIED
                 )
             assertThat(response.results()[0].analysis().contextAvailability().author())
-                .isEqualTo(
-                    AnalysisClassifyResponse.Result.Analysis.ContextAvailability.Author.AVAILABLE
-                )
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.ContextAvailability.Author.AVAILABLE)
             assertThat(response.results()[0].analysis().contextAvailability().media())
-                .isEqualTo(
-                    AnalysisClassifyResponse.Result.Analysis.ContextAvailability.Media.NOT_SUPPLIED
-                )
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.ContextAvailability.Media.NOT_SUPPLIED)
             assertThat(response.results()[0].analysis().contextAvailability().postText())
-                .isEqualTo(
-                    AnalysisClassifyResponse.Result.Analysis.ContextAvailability.PostText.FULL
-                )
+                .isEqualTo(TweetAnalysisPage.Result.Analysis.ContextAvailability.PostText.FULL)
             assertThat(response.results()[0].analysis().contextAvailability().quote())
                 .isEqualTo(
-                    AnalysisClassifyResponse.Result.Analysis.ContextAvailability.Quote
-                        .NOT_APPLICABLE
+                    TweetAnalysisPage.Result.Analysis.ContextAvailability.Quote.NOT_APPLICABLE
                 )
             assertThat(response.results()[0].analysis().contextAvailability().reply())
                 .isEqualTo(
-                    AnalysisClassifyResponse.Result.Analysis.ContextAvailability.Reply
-                        .NOT_APPLICABLE
+                    TweetAnalysisPage.Result.Analysis.ContextAvailability.Reply.NOT_APPLICABLE
                 )
             assertThat(response.results()[0].analysis().contextBytes()).isEqualTo(612L)
             assertThat(response.results()[0].analysis().questions()).hasSize(3)
