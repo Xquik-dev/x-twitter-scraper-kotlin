@@ -492,6 +492,7 @@ private constructor(
             users == other.users &&
             filteredCount == other.filteredCount &&
             scanLimit == other.scanLimit &&
+            diagnostic == other.diagnostic &&
             additionalProperties == other.additionalProperties
     }
 

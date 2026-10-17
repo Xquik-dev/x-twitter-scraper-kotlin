@@ -188,7 +188,8 @@ internal class ApiFieldsTest {
 
         val error = runCatching {
             ApiFields(ambiguous, file) { listOf(operation) }.run()
-        }.exceptionOrNull()
+        }
+            .exceptionOrNull()
 
         assertThat(error).isInstanceOf(IllegalStateException::class.java)
     }
