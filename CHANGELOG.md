@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Breaking changes
+
+* `AccountBulkRetryParams._body()` returns `AccountBulkRetryParams.Body?` instead of `Map<String, JsonValue>?`. Code that calls `_body()` must change, and compiled callers must rebuild.
+
 ### Features
 
 * Bulk retry can target specific accounts with `accountIds`.

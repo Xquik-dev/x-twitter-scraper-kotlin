@@ -1375,11 +1375,6 @@ private constructor(
      */
     @JsonProperty("viewState") @ExcludeMissing fun _viewState(): JsonField<String> = viewState
 
-    /**
-     * Returns the raw JSON value of [hiddenByAuthor].
-     *
-     * Unlike [hiddenByAuthor], this method doesn't throw if the JSON field has an unexpected type.
-     */
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
