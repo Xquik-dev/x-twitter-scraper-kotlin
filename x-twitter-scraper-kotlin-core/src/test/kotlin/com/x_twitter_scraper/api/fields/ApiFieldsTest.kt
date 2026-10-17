@@ -292,7 +292,7 @@ internal class ApiFieldsTest {
     }
 
     @Test
-    fun comparesTheRecordedUploadRequestWithItsJsonSchema() {
+    fun comparesTheRecordedUploadRequestsWithTheirSchemas() {
         val uploadSpec =
             jsonMapper()
                 .readTree(
@@ -302,7 +302,7 @@ internal class ApiFieldsTest {
                         "account": {"type": "string"}, "file": {"type": "string"}, "is_long_video": {"type": "boolean"}
                       }}},
                       "application/json": {"schema": {"type": "object", "required": ["account", "url"], "properties": {
-                        "account": {"type": "string"}, "url": {"type": "string"}, "is_long_video": {"type": "boolean"}
+                        "account": {"type": "string"}, "url": {"type": "string"}
                       }}}
                     }}, "responses": {}}}}}
                     """
@@ -311,6 +311,36 @@ internal class ApiFieldsTest {
 
         assertThat(ApiFields(uploadSpec, file).run())
             .isEqualTo(Report(true, listOf("The SDK's fields match the API for 1 operation.")))
+    }
+
+    @Test
+    fun reportsTheFileMissingFromTheMultipartSchema() {
+        val uploadSpec =
+            jsonMapper()
+                .readTree(
+                    """
+                    {"paths": {"/api/v1/x/media": {"post": {"requestBody": {"content": {
+                      "multipart/form-data": {"schema": {"type": "object", "required": ["account"], "properties": {
+                        "account": {"type": "string"}, "is_long_video": {"type": "boolean"}
+                      }}},
+                      "application/json": {"schema": {"type": "object", "required": ["account", "url"], "properties": {
+                        "account": {"type": "string"}, "url": {"type": "string"}
+                      }}}
+                    }}, "responses": {}}}}}
+                    """
+                )
+        val file = directory.resolve("accepted.json").toFile().apply { writeText("[]") }
+
+        assertThat(ApiFields(uploadSpec, file).run())
+            .isEqualTo(
+                Report(
+                    false,
+                    listOf(
+                        "POST /api/v1/x/media request extra file",
+                        "Fix each field above in the SDK, or list it in accepted.json with a reason.",
+                    ),
+                )
+            )
     }
 
     companion object {

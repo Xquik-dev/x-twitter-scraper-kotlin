@@ -22,8 +22,14 @@ internal class SdkShapesTest {
 
     @Test
     fun recordsTheMethodAndPathEachOperationSends() {
-        assertThat(operations).hasSize(180)
-        assertThat(operations.map { "${it.method} /${it.pathSegments.joinToString("/")}" })
+        assertThat(operations).hasSize(183)
+        assertThat(operations.map { it.label }.distinct()).hasSize(180)
+        assertThat(
+                operations.map {
+                    val contentType = it.contentType?.substringBefore(';')
+                    Triple(it.method, it.pathSegments, contentType)
+                }
+            )
             .doesNotHaveDuplicates()
         assertThat(operation("x().spaces().search").method).isEqualTo("GET")
         assertThat(operation("x().spaces().search").pathSegments)
@@ -82,12 +88,22 @@ internal class SdkShapesTest {
     fun recordsTheUploadBodyTypeAndItsSelectedInput() {
         listOf("x().media().upload", "x().profile().updateAvatar", "x().profile().updateBanner")
             .forEach { label ->
-                val upload = operation(label)
-                val body = upload.body as Shape.Fields
+                val uploads = operations.filter { it.label == label }
+                val json = uploads.single { it.contentType == "application/json" }
+                val multipart = uploads.single {
+                    it.contentType?.startsWith("multipart/form-data;") == true
+                }
+                val jsonBody = json.body as Shape.Fields
+                val multipartBody = multipart.body as Shape.Fields
 
-                assertThat(upload.contentType).isEqualTo("application/json")
-                assertThat(body.props.getValue("url").required).isTrue()
-                assertThat(body.props).doesNotContainKey("file")
+                assertThat(uploads).hasSize(2)
+                assertThat(jsonBody.props.getValue("url").required).isTrue()
+                assertThat(jsonBody.props).doesNotContainKeys("file", "is_long_video")
+                assertThat(multipartBody.props.getValue("file").required).isTrue()
+                assertThat(multipartBody.props).doesNotContainKey("url")
+                if (label == "x().media().upload") {
+                    assertThat(multipartBody.props.getValue("is_long_video").required).isFalse()
+                }
             }
         assertThat(operation("support().tickets().create").contentType)
             .startsWith("multipart/form-data;")

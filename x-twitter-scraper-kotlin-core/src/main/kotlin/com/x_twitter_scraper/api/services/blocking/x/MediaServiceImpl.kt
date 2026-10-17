@@ -14,9 +14,8 @@ import com.x_twitter_scraper.api.core.http.HttpRequest
 import com.x_twitter_scraper.api.core.http.HttpResponse
 import com.x_twitter_scraper.api.core.http.HttpResponse.Handler
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
-import com.x_twitter_scraper.api.core.http.json
-import com.x_twitter_scraper.api.core.http.multipartFormData
 import com.x_twitter_scraper.api.core.http.parseable
+import com.x_twitter_scraper.api.core.http.uploadBody
 import com.x_twitter_scraper.api.core.prepare
 import com.x_twitter_scraper.api.models.x.media.MediaDownloadParams
 import com.x_twitter_scraper.api.models.x.media.MediaDownloadResponse
@@ -97,11 +96,7 @@ class MediaServiceImpl internal constructor(private val clientOptions: ClientOpt
                     .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("x", "media")
                     .body(
-                        if (params.file() != null) {
-                            multipartFormData(clientOptions.jsonMapper, params._body())
-                        } else {
-                            json(clientOptions.jsonMapper, params._body())
-                        }
+                        uploadBody(clientOptions.jsonMapper, params._body(), params.file() != null)
                     )
                     .build()
                     .prepare(clientOptions, params)

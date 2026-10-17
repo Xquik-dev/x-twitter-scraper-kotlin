@@ -11,7 +11,7 @@
 * Bulk retry can target specific accounts with `accountIds`.
 * Embedded parent, quoted and retweeted posts carry every tweet field and the author.
 * Media, avatar and banner uploads accept exactly one URL or file input.
-* Media uploads accept `isLongVideo` and send it as `is_long_video`.
+* Media file uploads accept `isLongVideo` and send it as `is_long_video`.
 * Support tickets accept attachment streams with a filename and a binary content type.
 * `UserProfile.IdentityVerification` adds the optional `overrideVerifiedYear` field for the verification start year X shows.
 * `x().tweets()` adds `listTop`, `embed`, `getHiddenReplies`, `getInsights`, `getRetweeterIds`, `checkRepost`, `getSubtitles`, `translate` and `resolveLinks`, with typed params and responses.
@@ -41,11 +41,13 @@
 * Media, avatar and banner uploads send JSON for URLs and multipart form data for files.
 * File uploads detect PNG, JPEG, GIF, WebP, AVIF and MP4 content and preserve every byte.
 * File uploads use `application/octet-stream` and the filename `upload` for unknown content.
-* The API fields check selects the schema for the request content type.
+* The API fields check records both URL and file uploads and selects each request's content type schema.
 * The API fields check treats equivalent path parameter names as the same accepted difference.
 
 ### Compatibility
 
+* `MediaUploadParams.url()`, `ProfileUpdateAvatarParams.url()` and `ProfileUpdateBannerParams.url()` now return `String?` instead of `String`. Their builders no longer require `url` and accept exactly one URL or file.
+* Media uploads now reject `isLongVideo` without a file.
 * `XAccount` and `XAccountDetail` drop a timestamp field the API stopped returning.
 * `accepted-field-differences.json` records the fields, required flags and values kept for existing callers.
 

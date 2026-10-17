@@ -61,7 +61,7 @@ internal class ApiFields(
                     "$acceptedName lists $it, which the check no longer finds. Remove it."
                 }
         if (unaccepted.isEmpty() && stale.isEmpty()) {
-            val count = matched.size
+            val count = matched.map { it.first }.distinct().size
             val acceptedClause =
                 when (acceptedEntries.size) {
                     0 -> ""

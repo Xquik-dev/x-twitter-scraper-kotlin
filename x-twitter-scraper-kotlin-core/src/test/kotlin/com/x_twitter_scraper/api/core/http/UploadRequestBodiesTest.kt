@@ -19,6 +19,7 @@ import java.io.InputStream
 import java.util.Base64
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
@@ -72,34 +73,47 @@ internal class UploadRequestBodiesTest {
 
     @ParameterizedTest
     @ValueSource(booleans = [false, true])
-    fun mediaUpload_serializesLongVideoFlagForUrl(isLongVideo: Boolean) {
-        val httpClient = CapturingHttpClient()
-        val options = ClientOptions.builder().httpClient(httpClient).apiKey("test").build()
-        val params =
-            MediaUploadParams.builder()
-                .account("@example")
-                .idempotencyKey("test")
-                .url("https://example.com/video.mp4")
-                .isLongVideo(isLongVideo)
-                .build()
-                .toBuilder()
-                .build()
-
-        MediaServiceImpl(options).withRawResponse().upload(params).close()
-
-        val body = checkNotNull(httpClient.request.body)
-        val output = ByteArrayOutputStream()
-        body.writeTo(output)
-        assertThat(body.contentType()).isEqualTo("application/json")
-        assertThat(params.isLongVideo()).isEqualTo(isLongVideo)
-        assertThat(jsonMapper().readTree(output.toByteArray()))
-            .isEqualTo(
-                jsonMapper()
-                    .readTree(
-                        """{"account":"@example","url":"https://example.com/video.mp4","is_long_video":$isLongVideo}"""
-                    )
-            )
+    fun mediaUpload_rejectsLongVideoFlagForUrl(isLongVideo: Boolean) {
+        assertThatThrownBy {
+                MediaUploadParams.builder()
+                    .account("@example")
+                    .idempotencyKey("test")
+                    .url("https://example.com/video.mp4")
+                    .isLongVideo(isLongVideo)
+                    .build()
+            }
+            .isInstanceOf(IllegalStateException::class.java)
+            .hasMessage("`isLongVideo` requires `file`")
     }
+
+    @ParameterizedTest
+    @CsvSource("false, false", "false, true", "true, false", "true, true")
+    fun mediaUpload_serializesLongVideoFlagForFile(async: Boolean, isLongVideo: Boolean) =
+        runBlocking<Unit> {
+            val httpClient = CapturingHttpClient()
+            val options = ClientOptions.builder().httpClient(httpClient).apiKey("test").build()
+            val params =
+                MediaUploadParams.builder()
+                    .account("@example")
+                    .idempotencyKey("test")
+                    .file(png.inputStream())
+                    .isLongVideo(isLongVideo)
+                    .build()
+                    .toBuilder()
+                    .build()
+
+            if (async) {
+                MediaServiceAsyncImpl(options).withRawResponse().upload(params).close()
+            } else {
+                MediaServiceImpl(options).withRawResponse().upload(params).close()
+            }
+
+            val parts = multipartParts(checkNotNull(httpClient.request.body))
+            assertThat(params.isLongVideo()).isEqualTo(isLongVideo)
+            assertThat(parts.single { disposition(it.first)["name"] == "is_long_video" }.second)
+                .isEqualTo(isLongVideo.toString())
+            assertPngPart(parts.single { disposition(it.first)["name"] == "file" }, "file")
+        }
 
     @Test
     fun multipartFormData_omitsMissingFields() {
@@ -213,7 +227,15 @@ internal class UploadRequestBodiesTest {
         "00000018667479706176696600ff, image/avif, upload.avif",
         "00000018667479706176697300ff, image/avif, upload.avif",
         "000000186674797069736f6d00ff, video/mp4, upload.mp4",
-        "00000018667479706865696300ff, video/mp4, upload.mp4",
+        "000000186674797069736f3200ff, video/mp4, upload.mp4",
+        "00000018667479706d70343100ff, video/mp4, upload.mp4",
+        "00000018667479706d70343200ff, video/mp4, upload.mp4",
+        "00000018667479706176633100ff, video/mp4, upload.mp4",
+        "00000018667479704d34562000ff, video/mp4, upload.mp4",
+        "00000018667479706865696300ff, application/octet-stream, upload",
+        "00000018667479706865697800ff, application/octet-stream, upload",
+        "00000018667479706d69663100ff, application/octet-stream, upload",
+        "00000018667479707174202000ff, application/octet-stream, upload",
         "000102030405060708090a0b00ff, application/octet-stream, upload",
         "89504e470d0a1a, application/octet-stream, upload",
         "000000186674797069736f, application/octet-stream, upload",

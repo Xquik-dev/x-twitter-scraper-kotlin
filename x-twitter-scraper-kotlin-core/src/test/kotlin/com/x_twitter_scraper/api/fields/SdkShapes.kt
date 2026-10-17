@@ -53,7 +53,14 @@ internal class SdkShapes(private val client: XTwitterScraperClient = recordingCl
             service.javaClass.methods
                 .filter(::isOperation)
                 .sortedBy { it.name }
-                .map { operation("$label${it.name}", service, it) }
+                .flatMap { method ->
+                    val name = "$label${method.name}"
+                    val first = operation(name, service, method)
+                    listOf(first) +
+                        alternatives[method.parameterTypes[0]].orEmpty().drop(1).map { input ->
+                            operation(name, service, method, input)
+                        }
+                }
         }
 
     private fun services(target: Any, label: String): List<Pair<String, Any>> =
@@ -77,13 +84,18 @@ internal class SdkShapes(private val client: XTwitterScraperClient = recordingCl
             Params::class.java.isAssignableFrom(method.parameterTypes[0]) &&
             method.parameterTypes[1] == RequestOptions::class.java
 
-    private fun operation(label: String, service: Any, method: Method): SdkOperation {
+    private fun operation(
+        label: String,
+        service: Any,
+        method: Method,
+        input: String? = null,
+    ): SdkOperation {
         val paramsClass = method.parameterTypes[0]
         val required = mutableSetOf<String>()
         repeat(MAX_REQUIRED) {
             val params =
                 try {
-                    buildParams(paramsClass, required.associateWith { Sample.A })
+                    buildParams(paramsClass, required.associateWith { Sample.A }, input)
                 } catch (e: InvocationTargetException) {
                     required += requiredName(e.cause, label)
                     return@repeat
@@ -97,7 +109,7 @@ internal class SdkShapes(private val client: XTwitterScraperClient = recordingCl
                         label,
                         cause.request.method.name,
                         cause.request.pathSegments,
-                        query(paramsClass, required),
+                        query(paramsClass, required, input),
                         body(paramsClass, params),
                         response(method.genericReturnType),
                         cause.request.body?.let { it.contentType().orEmpty() },
@@ -111,12 +123,12 @@ internal class SdkShapes(private val client: XTwitterScraperClient = recordingCl
         throw IllegalStateException("$label needs more than $MAX_REQUIRED required params.")
     }
 
-    private fun query(paramsClass: Class<*>, required: Set<String>): Shape.Fields {
+    private fun query(paramsClass: Class<*>, required: Set<String>, input: String?): Shape.Fields {
         val base = required.associateWith<String, Sample> { Sample.A }
         val props = linkedMapOf<String, Prop>()
         typedSetters(builderClass(paramsClass)).forEach { (name, setter) ->
-            val first = queryOf(paramsClass, base + (name to Sample.A))
-            val second = queryOf(paramsClass, base + (name to Sample.B))
+            val first = queryOf(paramsClass, base + (name to Sample.A), input)
+            val second = queryOf(paramsClass, base + (name to Sample.B), input)
             (first.keys() + second.keys())
                 .filter { first.values(it) != second.values(it) && !it.contains('[') }
                 .forEach { wire ->
@@ -127,8 +139,11 @@ internal class SdkShapes(private val client: XTwitterScraperClient = recordingCl
         return Shape.Fields(props)
     }
 
-    private fun queryOf(paramsClass: Class<*>, values: Map<String, Sample>): QueryParams =
-        (buildParams(paramsClass, values) as Params)._queryParams()
+    private fun queryOf(
+        paramsClass: Class<*>,
+        values: Map<String, Sample>,
+        input: String?,
+    ): QueryParams = (buildParams(paramsClass, values, input) as Params)._queryParams()
 
     private fun body(paramsClass: Class<*>, params: Any): Shape? {
         val bodyMethod =
@@ -149,7 +164,10 @@ internal class SdkShapes(private val client: XTwitterScraperClient = recordingCl
         return body.copy(
             props =
                 body.props
-                    .filterKeys { it !in inputs || it == selected }
+                    .filterKeys {
+                        (it !in inputs || it == selected) &&
+                            (it != "is_long_video" || selected == "file")
+                    }
                     .mapValues { (name, prop) ->
                         if (name == selected) prop.copy(required = true) else prop
                     }
@@ -318,8 +336,22 @@ internal class SdkShapes(private val client: XTwitterScraperClient = recordingCl
             .toSet()
     }
 
-    private fun buildParams(paramsClass: Class<*>, values: Map<String, Sample>): Any =
-        build(paramsClass, values)
+    private fun buildParams(
+        paramsClass: Class<*>,
+        values: Map<String, Sample>,
+        input: String? = null,
+    ): Any {
+        val inputs = alternatives[paramsClass] ?: return build(paramsClass, values)
+        val selected = input ?: inputs.first()
+        val fields = values.filterKeys { it !in inputs || it == selected }.toMutableMap()
+        fields.putIfAbsent(selected, Sample.A)
+        if (selected == "file" && "isLongVideo" in typedSetters(builderClass(paramsClass))) {
+            fields.putIfAbsent("isLongVideo", Sample.A)
+        } else {
+            fields.remove("isLongVideo")
+        }
+        return build(paramsClass, fields)
+    }
 
     private fun build(model: Class<*>, values: Map<String, Sample>): Any {
         val builder = newBuilder(model)

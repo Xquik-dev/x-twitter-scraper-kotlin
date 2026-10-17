@@ -84,6 +84,26 @@ internal class MediaUploadParamsTest {
     }
 
     @Test
+    fun bodyRejectsLongVideoWithoutFile() {
+        listOf(
+                MultipartField.of(false),
+                MultipartField.of(true),
+                MultipartField.of<Boolean>(JsonNull.of()),
+            )
+            .forEach { isLongVideo ->
+                assertThatThrownBy {
+                        MediaUploadParams.Body.builder()
+                            .account("@example")
+                            .url("https://example.com/video.mp4")
+                            .isLongVideo(isLongVideo)
+                            .build()
+                    }
+                    .isInstanceOf(IllegalStateException::class.java)
+                    .hasMessage("`isLongVideo` requires `file`")
+            }
+    }
+
+    @Test
     fun rejectsBothUrlAndFile() {
         assertThatThrownBy {
                 MediaUploadParams.builder()
