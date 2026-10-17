@@ -15,6 +15,9 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import com.x_twitter_scraper.api.core.jsonMapper
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
+import com.x_twitter_scraper.api.models.x.media.MediaUploadParams
+import com.x_twitter_scraper.api.models.x.profile.ProfileUpdateAvatarParams
+import com.x_twitter_scraper.api.models.x.profile.ProfileUpdateBannerParams
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.lang.reflect.GenericArrayType
@@ -263,14 +266,56 @@ internal class GeneratedModelContractTest {
     }
 
     private fun verifyParams(paramClass: Class<*>) {
+        when (paramClass) {
+            MediaUploadParams::class.java -> {
+                verifyParams(paramClass, setOf("file", "isLongVideo"))
+                verifyParams(paramClass, setOf("url"))
+            }
+            ProfileUpdateAvatarParams::class.java,
+            ProfileUpdateBannerParams::class.java -> {
+                verifyParams(paramClass, setOf("file"))
+                verifyParams(paramClass, setOf("url"))
+            }
+            else -> verifyParams(paramClass, emptySet())
+        }
+    }
+
+    private fun verifyParams(paramClass: Class<*>, omittedFields: Set<String>) {
         val builder = newBuilder(paramClass)
-        val unsupportedMethods = applyBuilderMutators(builder)
-        val params = build(builder)
-        val copy = copyOf(params)
+        val unsupportedMethods =
+            applyBuilderMutators(
+                builder,
+                { type ->
+                    if (
+                        omittedFields.isNotEmpty() &&
+                            type is Class<*> &&
+                            type.enclosingClass == paramClass &&
+                            type.simpleName == "Body"
+                    ) {
+                        val bodyBuilder = newBuilder(type)
+                        assertThat(
+                                applyBuilderMutators(
+                                    bodyBuilder,
+                                    shouldSkip = { it.name in omittedFields },
+                                )
+                            )
+                            .describedAs("Unsupported builder methods for ${type.name}")
+                            .isEmpty()
+                        build(bodyBuilder)
+                    } else {
+                        sampleValue(type)
+                    }
+                },
+                { it.name in omittedFields },
+            )
 
         assertThat(unsupportedMethods)
             .describedAs("Unsupported builder methods for ${paramClass.name}")
             .isEmpty()
+
+        val params = build(builder)
+        val copy = copyOf(params)
+
         assertThat(copy).isEqualTo(params)
         assertThat(params).isEqualTo(copy)
         assertThat(params).isEqualTo(params)
@@ -288,9 +333,10 @@ internal class GeneratedModelContractTest {
                     it.name != "toBuilder"
             }
             .forEach { getter ->
-                assertThat(getter.invoke(params))
-                    .describedAs("${paramClass.name}.${getter.name}")
-                    .isNotNull()
+                val value =
+                    assertThat(getter.invoke(params))
+                        .describedAs("${paramClass.name}.${getter.name}")
+                if (getter.name in omittedFields) value.isNull() else value.isNotNull()
             }
     }
 
