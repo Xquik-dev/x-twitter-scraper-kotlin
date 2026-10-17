@@ -17,11 +17,11 @@ internal class JobRetrieveResponseTest {
         val jobRetrieveResponse =
             JobRetrieveResponse.builder()
                 .job(
-                    JobRetrieveResponse.Job.builder()
+                    Job.builder()
                         .id("1899202395210649861")
                         .url("https://x.com/i/jobs/1899202395210649861")
                         .account(
-                            JobRetrieveResponse.Job.Account.builder()
+                            Job.Account.builder()
                                 .id("1812126202804711425")
                                 .verified(true)
                                 .description("description")
@@ -35,7 +35,7 @@ internal class JobRetrieveResponseTest {
                         )
                         .applyUrl("https://xquik.com/example")
                         .company(
-                            JobRetrieveResponse.Job.Company.builder()
+                            Job.Company.builder()
                                 .id("1714017006498824192")
                                 .logoUrl("logoUrl")
                                 .name("TotalMed")
@@ -64,11 +64,11 @@ internal class JobRetrieveResponseTest {
 
         assertThat(jobRetrieveResponse.job())
             .isEqualTo(
-                JobRetrieveResponse.Job.builder()
+                Job.builder()
                     .id("1899202395210649861")
                     .url("https://x.com/i/jobs/1899202395210649861")
                     .account(
-                        JobRetrieveResponse.Job.Account.builder()
+                        Job.Account.builder()
                             .id("1812126202804711425")
                             .verified(true)
                             .description("description")
@@ -82,7 +82,7 @@ internal class JobRetrieveResponseTest {
                     )
                     .applyUrl("https://xquik.com/example")
                     .company(
-                        JobRetrieveResponse.Job.Company.builder()
+                        Job.Company.builder()
                             .id("1714017006498824192")
                             .logoUrl("logoUrl")
                             .name("TotalMed")
@@ -115,11 +115,11 @@ internal class JobRetrieveResponseTest {
         val jobRetrieveResponse =
             JobRetrieveResponse.builder()
                 .job(
-                    JobRetrieveResponse.Job.builder()
+                    Job.builder()
                         .id("1899202395210649861")
                         .url("https://x.com/i/jobs/1899202395210649861")
                         .account(
-                            JobRetrieveResponse.Job.Account.builder()
+                            Job.Account.builder()
                                 .id("1812126202804711425")
                                 .verified(true)
                                 .description("description")
@@ -133,7 +133,7 @@ internal class JobRetrieveResponseTest {
                         )
                         .applyUrl("https://xquik.com/example")
                         .company(
-                            JobRetrieveResponse.Job.Company.builder()
+                            Job.Company.builder()
                                 .id("1714017006498824192")
                                 .logoUrl("logoUrl")
                                 .name("TotalMed")

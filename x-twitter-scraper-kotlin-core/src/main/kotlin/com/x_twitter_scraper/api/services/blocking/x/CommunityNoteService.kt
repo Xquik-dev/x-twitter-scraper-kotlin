@@ -9,11 +9,10 @@ import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.models.x.communitynotes.CommunityNoteListContributorDeletedNotesParams
-import com.x_twitter_scraper.api.models.x.communitynotes.CommunityNoteListContributorDeletedNotesResponse
 import com.x_twitter_scraper.api.models.x.communitynotes.CommunityNoteListContributorNotesParams
-import com.x_twitter_scraper.api.models.x.communitynotes.CommunityNoteListContributorNotesResponse
 import com.x_twitter_scraper.api.models.x.communitynotes.CommunityNoteRetrieveContributorParams
 import com.x_twitter_scraper.api.models.x.communitynotes.CommunityNoteRetrieveContributorResponse
+import com.x_twitter_scraper.api.models.x.communitynotes.PaginatedCommunityNotes
 
 /** Community Notes contributors, their notes, ratings & deleted notes */
 interface CommunityNoteService {
@@ -65,20 +64,20 @@ interface CommunityNoteService {
         params: CommunityNoteListContributorNotesParams =
             CommunityNoteListContributorNotesParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CommunityNoteListContributorNotesResponse =
+    ): PaginatedCommunityNotes =
         listContributorNotes(params.toBuilder().alias(alias).build(), requestOptions)
 
     /** @see listContributorNotes */
     fun listContributorNotes(
         params: CommunityNoteListContributorNotesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CommunityNoteListContributorNotesResponse
+    ): PaginatedCommunityNotes
 
     /** @see listContributorNotes */
     fun listContributorNotes(
         alias: String,
         requestOptions: RequestOptions,
-    ): CommunityNoteListContributorNotesResponse =
+    ): PaginatedCommunityNotes =
         listContributorNotes(alias, CommunityNoteListContributorNotesParams.none(), requestOptions)
 
     /**
@@ -91,20 +90,20 @@ interface CommunityNoteService {
         params: CommunityNoteListContributorDeletedNotesParams =
             CommunityNoteListContributorDeletedNotesParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CommunityNoteListContributorDeletedNotesResponse =
+    ): PaginatedCommunityNotes =
         listContributorDeletedNotes(params.toBuilder().alias(alias).build(), requestOptions)
 
     /** @see listContributorDeletedNotes */
     fun listContributorDeletedNotes(
         params: CommunityNoteListContributorDeletedNotesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CommunityNoteListContributorDeletedNotesResponse
+    ): PaginatedCommunityNotes
 
     /** @see listContributorDeletedNotes */
     fun listContributorDeletedNotes(
         alias: String,
         requestOptions: RequestOptions,
-    ): CommunityNoteListContributorDeletedNotesResponse =
+    ): PaginatedCommunityNotes =
         listContributorDeletedNotes(
             alias,
             CommunityNoteListContributorDeletedNotesParams.none(),
@@ -167,7 +166,7 @@ interface CommunityNoteService {
             params: CommunityNoteListContributorNotesParams =
                 CommunityNoteListContributorNotesParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<CommunityNoteListContributorNotesResponse> =
+        ): HttpResponseFor<PaginatedCommunityNotes> =
             listContributorNotes(params.toBuilder().alias(alias).build(), requestOptions)
 
         /** @see listContributorNotes */
@@ -175,14 +174,14 @@ interface CommunityNoteService {
         fun listContributorNotes(
             params: CommunityNoteListContributorNotesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<CommunityNoteListContributorNotesResponse>
+        ): HttpResponseFor<PaginatedCommunityNotes>
 
         /** @see listContributorNotes */
         @MustBeClosed
         fun listContributorNotes(
             alias: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<CommunityNoteListContributorNotesResponse> =
+        ): HttpResponseFor<PaginatedCommunityNotes> =
             listContributorNotes(
                 alias,
                 CommunityNoteListContributorNotesParams.none(),
@@ -200,7 +199,7 @@ interface CommunityNoteService {
             params: CommunityNoteListContributorDeletedNotesParams =
                 CommunityNoteListContributorDeletedNotesParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<CommunityNoteListContributorDeletedNotesResponse> =
+        ): HttpResponseFor<PaginatedCommunityNotes> =
             listContributorDeletedNotes(params.toBuilder().alias(alias).build(), requestOptions)
 
         /** @see listContributorDeletedNotes */
@@ -208,14 +207,14 @@ interface CommunityNoteService {
         fun listContributorDeletedNotes(
             params: CommunityNoteListContributorDeletedNotesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<CommunityNoteListContributorDeletedNotesResponse>
+        ): HttpResponseFor<PaginatedCommunityNotes>
 
         /** @see listContributorDeletedNotes */
         @MustBeClosed
         fun listContributorDeletedNotes(
             alias: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<CommunityNoteListContributorDeletedNotesResponse> =
+        ): HttpResponseFor<PaginatedCommunityNotes> =
             listContributorDeletedNotes(
                 alias,
                 CommunityNoteListContributorDeletedNotesParams.none(),

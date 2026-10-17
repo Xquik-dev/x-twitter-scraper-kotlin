@@ -18,11 +18,11 @@ internal class JobSearchResponseTest {
             JobSearchResponse.builder()
                 .hasNextPage(true)
                 .addJob(
-                    JobSearchResponse.Job.builder()
+                    Job.builder()
                         .id("1899202395210649861")
                         .url("https://x.com/i/jobs/1899202395210649861")
                         .account(
-                            JobSearchResponse.Job.Account.builder()
+                            Job.Account.builder()
                                 .id("1812126202804711425")
                                 .verified(true)
                                 .description("description")
@@ -36,7 +36,7 @@ internal class JobSearchResponseTest {
                         )
                         .applyUrl("https://xquik.com/example")
                         .company(
-                            JobSearchResponse.Job.Company.builder()
+                            Job.Company.builder()
                                 .id("1714017006498824192")
                                 .logoUrl("logoUrl")
                                 .name("TotalMed")
@@ -67,11 +67,11 @@ internal class JobSearchResponseTest {
         assertThat(jobSearchResponse.hasNextPage()).isEqualTo(true)
         assertThat(jobSearchResponse.jobs())
             .containsExactly(
-                JobSearchResponse.Job.builder()
+                Job.builder()
                     .id("1899202395210649861")
                     .url("https://x.com/i/jobs/1899202395210649861")
                     .account(
-                        JobSearchResponse.Job.Account.builder()
+                        Job.Account.builder()
                             .id("1812126202804711425")
                             .verified(true)
                             .description("description")
@@ -85,7 +85,7 @@ internal class JobSearchResponseTest {
                     )
                     .applyUrl("https://xquik.com/example")
                     .company(
-                        JobSearchResponse.Job.Company.builder()
+                        Job.Company.builder()
                             .id("1714017006498824192")
                             .logoUrl("logoUrl")
                             .name("TotalMed")
@@ -120,11 +120,11 @@ internal class JobSearchResponseTest {
             JobSearchResponse.builder()
                 .hasNextPage(true)
                 .addJob(
-                    JobSearchResponse.Job.builder()
+                    Job.builder()
                         .id("1899202395210649861")
                         .url("https://x.com/i/jobs/1899202395210649861")
                         .account(
-                            JobSearchResponse.Job.Account.builder()
+                            Job.Account.builder()
                                 .id("1812126202804711425")
                                 .verified(true)
                                 .description("description")
@@ -138,7 +138,7 @@ internal class JobSearchResponseTest {
                         )
                         .applyUrl("https://xquik.com/example")
                         .company(
-                            JobSearchResponse.Job.Company.builder()
+                            Job.Company.builder()
                                 .id("1714017006498824192")
                                 .logoUrl("logoUrl")
                                 .name("TotalMed")

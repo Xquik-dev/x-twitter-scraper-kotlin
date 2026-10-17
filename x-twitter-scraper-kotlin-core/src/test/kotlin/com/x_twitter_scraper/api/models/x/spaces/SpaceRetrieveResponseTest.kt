@@ -20,21 +20,19 @@ internal class SpaceRetrieveResponseTest {
         val spaceRetrieveResponse =
             SpaceRetrieveResponse.builder()
                 .space(
-                    SpaceRetrieveResponse.Space.builder()
+                    Space.builder()
                         .id("1OGwblLjnQMKB")
                         .addAdmin(
-                            SpaceRetrieveResponse.Space.Admin.builder()
+                            SpaceParticipant.builder()
                                 .id("9876543210")
                                 .name("Solana")
                                 .username("elonmusk")
                                 .affiliatesHighlightedLabel(
-                                    SpaceRetrieveResponse.Space.Admin.AffiliatesHighlightedLabel
-                                        .builder()
+                                    SpaceParticipant.AffiliatesHighlightedLabel.builder()
                                         .badgeUrl("badgeUrl")
                                         .description("description")
                                         .longDescription(
-                                            SpaceRetrieveResponse.Space.Admin
-                                                .AffiliatesHighlightedLabel
+                                            SpaceParticipant.AffiliatesHighlightedLabel
                                                 .LongDescription
                                                 .builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -62,18 +60,16 @@ internal class SpaceRetrieveResponseTest {
                                 .build()
                         )
                         .addListener(
-                            SpaceRetrieveResponse.Space.Listener.builder()
+                            SpaceParticipant.builder()
                                 .id("9876543210")
                                 .name("Solana")
                                 .username("elonmusk")
                                 .affiliatesHighlightedLabel(
-                                    SpaceRetrieveResponse.Space.Listener.AffiliatesHighlightedLabel
-                                        .builder()
+                                    SpaceParticipant.AffiliatesHighlightedLabel.builder()
                                         .badgeUrl("badgeUrl")
                                         .description("description")
                                         .longDescription(
-                                            SpaceRetrieveResponse.Space.Listener
-                                                .AffiliatesHighlightedLabel
+                                            SpaceParticipant.AffiliatesHighlightedLabel
                                                 .LongDescription
                                                 .builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -101,18 +97,16 @@ internal class SpaceRetrieveResponseTest {
                                 .build()
                         )
                         .addSpeaker(
-                            SpaceRetrieveResponse.Space.Speaker.builder()
+                            SpaceParticipant.builder()
                                 .id("9876543210")
                                 .name("Solana")
                                 .username("elonmusk")
                                 .affiliatesHighlightedLabel(
-                                    SpaceRetrieveResponse.Space.Speaker.AffiliatesHighlightedLabel
-                                        .builder()
+                                    SpaceParticipant.AffiliatesHighlightedLabel.builder()
                                         .badgeUrl("badgeUrl")
                                         .description("description")
                                         .longDescription(
-                                            SpaceRetrieveResponse.Space.Speaker
-                                                .AffiliatesHighlightedLabel
+                                            SpaceParticipant.AffiliatesHighlightedLabel
                                                 .LongDescription
                                                 .builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -158,7 +152,7 @@ internal class SpaceRetrieveResponseTest {
                         .participantCount(67L)
                         .scheduledStart(OffsetDateTime.parse("2026-03-11T17:00:00.000Z"))
                         .addSharing(
-                            SpaceRetrieveResponse.Space.Sharing.builder()
+                            Space.Sharing.builder()
                                 .id("2106511178339881415")
                                 .sharedAt(OffsetDateTime.parse("2026-10-03T22:26:16.658Z"))
                                 .sharedBy(
@@ -208,21 +202,19 @@ internal class SpaceRetrieveResponseTest {
 
         assertThat(spaceRetrieveResponse.space())
             .isEqualTo(
-                SpaceRetrieveResponse.Space.builder()
+                Space.builder()
                     .id("1OGwblLjnQMKB")
                     .addAdmin(
-                        SpaceRetrieveResponse.Space.Admin.builder()
+                        SpaceParticipant.builder()
                             .id("9876543210")
                             .name("Solana")
                             .username("elonmusk")
                             .affiliatesHighlightedLabel(
-                                SpaceRetrieveResponse.Space.Admin.AffiliatesHighlightedLabel
-                                    .builder()
+                                SpaceParticipant.AffiliatesHighlightedLabel.builder()
                                     .badgeUrl("badgeUrl")
                                     .description("description")
                                     .longDescription(
-                                        SpaceRetrieveResponse.Space.Admin.AffiliatesHighlightedLabel
-                                            .LongDescription
+                                        SpaceParticipant.AffiliatesHighlightedLabel.LongDescription
                                             .builder()
                                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
@@ -249,19 +241,16 @@ internal class SpaceRetrieveResponseTest {
                             .build()
                     )
                     .addListener(
-                        SpaceRetrieveResponse.Space.Listener.builder()
+                        SpaceParticipant.builder()
                             .id("9876543210")
                             .name("Solana")
                             .username("elonmusk")
                             .affiliatesHighlightedLabel(
-                                SpaceRetrieveResponse.Space.Listener.AffiliatesHighlightedLabel
-                                    .builder()
+                                SpaceParticipant.AffiliatesHighlightedLabel.builder()
                                     .badgeUrl("badgeUrl")
                                     .description("description")
                                     .longDescription(
-                                        SpaceRetrieveResponse.Space.Listener
-                                            .AffiliatesHighlightedLabel
-                                            .LongDescription
+                                        SpaceParticipant.AffiliatesHighlightedLabel.LongDescription
                                             .builder()
                                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
@@ -288,19 +277,16 @@ internal class SpaceRetrieveResponseTest {
                             .build()
                     )
                     .addSpeaker(
-                        SpaceRetrieveResponse.Space.Speaker.builder()
+                        SpaceParticipant.builder()
                             .id("9876543210")
                             .name("Solana")
                             .username("elonmusk")
                             .affiliatesHighlightedLabel(
-                                SpaceRetrieveResponse.Space.Speaker.AffiliatesHighlightedLabel
-                                    .builder()
+                                SpaceParticipant.AffiliatesHighlightedLabel.builder()
                                     .badgeUrl("badgeUrl")
                                     .description("description")
                                     .longDescription(
-                                        SpaceRetrieveResponse.Space.Speaker
-                                            .AffiliatesHighlightedLabel
-                                            .LongDescription
+                                        SpaceParticipant.AffiliatesHighlightedLabel.LongDescription
                                             .builder()
                                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
@@ -345,7 +331,7 @@ internal class SpaceRetrieveResponseTest {
                     .participantCount(67L)
                     .scheduledStart(OffsetDateTime.parse("2026-03-11T17:00:00.000Z"))
                     .addSharing(
-                        SpaceRetrieveResponse.Space.Sharing.builder()
+                        Space.Sharing.builder()
                             .id("2106511178339881415")
                             .sharedAt(OffsetDateTime.parse("2026-10-03T22:26:16.658Z"))
                             .sharedBy(
@@ -399,21 +385,19 @@ internal class SpaceRetrieveResponseTest {
         val spaceRetrieveResponse =
             SpaceRetrieveResponse.builder()
                 .space(
-                    SpaceRetrieveResponse.Space.builder()
+                    Space.builder()
                         .id("1OGwblLjnQMKB")
                         .addAdmin(
-                            SpaceRetrieveResponse.Space.Admin.builder()
+                            SpaceParticipant.builder()
                                 .id("9876543210")
                                 .name("Solana")
                                 .username("elonmusk")
                                 .affiliatesHighlightedLabel(
-                                    SpaceRetrieveResponse.Space.Admin.AffiliatesHighlightedLabel
-                                        .builder()
+                                    SpaceParticipant.AffiliatesHighlightedLabel.builder()
                                         .badgeUrl("badgeUrl")
                                         .description("description")
                                         .longDescription(
-                                            SpaceRetrieveResponse.Space.Admin
-                                                .AffiliatesHighlightedLabel
+                                            SpaceParticipant.AffiliatesHighlightedLabel
                                                 .LongDescription
                                                 .builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -441,18 +425,16 @@ internal class SpaceRetrieveResponseTest {
                                 .build()
                         )
                         .addListener(
-                            SpaceRetrieveResponse.Space.Listener.builder()
+                            SpaceParticipant.builder()
                                 .id("9876543210")
                                 .name("Solana")
                                 .username("elonmusk")
                                 .affiliatesHighlightedLabel(
-                                    SpaceRetrieveResponse.Space.Listener.AffiliatesHighlightedLabel
-                                        .builder()
+                                    SpaceParticipant.AffiliatesHighlightedLabel.builder()
                                         .badgeUrl("badgeUrl")
                                         .description("description")
                                         .longDescription(
-                                            SpaceRetrieveResponse.Space.Listener
-                                                .AffiliatesHighlightedLabel
+                                            SpaceParticipant.AffiliatesHighlightedLabel
                                                 .LongDescription
                                                 .builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -480,18 +462,16 @@ internal class SpaceRetrieveResponseTest {
                                 .build()
                         )
                         .addSpeaker(
-                            SpaceRetrieveResponse.Space.Speaker.builder()
+                            SpaceParticipant.builder()
                                 .id("9876543210")
                                 .name("Solana")
                                 .username("elonmusk")
                                 .affiliatesHighlightedLabel(
-                                    SpaceRetrieveResponse.Space.Speaker.AffiliatesHighlightedLabel
-                                        .builder()
+                                    SpaceParticipant.AffiliatesHighlightedLabel.builder()
                                         .badgeUrl("badgeUrl")
                                         .description("description")
                                         .longDescription(
-                                            SpaceRetrieveResponse.Space.Speaker
-                                                .AffiliatesHighlightedLabel
+                                            SpaceParticipant.AffiliatesHighlightedLabel
                                                 .LongDescription
                                                 .builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -537,7 +517,7 @@ internal class SpaceRetrieveResponseTest {
                         .participantCount(67L)
                         .scheduledStart(OffsetDateTime.parse("2026-03-11T17:00:00.000Z"))
                         .addSharing(
-                            SpaceRetrieveResponse.Space.Sharing.builder()
+                            Space.Sharing.builder()
                                 .id("2106511178339881415")
                                 .sharedAt(OffsetDateTime.parse("2026-10-03T22:26:16.658Z"))
                                 .sharedBy(

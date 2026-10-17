@@ -18,25 +18,23 @@ internal class CommunityNoteListContributorNotesResponseTest {
     @Test
     fun create() {
         val communityNoteListContributorNotesResponse =
-            CommunityNoteListContributorNotesResponse.builder()
+            PaginatedCommunityNotes.builder()
                 .hasNextPage(true)
                 .nextCursor("DAACCgACGRElMJcAAA")
                 .addNote(
-                    CommunityNoteListContributorNotesResponse.Note.builder()
+                    PaginatedCommunityNotes.Note.builder()
                         .id("2026375778254868976")
                         .abovePcrhThreshold(true)
                         .appealStatus("NotAppealed")
                         .classification("MisinformedOrPotentiallyMisleading")
                         .contributor(
-                            CommunityNoteListContributorNotesResponse.Note.Contributor.builder()
+                            CommunityNotesContributor.builder()
                                 .alias("ardent-beach-friarbird")
                                 .deletedNotesCount(0L)
                                 .isApiContributor(true)
                                 .isTopWriter(true)
                                 .notesCount(
-                                    CommunityNoteListContributorNotesResponse.Note.Contributor
-                                        .NotesCount
-                                        .builder()
+                                    CommunityNotesContributor.NotesCount.builder()
                                         .awaitingMoreRatings(0L)
                                         .currentlyRatedHelpful(0L)
                                         .currentlyRatedNotHelpful(0L)
@@ -44,28 +42,18 @@ internal class CommunityNoteListContributorNotesResponseTest {
                                         .build()
                                 )
                                 .ratingsCount(
-                                    CommunityNoteListContributorNotesResponse.Note.Contributor
-                                        .RatingsCount
-                                        .builder()
+                                    CommunityNotesContributor.RatingsCount.builder()
                                         .awaitingMoreRatings(0L)
                                         .ratedAfterDecision(0L)
                                         .successful(
-                                            CommunityNoteListContributorNotesResponse.Note
-                                                .Contributor
-                                                .RatingsCount
-                                                .Successful
-                                                .builder()
+                                            CommunityNotesRatingOutcome.builder()
                                                 .helpfulCount(0L)
                                                 .notHelpfulCount(0L)
                                                 .total(0L)
                                                 .build()
                                         )
                                         .unsuccessful(
-                                            CommunityNoteListContributorNotesResponse.Note
-                                                .Contributor
-                                                .RatingsCount
-                                                .Unsuccessful
-                                                .builder()
+                                            CommunityNotesRatingOutcome.builder()
                                                 .helpfulCount(0L)
                                                 .notHelpfulCount(0L)
                                                 .total(0L)
@@ -81,11 +69,10 @@ internal class CommunityNoteListContributorNotesResponseTest {
                         .deleted(true)
                         .displayUrl("displayUrl")
                         .addEntity(
-                            CommunityNoteListContributorNotesResponse.Note.Entity.builder()
+                            PaginatedCommunityNotes.Note.Entity.builder()
                                 .fromIndex(0L)
                                 .ref(
-                                    CommunityNoteListContributorNotesResponse.Note.Entity.Ref
-                                        .builder()
+                                    PaginatedCommunityNotes.Note.Entity.Ref.builder()
                                         .screenName("screenName")
                                         .text("text")
                                         .type("TimelineUrl")
@@ -120,7 +107,7 @@ internal class CommunityNoteListContributorNotesResponseTest {
                         )
                         .postId("2026359315657805939")
                         .postUnavailable(
-                            CommunityNoteListContributorNotesResponse.Note.PostUnavailable.builder()
+                            PaginatedCommunityNotes.Note.PostUnavailable.builder()
                                 .reason("Suspended")
                                 .build()
                         )
@@ -138,21 +125,19 @@ internal class CommunityNoteListContributorNotesResponseTest {
             .isEqualTo("DAACCgACGRElMJcAAA")
         assertThat(communityNoteListContributorNotesResponse.notes())
             .containsExactly(
-                CommunityNoteListContributorNotesResponse.Note.builder()
+                PaginatedCommunityNotes.Note.builder()
                     .id("2026375778254868976")
                     .abovePcrhThreshold(true)
                     .appealStatus("NotAppealed")
                     .classification("MisinformedOrPotentiallyMisleading")
                     .contributor(
-                        CommunityNoteListContributorNotesResponse.Note.Contributor.builder()
+                        CommunityNotesContributor.builder()
                             .alias("ardent-beach-friarbird")
                             .deletedNotesCount(0L)
                             .isApiContributor(true)
                             .isTopWriter(true)
                             .notesCount(
-                                CommunityNoteListContributorNotesResponse.Note.Contributor
-                                    .NotesCount
-                                    .builder()
+                                CommunityNotesContributor.NotesCount.builder()
                                     .awaitingMoreRatings(0L)
                                     .currentlyRatedHelpful(0L)
                                     .currentlyRatedNotHelpful(0L)
@@ -160,26 +145,18 @@ internal class CommunityNoteListContributorNotesResponseTest {
                                     .build()
                             )
                             .ratingsCount(
-                                CommunityNoteListContributorNotesResponse.Note.Contributor
-                                    .RatingsCount
-                                    .builder()
+                                CommunityNotesContributor.RatingsCount.builder()
                                     .awaitingMoreRatings(0L)
                                     .ratedAfterDecision(0L)
                                     .successful(
-                                        CommunityNoteListContributorNotesResponse.Note.Contributor
-                                            .RatingsCount
-                                            .Successful
-                                            .builder()
+                                        CommunityNotesRatingOutcome.builder()
                                             .helpfulCount(0L)
                                             .notHelpfulCount(0L)
                                             .total(0L)
                                             .build()
                                     )
                                     .unsuccessful(
-                                        CommunityNoteListContributorNotesResponse.Note.Contributor
-                                            .RatingsCount
-                                            .Unsuccessful
-                                            .builder()
+                                        CommunityNotesRatingOutcome.builder()
                                             .helpfulCount(0L)
                                             .notHelpfulCount(0L)
                                             .total(0L)
@@ -195,10 +172,10 @@ internal class CommunityNoteListContributorNotesResponseTest {
                     .deleted(true)
                     .displayUrl("displayUrl")
                     .addEntity(
-                        CommunityNoteListContributorNotesResponse.Note.Entity.builder()
+                        PaginatedCommunityNotes.Note.Entity.builder()
                             .fromIndex(0L)
                             .ref(
-                                CommunityNoteListContributorNotesResponse.Note.Entity.Ref.builder()
+                                PaginatedCommunityNotes.Note.Entity.Ref.builder()
                                     .screenName("screenName")
                                     .text("text")
                                     .type("TimelineUrl")
@@ -233,7 +210,7 @@ internal class CommunityNoteListContributorNotesResponseTest {
                     )
                     .postId("2026359315657805939")
                     .postUnavailable(
-                        CommunityNoteListContributorNotesResponse.Note.PostUnavailable.builder()
+                        PaginatedCommunityNotes.Note.PostUnavailable.builder()
                             .reason("Suspended")
                             .build()
                     )
@@ -250,25 +227,23 @@ internal class CommunityNoteListContributorNotesResponseTest {
     fun roundtrip() {
         val jsonMapper = jsonMapper()
         val communityNoteListContributorNotesResponse =
-            CommunityNoteListContributorNotesResponse.builder()
+            PaginatedCommunityNotes.builder()
                 .hasNextPage(true)
                 .nextCursor("DAACCgACGRElMJcAAA")
                 .addNote(
-                    CommunityNoteListContributorNotesResponse.Note.builder()
+                    PaginatedCommunityNotes.Note.builder()
                         .id("2026375778254868976")
                         .abovePcrhThreshold(true)
                         .appealStatus("NotAppealed")
                         .classification("MisinformedOrPotentiallyMisleading")
                         .contributor(
-                            CommunityNoteListContributorNotesResponse.Note.Contributor.builder()
+                            CommunityNotesContributor.builder()
                                 .alias("ardent-beach-friarbird")
                                 .deletedNotesCount(0L)
                                 .isApiContributor(true)
                                 .isTopWriter(true)
                                 .notesCount(
-                                    CommunityNoteListContributorNotesResponse.Note.Contributor
-                                        .NotesCount
-                                        .builder()
+                                    CommunityNotesContributor.NotesCount.builder()
                                         .awaitingMoreRatings(0L)
                                         .currentlyRatedHelpful(0L)
                                         .currentlyRatedNotHelpful(0L)
@@ -276,28 +251,18 @@ internal class CommunityNoteListContributorNotesResponseTest {
                                         .build()
                                 )
                                 .ratingsCount(
-                                    CommunityNoteListContributorNotesResponse.Note.Contributor
-                                        .RatingsCount
-                                        .builder()
+                                    CommunityNotesContributor.RatingsCount.builder()
                                         .awaitingMoreRatings(0L)
                                         .ratedAfterDecision(0L)
                                         .successful(
-                                            CommunityNoteListContributorNotesResponse.Note
-                                                .Contributor
-                                                .RatingsCount
-                                                .Successful
-                                                .builder()
+                                            CommunityNotesRatingOutcome.builder()
                                                 .helpfulCount(0L)
                                                 .notHelpfulCount(0L)
                                                 .total(0L)
                                                 .build()
                                         )
                                         .unsuccessful(
-                                            CommunityNoteListContributorNotesResponse.Note
-                                                .Contributor
-                                                .RatingsCount
-                                                .Unsuccessful
-                                                .builder()
+                                            CommunityNotesRatingOutcome.builder()
                                                 .helpfulCount(0L)
                                                 .notHelpfulCount(0L)
                                                 .total(0L)
@@ -313,11 +278,10 @@ internal class CommunityNoteListContributorNotesResponseTest {
                         .deleted(true)
                         .displayUrl("displayUrl")
                         .addEntity(
-                            CommunityNoteListContributorNotesResponse.Note.Entity.builder()
+                            PaginatedCommunityNotes.Note.Entity.builder()
                                 .fromIndex(0L)
                                 .ref(
-                                    CommunityNoteListContributorNotesResponse.Note.Entity.Ref
-                                        .builder()
+                                    PaginatedCommunityNotes.Note.Entity.Ref.builder()
                                         .screenName("screenName")
                                         .text("text")
                                         .type("TimelineUrl")
@@ -352,7 +316,7 @@ internal class CommunityNoteListContributorNotesResponseTest {
                         )
                         .postId("2026359315657805939")
                         .postUnavailable(
-                            CommunityNoteListContributorNotesResponse.Note.PostUnavailable.builder()
+                            PaginatedCommunityNotes.Note.PostUnavailable.builder()
                                 .reason("Suspended")
                                 .build()
                         )
@@ -368,7 +332,7 @@ internal class CommunityNoteListContributorNotesResponseTest {
         val roundtrippedCommunityNoteListContributorNotesResponse =
             jsonMapper.readValue(
                 jsonMapper.writeValueAsString(communityNoteListContributorNotesResponse),
-                jacksonTypeRef<CommunityNoteListContributorNotesResponse>(),
+                jacksonTypeRef<PaginatedCommunityNotes>(),
             )
 
         assertThat(roundtrippedCommunityNoteListContributorNotesResponse)
@@ -384,8 +348,7 @@ internal class CommunityNoteListContributorNotesResponseTest {
                 )
         (json["notes"][0] as ObjectNode).putNull("post")
 
-        val response =
-            jsonMapper().treeToValue(json, CommunityNoteListContributorNotesResponse::class.java)
+        val response = jsonMapper().treeToValue(json, PaginatedCommunityNotes::class.java)
 
         assertThat(response.notes()[0].post()).isNull()
         assertThat(response.isValid()).isTrue()

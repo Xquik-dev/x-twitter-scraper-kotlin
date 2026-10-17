@@ -6,6 +6,7 @@ package com.x_twitter_scraper.api.models.x.broadcasts
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.x_twitter_scraper.api.core.jsonMapper
+import com.x_twitter_scraper.api.models.Broadcast
 import com.x_twitter_scraper.api.models.SearchTweet
 import com.x_twitter_scraper.api.models.UserProfile
 import java.time.OffsetDateTime
@@ -19,7 +20,7 @@ internal class BroadcastRetrieveResponseTest {
         val broadcastRetrieveResponse =
             BroadcastRetrieveResponse.builder()
                 .broadcast(
-                    BroadcastRetrieveResponse.Broadcast.builder()
+                    Broadcast.builder()
                         .id("1nGeLMWbkpaKX")
                         .cameraRotation(0L)
                         .chatOption(1L)
@@ -35,7 +36,7 @@ internal class BroadcastRetrieveResponseTest {
                         .lastPingAt(OffsetDateTime.parse("2026-09-17T01:17:32.232Z"))
                         .mediaKey("28_2097700444252635136")
                         .periscopeUser(
-                            BroadcastRetrieveResponse.Broadcast.PeriscopeUser.builder()
+                            Broadcast.PeriscopeUser.builder()
                                 .id("1raQZonlMGYKz")
                                 .displayName("SpaceX")
                                 .profilePicture("https://example.com")
@@ -72,7 +73,7 @@ internal class BroadcastRetrieveResponseTest {
 
         assertThat(broadcastRetrieveResponse.broadcast())
             .isEqualTo(
-                BroadcastRetrieveResponse.Broadcast.builder()
+                Broadcast.builder()
                     .id("1nGeLMWbkpaKX")
                     .cameraRotation(0L)
                     .chatOption(1L)
@@ -88,7 +89,7 @@ internal class BroadcastRetrieveResponseTest {
                     .lastPingAt(OffsetDateTime.parse("2026-09-17T01:17:32.232Z"))
                     .mediaKey("28_2097700444252635136")
                     .periscopeUser(
-                        BroadcastRetrieveResponse.Broadcast.PeriscopeUser.builder()
+                        Broadcast.PeriscopeUser.builder()
                             .id("1raQZonlMGYKz")
                             .displayName("SpaceX")
                             .profilePicture("https://example.com")
@@ -129,7 +130,7 @@ internal class BroadcastRetrieveResponseTest {
         val broadcastRetrieveResponse =
             BroadcastRetrieveResponse.builder()
                 .broadcast(
-                    BroadcastRetrieveResponse.Broadcast.builder()
+                    Broadcast.builder()
                         .id("1nGeLMWbkpaKX")
                         .cameraRotation(0L)
                         .chatOption(1L)
@@ -145,7 +146,7 @@ internal class BroadcastRetrieveResponseTest {
                         .lastPingAt(OffsetDateTime.parse("2026-09-17T01:17:32.232Z"))
                         .mediaKey("28_2097700444252635136")
                         .periscopeUser(
-                            BroadcastRetrieveResponse.Broadcast.PeriscopeUser.builder()
+                            Broadcast.PeriscopeUser.builder()
                                 .id("1raQZonlMGYKz")
                                 .displayName("SpaceX")
                                 .profilePicture("https://example.com")
