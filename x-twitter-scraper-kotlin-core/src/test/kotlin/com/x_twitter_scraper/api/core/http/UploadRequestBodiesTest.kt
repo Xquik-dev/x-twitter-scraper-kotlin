@@ -6,9 +6,11 @@ import com.x_twitter_scraper.api.core.MultipartField
 import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.jsonMapper
 import com.x_twitter_scraper.api.models.support.tickets.TicketCreateParams
+import com.x_twitter_scraper.api.models.support.tickets.TicketReplyParams
 import com.x_twitter_scraper.api.models.x.media.MediaUploadParams
 import com.x_twitter_scraper.api.models.x.profile.ProfileUpdateAvatarParams
 import com.x_twitter_scraper.api.models.x.profile.ProfileUpdateBannerParams
+import com.x_twitter_scraper.api.services.async.support.TicketServiceAsyncImpl
 import com.x_twitter_scraper.api.services.async.x.MediaServiceAsyncImpl
 import com.x_twitter_scraper.api.services.async.x.ProfileServiceAsyncImpl
 import com.x_twitter_scraper.api.services.blocking.support.TicketServiceImpl
@@ -70,6 +72,146 @@ internal class UploadRequestBodiesTest {
             assertThat(it.second.toByteArray(Charsets.ISO_8859_1)).isEqualTo(bytes)
         }
     }
+
+    @ParameterizedTest
+    @CsvSource("false, false", "false, true", "true, false", "true, true")
+    fun ticketCreate_withoutBodySendsOnlySubjectAndFileParts(
+        async: Boolean,
+        addIndividually: Boolean,
+    ) =
+        runBlocking<Unit> {
+            val contents =
+                listOf(byteArrayOf(0, 1, 0xff.toByte()), byteArrayOf(2, 3, 0xfe.toByte()))
+            val httpClient = CapturingHttpClient()
+            val options = ClientOptions.builder().httpClient(httpClient).apiKey("test").build()
+            val params =
+                TicketCreateParams.builder()
+                    .subject("Upload issue")
+                    .apply {
+                        if (addIndividually) {
+                            contents.forEach { addAttachment(it.inputStream()) }
+                        } else {
+                            attachments(contents.map { it.inputStream() })
+                        }
+                    }
+                    .build()
+                    .toBuilder()
+                    .build()
+
+            if (async) {
+                TicketServiceAsyncImpl(options).withRawResponse().create(params).close()
+            } else {
+                TicketServiceImpl(options).withRawResponse().create(params).close()
+            }
+
+            val parts = multipartParts(checkNotNull(httpClient.request.body))
+            assertThat(parts.map { disposition(it.first)["name"] })
+                .containsExactlyInAnyOrder("subject", "attachments", "attachments")
+            assertThat(parts.single { disposition(it.first)["name"] == "subject" }.second)
+                .isEqualTo("Upload issue")
+            val attachments = parts.filter { disposition(it.first)["name"] == "attachments" }
+            attachments.forEachIndexed { index, part ->
+                assertThat(disposition(part.first)).containsEntry("filename", "attachment")
+                assertThat(part.first["content-type"]).isEqualTo("application/octet-stream")
+                assertThat(part.second.toByteArray(Charsets.ISO_8859_1)).isEqualTo(contents[index])
+            }
+        }
+
+    @ParameterizedTest
+    @CsvSource(
+        "false, false, false",
+        "false, false, true",
+        "false, true, false",
+        "false, true, true",
+        "true, false, false",
+        "true, false, true",
+        "true, true, false",
+        "true, true, true",
+    )
+    fun ticketReply_serializesAttachmentsAndOptionalBody(
+        async: Boolean,
+        addIndividually: Boolean,
+        withBody: Boolean,
+    ) =
+        runBlocking<Unit> {
+            val contents =
+                listOf(byteArrayOf(0, 1, 0xff.toByte()), byteArrayOf(2, 3, 0xfe.toByte()))
+            val httpClient = CapturingHttpClient()
+            val options = ClientOptions.builder().httpClient(httpClient).apiKey("test").build()
+            val params =
+                TicketReplyParams.builder()
+                    .id("tkt_a1b2c3d4e5f6a1b2c3d4e5f6")
+                    .apply {
+                        if (withBody) body("Please see the attachments")
+                        if (addIndividually) {
+                            contents.forEach { addAttachment(it.inputStream()) }
+                        } else {
+                            attachments(contents.map { it.inputStream() })
+                        }
+                    }
+                    .build()
+                    .toBuilder()
+                    .build()
+
+            if (async) {
+                TicketServiceAsyncImpl(options).withRawResponse().reply(params).close()
+            } else {
+                TicketServiceImpl(options).withRawResponse().reply(params).close()
+            }
+
+            val parts = multipartParts(checkNotNull(httpClient.request.body))
+            val names = parts.map { disposition(it.first)["name"] }
+            if (withBody) {
+                assertThat(names).containsExactlyInAnyOrder("body", "attachments", "attachments")
+                assertThat(parts.single { disposition(it.first)["name"] == "body" }.second)
+                    .isEqualTo("Please see the attachments")
+            } else {
+                assertThat(names).containsExactlyInAnyOrder("attachments", "attachments")
+            }
+            val attachments = parts.filter { disposition(it.first)["name"] == "attachments" }
+            attachments.forEachIndexed { index, part ->
+                assertThat(disposition(part.first)).containsEntry("filename", "attachment")
+                assertThat(part.first["content-type"]).isEqualTo("application/octet-stream")
+                assertThat(part.second.toByteArray(Charsets.ISO_8859_1)).isEqualTo(contents[index])
+            }
+        }
+
+    @ParameterizedTest
+    @ValueSource(booleans = [false, true])
+    fun ticketReply_preservesCustomAttachmentMetadata(async: Boolean) =
+        runBlocking<Unit> {
+            val httpClient = CapturingHttpClient()
+            val options = ClientOptions.builder().httpClient(httpClient).apiKey("test").build()
+            val params =
+                TicketReplyParams.builder()
+                    .id("tkt_a1b2c3d4e5f6a1b2c3d4e5f6")
+                    .attachments(
+                        MultipartField.builder<List<InputStream>>()
+                            .value(listOf("first".byteInputStream()))
+                            .filename("details.txt")
+                            .contentType("text/plain")
+                            .build()
+                    )
+                    .build()
+                    .toBuilder()
+                    .addAttachment("second".byteInputStream())
+                    .build()
+
+            if (async) {
+                TicketServiceAsyncImpl(options).withRawResponse().reply(params).close()
+            } else {
+                TicketServiceImpl(options).withRawResponse().reply(params).close()
+            }
+
+            val parts = multipartParts(checkNotNull(httpClient.request.body))
+            assertThat(parts.map { it.second }).containsExactly("first", "second")
+            parts.forEach { part ->
+                assertThat(disposition(part.first))
+                    .containsEntry("name", "attachments")
+                    .containsEntry("filename", "details.txt")
+                assertThat(part.first["content-type"]).isEqualTo("text/plain")
+            }
+        }
 
     @ParameterizedTest
     @ValueSource(booleans = [false, true])

@@ -22,6 +22,52 @@ internal class TicketReplyParamsTest {
     }
 
     @Test
+    fun createWithoutBody() {
+        val params = TicketReplyParams.builder().id("tkt_a1b2c3d4e5f6a1b2c3d4e5f6").build()
+
+        assertThat(params.body()).isNull()
+        assertThat(params._body()).doesNotContainKey("body")
+        assertThat(params.toBuilder().build()).isEqualTo(params)
+    }
+
+    @Test
+    fun bodyWithoutBody() {
+        val body = TicketReplyParams.Body.builder().build()
+
+        assertThat(body.body()).isNull()
+        assertThat(body.validate()).isSameAs(body)
+        assertThat(body.toBuilder().build()).isEqualTo(body)
+    }
+
+    @Test
+    fun attachments() {
+        val first = "first".byteInputStream()
+        val second = "second".byteInputStream()
+        val body =
+            TicketReplyParams.Body.builder()
+                .attachments(
+                    MultipartField.builder<List<InputStream>>()
+                        .value(listOf(first))
+                        .filename("details.txt")
+                        .contentType("text/plain")
+                        .build()
+                )
+                .build()
+                .toBuilder()
+                .addAttachment(second)
+                .build()
+        val params = TicketReplyParams.builder().body(body).build().toBuilder().build()
+
+        assertThat(params.body()).isNull()
+        assertThat(params.attachments()).containsExactly(first, second)
+        assertThat(params._attachments().filename).isEqualTo("details.txt")
+        assertThat(params._attachments().contentType).isEqualTo("text/plain")
+        assertThat(body.attachments()).containsExactly(first, second)
+        assertThat(body.validate()).isSameAs(body)
+        assertThat(params).isEqualTo(params.toBuilder().build())
+    }
+
+    @Test
     fun pathParams() {
         val params =
             TicketReplyParams.builder()

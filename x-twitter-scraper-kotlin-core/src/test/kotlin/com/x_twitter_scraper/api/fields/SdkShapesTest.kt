@@ -70,7 +70,7 @@ internal class SdkShapesTest {
         val ticket = operation("support().tickets().create").body as Shape.Fields
         val compose = operation("compose().create").body
 
-        assertThat(ticket.props["body"]).isEqualTo(Prop(Shape.Leaf(), true, null))
+        assertThat(ticket.props["body"]).isEqualTo(Prop(Shape.Leaf(), false, null))
         assertThat(ticket.props["subject"]).isEqualTo(Prop(Shape.Leaf(), true, null))
         assertThat(compose).isInstanceOf(Shape.AnyOf::class.java)
         assertThat(operation("x().tweets().retrieve").body).isNull()

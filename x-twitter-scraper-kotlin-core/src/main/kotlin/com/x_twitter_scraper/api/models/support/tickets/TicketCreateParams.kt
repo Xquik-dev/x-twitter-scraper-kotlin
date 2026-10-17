@@ -34,10 +34,11 @@ private constructor(
     fun idempotencyKey(): String? = idempotencyKey
 
     /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null.
+     * Body is optional when attachments are sent.
+     *
+     * @throws XTwitterScraperInvalidDataException if the multipart field has an unexpected type.
      */
-    fun body(): String = body.body()
+    fun body(): String? = body.body()
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
@@ -80,7 +81,6 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
-         * .body()
          * .subject()
          * ```
          */
@@ -249,7 +249,6 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
-         * .body()
          * .subject()
          * ```
          *
@@ -292,10 +291,12 @@ private constructor(
     ) {
 
         /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null.
+         * Body is optional when attachments are sent.
+         *
+         * @throws XTwitterScraperInvalidDataException if the multipart field has an unexpected
+         *   type.
          */
-        fun body(): String = body.value.getRequired("body")
+        fun body(): String? = body.value.getNullable("body")
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
@@ -343,7 +344,6 @@ private constructor(
              *
              * The following fields are required:
              * ```kotlin
-             * .body()
              * .subject()
              * ```
              */
@@ -353,7 +353,7 @@ private constructor(
         /** A builder for [Body]. */
         class Builder internal constructor() {
 
-            private var body: MultipartField<String>? = null
+            private var body: MultipartField<String> = MultipartField.of(JsonMissing.of())
             private var subject: MultipartField<String>? = null
             private var attachments: MultipartField<MutableList<InputStream>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -426,7 +426,6 @@ private constructor(
              *
              * The following fields are required:
              * ```kotlin
-             * .body()
              * .subject()
              * ```
              *
@@ -434,7 +433,7 @@ private constructor(
              */
             fun build(): Body =
                 Body(
-                    checkRequired("body", body),
+                    body,
                     checkRequired("subject", subject),
                     (attachments ?: MultipartField.of(JsonMissing.of())).map { it.toImmutable() },
                     additionalProperties.toMutableMap(),

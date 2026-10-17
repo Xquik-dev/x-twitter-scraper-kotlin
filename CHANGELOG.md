@@ -14,6 +14,7 @@
 * Media, avatar and banner uploads accept exactly one URL or file input.
 * Media file uploads accept `isLongVideo` and send it as `is_long_video`.
 * Support tickets accept attachment streams with a filename and a binary content type.
+* Support ticket replies accept attachment streams with a filename and a binary content type.
 * `UserProfile.IdentityVerification` adds the optional `overrideVerifiedYear` field for the verification start year X shows.
 * `x().tweets()` adds `listTop`, `embed`, `getHiddenReplies`, `getInsights`, `getRetweeterIds`, `checkRepost`, `getSubtitles`, `translate` and `resolveLinks`, with typed params and responses.
 * `x().users()` adds `retrieveBatchTweets`, `retrieveAffiliates`, `retrieveArticles`, `retrieveFollowerIds`, `retrieveFollowingIds`, `retrieveHighlights`, `retrieveInsights`, `retrieveListMemberships`, `retrieveLists`, `retrieveLive`, `retrieveSimilar`, `retrieveSubscriptions` and `translateBio`, with typed params and responses.
@@ -47,6 +48,7 @@
 
 ### Compatibility
 
+* `TicketCreateParams.body()` and `TicketReplyParams.body()` now return `String?`. Their builders no longer require `body`.
 * `MediaUploadParams.url()`, `ProfileUpdateAvatarParams.url()` and `ProfileUpdateBannerParams.url()` now return `String?` instead of `String`. Their builders no longer require `url` and accept exactly one URL or file.
 * Media uploads now reject `isLongVideo` without a file.
 * `XAccount` and `XAccountDetail` drop a timestamp field the API stopped returning.

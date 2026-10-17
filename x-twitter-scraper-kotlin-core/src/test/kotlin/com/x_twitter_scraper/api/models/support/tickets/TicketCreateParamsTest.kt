@@ -22,6 +22,25 @@ internal class TicketCreateParamsTest {
     }
 
     @Test
+    fun createWithoutBody() {
+        val params = TicketCreateParams.builder().subject("Upload issue").build()
+
+        assertThat(params.body()).isNull()
+        assertThat(params.subject()).isEqualTo("Upload issue")
+        assertThat(params._body()).doesNotContainKey("body")
+        assertThat(params.toBuilder().build()).isEqualTo(params)
+    }
+
+    @Test
+    fun bodyWithoutBody() {
+        val body = TicketCreateParams.Body.builder().subject("Upload issue").build()
+
+        assertThat(body.body()).isNull()
+        assertThat(body.validate()).isSameAs(body)
+        assertThat(body.toBuilder().build()).isEqualTo(body)
+    }
+
+    @Test
     fun headers() {
         val params =
             TicketCreateParams.builder()
