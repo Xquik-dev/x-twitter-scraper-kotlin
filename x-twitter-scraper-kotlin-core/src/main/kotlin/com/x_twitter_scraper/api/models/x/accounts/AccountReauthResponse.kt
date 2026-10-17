@@ -26,9 +26,9 @@ private constructor(
     private val id: JsonField<String>,
     private val createdAt: JsonField<OffsetDateTime>,
     private val health: JsonField<Health>,
-    private val status: JsonValue,
     private val xUserId: JsonField<String>,
     private val xUsername: JsonField<String>,
+    private val status: JsonValue,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -39,10 +39,10 @@ private constructor(
         @ExcludeMissing
         createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("health") @ExcludeMissing health: JsonField<Health> = JsonMissing.of(),
-        @JsonProperty("status") @ExcludeMissing status: JsonValue = JsonMissing.of(),
         @JsonProperty("xUserId") @ExcludeMissing xUserId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("xUsername") @ExcludeMissing xUsername: JsonField<String> = JsonMissing.of(),
-    ) : this(id, createdAt, health, status, xUserId, xUsername, mutableMapOf())
+        @JsonProperty("status") @ExcludeMissing status: JsonValue = JsonMissing.of(),
+    ) : this(id, createdAt, health, xUserId, xUsername, status, mutableMapOf())
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
@@ -63,14 +63,6 @@ private constructor(
     fun health(): Health = health.getRequired("health")
 
     /**
-     * Expected to always return the following:
-     * ```kotlin
-     * JsonValue.from("active")
-     * ```
-     */
-    @JsonProperty("status") @ExcludeMissing fun _status(): JsonValue = status
-
-    /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null.
      */
@@ -81,6 +73,14 @@ private constructor(
      *   unexpectedly missing or null.
      */
     fun xUsername(): String = xUsername.getRequired("xUsername")
+
+    /**
+     * Expected to always return the following:
+     * ```kotlin
+     * JsonValue.from("active")
+     * ```
+     */
+    @JsonProperty("status") @ExcludeMissing fun _status(): JsonValue = status
 
     /**
      * Returns the raw JSON value of [id].
@@ -154,18 +154,18 @@ private constructor(
         private var id: JsonField<String>? = null
         private var createdAt: JsonField<OffsetDateTime>? = null
         private var health: JsonField<Health>? = null
-        private var status: JsonValue = JsonValue.from("active")
         private var xUserId: JsonField<String>? = null
         private var xUsername: JsonField<String>? = null
+        private var status: JsonValue = JsonValue.from("active")
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(accountReauthResponse: AccountReauthResponse) = apply {
             id = accountReauthResponse.id
             createdAt = accountReauthResponse.createdAt
             health = accountReauthResponse.health
-            status = accountReauthResponse.status
             xUserId = accountReauthResponse.xUserId
             xUsername = accountReauthResponse.xUsername
+            status = accountReauthResponse.status
             additionalProperties = accountReauthResponse.additionalProperties.toMutableMap()
         }
 
@@ -184,16 +184,6 @@ private constructor(
         /** Sets [Builder.health] to an arbitrary JSON value. */
         fun health(health: JsonField<Health>) = apply { this.health = health }
 
-        /**
-         * Sets the field to an arbitrary JSON value.
-         *
-         * Defaults to the following:
-         * ```kotlin
-         * JsonValue.from("active")
-         * ```
-         */
-        fun status(status: JsonValue) = apply { this.status = status }
-
         fun xUserId(xUserId: String) = xUserId(JsonField.of(xUserId))
 
         /** Sets [Builder.xUserId] to an arbitrary JSON value. */
@@ -203,6 +193,16 @@ private constructor(
 
         /** Sets [Builder.xUsername] to an arbitrary JSON value. */
         fun xUsername(xUsername: JsonField<String>) = apply { this.xUsername = xUsername }
+
+        /**
+         * Sets the field to an arbitrary JSON value.
+         *
+         * Defaults to the following:
+         * ```kotlin
+         * JsonValue.from("active")
+         * ```
+         */
+        fun status(status: JsonValue) = apply { this.status = status }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -244,9 +244,9 @@ private constructor(
                 checkRequired("id", id),
                 checkRequired("createdAt", createdAt),
                 checkRequired("health", health),
-                status,
                 checkRequired("xUserId", xUserId),
                 checkRequired("xUsername", xUsername),
+                status,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -269,13 +269,13 @@ private constructor(
         id()
         createdAt()
         health().validate()
+        xUserId()
+        xUsername()
         _status().let {
             if (it != JsonValue.from("active")) {
                 throw XTwitterScraperInvalidDataException("'status' is invalid, received $it")
             }
         }
-        xUserId()
-        xUsername()
         validated = true
     }
 
@@ -291,9 +291,9 @@ private constructor(
         (if (id.asKnown() == null) 0 else 1) +
             (if (createdAt.asKnown() == null) 0 else 1) +
             (health.asKnown()?.validity() ?: 0) +
-            status.let { if (it == JsonValue.from("active")) 1 else 0 } +
             (if (xUserId.asKnown() == null) 0 else 1) +
-            (if (xUsername.asKnown() == null) 0 else 1)
+            (if (xUsername.asKnown() == null) 0 else 1) +
+            status.let { if (it == JsonValue.from("active")) 1 else 0 }
 
     class Health @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
@@ -441,18 +441,18 @@ private constructor(
             id == other.id &&
             createdAt == other.createdAt &&
             health == other.health &&
-            status == other.status &&
             xUserId == other.xUserId &&
             xUsername == other.xUsername &&
+            status == other.status &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(id, createdAt, health, status, xUserId, xUsername, additionalProperties)
+        Objects.hash(id, createdAt, health, xUserId, xUsername, status, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "AccountReauthResponse{id=$id, createdAt=$createdAt, health=$health, status=$status, xUserId=$xUserId, xUsername=$xUsername, additionalProperties=$additionalProperties}"
+        "AccountReauthResponse{id=$id, createdAt=$createdAt, health=$health, xUserId=$xUserId, xUsername=$xUsername, status=$status, additionalProperties=$additionalProperties}"
 }

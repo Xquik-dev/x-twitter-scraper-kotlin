@@ -1165,8 +1165,8 @@ private constructor(
         class PeriscopeUser
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
-            private val displayName: JsonField<String>,
             private val id: JsonField<String>,
+            private val displayName: JsonField<String>,
             private val profilePicture: JsonField<String>,
             private val profilePictureOriginal: JsonField<String>,
             private val username: JsonField<String>,
@@ -1175,10 +1175,10 @@ private constructor(
 
             @JsonCreator
             private constructor(
+                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("displayName")
                 @ExcludeMissing
                 displayName: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("profilePicture")
                 @ExcludeMissing
                 profilePicture: JsonField<String> = JsonMissing.of(),
@@ -1189,8 +1189,8 @@ private constructor(
                 @ExcludeMissing
                 username: JsonField<String> = JsonMissing.of(),
             ) : this(
-                displayName,
                 id,
+                displayName,
                 profilePicture,
                 profilePictureOriginal,
                 username,
@@ -1198,18 +1198,18 @@ private constructor(
             )
 
             /**
-             * Live video display name
-             *
-             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-             */
-            fun displayName(): String? = displayName.getNullable("displayName")
-
-            /**
              * Live video account ID
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
              */
             fun id(): String? = id.getNullable("id")
+
+            /**
+             * Live video display name
+             *
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+             */
+            fun displayName(): String? = displayName.getNullable("displayName")
 
             /**
              * Live video avatar URL
@@ -1234,6 +1234,13 @@ private constructor(
             fun username(): String? = username.getNullable("username")
 
             /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+            /**
              * Returns the raw JSON value of [displayName].
              *
              * Unlike [displayName], this method doesn't throw if the JSON field has an unexpected
@@ -1242,13 +1249,6 @@ private constructor(
             @JsonProperty("displayName")
             @ExcludeMissing
             fun _displayName(): JsonField<String> = displayName
-
-            /**
-             * Returns the raw JSON value of [id].
-             *
-             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
             /**
              * Returns the raw JSON value of [profilePicture].
@@ -1299,21 +1299,27 @@ private constructor(
             /** A builder for [PeriscopeUser]. */
             class Builder internal constructor() {
 
-                private var displayName: JsonField<String> = JsonMissing.of()
                 private var id: JsonField<String> = JsonMissing.of()
+                private var displayName: JsonField<String> = JsonMissing.of()
                 private var profilePicture: JsonField<String> = JsonMissing.of()
                 private var profilePictureOriginal: JsonField<String> = JsonMissing.of()
                 private var username: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 internal fun from(periscopeUser: PeriscopeUser) = apply {
-                    displayName = periscopeUser.displayName
                     id = periscopeUser.id
+                    displayName = periscopeUser.displayName
                     profilePicture = periscopeUser.profilePicture
                     profilePictureOriginal = periscopeUser.profilePictureOriginal
                     username = periscopeUser.username
                     additionalProperties = periscopeUser.additionalProperties.toMutableMap()
                 }
+
+                /** Live video account ID */
+                fun id(id: String) = id(JsonField.of(id))
+
+                /** Sets [Builder.id] to an arbitrary JSON value. */
+                fun id(id: JsonField<String>) = apply { this.id = id }
 
                 /** Live video display name */
                 fun displayName(displayName: String) = displayName(JsonField.of(displayName))
@@ -1322,12 +1328,6 @@ private constructor(
                 fun displayName(displayName: JsonField<String>) = apply {
                     this.displayName = displayName
                 }
-
-                /** Live video account ID */
-                fun id(id: String) = id(JsonField.of(id))
-
-                /** Sets [Builder.id] to an arbitrary JSON value. */
-                fun id(id: JsonField<String>) = apply { this.id = id }
 
                 /** Live video avatar URL */
                 fun profilePicture(profilePicture: String) =
@@ -1382,8 +1382,8 @@ private constructor(
                  */
                 fun build(): PeriscopeUser =
                     PeriscopeUser(
-                        displayName,
                         id,
+                        displayName,
                         profilePicture,
                         profilePictureOriginal,
                         username,
@@ -1408,8 +1408,8 @@ private constructor(
                     return@apply
                 }
 
-                displayName()
                 id()
+                displayName()
                 profilePicture()
                 profilePictureOriginal()
                 username()
@@ -1425,8 +1425,8 @@ private constructor(
                 }
 
             internal fun validity(): Int =
-                (if (displayName.asKnown() == null) 0 else 1) +
-                    (if (id.asKnown() == null) 0 else 1) +
+                (if (id.asKnown() == null) 0 else 1) +
+                    (if (displayName.asKnown() == null) 0 else 1) +
                     (if (profilePicture.asKnown() == null) 0 else 1) +
                     (if (profilePictureOriginal.asKnown() == null) 0 else 1) +
                     (if (username.asKnown() == null) 0 else 1)
@@ -1437,8 +1437,8 @@ private constructor(
                 }
 
                 return other is PeriscopeUser &&
-                    displayName == other.displayName &&
                     id == other.id &&
+                    displayName == other.displayName &&
                     profilePicture == other.profilePicture &&
                     profilePictureOriginal == other.profilePictureOriginal &&
                     username == other.username &&
@@ -1447,8 +1447,8 @@ private constructor(
 
             private val hashCode: Int by lazy {
                 Objects.hash(
-                    displayName,
                     id,
+                    displayName,
                     profilePicture,
                     profilePictureOriginal,
                     username,
@@ -1459,7 +1459,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "PeriscopeUser{displayName=$displayName, id=$id, profilePicture=$profilePicture, profilePictureOriginal=$profilePictureOriginal, username=$username, additionalProperties=$additionalProperties}"
+                "PeriscopeUser{id=$id, displayName=$displayName, profilePicture=$profilePicture, profilePictureOriginal=$profilePictureOriginal, username=$username, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {

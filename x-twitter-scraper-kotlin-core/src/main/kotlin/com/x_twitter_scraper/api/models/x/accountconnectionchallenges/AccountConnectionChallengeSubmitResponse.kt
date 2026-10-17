@@ -26,9 +26,13 @@ private constructor(
     private val id: JsonField<String>,
     private val createdAt: JsonField<OffsetDateTime>,
     private val health: JsonField<Health>,
-    private val status: JsonValue,
     private val xUserId: JsonField<String>,
     private val xUsername: JsonField<String>,
+    private val expiresAt: JsonField<OffsetDateTime>,
+    private val message: JsonField<String>,
+    private val object_: JsonField<String>,
+    private val status: JsonValue,
+    private val username: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -39,10 +43,28 @@ private constructor(
         @ExcludeMissing
         createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("health") @ExcludeMissing health: JsonField<Health> = JsonMissing.of(),
-        @JsonProperty("status") @ExcludeMissing status: JsonValue = JsonMissing.of(),
         @JsonProperty("xUserId") @ExcludeMissing xUserId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("xUsername") @ExcludeMissing xUsername: JsonField<String> = JsonMissing.of(),
-    ) : this(id, createdAt, health, status, xUserId, xUsername, mutableMapOf())
+        @JsonProperty("expiresAt")
+        @ExcludeMissing
+        expiresAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("message") @ExcludeMissing message: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("object") @ExcludeMissing object_: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("status") @ExcludeMissing status: JsonValue = JsonMissing.of(),
+        @JsonProperty("username") @ExcludeMissing username: JsonField<String> = JsonMissing.of(),
+    ) : this(
+        id,
+        createdAt,
+        health,
+        xUserId,
+        xUsername,
+        expiresAt,
+        message,
+        object_,
+        status,
+        username,
+        mutableMapOf(),
+    )
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
@@ -63,14 +85,6 @@ private constructor(
     fun health(): Health = health.getRequired("health")
 
     /**
-     * Expected to always return the following:
-     * ```kotlin
-     * JsonValue.from("active")
-     * ```
-     */
-    @JsonProperty("status") @ExcludeMissing fun _status(): JsonValue = status
-
-    /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null.
      */
@@ -81,6 +95,26 @@ private constructor(
      *   unexpectedly missing or null.
      */
     fun xUsername(): String = xUsername.getRequired("xUsername")
+
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    fun expiresAt(): OffsetDateTime? = expiresAt.getNullable("expiresAt")
+
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    fun message(): String? = message.getNullable("message")
+
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    fun object_(): String? = object_.getNullable("object")
+
+    /**
+     * Expected to always return the following:
+     * ```kotlin
+     * JsonValue.from("active")
+     * ```
+     */
+    @JsonProperty("status") @ExcludeMissing fun _status(): JsonValue = status
+
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    fun username(): String? = username.getNullable("username")
 
     /**
      * Returns the raw JSON value of [id].
@@ -119,6 +153,36 @@ private constructor(
      */
     @JsonProperty("xUsername") @ExcludeMissing fun _xUsername(): JsonField<String> = xUsername
 
+    /**
+     * Returns the raw JSON value of [expiresAt].
+     *
+     * Unlike [expiresAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("expiresAt")
+    @ExcludeMissing
+    fun _expiresAt(): JsonField<OffsetDateTime> = expiresAt
+
+    /**
+     * Returns the raw JSON value of [message].
+     *
+     * Unlike [message], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("message") @ExcludeMissing fun _message(): JsonField<String> = message
+
+    /**
+     * Returns the raw JSON value of [object_].
+     *
+     * Unlike [object_], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("object") @ExcludeMissing fun _object_(): JsonField<String> = object_
+
+    /**
+     * Returns the raw JSON value of [username].
+     *
+     * Unlike [username], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("username") @ExcludeMissing fun _username(): JsonField<String> = username
+
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -155,9 +219,13 @@ private constructor(
         private var id: JsonField<String>? = null
         private var createdAt: JsonField<OffsetDateTime>? = null
         private var health: JsonField<Health>? = null
-        private var status: JsonValue = JsonValue.from("active")
         private var xUserId: JsonField<String>? = null
         private var xUsername: JsonField<String>? = null
+        private var expiresAt: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var message: JsonField<String> = JsonMissing.of()
+        private var object_: JsonField<String> = JsonMissing.of()
+        private var status: JsonValue = JsonValue.from("active")
+        private var username: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(
@@ -166,9 +234,13 @@ private constructor(
             id = accountConnectionChallengeSubmitResponse.id
             createdAt = accountConnectionChallengeSubmitResponse.createdAt
             health = accountConnectionChallengeSubmitResponse.health
-            status = accountConnectionChallengeSubmitResponse.status
             xUserId = accountConnectionChallengeSubmitResponse.xUserId
             xUsername = accountConnectionChallengeSubmitResponse.xUsername
+            expiresAt = accountConnectionChallengeSubmitResponse.expiresAt
+            message = accountConnectionChallengeSubmitResponse.message
+            object_ = accountConnectionChallengeSubmitResponse.object_
+            status = accountConnectionChallengeSubmitResponse.status
+            username = accountConnectionChallengeSubmitResponse.username
             additionalProperties =
                 accountConnectionChallengeSubmitResponse.additionalProperties.toMutableMap()
         }
@@ -188,6 +260,31 @@ private constructor(
         /** Sets [Builder.health] to an arbitrary JSON value. */
         fun health(health: JsonField<Health>) = apply { this.health = health }
 
+        fun xUserId(xUserId: String) = xUserId(JsonField.of(xUserId))
+
+        /** Sets [Builder.xUserId] to an arbitrary JSON value. */
+        fun xUserId(xUserId: JsonField<String>) = apply { this.xUserId = xUserId }
+
+        fun xUsername(xUsername: String) = xUsername(JsonField.of(xUsername))
+
+        /** Sets [Builder.xUsername] to an arbitrary JSON value. */
+        fun xUsername(xUsername: JsonField<String>) = apply { this.xUsername = xUsername }
+
+        fun expiresAt(expiresAt: OffsetDateTime) = expiresAt(JsonField.of(expiresAt))
+
+        /** Sets [Builder.expiresAt] to an arbitrary JSON value. */
+        fun expiresAt(expiresAt: JsonField<OffsetDateTime>) = apply { this.expiresAt = expiresAt }
+
+        fun message(message: String) = message(JsonField.of(message))
+
+        /** Sets [Builder.message] to an arbitrary JSON value. */
+        fun message(message: JsonField<String>) = apply { this.message = message }
+
+        fun object_(object_: String) = object_(JsonField.of(object_))
+
+        /** Sets [Builder.object_] to an arbitrary JSON value. */
+        fun object_(object_: JsonField<String>) = apply { this.object_ = object_ }
+
         /**
          * Sets the field to an arbitrary JSON value.
          *
@@ -198,15 +295,10 @@ private constructor(
          */
         fun status(status: JsonValue) = apply { this.status = status }
 
-        fun xUserId(xUserId: String) = xUserId(JsonField.of(xUserId))
+        fun username(username: String) = username(JsonField.of(username))
 
-        /** Sets [Builder.xUserId] to an arbitrary JSON value. */
-        fun xUserId(xUserId: JsonField<String>) = apply { this.xUserId = xUserId }
-
-        fun xUsername(xUsername: String) = xUsername(JsonField.of(xUsername))
-
-        /** Sets [Builder.xUsername] to an arbitrary JSON value. */
-        fun xUsername(xUsername: JsonField<String>) = apply { this.xUsername = xUsername }
+        /** Sets [Builder.username] to an arbitrary JSON value. */
+        fun username(username: JsonField<String>) = apply { this.username = username }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -248,9 +340,13 @@ private constructor(
                 checkRequired("id", id),
                 checkRequired("createdAt", createdAt),
                 checkRequired("health", health),
-                status,
                 checkRequired("xUserId", xUserId),
                 checkRequired("xUsername", xUsername),
+                expiresAt,
+                message,
+                object_,
+                status,
+                username,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -273,13 +369,17 @@ private constructor(
         id()
         createdAt()
         health().validate()
+        xUserId()
+        xUsername()
+        expiresAt()
+        message()
+        object_()
         _status().let {
-            if (it != JsonValue.from("active")) {
+            if (it != JsonValue.from("active") && it != JsonValue.from("requires_email_code")) {
                 throw XTwitterScraperInvalidDataException("'status' is invalid, received $it")
             }
         }
-        xUserId()
-        xUsername()
+        username()
         validated = true
     }
 
@@ -295,9 +395,17 @@ private constructor(
         (if (id.asKnown() == null) 0 else 1) +
             (if (createdAt.asKnown() == null) 0 else 1) +
             (health.asKnown()?.validity() ?: 0) +
-            status.let { if (it == JsonValue.from("active")) 1 else 0 } +
             (if (xUserId.asKnown() == null) 0 else 1) +
-            (if (xUsername.asKnown() == null) 0 else 1)
+            (if (xUsername.asKnown() == null) 0 else 1) +
+            (if (expiresAt.asKnown() == null) 0 else 1) +
+            (if (message.asKnown() == null) 0 else 1) +
+            (if (object_.asKnown() == null) 0 else 1) +
+            status.let {
+                if ((it == JsonValue.from("active") || it == JsonValue.from("requires_email_code")))
+                    1
+                else 0
+            } +
+            (if (username.asKnown() == null) 0 else 1)
 
     class Health @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
@@ -445,18 +553,34 @@ private constructor(
             id == other.id &&
             createdAt == other.createdAt &&
             health == other.health &&
-            status == other.status &&
             xUserId == other.xUserId &&
             xUsername == other.xUsername &&
+            expiresAt == other.expiresAt &&
+            message == other.message &&
+            object_ == other.object_ &&
+            status == other.status &&
+            username == other.username &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(id, createdAt, health, status, xUserId, xUsername, additionalProperties)
+        Objects.hash(
+            id,
+            createdAt,
+            health,
+            xUserId,
+            xUsername,
+            expiresAt,
+            message,
+            object_,
+            status,
+            username,
+            additionalProperties,
+        )
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "AccountConnectionChallengeSubmitResponse{id=$id, createdAt=$createdAt, health=$health, status=$status, xUserId=$xUserId, xUsername=$xUsername, additionalProperties=$additionalProperties}"
+        "AccountConnectionChallengeSubmitResponse{id=$id, createdAt=$createdAt, health=$health, xUserId=$xUserId, xUsername=$xUsername, expiresAt=$expiresAt, message=$message, object_=$object_, status=$status, username=$username, additionalProperties=$additionalProperties}"
 }

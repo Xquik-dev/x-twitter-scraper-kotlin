@@ -5,6 +5,7 @@
 package com.x_twitter_scraper.api.models.webhooks
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.x_twitter_scraper.api.core.JsonMissing
 import com.x_twitter_scraper.api.core.jsonMapper
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -23,11 +24,10 @@ internal class WebhookListDeliveriesResponseTest {
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .status("status")
                         .streamEventId("streamEventId")
-                        .deliveredAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .lastError("lastError")
-                        .lastStatusCode(0L)
                         .build()
                 )
+                .hasMore(false)
+                .nextCursor("abc123")
                 .build()
 
         assertThat(webhookListDeliveriesResponse.deliveries())
@@ -38,11 +38,10 @@ internal class WebhookListDeliveriesResponseTest {
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .status("status")
                     .streamEventId("streamEventId")
-                    .deliveredAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .lastError("lastError")
-                    .lastStatusCode(0L)
                     .build()
             )
+        assertThat(webhookListDeliveriesResponse.hasMore()).isEqualTo(false)
+        assertThat(webhookListDeliveriesResponse.nextCursor()).isEqualTo("abc123")
     }
 
     @Test
@@ -57,11 +56,10 @@ internal class WebhookListDeliveriesResponseTest {
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .status("status")
                         .streamEventId("streamEventId")
-                        .deliveredAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .lastError("lastError")
-                        .lastStatusCode(0L)
                         .build()
                 )
+                .hasMore(false)
+                .nextCursor("abc123")
                 .build()
 
         val roundtrippedWebhookListDeliveriesResponse =
@@ -72,5 +70,30 @@ internal class WebhookListDeliveriesResponseTest {
 
         assertThat(roundtrippedWebhookListDeliveriesResponse)
             .isEqualTo(webhookListDeliveriesResponse)
+    }
+
+    @Test
+    fun readsAdditionalFields() {
+        val jsonMapper = jsonMapper()
+
+        val webhookListDeliveriesResponse0 =
+            jsonMapper.readValue(
+                """{"hasMore":true,"nextCursor":"value"}""",
+                jacksonTypeRef<WebhookListDeliveriesResponse>(),
+            )
+        assertThat(webhookListDeliveriesResponse0.hasMore()).isNotNull()
+        assertThat(webhookListDeliveriesResponse0.nextCursor()).isNotNull()
+        assertThat(
+                jsonMapper.readTree(jsonMapper.writeValueAsString(webhookListDeliveriesResponse0))
+            )
+            .isEqualTo(jsonMapper.readTree("""{"hasMore":true,"nextCursor":"value"}"""))
+    }
+
+    @Test
+    fun keepsAdditionalFieldsOptional() {
+        val webhookListDeliveriesResponse0 =
+            WebhookListDeliveriesResponse.builder().deliveries(JsonMissing.of()).build()
+        assertThat(webhookListDeliveriesResponse0.hasMore()).isNull()
+        assertThat(webhookListDeliveriesResponse0.nextCursor()).isNull()
     }
 }

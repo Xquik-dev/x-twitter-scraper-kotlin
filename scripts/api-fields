@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+# SPDX-FileCopyrightText: 2026 Xquik contributors
+#
+# SPDX-License-Identifier: Apache-2.0
+
+set -euo pipefail
+
+# shellcheck source=scripts/lib/api-spec.sh
+source "$(dirname -- "$0")/lib/api-spec.sh"
+
+cd -- "$(dirname -- "$0")/.."
+
+readonly accepted_file="accepted-field-differences.json"
+
+fail() {
+    printf '%s\n' "$@" >&2
+    exit 1
+}
+
+fields_workspace="$(mktemp -d "${TMPDIR:-/tmp}/xquik-kotlin-api-fields.XXXXXX")"
+trap 'rm -rf -- "$fields_workspace"' EXIT
+readonly spec_file="$fields_workspace/spec.json"
+readonly result_file="$fields_workspace/result.txt"
+readonly gradle_log="$fields_workspace/gradle.log"
+
+load_api_spec "$spec_file"
+
+if ! ./gradlew --quiet --console=plain :x-twitter-scraper-kotlin-core:apiFields \
+    "--args='$spec_file' '$PWD/$accepted_file' '$result_file'" >"$gradle_log" 2>&1 ||
+    [[ ! -s "$result_file" ]]; then
+    cat -- "$gradle_log" >&2
+    fail "Could not run the API fields check. Fix the build error above, then rerun."
+fi
+
+if [[ "$(head -n 1 -- "$result_file")" == "pass" ]]; then
+    tail -n +2 -- "$result_file"
+else
+    tail -n +2 -- "$result_file" >&2
+    exit 1
+fi

@@ -32,8 +32,10 @@ private constructor(
     private val occurredAt: JsonField<OffsetDateTime>,
     private val type: JsonField<EventType>,
     private val keywordMonitorId: JsonField<String>,
+    private val monitorName: JsonField<String>,
     private val query: JsonField<String>,
     private val username: JsonField<String>,
+    private val xUserId: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -52,8 +54,12 @@ private constructor(
         @JsonProperty("keywordMonitorId")
         @ExcludeMissing
         keywordMonitorId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("monitorName")
+        @ExcludeMissing
+        monitorName: JsonField<String> = JsonMissing.of(),
         @JsonProperty("query") @ExcludeMissing query: JsonField<String> = JsonMissing.of(),
         @JsonProperty("username") @ExcludeMissing username: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("xUserId") @ExcludeMissing xUserId: JsonField<String> = JsonMissing.of(),
     ) : this(
         id,
         data,
@@ -62,8 +68,10 @@ private constructor(
         occurredAt,
         type,
         keywordMonitorId,
+        monitorName,
         query,
         username,
+        xUserId,
         mutableMapOf(),
     )
 
@@ -117,6 +125,14 @@ private constructor(
     fun keywordMonitorId(): String? = keywordMonitorId.getNullable("keywordMonitorId")
 
     /**
+     * Your monitor label when Xquik created the event, present when set. A rename leaves the
+     * event's label unchanged.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun monitorName(): String? = monitorName.getNullable("monitorName")
+
+    /**
      * Keyword query, present for keyword monitor events.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
@@ -129,6 +145,14 @@ private constructor(
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun username(): String? = username.getNullable("username")
+
+    /**
+     * Permanent X user ID of the monitored account, present for account monitor events. It stays
+     * the same after a username change.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun xUserId(): String? = xUserId.getNullable("xUserId")
 
     /**
      * Returns the raw JSON value of [id].
@@ -187,6 +211,13 @@ private constructor(
     fun _keywordMonitorId(): JsonField<String> = keywordMonitorId
 
     /**
+     * Returns the raw JSON value of [monitorName].
+     *
+     * Unlike [monitorName], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("monitorName") @ExcludeMissing fun _monitorName(): JsonField<String> = monitorName
+
+    /**
      * Returns the raw JSON value of [query].
      *
      * Unlike [query], this method doesn't throw if the JSON field has an unexpected type.
@@ -199,6 +230,13 @@ private constructor(
      * Unlike [username], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("username") @ExcludeMissing fun _username(): JsonField<String> = username
+
+    /**
+     * Returns the raw JSON value of [xUserId].
+     *
+     * Unlike [xUserId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("xUserId") @ExcludeMissing fun _xUserId(): JsonField<String> = xUserId
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -240,8 +278,10 @@ private constructor(
         private var occurredAt: JsonField<OffsetDateTime>? = null
         private var type: JsonField<EventType>? = null
         private var keywordMonitorId: JsonField<String> = JsonMissing.of()
+        private var monitorName: JsonField<String> = JsonMissing.of()
         private var query: JsonField<String> = JsonMissing.of()
         private var username: JsonField<String> = JsonMissing.of()
+        private var xUserId: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(event: Event) = apply {
@@ -252,8 +292,10 @@ private constructor(
             occurredAt = event.occurredAt
             type = event.type
             keywordMonitorId = event.keywordMonitorId
+            monitorName = event.monitorName
             query = event.query
             username = event.username
+            xUserId = event.xUserId
             additionalProperties = event.additionalProperties.toMutableMap()
         }
 
@@ -281,6 +323,10 @@ private constructor(
             this.monitorType = monitorType
         }
 
+        /**
+         * X's time of the event when X gives one, as for a post, a live video & a Space. Otherwise,
+         * the time Xquik saw it, as for a deleted post, a profile change & a follow list change.
+         */
         fun occurredAt(occurredAt: OffsetDateTime) = occurredAt(JsonField.of(occurredAt))
 
         /** Sets [Builder.occurredAt] to an arbitrary JSON value. */
@@ -303,6 +349,15 @@ private constructor(
             this.keywordMonitorId = keywordMonitorId
         }
 
+        /**
+         * Your monitor label when Xquik created the event, present when set. A rename leaves the
+         * event's label unchanged.
+         */
+        fun monitorName(monitorName: String) = monitorName(JsonField.of(monitorName))
+
+        /** Sets [Builder.monitorName] to an arbitrary JSON value. */
+        fun monitorName(monitorName: JsonField<String>) = apply { this.monitorName = monitorName }
+
         /** Keyword query, present for keyword monitor events. */
         fun query(query: String) = query(JsonField.of(query))
 
@@ -314,6 +369,15 @@ private constructor(
 
         /** Sets [Builder.username] to an arbitrary JSON value. */
         fun username(username: JsonField<String>) = apply { this.username = username }
+
+        /**
+         * Permanent X user ID of the monitored account, present for account monitor events. It
+         * stays the same after a username change.
+         */
+        fun xUserId(xUserId: String) = xUserId(JsonField.of(xUserId))
+
+        /** Sets [Builder.xUserId] to an arbitrary JSON value. */
+        fun xUserId(xUserId: JsonField<String>) = apply { this.xUserId = xUserId }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -360,8 +424,10 @@ private constructor(
                 checkRequired("occurredAt", occurredAt),
                 checkRequired("type", type),
                 keywordMonitorId,
+                monitorName,
                 query,
                 username,
+                xUserId,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -388,8 +454,10 @@ private constructor(
         occurredAt()
         type().validate()
         keywordMonitorId()
+        monitorName()
         query()
         username()
+        xUserId()
         validated = true
     }
 
@@ -409,8 +477,10 @@ private constructor(
             (if (occurredAt.asKnown() == null) 0 else 1) +
             (type.asKnown()?.validity() ?: 0) +
             (if (keywordMonitorId.asKnown() == null) 0 else 1) +
+            (if (monitorName.asKnown() == null) 0 else 1) +
             (if (query.asKnown() == null) 0 else 1) +
-            (if (username.asKnown() == null) 0 else 1)
+            (if (username.asKnown() == null) 0 else 1) +
+            (if (xUserId.asKnown() == null) 0 else 1)
 
     class Data
     @JsonCreator
@@ -643,8 +713,10 @@ private constructor(
             occurredAt == other.occurredAt &&
             type == other.type &&
             keywordMonitorId == other.keywordMonitorId &&
+            monitorName == other.monitorName &&
             query == other.query &&
             username == other.username &&
+            xUserId == other.xUserId &&
             additionalProperties == other.additionalProperties
     }
 
@@ -657,8 +729,10 @@ private constructor(
             occurredAt,
             type,
             keywordMonitorId,
+            monitorName,
             query,
             username,
+            xUserId,
             additionalProperties,
         )
     }
@@ -666,5 +740,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Event{id=$id, data=$data, monitorId=$monitorId, monitorType=$monitorType, occurredAt=$occurredAt, type=$type, keywordMonitorId=$keywordMonitorId, query=$query, username=$username, additionalProperties=$additionalProperties}"
+        "Event{id=$id, data=$data, monitorId=$monitorId, monitorType=$monitorType, occurredAt=$occurredAt, type=$type, keywordMonitorId=$keywordMonitorId, monitorName=$monitorName, query=$query, username=$username, xUserId=$xUserId, additionalProperties=$additionalProperties}"
 }

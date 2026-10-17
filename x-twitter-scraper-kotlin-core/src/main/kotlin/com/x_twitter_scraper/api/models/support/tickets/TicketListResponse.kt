@@ -25,13 +25,21 @@ class TicketListResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val tickets: JsonField<List<Ticket>>,
+    private val hasMore: JsonField<Boolean>,
+    private val nextCursor: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("tickets") @ExcludeMissing tickets: JsonField<List<Ticket>> = JsonMissing.of()
-    ) : this(tickets, mutableMapOf())
+        @JsonProperty("tickets")
+        @ExcludeMissing
+        tickets: JsonField<List<Ticket>> = JsonMissing.of(),
+        @JsonProperty("hasMore") @ExcludeMissing hasMore: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("nextCursor")
+        @ExcludeMissing
+        nextCursor: JsonField<String> = JsonMissing.of(),
+    ) : this(tickets, hasMore, nextCursor, mutableMapOf())
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
@@ -39,12 +47,32 @@ private constructor(
      */
     fun tickets(): List<Ticket> = tickets.getRequired("tickets")
 
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    fun hasMore(): Boolean? = hasMore.getNullable("hasMore")
+
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    fun nextCursor(): String? = nextCursor.getNullable("nextCursor")
+
     /**
      * Returns the raw JSON value of [tickets].
      *
      * Unlike [tickets], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("tickets") @ExcludeMissing fun _tickets(): JsonField<List<Ticket>> = tickets
+
+    /**
+     * Returns the raw JSON value of [hasMore].
+     *
+     * Unlike [hasMore], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("hasMore") @ExcludeMissing fun _hasMore(): JsonField<Boolean> = hasMore
+
+    /**
+     * Returns the raw JSON value of [nextCursor].
+     *
+     * Unlike [nextCursor], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("nextCursor") @ExcludeMissing fun _nextCursor(): JsonField<String> = nextCursor
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -75,10 +103,14 @@ private constructor(
     class Builder internal constructor() {
 
         private var tickets: JsonField<MutableList<Ticket>>? = null
+        private var hasMore: JsonField<Boolean> = JsonMissing.of()
+        private var nextCursor: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(ticketListResponse: TicketListResponse) = apply {
             tickets = ticketListResponse.tickets.map { it.toMutableList() }
+            hasMore = ticketListResponse.hasMore
+            nextCursor = ticketListResponse.nextCursor
             additionalProperties = ticketListResponse.additionalProperties.toMutableMap()
         }
 
@@ -100,6 +132,16 @@ private constructor(
                     checkKnown("tickets", it).add(ticket)
                 }
         }
+
+        fun hasMore(hasMore: Boolean) = hasMore(JsonField.of(hasMore))
+
+        /** Sets [Builder.hasMore] to an arbitrary JSON value. */
+        fun hasMore(hasMore: JsonField<Boolean>) = apply { this.hasMore = hasMore }
+
+        fun nextCursor(nextCursor: String) = nextCursor(JsonField.of(nextCursor))
+
+        /** Sets [Builder.nextCursor] to an arbitrary JSON value. */
+        fun nextCursor(nextCursor: JsonField<String>) = apply { this.nextCursor = nextCursor }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -135,6 +177,8 @@ private constructor(
         fun build(): TicketListResponse =
             TicketListResponse(
                 checkRequired("tickets", tickets).map { it.toImmutable() },
+                hasMore,
+                nextCursor,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -155,6 +199,8 @@ private constructor(
         }
 
         tickets().forEach { it.validate() }
+        hasMore()
+        nextCursor()
         validated = true
     }
 
@@ -166,7 +212,10 @@ private constructor(
             false
         }
 
-    internal fun validity(): Int = (tickets.asKnown()?.sumOf { it.validity() } ?: 0)
+    internal fun validity(): Int =
+        (tickets.asKnown()?.sumOf { it.validity() } ?: 0) +
+            (if (hasMore.asKnown() == null) 0 else 1) +
+            (if (nextCursor.asKnown() == null) 0 else 1)
 
     class Ticket
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
@@ -627,13 +676,17 @@ private constructor(
 
         return other is TicketListResponse &&
             tickets == other.tickets &&
+            hasMore == other.hasMore &&
+            nextCursor == other.nextCursor &&
             additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(tickets, additionalProperties) }
+    private val hashCode: Int by lazy {
+        Objects.hash(tickets, hasMore, nextCursor, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "TicketListResponse{tickets=$tickets, additionalProperties=$additionalProperties}"
+        "TicketListResponse{tickets=$tickets, hasMore=$hasMore, nextCursor=$nextCursor, additionalProperties=$additionalProperties}"
 }
