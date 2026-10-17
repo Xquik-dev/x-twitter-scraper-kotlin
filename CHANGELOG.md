@@ -48,6 +48,7 @@
 
 ### Compatibility
 
+* Ticket and reply builders now require `body` or nonempty `attachments`.
 * `TicketCreateParams.body()` and `TicketReplyParams.body()` now return `String?`. Their builders no longer require `body`.
 * `MediaUploadParams.url()`, `ProfileUpdateAvatarParams.url()` and `ProfileUpdateBannerParams.url()` now return `String?` instead of `String`. Their builders no longer require `url` and accept exactly one URL or file.
 * Media uploads now reject `isLongVideo` without a file.

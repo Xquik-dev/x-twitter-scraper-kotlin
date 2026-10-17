@@ -24,6 +24,24 @@ internal fun checkExactlyOne(
     check(hasFirst xor hasSecond) { "Exactly one of `$firstName` or `$secondName` must be set" }
 }
 
+internal fun checkAtLeastOne(
+    firstName: String,
+    first: MultipartField<*>?,
+    secondName: String,
+    second: MultipartField<*>?,
+) {
+    fun isSet(field: MultipartField<*>?): Boolean {
+        val value = field?.value ?: return false
+        return !value.isMissing() &&
+            !value.isNull() &&
+            (value.asKnown() as? Collection<*>)?.isEmpty() != true
+    }
+
+    check(isSet(first) || isSet(second)) {
+        "At least one of `$firstName` or `$secondName` must be set"
+    }
+}
+
 internal fun <T : Any> checkKnown(name: String, value: JsonField<T>): T =
     value.asKnown()
         ?: throw IllegalStateException("`$name` is not a known type: ${value.javaClass.simpleName}")

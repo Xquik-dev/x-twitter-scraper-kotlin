@@ -24,6 +24,35 @@ internal class CheckTest {
     }
 
     @Test
+    fun atLeastOneValue() {
+        val body = MultipartField.of("Details")
+        val attachments = MultipartField.of(listOf("attachment"))
+        val missingBody = MultipartField.of<String>(JsonMissing.of())
+        val missingAttachments = MultipartField.of<List<String>>(JsonMissing.of())
+
+        checkAtLeastOne("body", body, "attachments", missingAttachments)
+        checkAtLeastOne("body", missingBody, "attachments", attachments)
+        checkAtLeastOne("body", body, "attachments", attachments)
+        checkAtLeastOne("body", body, "attachments", MultipartField.of(emptyList<String>()))
+
+        listOf(
+                missingAttachments,
+                MultipartField.of<List<String>>(JsonNull.of()),
+                MultipartField.of(emptyList<String>()),
+            )
+            .forEach { absentAttachments ->
+                listOf(missingBody, MultipartField.of<String>(JsonNull.of())).forEach { absentBody
+                    ->
+                    assertThatThrownBy {
+                            checkAtLeastOne("body", absentBody, "attachments", absentAttachments)
+                        }
+                        .isInstanceOf(IllegalStateException::class.java)
+                        .hasMessage("At least one of `body` or `attachments` must be set")
+                }
+            }
+    }
+
+    @Test
     fun knownValues() {
         assertThat(checkKnown("field", JsonField.of("known"))).isEqualTo("known")
         assertThat(checkKnown("field", MultipartField.of("known"))).isEqualTo("known")

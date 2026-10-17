@@ -21,6 +21,8 @@ import com.x_twitter_scraper.api.models.PaginatedUsers
 import com.x_twitter_scraper.api.models.SearchTweet
 import com.x_twitter_scraper.api.models.account.AccountUpdateLocaleResponse
 import com.x_twitter_scraper.api.models.guestwallets.GuestWalletRetrieveStatusResponse
+import com.x_twitter_scraper.api.models.support.tickets.TicketCreateParams
+import com.x_twitter_scraper.api.models.support.tickets.TicketReplyParams
 import com.x_twitter_scraper.api.models.x.media.MediaUploadParams
 import com.x_twitter_scraper.api.models.x.profile.ProfileUpdateAvatarParams
 import com.x_twitter_scraper.api.models.x.profile.ProfileUpdateBannerParams
@@ -98,6 +100,24 @@ internal class SdkShapesTest {
                 assertThat(props.getValue("url").required).isFalse()
                 assertThat(props.getValue("file").required).isFalse()
             }
+    }
+
+    @Test
+    fun readsTicketInputsWithoutMakingEitherRequired() {
+        val reader = SdkShapes()
+        listOf(TicketCreateParams.Body::class.java, TicketReplyParams.Body::class.java).forEach {
+            model ->
+            val props = (reader.shapeOf(model) as Shape.Fields).props
+
+            assertThat(props.getValue("body").required).isFalse()
+            assertThat(props.getValue("attachments").required).isFalse()
+        }
+        listOf("support().tickets().create", "support().tickets().reply").forEach { label ->
+            val body = operation(label).body as Shape.Fields
+
+            assertThat(body.props.getValue("body").required).isFalse()
+            assertThat(body.props.getValue("attachments").required).isFalse()
+        }
     }
 
     @Test

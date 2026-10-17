@@ -84,6 +84,8 @@ private constructor(
          * ```
          *
          * Exactly one of `url` or `file` must be set.
+         *
+         * Uploads allow images up to 10 MiB and requests up to 30 MiB.
          */
         fun builder() = Builder()
     }
@@ -344,6 +346,8 @@ private constructor(
              * ```
              *
              * Exactly one of `url` or `file` must be set.
+             *
+             * Uploads allow images up to 10 MiB and requests up to 30 MiB.
              */
             fun builder() = Builder()
         }

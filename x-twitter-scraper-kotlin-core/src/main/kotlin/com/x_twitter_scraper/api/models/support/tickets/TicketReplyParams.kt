@@ -12,6 +12,7 @@ import com.x_twitter_scraper.api.core.JsonMissing
 import com.x_twitter_scraper.api.core.JsonValue
 import com.x_twitter_scraper.api.core.MultipartField
 import com.x_twitter_scraper.api.core.Params
+import com.x_twitter_scraper.api.core.checkAtLeastOne
 import com.x_twitter_scraper.api.core.checkKnown
 import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
@@ -65,7 +66,12 @@ private constructor(
 
     companion object {
 
-        /** Returns a mutable builder for constructing an instance of [TicketReplyParams]. */
+        /**
+         * Returns a mutable builder for constructing an instance of [TicketReplyParams].
+         *
+         * Tickets allow up to 4 attachments, 10 MiB per image, 25 MiB per video, and 30 MiB per
+         * request.
+         */
         fun builder() = Builder()
     }
 
@@ -302,7 +308,12 @@ private constructor(
 
         companion object {
 
-            /** Returns a mutable builder for constructing an instance of [Body]. */
+            /**
+             * Returns a mutable builder for constructing an instance of [Body].
+             *
+             * Tickets allow up to 4 attachments, 10 MiB per image, 25 MiB per video, and 30 MiB per
+             * request.
+             */
             fun builder() = Builder()
         }
 
@@ -325,14 +336,9 @@ private constructor(
             /** Sets [Builder.body] to an arbitrary multipart value. */
             fun body(body: MultipartField<String>) = apply { this.body = body }
 
-            fun attachments(attachments: List<InputStream>) =
-                attachments(
-                    MultipartField.builder<List<InputStream>>()
-                        .value(attachments)
-                        .filename("attachment")
-                        .contentType("application/octet-stream")
-                        .build()
-                )
+            fun attachments(attachments: List<InputStream>) = apply {
+                this.attachments = attachmentField(attachments)
+            }
 
             fun attachments(attachments: MultipartField<List<InputStream>>) = apply {
                 this.attachments = attachments.map { it.toMutableList() }
@@ -340,14 +346,17 @@ private constructor(
 
             fun addAttachment(attachment: InputStream) = apply {
                 attachments =
-                    (attachments
-                            ?: MultipartField.builder<MutableList<InputStream>>()
-                                .value(mutableListOf())
-                                .filename("attachment")
-                                .contentType("application/octet-stream")
-                                .build())
-                        .also { checkKnown("attachments", it).add(attachment) }
+                    (attachments ?: attachmentField(emptyList())).also {
+                        checkKnown("attachments", it).add(attachment)
+                    }
             }
+
+            private fun attachmentField(attachments: List<InputStream>) =
+                MultipartField.builder<MutableList<InputStream>>()
+                    .value(attachments.toMutableList())
+                    .filename("attachment")
+                    .contentType("application/octet-stream")
+                    .build()
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -373,12 +382,14 @@ private constructor(
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              */
-            fun build(): Body =
-                Body(
+            fun build(): Body {
+                checkAtLeastOne("body", body, "attachments", attachments)
+                return Body(
                     body,
                     (attachments ?: MultipartField.of(JsonMissing.of())).map { it.toImmutable() },
                     additionalProperties.toMutableMap(),
                 )
+            }
         }
 
         private var validated: Boolean = false

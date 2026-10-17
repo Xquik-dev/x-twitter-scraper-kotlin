@@ -88,6 +88,8 @@ private constructor(
          * ```
          *
          * Exactly one of `url` or `file` must be set. `isLongVideo` requires `file`.
+         *
+         * Uploads allow images up to 10 MiB, videos up to 25 MiB, and requests up to 30 MiB.
          */
         fun builder() = Builder()
     }
@@ -362,6 +364,8 @@ private constructor(
              * ```
              *
              * Exactly one of `url` or `file` must be set. `isLongVideo` requires `file`.
+             *
+             * Uploads allow images up to 10 MiB, videos up to 25 MiB, and requests up to 30 MiB.
              */
             fun builder() = Builder()
         }
