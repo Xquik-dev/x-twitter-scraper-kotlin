@@ -10,6 +10,9 @@ import com.x_twitter_scraper.api.models.PaginatedUsers
 import com.x_twitter_scraper.api.models.SearchTweet
 import com.x_twitter_scraper.api.models.account.AccountUpdateLocaleResponse
 import com.x_twitter_scraper.api.models.guestwallets.GuestWalletRetrieveStatusResponse
+import com.x_twitter_scraper.api.models.x.media.MediaUploadParams
+import com.x_twitter_scraper.api.models.x.profile.ProfileUpdateAvatarParams
+import com.x_twitter_scraper.api.models.x.profile.ProfileUpdateBannerParams
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -20,6 +23,8 @@ internal class SdkShapesTest {
     @Test
     fun recordsTheMethodAndPathEachOperationSends() {
         assertThat(operations).hasSize(180)
+        assertThat(operations.map { "${it.method} /${it.pathSegments.joinToString("/")}" })
+            .doesNotHaveDuplicates()
         assertThat(operation("x().spaces().search").method).isEqualTo("GET")
         assertThat(operation("x().spaces().search").pathSegments)
             .containsExactly("x", "spaces", "search")
@@ -54,6 +59,39 @@ internal class SdkShapesTest {
         assertThat(operation("events().stream").response).isNull()
         assertThat(operation("x().tweets().retrieve").response)
             .isInstanceOf(Shape.Fields::class.java)
+    }
+
+    @Test
+    fun readsAlternativeUploadInputs() {
+        val reader = SdkShapes()
+        listOf(
+                MediaUploadParams.Body::class.java,
+                ProfileUpdateAvatarParams.Body::class.java,
+                ProfileUpdateBannerParams.Body::class.java,
+            )
+            .forEach { model ->
+                val props = (reader.shapeOf(model) as Shape.Fields).props
+
+                assertThat(props.getValue("account").required).isTrue()
+                assertThat(props.getValue("url").required).isFalse()
+                assertThat(props.getValue("file").required).isFalse()
+            }
+    }
+
+    @Test
+    fun recordsTheUploadBodyTypeAndItsSelectedInput() {
+        listOf("x().media().upload", "x().profile().updateAvatar", "x().profile().updateBanner")
+            .forEach { label ->
+                val upload = operation(label)
+                val body = upload.body as Shape.Fields
+
+                assertThat(upload.contentType).isEqualTo("application/json")
+                assertThat(body.props.getValue("url").required).isTrue()
+                assertThat(body.props).doesNotContainKey("file")
+            }
+        assertThat(operation("support().tickets().create").contentType)
+            .startsWith("multipart/form-data;")
+        assertThat(operation("x().tweets().retrieve").contentType).isNull()
     }
 
     @Test

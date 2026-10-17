@@ -39,12 +39,14 @@ internal data class SdkOperation(
     val query: Shape.Fields,
     val body: Shape?,
     val response: Shape?,
+    val contentType: String? = null,
 )
 
 internal class SdkShapes(private val client: XTwitterScraperClient = recordingClient()) {
 
     private val models = mutableMapOf<Class<*>, Shape>()
     private val requiredNames = mutableMapOf<Class<*>, Set<String>>()
+    private val alternatives = mutableMapOf<Class<*>, List<String>>()
 
     fun operations(): List<SdkOperation> =
         services(client, "").flatMap { (label, service) ->
@@ -96,8 +98,9 @@ internal class SdkShapes(private val client: XTwitterScraperClient = recordingCl
                         cause.request.method.name,
                         cause.request.pathSegments,
                         query(paramsClass, required),
-                        body(paramsClass),
+                        body(paramsClass, params),
                         response(method.genericReturnType),
+                        cause.request.body?.let { it.contentType().orEmpty() },
                     )
                 }
                 required += requiredName(cause, label)
@@ -127,7 +130,7 @@ internal class SdkShapes(private val client: XTwitterScraperClient = recordingCl
     private fun queryOf(paramsClass: Class<*>, values: Map<String, Sample>): QueryParams =
         (buildParams(paramsClass, values) as Params)._queryParams()
 
-    private fun body(paramsClass: Class<*>): Shape? {
+    private fun body(paramsClass: Class<*>, params: Any): Shape? {
         val bodyMethod =
             paramsClass.methods.singleOrNull { it.name == "_body" && it.parameterCount == 0 }
                 ?: return null
@@ -135,7 +138,22 @@ internal class SdkShapes(private val client: XTwitterScraperClient = recordingCl
             paramsClass.declaredClasses.singleOrNull { it.simpleName == "Body" }
                 ?: bodyMethod.returnType.takeIf { isModel(it) }
                 ?: return null
-        return shapeOf(bodyClass)
+        val shape = shapeOf(bodyClass)
+        val inputs = alternatives[bodyClass] ?: return shape
+        val fields = bodyMethod.invoke(params) as Map<*, *>
+        val selected = inputs.single { name ->
+            val field = fields[name] as? MultipartField<*>
+            field != null && !field.value.isMissing() && !field.value.isNull()
+        }
+        val body = shape as Shape.Fields
+        return body.copy(
+            props =
+                body.props
+                    .filterKeys { it !in inputs || it == selected }
+                    .mapValues { (name, prop) ->
+                        if (name == selected) prop.copy(required = true) else prop
+                    }
+        )
     }
 
     private fun response(type: Type): Shape? {
@@ -306,7 +324,15 @@ internal class SdkShapes(private val client: XTwitterScraperClient = recordingCl
     private fun build(model: Class<*>, values: Map<String, Sample>): Any {
         val builder = newBuilder(model)
         values.forEach { (name, sample) -> set(builder, name, sample) }
-        return builder.javaClass.getMethod("build").invoke(builder)
+        return try {
+            builder.javaClass.getMethod("build").invoke(builder)
+        } catch (e: InvocationTargetException) {
+            val inputs = ALTERNATIVE.matchEntire(e.cause?.message.orEmpty()) ?: throw e
+            val names = inputs.groupValues.drop(1)
+            alternatives[model] = names
+            set(builder, names.first(), Sample.A)
+            builder.javaClass.getMethod("build").invoke(builder)
+        }
     }
 
     private fun set(builder: Any, name: String, sample: Sample) {
@@ -474,6 +500,7 @@ internal class SdkShapes(private val client: XTwitterScraperClient = recordingCl
         private const val STREAM_RESPONSE = "com.x_twitter_scraper.api.core.http.StreamResponse"
         private const val MAX_REQUIRED = 64
         private val REQUIRED = Regex("^`(\\w+)` is required, but was not set$")
+        private val ALTERNATIVE = Regex("^Exactly one of `(\\w+)` or `(\\w+)` must be set$")
         private val BUILDER_PLUMBING = setOf("additionalBodyProperties")
         private val BUILDER_PLUMBING_PREFIXES =
             listOf(

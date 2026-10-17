@@ -13,9 +13,14 @@ internal data class SpecOperation(
     val server: String,
     val path: String,
     val query: Shape.Fields,
-    val body: Shape?,
+    val bodies: Map<String, Shape>,
     val response: Shape?,
-)
+) {
+
+    fun body(contentType: String?): Shape? =
+        if (contentType == null) bodies.values.firstOrNull()
+        else bodies[contentType.substringBefore(";").trim().lowercase()]
+}
 
 internal class SpecShapes(private val root: JsonNode) {
 
@@ -67,11 +72,13 @@ internal class SpecShapes(private val root: JsonNode) {
         return url.replace(Regex("^[A-Za-z][A-Za-z0-9+.-]*://[^/]*"), "").trimEnd('/')
     }
 
-    private fun requestBody(op: JsonNode): Shape? {
-        val body = op.get("requestBody")?.let(::deref) ?: return null
+    private fun requestBody(op: JsonNode): Map<String, Shape> {
+        val body = op.get("requestBody")?.let(::deref) ?: return emptyMap()
         val content = body.path("content")
-        val media = BODY_TYPES.firstNotNullOfOrNull { type -> content.get(type) } ?: return null
-        return media.get("schema")?.let { node(it, emptyList()).first }
+        return BODY_TYPES.mapNotNull { type ->
+                content.get(type)?.get("schema")?.let { type to node(it, emptyList()).first }
+            }
+            .toMap()
     }
 
     private fun response(op: JsonNode): Shape? {

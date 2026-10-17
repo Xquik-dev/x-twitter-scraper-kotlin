@@ -98,7 +98,13 @@ class MediaServiceAsyncImpl internal constructor(private val clientOptions: Clie
                     .method(HttpMethod.POST)
                     .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("x", "media")
-                    .body(multipartFormData(clientOptions.jsonMapper, params._body()))
+                    .body(
+                        if (params.file() != null) {
+                            multipartFormData(clientOptions.jsonMapper, params._body())
+                        } else {
+                            json(clientOptions.jsonMapper, params._body())
+                        }
+                    )
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))

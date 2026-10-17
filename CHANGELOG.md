@@ -10,6 +10,9 @@
 
 * Bulk retry can target specific accounts with `accountIds`.
 * Embedded parent, quoted and retweeted posts carry every tweet field and the author.
+* Media, avatar and banner uploads accept exactly one URL or file input.
+* Media uploads accept `isLongVideo` and send it as `is_long_video`.
+* Support tickets accept attachment streams with a filename and a binary content type.
 * `UserProfile.IdentityVerification` adds the optional `overrideVerifiedYear` field for the verification start year X shows.
 * `x().tweets()` adds `listTop`, `embed`, `getHiddenReplies`, `getInsights`, `getRetweeterIds`, `checkRepost`, `getSubtitles`, `translate` and `resolveLinks`, with typed params and responses.
 * `x().users()` adds `retrieveBatchTweets`, `retrieveAffiliates`, `retrieveArticles`, `retrieveFollowerIds`, `retrieveFollowingIds`, `retrieveHighlights`, `retrieveInsights`, `retrieveListMemberships`, `retrieveLists`, `retrieveLive`, `retrieveSimilar`, `retrieveSubscriptions` and `translateBio`, with typed params and responses.
@@ -32,6 +35,14 @@
 * The core module exposes kotlinx-coroutines-core as an API dependency for the async event stream.
 * Response models add getters for missing API fields at every depth, and enum models add the API's new values.
 * Monitor and extraction requests accept `name` and email filters, and batch user requests accept `usernames`.
+
+### Bug Fixes
+
+* Media, avatar and banner uploads send JSON for URLs and multipart form data for files.
+* File uploads detect PNG, JPEG, GIF, WebP, AVIF and MP4 content and preserve every byte.
+* File uploads use `application/octet-stream` and the filename `upload` for unknown content.
+* The API fields check selects the schema for the request content type.
+* The API fields check treats equivalent path parameter names as the same accepted difference.
 
 ### Compatibility
 

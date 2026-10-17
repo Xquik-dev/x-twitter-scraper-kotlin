@@ -50,10 +50,12 @@ internal class ApiFields(
                     }
                 }
                 .toSortedSet()
-        val unaccepted = found.filterNot { it in acceptedEntries }
+        val acceptedKeys = acceptedEntries.map(::canonicalKey).toSet()
+        val foundKeys = found.map(::canonicalKey).toSet()
+        val unaccepted = found.filterNot { canonicalKey(it) in acceptedKeys }
         val stale =
             acceptedEntries
-                .filterNot { it in found }
+                .filterNot { canonicalKey(it) in foundKeys }
                 .sorted()
                 .map {
                     "$acceptedName lists $it, which the check no longer finds. Remove it."
@@ -114,7 +116,7 @@ internal class ApiFields(
 
     private fun differences(spec: SpecOperation, sdk: SdkOperation): List<Difference> =
         compare(spec.query, sdk.query, Side.REQUEST) +
-            body(spec.body, sdk.body) +
+            body(spec.body(sdk.contentType), sdk.body) +
             response(spec.response, sdk.response)
 
     private fun body(spec: Shape?, sdk: Shape?): List<Difference> =
@@ -198,23 +200,25 @@ internal class ApiFields(
         }
         val repeated =
             differences
-                .groupingBy { it }
-                .eachCount()
-                .filterValues { it > 1 }
-                .keys
-                .sorted()
+                .groupBy(::canonicalKey)
+                .values
+                .filter { it.size > 1 }
+                .sortedBy { it.last() }
                 .map {
-                    "It lists $it ${differences.count { other -> other == it }} times. List each difference once."
+                    "It lists ${it.last()} ${it.size} times. List each difference once."
                 }
         return if (repeated.isEmpty()) Accepted.Valid(differences.toSet())
         else Accepted.Invalid(repeated)
     }
+
+    private fun canonicalKey(key: String): String = PARAMETER.replace(key, "{}")
 
     companion object {
         private val basePath =
             URI(ClientOptions.PRODUCTION_URL).path.trim('/').split('/').filter { it.isNotEmpty() }
         private val KEY =
             Regex("^[A-Z]+ /\\S* (request|response) (missing|extra|enum|required|nullable) \\S+$")
+        private val PARAMETER = Regex("\\{[^/{}]+}")
     }
 }
 
