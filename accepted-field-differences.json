@@ -216,7 +216,7 @@
     ]
   },
   {
-    "reason": "Ticket create and reply now compare with their multipart schemas, where body is optional once attachments are sent and reply takes attachments. The SDK keeps body required on both and has no reply attachments until a follow-up adds them.",
+    "reason": "Ticket create and reply now compare with their multipart schemas, where body is optional once attachments are sent and reply takes attachments. Temporary until #99 lands tonight. It makes body optional and adds reply attachments, and removes these 3 entries.",
     "differences": [
       "POST /api/v1/support/tickets request required body",
       "POST /api/v1/support/tickets/{id}/messages request missing attachments",
