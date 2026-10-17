@@ -79,7 +79,7 @@ test_reproducibility_removes_read_only_temp_paths_after_sigint() {
 
     run_in_repo_and_signal_at INT step-ready scripts/check-reproducible
 
-    assert_equal 130 "$run_status" "the exit code"
+    assert_equal 130 "$run_status" "the SIGINT wait status"
     assert_no_temporary_entries
 }
 

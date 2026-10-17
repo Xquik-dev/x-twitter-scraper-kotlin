@@ -61,4 +61,26 @@ test_the_runner_removes_read_only_temp_paths_after_success() {
     assert_no_temporary_entries
 }
 
+test_the_script_runner_stops_after_sigint_without_running_the_next_command() {
+    prepare_sandbox_cleanup
+    copy_file scripts/test-scripts
+    stub scripts/tests/zz-second.test.sh <<'EOF'
+#!/usr/bin/env bash
+echo "ran" >"$FAKE_LOGS/second-file"
+EOF
+    stub parent.sh <<'EOF'
+#!/usr/bin/env bash
+scripts/test-scripts
+echo "ran" >"$FAKE_LOGS/second-command"
+EOF
+    run_env+=("FAKE_STEP_STATUS=wait")
+
+    run_in_repo_and_signal_at INT step-ready bash parent.sh
+
+    assert_equal "" "$(log_of second-file)" "the second test file"
+    assert_equal "" "$(log_of second-command)" "the second command"
+    assert_equal 130 "$run_status" "the SIGINT wait status"
+    assert_no_temporary_entries
+}
+
 run_tests

@@ -210,7 +210,8 @@ EOF
 }
 
 origin_tags() {
-    sandbox_git --git-dir="$sandbox/origin.git" for-each-ref --format='%(refname)%0a%(refname)^{}' refs/tags
+    sandbox_git --git-dir="$sandbox/origin.git" for-each-ref \
+        --format='%(refname)%(if)%(tag)%(then)%0a%(refname)^{}%(end)' refs/tags
 }
 
 assert_nothing_released() {
