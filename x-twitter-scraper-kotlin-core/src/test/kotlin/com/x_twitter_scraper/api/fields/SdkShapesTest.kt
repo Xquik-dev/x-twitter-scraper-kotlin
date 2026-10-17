@@ -4,6 +4,17 @@
 
 package com.x_twitter_scraper.api.fields
 
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.x_twitter_scraper.api.core.MultipartField
+import com.x_twitter_scraper.api.core.Params
+import com.x_twitter_scraper.api.core.RequestOptions
+import com.x_twitter_scraper.api.core.checkRequired
+import com.x_twitter_scraper.api.core.http.Headers
+import com.x_twitter_scraper.api.core.http.HttpMethod
+import com.x_twitter_scraper.api.core.http.HttpRequest
+import com.x_twitter_scraper.api.core.http.QueryParams
+import com.x_twitter_scraper.api.core.http.uploadBody
+import com.x_twitter_scraper.api.core.jsonMapper
 import com.x_twitter_scraper.api.models.EventType
 import com.x_twitter_scraper.api.models.PaginatedTweets
 import com.x_twitter_scraper.api.models.PaginatedUsers
@@ -13,10 +24,15 @@ import com.x_twitter_scraper.api.models.guestwallets.GuestWalletRetrieveStatusRe
 import com.x_twitter_scraper.api.models.x.media.MediaUploadParams
 import com.x_twitter_scraper.api.models.x.profile.ProfileUpdateAvatarParams
 import com.x_twitter_scraper.api.models.x.profile.ProfileUpdateBannerParams
+import java.io.InputStream
+import java.nio.file.Path
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
 
 internal class SdkShapesTest {
+
+    @TempDir lateinit var directory: Path
 
     private fun operation(label: String): SdkOperation = operations.single { it.label == label }
 
@@ -111,6 +127,53 @@ internal class SdkShapesTest {
     }
 
     @Test
+    fun reportsDependentFieldsInJsonWithoutABuilderRule() {
+        val spec =
+            jsonMapper()
+                .readTree(
+                    """
+                    {"paths": {"/api/v1/x/media": {"post": {"requestBody": {"content": {
+                      "multipart/form-data": {"schema": {
+                        "type": "object", "required": ["account", "file"], "properties": {
+                          "account": {"type": "string"}, "file": {"type": "string"},
+                          "is_long_video": {"type": "boolean"}
+                        }
+                      }},
+                      "application/json": {"schema": {
+                        "type": "object", "required": ["account", "url"], "properties": {
+                          "account": {"type": "string"}, "url": {"type": "string"}
+                        }
+                      }}
+                    }}, "responses": {}}}}}
+                    """
+                )
+        val accepted = directory.resolve("accepted.json").toFile().apply { writeText("[]") }
+        val service = UnrestrictedUploadService()
+        val unrestricted = SdkShapes().operations(service)
+        val json = unrestricted.single { it.contentType == "application/json" }
+        val multipart = unrestricted.single {
+            it.contentType?.startsWith("multipart/form-data;") == true
+        }
+
+        assertThat((json.body as Shape.Fields).props).containsKey("is_long_video")
+        assertThat((multipart.body as Shape.Fields).props).containsKey("is_long_video")
+        assertThat(service.bodies).hasSize(2)
+        service.bodies.forEach {
+            assertThat(it.getValue("is_long_video").value.asBoolean()).isTrue()
+        }
+        val report = ApiFields(spec, accepted) { unrestricted }.run()
+
+        assertThat(report.passed).isFalse()
+        assertThat(report.lines)
+            .containsExactly(
+                "POST /api/v1/x/media request extra is_long_video",
+                "Fix each field above in the SDK, or list it in accepted.json with a reason.",
+            )
+        assertThat(ApiFields(spec, accepted) { operations }.run())
+            .isEqualTo(Report(true, listOf("The SDK's fields match the API for 1 operation.")))
+    }
+
+    @Test
     fun readsRequiredAndNullableFlagsFromTheBuildersAndGetters() {
         val response = operation("x().tweets().retrieve").response as Shape.Fields
         val tweet = response.props.getValue("tweet")
@@ -167,6 +230,108 @@ internal class SdkShapesTest {
                 "profile.followers.changed",
                 "profile.following.changed",
             )
+    }
+
+    class UnrestrictedUploadService {
+
+        val bodies = mutableListOf<Map<String, MultipartField<*>>>()
+
+        fun upload(params: UnrestrictedUploadParams, requestOptions: RequestOptions) {
+            val body = params._body()
+            bodies += body
+            SdkShapes.RecordingHttpClient()
+                .execute(
+                    HttpRequest.builder()
+                        .method(HttpMethod.POST)
+                        .baseUrl("https://example.com")
+                        .addPathSegments("x", "media")
+                        .body(uploadBody(jsonMapper(), body, params.file() != null))
+                        .build(),
+                    requestOptions,
+                )
+        }
+    }
+
+    class UnrestrictedUploadParams(private val body: Body) : Params {
+
+        fun file(): InputStream? = body._file().value.asKnown()
+
+        fun _body(): Map<String, MultipartField<*>> =
+            mapOf(
+                    "account" to body._account(),
+                    "url" to body._url(),
+                    "file" to body._file(),
+                    "is_long_video" to body._isLongVideo(),
+                )
+                .filterValues { !it.value.isMissing() && !it.value.isNull() }
+
+        override fun _headers(): Headers = Headers.builder().build()
+
+        override fun _queryParams(): QueryParams = QueryParams.builder().build()
+
+        companion object {
+            fun builder() = Builder()
+        }
+
+        class Builder {
+
+            private val body = Body.builder()
+
+            fun account(account: String) = apply { body.account(account) }
+
+            fun url(url: String) = apply { body.url(url) }
+
+            fun file(file: InputStream) = apply { body.file(file) }
+
+            fun isLongVideo(isLongVideo: Boolean) = apply { body.isLongVideo(isLongVideo) }
+
+            fun build(): UnrestrictedUploadParams = UnrestrictedUploadParams(body.build())
+        }
+
+        class Body(
+            private val account: String,
+            private val url: String?,
+            private val file: InputStream?,
+            private val isLongVideo: Boolean?,
+        ) {
+
+            @JsonProperty("account")
+            fun _account(): MultipartField<String> = MultipartField.of(account)
+
+            @JsonProperty("url") fun _url(): MultipartField<String> = MultipartField.of(url)
+
+            @JsonProperty("file") fun _file(): MultipartField<InputStream> = MultipartField.of(file)
+
+            @JsonProperty("is_long_video")
+            fun _isLongVideo(): MultipartField<Boolean> = MultipartField.of(isLongVideo)
+
+            companion object {
+                fun builder() = Builder()
+            }
+
+            class Builder {
+
+                private var account: String? = null
+                private var url: String? = null
+                private var file: InputStream? = null
+                private var isLongVideo: Boolean? = null
+
+                fun account(account: String) = apply { this.account = account }
+
+                fun url(url: String) = apply { this.url = url }
+
+                fun file(file: InputStream) = apply { this.file = file }
+
+                fun isLongVideo(isLongVideo: Boolean) = apply { this.isLongVideo = isLongVideo }
+
+                fun build(): Body {
+                    check((url != null) xor (file != null)) {
+                        "Exactly one of `url` or `file` must be set"
+                    }
+                    return Body(checkRequired("account", account), url, file, isLongVideo)
+                }
+            }
+        }
     }
 
     companion object {

@@ -82,6 +82,8 @@ private constructor(
          * .idempotencyKey()
          * .account()
          * ```
+         *
+         * Exactly one of `url` or `file` must be set.
          */
         fun builder() = Builder()
     }
@@ -250,7 +252,9 @@ private constructor(
          * .account()
          * ```
          *
-         * @throws IllegalStateException if any required field is unset.
+         * Exactly one of `url` or `file` must be set.
+         *
+         * @throws IllegalStateException if a required field is unset or an input rule is violated.
          */
         fun build(): ProfileUpdateBannerParams =
             ProfileUpdateBannerParams(
@@ -267,7 +271,7 @@ private constructor(
                 "url" to _url(),
                 "file" to _file(),
             ) + _additionalBodyProperties().mapValues { (_, value) -> MultipartField.of(value) })
-            .filterValues { !it.value.isMissing() }
+            .filterValues { !it.value.isMissing() && !it.value.isNull() }
             .toImmutable()
 
     override fun _headers(): Headers =
@@ -338,6 +342,8 @@ private constructor(
              * ```kotlin
              * .account()
              * ```
+             *
+             * Exactly one of `url` or `file` must be set.
              */
             fun builder() = Builder()
         }
@@ -402,7 +408,10 @@ private constructor(
              * .account()
              * ```
              *
-             * @throws IllegalStateException if any required field is unset.
+             * Exactly one of `url` or `file` must be set.
+             *
+             * @throws IllegalStateException if a required field is unset or an input rule is
+             *   violated.
              */
             fun build(): Body {
                 checkExactlyOne("url", url, "file", file)

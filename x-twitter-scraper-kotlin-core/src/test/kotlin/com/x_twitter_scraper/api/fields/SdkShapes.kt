@@ -47,9 +47,10 @@ internal class SdkShapes(private val client: XTwitterScraperClient = recordingCl
     private val models = mutableMapOf<Class<*>, Shape>()
     private val requiredNames = mutableMapOf<Class<*>, Set<String>>()
     private val alternatives = mutableMapOf<Class<*>, List<String>>()
+    private val dependencies = mutableMapOf<Class<*>, MutableMap<String, String>>()
 
-    fun operations(): List<SdkOperation> =
-        services(client, "").flatMap { (label, service) ->
+    fun operations(target: Any = client): List<SdkOperation> =
+        services(target, "").flatMap { (label, service) ->
             service.javaClass.methods
                 .filter(::isOperation)
                 .sortedBy { it.name }
@@ -145,17 +146,27 @@ internal class SdkShapes(private val client: XTwitterScraperClient = recordingCl
         input: String?,
     ): QueryParams = (buildParams(paramsClass, values, input) as Params)._queryParams()
 
-    private fun body(paramsClass: Class<*>, params: Any): Shape? {
+    private fun bodyClass(paramsClass: Class<*>): Class<*>? {
         val bodyMethod =
             paramsClass.methods.singleOrNull { it.name == "_body" && it.parameterCount == 0 }
                 ?: return null
-        val bodyClass =
-            paramsClass.declaredClasses.singleOrNull { it.simpleName == "Body" }
-                ?: bodyMethod.returnType.takeIf { isModel(it) }
-                ?: return null
+        return paramsClass.declaredClasses.singleOrNull { it.simpleName == "Body" }
+            ?: bodyMethod.returnType.takeIf { isModel(it) }
+    }
+
+    private fun body(paramsClass: Class<*>, params: Any): Shape? {
+        val bodyClass = bodyClass(paramsClass) ?: return null
         val shape = shapeOf(bodyClass)
-        val inputs = alternatives[bodyClass] ?: return shape
-        val fields = bodyMethod.invoke(params) as Map<*, *>
+        val wireNames =
+            rawGetters(bodyClass).associate {
+                it.name.removePrefix("_") to it.getAnnotation(JsonProperty::class.java).value
+            }
+        val inputs = alternatives[bodyClass]?.map { wireNames.getValue(it) } ?: return shape
+        val requires =
+            (dependencies[bodyClass].orEmpty() + dependencies[paramsClass].orEmpty())
+                .mapKeys { (name, _) -> wireNames.getValue(name) }
+                .mapValues { (_, name) -> wireNames.getValue(name) }
+        val fields = paramsClass.getMethod("_body").invoke(params) as Map<*, *>
         val selected = inputs.single { name ->
             val field = fields[name] as? MultipartField<*>
             field != null && !field.value.isMissing() && !field.value.isNull()
@@ -164,9 +175,10 @@ internal class SdkShapes(private val client: XTwitterScraperClient = recordingCl
         return body.copy(
             props =
                 body.props
-                    .filterKeys {
-                        (it !in inputs || it == selected) &&
-                            (it != "is_long_video" || selected == "file")
+                    .filterKeys { name ->
+                        val dependency = requires[name]
+                        (name !in inputs || name == selected) &&
+                            (dependency !in inputs || dependency == selected)
                     }
                     .mapValues { (name, prop) ->
                         if (name == selected) prop.copy(required = true) else prop
@@ -343,12 +355,21 @@ internal class SdkShapes(private val client: XTwitterScraperClient = recordingCl
     ): Any {
         val inputs = alternatives[paramsClass] ?: return build(paramsClass, values)
         val selected = input ?: inputs.first()
-        val fields = values.filterKeys { it !in inputs || it == selected }.toMutableMap()
+        val setters = typedSetters(builderClass(paramsClass))
+        val samples =
+            bodyClass(paramsClass)
+                ?.let(::rawGetters)
+                .orEmpty()
+                .map { it.name.removePrefix("_") }
+                .filter { it in setters }
+                .associateWith { Sample.A }
+        val fields =
+            (samples + values).filterKeys { it !in inputs || it == selected }.toMutableMap()
         fields.putIfAbsent(selected, Sample.A)
-        if (selected == "file" && "isLongVideo" in typedSetters(builderClass(paramsClass))) {
-            fields.putIfAbsent("isLongVideo", Sample.A)
-        } else {
-            fields.remove("isLongVideo")
+        dependencies[paramsClass].orEmpty().forEach { (name, dependency) ->
+            if (dependency in inputs && dependency != selected) {
+                fields.remove(name)
+            }
         }
         return build(paramsClass, fields)
     }
@@ -356,15 +377,29 @@ internal class SdkShapes(private val client: XTwitterScraperClient = recordingCl
     private fun build(model: Class<*>, values: Map<String, Sample>): Any {
         val builder = newBuilder(model)
         values.forEach { (name, sample) -> set(builder, name, sample) }
-        return try {
-            builder.javaClass.getMethod("build").invoke(builder)
-        } catch (e: InvocationTargetException) {
-            val inputs = ALTERNATIVE.matchEntire(e.cause?.message.orEmpty()) ?: throw e
-            val names = inputs.groupValues.drop(1)
-            alternatives[model] = names
-            set(builder, names.first(), Sample.A)
-            builder.javaClass.getMethod("build").invoke(builder)
+        repeat(MAX_REQUIRED) {
+            try {
+                return builder.javaClass.getMethod("build").invoke(builder)
+            } catch (e: InvocationTargetException) {
+                val message = e.cause?.message.orEmpty()
+                val inputs = ALTERNATIVE.matchEntire(message)
+                val requires = REQUIRES.matchEntire(message)
+                when {
+                    inputs != null -> {
+                        val names = inputs.groupValues.drop(1)
+                        alternatives[model] = names
+                        set(builder, names.first(), Sample.A)
+                    }
+                    requires != null -> {
+                        val (name, dependency) = requires.destructured
+                        dependencies.getOrPut(model) { mutableMapOf() }[name] = dependency
+                        set(builder, name, Sample.MISSING)
+                    }
+                    else -> throw e
+                }
+            }
         }
+        throw IllegalStateException("${model.name} needs more than $MAX_REQUIRED input rules.")
     }
 
     private fun set(builder: Any, name: String, sample: Sample) {
@@ -507,7 +542,7 @@ internal class SdkShapes(private val client: XTwitterScraperClient = recordingCl
 
     private class Recorded(val request: HttpRequest) : RuntimeException(null, null, false, false)
 
-    private class RecordingHttpClient : HttpClient {
+    class RecordingHttpClient : HttpClient {
 
         override fun execute(request: HttpRequest, requestOptions: RequestOptions): HttpResponse =
             throw Recorded(request)
@@ -533,6 +568,7 @@ internal class SdkShapes(private val client: XTwitterScraperClient = recordingCl
         private const val MAX_REQUIRED = 64
         private val REQUIRED = Regex("^`(\\w+)` is required, but was not set$")
         private val ALTERNATIVE = Regex("^Exactly one of `(\\w+)` or `(\\w+)` must be set$")
+        private val REQUIRES = Regex("^`(\\w+)` requires `(\\w+)`$")
         private val BUILDER_PLUMBING = setOf("additionalBodyProperties")
         private val BUILDER_PLUMBING_PREFIXES =
             listOf(

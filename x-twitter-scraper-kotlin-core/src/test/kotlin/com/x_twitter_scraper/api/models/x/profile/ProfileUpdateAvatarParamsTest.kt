@@ -84,6 +84,27 @@ internal class ProfileUpdateAvatarParamsTest {
     }
 
     @Test
+    fun omitsNullUploadInputs() {
+        val urlParams =
+            ProfileUpdateAvatarParams.builder()
+                .idempotencyKey("Idempotency-Key")
+                .account("@example")
+                .url("https://example.com/image.png")
+                .file(MultipartField.of<InputStream>(JsonNull.of()))
+                .build()
+        val fileParams =
+            ProfileUpdateAvatarParams.builder()
+                .idempotencyKey("Idempotency-Key")
+                .account("@example")
+                .url(MultipartField.of<String>(JsonNull.of()))
+                .file("file bytes".byteInputStream())
+                .build()
+
+        assertThat(urlParams._body()).containsOnlyKeys("account", "url")
+        assertThat(fileParams._body()).containsOnlyKeys("account", "file")
+    }
+
+    @Test
     fun rejectsBothUrlAndFile() {
         assertThatThrownBy {
                 ProfileUpdateAvatarParams.builder()
