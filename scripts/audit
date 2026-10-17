@@ -8,8 +8,10 @@ set -euo pipefail
 
 cd -- "$(dirname -- "$0")/.."
 
-# shellcheck source=scripts/lib/temp-dirs.sh
-source scripts/lib/temp-dirs.sh
+# shellcheck source=scripts/lib/temp-paths.bash
+source scripts/lib/temp-paths.bash
+trap remove_temp_paths EXIT
+exit_on_signals
 
 readonly exceptions_file="audit-exceptions.json"
 published_lockfiles=(
@@ -27,7 +29,7 @@ fail() {
 command -v jq >/dev/null 2>&1 || fail "jq is not installed. Install it, then rerun."
 
 audit_workspace="$(mktemp -d "${TMPDIR:-/tmp}/xquik-kotlin-audit.XXXXXX")"
-temp_dirs+=("$audit_workspace")
+temp_paths+=("$audit_workspace")
 
 today="$(date -u +%Y-%m-%d)"
 latest_recheck="$(jq -nr 'now + 30 * 86400 | strftime("%Y-%m-%d")')"

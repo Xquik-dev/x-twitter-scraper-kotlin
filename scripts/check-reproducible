@@ -8,11 +8,13 @@ set -euo pipefail
 
 cd -- "$(dirname -- "$0")/.."
 
-# shellcheck source=scripts/lib/temp-dirs.sh
-source scripts/lib/temp-dirs.sh
+# shellcheck source=scripts/lib/temp-paths.bash
+source scripts/lib/temp-paths.bash
+trap remove_temp_paths EXIT
+exit_on_signals
 
 reproducibility_workspace="$(mktemp -d "${TMPDIR:-/tmp}/xquik-kotlin-reproducibility.XXXXXX")"
-temp_dirs+=("$reproducibility_workspace")
+temp_paths+=("$reproducibility_workspace")
 
 copy_source() {
     local destination="$1"

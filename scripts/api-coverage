@@ -16,8 +16,10 @@ readonly spec_source
 
 cd -- "$(dirname -- "$0")/.."
 
-# shellcheck source=scripts/lib/temp-dirs.sh
-source scripts/lib/temp-dirs.sh
+# shellcheck source=scripts/lib/temp-paths.bash
+source scripts/lib/temp-paths.bash
+trap remove_temp_paths EXIT
+exit_on_signals
 
 readonly exclusions_file="excluded-operations.json"
 readonly source_root="x-twitter-scraper-kotlin-core/src/main/kotlin/com/x_twitter_scraper/api"
@@ -32,7 +34,7 @@ fail() {
 }
 
 coverage_workspace="$(mktemp -d "${TMPDIR:-/tmp}/xquik-kotlin-api-coverage.XXXXXX")"
-temp_dirs+=("$coverage_workspace")
+temp_paths+=("$coverage_workspace")
 readonly spec_file="$coverage_workspace/spec.json"
 readonly requests_file="$coverage_workspace/requests.json"
 

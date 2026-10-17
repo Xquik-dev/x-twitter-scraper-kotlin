@@ -64,6 +64,8 @@ bin/check-local
 It checks the tools and both JDKs first.
 Then it runs the API coverage check, lint, shellcheck, the script tests, REUSE, build, tests, coverage, 30 seconds of Jazzer fuzzing, the dependency audit, the reproducible artifact check, and CodeQL security-extended queries.
 It stops at the first failure and says what to fix.
+The check and release scripts remove their temp paths on every exit, including failures and signals.
+Keep reports needed after a script exits under the Git common directory.
 REUSE 6.2.0 runs through `uvx` on every run.
 CodeQL and REUSE are required, and any finding fails the run.
 A file that CodeQL reads only in part, or skips, fails it too.

@@ -160,6 +160,7 @@ test_a_covered_spec_passes_with_the_counts() {
     assert_equal 0 "$run_status" "the exit code"
     assert_equal "The SDK covers 3 of 5 API operations, and excluded-operations.json lists the other 2." \
         "$run_stdout" "stdout"
+    assert_no_temporary_entries
 }
 
 test_a_spec_without_exclusions_passes_without_the_exclusion_count() {
@@ -600,6 +601,28 @@ EOF
     assert_equal "The API spec path /api/v1/account uses \$ref, which this check cannot read.
 Inline each path item that uses \$ref in the API spec, or set XQUIK_OPENAPI_SPEC to a spec that does." \
         "$run_stderr" "stderr"
+}
+
+test_api_coverage_removes_read_only_temp_paths_after_a_failing_step() {
+    prepare_coverage
+    replace_step "$sandbox_bin/jq"
+
+    run_in_repo scripts/api-coverage
+
+    assert_equal 1 "$run_status" "the exit code"
+    assert_equal "ready" "$(log_of step-ready)" "the failing step"
+    assert_no_temporary_entries
+}
+
+test_api_coverage_removes_read_only_temp_paths_after_sigterm() {
+    prepare_coverage
+    replace_step "$sandbox_bin/jq"
+    run_env+=("FAKE_STEP_STATUS=wait")
+
+    run_in_repo_and_terminate_at step-ready scripts/api-coverage
+
+    assert_equal 143 "$run_status" "the exit code"
+    assert_no_temporary_entries
 }
 
 run_tests

@@ -19,6 +19,10 @@
 * The new `x().broadcasts()` service has `retrieve`.
 * The new `x().communityNotes()` service has `retrieveContributor`, `listContributorNotes` and `listContributorDeletedNotes`.
 
+### Chores
+
+* The check and release scripts remove their temp dirs on every exit, including a failed step, a signal and read-only build caches.
+
 ## 0.9.4 (2026-10-13)
 
 [Full changelog from v0.9.3 to v0.9.4](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.9.3...v0.9.4)

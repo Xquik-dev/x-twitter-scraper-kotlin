@@ -94,6 +94,7 @@ test_a_passing_run_lists_the_checks_in_order_and_runs_reuse_through_uvx() {
     assert_equal "$check_order" "$(log_of order)" "the order of the checks"
     assert_equal "--from reuse==6.2.0 reuse lint" "$(log_of uvx)" "the uvx call"
     assert_equal "" "$(log_of gh)" "the posted statuses"
+    assert_no_temporary_entries
 }
 
 test_shellcheck_reads_every_bash_script_and_skips_other_files() {
@@ -106,7 +107,7 @@ EOF
 Not a script.
 EOF
     sandbox_git add --all
-    sandbox_git commit --quiet --message "Add files"
+    save_repo "Add files"
 
     run_in_repo bin/check-local --no-status
 
@@ -250,7 +251,7 @@ echo "coverage" >>"$FAKE_LOGS/order"
 echo "left behind" >leftover.txt
 EOF
     sandbox_git add --all
-    sandbox_git commit --quiet --message "Use a check that changes the tree"
+    save_repo "Use a check that changes the tree"
     head="$(sandbox_git rev-parse HEAD)"
 
     run_in_repo bin/check-local
@@ -272,6 +273,28 @@ test_an_unknown_option_stops_with_the_usage_line() {
     assert_equal 2 "$run_status" "the exit code"
     assert_equal "Unknown option --fast. Run bin/check-local or bin/check-local --no-status." "$run_stderr" "stderr"
     assert_equal "" "$(log_of order)" "the checks that ran"
+}
+
+test_check_local_removes_read_only_temp_paths_after_a_failing_step() {
+    prepare_checks
+    replace_step "$sandbox_repo/scripts/lint"
+
+    run_in_repo bin/check-local --no-status
+
+    assert_equal 37 "$run_status" "the exit code"
+    assert_equal "ready" "$(log_of step-ready)" "the failing step"
+    assert_no_temporary_entries
+}
+
+test_check_local_removes_read_only_temp_paths_after_sigterm() {
+    prepare_checks
+    replace_step "$sandbox_repo/scripts/lint"
+    run_env+=("FAKE_STEP_STATUS=wait")
+
+    run_in_repo_and_terminate_at step-ready bin/check-local --no-status
+
+    assert_equal 143 "$run_status" "the exit code"
+    assert_no_temporary_entries
 }
 
 run_tests

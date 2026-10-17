@@ -8,8 +8,10 @@ set -euo pipefail
 
 cd -- "$(dirname -- "$0")/.."
 
-# shellcheck source=scripts/lib/temp-dirs.sh
-source scripts/lib/temp-dirs.sh
+# shellcheck source=scripts/lib/temp-paths.bash
+source scripts/lib/temp-paths.bash
+trap remove_temp_paths EXIT
+exit_on_signals
 
 release_ref="${1:-}"
 if [[ ! "$release_ref" =~ ^v[0-9]+\.[0-9]+\.[0-9]+([-+][0-9A-Za-z.+-]+)?$ ]]; then
@@ -26,7 +28,7 @@ verification_timeout_minutes=20
 retry_delay_seconds=15
 max_attempts=$((verification_timeout_minutes * 60 / retry_delay_seconds))
 verification_workspace="$(mktemp -d "${TMPDIR:-/tmp}/xquik-kotlin-verify.XXXXXX")"
-temp_dirs+=("$verification_workspace")
+temp_paths+=("$verification_workspace")
 verification_gnupg="$verification_workspace/gnupg"
 mkdir -m 700 "$verification_gnupg"
 

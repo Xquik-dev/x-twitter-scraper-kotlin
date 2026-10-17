@@ -9,8 +9,10 @@ set +o xtrace
 
 cd -- "$(dirname -- "$0")/.."
 
-# shellcheck source=scripts/lib/temp-dirs.sh
-source scripts/lib/temp-dirs.sh
+# shellcheck source=scripts/lib/temp-paths.bash
+source scripts/lib/temp-paths.bash
+trap remove_temp_paths EXIT
+exit_on_signals
 
 readonly repository="Xquik-dev/x-twitter-scraper-kotlin"
 readonly group="com.xquik.api"
@@ -48,7 +50,7 @@ if [[ "$dry_run" == false ]]; then
 fi
 
 workspace="$(mktemp -d "${TMPDIR:-/tmp}/xquik-kotlin-release.XXXXXX")"
-temp_dirs+=("$workspace")
+temp_paths+=("$workspace")
 
 central_has_version() {
     local status

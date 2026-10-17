@@ -84,6 +84,18 @@ A file that is new and not ignored.
 EOF
 }
 
+prepare_codeql_cleanup() {
+    prepare_codeql
+    fake codeql <<EOF
+#!/bin/sh
+if [ "\$1" = version ]; then
+    echo "2.27.2"
+    exit 0
+fi
+exec "$sandbox_bin/codeql-step" "\$@"
+EOF
+}
+
 test_codeql_scans_a_copy_and_leaves_the_working_tree_alone() {
     local tree_before
     prepare_codeql
@@ -105,10 +117,11 @@ test_codeql_scans_a_copy_and_leaves_the_working_tree_alone() {
 ./example-core/src/main/kotlin/Client.kt
 ./example-core/src/test/kotlin/ClientTest.kt
 ./notes-in-progress.txt
-./scripts/codeql" "$(log_of codeql-copied-files)" "the copied files"
+./scripts/codeql
+./scripts/lib/temp-paths.bash" "$(log_of codeql-copied-files)" "the copied files"
     assert_not_contains "$(log_of codeql-source-root)" "$sandbox_repo" "the scanned folder"
     assert_equal "$tree_before" "$(sandbox_git status --porcelain)" "the working tree"
-    assert_equal "" "$(ls "$sandbox/tmp")" "the temporary folder after the run"
+    assert_no_temporary_entries
 }
 
 test_a_codeql_result_fails_the_run_and_is_printed() {
@@ -178,6 +191,28 @@ test_a_failing_traced_build_fails_the_run() {
     assert_equal 2 "$run_status" "the exit code"
     assert_equal "The traced build failed." "$run_stderr" "stderr"
     assert_equal "" "$(log_of codeql-suite)" "the query runs"
+}
+
+test_codeql_removes_read_only_temp_paths_after_a_failing_step() {
+    prepare_codeql_cleanup
+    replace_step "$sandbox_bin/codeql-step"
+
+    run_in_repo scripts/codeql
+
+    assert_equal 37 "$run_status" "the exit code"
+    assert_equal "ready" "$(log_of step-ready)" "the failing step"
+    assert_no_temporary_entries
+}
+
+test_codeql_removes_read_only_temp_paths_after_sigterm() {
+    prepare_codeql_cleanup
+    replace_step "$sandbox_bin/codeql-step"
+    run_env+=("FAKE_STEP_STATUS=wait")
+
+    run_in_repo_and_terminate_at step-ready scripts/codeql
+
+    assert_equal 143 "$run_status" "the exit code"
+    assert_no_temporary_entries
 }
 
 run_tests

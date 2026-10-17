@@ -7,6 +7,10 @@
 tests_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
 readonly tests_root
 
+source "$tests_root/scripts/lib/temp-paths.bash"
+trap remove_temp_paths EXIT
+exit_on_signals
+
 readonly local_tools=(bash git jq)
 
 readonly remote_tools=(codeql curl gh gpg java security shellcheck uvx)
@@ -14,7 +18,9 @@ readonly remote_tools=(codeql curl gh gpg java security shellcheck uvx)
 create_sandbox() {
     local tool tool_path
     sandbox="$(mktemp -d "${TMPDIR:-/tmp}/xquik-kotlin-script-test.XXXXXX")"
+    temp_paths+=("$sandbox")
     sandbox="$(cd -- "$sandbox" && pwd -P)"
+    sandbox_pid=""
     sandbox_repo="$sandbox/repo"
     sandbox_bin="$sandbox/bin"
     sandbox_logs="$sandbox/logs"
@@ -33,10 +39,15 @@ create_sandbox() {
         chmod 755 "$sandbox_bin/$tool"
     done
     run_env=()
+    copy_file scripts/lib/temp-paths.bash
 }
 
 remove_sandbox() {
-    rm -rf -- "${sandbox:?}"
+    if [[ -n "${sandbox_pid:-}" ]]; then
+        kill -TERM -- "-$sandbox_pid" 2>/dev/null || true
+        wait "$sandbox_pid" 2>/dev/null || true
+    fi
+    remove_temp_paths
 }
 
 fake() {
@@ -80,13 +91,34 @@ sandbox_git() {
 commit_repo() {
     sandbox_git init --quiet --initial-branch=main
     sandbox_git add --all
-    sandbox_git commit --quiet --message "Test commit"
+    save_repo "Test commit"
+}
+
+save_repo() {
+    local tree parent revision
+    tree="$(sandbox_git write-tree)"
+    parent="$(sandbox_git rev-parse --verify HEAD 2>/dev/null || true)"
+    if [[ -n "$parent" ]]; then
+        revision="$(sandbox_git commit-tree "$tree" -p "$parent" -m "$1")"
+    else
+        revision="$(sandbox_git commit-tree "$tree" -m "Test commit")"
+    fi
+    sandbox_git update-ref HEAD "$revision"
+}
+
+sync_origin() {
+    local ref="${1:-refs/heads/main}"
+    cp -R -f "$sandbox_repo/.git/objects/." "$sandbox/origin.git/objects/"
+    sandbox_git --git-dir="$sandbox/origin.git" update-ref "$ref" "$(sandbox_git rev-parse "$ref")"
+    if [[ "$ref" == refs/heads/main ]]; then
+        sandbox_git update-ref refs/remotes/origin/main "$(sandbox_git rev-parse "$ref")"
+    fi
 }
 
 add_origin() {
     sandbox_git init --quiet --bare "$sandbox/origin.git"
     sandbox_git remote add origin "$sandbox/origin.git"
-    sandbox_git push --quiet origin main
+    sync_origin
 }
 
 exec_in_repo() {
@@ -118,24 +150,54 @@ run_in_repo() {
 }
 
 run_in_repo_and_terminate_at() {
-    local marker="$1" pid tries=0
+    run_in_repo_and_signal_at TERM "$@"
+}
+
+run_in_repo_and_signal_at() {
+    local signal="$1" marker="$2" tries=0
+    shift
     shift
     run_status=0
+    set -m
     (exec_in_repo "$@") >"$sandbox/stdout" 2>"$sandbox/stderr" </dev/null &
-    pid=$!
+    sandbox_pid=$!
+    set +m
     until [[ -e "$sandbox_logs/$marker" ]]; do
-        if ((tries >= 200)) || ! kill -0 "$pid" 2>/dev/null; then
-            kill -KILL "$pid" 2>/dev/null || true
-            wait "$pid" || true
+        if ((tries >= 200)) || ! kill -0 "$sandbox_pid" 2>/dev/null; then
+            kill -KILL -- "-$sandbox_pid" 2>/dev/null || true
+            wait "$sandbox_pid" || true
             read_run_output
             fail_test "The run never reached the step that writes $marker."
         fi
         sleep 0.05
         tries=$((tries + 1))
     done
-    kill -TERM "$pid"
-    wait "$pid" || run_status=$?
+    kill -s "$signal" -- "-$sandbox_pid"
+    wait "$sandbox_pid" || run_status=$?
+    sandbox_pid=""
     read_run_output
+}
+
+replace_step() {
+    cat >"$1" <<'EOF'
+#!/bin/sh
+prepared=false
+for workspace in "$TMPDIR"/*; do
+    [ -d "$workspace" ] || continue
+    mkdir -p "$workspace/cache"
+    echo "cache" >"$workspace/cache/entry"
+    chmod 400 "$workspace/cache/entry"
+    chmod 500 "$workspace/cache"
+    prepared=true
+done
+[ "$prepared" = true ] || exit 38
+echo "ready" >"$FAKE_LOGS/step-ready"
+if [ "${FAKE_STEP_STATUS:-37}" = wait ]; then
+    exec /bin/sleep 30
+fi
+exit "${FAKE_STEP_STATUS:-37}"
+EOF
+    chmod 755 "$1"
 }
 
 assert_no_temporary_entries() {
@@ -206,8 +268,9 @@ run_tests() {
         set +e
         (
             set -euo pipefail
-            create_sandbox
             trap remove_sandbox EXIT
+            exit_on_signals
+            create_sandbox
             "$name"
         )
         status=$?

@@ -58,6 +58,7 @@ $base_url/x-twitter-scraper-kotlin-9.9.9.jar.asc" "$(log_of curl)" "the download
 --batch --status-fd 1 --verify WORKSPACE/x-twitter-scraper-kotlin-9.9.9.jar.asc WORKSPACE/x-twitter-scraper-kotlin-9.9.9.jar with GNUPGHOME=WORKSPACE/gnupg" \
         "$(log_of gpg)" "the gpg calls"
     assert_equal "" "$(log_of sleep)" "the waits"
+    assert_no_temporary_entries
 }
 
 test_a_signature_by_another_key_fails() {
@@ -91,6 +92,28 @@ test_a_version_without_the_v_prefix_is_refused() {
     assert_equal 1 "$run_status" "the exit code"
     assert_equal "Pass a valid v-prefixed release version." "$run_stderr" "stderr"
     assert_equal "" "$(log_of curl)" "the downloads"
+}
+
+test_verify_release_signature_removes_read_only_temp_paths_after_a_failing_step() {
+    prepare_verification
+    replace_step "$sandbox_bin/gpg"
+
+    run_in_repo bin/verify-release-signature v9.9.9
+
+    assert_equal 37 "$run_status" "the exit code"
+    assert_equal "ready" "$(log_of step-ready)" "the failing step"
+    assert_no_temporary_entries
+}
+
+test_verify_release_signature_removes_read_only_temp_paths_after_sigterm() {
+    prepare_verification
+    replace_step "$sandbox_bin/gpg"
+    run_env+=("FAKE_STEP_STATUS=wait")
+
+    run_in_repo_and_terminate_at step-ready bin/verify-release-signature v9.9.9
+
+    assert_equal 143 "$run_status" "the exit code"
+    assert_no_temporary_entries
 }
 
 run_tests
