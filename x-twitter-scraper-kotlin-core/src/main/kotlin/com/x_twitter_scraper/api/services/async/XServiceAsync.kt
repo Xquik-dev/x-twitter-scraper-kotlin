@@ -32,12 +32,16 @@ import com.x_twitter_scraper.api.services.async.x.AccountConnectionAttemptServic
 import com.x_twitter_scraper.api.services.async.x.AccountConnectionChallengeServiceAsync
 import com.x_twitter_scraper.api.services.async.x.AccountServiceAsync
 import com.x_twitter_scraper.api.services.async.x.BookmarkServiceAsync
+import com.x_twitter_scraper.api.services.async.x.BroadcastServiceAsync
+import com.x_twitter_scraper.api.services.async.x.CommunityNoteServiceAsync
 import com.x_twitter_scraper.api.services.async.x.CommunityServiceAsync
 import com.x_twitter_scraper.api.services.async.x.DmServiceAsync
 import com.x_twitter_scraper.api.services.async.x.FollowerServiceAsync
+import com.x_twitter_scraper.api.services.async.x.JobServiceAsync
 import com.x_twitter_scraper.api.services.async.x.ListServiceAsync
 import com.x_twitter_scraper.api.services.async.x.MediaServiceAsync
 import com.x_twitter_scraper.api.services.async.x.ProfileServiceAsync
+import com.x_twitter_scraper.api.services.async.x.SpaceServiceAsync
 import com.x_twitter_scraper.api.services.async.x.TweetServiceAsync
 import com.x_twitter_scraper.api.services.async.x.UserServiceAsync
 import com.x_twitter_scraper.api.services.async.x.WriteActionServiceAsync
@@ -89,6 +93,18 @@ interface XServiceAsync {
 
     /** X List followers, members, and tweets */
     fun lists(): ListServiceAsync
+
+    /** Public X job listings, search and details */
+    fun jobs(): JobServiceAsync
+
+    /** X Space details, host, and speakers */
+    fun spaces(): SpaceServiceAsync
+
+    /** X live video details, watch counts, and broadcaster */
+    fun broadcasts(): BroadcastServiceAsync
+
+    /** Community Notes contributors, their notes, ratings & deleted notes */
+    fun communityNotes(): CommunityNoteServiceAsync
 
     /**
      * Retrieve the full content of an X Article (long-form post) by numeric tweet ID. Returns
@@ -278,6 +294,18 @@ interface XServiceAsync {
 
         /** X List followers, members, and tweets */
         fun lists(): ListServiceAsync.WithRawResponse
+
+        /** Public X job listings, search and details */
+        fun jobs(): JobServiceAsync.WithRawResponse
+
+        /** X Space details, host, and speakers */
+        fun spaces(): SpaceServiceAsync.WithRawResponse
+
+        /** X live video details, watch counts, and broadcaster */
+        fun broadcasts(): BroadcastServiceAsync.WithRawResponse
+
+        /** Community Notes contributors, their notes, ratings & deleted notes */
+        fun communityNotes(): CommunityNoteServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /x/articles/{tweetId}`, but is otherwise the same as
