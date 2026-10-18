@@ -18,6 +18,7 @@ import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.core.http.json
 import com.x_twitter_scraper.api.core.http.parseable
 import com.x_twitter_scraper.api.core.prepareAsync
+import com.x_twitter_scraper.api.models.CommunityAnalytics
 import com.x_twitter_scraper.api.models.CommunityPage
 import com.x_twitter_scraper.api.models.PaginatedTweets
 import com.x_twitter_scraper.api.models.PaginatedUsers
@@ -31,6 +32,7 @@ import com.x_twitter_scraper.api.models.x.communities.CommunityListSuggestedPara
 import com.x_twitter_scraper.api.models.x.communities.CommunityListSuggestedResponse
 import com.x_twitter_scraper.api.models.x.communities.CommunityListTopicsParams
 import com.x_twitter_scraper.api.models.x.communities.CommunityListTopicsResponse
+import com.x_twitter_scraper.api.models.x.communities.CommunityRetrieveAnalyticsParams
 import com.x_twitter_scraper.api.models.x.communities.CommunityRetrieveInfoParams
 import com.x_twitter_scraper.api.models.x.communities.CommunityRetrieveInfoResponse
 import com.x_twitter_scraper.api.models.x.communities.CommunityRetrieveMembersParams
@@ -80,6 +82,11 @@ class CommunityServiceAsyncImpl internal constructor(private val clientOptions: 
         params: CommunityDeleteParams,
         requestOptions: RequestOptions,
     ): CommunityDeleteResponse = withRawResponse().delete(params, requestOptions).parse()
+
+    override suspend fun retrieveAnalytics(
+        params: CommunityRetrieveAnalyticsParams,
+        requestOptions: RequestOptions,
+    ): CommunityAnalytics = withRawResponse().retrieveAnalytics(params, requestOptions).parse()
 
     override suspend fun retrieveInfo(
         params: CommunityRetrieveInfoParams,
@@ -211,6 +218,34 @@ class CommunityServiceAsyncImpl internal constructor(private val clientOptions: 
             return errorHandler.handle(response).parseable {
                 response
                     .use { deleteHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val retrieveAnalyticsHandler: Handler<CommunityAnalytics> =
+            jsonHandler<CommunityAnalytics>(clientOptions.jsonMapper)
+
+        override suspend fun retrieveAnalytics(
+            params: CommunityRetrieveAnalyticsParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<CommunityAnalytics> {
+            checkRequired("id", params.id())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("x", "communities", params._pathParam(0), "analytics")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { retrieveAnalyticsHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()

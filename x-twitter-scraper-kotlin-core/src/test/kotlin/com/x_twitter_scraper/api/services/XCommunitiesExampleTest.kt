@@ -19,7 +19,9 @@ import com.x_twitter_scraper.api.models.x.communities.CommunityFindParams
 import com.x_twitter_scraper.api.models.x.communities.CommunityListPopularParams
 import com.x_twitter_scraper.api.models.x.communities.CommunityListSuggestedParams
 import com.x_twitter_scraper.api.models.x.communities.CommunityListTopicsParams
+import com.x_twitter_scraper.api.models.x.communities.CommunityRetrieveAnalyticsParams
 import com.x_twitter_scraper.api.models.x.communities.CommunitySearchMembersParams
+import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -40,6 +42,61 @@ internal class XCommunitiesExampleTest {
                 .bearerToken("My Bearer Token")
                 .responseValidation(true)
                 .build()
+    }
+
+    @Test
+    suspend fun retrieveAnalytics() {
+        stubFor(
+            get(urlPathEqualTo("/x/communities/1493446837214187523/analytics"))
+                .willReturn(
+                    okJson(ExampleResponses.read("examples/x/communities/retrieveAnalytics.json"))
+                )
+        )
+        val params =
+            CommunityRetrieveAnalyticsParams.builder()
+                .fields("id,periodEndsAt,metrics")
+                .omit("metrics.likes.changePercent")
+                .build()
+        val paramsWithId = params.toBuilder().id("1493446837214187523").build()
+        val raw = client.x().communities().withRawResponse()
+        val rawAsync = client.async().x().communities().withRawResponse()
+
+        val responses =
+            listOf(
+                client.x().communities().retrieveAnalytics("1493446837214187523", params),
+                client.async().x().communities().retrieveAnalytics(paramsWithId),
+                raw.retrieveAnalytics(paramsWithId).use { response ->
+                    assertThat(response.statusCode()).isEqualTo(200)
+                    response.parse()
+                },
+                rawAsync.retrieveAnalytics("1493446837214187523", params).use { response ->
+                    assertThat(response.statusCode()).isEqualTo(200)
+                    response.parse()
+                },
+            )
+
+        verify(
+            4,
+            getRequestedFor(urlPathEqualTo("/x/communities/1493446837214187523/analytics"))
+                .withQueryParam("fields", equalTo("id,periodEndsAt,metrics"))
+                .withQueryParam("omit", equalTo("metrics.likes.changePercent")),
+        )
+        responses.forEach { response ->
+            assertThat(response.id()).isEqualTo("1493446837214187523")
+            assertThat(response.periodEndsAt())
+                .isEqualTo(OffsetDateTime.parse("2026-10-16T23:59:59.999Z"))
+            val metrics = response.metrics()
+            assertThat(metrics.likes().count()).isEqualTo(15298L)
+            assertThat(metrics.likes().changePercent()).isEqualTo(-1.2076202776880853)
+            assertThat(metrics.newMembers().count()).isEqualTo(557L)
+            assertThat(metrics.newMembers().changePercent()).isEqualTo(-1.5901060070671376)
+            assertThat(metrics.posts().count()).isEqualTo(5108L)
+            assertThat(metrics.posts().changePercent()).isEqualTo(0.5907837731390311)
+            assertThat(metrics.replies().count()).isEqualTo(6851L)
+            assertThat(metrics.replies().changePercent()).isEqualTo(-0.8251302837290099)
+            assertThat(metrics.uniquePosters().count()).isEqualTo(1800L)
+            assertThat(metrics.uniquePosters().changePercent()).isEqualTo(-0.33222591362126247)
+        }
     }
 
     @Test
