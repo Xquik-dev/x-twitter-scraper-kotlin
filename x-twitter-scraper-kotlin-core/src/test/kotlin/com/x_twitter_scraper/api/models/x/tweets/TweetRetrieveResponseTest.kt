@@ -9,12 +9,146 @@ import com.x_twitter_scraper.api.core.JsonValue
 import com.x_twitter_scraper.api.core.jsonMapper
 import com.x_twitter_scraper.api.models.ContentDisclosure
 import com.x_twitter_scraper.api.models.EmbeddedTweet
+import com.x_twitter_scraper.api.models.SearchTweet
 import com.x_twitter_scraper.api.models.TweetMedia
 import com.x_twitter_scraper.api.models.UserProfile
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 internal class TweetRetrieveResponseTest {
+
+    @Test
+    fun deserializeUnknownCounts() {
+        val response =
+            jsonMapper()
+                .readValue(
+                    """
+                    {
+                        "tweet": {
+                            "id": "123",
+                            "bookmarkCount": 0,
+                            "unknownCounts": ["bookmarkCount", "viewCount"],
+                            "likeCount": 1,
+                            "quoteCount": 0,
+                            "replyCount": 0,
+                            "retweetCount": 1,
+                            "text": "Post",
+                            "viewCount": 0,
+                            "retweeted_tweet": {
+                                "id": "456",
+                                "bookmarkCount": 0,
+                                "unknownCounts": ["bookmarkCount", "viewCount"],
+                                "likeCount": 1,
+                                "quoteCount": 0,
+                                "replyCount": 0,
+                                "retweetCount": 0,
+                                "text": "Original post",
+                                "viewCount": 0
+                            }
+                        }
+                    }
+                    """
+                        .trimIndent(),
+                    jacksonTypeRef<TweetRetrieveResponse>(),
+                )
+
+        response.validate()
+        assertThat(response.tweet().unknownCounts())
+            .containsExactly(
+                SearchTweet.UnknownCount.BOOKMARK_COUNT,
+                SearchTweet.UnknownCount.VIEW_COUNT,
+            )
+        assertThat(response.tweet().retweetedTweet()!!.unknownCounts())
+            .containsExactly(
+                SearchTweet.UnknownCount.BOOKMARK_COUNT,
+                SearchTweet.UnknownCount.VIEW_COUNT,
+            )
+        assertThat(
+                jsonMapper()
+                    .readValue(
+                        jsonMapper().writeValueAsString(response),
+                        jacksonTypeRef<TweetRetrieveResponse>(),
+                    )
+            )
+            .isEqualTo(response)
+    }
+
+    @Test
+    fun deserializeWithoutUnknownCounts() {
+        val response =
+            jsonMapper()
+                .readValue(
+                    """
+                    {
+                        "tweet": {
+                            "id": "123",
+                            "bookmarkCount": 0,
+                            "likeCount": 1,
+                            "quoteCount": 0,
+                            "replyCount": 0,
+                            "retweetCount": 1,
+                            "text": "Post",
+                            "viewCount": 0,
+                            "retweeted_tweet": {
+                                "id": "456",
+                                "bookmarkCount": 0,
+                                "likeCount": 1,
+                                "quoteCount": 0,
+                                "replyCount": 0,
+                                "retweetCount": 0,
+                                "text": "Original post",
+                                "viewCount": 0
+                            }
+                        }
+                    }
+                    """
+                        .trimIndent(),
+                    jacksonTypeRef<TweetRetrieveResponse>(),
+                )
+
+        response.validate()
+        assertThat(response.tweet().unknownCounts()).isNull()
+        assertThat(response.tweet()._unknownCounts().isMissing()).isTrue()
+        assertThat(response.tweet().retweetedTweet()!!.unknownCounts()).isNull()
+        assertThat(response.tweet().retweetedTweet()!!._unknownCounts().isMissing()).isTrue()
+        assertThat(jsonMapper().writeValueAsString(response)).doesNotContain("unknownCounts")
+    }
+
+    @Test
+    fun deserializeUnknownFutureCounts() {
+        val response =
+            jsonMapper()
+                .readValue(
+                    """
+                    {
+                        "tweet": {
+                            "unknownCounts": ["futureCount"],
+                            "retweeted_tweet": {
+                                "unknownCounts": ["futureCount"]
+                            }
+                        }
+                    }
+                    """
+                        .trimIndent(),
+                    jacksonTypeRef<TweetRetrieveResponse>(),
+                )
+
+        val count = response.tweet().unknownCounts()!!.single()
+        val embeddedCount = response.tweet().retweetedTweet()!!.unknownCounts()!!.single()
+
+        assertThat(count.value()).isEqualTo(SearchTweet.UnknownCount.Value._UNKNOWN)
+        assertThat(count.asString()).isEqualTo("futureCount")
+        assertThat(embeddedCount.value()).isEqualTo(SearchTweet.UnknownCount.Value._UNKNOWN)
+        assertThat(embeddedCount.asString()).isEqualTo("futureCount")
+        assertThat(
+                jsonMapper()
+                    .readValue(
+                        jsonMapper().writeValueAsString(response),
+                        jacksonTypeRef<TweetRetrieveResponse>(),
+                    )
+            )
+            .isEqualTo(response)
+    }
 
     @Test
     fun create() {

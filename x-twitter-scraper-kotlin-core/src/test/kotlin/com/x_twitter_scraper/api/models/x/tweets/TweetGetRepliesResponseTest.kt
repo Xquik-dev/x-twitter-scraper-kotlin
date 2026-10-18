@@ -16,6 +16,91 @@ import org.junit.jupiter.api.Test
 internal class TweetGetRepliesResponseTest {
 
     @Test
+    fun deserializeUnknownCounts() {
+        val response =
+            jsonMapper()
+                .readValue(
+                    """
+                    {
+                        "has_next_page": false,
+                        "next_cursor": "",
+                        "tweets": [
+                            {
+                                "id": "123",
+                                "bookmarkCount": 0,
+                                "unknownCounts": ["bookmarkCount", "viewCount"],
+                                "likeCount": 1,
+                                "quoteCount": 0,
+                                "replyCount": 0,
+                                "retweetCount": 1,
+                                "text": "Post",
+                                "viewCount": 0,
+                                "retweeted_tweet": {
+                                    "id": "456",
+                                    "bookmarkCount": 0,
+                                    "unknownCounts": ["bookmarkCount", "viewCount"],
+                                    "likeCount": 1,
+                                    "quoteCount": 0,
+                                    "replyCount": 0,
+                                    "retweetCount": 0,
+                                    "text": "Original post",
+                                    "viewCount": 0
+                                }
+                            }
+                        ]
+                    }
+                    """
+                        .trimIndent(),
+                    jacksonTypeRef<TweetGetRepliesResponse>(),
+                )
+
+        response.validate()
+        assertThat(response.tweets().single().unknownCounts())
+            .containsExactly(
+                SearchTweet.UnknownCount.BOOKMARK_COUNT,
+                SearchTweet.UnknownCount.VIEW_COUNT,
+            )
+        assertThat(response.tweets().single().retweetedTweet()!!.unknownCounts())
+            .containsExactly(
+                SearchTweet.UnknownCount.BOOKMARK_COUNT,
+                SearchTweet.UnknownCount.VIEW_COUNT,
+            )
+    }
+
+    @Test
+    fun deserializeWithoutUnknownCounts() {
+        val response =
+            jsonMapper()
+                .readValue(
+                    """
+                    {
+                        "has_next_page": false,
+                        "next_cursor": "",
+                        "tweets": [
+                            {
+                                "id": "123",
+                                "bookmarkCount": 0,
+                                "likeCount": 1,
+                                "quoteCount": 0,
+                                "replyCount": 0,
+                                "retweetCount": 0,
+                                "text": "Post",
+                                "viewCount": 0
+                            }
+                        ]
+                    }
+                    """
+                        .trimIndent(),
+                    jacksonTypeRef<TweetGetRepliesResponse>(),
+                )
+
+        response.validate()
+        assertThat(response.tweets().single().unknownCounts()).isNull()
+        assertThat(response.tweets().single()._unknownCounts().isMissing()).isTrue()
+        assertThat(jsonMapper().writeValueAsString(response)).doesNotContain("unknownCounts")
+    }
+
+    @Test
     fun create() {
         val tweetGetRepliesResponse =
             TweetGetRepliesResponse.builder()
