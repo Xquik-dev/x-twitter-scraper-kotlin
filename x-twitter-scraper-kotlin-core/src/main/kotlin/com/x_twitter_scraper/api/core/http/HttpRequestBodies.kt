@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeType
 import com.x_twitter_scraper.api.core.MultipartField
 import com.x_twitter_scraper.api.core.toImmutable
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
+import java.io.BufferedInputStream
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.io.OutputStream
@@ -33,6 +34,52 @@ internal inline fun <reified T> json(jsonMapper: JsonMapper, value: T): HttpRequ
         override fun close() {}
     }
 
+internal fun uploadBody(
+    jsonMapper: JsonMapper,
+    fields: Map<String, MultipartField<*>>,
+    hasFile: Boolean,
+): HttpRequestBody =
+    if (hasFile) multipartFormData(jsonMapper, fields) else json(jsonMapper, fields)
+
+internal fun uploadFile(file: InputStream): MultipartField<InputStream> {
+    val stream = if (file.markSupported()) file else BufferedInputStream(file, 12)
+    val header = ByteArray(12)
+    stream.mark(header.size)
+    var size = 0
+    try {
+        while (size < header.size) {
+            val next = stream.read()
+            if (next == -1) break
+            header[size++] = next.toByte()
+        }
+    } finally {
+        stream.reset()
+    }
+
+    fun matches(offset: Int, signature: String): Boolean =
+        size >= offset + signature.length &&
+            signature.indices.all { header[offset + it] == signature[it].code.toByte() }
+
+    val (contentType, filename) =
+        when {
+            matches(0, "\u0089PNG\r\n\u001a\n") -> "image/png" to "upload.png"
+            matches(0, "\u00ff\u00d8\u00ff") -> "image/jpeg" to "upload.jpg"
+            matches(0, "GIF87a") || matches(0, "GIF89a") -> "image/gif" to "upload.gif"
+            matches(0, "RIFF") && matches(8, "WEBP") -> "image/webp" to "upload.webp"
+            matches(4, "ftyp") && (matches(8, "avif") || matches(8, "avis")) ->
+                "image/avif" to "upload.avif"
+            matches(4, "ftyp") &&
+                listOf("isom", "iso2", "mp41", "mp42", "avc1", "M4V ").any { matches(8, it) } ->
+                "video/mp4" to "upload.mp4"
+            else -> "application/octet-stream" to "upload"
+        }
+    return MultipartField.builder<InputStream>()
+        .value(stream)
+        .filename(filename)
+        .contentType(contentType)
+        .build()
+}
+
 internal fun multipartFormData(
     jsonMapper: JsonMapper,
     fields: Map<String, MultipartField<*>>,
@@ -40,10 +87,19 @@ internal fun multipartFormData(
     MultipartBody.Builder()
         .apply {
             fields.forEach { (name, field) ->
+                if (field.value.isMissing()) {
+                    return@forEach
+                }
                 val knownValue = field.value.asKnown()
                 val parts =
                     if (knownValue is InputStream) {
                         sequenceOf(name to knownValue)
+                    } else if (
+                        knownValue is List<*> &&
+                            knownValue.isNotEmpty() &&
+                            knownValue.all { it is InputStream }
+                    ) {
+                        knownValue.asSequence().map { name to it as InputStream }
                     } else {
                         val node = jsonMapper.valueToTree<JsonNode>(field.value)
                         serializePart(name, node)

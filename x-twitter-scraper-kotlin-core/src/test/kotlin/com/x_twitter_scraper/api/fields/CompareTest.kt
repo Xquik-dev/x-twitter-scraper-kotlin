@@ -121,4 +121,37 @@ internal class CompareTest {
 
         assertThat(compare(spec, sdk, Side.RESPONSE)).isEmpty()
     }
+
+    @Test
+    fun comparesFlagsEnumsAndExtraFieldsInsideArrays() {
+        val spec =
+            fields(
+                "items" to
+                    optional(
+                        Shape.ListOf(
+                            fields("kind" to Prop(Shape.Leaf(setOf("a", "b")), true, true))
+                        )
+                    )
+            )
+        val sdk =
+            fields(
+                "items" to
+                    optional(
+                        Shape.ListOf(
+                            fields(
+                                "kind" to Prop(Shape.Leaf(setOf("a")), false, false),
+                                "old" to optional(),
+                            )
+                        )
+                    )
+            )
+
+        assertThat(compare(spec, sdk, Side.RESPONSE))
+            .containsExactly(
+                Difference(Side.RESPONSE, Kind.REQUIRED, "items[].kind"),
+                Difference(Side.RESPONSE, Kind.NULLABLE, "items[].kind"),
+                Difference(Side.RESPONSE, Kind.ENUM, "items[].kind"),
+                Difference(Side.RESPONSE, Kind.EXTRA, "items[].old"),
+            )
+    }
 }

@@ -158,6 +158,50 @@ internal class ApiFieldsTest {
             )
     }
 
+    @Test
+    fun acceptsEquivalentPathParameterNames() {
+        val report =
+            run(
+                """
+                [{"reason": "The SDK keeps these fields.", "differences": [
+                  "GET /api/v1/x/tweets/{tweetId} request extra minFaves",
+                  "GET /api/v1/x/tweets/{tweetId} response enum status",
+                  "GET /api/v1/x/tweets/{tweetId} response missing retweetedAt"
+                ]}]
+                """,
+                retrieve,
+            )
+
+        assertThat(report.passed).isTrue()
+    }
+
+    @Test
+    fun countsAMissingResponseObjectOnce() {
+        val responseSpec =
+            jsonMapper()
+                .readTree(
+                    """
+                    {"paths": {"/api/v1/x/tweets/search": {"get": {"responses": {
+                      "200": {"content": {"application/json": {"schema": {
+                        "type": "object", "properties": {"thing": {"type": "object", "properties": {"id": {"type": "string"}}}}
+                      }}}}
+                    }}}}}
+                    """
+                )
+        val file = directory.resolve("accepted.json").toFile().apply { writeText("[]") }
+        val report =
+            ApiFields(responseSpec, file) {
+                    listOf(search.copy(query = Shape.Fields(emptyMap()), response = null))
+                }
+                .run()
+
+        assertThat(report.lines)
+            .containsExactly(
+                "GET /api/v1/x/tweets/search response missing thing",
+                "Fix each field above in the SDK, or list it in accepted.json with a reason.",
+            )
+    }
+
     @ParameterizedTest
     @MethodSource("invalidAcceptedFiles")
     fun failsOnAnInvalidAcceptedFile(contents: String?, problems: List<String>) {
@@ -210,7 +254,107 @@ internal class ApiFieldsTest {
             )
     }
 
+    @ParameterizedTest
+    @MethodSource("requestContentTypes")
+    fun comparesTheSchemaForTheBodyTheSdkSends(contentType: String?, field: String?) {
+        val uploadSpec =
+            jsonMapper()
+                .readTree(
+                    """
+                    {"paths": {"/api/v1/upload": {"post": {"requestBody": {"content": {
+                      "application/json": {"schema": {"type": "object", "properties": {"url": {"type": "string"}}}},
+                      "multipart/form-data": {"schema": {"type": "object", "properties": {"file": {"type": "string"}}}},
+                      "application/x-www-form-urlencoded": {"schema": {"type": "object", "properties": {"form": {"type": "string"}}}}
+                    }}, "responses": {}}}}}
+                    """
+                )
+        val file = directory.resolve("accepted.json").toFile().apply { writeText("[]") }
+        val body = field?.let { Shape.Fields(mapOf(it to Prop(Shape.Leaf(), false, null))) }
+        val operation =
+            SdkOperation(
+                "upload",
+                "POST",
+                listOf("upload"),
+                Shape.Fields(emptyMap()),
+                body,
+                null,
+                contentType,
+            )
+
+        val report = ApiFields(uploadSpec, file) { listOf(operation) }.run()
+
+        if (contentType == null) {
+            assertThat(report.passed).isFalse()
+            assertThat(report.lines).contains("POST /api/v1/upload request missing url")
+        } else {
+            assertThat(report.passed).isTrue()
+        }
+    }
+
+    @Test
+    fun comparesTheRecordedUploadRequestsWithTheirSchemas() {
+        val uploadSpec =
+            jsonMapper()
+                .readTree(
+                    """
+                    {"paths": {"/api/v1/x/media": {"post": {"requestBody": {"content": {
+                      "multipart/form-data": {"schema": {"type": "object", "required": ["account", "file"], "properties": {
+                        "account": {"type": "string"}, "file": {"type": "string"}, "is_long_video": {"type": "boolean"}
+                      }}},
+                      "application/json": {"schema": {"type": "object", "required": ["account", "url"], "properties": {
+                        "account": {"type": "string"}, "url": {"type": "string"}
+                      }}}
+                    }}, "responses": {}}}}}
+                    """
+                )
+        val file = directory.resolve("accepted.json").toFile().apply { writeText("[]") }
+
+        assertThat(ApiFields(uploadSpec, file).run())
+            .isEqualTo(Report(true, listOf("The SDK's fields match the API for 1 operation.")))
+    }
+
+    @Test
+    fun reportsTheFileMissingFromTheMultipartSchema() {
+        val uploadSpec =
+            jsonMapper()
+                .readTree(
+                    """
+                    {"paths": {"/api/v1/x/media": {"post": {"requestBody": {"content": {
+                      "multipart/form-data": {"schema": {"type": "object", "required": ["account"], "properties": {
+                        "account": {"type": "string"}, "is_long_video": {"type": "boolean"}
+                      }}},
+                      "application/json": {"schema": {"type": "object", "required": ["account", "url"], "properties": {
+                        "account": {"type": "string"}, "url": {"type": "string"}
+                      }}}
+                    }}, "responses": {}}}}}
+                    """
+                )
+        val file = directory.resolve("accepted.json").toFile().apply { writeText("[]") }
+
+        assertThat(ApiFields(uploadSpec, file).run())
+            .isEqualTo(
+                Report(
+                    false,
+                    listOf(
+                        "POST /api/v1/x/media request extra file",
+                        "Fix each field above in the SDK, or list it in accepted.json with a reason.",
+                    ),
+                )
+            )
+    }
+
     companion object {
+
+        @JvmStatic
+        fun requestContentTypes(): List<Array<String?>> =
+            listOf(
+                arrayOf("application/json; charset=utf-8", "url"),
+                arrayOf("multipart/form-data; boundary=sample", "file"),
+                arrayOf("application/x-www-form-urlencoded", "form"),
+                arrayOf("application/octet-stream", null),
+                arrayOf("", null),
+                arrayOf(null, null),
+            )
 
         @JvmStatic
         fun invalidAcceptedFiles(): List<Array<Any?>> =
@@ -238,6 +382,12 @@ internal class ApiFieldsTest {
                     """[{"reason": "Why.", "differences": ["GET /x response missing id"]}, {"reason": "Again.", "differences": ["GET /x response missing id"]}]""",
                     listOf(
                         "It lists GET /x response missing id 2 times. List each difference once."
+                    ),
+                ),
+                arrayOf(
+                    """[{"reason": "Why.", "differences": ["GET /x/{id} response missing name", "GET /x/{other} response missing name"]}]""",
+                    listOf(
+                        "It lists GET /x/{other} response missing name 2 times. List each difference once."
                     ),
                 ),
             )

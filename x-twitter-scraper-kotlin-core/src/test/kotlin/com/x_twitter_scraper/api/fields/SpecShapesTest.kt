@@ -43,7 +43,7 @@ internal class SpecShapesTest {
                     )
                 )
             )
-        assertThat(operation.body).isNull()
+        assertThat(operation.body(null)).isNull()
         assertThat(operation.response).isNull()
     }
 
@@ -147,7 +147,7 @@ internal class SpecShapesTest {
                 )
                 .single()
 
-        assertThat(operation.body)
+        assertThat(operation.body(null))
             .isEqualTo(Shape.Fields(mapOf("body" to Prop(Shape.Leaf(), true, false))))
     }
 
@@ -197,6 +197,62 @@ internal class SpecShapesTest {
             }
             .isInstanceOf(IllegalArgumentException::class.java)
             .hasMessage("The API spec has a reference to nothing: #/components/schemas/Missing")
+    }
+
+    @Test
+    fun readsReferencedParametersAndBodiesWithSchemaSiblings() {
+        val operation =
+            operations(
+                    """
+                    {"components": {
+                      "schemas": {"Thing": {"type": "object", "required": ["id"], "properties": {"id": {"type": "string"}}}},
+                      "parameters": {"Limit": {"name": "limit", "in": "query", "required": true, "schema": {"type": "integer"}}},
+                      "requestBodies": {"Upload": {"content": {"multipart/form-data": {"schema": {"type": "object", "properties": {"file": {"type": "string"}}}}}}}
+                    }, "paths": {"/things": {"get": {
+                      "parameters": [{"${'$'}ref": "#/components/parameters/Limit"}],
+                      "requestBody": {"${'$'}ref": "#/components/requestBodies/Upload"},
+                      "responses": {"200": {"content": {"application/json": {"schema": {
+                        "${'$'}ref": "#/components/schemas/Thing", "description": "Ignored",
+                        "properties": {"extra": {"type": "string"}}
+                      }}}}}
+                    }}}}
+                    """
+                )
+                .single()
+
+        assertThat(operation.query.props)
+            .containsExactlyEntriesOf(mapOf("limit" to Prop(Shape.Leaf(), true, null)))
+        assertThat(operation.body("multipart/form-data"))
+            .isEqualTo(Shape.Fields(mapOf("file" to Prop(Shape.Leaf(), false, false))))
+        assertThat(operation.response)
+            .isEqualTo(
+                Shape.Fields(
+                    mapOf(
+                        "id" to Prop(Shape.Leaf(), true, false),
+                        "extra" to Prop(Shape.Leaf(), false, false),
+                    )
+                )
+            )
+    }
+
+    @Test
+    fun readsNullVariantsConstantsAndNullableEnums() {
+        val response =
+            responseOf(
+                """
+                {"type": "object", "properties": {
+                  "a": {"oneOf": [{"type": "string"}, {"type": "null"}]},
+                  "b": {"const": "fixed"}, "c": {"enum": ["x", null]}
+                }}
+                """
+            )
+                as Shape.Fields
+
+        assertThat(response.props.getValue("a")).isEqualTo(Prop(Shape.Leaf(), false, true))
+        assertThat(response.props.getValue("b"))
+            .isEqualTo(Prop(Shape.Leaf(setOf("fixed")), false, false))
+        assertThat(response.props.getValue("c"))
+            .isEqualTo(Prop(Shape.Leaf(setOf("x")), false, true))
     }
 
     private fun responseOf(schema: String, components: String = ""): Shape? =
