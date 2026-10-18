@@ -17,7 +17,7 @@ import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
 import java.util.Collections
 import java.util.Objects
 
-/** Read a community metric and its percentage change. */
+/** A community metric for X's latest period & its percent change. */
 class CommunityAnalyticsMetric
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
@@ -35,25 +35,35 @@ private constructor(
     ) : this(changePercent, count, mutableMapOf())
 
     /**
-     * Compare this figure with one day earlier. Keep the percentage unrounded.
+     * Change in percent from the same figure 1 day earlier. Values stay unrounded.
      *
-     * @throws XTwitterScraperInvalidDataException if this field is missing, null, or invalid.
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null.
      */
     fun changePercent(): Double = changePercent.getRequired("changePercent")
 
     /**
-     * Count this metric during X's latest period.
+     * Total for this metric during X's latest period.
      *
-     * @throws XTwitterScraperInvalidDataException if this field is missing, null, or invalid.
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null.
      */
     fun count(): Long = count.getRequired("count")
 
-    /** Return the raw JSON value of [changePercent]. */
+    /**
+     * Returns the raw JSON value of [changePercent].
+     *
+     * Unlike [changePercent], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("changePercent")
     @ExcludeMissing
     fun _changePercent(): JsonField<Double> = changePercent
 
-    /** Return the raw JSON value of [count]. */
+    /**
+     * Returns the raw JSON value of [count].
+     *
+     * Unlike [count], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("count") @ExcludeMissing fun _count(): JsonField<Long> = count
 
     @JsonAnySetter
@@ -71,10 +81,9 @@ private constructor(
     companion object {
 
         /**
-         * Create a mutable builder for [CommunityAnalyticsMetric].
+         * Returns a mutable builder for constructing an instance of [CommunityAnalyticsMetric].
          *
-         * Set every required field before building.
-         *
+         * The following fields are required:
          * ```kotlin
          * .changePercent()
          * .count()
@@ -96,7 +105,7 @@ private constructor(
             additionalProperties = communityAnalyticsMetric.additionalProperties.toMutableMap()
         }
 
-        /** Compare this figure with one day earlier. Keep the percentage unrounded. */
+        /** Change in percent from the same figure 1 day earlier. Values stay unrounded. */
         fun changePercent(changePercent: Double) = changePercent(JsonField.of(changePercent))
 
         /** Sets [Builder.changePercent] to an arbitrary JSON value. */
@@ -104,7 +113,7 @@ private constructor(
             this.changePercent = changePercent
         }
 
-        /** Count this metric during X's latest period. */
+        /** Total for this metric during X's latest period. */
         fun count(count: Long) = count(JsonField.of(count))
 
         /** Sets [Builder.count] to an arbitrary JSON value. */
@@ -130,9 +139,15 @@ private constructor(
         }
 
         /**
-         * Create an immutable instance of [CommunityAnalyticsMetric].
+         * Returns an immutable instance of [CommunityAnalyticsMetric].
          *
-         * Further builder updates leave this instance unchanged.
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .changePercent()
+         * .count()
+         * ```
          *
          * @throws IllegalStateException if any required field is unset.
          */
@@ -147,9 +162,12 @@ private constructor(
     private var validated: Boolean = false
 
     /**
-     * Validate every field recursively. New API types can fail validation.
+     * Validates that the types of all values in this object match their expected types recursively.
      *
-     * @throws XTwitterScraperInvalidDataException if any field is missing, null, or invalid.
+     * This method is _not_ forwards compatible with new types from the API for existing fields.
+     *
+     * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't match
+     *   its expected type.
      */
     fun validate(): CommunityAnalyticsMetric = apply {
         if (validated) {

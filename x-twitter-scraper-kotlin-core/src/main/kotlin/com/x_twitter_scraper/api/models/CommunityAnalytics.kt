@@ -18,7 +18,7 @@ import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 
-/** Read community activity and growth during X's latest period. */
+/** Community activity & growth for X's latest period. */
 class CommunityAnalytics
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
@@ -38,33 +38,50 @@ private constructor(
     ) : this(id, metrics, periodEndsAt, mutableMapOf())
 
     /**
-     * Identify the community from your request.
+     * The community ID from your request.
      *
-     * @throws XTwitterScraperInvalidDataException if this field is missing, null, or invalid.
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null.
      */
     fun id(): String = id.getRequired("id")
 
     /**
-     * Read each activity count and its percentage change.
+     * The period's activity, each metric with its count and changePercent. likes counts likes on
+     * community posts and newMembers the accounts that joined. posts counts the community posts and
+     * replies the replies to them. uniquePosters counts the distinct accounts that posted.
      *
-     * @throws XTwitterScraperInvalidDataException if this field is missing, null, or invalid.
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null.
      */
     fun metrics(): Metrics = metrics.getRequired("metrics")
 
     /**
-     * Read the end of X's latest period in UTC.
+     * The end of X's latest period, in UTC.
      *
-     * @throws XTwitterScraperInvalidDataException if this field is missing, null, or invalid.
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null.
      */
     fun periodEndsAt(): OffsetDateTime = periodEndsAt.getRequired("periodEndsAt")
 
-    /** Return the raw JSON value of [id]. */
+    /**
+     * Returns the raw JSON value of [id].
+     *
+     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-    /** Return the raw JSON value of [metrics]. */
+    /**
+     * Returns the raw JSON value of [metrics].
+     *
+     * Unlike [metrics], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("metrics") @ExcludeMissing fun _metrics(): JsonField<Metrics> = metrics
 
-    /** Return the raw JSON value of [periodEndsAt]. */
+    /**
+     * Returns the raw JSON value of [periodEndsAt].
+     *
+     * Unlike [periodEndsAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("periodEndsAt")
     @ExcludeMissing
     fun _periodEndsAt(): JsonField<OffsetDateTime> = periodEndsAt
@@ -84,10 +101,9 @@ private constructor(
     companion object {
 
         /**
-         * Create a mutable builder for [CommunityAnalytics].
+         * Returns a mutable builder for constructing an instance of [CommunityAnalytics].
          *
-         * Set every required field before building.
-         *
+         * The following fields are required:
          * ```kotlin
          * .id()
          * .metrics()
@@ -112,19 +128,24 @@ private constructor(
             additionalProperties = communityAnalytics.additionalProperties.toMutableMap()
         }
 
-        /** Identify the community from your request. */
+        /** The community ID from your request. */
         fun id(id: String) = id(JsonField.of(id))
 
         /** Sets [Builder.id] to an arbitrary JSON value. */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
-        /** Read each activity count and its percentage change. */
+        /**
+         * The period's activity, each metric with its count and changePercent. likes counts likes
+         * on community posts and newMembers the accounts that joined. posts counts the community
+         * posts and replies the replies to them. uniquePosters counts the distinct accounts that
+         * posted.
+         */
         fun metrics(metrics: Metrics) = metrics(JsonField.of(metrics))
 
         /** Sets [Builder.metrics] to an arbitrary JSON value. */
         fun metrics(metrics: JsonField<Metrics>) = apply { this.metrics = metrics }
 
-        /** Read the end of X's latest period in UTC. */
+        /** The end of X's latest period, in UTC. */
         fun periodEndsAt(periodEndsAt: OffsetDateTime) = periodEndsAt(JsonField.of(periodEndsAt))
 
         /** Sets [Builder.periodEndsAt] to an arbitrary JSON value. */
@@ -152,9 +173,16 @@ private constructor(
         }
 
         /**
-         * Create an immutable instance of [CommunityAnalytics].
+         * Returns an immutable instance of [CommunityAnalytics].
          *
-         * Further builder updates leave this instance unchanged.
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .id()
+         * .metrics()
+         * .periodEndsAt()
+         * ```
          *
          * @throws IllegalStateException if any required field is unset.
          */
@@ -170,9 +198,12 @@ private constructor(
     private var validated: Boolean = false
 
     /**
-     * Validate every field recursively. New API types can fail validation.
+     * Validates that the types of all values in this object match their expected types recursively.
      *
-     * @throws XTwitterScraperInvalidDataException if any field is missing, null, or invalid.
+     * This method is _not_ forwards compatible with new types from the API for existing fields.
+     *
+     * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't match
+     *   its expected type.
      */
     fun validate(): CommunityAnalytics = apply {
         if (validated) {
@@ -198,7 +229,11 @@ private constructor(
             (metrics.asKnown()?.validity() ?: 0) +
             (if (periodEndsAt.asKnown() == null) 0 else 1)
 
-    /** Read community activity during X's latest period. */
+    /**
+     * The period's activity, each metric with its count and changePercent. likes counts likes on
+     * community posts and newMembers the accounts that joined. posts counts the community posts and
+     * replies the replies to them. uniquePosters counts the distinct accounts that posted.
+     */
     class Metrics
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
@@ -230,61 +265,87 @@ private constructor(
         ) : this(likes, newMembers, posts, replies, uniquePosters, mutableMapOf())
 
         /**
-         * Count likes on community posts.
+         * A community metric for X's latest period & its percent change.
          *
-         * @throws XTwitterScraperInvalidDataException if this field is missing, null, or invalid.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null.
          */
         fun likes(): CommunityAnalyticsMetric = likes.getRequired("likes")
 
         /**
-         * Count accounts that joined the community.
+         * A community metric for X's latest period & its percent change.
          *
-         * @throws XTwitterScraperInvalidDataException if this field is missing, null, or invalid.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null.
          */
         fun newMembers(): CommunityAnalyticsMetric = newMembers.getRequired("newMembers")
 
         /**
-         * Count community posts.
+         * A community metric for X's latest period & its percent change.
          *
-         * @throws XTwitterScraperInvalidDataException if this field is missing, null, or invalid.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null.
          */
         fun posts(): CommunityAnalyticsMetric = posts.getRequired("posts")
 
         /**
-         * Count replies to community posts.
+         * A community metric for X's latest period & its percent change.
          *
-         * @throws XTwitterScraperInvalidDataException if this field is missing, null, or invalid.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null.
          */
         fun replies(): CommunityAnalyticsMetric = replies.getRequired("replies")
 
         /**
-         * Count distinct accounts that posted.
+         * A community metric for X's latest period & its percent change.
          *
-         * @throws XTwitterScraperInvalidDataException if this field is missing, null, or invalid.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null.
          */
         fun uniquePosters(): CommunityAnalyticsMetric = uniquePosters.getRequired("uniquePosters")
 
-        /** Return the raw JSON value of [likes]. */
+        /**
+         * Returns the raw JSON value of [likes].
+         *
+         * Unlike [likes], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("likes")
         @ExcludeMissing
         fun _likes(): JsonField<CommunityAnalyticsMetric> = likes
 
-        /** Return the raw JSON value of [newMembers]. */
+        /**
+         * Returns the raw JSON value of [newMembers].
+         *
+         * Unlike [newMembers], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("newMembers")
         @ExcludeMissing
         fun _newMembers(): JsonField<CommunityAnalyticsMetric> = newMembers
 
-        /** Return the raw JSON value of [posts]. */
+        /**
+         * Returns the raw JSON value of [posts].
+         *
+         * Unlike [posts], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("posts")
         @ExcludeMissing
         fun _posts(): JsonField<CommunityAnalyticsMetric> = posts
 
-        /** Return the raw JSON value of [replies]. */
+        /**
+         * Returns the raw JSON value of [replies].
+         *
+         * Unlike [replies], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("replies")
         @ExcludeMissing
         fun _replies(): JsonField<CommunityAnalyticsMetric> = replies
 
-        /** Return the raw JSON value of [uniquePosters]. */
+        /**
+         * Returns the raw JSON value of [uniquePosters].
+         *
+         * Unlike [uniquePosters], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @JsonProperty("uniquePosters")
         @ExcludeMissing
         fun _uniquePosters(): JsonField<CommunityAnalyticsMetric> = uniquePosters
@@ -304,10 +365,9 @@ private constructor(
         companion object {
 
             /**
-             * Create a mutable builder for [Metrics].
+             * Returns a mutable builder for constructing an instance of [Metrics].
              *
-             * Set every required field before building.
-             *
+             * The following fields are required:
              * ```kotlin
              * .likes()
              * .newMembers()
@@ -338,13 +398,13 @@ private constructor(
                 additionalProperties = metrics.additionalProperties.toMutableMap()
             }
 
-            /** Count likes on community posts. */
+            /** A community metric for X's latest period & its percent change. */
             fun likes(likes: CommunityAnalyticsMetric) = likes(JsonField.of(likes))
 
             /** Sets [Builder.likes] to an arbitrary JSON value. */
             fun likes(likes: JsonField<CommunityAnalyticsMetric>) = apply { this.likes = likes }
 
-            /** Count accounts that joined the community. */
+            /** A community metric for X's latest period & its percent change. */
             fun newMembers(newMembers: CommunityAnalyticsMetric) =
                 newMembers(JsonField.of(newMembers))
 
@@ -353,13 +413,13 @@ private constructor(
                 this.newMembers = newMembers
             }
 
-            /** Count community posts. */
+            /** A community metric for X's latest period & its percent change. */
             fun posts(posts: CommunityAnalyticsMetric) = posts(JsonField.of(posts))
 
             /** Sets [Builder.posts] to an arbitrary JSON value. */
             fun posts(posts: JsonField<CommunityAnalyticsMetric>) = apply { this.posts = posts }
 
-            /** Count replies to community posts. */
+            /** A community metric for X's latest period & its percent change. */
             fun replies(replies: CommunityAnalyticsMetric) = replies(JsonField.of(replies))
 
             /** Sets [Builder.replies] to an arbitrary JSON value. */
@@ -367,7 +427,7 @@ private constructor(
                 this.replies = replies
             }
 
-            /** Count distinct accounts that posted. */
+            /** A community metric for X's latest period & its percent change. */
             fun uniquePosters(uniquePosters: CommunityAnalyticsMetric) =
                 uniquePosters(JsonField.of(uniquePosters))
 
@@ -396,9 +456,18 @@ private constructor(
             }
 
             /**
-             * Create an immutable instance of [Metrics].
+             * Returns an immutable instance of [Metrics].
              *
-             * Further builder updates leave this instance unchanged.
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .likes()
+             * .newMembers()
+             * .posts()
+             * .replies()
+             * .uniquePosters()
+             * ```
              *
              * @throws IllegalStateException if any required field is unset.
              */
@@ -416,9 +485,13 @@ private constructor(
         private var validated: Boolean = false
 
         /**
-         * Validate every field recursively. New API types can fail validation.
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
          *
-         * @throws XTwitterScraperInvalidDataException if any field is missing, null, or invalid.
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+         *   match its expected type.
          */
         fun validate(): Metrics = apply {
             if (validated) {

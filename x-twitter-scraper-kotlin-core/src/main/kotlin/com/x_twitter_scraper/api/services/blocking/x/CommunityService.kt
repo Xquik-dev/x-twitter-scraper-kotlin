@@ -75,7 +75,10 @@ interface CommunityService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CommunityDeleteResponse
 
-    /** Read community activity and growth for X's latest period. Each request costs one credit. */
+    /**
+     * Returns community activity for X's latest period. Includes likes, new members, posts, replies
+     * & unique posters. Each metric has a count and a changePercent. Each request costs 1 credit.
+     */
     fun retrieveAnalytics(
         id: String,
         params: CommunityRetrieveAnalyticsParams = CommunityRetrieveAnalyticsParams.none(),
@@ -265,7 +268,10 @@ interface CommunityService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CommunityDeleteResponse>
 
-        /** Return the raw analytics response. See [CommunityService.retrieveAnalytics]. */
+        /**
+         * Returns a raw HTTP response for `get /x/communities/{id}/analytics`, but is otherwise the
+         * same as [CommunityService.retrieveAnalytics].
+         */
         @MustBeClosed
         fun retrieveAnalytics(
             id: String,

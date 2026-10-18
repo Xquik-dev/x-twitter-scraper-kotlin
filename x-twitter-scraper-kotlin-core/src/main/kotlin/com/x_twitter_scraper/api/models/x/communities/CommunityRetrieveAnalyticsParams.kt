@@ -9,7 +9,10 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
 
-/** Read community activity and growth during X's latest period. */
+/**
+ * Returns community activity for X's latest period. Includes likes, new members, posts, replies &
+ * unique posters. Each metric has a count and a changePercent. Each request costs 1 credit.
+ */
 class CommunityRetrieveAnalyticsParams
 private constructor(
     private val id: String?,
@@ -21,10 +24,19 @@ private constructor(
 
     fun id(): String? = id
 
-    /** Keep these fields in each row. Separate names with commas. */
+    /**
+     * Fields to keep in each row, comma-separated. Use dots for nested fields, such as
+     * author.username. A list keeps the field in each item. Case & underscores do not matter. A row
+     * that lacks a field leaves it out. Cursors, counts & diagnostics always stay. An unknown name
+     * answers 400 unknown_field with the valid names, before any read. The price stays the same.
+     * SDK row types then hold only the named fields.
+     */
     fun fields(): String? = fields
 
-    /** Drop these fields from each row. Separate names with commas. */
+    /**
+     * Fields to drop from each row, comma-separated. It takes the same names as fields. With
+     * fields, it drops from the kept fields.
+     */
     fun omit(): String? = omit
 
     /** Additional headers to send with the request. */
@@ -39,7 +51,10 @@ private constructor(
 
         fun none(): CommunityRetrieveAnalyticsParams = builder().build()
 
-        /** Create a mutable builder for [CommunityRetrieveAnalyticsParams]. */
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [CommunityRetrieveAnalyticsParams].
+         */
         fun builder() = Builder()
     }
 
@@ -64,10 +79,19 @@ private constructor(
 
         fun id(id: String?) = apply { this.id = id }
 
-        /** Keep these fields in each row. Separate names with commas. */
+        /**
+         * Fields to keep in each row, comma-separated. Use dots for nested fields, such as
+         * author.username. A list keeps the field in each item. Case & underscores do not matter. A
+         * row that lacks a field leaves it out. Cursors, counts & diagnostics always stay. An
+         * unknown name answers 400 unknown_field with the valid names, before any read. The price
+         * stays the same. SDK row types then hold only the named fields.
+         */
         fun fields(fields: String?) = apply { this.fields = fields }
 
-        /** Drop these fields from each row. Separate names with commas. */
+        /**
+         * Fields to drop from each row, comma-separated. It takes the same names as fields. With
+         * fields, it drops from the kept fields.
+         */
         fun omit(omit: String?) = apply { this.omit = omit }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
