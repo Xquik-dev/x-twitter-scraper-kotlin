@@ -363,7 +363,7 @@ private constructor(
     fun bookmarkCount(): Long = bookmarkCount.getRequired("bookmarkCount")
 
     /**
-     * Counts X did not send for this post read 0 and remain unknown.
+     * X did not send these counts, so each 0 means unknown.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
@@ -1596,7 +1596,7 @@ private constructor(
             this.bookmarkCount = bookmarkCount
         }
 
-        /** Counts X did not send for this post read 0 and remain unknown. */
+        /** X did not send these counts, so each 0 means unknown. */
         fun unknownCounts(unknownCounts: List<UnknownCount>) =
             unknownCounts(JsonField.of(unknownCounts))
 
