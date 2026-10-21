@@ -1,6 +1,7 @@
 package com.x_twitter_scraper.api.models.x.users
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.x_twitter_scraper.api.core.JsonMissing
 import com.x_twitter_scraper.api.core.JsonValue
 import com.x_twitter_scraper.api.core.jsonMapper
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
@@ -474,5 +475,31 @@ internal class UserRetrieveFollowingResponseTest {
                 userRetrieveFollowingResponse.validate()
             }
         assertThat(e).hasMessageStartingWith("Unknown ")
+    }
+
+    @Test
+    fun readsAdditionalFields() {
+        val jsonMapper = jsonMapper()
+
+        val userListCoverageResponse0 =
+            jsonMapper.readValue(
+                """{"filtered_count":1}""",
+                jacksonTypeRef<UserRetrieveFollowingResponse.UserListCoverageResponse>(),
+            )
+        assertThat(userListCoverageResponse0.filteredCount()).isNotNull()
+        assertThat(jsonMapper.readTree(jsonMapper.writeValueAsString(userListCoverageResponse0)))
+            .isEqualTo(jsonMapper.readTree("""{"filtered_count":1}"""))
+    }
+
+    @Test
+    fun keepsAdditionalFieldsOptional() {
+        val userListCoverageResponse0 =
+            UserRetrieveFollowingResponse.UserListCoverageResponse.builder()
+                .hasNextPage(JsonMissing.of())
+                .nextCursor(JsonMissing.of())
+                .users(JsonMissing.of())
+                .diagnostic(JsonMissing.of())
+                .build()
+        assertThat(userListCoverageResponse0.filteredCount()).isNull()
     }
 }

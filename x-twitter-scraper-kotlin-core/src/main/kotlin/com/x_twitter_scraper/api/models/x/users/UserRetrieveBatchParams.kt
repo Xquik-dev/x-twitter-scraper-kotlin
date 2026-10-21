@@ -34,9 +34,12 @@ private constructor(
     private val usernameContains: String?,
     private val verifiedOnly: Boolean?,
     private val verifiedType: String?,
+    private val usernames: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
+
+    fun usernames(): String? = usernames
 
     /**
      * Comma-separated numeric user IDs (1-100 values). Xquik ignores duplicate IDs and keeps the
@@ -164,6 +167,7 @@ private constructor(
         private var usernameContains: String? = null
         private var verifiedOnly: Boolean? = null
         private var verifiedType: String? = null
+        private var usernames: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -189,6 +193,7 @@ private constructor(
             usernameContains = userRetrieveBatchParams.usernameContains
             verifiedOnly = userRetrieveBatchParams.verifiedOnly
             verifiedType = userRetrieveBatchParams.verifiedType
+            usernames = userRetrieveBatchParams.usernames
             additionalHeaders = userRetrieveBatchParams.additionalHeaders.toBuilder()
             additionalQueryParams = userRetrieveBatchParams.additionalQueryParams.toBuilder()
         }
@@ -326,6 +331,8 @@ private constructor(
         /** Match the verification type exactly, ignoring case. */
         fun verifiedType(verifiedType: String?) = apply { this.verifiedType = verifiedType }
 
+        fun usernames(usernames: String?) = apply { this.usernames = usernames }
+
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
             putAllAdditionalHeaders(additionalHeaders)
@@ -459,6 +466,7 @@ private constructor(
                 usernameContains,
                 verifiedOnly,
                 verifiedType,
+                usernames,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -490,6 +498,7 @@ private constructor(
                 usernameContains?.let { put("usernameContains", it) }
                 verifiedOnly?.let { put("verifiedOnly", it.toString()) }
                 verifiedType?.let { put("verifiedType", it) }
+                usernames?.let { put("usernames", it) }
                 putAll(additionalQueryParams)
             }
             .build()
@@ -521,6 +530,7 @@ private constructor(
             usernameContains == other.usernameContains &&
             verifiedOnly == other.verifiedOnly &&
             verifiedType == other.verifiedType &&
+            usernames == other.usernames &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
@@ -548,10 +558,11 @@ private constructor(
             usernameContains,
             verifiedOnly,
             verifiedType,
+            usernames,
             additionalHeaders,
             additionalQueryParams,
         )
 
     override fun toString() =
-        "UserRetrieveBatchParams{ids=$ids, bioContains=$bioContains, blueVerifiedOnly=$blueVerifiedOnly, businessEmailOnly=$businessEmailOnly, emailDomains=$emailDomains, fields=$fields, hasEmail=$hasEmail, hasLocation=$hasLocation, hasWebsite=$hasWebsite, locationContains=$locationContains, maxFollowers=$maxFollowers, maxFollowing=$maxFollowing, maxStatuses=$maxStatuses, minAccountAgeDays=$minAccountAgeDays, minFollowers=$minFollowers, minFollowing=$minFollowing, minStatuses=$minStatuses, omit=$omit, usernameContains=$usernameContains, verifiedOnly=$verifiedOnly, verifiedType=$verifiedType, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "UserRetrieveBatchParams{ids=$ids, bioContains=$bioContains, blueVerifiedOnly=$blueVerifiedOnly, businessEmailOnly=$businessEmailOnly, emailDomains=$emailDomains, fields=$fields, hasEmail=$hasEmail, hasLocation=$hasLocation, hasWebsite=$hasWebsite, locationContains=$locationContains, maxFollowers=$maxFollowers, maxFollowing=$maxFollowing, maxStatuses=$maxStatuses, minAccountAgeDays=$minAccountAgeDays, minFollowers=$minFollowers, minFollowing=$minFollowing, minStatuses=$minStatuses, omit=$omit, usernameContains=$usernameContains, verifiedOnly=$verifiedOnly, verifiedType=$verifiedType, usernames=$usernames, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

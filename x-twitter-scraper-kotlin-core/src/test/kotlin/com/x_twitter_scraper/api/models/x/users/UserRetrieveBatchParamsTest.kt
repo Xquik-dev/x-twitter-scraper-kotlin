@@ -34,6 +34,7 @@ internal class UserRetrieveBatchParamsTest {
             .usernameContains("usernameContains")
             .verifiedOnly(true)
             .verifiedType("verifiedType")
+            .usernames("nasa,@OpenAI")
             .build()
     }
 
@@ -62,6 +63,7 @@ internal class UserRetrieveBatchParamsTest {
                 .usernameContains("usernameContains")
                 .verifiedOnly(true)
                 .verifiedType("verifiedType")
+                .usernames("nasa,@OpenAI")
                 .build()
 
         val queryParams = params._queryParams()
@@ -90,6 +92,7 @@ internal class UserRetrieveBatchParamsTest {
                     .put("usernameContains", "usernameContains")
                     .put("verifiedOnly", "true")
                     .put("verifiedType", "verifiedType")
+                    .put("usernames", "nasa,@OpenAI")
                     .build()
             )
     }

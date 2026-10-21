@@ -5,6 +5,7 @@
 package com.x_twitter_scraper.api.models.credits
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.x_twitter_scraper.api.core.JsonMissing
 import com.x_twitter_scraper.api.core.jsonMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -15,20 +16,24 @@ internal class CreditRetrieveBalanceResponseTest {
     fun create() {
         val creditRetrieveBalanceResponse =
             CreditRetrieveBalanceResponse.builder()
-                .autoTopupAmountDollars(10.0)
-                .autoTopupEnabled(false)
-                .autoTopupThreshold("50000")
-                .balance("50000")
-                .lifetimePurchased("200000")
-                .lifetimeUsed("150000")
+                .autoTopupAmountDollars(0.0)
+                .autoTopupEnabled(true)
+                .autoTopupThreshold("auto_topup_threshold")
+                .balance("balance")
+                .lifetimePurchased("lifetime_purchased")
+                .lifetimeUsed("lifetime_used")
+                .autoTopupStopped(false)
                 .build()
 
-        assertThat(creditRetrieveBalanceResponse.autoTopupAmountDollars()).isEqualTo(10.0)
-        assertThat(creditRetrieveBalanceResponse.autoTopupEnabled()).isEqualTo(false)
-        assertThat(creditRetrieveBalanceResponse.autoTopupThreshold()).isEqualTo("50000")
-        assertThat(creditRetrieveBalanceResponse.balance()).isEqualTo("50000")
-        assertThat(creditRetrieveBalanceResponse.lifetimePurchased()).isEqualTo("200000")
-        assertThat(creditRetrieveBalanceResponse.lifetimeUsed()).isEqualTo("150000")
+        assertThat(creditRetrieveBalanceResponse.autoTopupAmountDollars()).isEqualTo(0.0)
+        assertThat(creditRetrieveBalanceResponse.autoTopupEnabled()).isEqualTo(true)
+        assertThat(creditRetrieveBalanceResponse.autoTopupThreshold())
+            .isEqualTo("auto_topup_threshold")
+        assertThat(creditRetrieveBalanceResponse.balance()).isEqualTo("balance")
+        assertThat(creditRetrieveBalanceResponse.lifetimePurchased())
+            .isEqualTo("lifetime_purchased")
+        assertThat(creditRetrieveBalanceResponse.lifetimeUsed()).isEqualTo("lifetime_used")
+        assertThat(creditRetrieveBalanceResponse.autoTopupStopped()).isEqualTo(false)
     }
 
     @Test
@@ -36,12 +41,13 @@ internal class CreditRetrieveBalanceResponseTest {
         val jsonMapper = jsonMapper()
         val creditRetrieveBalanceResponse =
             CreditRetrieveBalanceResponse.builder()
-                .autoTopupAmountDollars(10.0)
-                .autoTopupEnabled(false)
-                .autoTopupThreshold("50000")
-                .balance("50000")
-                .lifetimePurchased("200000")
-                .lifetimeUsed("150000")
+                .autoTopupAmountDollars(0.0)
+                .autoTopupEnabled(true)
+                .autoTopupThreshold("auto_topup_threshold")
+                .balance("balance")
+                .lifetimePurchased("lifetime_purchased")
+                .lifetimeUsed("lifetime_used")
+                .autoTopupStopped(false)
                 .build()
 
         val roundtrippedCreditRetrieveBalanceResponse =
@@ -52,5 +58,35 @@ internal class CreditRetrieveBalanceResponseTest {
 
         assertThat(roundtrippedCreditRetrieveBalanceResponse)
             .isEqualTo(creditRetrieveBalanceResponse)
+    }
+
+    @Test
+    fun readsAdditionalFields() {
+        val jsonMapper = jsonMapper()
+
+        val creditRetrieveBalanceResponse0 =
+            jsonMapper.readValue(
+                """{"auto_topup_stopped":true}""",
+                jacksonTypeRef<CreditRetrieveBalanceResponse>(),
+            )
+        assertThat(creditRetrieveBalanceResponse0.autoTopupStopped()).isNotNull()
+        assertThat(
+                jsonMapper.readTree(jsonMapper.writeValueAsString(creditRetrieveBalanceResponse0))
+            )
+            .isEqualTo(jsonMapper.readTree("""{"auto_topup_stopped":true}"""))
+    }
+
+    @Test
+    fun keepsAdditionalFieldsOptional() {
+        val creditRetrieveBalanceResponse0 =
+            CreditRetrieveBalanceResponse.builder()
+                .autoTopupAmountDollars(JsonMissing.of())
+                .autoTopupEnabled(JsonMissing.of())
+                .autoTopupThreshold(JsonMissing.of())
+                .balance(JsonMissing.of())
+                .lifetimePurchased(JsonMissing.of())
+                .lifetimeUsed(JsonMissing.of())
+                .build()
+        assertThat(creditRetrieveBalanceResponse0.autoTopupStopped()).isNull()
     }
 }

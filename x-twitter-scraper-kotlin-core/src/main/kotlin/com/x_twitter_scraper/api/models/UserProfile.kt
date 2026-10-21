@@ -5256,6 +5256,7 @@ private constructor(
     private constructor(
         private val description: JsonField<String>,
         private val isIdentityVerified: JsonField<Boolean>,
+        private val overrideVerifiedYear: JsonField<Long>,
         private val verifiedSinceMsec: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -5268,10 +5269,19 @@ private constructor(
             @JsonProperty("isIdentityVerified")
             @ExcludeMissing
             isIdentityVerified: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("overrideVerifiedYear")
+            @ExcludeMissing
+            overrideVerifiedYear: JsonField<Long> = JsonMissing.of(),
             @JsonProperty("verifiedSinceMsec")
             @ExcludeMissing
             verifiedSinceMsec: JsonField<String> = JsonMissing.of(),
-        ) : this(description, isIdentityVerified, verifiedSinceMsec, mutableMapOf())
+        ) : this(
+            description,
+            isIdentityVerified,
+            overrideVerifiedYear,
+            verifiedSinceMsec,
+            mutableMapOf(),
+        )
 
         /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun description(): String? = description.getNullable("description")
@@ -5282,6 +5292,13 @@ private constructor(
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
         fun isIdentityVerified(): Boolean? = isIdentityVerified.getNullable("isIdentityVerified")
+
+        /**
+         * The year X shows as the start of verification, in place of verifiedSinceMsec.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun overrideVerifiedYear(): Long? = overrideVerifiedYear.getNullable("overrideVerifiedYear")
 
         /**
          * When X verified the account, in milliseconds since 1970, as text.
@@ -5308,6 +5325,16 @@ private constructor(
         @JsonProperty("isIdentityVerified")
         @ExcludeMissing
         fun _isIdentityVerified(): JsonField<Boolean> = isIdentityVerified
+
+        /**
+         * Returns the raw JSON value of [overrideVerifiedYear].
+         *
+         * Unlike [overrideVerifiedYear], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("overrideVerifiedYear")
+        @ExcludeMissing
+        fun _overrideVerifiedYear(): JsonField<Long> = overrideVerifiedYear
 
         /**
          * Returns the raw JSON value of [verifiedSinceMsec].
@@ -5342,12 +5369,14 @@ private constructor(
 
             private var description: JsonField<String> = JsonMissing.of()
             private var isIdentityVerified: JsonField<Boolean> = JsonMissing.of()
+            private var overrideVerifiedYear: JsonField<Long> = JsonMissing.of()
             private var verifiedSinceMsec: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(identityVerification: IdentityVerification) = apply {
                 description = identityVerification.description
                 isIdentityVerified = identityVerification.isIdentityVerified
+                overrideVerifiedYear = identityVerification.overrideVerifiedYear
                 verifiedSinceMsec = identityVerification.verifiedSinceMsec
                 additionalProperties = identityVerification.additionalProperties.toMutableMap()
             }
@@ -5366,6 +5395,15 @@ private constructor(
             /** Sets [Builder.isIdentityVerified] to an arbitrary JSON value. */
             fun isIdentityVerified(isIdentityVerified: JsonField<Boolean>) = apply {
                 this.isIdentityVerified = isIdentityVerified
+            }
+
+            /** The year X shows as the start of verification, in place of verifiedSinceMsec. */
+            fun overrideVerifiedYear(overrideVerifiedYear: Long) =
+                overrideVerifiedYear(JsonField.of(overrideVerifiedYear))
+
+            /** Sets [Builder.overrideVerifiedYear] to an arbitrary JSON value. */
+            fun overrideVerifiedYear(overrideVerifiedYear: JsonField<Long>) = apply {
+                this.overrideVerifiedYear = overrideVerifiedYear
             }
 
             /** When X verified the account, in milliseconds since 1970, as text. */
@@ -5405,6 +5443,7 @@ private constructor(
                 IdentityVerification(
                     description,
                     isIdentityVerified,
+                    overrideVerifiedYear,
                     verifiedSinceMsec,
                     additionalProperties.toMutableMap(),
                 )
@@ -5428,6 +5467,7 @@ private constructor(
 
             description()
             isIdentityVerified()
+            overrideVerifiedYear()
             verifiedSinceMsec()
             validated = true
         }
@@ -5443,6 +5483,7 @@ private constructor(
         internal fun validity(): Int =
             (if (description.asKnown() == null) 0 else 1) +
                 (if (isIdentityVerified.asKnown() == null) 0 else 1) +
+                (if (overrideVerifiedYear.asKnown() == null) 0 else 1) +
                 (if (verifiedSinceMsec.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {
@@ -5453,18 +5494,25 @@ private constructor(
             return other is IdentityVerification &&
                 description == other.description &&
                 isIdentityVerified == other.isIdentityVerified &&
+                overrideVerifiedYear == other.overrideVerifiedYear &&
                 verifiedSinceMsec == other.verifiedSinceMsec &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(description, isIdentityVerified, verifiedSinceMsec, additionalProperties)
+            Objects.hash(
+                description,
+                isIdentityVerified,
+                overrideVerifiedYear,
+                verifiedSinceMsec,
+                additionalProperties,
+            )
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "IdentityVerification{description=$description, isIdentityVerified=$isIdentityVerified, verifiedSinceMsec=$verifiedSinceMsec, additionalProperties=$additionalProperties}"
+            "IdentityVerification{description=$description, isIdentityVerified=$isIdentityVerified, overrideVerifiedYear=$overrideVerifiedYear, verifiedSinceMsec=$verifiedSinceMsec, additionalProperties=$additionalProperties}"
     }
 
     /** Public metadata whose fields X defines. */

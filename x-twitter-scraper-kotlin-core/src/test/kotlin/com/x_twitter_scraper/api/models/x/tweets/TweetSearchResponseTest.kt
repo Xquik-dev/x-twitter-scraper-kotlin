@@ -1,6 +1,7 @@
 package com.x_twitter_scraper.api.models.x.tweets
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.x_twitter_scraper.api.core.JsonMissing
 import com.x_twitter_scraper.api.core.JsonValue
 import com.x_twitter_scraper.api.core.jsonMapper
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
@@ -3591,5 +3592,43 @@ internal class TweetSearchResponseTest {
 
         val e = assertThrows<XTwitterScraperInvalidDataException> { tweetSearchResponse.validate() }
         assertThat(e).hasMessageStartingWith("Unknown ")
+    }
+
+    @Test
+    fun readsAdditionalFields() {
+        val jsonMapper = jsonMapper()
+
+        val tweetSearchCoverageResponse0 =
+            jsonMapper.readValue(
+                """{"filtered_count":1,"readBackTo":"2026-10-17T00:00:00Z","searchContext":{},"searchedQuery":"value","windowComplete":true}""",
+                jacksonTypeRef<TweetSearchResponse.TweetSearchCoverageResponse>(),
+            )
+        assertThat(tweetSearchCoverageResponse0.filteredCount()).isNotNull()
+        assertThat(tweetSearchCoverageResponse0.readBackTo()).isNotNull()
+        assertThat(tweetSearchCoverageResponse0.searchContext()).isNotNull()
+        assertThat(tweetSearchCoverageResponse0.searchedQuery()).isNotNull()
+        assertThat(tweetSearchCoverageResponse0.windowComplete()).isNotNull()
+        assertThat(jsonMapper.readTree(jsonMapper.writeValueAsString(tweetSearchCoverageResponse0)))
+            .isEqualTo(
+                jsonMapper.readTree(
+                    """{"filtered_count":1,"readBackTo":"2026-10-17T00:00:00Z","searchContext":{},"searchedQuery":"value","windowComplete":true}"""
+                )
+            )
+    }
+
+    @Test
+    fun keepsAdditionalFieldsOptional() {
+        val tweetSearchCoverageResponse0 =
+            TweetSearchResponse.TweetSearchCoverageResponse.builder()
+                .hasNextPage(JsonMissing.of())
+                .nextCursor(JsonMissing.of())
+                .tweets(JsonMissing.of())
+                .diagnostic(JsonMissing.of())
+                .build()
+        assertThat(tweetSearchCoverageResponse0.filteredCount()).isNull()
+        assertThat(tweetSearchCoverageResponse0.readBackTo()).isNull()
+        assertThat(tweetSearchCoverageResponse0.searchContext()).isNull()
+        assertThat(tweetSearchCoverageResponse0.searchedQuery()).isNull()
+        assertThat(tweetSearchCoverageResponse0.windowComplete()).isNull()
     }
 }

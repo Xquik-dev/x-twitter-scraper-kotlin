@@ -5,6 +5,7 @@
 package com.x_twitter_scraper.api.models.webhooks
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.x_twitter_scraper.api.core.JsonMissing
 import com.x_twitter_scraper.api.core.jsonMapper
 import com.x_twitter_scraper.api.models.EventType
 import java.time.OffsetDateTime
@@ -19,33 +20,35 @@ internal class WebhookListResponseTest {
             WebhookListResponse.builder()
                 .addWebhook(
                     Webhook.builder()
-                        .id("42")
+                        .id("id")
                         .consecutiveFailures(0L)
-                        .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .deliveryStatus(Webhook.DeliveryStatus.ACTIVE)
-                        .addEventType(EventType.TWEET_NEW)
-                        .addEventType(EventType.TWEET_REPLY)
-                        .failureHardCap(200L)
+                        .eventTypes(listOf(EventType.TWEET_NEW))
+                        .failureHardCap(0L)
                         .isActive(true)
-                        .url("https://example.com/webhooks/xquik")
+                        .url("url")
                         .build()
                 )
+                .hasMore(false)
+                .nextCursor("abc123")
                 .build()
 
         assertThat(webhookListResponse.webhooks())
             .containsExactly(
                 Webhook.builder()
-                    .id("42")
+                    .id("id")
                     .consecutiveFailures(0L)
-                    .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                    .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .deliveryStatus(Webhook.DeliveryStatus.ACTIVE)
-                    .addEventType(EventType.TWEET_NEW)
-                    .addEventType(EventType.TWEET_REPLY)
-                    .failureHardCap(200L)
+                    .eventTypes(listOf(EventType.TWEET_NEW))
+                    .failureHardCap(0L)
                     .isActive(true)
-                    .url("https://example.com/webhooks/xquik")
+                    .url("url")
                     .build()
             )
+        assertThat(webhookListResponse.hasMore()).isEqualTo(false)
+        assertThat(webhookListResponse.nextCursor()).isEqualTo("abc123")
     }
 
     @Test
@@ -55,17 +58,18 @@ internal class WebhookListResponseTest {
             WebhookListResponse.builder()
                 .addWebhook(
                     Webhook.builder()
-                        .id("42")
+                        .id("id")
                         .consecutiveFailures(0L)
-                        .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .deliveryStatus(Webhook.DeliveryStatus.ACTIVE)
-                        .addEventType(EventType.TWEET_NEW)
-                        .addEventType(EventType.TWEET_REPLY)
-                        .failureHardCap(200L)
+                        .eventTypes(listOf(EventType.TWEET_NEW))
+                        .failureHardCap(0L)
                         .isActive(true)
-                        .url("https://example.com/webhooks/xquik")
+                        .url("url")
                         .build()
                 )
+                .hasMore(false)
+                .nextCursor("abc123")
                 .build()
 
         val roundtrippedWebhookListResponse =
@@ -75,5 +79,27 @@ internal class WebhookListResponseTest {
             )
 
         assertThat(roundtrippedWebhookListResponse).isEqualTo(webhookListResponse)
+    }
+
+    @Test
+    fun readsAdditionalFields() {
+        val jsonMapper = jsonMapper()
+
+        val webhookListResponse0 =
+            jsonMapper.readValue(
+                """{"hasMore":true,"nextCursor":"value"}""",
+                jacksonTypeRef<WebhookListResponse>(),
+            )
+        assertThat(webhookListResponse0.hasMore()).isNotNull()
+        assertThat(webhookListResponse0.nextCursor()).isNotNull()
+        assertThat(jsonMapper.readTree(jsonMapper.writeValueAsString(webhookListResponse0)))
+            .isEqualTo(jsonMapper.readTree("""{"hasMore":true,"nextCursor":"value"}"""))
+    }
+
+    @Test
+    fun keepsAdditionalFieldsOptional() {
+        val webhookListResponse0 = WebhookListResponse.builder().webhooks(JsonMissing.of()).build()
+        assertThat(webhookListResponse0.hasMore()).isNull()
+        assertThat(webhookListResponse0.nextCursor()).isNull()
     }
 }

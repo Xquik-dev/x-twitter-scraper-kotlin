@@ -13,13 +13,24 @@ internal class MonitorDeactivateResponseTest {
 
     @Test
     fun create() {
-        val monitorDeactivateResponse = MonitorDeactivateResponse.builder().build()
+        val monitorDeactivateResponse =
+            MonitorDeactivateResponse.builder()
+                .deletionStatus("deletionStatus")
+                .statusUrl("/api/v1/monitors/42")
+                .build()
+
+        assertThat(monitorDeactivateResponse.deletionStatus()).isEqualTo("deletionStatus")
+        assertThat(monitorDeactivateResponse.statusUrl()).isEqualTo("/api/v1/monitors/42")
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val monitorDeactivateResponse = MonitorDeactivateResponse.builder().build()
+        val monitorDeactivateResponse =
+            MonitorDeactivateResponse.builder()
+                .deletionStatus("deletionStatus")
+                .statusUrl("/api/v1/monitors/42")
+                .build()
 
         val roundtrippedMonitorDeactivateResponse =
             jsonMapper.readValue(

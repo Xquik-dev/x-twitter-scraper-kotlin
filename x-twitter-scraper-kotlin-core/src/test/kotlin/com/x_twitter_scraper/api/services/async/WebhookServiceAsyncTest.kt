@@ -7,6 +7,7 @@ package com.x_twitter_scraper.api.services.async
 import com.x_twitter_scraper.api.client.okhttp.XTwitterScraperOkHttpClientAsync
 import com.x_twitter_scraper.api.models.EventType
 import com.x_twitter_scraper.api.models.webhooks.WebhookCreateParams
+import com.x_twitter_scraper.api.models.webhooks.WebhookCreateTelegramLinkParams
 import com.x_twitter_scraper.api.models.webhooks.WebhookUpdateParams
 import org.junit.jupiter.api.Test
 
@@ -128,6 +129,24 @@ internal class WebhookServiceAsyncTest {
         val webhookServiceAsync = client.webhooks()
 
         val response = webhookServiceAsync.test("id")
+
+        kotlin.test.assertNotNull(response)
+    }
+
+    @Test
+    suspend fun createTelegramLink() {
+        val client =
+            XTwitterScraperOkHttpClientAsync.builder()
+                .baseUrl(com.x_twitter_scraper.api.LoopbackTestServer.baseUrl())
+                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
+                .build()
+        val webhookServiceAsync = client.webhooks()
+
+        val response =
+            webhookServiceAsync.createTelegramLink(
+                WebhookCreateTelegramLinkParams.builder().addEventType(EventType.TWEET_NEW).build()
+            )
 
         kotlin.test.assertNotNull(response)
     }

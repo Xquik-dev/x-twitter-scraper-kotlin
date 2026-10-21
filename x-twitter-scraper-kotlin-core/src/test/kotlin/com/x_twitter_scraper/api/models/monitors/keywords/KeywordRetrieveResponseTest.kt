@@ -5,6 +5,7 @@
 package com.x_twitter_scraper.api.models.monitors.keywords
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.x_twitter_scraper.api.core.JsonMissing
 import com.x_twitter_scraper.api.core.jsonMapper
 import com.x_twitter_scraper.api.models.EventType
 import java.time.OffsetDateTime
@@ -17,22 +18,30 @@ internal class KeywordRetrieveResponseTest {
     fun create() {
         val keywordRetrieveResponse =
             KeywordRetrieveResponse.builder()
-                .id("21")
-                .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                .id("id")
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .addEventType(EventType.TWEET_NEW)
                 .isActive(true)
-                .nextBillingAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
-                .query("xquik OR \"x api\"")
+                .nextBillingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .query("query")
+                .name("Launch mentions")
+                .pausedAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                .pausedReason(KeywordRetrieveResponse.PausedReason.INSUFFICIENT_CREDITS)
                 .build()
 
-        assertThat(keywordRetrieveResponse.id()).isEqualTo("21")
+        assertThat(keywordRetrieveResponse.id()).isEqualTo("id")
         assertThat(keywordRetrieveResponse.createdAt())
-            .isEqualTo(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(keywordRetrieveResponse.eventTypes()).containsExactly(EventType.TWEET_NEW)
         assertThat(keywordRetrieveResponse.isActive()).isEqualTo(true)
         assertThat(keywordRetrieveResponse.nextBillingAt())
+            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(keywordRetrieveResponse.query()).isEqualTo("query")
+        assertThat(keywordRetrieveResponse.name()).isEqualTo("Launch mentions")
+        assertThat(keywordRetrieveResponse.pausedAt())
             .isEqualTo(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
-        assertThat(keywordRetrieveResponse.query()).isEqualTo("xquik OR \"x api\"")
+        assertThat(keywordRetrieveResponse.pausedReason())
+            .isEqualTo(KeywordRetrieveResponse.PausedReason.INSUFFICIENT_CREDITS)
     }
 
     @Test
@@ -40,12 +49,15 @@ internal class KeywordRetrieveResponseTest {
         val jsonMapper = jsonMapper()
         val keywordRetrieveResponse =
             KeywordRetrieveResponse.builder()
-                .id("21")
-                .createdAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                .id("id")
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .addEventType(EventType.TWEET_NEW)
                 .isActive(true)
-                .nextBillingAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
-                .query("xquik OR \"x api\"")
+                .nextBillingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .query("query")
+                .name("Launch mentions")
+                .pausedAt(OffsetDateTime.parse("2025-01-15T12:00:00Z"))
+                .pausedReason(KeywordRetrieveResponse.PausedReason.INSUFFICIENT_CREDITS)
                 .build()
 
         val roundtrippedKeywordRetrieveResponse =
@@ -55,5 +67,41 @@ internal class KeywordRetrieveResponseTest {
             )
 
         assertThat(roundtrippedKeywordRetrieveResponse).isEqualTo(keywordRetrieveResponse)
+    }
+
+    @Test
+    fun readsAdditionalFields() {
+        val jsonMapper = jsonMapper()
+
+        val keywordRetrieveResponse0 =
+            jsonMapper.readValue(
+                """{"name":"value","pausedAt":"2026-10-17T00:00:00Z","pausedReason":"value"}""",
+                jacksonTypeRef<KeywordRetrieveResponse>(),
+            )
+        assertThat(keywordRetrieveResponse0.name()).isNotNull()
+        assertThat(keywordRetrieveResponse0.pausedAt()).isNotNull()
+        assertThat(keywordRetrieveResponse0.pausedReason()).isNotNull()
+        assertThat(jsonMapper.readTree(jsonMapper.writeValueAsString(keywordRetrieveResponse0)))
+            .isEqualTo(
+                jsonMapper.readTree(
+                    """{"name":"value","pausedAt":"2026-10-17T00:00:00Z","pausedReason":"value"}"""
+                )
+            )
+    }
+
+    @Test
+    fun keepsAdditionalFieldsOptional() {
+        val keywordRetrieveResponse0 =
+            KeywordRetrieveResponse.builder()
+                .id(JsonMissing.of())
+                .createdAt(JsonMissing.of())
+                .eventTypes(JsonMissing.of())
+                .isActive(JsonMissing.of())
+                .nextBillingAt(JsonMissing.of())
+                .query(JsonMissing.of())
+                .build()
+        assertThat(keywordRetrieveResponse0.name()).isNull()
+        assertThat(keywordRetrieveResponse0.pausedAt()).isNull()
+        assertThat(keywordRetrieveResponse0.pausedReason()).isNull()
     }
 }

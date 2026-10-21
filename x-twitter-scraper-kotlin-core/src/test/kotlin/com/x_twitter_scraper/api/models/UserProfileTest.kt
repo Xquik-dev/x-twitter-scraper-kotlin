@@ -577,4 +577,17 @@ internal class UserProfileTest {
 
         assertThat(roundtrippedUserProfile).isEqualTo(userProfile)
     }
+
+    @Test
+    fun deserializeIdentityVerification() {
+        val identityVerification =
+            jsonMapper()
+                .readValue(
+                    """{"overrideVerifiedYear":2009}""",
+                    jacksonTypeRef<UserProfile.IdentityVerification>(),
+                )
+
+        assertThat(identityVerification.validate().overrideVerifiedYear()).isEqualTo(2009L)
+        assertThat(identityVerification.toBuilder().build().overrideVerifiedYear()).isEqualTo(2009L)
+    }
 }

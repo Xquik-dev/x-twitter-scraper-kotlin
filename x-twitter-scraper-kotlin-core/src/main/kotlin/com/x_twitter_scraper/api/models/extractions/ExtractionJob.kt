@@ -29,6 +29,10 @@ private constructor(
     private val toolType: JsonField<ToolType>,
     private val totalResults: JsonField<Long>,
     private val completedAt: JsonField<OffsetDateTime>,
+    private val completionReason: JsonField<CompletionReason>,
+    private val effectiveResultsLimit: JsonField<Long>,
+    private val errorMessage: JsonField<String>,
+    private val resultsLimit: JsonField<Long>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -46,7 +50,31 @@ private constructor(
         @JsonProperty("completedAt")
         @ExcludeMissing
         completedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    ) : this(id, createdAt, status, toolType, totalResults, completedAt, mutableMapOf())
+        @JsonProperty("completionReason")
+        @ExcludeMissing
+        completionReason: JsonField<CompletionReason> = JsonMissing.of(),
+        @JsonProperty("effectiveResultsLimit")
+        @ExcludeMissing
+        effectiveResultsLimit: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("errorMessage")
+        @ExcludeMissing
+        errorMessage: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("resultsLimit")
+        @ExcludeMissing
+        resultsLimit: JsonField<Long> = JsonMissing.of(),
+    ) : this(
+        id,
+        createdAt,
+        status,
+        toolType,
+        totalResults,
+        completedAt,
+        completionReason,
+        effectiveResultsLimit,
+        errorMessage,
+        resultsLimit,
+        mutableMapOf(),
+    )
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
@@ -82,6 +110,34 @@ private constructor(
 
     /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun completedAt(): OffsetDateTime? = completedAt.getNullable("completedAt")
+
+    /**
+     * Why a terminal job stopped.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun completionReason(): CompletionReason? = completionReason.getNullable("completionReason")
+
+    /**
+     * Result limit after affordability checks.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun effectiveResultsLimit(): Long? = effectiveResultsLimit.getNullable("effectiveResultsLimit")
+
+    /**
+     * Safe error code for a failed job.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun errorMessage(): String? = errorMessage.getNullable("errorMessage")
+
+    /**
+     * Requested result limit.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun resultsLimit(): Long? = resultsLimit.getNullable("resultsLimit")
 
     /**
      * Returns the raw JSON value of [id].
@@ -131,6 +187,44 @@ private constructor(
     @ExcludeMissing
     fun _completedAt(): JsonField<OffsetDateTime> = completedAt
 
+    /**
+     * Returns the raw JSON value of [completionReason].
+     *
+     * Unlike [completionReason], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("completionReason")
+    @ExcludeMissing
+    fun _completionReason(): JsonField<CompletionReason> = completionReason
+
+    /**
+     * Returns the raw JSON value of [effectiveResultsLimit].
+     *
+     * Unlike [effectiveResultsLimit], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("effectiveResultsLimit")
+    @ExcludeMissing
+    fun _effectiveResultsLimit(): JsonField<Long> = effectiveResultsLimit
+
+    /**
+     * Returns the raw JSON value of [errorMessage].
+     *
+     * Unlike [errorMessage], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("errorMessage")
+    @ExcludeMissing
+    fun _errorMessage(): JsonField<String> = errorMessage
+
+    /**
+     * Returns the raw JSON value of [resultsLimit].
+     *
+     * Unlike [resultsLimit], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("resultsLimit")
+    @ExcludeMissing
+    fun _resultsLimit(): JsonField<Long> = resultsLimit
+
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -169,6 +263,10 @@ private constructor(
         private var toolType: JsonField<ToolType>? = null
         private var totalResults: JsonField<Long>? = null
         private var completedAt: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var completionReason: JsonField<CompletionReason> = JsonMissing.of()
+        private var effectiveResultsLimit: JsonField<Long> = JsonMissing.of()
+        private var errorMessage: JsonField<String> = JsonMissing.of()
+        private var resultsLimit: JsonField<Long> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(extractionJob: ExtractionJob) = apply {
@@ -178,6 +276,10 @@ private constructor(
             toolType = extractionJob.toolType
             totalResults = extractionJob.totalResults
             completedAt = extractionJob.completedAt
+            completionReason = extractionJob.completionReason
+            effectiveResultsLimit = extractionJob.effectiveResultsLimit
+            errorMessage = extractionJob.errorMessage
+            resultsLimit = extractionJob.resultsLimit
             additionalProperties = extractionJob.additionalProperties.toMutableMap()
         }
 
@@ -213,6 +315,38 @@ private constructor(
         fun completedAt(completedAt: JsonField<OffsetDateTime>) = apply {
             this.completedAt = completedAt
         }
+
+        /** Why a terminal job stopped. */
+        fun completionReason(completionReason: CompletionReason) =
+            completionReason(JsonField.of(completionReason))
+
+        /** Sets [Builder.completionReason] to an arbitrary JSON value. */
+        fun completionReason(completionReason: JsonField<CompletionReason>) = apply {
+            this.completionReason = completionReason
+        }
+
+        /** Result limit after affordability checks. */
+        fun effectiveResultsLimit(effectiveResultsLimit: Long) =
+            effectiveResultsLimit(JsonField.of(effectiveResultsLimit))
+
+        /** Sets [Builder.effectiveResultsLimit] to an arbitrary JSON value. */
+        fun effectiveResultsLimit(effectiveResultsLimit: JsonField<Long>) = apply {
+            this.effectiveResultsLimit = effectiveResultsLimit
+        }
+
+        /** Safe error code for a failed job. */
+        fun errorMessage(errorMessage: String) = errorMessage(JsonField.of(errorMessage))
+
+        /** Sets [Builder.errorMessage] to an arbitrary JSON value. */
+        fun errorMessage(errorMessage: JsonField<String>) = apply {
+            this.errorMessage = errorMessage
+        }
+
+        /** Requested result limit. */
+        fun resultsLimit(resultsLimit: Long) = resultsLimit(JsonField.of(resultsLimit))
+
+        /** Sets [Builder.resultsLimit] to an arbitrary JSON value. */
+        fun resultsLimit(resultsLimit: JsonField<Long>) = apply { this.resultsLimit = resultsLimit }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -257,6 +391,10 @@ private constructor(
                 checkRequired("toolType", toolType),
                 checkRequired("totalResults", totalResults),
                 completedAt,
+                completionReason,
+                effectiveResultsLimit,
+                errorMessage,
+                resultsLimit,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -282,6 +420,10 @@ private constructor(
         toolType().validate()
         totalResults()
         completedAt()
+        completionReason()?.validate()
+        effectiveResultsLimit()
+        errorMessage()
+        resultsLimit()
         validated = true
     }
 
@@ -299,7 +441,11 @@ private constructor(
             (status.asKnown()?.validity() ?: 0) +
             (toolType.asKnown()?.validity() ?: 0) +
             (if (totalResults.asKnown() == null) 0 else 1) +
-            (if (completedAt.asKnown() == null) 0 else 1)
+            (if (completedAt.asKnown() == null) 0 else 1) +
+            (completionReason.asKnown()?.validity() ?: 0) +
+            (if (effectiveResultsLimit.asKnown() == null) 0 else 1) +
+            (if (errorMessage.asKnown() == null) 0 else 1) +
+            (if (resultsLimit.asKnown() == null) 0 else 1)
 
     class Status @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
@@ -314,6 +460,10 @@ private constructor(
 
             val FAILED = of("failed")
 
+            val PENDING = of("pending")
+
+            val CANCELED = of("canceled")
+
             fun of(value: String) = Status(JsonField.of(value))
         }
 
@@ -322,6 +472,8 @@ private constructor(
             RUNNING,
             COMPLETED,
             FAILED,
+            PENDING,
+            CANCELED,
         }
 
         /**
@@ -337,6 +489,8 @@ private constructor(
             RUNNING,
             COMPLETED,
             FAILED,
+            PENDING,
+            CANCELED,
             /** An enum member indicating that [Status] was instantiated with an unknown value. */
             _UNKNOWN,
         }
@@ -350,6 +504,8 @@ private constructor(
                 RUNNING -> Value.RUNNING
                 COMPLETED -> Value.COMPLETED
                 FAILED -> Value.FAILED
+                PENDING -> Value.PENDING
+                CANCELED -> Value.CANCELED
                 else -> Value._UNKNOWN
             }
 
@@ -364,6 +520,8 @@ private constructor(
                 RUNNING -> Known.RUNNING
                 COMPLETED -> Known.COMPLETED
                 FAILED -> Known.FAILED
+                PENDING -> Known.PENDING
+                CANCELED -> Known.CANCELED
                 else -> throw XTwitterScraperInvalidDataException("Unknown Status: $value")
             }
 
@@ -660,6 +818,161 @@ private constructor(
         override fun toString() = value.toString()
     }
 
+    /** Why a terminal job stopped. */
+    class CompletionReason @JsonCreator private constructor(private val value: JsonField<String>) :
+        Enum {
+
+        /** Returns this class instance's raw value. */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            val BUDGET_LIMITED = of("budget_limited")
+
+            val CANCELED = of("canceled")
+
+            val DEADLINE_REACHED = of("deadline_reached")
+
+            val FAILED = of("failed")
+
+            val PAGINATION_SAFETY_LIMIT = of("pagination_safety_limit")
+
+            val PARTIAL_FAILURE = of("partial_failure")
+
+            val REQUESTED_LIMIT_REACHED = of("requested_limit_reached")
+
+            val SOURCE_EXHAUSTED = of("source_exhausted")
+
+            fun of(value: String) = CompletionReason(JsonField.of(value))
+        }
+
+        /** An enum containing [CompletionReason]'s known values. */
+        enum class Known {
+            BUDGET_LIMITED,
+            CANCELED,
+            DEADLINE_REACHED,
+            FAILED,
+            PAGINATION_SAFETY_LIMIT,
+            PARTIAL_FAILURE,
+            REQUESTED_LIMIT_REACHED,
+            SOURCE_EXHAUSTED,
+        }
+
+        /**
+         * An enum containing [CompletionReason]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [CompletionReason] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            BUDGET_LIMITED,
+            CANCELED,
+            DEADLINE_REACHED,
+            FAILED,
+            PAGINATION_SAFETY_LIMIT,
+            PARTIAL_FAILURE,
+            REQUESTED_LIMIT_REACHED,
+            SOURCE_EXHAUSTED,
+            /**
+             * An enum member indicating that [CompletionReason] was instantiated with an unknown
+             * value.
+             */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         */
+        fun value(): Value =
+            when (this) {
+                BUDGET_LIMITED -> Value.BUDGET_LIMITED
+                CANCELED -> Value.CANCELED
+                DEADLINE_REACHED -> Value.DEADLINE_REACHED
+                FAILED -> Value.FAILED
+                PAGINATION_SAFETY_LIMIT -> Value.PAGINATION_SAFETY_LIMIT
+                PARTIAL_FAILURE -> Value.PARTIAL_FAILURE
+                REQUESTED_LIMIT_REACHED -> Value.REQUESTED_LIMIT_REACHED
+                SOURCE_EXHAUSTED -> Value.SOURCE_EXHAUSTED
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * @throws XTwitterScraperInvalidDataException if this class instance's value is a not a
+         *   known member.
+         */
+        fun known(): Known =
+            when (this) {
+                BUDGET_LIMITED -> Known.BUDGET_LIMITED
+                CANCELED -> Known.CANCELED
+                DEADLINE_REACHED -> Known.DEADLINE_REACHED
+                FAILED -> Known.FAILED
+                PAGINATION_SAFETY_LIMIT -> Known.PAGINATION_SAFETY_LIMIT
+                PARTIAL_FAILURE -> Known.PARTIAL_FAILURE
+                REQUESTED_LIMIT_REACHED -> Known.REQUESTED_LIMIT_REACHED
+                SOURCE_EXHAUSTED -> Known.SOURCE_EXHAUSTED
+                else ->
+                    throw XTwitterScraperInvalidDataException("Unknown CompletionReason: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * @throws XTwitterScraperInvalidDataException if this class instance's value does not have
+         *   the expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString()
+                ?: throw XTwitterScraperInvalidDataException("Value is not a String")
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+         *   match its expected type.
+         */
+        fun validate(): CompletionReason = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: XTwitterScraperInvalidDataException) {
+                false
+            }
+
+        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is CompletionReason && value == other.value
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
@@ -672,6 +985,10 @@ private constructor(
             toolType == other.toolType &&
             totalResults == other.totalResults &&
             completedAt == other.completedAt &&
+            completionReason == other.completionReason &&
+            effectiveResultsLimit == other.effectiveResultsLimit &&
+            errorMessage == other.errorMessage &&
+            resultsLimit == other.resultsLimit &&
             additionalProperties == other.additionalProperties
     }
 
@@ -683,6 +1000,10 @@ private constructor(
             toolType,
             totalResults,
             completedAt,
+            completionReason,
+            effectiveResultsLimit,
+            errorMessage,
+            resultsLimit,
             additionalProperties,
         )
     }
@@ -690,5 +1011,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ExtractionJob{id=$id, createdAt=$createdAt, status=$status, toolType=$toolType, totalResults=$totalResults, completedAt=$completedAt, additionalProperties=$additionalProperties}"
+        "ExtractionJob{id=$id, createdAt=$createdAt, status=$status, toolType=$toolType, totalResults=$totalResults, completedAt=$completedAt, completionReason=$completionReason, effectiveResultsLimit=$effectiveResultsLimit, errorMessage=$errorMessage, resultsLimit=$resultsLimit, additionalProperties=$additionalProperties}"
 }

@@ -479,4 +479,60 @@ internal class EmbeddedTweetTest {
 
         assertThat(roundtrippedEmbeddedTweet).isEqualTo(embeddedTweet)
     }
+
+    @Test
+    fun keepsAdditionalFieldsOptional() {
+        val embeddedTweet =
+            EmbeddedTweet.builder()
+                .id("1234567890")
+                .bookmarkCount(2L)
+                .likeCount(42L)
+                .quoteCount(1L)
+                .replyCount(3L)
+                .retweetCount(5L)
+                .text("Just launched!")
+                .viewCount(1500L)
+                .build()
+
+        assertThat(embeddedTweet.author()).isNull()
+        assertThat(embeddedTweet.authorUnavailable()).isNull()
+        assertThat(embeddedTweet.cashtagAttachments()).isNull()
+        assertThat(embeddedTweet.communityId()).isNull()
+        assertThat(embeddedTweet.communityName()).isNull()
+        assertThat(embeddedTweet.conversationControl()).isNull()
+        assertThat(embeddedTweet.coordinates()).isNull()
+        assertThat(embeddedTweet.exclusiveContent()).isNull()
+        assertThat(embeddedTweet.geo()).isNull()
+        assertThat(embeddedTweet.grokShareAttachment()).isNull()
+        assertThat(embeddedTweet.grokTranslatedPost()).isNull()
+        assertThat(embeddedTweet.hasCommunityNotes()).isNull()
+        assertThat(embeddedTweet.interstitial()).isNull()
+        assertThat(embeddedTweet.isPinned()).isNull()
+        assertThat(embeddedTweet.isRetweet()).isNull()
+        assertThat(embeddedTweet.jetfuelAttachment()).isNull()
+        assertThat(embeddedTweet.limitedActions()).isNull()
+        assertThat(embeddedTweet.parentTweet()).isNull()
+        assertThat(embeddedTweet.postCta()).isNull()
+        assertThat(embeddedTweet.quotedTweetId()).isNull()
+        assertThat(embeddedTweet.quotedTweetPermalink()).isNull()
+        assertThat(embeddedTweet.quotedTweetUnavailable()).isNull()
+        assertThat(embeddedTweet.reactionContext()).isNull()
+        assertThat(embeddedTweet.retweetedAt()).isNull()
+        assertThat(embeddedTweet.scopes()).isNull()
+        assertThat(embeddedTweet.sportsContext()).isNull()
+        assertThat(embeddedTweet.subscriberBadge()).isNull()
+        assertThat(embeddedTweet.textHighlights()).isNull()
+        assertThat(embeddedTweet.tombstone()).isNull()
+        assertThat(embeddedTweet.unavailableAuthorId()).isNull()
+        assertThat(embeddedTweet.unmentionedUserIds()).isNull()
+        embeddedTweet.validate()
+
+        val jsonMapper = jsonMapper()
+        val roundtrippedEmbeddedTweet =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(embeddedTweet),
+                jacksonTypeRef<EmbeddedTweet>(),
+            )
+        assertThat(roundtrippedEmbeddedTweet).isEqualTo(embeddedTweet)
+    }
 }

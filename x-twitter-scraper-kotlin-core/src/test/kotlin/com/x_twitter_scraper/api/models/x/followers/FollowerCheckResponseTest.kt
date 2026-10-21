@@ -5,6 +5,7 @@
 package com.x_twitter_scraper.api.models.x.followers
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.x_twitter_scraper.api.core.JsonMissing
 import com.x_twitter_scraper.api.core.jsonMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -15,16 +16,20 @@ internal class FollowerCheckResponseTest {
     fun create() {
         val followerCheckResponse =
             FollowerCheckResponse.builder()
-                .isFollowedBy(false)
+                .isFollowedBy(true)
                 .isFollowing(true)
-                .sourceUsername("elonmusk")
-                .targetUsername("jack")
+                .sourceUsername("sourceUsername")
+                .targetUsername("targetUsername")
+                .sourceId("11348282")
+                .targetId("34743251")
                 .build()
 
-        assertThat(followerCheckResponse.isFollowedBy()).isEqualTo(false)
+        assertThat(followerCheckResponse.isFollowedBy()).isEqualTo(true)
         assertThat(followerCheckResponse.isFollowing()).isEqualTo(true)
-        assertThat(followerCheckResponse.sourceUsername()).isEqualTo("elonmusk")
-        assertThat(followerCheckResponse.targetUsername()).isEqualTo("jack")
+        assertThat(followerCheckResponse.sourceUsername()).isEqualTo("sourceUsername")
+        assertThat(followerCheckResponse.targetUsername()).isEqualTo("targetUsername")
+        assertThat(followerCheckResponse.sourceId()).isEqualTo("11348282")
+        assertThat(followerCheckResponse.targetId()).isEqualTo("34743251")
     }
 
     @Test
@@ -32,10 +37,12 @@ internal class FollowerCheckResponseTest {
         val jsonMapper = jsonMapper()
         val followerCheckResponse =
             FollowerCheckResponse.builder()
-                .isFollowedBy(false)
+                .isFollowedBy(true)
                 .isFollowing(true)
-                .sourceUsername("elonmusk")
-                .targetUsername("jack")
+                .sourceUsername("sourceUsername")
+                .targetUsername("targetUsername")
+                .sourceId("11348282")
+                .targetId("34743251")
                 .build()
 
         val roundtrippedFollowerCheckResponse =
@@ -45,5 +52,33 @@ internal class FollowerCheckResponseTest {
             )
 
         assertThat(roundtrippedFollowerCheckResponse).isEqualTo(followerCheckResponse)
+    }
+
+    @Test
+    fun readsAdditionalFields() {
+        val jsonMapper = jsonMapper()
+
+        val followerCheckResponse0 =
+            jsonMapper.readValue(
+                """{"sourceId":"value","targetId":"value"}""",
+                jacksonTypeRef<FollowerCheckResponse>(),
+            )
+        assertThat(followerCheckResponse0.sourceId()).isNotNull()
+        assertThat(followerCheckResponse0.targetId()).isNotNull()
+        assertThat(jsonMapper.readTree(jsonMapper.writeValueAsString(followerCheckResponse0)))
+            .isEqualTo(jsonMapper.readTree("""{"sourceId":"value","targetId":"value"}"""))
+    }
+
+    @Test
+    fun keepsAdditionalFieldsOptional() {
+        val followerCheckResponse0 =
+            FollowerCheckResponse.builder()
+                .isFollowedBy(JsonMissing.of())
+                .isFollowing(JsonMissing.of())
+                .sourceUsername(JsonMissing.of())
+                .targetUsername(JsonMissing.of())
+                .build()
+        assertThat(followerCheckResponse0.sourceId()).isNull()
+        assertThat(followerCheckResponse0.targetId()).isNull()
     }
 }

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 Xquik contributors
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package com.x_twitter_scraper.api.models.x.users
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -232,11 +236,11 @@ private constructor(
 
             val bestMatches =
                 sequenceOf(
-                        tryDeserialize(node, jacksonTypeRef<PaginatedUsers>())?.let {
-                            UserRetrieveFollowingResponse(paginatedUsers = it, _json = json)
-                        },
                         tryDeserialize(node, jacksonTypeRef<UserListCoverageResponse>())?.let {
                             UserRetrieveFollowingResponse(listCoverage = it, _json = json)
+                        },
+                        tryDeserialize(node, jacksonTypeRef<PaginatedUsers>())?.let {
+                            UserRetrieveFollowingResponse(paginatedUsers = it, _json = json)
                         },
                     )
                     .filterNotNull()
@@ -276,15 +280,19 @@ private constructor(
     class UserListCoverageResponse
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
+        private val diagnostic: JsonField<Diagnostic>,
         private val hasNextPage: JsonField<Boolean>,
         private val nextCursor: JsonField<String>,
         private val users: JsonField<List<UserProfile>>,
-        private val diagnostic: JsonField<Diagnostic>,
+        private val filteredCount: JsonField<Long>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
         @JsonCreator
         private constructor(
+            @JsonProperty("diagnostic")
+            @ExcludeMissing
+            diagnostic: JsonField<Diagnostic> = JsonMissing.of(),
             @JsonProperty("has_next_page")
             @ExcludeMissing
             hasNextPage: JsonField<Boolean> = JsonMissing.of(),
@@ -294,10 +302,10 @@ private constructor(
             @JsonProperty("users")
             @ExcludeMissing
             users: JsonField<List<UserProfile>> = JsonMissing.of(),
-            @JsonProperty("diagnostic")
+            @JsonProperty("filtered_count")
             @ExcludeMissing
-            diagnostic: JsonField<Diagnostic> = JsonMissing.of(),
-        ) : this(hasNextPage, nextCursor, users, diagnostic, mutableMapOf())
+            filteredCount: JsonField<Long> = JsonMissing.of(),
+        ) : this(diagnostic, hasNextPage, nextCursor, users, filteredCount, mutableMapOf())
 
         fun toPaginatedUsers(): PaginatedUsers =
             PaginatedUsers.builder()
@@ -305,6 +313,14 @@ private constructor(
                 .nextCursor(nextCursor)
                 .users(users)
                 .build()
+
+        /**
+         * Coverage evidence across parallel relationship strategies.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
+         *   is unexpectedly missing or null.
+         */
+        fun diagnostic(): Diagnostic = diagnostic.getRequired("diagnostic")
 
         /**
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
@@ -325,12 +341,20 @@ private constructor(
         fun users(): List<UserProfile> = users.getRequired("users")
 
         /**
-         * Coverage evidence across parallel relationship strategies.
+         * Whole number from 0.
          *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null.
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
-        fun diagnostic(): Diagnostic = diagnostic.getRequired("diagnostic")
+        fun filteredCount(): Long? = filteredCount.getNullable("filtered_count")
+
+        /**
+         * Returns the raw JSON value of [diagnostic].
+         *
+         * Unlike [diagnostic], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("diagnostic")
+        @ExcludeMissing
+        fun _diagnostic(): JsonField<Diagnostic> = diagnostic
 
         /**
          * Returns the raw JSON value of [hasNextPage].
@@ -358,13 +382,14 @@ private constructor(
         @JsonProperty("users") @ExcludeMissing fun _users(): JsonField<List<UserProfile>> = users
 
         /**
-         * Returns the raw JSON value of [diagnostic].
+         * Returns the raw JSON value of [filteredCount].
          *
-         * Unlike [diagnostic], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [filteredCount], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
-        @JsonProperty("diagnostic")
+        @JsonProperty("filtered_count")
         @ExcludeMissing
-        fun _diagnostic(): JsonField<Diagnostic> = diagnostic
+        fun _filteredCount(): JsonField<Long> = filteredCount
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -397,18 +422,28 @@ private constructor(
         /** A builder for [UserListCoverageResponse]. */
         class Builder internal constructor() {
 
+            private var diagnostic: JsonField<Diagnostic>? = null
             private var hasNextPage: JsonField<Boolean>? = null
             private var nextCursor: JsonField<String>? = null
             private var users: JsonField<MutableList<UserProfile>>? = null
-            private var diagnostic: JsonField<Diagnostic>? = null
+            private var filteredCount: JsonField<Long> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(userListCoverageResponse: UserListCoverageResponse) = apply {
+                diagnostic = userListCoverageResponse.diagnostic
                 hasNextPage = userListCoverageResponse.hasNextPage
                 nextCursor = userListCoverageResponse.nextCursor
                 users = userListCoverageResponse.users.map { it.toMutableList() }
-                diagnostic = userListCoverageResponse.diagnostic
+                filteredCount = userListCoverageResponse.filteredCount
                 additionalProperties = userListCoverageResponse.additionalProperties.toMutableMap()
+            }
+
+            /** Coverage evidence across parallel relationship strategies. */
+            fun diagnostic(diagnostic: Diagnostic) = diagnostic(JsonField.of(diagnostic))
+
+            /** Sets [Builder.diagnostic] to an arbitrary JSON value. */
+            fun diagnostic(diagnostic: JsonField<Diagnostic>) = apply {
+                this.diagnostic = diagnostic
             }
 
             fun hasNextPage(hasNextPage: Boolean) = hasNextPage(JsonField.of(hasNextPage))
@@ -442,12 +477,12 @@ private constructor(
                     }
             }
 
-            /** Coverage evidence across parallel relationship strategies. */
-            fun diagnostic(diagnostic: Diagnostic) = diagnostic(JsonField.of(diagnostic))
+            /** Whole number from 0. */
+            fun filteredCount(filteredCount: Long) = filteredCount(JsonField.of(filteredCount))
 
-            /** Sets [Builder.diagnostic] to an arbitrary JSON value. */
-            fun diagnostic(diagnostic: JsonField<Diagnostic>) = apply {
-                this.diagnostic = diagnostic
+            /** Sets [Builder.filteredCount] to an arbitrary JSON value. */
+            fun filteredCount(filteredCount: JsonField<Long>) = apply {
+                this.filteredCount = filteredCount
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -486,10 +521,11 @@ private constructor(
              */
             fun build(): UserListCoverageResponse =
                 UserListCoverageResponse(
+                    checkRequired("diagnostic", diagnostic),
                     checkRequired("hasNextPage", hasNextPage),
                     checkRequired("nextCursor", nextCursor),
                     checkRequired("users", users).map { it.toImmutable() },
-                    checkRequired("diagnostic", diagnostic),
+                    filteredCount,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -510,10 +546,11 @@ private constructor(
                 return@apply
             }
 
+            diagnostic().validate()
             hasNextPage()
             nextCursor()
             users().forEach { it.validate() }
-            diagnostic().validate()
+            filteredCount()
             validated = true
         }
 
@@ -526,10 +563,11 @@ private constructor(
             }
 
         internal fun validity(): Int =
-            (if (hasNextPage.asKnown() == null) 0 else 1) +
+            (diagnostic.asKnown()?.validity() ?: 0) +
+                (if (hasNextPage.asKnown() == null) 0 else 1) +
                 (if (nextCursor.asKnown() == null) 0 else 1) +
                 (users.asKnown()?.sumOf { it.validity() } ?: 0) +
-                (diagnostic.asKnown()?.validity() ?: 0)
+                (if (filteredCount.asKnown() == null) 0 else 1)
 
         /** Coverage evidence across parallel relationship strategies. */
         class Diagnostic
@@ -1159,6 +1197,7 @@ private constructor(
                     (if (strategyCount.asKnown() == null) 0 else 1) +
                     (if (uniqueUsers.asKnown() == null) 0 else 1)
 
+            /** Result counts and stop reason for 1 relationship strategy. */
             class Strategy
             @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
@@ -1912,20 +1951,28 @@ private constructor(
             }
 
             return other is UserListCoverageResponse &&
+                diagnostic == other.diagnostic &&
                 hasNextPage == other.hasNextPage &&
                 nextCursor == other.nextCursor &&
                 users == other.users &&
-                diagnostic == other.diagnostic &&
+                filteredCount == other.filteredCount &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(hasNextPage, nextCursor, users, diagnostic, additionalProperties)
+            Objects.hash(
+                diagnostic,
+                hasNextPage,
+                nextCursor,
+                users,
+                filteredCount,
+                additionalProperties,
+            )
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "UserListCoverageResponse{hasNextPage=$hasNextPage, nextCursor=$nextCursor, users=$users, diagnostic=$diagnostic, additionalProperties=$additionalProperties}"
+            "UserListCoverageResponse{diagnostic=$diagnostic, hasNextPage=$hasNextPage, nextCursor=$nextCursor, users=$users, filteredCount=$filteredCount, additionalProperties=$additionalProperties}"
     }
 }

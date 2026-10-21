@@ -89,6 +89,13 @@ private constructor(
     fun boundingBox(): String? = body.boundingBox()
 
     /**
+     * Require an email the profile publishes outside free webmail, such as Gmail.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun businessEmailOnly(): Boolean? = body.businessEmailOnly()
+
+    /**
      * Match the Tweet card name.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
@@ -129,6 +136,21 @@ private constructor(
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun dedupeMode(): DedupeMode? = body.dedupeMode()
+
+    /**
+     * Require an email at one of these domains. Separate domains with commas. Subdomains match.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun emailDomains(): String? = body.emailDomains()
+
+    /**
+     * Add each user's full profile to follower_explorer, following_explorer,
+     * verified_follower_explorer, people_search & repost_extractor rows. Jobs take longer.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun enrichProfiles(): Boolean? = body.enrichProfiles()
 
     /**
      * Exact phrase to match (tweet_search_extractor)
@@ -174,11 +196,11 @@ private constructor(
     fun geocode(): String? = body.geocode()
 
     /**
-     * Hashtags separated by spaces, commas, or lines. (tweet_search_extractor)
+     * Require an email the profile publishes.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
-    fun hashtags(): String? = body.hashtags()
+    fun hasEmail(): Boolean? = body.hasEmail()
 
     /**
      * Require a profile location.
@@ -202,6 +224,20 @@ private constructor(
     fun hasWebsite(): Boolean? = body.hasWebsite()
 
     /**
+     * Hashtags separated by spaces, commas, or lines. (tweet_search_extractor)
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun hashtags(): String? = body.hashtags()
+
+    /**
+     * Only replies to this tweet ID (tweet_search_extractor)
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun inReplyToTweetId(): String? = body.inReplyToTweetId()
+
+    /**
      * Include the source post in reply results.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
@@ -221,13 +257,6 @@ private constructor(
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun includeTargetMetadata(): Boolean? = body.includeTargetMetadata()
-
-    /**
-     * Only replies to this tweet ID (tweet_search_extractor)
-     *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-     */
-    fun inReplyToTweetId(): String? = body.inReplyToTweetId()
 
     /**
      * Language code filter (tweet_search_extractor)
@@ -616,13 +645,6 @@ private constructor(
     fun targetListIds(): List<String>? = body.targetListIds()
 
     /**
-     * Mixed targets auto-routed within one job.
-     *
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-     */
-    fun targets(): List<Target>? = body.targets()
-
-    /**
      * Required for space_explorer.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
@@ -648,6 +670,13 @@ private constructor(
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun targetUsernames(): List<String>? = body.targetUsernames()
+
+    /**
+     * Mixed targets auto-routed within one job.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun targets(): List<Target>? = body.targets()
 
     /**
      * Filter replies sent to a username (tweet_search_extractor)
@@ -756,6 +785,14 @@ private constructor(
     fun _boundingBox(): JsonField<String> = body._boundingBox()
 
     /**
+     * Returns the raw JSON value of [businessEmailOnly].
+     *
+     * Unlike [businessEmailOnly], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    fun _businessEmailOnly(): JsonField<Boolean> = body._businessEmailOnly()
+
+    /**
      * Returns the raw JSON value of [cardName].
      *
      * Unlike [cardName], this method doesn't throw if the JSON field has an unexpected type.
@@ -798,6 +835,20 @@ private constructor(
      * Unlike [dedupeMode], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _dedupeMode(): JsonField<DedupeMode> = body._dedupeMode()
+
+    /**
+     * Returns the raw JSON value of [emailDomains].
+     *
+     * Unlike [emailDomains], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _emailDomains(): JsonField<String> = body._emailDomains()
+
+    /**
+     * Returns the raw JSON value of [enrichProfiles].
+     *
+     * Unlike [enrichProfiles], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _enrichProfiles(): JsonField<Boolean> = body._enrichProfiles()
 
     /**
      * Returns the raw JSON value of [exactPhrase].
@@ -843,11 +894,11 @@ private constructor(
     fun _geocode(): JsonField<String> = body._geocode()
 
     /**
-     * Returns the raw JSON value of [hashtags].
+     * Returns the raw JSON value of [hasEmail].
      *
-     * Unlike [hashtags], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [hasEmail], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _hashtags(): JsonField<String> = body._hashtags()
+    fun _hasEmail(): JsonField<Boolean> = body._hasEmail()
 
     /**
      * Returns the raw JSON value of [hasLocation].
@@ -869,6 +920,21 @@ private constructor(
      * Unlike [hasWebsite], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _hasWebsite(): JsonField<Boolean> = body._hasWebsite()
+
+    /**
+     * Returns the raw JSON value of [hashtags].
+     *
+     * Unlike [hashtags], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _hashtags(): JsonField<String> = body._hashtags()
+
+    /**
+     * Returns the raw JSON value of [inReplyToTweetId].
+     *
+     * Unlike [inReplyToTweetId], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    fun _inReplyToTweetId(): JsonField<String> = body._inReplyToTweetId()
 
     /**
      * Returns the raw JSON value of [includeOriginalPost].
@@ -893,14 +959,6 @@ private constructor(
      * type.
      */
     fun _includeTargetMetadata(): JsonField<Boolean> = body._includeTargetMetadata()
-
-    /**
-     * Returns the raw JSON value of [inReplyToTweetId].
-     *
-     * Unlike [inReplyToTweetId], this method doesn't throw if the JSON field has an unexpected
-     * type.
-     */
-    fun _inReplyToTweetId(): JsonField<String> = body._inReplyToTweetId()
 
     /**
      * Returns the raw JSON value of [language].
@@ -1295,13 +1353,6 @@ private constructor(
     fun _targetListIds(): JsonField<List<String>> = body._targetListIds()
 
     /**
-     * Returns the raw JSON value of [targets].
-     *
-     * Unlike [targets], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _targets(): JsonField<List<Target>> = body._targets()
-
-    /**
      * Returns the raw JSON value of [targetSpaceId].
      *
      * Unlike [targetSpaceId], this method doesn't throw if the JSON field has an unexpected type.
@@ -1335,6 +1386,13 @@ private constructor(
      * Unlike [targetUsernames], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _targetUsernames(): JsonField<List<String>> = body._targetUsernames()
+
+    /**
+     * Returns the raw JSON value of [targets].
+     *
+     * Unlike [targets], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _targets(): JsonField<List<Target>> = body._targets()
 
     /**
      * Returns the raw JSON value of [toUser].
@@ -1484,6 +1542,16 @@ private constructor(
         /** Sets [Builder.boundingBox] to an arbitrary JSON value. */
         fun boundingBox(boundingBox: JsonField<String>) = apply { body.boundingBox(boundingBox) }
 
+        /** Require an email the profile publishes outside free webmail, such as Gmail. */
+        fun businessEmailOnly(businessEmailOnly: Boolean) = apply {
+            body.businessEmailOnly(businessEmailOnly)
+        }
+
+        /** Sets [Builder.businessEmailOnly] to an arbitrary JSON value. */
+        fun businessEmailOnly(businessEmailOnly: JsonField<Boolean>) = apply {
+            body.businessEmailOnly(businessEmailOnly)
+        }
+
         /** Match the Tweet card name. */
         fun cardName(cardName: String) = apply { body.cardName(cardName) }
 
@@ -1529,6 +1597,27 @@ private constructor(
 
         /** Sets [Builder.dedupeMode] to an arbitrary JSON value. */
         fun dedupeMode(dedupeMode: JsonField<DedupeMode>) = apply { body.dedupeMode(dedupeMode) }
+
+        /**
+         * Require an email at one of these domains. Separate domains with commas. Subdomains match.
+         */
+        fun emailDomains(emailDomains: String) = apply { body.emailDomains(emailDomains) }
+
+        /** Sets [Builder.emailDomains] to an arbitrary JSON value. */
+        fun emailDomains(emailDomains: JsonField<String>) = apply {
+            body.emailDomains(emailDomains)
+        }
+
+        /**
+         * Add each user's full profile to follower_explorer, following_explorer,
+         * verified_follower_explorer, people_search & repost_extractor rows. Jobs take longer.
+         */
+        fun enrichProfiles(enrichProfiles: Boolean) = apply { body.enrichProfiles(enrichProfiles) }
+
+        /** Sets [Builder.enrichProfiles] to an arbitrary JSON value. */
+        fun enrichProfiles(enrichProfiles: JsonField<Boolean>) = apply {
+            body.enrichProfiles(enrichProfiles)
+        }
 
         /** Exact phrase to match (tweet_search_extractor) */
         fun exactPhrase(exactPhrase: String) = apply { body.exactPhrase(exactPhrase) }
@@ -1577,11 +1666,11 @@ private constructor(
         /** Sets [Builder.geocode] to an arbitrary JSON value. */
         fun geocode(geocode: JsonField<String>) = apply { body.geocode(geocode) }
 
-        /** Hashtags separated by spaces, commas, or lines. (tweet_search_extractor) */
-        fun hashtags(hashtags: String) = apply { body.hashtags(hashtags) }
+        /** Require an email the profile publishes. */
+        fun hasEmail(hasEmail: Boolean) = apply { body.hasEmail(hasEmail) }
 
-        /** Sets [Builder.hashtags] to an arbitrary JSON value. */
-        fun hashtags(hashtags: JsonField<String>) = apply { body.hashtags(hashtags) }
+        /** Sets [Builder.hasEmail] to an arbitrary JSON value. */
+        fun hasEmail(hasEmail: JsonField<Boolean>) = apply { body.hasEmail(hasEmail) }
 
         /** Require a profile location. */
         fun hasLocation(hasLocation: Boolean) = apply { body.hasLocation(hasLocation) }
@@ -1602,6 +1691,22 @@ private constructor(
 
         /** Sets [Builder.hasWebsite] to an arbitrary JSON value. */
         fun hasWebsite(hasWebsite: JsonField<Boolean>) = apply { body.hasWebsite(hasWebsite) }
+
+        /** Hashtags separated by spaces, commas, or lines. (tweet_search_extractor) */
+        fun hashtags(hashtags: String) = apply { body.hashtags(hashtags) }
+
+        /** Sets [Builder.hashtags] to an arbitrary JSON value. */
+        fun hashtags(hashtags: JsonField<String>) = apply { body.hashtags(hashtags) }
+
+        /** Only replies to this tweet ID (tweet_search_extractor) */
+        fun inReplyToTweetId(inReplyToTweetId: String) = apply {
+            body.inReplyToTweetId(inReplyToTweetId)
+        }
+
+        /** Sets [Builder.inReplyToTweetId] to an arbitrary JSON value. */
+        fun inReplyToTweetId(inReplyToTweetId: JsonField<String>) = apply {
+            body.inReplyToTweetId(inReplyToTweetId)
+        }
 
         /** Include the source post in reply results. */
         fun includeOriginalPost(includeOriginalPost: Boolean) = apply {
@@ -1631,16 +1736,6 @@ private constructor(
         /** Sets [Builder.includeTargetMetadata] to an arbitrary JSON value. */
         fun includeTargetMetadata(includeTargetMetadata: JsonField<Boolean>) = apply {
             body.includeTargetMetadata(includeTargetMetadata)
-        }
-
-        /** Only replies to this tweet ID (tweet_search_extractor) */
-        fun inReplyToTweetId(inReplyToTweetId: String) = apply {
-            body.inReplyToTweetId(inReplyToTweetId)
-        }
-
-        /** Sets [Builder.inReplyToTweetId] to an arbitrary JSON value. */
-        fun inReplyToTweetId(inReplyToTweetId: JsonField<String>) = apply {
-            body.inReplyToTweetId(inReplyToTweetId)
         }
 
         /** Language code filter (tweet_search_extractor) */
@@ -2060,25 +2155,6 @@ private constructor(
          */
         fun addTargetListId(targetListId: String) = apply { body.addTargetListId(targetListId) }
 
-        /** Mixed targets auto-routed within one job. */
-        fun targets(targets: List<Target>) = apply { body.targets(targets) }
-
-        /** Sets [Builder.targets] to an arbitrary JSON value. */
-        fun targets(targets: JsonField<List<Target>>) = apply { body.targets(targets) }
-
-        /**
-         * Adds a single [Target] to [targets].
-         *
-         * @throws IllegalStateException if the field was previously set to a non-list.
-         */
-        fun addTarget(target: Target) = apply { body.addTarget(target) }
-
-        /** Alias for calling [addTarget] with `Target.ofString(string)`. */
-        fun addTarget(string: String) = apply { body.addTarget(string) }
-
-        /** Alias for calling [addTarget] with `Target.ofUnionMember1(unionMember1)`. */
-        fun addTarget(unionMember1: Target.UnionMember1) = apply { body.addTarget(unionMember1) }
-
         /** Required for space_explorer. */
         fun targetSpaceId(targetSpaceId: String) = apply { body.targetSpaceId(targetSpaceId) }
 
@@ -2136,6 +2212,25 @@ private constructor(
         fun addTargetUsername(targetUsername: String) = apply {
             body.addTargetUsername(targetUsername)
         }
+
+        /** Mixed targets auto-routed within one job. */
+        fun targets(targets: List<Target>) = apply { body.targets(targets) }
+
+        /** Sets [Builder.targets] to an arbitrary JSON value. */
+        fun targets(targets: JsonField<List<Target>>) = apply { body.targets(targets) }
+
+        /** Alias for calling [addTarget] with `Target.ofString(string)`. */
+        fun addTarget(string: String) = apply { body.addTarget(string) }
+
+        /** Alias for calling [addTarget] with `Target.ofUnionMember1(unionMember1)`. */
+        fun addTarget(unionMember1: Target.UnionMember1) = apply { body.addTarget(unionMember1) }
+
+        /**
+         * Adds a single [Target] to [targets].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addTarget(target: Target) = apply { body.addTarget(target) }
 
         /** Filter replies sent to a username (tweet_search_extractor) */
         fun toUser(toUser: String) = apply { body.toUser(toUser) }
@@ -2358,26 +2453,30 @@ private constructor(
         private val bioContains: JsonField<String>,
         private val blueVerifiedOnly: JsonField<Boolean>,
         private val boundingBox: JsonField<String>,
+        private val businessEmailOnly: JsonField<Boolean>,
         private val cardName: JsonField<String>,
         private val cashtags: JsonField<String>,
         private val collectionStrategy: JsonField<CollectionStrategy>,
         private val conversationId: JsonField<String>,
         private val dedupeAcrossTargets: JsonField<Boolean>,
         private val dedupeMode: JsonField<DedupeMode>,
+        private val emailDomains: JsonField<String>,
+        private val enrichProfiles: JsonField<Boolean>,
         private val exactPhrase: JsonField<String>,
         private val excludeOriginalAuthor: JsonField<Boolean>,
         private val excludeSource: JsonField<String>,
         private val excludeWords: JsonField<String>,
         private val fromUser: JsonField<String>,
         private val geocode: JsonField<String>,
-        private val hashtags: JsonField<String>,
+        private val hasEmail: JsonField<Boolean>,
         private val hasLocation: JsonField<Boolean>,
         private val hasMediaOnly: JsonField<Boolean>,
         private val hasWebsite: JsonField<Boolean>,
+        private val hashtags: JsonField<String>,
+        private val inReplyToTweetId: JsonField<String>,
         private val includeOriginalPost: JsonField<Boolean>,
         private val includeSearchTerms: JsonField<Boolean>,
         private val includeTargetMetadata: JsonField<Boolean>,
-        private val inReplyToTweetId: JsonField<String>,
         private val language: JsonField<String>,
         private val listId: JsonField<String>,
         private val locationContains: JsonField<String>,
@@ -2433,12 +2532,12 @@ private constructor(
         private val targetCommunityIds: JsonField<List<String>>,
         private val targetListId: JsonField<String>,
         private val targetListIds: JsonField<List<String>>,
-        private val targets: JsonField<List<Target>>,
         private val targetSpaceId: JsonField<String>,
         private val targetTweetId: JsonField<String>,
         private val targetTweetIds: JsonField<List<String>>,
         private val targetUsername: JsonField<String>,
         private val targetUsernames: JsonField<List<String>>,
+        private val targets: JsonField<List<Target>>,
         private val toUser: JsonField<String>,
         private val untilDate: JsonField<LocalDate>,
         private val untilTime: JsonField<UntilTime>,
@@ -2471,6 +2570,9 @@ private constructor(
             @JsonProperty("boundingBox")
             @ExcludeMissing
             boundingBox: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("businessEmailOnly")
+            @ExcludeMissing
+            businessEmailOnly: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("cardName")
             @ExcludeMissing
             cardName: JsonField<String> = JsonMissing.of(),
@@ -2489,6 +2591,12 @@ private constructor(
             @JsonProperty("dedupeMode")
             @ExcludeMissing
             dedupeMode: JsonField<DedupeMode> = JsonMissing.of(),
+            @JsonProperty("emailDomains")
+            @ExcludeMissing
+            emailDomains: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("enrichProfiles")
+            @ExcludeMissing
+            enrichProfiles: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("exactPhrase")
             @ExcludeMissing
             exactPhrase: JsonField<String> = JsonMissing.of(),
@@ -2505,9 +2613,9 @@ private constructor(
             @ExcludeMissing
             fromUser: JsonField<String> = JsonMissing.of(),
             @JsonProperty("geocode") @ExcludeMissing geocode: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("hashtags")
+            @JsonProperty("hasEmail")
             @ExcludeMissing
-            hashtags: JsonField<String> = JsonMissing.of(),
+            hasEmail: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("hasLocation")
             @ExcludeMissing
             hasLocation: JsonField<Boolean> = JsonMissing.of(),
@@ -2517,6 +2625,12 @@ private constructor(
             @JsonProperty("hasWebsite")
             @ExcludeMissing
             hasWebsite: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("hashtags")
+            @ExcludeMissing
+            hashtags: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("inReplyToTweetId")
+            @ExcludeMissing
+            inReplyToTweetId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("includeOriginalPost")
             @ExcludeMissing
             includeOriginalPost: JsonField<Boolean> = JsonMissing.of(),
@@ -2526,9 +2640,6 @@ private constructor(
             @JsonProperty("includeTargetMetadata")
             @ExcludeMissing
             includeTargetMetadata: JsonField<Boolean> = JsonMissing.of(),
-            @JsonProperty("inReplyToTweetId")
-            @ExcludeMissing
-            inReplyToTweetId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("language")
             @ExcludeMissing
             language: JsonField<String> = JsonMissing.of(),
@@ -2658,9 +2769,6 @@ private constructor(
             @JsonProperty("targetListIds")
             @ExcludeMissing
             targetListIds: JsonField<List<String>> = JsonMissing.of(),
-            @JsonProperty("targets")
-            @ExcludeMissing
-            targets: JsonField<List<Target>> = JsonMissing.of(),
             @JsonProperty("targetSpaceId")
             @ExcludeMissing
             targetSpaceId: JsonField<String> = JsonMissing.of(),
@@ -2676,6 +2784,9 @@ private constructor(
             @JsonProperty("targetUsernames")
             @ExcludeMissing
             targetUsernames: JsonField<List<String>> = JsonMissing.of(),
+            @JsonProperty("targets")
+            @ExcludeMissing
+            targets: JsonField<List<Target>> = JsonMissing.of(),
             @JsonProperty("toUser") @ExcludeMissing toUser: JsonField<String> = JsonMissing.of(),
             @JsonProperty("untilDate")
             @ExcludeMissing
@@ -2704,26 +2815,30 @@ private constructor(
             bioContains,
             blueVerifiedOnly,
             boundingBox,
+            businessEmailOnly,
             cardName,
             cashtags,
             collectionStrategy,
             conversationId,
             dedupeAcrossTargets,
             dedupeMode,
+            emailDomains,
+            enrichProfiles,
             exactPhrase,
             excludeOriginalAuthor,
             excludeSource,
             excludeWords,
             fromUser,
             geocode,
-            hashtags,
+            hasEmail,
             hasLocation,
             hasMediaOnly,
             hasWebsite,
+            hashtags,
+            inReplyToTweetId,
             includeOriginalPost,
             includeSearchTerms,
             includeTargetMetadata,
-            inReplyToTweetId,
             language,
             listId,
             locationContains,
@@ -2779,12 +2894,12 @@ private constructor(
             targetCommunityIds,
             targetListId,
             targetListIds,
-            targets,
             targetSpaceId,
             targetTweetId,
             targetTweetIds,
             targetUsername,
             targetUsernames,
+            targets,
             toUser,
             untilDate,
             untilTime,
@@ -2842,6 +2957,13 @@ private constructor(
         fun boundingBox(): String? = boundingBox.getNullable("boundingBox")
 
         /**
+         * Require an email the profile publishes outside free webmail, such as Gmail.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun businessEmailOnly(): Boolean? = businessEmailOnly.getNullable("businessEmailOnly")
+
+        /**
          * Match the Tweet card name.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
@@ -2883,6 +3005,21 @@ private constructor(
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
         fun dedupeMode(): DedupeMode? = dedupeMode.getNullable("dedupeMode")
+
+        /**
+         * Require an email at one of these domains. Separate domains with commas. Subdomains match.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun emailDomains(): String? = emailDomains.getNullable("emailDomains")
+
+        /**
+         * Add each user's full profile to follower_explorer, following_explorer,
+         * verified_follower_explorer, people_search & repost_extractor rows. Jobs take longer.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun enrichProfiles(): Boolean? = enrichProfiles.getNullable("enrichProfiles")
 
         /**
          * Exact phrase to match (tweet_search_extractor)
@@ -2929,11 +3066,11 @@ private constructor(
         fun geocode(): String? = geocode.getNullable("geocode")
 
         /**
-         * Hashtags separated by spaces, commas, or lines. (tweet_search_extractor)
+         * Require an email the profile publishes.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
-        fun hashtags(): String? = hashtags.getNullable("hashtags")
+        fun hasEmail(): Boolean? = hasEmail.getNullable("hasEmail")
 
         /**
          * Require a profile location.
@@ -2957,6 +3094,20 @@ private constructor(
         fun hasWebsite(): Boolean? = hasWebsite.getNullable("hasWebsite")
 
         /**
+         * Hashtags separated by spaces, commas, or lines. (tweet_search_extractor)
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun hashtags(): String? = hashtags.getNullable("hashtags")
+
+        /**
+         * Only replies to this tweet ID (tweet_search_extractor)
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun inReplyToTweetId(): String? = inReplyToTweetId.getNullable("inReplyToTweetId")
+
+        /**
          * Include the source post in reply results.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
@@ -2977,13 +3128,6 @@ private constructor(
          */
         fun includeTargetMetadata(): Boolean? =
             includeTargetMetadata.getNullable("includeTargetMetadata")
-
-        /**
-         * Only replies to this tweet ID (tweet_search_extractor)
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun inReplyToTweetId(): String? = inReplyToTweetId.getNullable("inReplyToTweetId")
 
         /**
          * Language code filter (tweet_search_extractor)
@@ -3374,13 +3518,6 @@ private constructor(
         fun targetListIds(): List<String>? = targetListIds.getNullable("targetListIds")
 
         /**
-         * Mixed targets auto-routed within one job.
-         *
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
-         */
-        fun targets(): List<Target>? = targets.getNullable("targets")
-
-        /**
          * Required for space_explorer.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
@@ -3406,6 +3543,13 @@ private constructor(
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
         fun targetUsernames(): List<String>? = targetUsernames.getNullable("targetUsernames")
+
+        /**
+         * Mixed targets auto-routed within one job.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun targets(): List<Target>? = targets.getNullable("targets")
 
         /**
          * Filter replies sent to a username (tweet_search_extractor)
@@ -3523,6 +3667,16 @@ private constructor(
         fun _boundingBox(): JsonField<String> = boundingBox
 
         /**
+         * Returns the raw JSON value of [businessEmailOnly].
+         *
+         * Unlike [businessEmailOnly], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("businessEmailOnly")
+        @ExcludeMissing
+        fun _businessEmailOnly(): JsonField<Boolean> = businessEmailOnly
+
+        /**
          * Returns the raw JSON value of [cardName].
          *
          * Unlike [cardName], this method doesn't throw if the JSON field has an unexpected type.
@@ -3574,6 +3728,26 @@ private constructor(
         @JsonProperty("dedupeMode")
         @ExcludeMissing
         fun _dedupeMode(): JsonField<DedupeMode> = dedupeMode
+
+        /**
+         * Returns the raw JSON value of [emailDomains].
+         *
+         * Unlike [emailDomains], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("emailDomains")
+        @ExcludeMissing
+        fun _emailDomains(): JsonField<String> = emailDomains
+
+        /**
+         * Returns the raw JSON value of [enrichProfiles].
+         *
+         * Unlike [enrichProfiles], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("enrichProfiles")
+        @ExcludeMissing
+        fun _enrichProfiles(): JsonField<Boolean> = enrichProfiles
 
         /**
          * Returns the raw JSON value of [exactPhrase].
@@ -3629,11 +3803,11 @@ private constructor(
         @JsonProperty("geocode") @ExcludeMissing fun _geocode(): JsonField<String> = geocode
 
         /**
-         * Returns the raw JSON value of [hashtags].
+         * Returns the raw JSON value of [hasEmail].
          *
-         * Unlike [hashtags], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [hasEmail], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("hashtags") @ExcludeMissing fun _hashtags(): JsonField<String> = hashtags
+        @JsonProperty("hasEmail") @ExcludeMissing fun _hasEmail(): JsonField<Boolean> = hasEmail
 
         /**
          * Returns the raw JSON value of [hasLocation].
@@ -3664,6 +3838,23 @@ private constructor(
         fun _hasWebsite(): JsonField<Boolean> = hasWebsite
 
         /**
+         * Returns the raw JSON value of [hashtags].
+         *
+         * Unlike [hashtags], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("hashtags") @ExcludeMissing fun _hashtags(): JsonField<String> = hashtags
+
+        /**
+         * Returns the raw JSON value of [inReplyToTweetId].
+         *
+         * Unlike [inReplyToTweetId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("inReplyToTweetId")
+        @ExcludeMissing
+        fun _inReplyToTweetId(): JsonField<String> = inReplyToTweetId
+
+        /**
          * Returns the raw JSON value of [includeOriginalPost].
          *
          * Unlike [includeOriginalPost], this method doesn't throw if the JSON field has an
@@ -3692,16 +3883,6 @@ private constructor(
         @JsonProperty("includeTargetMetadata")
         @ExcludeMissing
         fun _includeTargetMetadata(): JsonField<Boolean> = includeTargetMetadata
-
-        /**
-         * Returns the raw JSON value of [inReplyToTweetId].
-         *
-         * Unlike [inReplyToTweetId], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("inReplyToTweetId")
-        @ExcludeMissing
-        fun _inReplyToTweetId(): JsonField<String> = inReplyToTweetId
 
         /**
          * Returns the raw JSON value of [language].
@@ -4171,13 +4352,6 @@ private constructor(
         fun _targetListIds(): JsonField<List<String>> = targetListIds
 
         /**
-         * Returns the raw JSON value of [targets].
-         *
-         * Unlike [targets], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("targets") @ExcludeMissing fun _targets(): JsonField<List<Target>> = targets
-
-        /**
          * Returns the raw JSON value of [targetSpaceId].
          *
          * Unlike [targetSpaceId], this method doesn't throw if the JSON field has an unexpected
@@ -4226,6 +4400,13 @@ private constructor(
         @JsonProperty("targetUsernames")
         @ExcludeMissing
         fun _targetUsernames(): JsonField<List<String>> = targetUsernames
+
+        /**
+         * Returns the raw JSON value of [targets].
+         *
+         * Unlike [targets], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("targets") @ExcludeMissing fun _targets(): JsonField<List<Target>> = targets
 
         /**
          * Returns the raw JSON value of [toUser].
@@ -4339,26 +4520,30 @@ private constructor(
             private var bioContains: JsonField<String> = JsonMissing.of()
             private var blueVerifiedOnly: JsonField<Boolean> = JsonMissing.of()
             private var boundingBox: JsonField<String> = JsonMissing.of()
+            private var businessEmailOnly: JsonField<Boolean> = JsonMissing.of()
             private var cardName: JsonField<String> = JsonMissing.of()
             private var cashtags: JsonField<String> = JsonMissing.of()
             private var collectionStrategy: JsonField<CollectionStrategy> = JsonMissing.of()
             private var conversationId: JsonField<String> = JsonMissing.of()
             private var dedupeAcrossTargets: JsonField<Boolean> = JsonMissing.of()
             private var dedupeMode: JsonField<DedupeMode> = JsonMissing.of()
+            private var emailDomains: JsonField<String> = JsonMissing.of()
+            private var enrichProfiles: JsonField<Boolean> = JsonMissing.of()
             private var exactPhrase: JsonField<String> = JsonMissing.of()
             private var excludeOriginalAuthor: JsonField<Boolean> = JsonMissing.of()
             private var excludeSource: JsonField<String> = JsonMissing.of()
             private var excludeWords: JsonField<String> = JsonMissing.of()
             private var fromUser: JsonField<String> = JsonMissing.of()
             private var geocode: JsonField<String> = JsonMissing.of()
-            private var hashtags: JsonField<String> = JsonMissing.of()
+            private var hasEmail: JsonField<Boolean> = JsonMissing.of()
             private var hasLocation: JsonField<Boolean> = JsonMissing.of()
             private var hasMediaOnly: JsonField<Boolean> = JsonMissing.of()
             private var hasWebsite: JsonField<Boolean> = JsonMissing.of()
+            private var hashtags: JsonField<String> = JsonMissing.of()
+            private var inReplyToTweetId: JsonField<String> = JsonMissing.of()
             private var includeOriginalPost: JsonField<Boolean> = JsonMissing.of()
             private var includeSearchTerms: JsonField<Boolean> = JsonMissing.of()
             private var includeTargetMetadata: JsonField<Boolean> = JsonMissing.of()
-            private var inReplyToTweetId: JsonField<String> = JsonMissing.of()
             private var language: JsonField<String> = JsonMissing.of()
             private var listId: JsonField<String> = JsonMissing.of()
             private var locationContains: JsonField<String> = JsonMissing.of()
@@ -4414,12 +4599,12 @@ private constructor(
             private var targetCommunityIds: JsonField<MutableList<String>>? = null
             private var targetListId: JsonField<String> = JsonMissing.of()
             private var targetListIds: JsonField<MutableList<String>>? = null
-            private var targets: JsonField<MutableList<Target>>? = null
             private var targetSpaceId: JsonField<String> = JsonMissing.of()
             private var targetTweetId: JsonField<String> = JsonMissing.of()
             private var targetTweetIds: JsonField<MutableList<String>>? = null
             private var targetUsername: JsonField<String> = JsonMissing.of()
             private var targetUsernames: JsonField<MutableList<String>>? = null
+            private var targets: JsonField<MutableList<Target>>? = null
             private var toUser: JsonField<String> = JsonMissing.of()
             private var untilDate: JsonField<LocalDate> = JsonMissing.of()
             private var untilTime: JsonField<UntilTime> = JsonMissing.of()
@@ -4438,26 +4623,30 @@ private constructor(
                 bioContains = body.bioContains
                 blueVerifiedOnly = body.blueVerifiedOnly
                 boundingBox = body.boundingBox
+                businessEmailOnly = body.businessEmailOnly
                 cardName = body.cardName
                 cashtags = body.cashtags
                 collectionStrategy = body.collectionStrategy
                 conversationId = body.conversationId
                 dedupeAcrossTargets = body.dedupeAcrossTargets
                 dedupeMode = body.dedupeMode
+                emailDomains = body.emailDomains
+                enrichProfiles = body.enrichProfiles
                 exactPhrase = body.exactPhrase
                 excludeOriginalAuthor = body.excludeOriginalAuthor
                 excludeSource = body.excludeSource
                 excludeWords = body.excludeWords
                 fromUser = body.fromUser
                 geocode = body.geocode
-                hashtags = body.hashtags
+                hasEmail = body.hasEmail
                 hasLocation = body.hasLocation
                 hasMediaOnly = body.hasMediaOnly
                 hasWebsite = body.hasWebsite
+                hashtags = body.hashtags
+                inReplyToTweetId = body.inReplyToTweetId
                 includeOriginalPost = body.includeOriginalPost
                 includeSearchTerms = body.includeSearchTerms
                 includeTargetMetadata = body.includeTargetMetadata
-                inReplyToTweetId = body.inReplyToTweetId
                 language = body.language
                 listId = body.listId
                 locationContains = body.locationContains
@@ -4513,12 +4702,12 @@ private constructor(
                 targetCommunityIds = body.targetCommunityIds.map { it.toMutableList() }
                 targetListId = body.targetListId
                 targetListIds = body.targetListIds.map { it.toMutableList() }
-                targets = body.targets.map { it.toMutableList() }
                 targetSpaceId = body.targetSpaceId
                 targetTweetId = body.targetTweetId
                 targetTweetIds = body.targetTweetIds.map { it.toMutableList() }
                 targetUsername = body.targetUsername
                 targetUsernames = body.targetUsernames.map { it.toMutableList() }
+                targets = body.targets.map { it.toMutableList() }
                 toUser = body.toUser
                 untilDate = body.untilDate
                 untilTime = body.untilTime
@@ -4579,6 +4768,15 @@ private constructor(
                 this.boundingBox = boundingBox
             }
 
+            /** Require an email the profile publishes outside free webmail, such as Gmail. */
+            fun businessEmailOnly(businessEmailOnly: Boolean) =
+                businessEmailOnly(JsonField.of(businessEmailOnly))
+
+            /** Sets [Builder.businessEmailOnly] to an arbitrary JSON value. */
+            fun businessEmailOnly(businessEmailOnly: JsonField<Boolean>) = apply {
+                this.businessEmailOnly = businessEmailOnly
+            }
+
             /** Match the Tweet card name. */
             fun cardName(cardName: String) = cardName(JsonField.of(cardName))
 
@@ -4624,6 +4822,29 @@ private constructor(
             /** Sets [Builder.dedupeMode] to an arbitrary JSON value. */
             fun dedupeMode(dedupeMode: JsonField<DedupeMode>) = apply {
                 this.dedupeMode = dedupeMode
+            }
+
+            /**
+             * Require an email at one of these domains. Separate domains with commas. Subdomains
+             * match.
+             */
+            fun emailDomains(emailDomains: String) = emailDomains(JsonField.of(emailDomains))
+
+            /** Sets [Builder.emailDomains] to an arbitrary JSON value. */
+            fun emailDomains(emailDomains: JsonField<String>) = apply {
+                this.emailDomains = emailDomains
+            }
+
+            /**
+             * Add each user's full profile to follower_explorer, following_explorer,
+             * verified_follower_explorer, people_search & repost_extractor rows. Jobs take longer.
+             */
+            fun enrichProfiles(enrichProfiles: Boolean) =
+                enrichProfiles(JsonField.of(enrichProfiles))
+
+            /** Sets [Builder.enrichProfiles] to an arbitrary JSON value. */
+            fun enrichProfiles(enrichProfiles: JsonField<Boolean>) = apply {
+                this.enrichProfiles = enrichProfiles
             }
 
             /** Exact phrase to match (tweet_search_extractor) */
@@ -4674,11 +4895,11 @@ private constructor(
             /** Sets [Builder.geocode] to an arbitrary JSON value. */
             fun geocode(geocode: JsonField<String>) = apply { this.geocode = geocode }
 
-            /** Hashtags separated by spaces, commas, or lines. (tweet_search_extractor) */
-            fun hashtags(hashtags: String) = hashtags(JsonField.of(hashtags))
+            /** Require an email the profile publishes. */
+            fun hasEmail(hasEmail: Boolean) = hasEmail(JsonField.of(hasEmail))
 
-            /** Sets [Builder.hashtags] to an arbitrary JSON value. */
-            fun hashtags(hashtags: JsonField<String>) = apply { this.hashtags = hashtags }
+            /** Sets [Builder.hasEmail] to an arbitrary JSON value. */
+            fun hasEmail(hasEmail: JsonField<Boolean>) = apply { this.hasEmail = hasEmail }
 
             /** Require a profile location. */
             fun hasLocation(hasLocation: Boolean) = hasLocation(JsonField.of(hasLocation))
@@ -4701,6 +4922,21 @@ private constructor(
 
             /** Sets [Builder.hasWebsite] to an arbitrary JSON value. */
             fun hasWebsite(hasWebsite: JsonField<Boolean>) = apply { this.hasWebsite = hasWebsite }
+
+            /** Hashtags separated by spaces, commas, or lines. (tweet_search_extractor) */
+            fun hashtags(hashtags: String) = hashtags(JsonField.of(hashtags))
+
+            /** Sets [Builder.hashtags] to an arbitrary JSON value. */
+            fun hashtags(hashtags: JsonField<String>) = apply { this.hashtags = hashtags }
+
+            /** Only replies to this tweet ID (tweet_search_extractor) */
+            fun inReplyToTweetId(inReplyToTweetId: String) =
+                inReplyToTweetId(JsonField.of(inReplyToTweetId))
+
+            /** Sets [Builder.inReplyToTweetId] to an arbitrary JSON value. */
+            fun inReplyToTweetId(inReplyToTweetId: JsonField<String>) = apply {
+                this.inReplyToTweetId = inReplyToTweetId
+            }
 
             /** Include the source post in reply results. */
             fun includeOriginalPost(includeOriginalPost: Boolean) =
@@ -4727,15 +4963,6 @@ private constructor(
             /** Sets [Builder.includeTargetMetadata] to an arbitrary JSON value. */
             fun includeTargetMetadata(includeTargetMetadata: JsonField<Boolean>) = apply {
                 this.includeTargetMetadata = includeTargetMetadata
-            }
-
-            /** Only replies to this tweet ID (tweet_search_extractor) */
-            fun inReplyToTweetId(inReplyToTweetId: String) =
-                inReplyToTweetId(JsonField.of(inReplyToTweetId))
-
-            /** Sets [Builder.inReplyToTweetId] to an arbitrary JSON value. */
-            fun inReplyToTweetId(inReplyToTweetId: JsonField<String>) = apply {
-                this.inReplyToTweetId = inReplyToTweetId
             }
 
             /** Language code filter (tweet_search_extractor) */
@@ -5186,33 +5413,6 @@ private constructor(
                     }
             }
 
-            /** Mixed targets auto-routed within one job. */
-            fun targets(targets: List<Target>) = targets(JsonField.of(targets))
-
-            /** Sets [Builder.targets] to an arbitrary JSON value. */
-            fun targets(targets: JsonField<List<Target>>) = apply {
-                this.targets = targets.map { it.toMutableList() }
-            }
-
-            /**
-             * Adds a single [Target] to [targets].
-             *
-             * @throws IllegalStateException if the field was previously set to a non-list.
-             */
-            fun addTarget(target: Target) = apply {
-                targets =
-                    (targets ?: JsonField.of(mutableListOf())).also {
-                        checkKnown("targets", it).add(target)
-                    }
-            }
-
-            /** Alias for calling [addTarget] with `Target.ofString(string)`. */
-            fun addTarget(string: String) = addTarget(Target.ofString(string))
-
-            /** Alias for calling [addTarget] with `Target.ofUnionMember1(unionMember1)`. */
-            fun addTarget(unionMember1: Target.UnionMember1) =
-                addTarget(Target.ofUnionMember1(unionMember1))
-
             /** Required for space_explorer. */
             fun targetSpaceId(targetSpaceId: String) = targetSpaceId(JsonField.of(targetSpaceId))
 
@@ -5277,6 +5477,33 @@ private constructor(
                         checkKnown("targetUsernames", it).add(targetUsername)
                     }
             }
+
+            /** Mixed targets auto-routed within one job. */
+            fun targets(targets: List<Target>) = targets(JsonField.of(targets))
+
+            /** Sets [Builder.targets] to an arbitrary JSON value. */
+            fun targets(targets: JsonField<List<Target>>) = apply {
+                this.targets = targets.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [Target] to [targets].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addTarget(target: Target) = apply {
+                targets =
+                    (targets ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("targets", it).add(target)
+                    }
+            }
+
+            /** Alias for calling [addTarget] with `Target.ofString(string)`. */
+            fun addTarget(string: String) = addTarget(Target.ofString(string))
+
+            /** Alias for calling [addTarget] with `Target.ofUnionMember1(unionMember1)`. */
+            fun addTarget(unionMember1: Target.UnionMember1) =
+                addTarget(Target.ofUnionMember1(unionMember1))
 
             /** Filter replies sent to a username (tweet_search_extractor) */
             fun toUser(toUser: String) = toUser(JsonField.of(toUser))
@@ -5385,26 +5612,30 @@ private constructor(
                     bioContains,
                     blueVerifiedOnly,
                     boundingBox,
+                    businessEmailOnly,
                     cardName,
                     cashtags,
                     collectionStrategy,
                     conversationId,
                     dedupeAcrossTargets,
                     dedupeMode,
+                    emailDomains,
+                    enrichProfiles,
                     exactPhrase,
                     excludeOriginalAuthor,
                     excludeSource,
                     excludeWords,
                     fromUser,
                     geocode,
-                    hashtags,
+                    hasEmail,
                     hasLocation,
                     hasMediaOnly,
                     hasWebsite,
+                    hashtags,
+                    inReplyToTweetId,
                     includeOriginalPost,
                     includeSearchTerms,
                     includeTargetMetadata,
-                    inReplyToTweetId,
                     language,
                     listId,
                     locationContains,
@@ -5460,12 +5691,12 @@ private constructor(
                     (targetCommunityIds ?: JsonMissing.of()).map { it.toImmutable() },
                     targetListId,
                     (targetListIds ?: JsonMissing.of()).map { it.toImmutable() },
-                    (targets ?: JsonMissing.of()).map { it.toImmutable() },
                     targetSpaceId,
                     targetTweetId,
                     (targetTweetIds ?: JsonMissing.of()).map { it.toImmutable() },
                     targetUsername,
                     (targetUsernames ?: JsonMissing.of()).map { it.toImmutable() },
+                    (targets ?: JsonMissing.of()).map { it.toImmutable() },
                     toUser,
                     untilDate,
                     untilTime,
@@ -5501,26 +5732,30 @@ private constructor(
             bioContains()
             blueVerifiedOnly()
             boundingBox()
+            businessEmailOnly()
             cardName()
             cashtags()
             collectionStrategy()?.validate()
             conversationId()
             dedupeAcrossTargets()
             dedupeMode()?.validate()
+            emailDomains()
+            enrichProfiles()
             exactPhrase()
             excludeOriginalAuthor()
             excludeSource()
             excludeWords()
             fromUser()
             geocode()
-            hashtags()
+            hasEmail()
             hasLocation()
             hasMediaOnly()
             hasWebsite()
+            hashtags()
+            inReplyToTweetId()
             includeOriginalPost()
             includeSearchTerms()
             includeTargetMetadata()
-            inReplyToTweetId()
             language()
             listId()
             locationContains()
@@ -5576,12 +5811,12 @@ private constructor(
             targetCommunityIds()
             targetListId()
             targetListIds()
-            targets()?.forEach { it.validate() }
             targetSpaceId()
             targetTweetId()
             targetTweetIds()
             targetUsername()
             targetUsernames()
+            targets()?.forEach { it.validate() }
             toUser()
             untilDate()
             untilTime()?.validate()
@@ -5609,26 +5844,30 @@ private constructor(
                 (if (bioContains.asKnown() == null) 0 else 1) +
                 (if (blueVerifiedOnly.asKnown() == null) 0 else 1) +
                 (if (boundingBox.asKnown() == null) 0 else 1) +
+                (if (businessEmailOnly.asKnown() == null) 0 else 1) +
                 (if (cardName.asKnown() == null) 0 else 1) +
                 (if (cashtags.asKnown() == null) 0 else 1) +
                 (collectionStrategy.asKnown()?.validity() ?: 0) +
                 (if (conversationId.asKnown() == null) 0 else 1) +
                 (if (dedupeAcrossTargets.asKnown() == null) 0 else 1) +
                 (dedupeMode.asKnown()?.validity() ?: 0) +
+                (if (emailDomains.asKnown() == null) 0 else 1) +
+                (if (enrichProfiles.asKnown() == null) 0 else 1) +
                 (if (exactPhrase.asKnown() == null) 0 else 1) +
                 (if (excludeOriginalAuthor.asKnown() == null) 0 else 1) +
                 (if (excludeSource.asKnown() == null) 0 else 1) +
                 (if (excludeWords.asKnown() == null) 0 else 1) +
                 (if (fromUser.asKnown() == null) 0 else 1) +
                 (if (geocode.asKnown() == null) 0 else 1) +
-                (if (hashtags.asKnown() == null) 0 else 1) +
+                (if (hasEmail.asKnown() == null) 0 else 1) +
                 (if (hasLocation.asKnown() == null) 0 else 1) +
                 (if (hasMediaOnly.asKnown() == null) 0 else 1) +
                 (if (hasWebsite.asKnown() == null) 0 else 1) +
+                (if (hashtags.asKnown() == null) 0 else 1) +
+                (if (inReplyToTweetId.asKnown() == null) 0 else 1) +
                 (if (includeOriginalPost.asKnown() == null) 0 else 1) +
                 (if (includeSearchTerms.asKnown() == null) 0 else 1) +
                 (if (includeTargetMetadata.asKnown() == null) 0 else 1) +
-                (if (inReplyToTweetId.asKnown() == null) 0 else 1) +
                 (if (language.asKnown() == null) 0 else 1) +
                 (if (listId.asKnown() == null) 0 else 1) +
                 (if (locationContains.asKnown() == null) 0 else 1) +
@@ -5684,12 +5923,12 @@ private constructor(
                 (targetCommunityIds.asKnown()?.size ?: 0) +
                 (if (targetListId.asKnown() == null) 0 else 1) +
                 (targetListIds.asKnown()?.size ?: 0) +
-                (targets.asKnown()?.sumOf { it.validity() } ?: 0) +
                 (if (targetSpaceId.asKnown() == null) 0 else 1) +
                 (if (targetTweetId.asKnown() == null) 0 else 1) +
                 (targetTweetIds.asKnown()?.size ?: 0) +
                 (if (targetUsername.asKnown() == null) 0 else 1) +
                 (targetUsernames.asKnown()?.size ?: 0) +
+                (targets.asKnown()?.sumOf { it.validity() } ?: 0) +
                 (if (toUser.asKnown() == null) 0 else 1) +
                 (if (untilDate.asKnown() == null) 0 else 1) +
                 (untilTime.asKnown()?.validity() ?: 0) +
@@ -5712,26 +5951,30 @@ private constructor(
                 bioContains == other.bioContains &&
                 blueVerifiedOnly == other.blueVerifiedOnly &&
                 boundingBox == other.boundingBox &&
+                businessEmailOnly == other.businessEmailOnly &&
                 cardName == other.cardName &&
                 cashtags == other.cashtags &&
                 collectionStrategy == other.collectionStrategy &&
                 conversationId == other.conversationId &&
                 dedupeAcrossTargets == other.dedupeAcrossTargets &&
                 dedupeMode == other.dedupeMode &&
+                emailDomains == other.emailDomains &&
+                enrichProfiles == other.enrichProfiles &&
                 exactPhrase == other.exactPhrase &&
                 excludeOriginalAuthor == other.excludeOriginalAuthor &&
                 excludeSource == other.excludeSource &&
                 excludeWords == other.excludeWords &&
                 fromUser == other.fromUser &&
                 geocode == other.geocode &&
-                hashtags == other.hashtags &&
+                hasEmail == other.hasEmail &&
                 hasLocation == other.hasLocation &&
                 hasMediaOnly == other.hasMediaOnly &&
                 hasWebsite == other.hasWebsite &&
+                hashtags == other.hashtags &&
+                inReplyToTweetId == other.inReplyToTweetId &&
                 includeOriginalPost == other.includeOriginalPost &&
                 includeSearchTerms == other.includeSearchTerms &&
                 includeTargetMetadata == other.includeTargetMetadata &&
-                inReplyToTweetId == other.inReplyToTweetId &&
                 language == other.language &&
                 listId == other.listId &&
                 locationContains == other.locationContains &&
@@ -5787,12 +6030,12 @@ private constructor(
                 targetCommunityIds == other.targetCommunityIds &&
                 targetListId == other.targetListId &&
                 targetListIds == other.targetListIds &&
-                targets == other.targets &&
                 targetSpaceId == other.targetSpaceId &&
                 targetTweetId == other.targetTweetId &&
                 targetTweetIds == other.targetTweetIds &&
                 targetUsername == other.targetUsername &&
                 targetUsernames == other.targetUsernames &&
+                targets == other.targets &&
                 toUser == other.toUser &&
                 untilDate == other.untilDate &&
                 untilTime == other.untilTime &&
@@ -5813,26 +6056,30 @@ private constructor(
                 bioContains,
                 blueVerifiedOnly,
                 boundingBox,
+                businessEmailOnly,
                 cardName,
                 cashtags,
                 collectionStrategy,
                 conversationId,
                 dedupeAcrossTargets,
                 dedupeMode,
+                emailDomains,
+                enrichProfiles,
                 exactPhrase,
                 excludeOriginalAuthor,
                 excludeSource,
                 excludeWords,
                 fromUser,
                 geocode,
-                hashtags,
+                hasEmail,
                 hasLocation,
                 hasMediaOnly,
                 hasWebsite,
+                hashtags,
+                inReplyToTweetId,
                 includeOriginalPost,
                 includeSearchTerms,
                 includeTargetMetadata,
-                inReplyToTweetId,
                 language,
                 listId,
                 locationContains,
@@ -5888,12 +6135,12 @@ private constructor(
                 targetCommunityIds,
                 targetListId,
                 targetListIds,
-                targets,
                 targetSpaceId,
                 targetTweetId,
                 targetTweetIds,
                 targetUsername,
                 targetUsernames,
+                targets,
                 toUser,
                 untilDate,
                 untilTime,
@@ -5910,7 +6157,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{toolType=$toolType, advancedQuery=$advancedQuery, anyWords=$anyWords, bioContains=$bioContains, blueVerifiedOnly=$blueVerifiedOnly, boundingBox=$boundingBox, cardName=$cardName, cashtags=$cashtags, collectionStrategy=$collectionStrategy, conversationId=$conversationId, dedupeAcrossTargets=$dedupeAcrossTargets, dedupeMode=$dedupeMode, exactPhrase=$exactPhrase, excludeOriginalAuthor=$excludeOriginalAuthor, excludeSource=$excludeSource, excludeWords=$excludeWords, fromUser=$fromUser, geocode=$geocode, hashtags=$hashtags, hasLocation=$hasLocation, hasMediaOnly=$hasMediaOnly, hasWebsite=$hasWebsite, includeOriginalPost=$includeOriginalPost, includeSearchTerms=$includeSearchTerms, includeTargetMetadata=$includeTargetMetadata, inReplyToTweetId=$inReplyToTweetId, language=$language, listId=$listId, locationContains=$locationContains, maxDepth=$maxDepth, maxFollowers=$maxFollowers, maxFollowing=$maxFollowing, maxId=$maxId, maxItemsPerTarget=$maxItemsPerTarget, maxLikes=$maxLikes, maxPagesPerTarget=$maxPagesPerTarget, maxPosts=$maxPosts, maxQuotes=$maxQuotes, maxReplies=$maxReplies, maxRetweets=$maxRetweets, mediaType=$mediaType, mentioning=$mentioning, minAccountAgeDays=$minAccountAgeDays, minBookmarks=$minBookmarks, minFaves=$minFaves, minFollowers=$minFollowers, minFollowing=$minFollowing, minPosts=$minPosts, minQuotes=$minQuotes, minReplies=$minReplies, minRetweets=$minRetweets, minViews=$minViews, nativeRetweets=$nativeRetweets, near=$near, news=$news, overlapMode=$overlapMode, place=$place, placeCountry=$placeCountry, pointRadius=$pointRadius, queryType=$queryType, quotes=$quotes, quotesOfTweetId=$quotesOfTweetId, relationTargets=$relationTargets, replies=$replies, resultsLimit=$resultsLimit, retweets=$retweets, retweetsOfTweetId=$retweetsOfTweetId, safe=$safe, scope=$scope, searchQueries=$searchQueries, searchQuery=$searchQuery, sinceDate=$sinceDate, sinceId=$sinceId, sinceTime=$sinceTime, sort=$sort, source=$source, startCursor=$startCursor, targetCommunityId=$targetCommunityId, targetCommunityIds=$targetCommunityIds, targetListId=$targetListId, targetListIds=$targetListIds, targets=$targets, targetSpaceId=$targetSpaceId, targetTweetId=$targetTweetId, targetTweetIds=$targetTweetIds, targetUsername=$targetUsername, targetUsernames=$targetUsernames, toUser=$toUser, untilDate=$untilDate, untilTime=$untilTime, url=$url, usernameContains=$usernameContains, verifiedOnly=$verifiedOnly, verifiedType=$verifiedType, within=$within, withinTime=$withinTime, additionalProperties=$additionalProperties}"
+            "Body{toolType=$toolType, advancedQuery=$advancedQuery, anyWords=$anyWords, bioContains=$bioContains, blueVerifiedOnly=$blueVerifiedOnly, boundingBox=$boundingBox, businessEmailOnly=$businessEmailOnly, cardName=$cardName, cashtags=$cashtags, collectionStrategy=$collectionStrategy, conversationId=$conversationId, dedupeAcrossTargets=$dedupeAcrossTargets, dedupeMode=$dedupeMode, emailDomains=$emailDomains, enrichProfiles=$enrichProfiles, exactPhrase=$exactPhrase, excludeOriginalAuthor=$excludeOriginalAuthor, excludeSource=$excludeSource, excludeWords=$excludeWords, fromUser=$fromUser, geocode=$geocode, hasEmail=$hasEmail, hasLocation=$hasLocation, hasMediaOnly=$hasMediaOnly, hasWebsite=$hasWebsite, hashtags=$hashtags, inReplyToTweetId=$inReplyToTweetId, includeOriginalPost=$includeOriginalPost, includeSearchTerms=$includeSearchTerms, includeTargetMetadata=$includeTargetMetadata, language=$language, listId=$listId, locationContains=$locationContains, maxDepth=$maxDepth, maxFollowers=$maxFollowers, maxFollowing=$maxFollowing, maxId=$maxId, maxItemsPerTarget=$maxItemsPerTarget, maxLikes=$maxLikes, maxPagesPerTarget=$maxPagesPerTarget, maxPosts=$maxPosts, maxQuotes=$maxQuotes, maxReplies=$maxReplies, maxRetweets=$maxRetweets, mediaType=$mediaType, mentioning=$mentioning, minAccountAgeDays=$minAccountAgeDays, minBookmarks=$minBookmarks, minFaves=$minFaves, minFollowers=$minFollowers, minFollowing=$minFollowing, minPosts=$minPosts, minQuotes=$minQuotes, minReplies=$minReplies, minRetweets=$minRetweets, minViews=$minViews, nativeRetweets=$nativeRetweets, near=$near, news=$news, overlapMode=$overlapMode, place=$place, placeCountry=$placeCountry, pointRadius=$pointRadius, queryType=$queryType, quotes=$quotes, quotesOfTweetId=$quotesOfTweetId, relationTargets=$relationTargets, replies=$replies, resultsLimit=$resultsLimit, retweets=$retweets, retweetsOfTweetId=$retweetsOfTweetId, safe=$safe, scope=$scope, searchQueries=$searchQueries, searchQuery=$searchQuery, sinceDate=$sinceDate, sinceId=$sinceId, sinceTime=$sinceTime, sort=$sort, source=$source, startCursor=$startCursor, targetCommunityId=$targetCommunityId, targetCommunityIds=$targetCommunityIds, targetListId=$targetListId, targetListIds=$targetListIds, targetSpaceId=$targetSpaceId, targetTweetId=$targetTweetId, targetTweetIds=$targetTweetIds, targetUsername=$targetUsername, targetUsernames=$targetUsernames, targets=$targets, toUser=$toUser, untilDate=$untilDate, untilTime=$untilTime, url=$url, usernameContains=$usernameContains, verifiedOnly=$verifiedOnly, verifiedType=$verifiedType, within=$within, withinTime=$withinTime, additionalProperties=$additionalProperties}"
     }
 
     /** Identifier for the extraction tool used to run a job. */
@@ -6567,6 +6814,8 @@ private constructor(
 
             val BOTH = of("Both")
 
+            val RELEVANCE = of("relevance")
+
             fun of(value: String) = QueryType(JsonField.of(value))
         }
 
@@ -6575,6 +6824,7 @@ private constructor(
             LATEST,
             TOP,
             BOTH,
+            RELEVANCE,
         }
 
         /**
@@ -6590,6 +6840,7 @@ private constructor(
             LATEST,
             TOP,
             BOTH,
+            RELEVANCE,
             /**
              * An enum member indicating that [QueryType] was instantiated with an unknown value.
              */
@@ -6605,6 +6856,7 @@ private constructor(
                 LATEST -> Value.LATEST
                 TOP -> Value.TOP
                 BOTH -> Value.BOTH
+                RELEVANCE -> Value.RELEVANCE
                 else -> Value._UNKNOWN
             }
 
@@ -6619,6 +6871,7 @@ private constructor(
                 LATEST -> Known.LATEST
                 TOP -> Known.TOP
                 BOTH -> Known.BOTH
+                RELEVANCE -> Known.RELEVANCE
                 else -> throw XTwitterScraperInvalidDataException("Unknown QueryType: $value")
             }
 
@@ -7111,7 +7364,9 @@ private constructor(
                 additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(relation, value, additionalProperties) }
+        private val hashCode: Int by lazy {
+            Objects.hash(relation, value, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 

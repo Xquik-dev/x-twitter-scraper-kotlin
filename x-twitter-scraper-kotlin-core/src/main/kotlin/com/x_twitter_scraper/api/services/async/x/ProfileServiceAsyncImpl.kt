@@ -15,8 +15,8 @@ import com.x_twitter_scraper.api.core.http.HttpResponse
 import com.x_twitter_scraper.api.core.http.HttpResponse.Handler
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.core.http.json
-import com.x_twitter_scraper.api.core.http.multipartFormData
 import com.x_twitter_scraper.api.core.http.parseable
+import com.x_twitter_scraper.api.core.http.uploadBody
 import com.x_twitter_scraper.api.core.prepareAsync
 import com.x_twitter_scraper.api.models.x.profile.ProfileUpdateAvatarParams
 import com.x_twitter_scraper.api.models.x.profile.ProfileUpdateAvatarResponse
@@ -106,7 +106,9 @@ class ProfileServiceAsyncImpl internal constructor(private val clientOptions: Cl
                     .method(HttpMethod.PATCH)
                     .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("x", "profile", "avatar")
-                    .body(multipartFormData(clientOptions.jsonMapper, params._body()))
+                    .body(
+                        uploadBody(clientOptions.jsonMapper, params._body(), params.file() != null)
+                    )
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -134,7 +136,9 @@ class ProfileServiceAsyncImpl internal constructor(private val clientOptions: Cl
                     .method(HttpMethod.PATCH)
                     .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("x", "profile", "banner")
-                    .body(multipartFormData(clientOptions.jsonMapper, params._body()))
+                    .body(
+                        uploadBody(clientOptions.jsonMapper, params._body(), params.file() != null)
+                    )
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))

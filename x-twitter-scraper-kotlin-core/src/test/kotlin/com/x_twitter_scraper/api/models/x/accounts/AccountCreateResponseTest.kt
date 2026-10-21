@@ -5,6 +5,7 @@
 package com.x_twitter_scraper.api.models.x.accounts
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.x_twitter_scraper.api.core.JsonMissing
 import com.x_twitter_scraper.api.core.JsonValue
 import com.x_twitter_scraper.api.core.jsonMapper
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
@@ -155,5 +156,108 @@ internal class AccountCreateResponseTest {
         val e =
             assertThrows<XTwitterScraperInvalidDataException> { accountCreateResponse.validate() }
         assertThat(e).hasMessageStartingWith("Unknown ")
+    }
+
+    @Test
+    fun readsAdditionalFields() {
+        val jsonMapper = jsonMapper()
+
+        val xAccountConnectionChallenge0 =
+            jsonMapper.readValue(
+                """{"createdAt":"2026-10-17T00:00:00Z","health":"value","pollAfterMs":1,"xUserId":"value","xUsername":"value"}""",
+                jacksonTypeRef<AccountCreateResponse.XAccountConnectionChallenge>(),
+            )
+        assertThat(xAccountConnectionChallenge0.createdAt()).isNotNull()
+        assertThat(xAccountConnectionChallenge0.health()).isNotNull()
+        assertThat(xAccountConnectionChallenge0.pollAfterMs()).isNotNull()
+        assertThat(xAccountConnectionChallenge0.xUserId()).isNotNull()
+        assertThat(xAccountConnectionChallenge0.xUsername()).isNotNull()
+        assertThat(jsonMapper.readTree(jsonMapper.writeValueAsString(xAccountConnectionChallenge0)))
+            .isEqualTo(
+                jsonMapper.readTree(
+                    """{"createdAt":"2026-10-17T00:00:00Z","health":"value","pollAfterMs":1,"xUserId":"value","xUsername":"value"}"""
+                )
+            )
+
+        val xAccountConnectionAttemptPending1 =
+            jsonMapper.readValue(
+                """{"createdAt":"2026-10-17T00:00:00Z","expiresAt":"2026-10-17T00:00:00Z","health":"value","message":"value","username":"value","xUserId":"value","xUsername":"value"}""",
+                jacksonTypeRef<AccountCreateResponse.XAccountConnectionAttemptPending>(),
+            )
+        assertThat(xAccountConnectionAttemptPending1.createdAt()).isNotNull()
+        assertThat(xAccountConnectionAttemptPending1.expiresAt()).isNotNull()
+        assertThat(xAccountConnectionAttemptPending1.health()).isNotNull()
+        assertThat(xAccountConnectionAttemptPending1.message()).isNotNull()
+        assertThat(xAccountConnectionAttemptPending1.username()).isNotNull()
+        assertThat(xAccountConnectionAttemptPending1.xUserId()).isNotNull()
+        assertThat(xAccountConnectionAttemptPending1.xUsername()).isNotNull()
+        assertThat(
+                jsonMapper.readTree(
+                    jsonMapper.writeValueAsString(xAccountConnectionAttemptPending1)
+                )
+            )
+            .isEqualTo(
+                jsonMapper.readTree(
+                    """{"createdAt":"2026-10-17T00:00:00Z","expiresAt":"2026-10-17T00:00:00Z","health":"value","message":"value","username":"value","xUserId":"value","xUsername":"value"}"""
+                )
+            )
+
+        val sanitizedXAccount2 =
+            jsonMapper.readValue(
+                """{"expiresAt":"2026-10-17T00:00:00Z","message":"value","object":"value","pollAfterMs":1,"username":"value"}""",
+                jacksonTypeRef<AccountCreateResponse.SanitizedXAccount>(),
+            )
+        assertThat(sanitizedXAccount2.expiresAt()).isNotNull()
+        assertThat(sanitizedXAccount2.message()).isNotNull()
+        assertThat(sanitizedXAccount2.object_()).isNotNull()
+        assertThat(sanitizedXAccount2.pollAfterMs()).isNotNull()
+        assertThat(sanitizedXAccount2.username()).isNotNull()
+        assertThat(jsonMapper.readTree(jsonMapper.writeValueAsString(sanitizedXAccount2)))
+            .isEqualTo(
+                jsonMapper.readTree(
+                    """{"expiresAt":"2026-10-17T00:00:00Z","message":"value","object":"value","pollAfterMs":1,"username":"value"}"""
+                )
+            )
+    }
+
+    @Test
+    fun keepsAdditionalFieldsOptional() {
+        val xAccountConnectionChallenge0 =
+            AccountCreateResponse.XAccountConnectionChallenge.builder()
+                .id(JsonMissing.of())
+                .expiresAt(JsonMissing.of())
+                .message(JsonMissing.of())
+                .username(JsonMissing.of())
+                .build()
+        assertThat(xAccountConnectionChallenge0.createdAt()).isNull()
+        assertThat(xAccountConnectionChallenge0.health()).isNull()
+        assertThat(xAccountConnectionChallenge0.pollAfterMs()).isNull()
+        assertThat(xAccountConnectionChallenge0.xUserId()).isNull()
+        assertThat(xAccountConnectionChallenge0.xUsername()).isNull()
+        val xAccountConnectionAttemptPending1 =
+            AccountCreateResponse.XAccountConnectionAttemptPending.builder()
+                .id(JsonMissing.of())
+                .pollAfterMs(JsonMissing.of())
+                .build()
+        assertThat(xAccountConnectionAttemptPending1.createdAt()).isNull()
+        assertThat(xAccountConnectionAttemptPending1.expiresAt()).isNull()
+        assertThat(xAccountConnectionAttemptPending1.health()).isNull()
+        assertThat(xAccountConnectionAttemptPending1.message()).isNull()
+        assertThat(xAccountConnectionAttemptPending1.username()).isNull()
+        assertThat(xAccountConnectionAttemptPending1.xUserId()).isNull()
+        assertThat(xAccountConnectionAttemptPending1.xUsername()).isNull()
+        val sanitizedXAccount2 =
+            AccountCreateResponse.SanitizedXAccount.builder()
+                .id(JsonMissing.of())
+                .createdAt(JsonMissing.of())
+                .health(JsonMissing.of())
+                .xUserId(JsonMissing.of())
+                .xUsername(JsonMissing.of())
+                .build()
+        assertThat(sanitizedXAccount2.expiresAt()).isNull()
+        assertThat(sanitizedXAccount2.message()).isNull()
+        assertThat(sanitizedXAccount2.object_()).isNull()
+        assertThat(sanitizedXAccount2.pollAfterMs()).isNull()
+        assertThat(sanitizedXAccount2.username()).isNull()
     }
 }

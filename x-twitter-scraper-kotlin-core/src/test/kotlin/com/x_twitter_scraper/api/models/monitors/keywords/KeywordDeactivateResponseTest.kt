@@ -13,13 +13,24 @@ internal class KeywordDeactivateResponseTest {
 
     @Test
     fun create() {
-        val keywordDeactivateResponse = KeywordDeactivateResponse.builder().build()
+        val keywordDeactivateResponse =
+            KeywordDeactivateResponse.builder()
+                .deletionStatus("deletionStatus")
+                .statusUrl("/api/v1/monitors/42")
+                .build()
+
+        assertThat(keywordDeactivateResponse.deletionStatus()).isEqualTo("deletionStatus")
+        assertThat(keywordDeactivateResponse.statusUrl()).isEqualTo("/api/v1/monitors/42")
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val keywordDeactivateResponse = KeywordDeactivateResponse.builder().build()
+        val keywordDeactivateResponse =
+            KeywordDeactivateResponse.builder()
+                .deletionStatus("deletionStatus")
+                .statusUrl("/api/v1/monitors/42")
+                .build()
 
         val roundtrippedKeywordDeactivateResponse =
             jsonMapper.readValue(

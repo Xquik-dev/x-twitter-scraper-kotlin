@@ -29,6 +29,7 @@ private constructor(
     private val eventTypes: JsonField<List<EventType>>,
     private val secret: JsonField<String>,
     private val url: JsonField<String>,
+    private val ignoredFields: JsonField<List<String>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -43,7 +44,10 @@ private constructor(
         eventTypes: JsonField<List<EventType>> = JsonMissing.of(),
         @JsonProperty("secret") @ExcludeMissing secret: JsonField<String> = JsonMissing.of(),
         @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of(),
-    ) : this(id, createdAt, eventTypes, secret, url, mutableMapOf())
+        @JsonProperty("ignoredFields")
+        @ExcludeMissing
+        ignoredFields: JsonField<List<String>> = JsonMissing.of(),
+    ) : this(id, createdAt, eventTypes, secret, url, ignoredFields, mutableMapOf())
 
     /**
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
@@ -78,6 +82,14 @@ private constructor(
      *   unexpectedly missing or null.
      */
     fun url(): String = url.getRequired("url")
+
+    /**
+     * Fields the request sent that this route does not read, in the order sent. They changed
+     * nothing. The answer leaves this out when the route read every field.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun ignoredFields(): List<String>? = ignoredFields.getNullable("ignoredFields")
 
     /**
      * Returns the raw JSON value of [id].
@@ -118,6 +130,15 @@ private constructor(
      */
     @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
 
+    /**
+     * Returns the raw JSON value of [ignoredFields].
+     *
+     * Unlike [ignoredFields], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("ignoredFields")
+    @ExcludeMissing
+    fun _ignoredFields(): JsonField<List<String>> = ignoredFields
+
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -155,6 +176,7 @@ private constructor(
         private var eventTypes: JsonField<MutableList<EventType>>? = null
         private var secret: JsonField<String>? = null
         private var url: JsonField<String>? = null
+        private var ignoredFields: JsonField<MutableList<String>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(webhookCreateResponse: WebhookCreateResponse) = apply {
@@ -163,6 +185,7 @@ private constructor(
             eventTypes = webhookCreateResponse.eventTypes.map { it.toMutableList() }
             secret = webhookCreateResponse.secret
             url = webhookCreateResponse.url
+            ignoredFields = webhookCreateResponse.ignoredFields.map { it.toMutableList() }
             additionalProperties = webhookCreateResponse.additionalProperties.toMutableMap()
         }
 
@@ -207,6 +230,29 @@ private constructor(
         /** Sets [Builder.url] to an arbitrary JSON value. */
         fun url(url: JsonField<String>) = apply { this.url = url }
 
+        /**
+         * Fields the request sent that this route does not read, in the order sent. They changed
+         * nothing. The answer leaves this out when the route read every field.
+         */
+        fun ignoredFields(ignoredFields: List<String>) = ignoredFields(JsonField.of(ignoredFields))
+
+        /** Sets [Builder.ignoredFields] to an arbitrary JSON value. */
+        fun ignoredFields(ignoredFields: JsonField<List<String>>) = apply {
+            this.ignoredFields = ignoredFields.map { it.toMutableList() }
+        }
+
+        /**
+         * Adds a single [String] to [ignoredFields].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addIgnoredField(ignoredField: String) = apply {
+            ignoredFields =
+                (ignoredFields ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("ignoredFields", it).add(ignoredField)
+                }
+        }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -249,6 +295,7 @@ private constructor(
                 checkRequired("eventTypes", eventTypes).map { it.toImmutable() },
                 checkRequired("secret", secret),
                 checkRequired("url", url),
+                (ignoredFields ?: JsonMissing.of()).map { it.toImmutable() },
                 additionalProperties.toMutableMap(),
             )
     }
@@ -273,6 +320,7 @@ private constructor(
         eventTypes().forEach { it.validate() }
         secret()
         url()
+        ignoredFields()
         validated = true
     }
 
@@ -289,7 +337,8 @@ private constructor(
             (if (createdAt.asKnown() == null) 0 else 1) +
             (eventTypes.asKnown()?.sumOf { it.validity() } ?: 0) +
             (if (secret.asKnown() == null) 0 else 1) +
-            (if (url.asKnown() == null) 0 else 1)
+            (if (url.asKnown() == null) 0 else 1) +
+            (ignoredFields.asKnown()?.size ?: 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -302,15 +351,16 @@ private constructor(
             eventTypes == other.eventTypes &&
             secret == other.secret &&
             url == other.url &&
+            ignoredFields == other.ignoredFields &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(id, createdAt, eventTypes, secret, url, additionalProperties)
+        Objects.hash(id, createdAt, eventTypes, secret, url, ignoredFields, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "WebhookCreateResponse{id=$id, createdAt=$createdAt, eventTypes=$eventTypes, secret=$secret, url=$url, additionalProperties=$additionalProperties}"
+        "WebhookCreateResponse{id=$id, createdAt=$createdAt, eventTypes=$eventTypes, secret=$secret, url=$url, ignoredFields=$ignoredFields, additionalProperties=$additionalProperties}"
 }

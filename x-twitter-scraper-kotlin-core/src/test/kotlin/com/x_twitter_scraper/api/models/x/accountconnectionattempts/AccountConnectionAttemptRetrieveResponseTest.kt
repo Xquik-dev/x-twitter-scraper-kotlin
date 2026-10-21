@@ -1,6 +1,7 @@
 package com.x_twitter_scraper.api.models.x.accountconnectionattempts
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.x_twitter_scraper.api.core.JsonMissing
 import com.x_twitter_scraper.api.core.JsonValue
 import com.x_twitter_scraper.api.core.jsonMapper
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
@@ -195,5 +196,26 @@ internal class AccountConnectionAttemptRetrieveResponseTest {
                 accountConnectionAttemptRetrieveResponse.validate()
             }
         assertThat(e).hasMessageStartingWith("Unknown ")
+    }
+
+    @Test
+    fun readsAdditionalFields() {
+        val jsonMapper = jsonMapper()
+
+        val success0 =
+            jsonMapper.readValue(
+                """{"pollAfterMs":1}""",
+                jacksonTypeRef<AccountConnectionAttemptRetrieveResponse.Success>(),
+            )
+        assertThat(success0.pollAfterMs()).isNotNull()
+        assertThat(jsonMapper.readTree(jsonMapper.writeValueAsString(success0)))
+            .isEqualTo(jsonMapper.readTree("""{"pollAfterMs":1}"""))
+    }
+
+    @Test
+    fun keepsAdditionalFieldsOptional() {
+        val success0 =
+            AccountConnectionAttemptRetrieveResponse.Success.builder().id(JsonMissing.of()).build()
+        assertThat(success0.pollAfterMs()).isNull()
     }
 }

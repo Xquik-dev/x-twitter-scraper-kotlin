@@ -37,6 +37,7 @@ private constructor(
     private val searchContext: JsonField<SearchContext>,
     private val searchedQuery: JsonField<String>,
     private val windowComplete: JsonField<Boolean>,
+    private val skipped: JsonField<List<Skipped>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -66,6 +67,9 @@ private constructor(
         @JsonProperty("windowComplete")
         @ExcludeMissing
         windowComplete: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("skipped")
+        @ExcludeMissing
+        skipped: JsonField<List<Skipped>> = JsonMissing.of(),
     ) : this(
         hasNextPage,
         nextCursor,
@@ -75,6 +79,7 @@ private constructor(
         searchContext,
         searchedQuery,
         windowComplete,
+        skipped,
         mutableMapOf(),
     )
 
@@ -201,6 +206,16 @@ private constructor(
     @ExcludeMissing
     fun _windowComplete(): JsonField<Boolean> = windowComplete
 
+    /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
+    fun skipped(): List<Skipped>? = skipped.getNullable("skipped")
+
+    /**
+     * Returns the raw JSON value of [skipped].
+     *
+     * Unlike [skipped], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("skipped") @ExcludeMissing fun _skipped(): JsonField<List<Skipped>> = skipped
+
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -239,6 +254,7 @@ private constructor(
         private var searchContext: JsonField<SearchContext> = JsonMissing.of()
         private var searchedQuery: JsonField<String> = JsonMissing.of()
         private var windowComplete: JsonField<Boolean> = JsonMissing.of()
+        private var skipped: JsonField<MutableList<Skipped>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(paginatedTweets: PaginatedTweets) = apply {
@@ -250,6 +266,7 @@ private constructor(
             searchContext = paginatedTweets.searchContext
             searchedQuery = paginatedTweets.searchedQuery
             windowComplete = paginatedTweets.windowComplete
+            skipped = paginatedTweets.skipped.map { it.toMutableList() }
             additionalProperties = paginatedTweets.additionalProperties.toMutableMap()
         }
 
@@ -328,6 +345,21 @@ private constructor(
             this.windowComplete = windowComplete
         }
 
+        fun skipped(skipped: List<Skipped>) = skipped(JsonField.of(skipped))
+
+        /** Sets [Builder.skipped] to an arbitrary JSON value. */
+        fun skipped(skipped: JsonField<List<Skipped>>) = apply {
+            this.skipped = skipped.map { it.toMutableList() }
+        }
+
+        /** Adds a single [skipped] to [skipped]. */
+        fun addSkipped(skipped: Skipped) = apply {
+            this.skipped =
+                (this.skipped ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("skipped", it).add(skipped)
+                }
+        }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -371,6 +403,7 @@ private constructor(
                 searchContext,
                 searchedQuery,
                 windowComplete,
+                (skipped ?: JsonMissing.of()).map { it.toImmutable() },
                 additionalProperties.toMutableMap(),
             )
     }
@@ -398,6 +431,7 @@ private constructor(
         searchContext()?.validate()
         searchedQuery()
         windowComplete()
+        skipped()?.forEach { it.validate() }
         validated = true
     }
 
@@ -410,7 +444,8 @@ private constructor(
         }
 
     internal fun validity(): Int =
-        (if (hasNextPage.asKnown() == null) 0 else 1) +
+        (skipped.asKnown()?.sumOf { it.validity() } ?: 0) +
+            (if (hasNextPage.asKnown() == null) 0 else 1) +
             (if (nextCursor.asKnown() == null) 0 else 1) +
             (tweets.asKnown()?.sumOf { it.validity() } ?: 0) +
             (if (filteredCount.asKnown() == null) 0 else 1) +
@@ -810,6 +845,138 @@ private constructor(
             "SearchContext{smartTag=$smartTag, additionalProperties=$additionalProperties}"
     }
 
+    class Skipped
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
+        private val entry: JsonField<String>,
+        private val reason: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("entry") @ExcludeMissing entry: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("reason") @ExcludeMissing reason: JsonField<String> = JsonMissing.of(),
+        ) : this(entry, reason, mutableMapOf())
+
+        fun entry(): String = entry.getRequired("entry")
+
+        fun reason(): String = reason.getRequired("reason")
+
+        @JsonProperty("entry") @ExcludeMissing fun _entry(): JsonField<String> = entry
+
+        @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<String> = reason
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            fun builder() = Builder()
+        }
+
+        class Builder internal constructor() {
+
+            private var entry: JsonField<String>? = null
+            private var reason: JsonField<String>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(skipped: Skipped) = apply {
+                entry = skipped.entry
+                reason = skipped.reason
+                additionalProperties = skipped.additionalProperties.toMutableMap()
+            }
+
+            fun entry(entry: String) = entry(JsonField.of(entry))
+
+            fun entry(entry: JsonField<String>) = apply { this.entry = entry }
+
+            fun reason(reason: String) = reason(JsonField.of(reason))
+
+            fun reason(reason: JsonField<String>) = apply { this.reason = reason }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply {
+                additionalProperties.remove(key)
+            }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            fun build(): Skipped =
+                Skipped(
+                    checkRequired("entry", entry),
+                    checkRequired("reason", reason),
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Skipped = apply {
+            if (validated) {
+                return@apply
+            }
+
+            entry()
+            reason()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: XTwitterScraperInvalidDataException) {
+                false
+            }
+
+        internal fun validity(): Int =
+            (if (entry.asKnown() == null) 0 else 1) + (if (reason.asKnown() == null) 0 else 1)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Skipped &&
+                entry == other.entry &&
+                reason == other.reason &&
+                additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy {
+            Objects.hash(entry, reason, additionalProperties)
+        }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Skipped{entry=$entry, reason=$reason, additionalProperties=$additionalProperties}"
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
@@ -824,6 +991,7 @@ private constructor(
             searchContext == other.searchContext &&
             searchedQuery == other.searchedQuery &&
             windowComplete == other.windowComplete &&
+            skipped == other.skipped &&
             additionalProperties == other.additionalProperties
     }
 
@@ -837,6 +1005,7 @@ private constructor(
             searchContext,
             searchedQuery,
             windowComplete,
+            skipped,
             additionalProperties,
         )
     }
@@ -844,5 +1013,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "PaginatedTweets{hasNextPage=$hasNextPage, nextCursor=$nextCursor, tweets=$tweets, filteredCount=$filteredCount, readBackTo=$readBackTo, searchContext=$searchContext, searchedQuery=$searchedQuery, windowComplete=$windowComplete, additionalProperties=$additionalProperties}"
+        "PaginatedTweets{hasNextPage=$hasNextPage, nextCursor=$nextCursor, tweets=$tweets, filteredCount=$filteredCount, readBackTo=$readBackTo, searchContext=$searchContext, searchedQuery=$searchedQuery, windowComplete=$windowComplete, skipped=$skipped, additionalProperties=$additionalProperties}"
 }

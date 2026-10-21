@@ -15,8 +15,8 @@ import com.x_twitter_scraper.api.core.http.HttpResponse
 import com.x_twitter_scraper.api.core.http.HttpResponse.Handler
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.core.http.json
-import com.x_twitter_scraper.api.core.http.multipartFormData
 import com.x_twitter_scraper.api.core.http.parseable
+import com.x_twitter_scraper.api.core.http.uploadBody
 import com.x_twitter_scraper.api.core.prepareAsync
 import com.x_twitter_scraper.api.models.x.media.MediaDownloadParams
 import com.x_twitter_scraper.api.models.x.media.MediaDownloadResponse
@@ -98,7 +98,9 @@ class MediaServiceAsyncImpl internal constructor(private val clientOptions: Clie
                     .method(HttpMethod.POST)
                     .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("x", "media")
-                    .body(multipartFormData(clientOptions.jsonMapper, params._body()))
+                    .body(
+                        uploadBody(clientOptions.jsonMapper, params._body(), params.file() != null)
+                    )
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))

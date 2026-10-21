@@ -18,6 +18,10 @@ import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
 import java.util.Collections
 import java.util.Objects
 
+/**
+ * Free conservative cost estimate. Post estimates use the supported cap & refuse a protected
+ * profile. It never creates a job or charges.
+ */
 class ExtractionEstimateCostResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
@@ -193,6 +197,7 @@ private constructor(
                 extractionEstimateCostResponse.additionalProperties.toMutableMap()
         }
 
+        /** Whether the balance covers the full estimate. */
         fun allowed(allowed: Boolean) = allowed(JsonField.of(allowed))
 
         /** Sets [Builder.allowed] to an arbitrary JSON value. */
@@ -214,6 +219,7 @@ private constructor(
             this.creditsRequired = creditsRequired
         }
 
+        /** The row count the credit estimate uses. It does not say how many rows exist. */
         fun estimatedResults(estimatedResults: Long) =
             estimatedResults(JsonField.of(estimatedResults))
 
@@ -227,6 +233,7 @@ private constructor(
         /** Sets [Builder.source] to an arbitrary JSON value. */
         fun source(source: JsonField<Source>) = apply { this.source = source }
 
+        /** Resolved X user ID from count-based profile estimates. */
         fun resolvedXUserId(resolvedXUserId: String) =
             resolvedXUserId(JsonField.of(resolvedXUserId))
 
@@ -349,6 +356,8 @@ private constructor(
 
             val UNKNOWN = of("unknown")
 
+            val LIKE_COUNT = of("likeCount")
+
             fun of(value: String) = Source(JsonField.of(value))
         }
 
@@ -364,6 +373,7 @@ private constructor(
             RESULTS_LIMIT,
             RETWEET_COUNT,
             UNKNOWN,
+            LIKE_COUNT,
         }
 
         /**
@@ -386,6 +396,7 @@ private constructor(
             RESULTS_LIMIT,
             RETWEET_COUNT,
             UNKNOWN,
+            LIKE_COUNT,
             /** An enum member indicating that [Source] was instantiated with an unknown value. */
             _UNKNOWN,
         }
@@ -406,6 +417,7 @@ private constructor(
                 RESULTS_LIMIT -> Value.RESULTS_LIMIT
                 RETWEET_COUNT -> Value.RETWEET_COUNT
                 UNKNOWN -> Value.UNKNOWN
+                LIKE_COUNT -> Value.LIKE_COUNT
                 else -> Value._UNKNOWN
             }
 
@@ -427,6 +439,7 @@ private constructor(
                 RESULTS_LIMIT -> Known.RESULTS_LIMIT
                 RETWEET_COUNT -> Known.RETWEET_COUNT
                 UNKNOWN -> Known.UNKNOWN
+                LIKE_COUNT -> Known.LIKE_COUNT
                 else -> throw XTwitterScraperInvalidDataException("Unknown Source: $value")
             }
 

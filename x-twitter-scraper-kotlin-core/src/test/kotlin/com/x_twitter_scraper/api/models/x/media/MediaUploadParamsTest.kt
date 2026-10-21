@@ -4,10 +4,13 @@
 
 package com.x_twitter_scraper.api.models.x.media
 
+import com.x_twitter_scraper.api.core.JsonMissing
+import com.x_twitter_scraper.api.core.JsonNull
 import com.x_twitter_scraper.api.core.MultipartField
 import com.x_twitter_scraper.api.core.http.Headers
 import java.io.InputStream
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 
 internal class MediaUploadParamsTest {
@@ -47,7 +50,7 @@ internal class MediaUploadParamsTest {
 
         val body = params._body()
 
-        assertThat(body.filterValues { !it.value.isNull() })
+        assertThat(body.filterValues { !it.value.isMissing() && !it.value.isNull() })
             .usingRecursiveComparison()
             .withEqualsForType(
                 { a, b -> a.readBytes() contentEquals b.readBytes() },
@@ -62,5 +65,92 @@ internal class MediaUploadParamsTest {
                         field.map { (it as? ByteArray)?.inputStream() ?: it }
                     }
             )
+    }
+
+    @Test
+    fun fileWithoutUrl() {
+        val params =
+            MediaUploadParams.builder()
+                .idempotencyKey("Idempotency-Key")
+                .account("@example")
+                .file("file bytes".byteInputStream())
+                .build()
+                .toBuilder()
+                .build()
+
+        assertThat(params.url()).isNull()
+        assertThat(params.file()!!.readBytes()).isEqualTo("file bytes".toByteArray())
+        assertThat(params._file().filename).isEqualTo("upload")
+    }
+
+    @Test
+    fun bodyRejectsLongVideoWithoutFile() {
+        listOf(
+                MultipartField.of(false),
+                MultipartField.of(true),
+                MultipartField.of<Boolean>(JsonNull.of()),
+            )
+            .forEach { isLongVideo ->
+                assertThatThrownBy {
+                        MediaUploadParams.Body.builder()
+                            .account("@example")
+                            .url("https://example.com/video.mp4")
+                            .isLongVideo(isLongVideo)
+                            .build()
+                    }
+                    .isInstanceOf(IllegalStateException::class.java)
+                    .hasMessage("`isLongVideo` requires `file`")
+            }
+    }
+
+    @Test
+    fun omitsNullUploadInputs() {
+        val urlParams =
+            MediaUploadParams.builder()
+                .idempotencyKey("Idempotency-Key")
+                .account("@example")
+                .url("https://example.com/image.png")
+                .file(MultipartField.of<InputStream>(JsonNull.of()))
+                .build()
+        val fileParams =
+            MediaUploadParams.builder()
+                .idempotencyKey("Idempotency-Key")
+                .account("@example")
+                .url(MultipartField.of<String>(JsonNull.of()))
+                .file("file bytes".byteInputStream())
+                .build()
+
+        assertThat(urlParams._body()).containsOnlyKeys("account", "url")
+        assertThat(fileParams._body()).containsOnlyKeys("account", "file")
+    }
+
+    @Test
+    fun rejectsBothUrlAndFile() {
+        assertThatThrownBy {
+                MediaUploadParams.builder()
+                    .idempotencyKey("Idempotency-Key")
+                    .account("@example")
+                    .url("https://example.com/image.png")
+                    .file("file bytes".byteInputStream())
+                    .build()
+            }
+            .isInstanceOf(IllegalStateException::class.java)
+            .hasMessage("Exactly one of `url` or `file` must be set")
+    }
+
+    @Test
+    fun rejectsNeitherUrlNorFile() {
+        listOf(JsonMissing.of(), JsonNull.of()).forEach { missing ->
+            assertThatThrownBy {
+                    MediaUploadParams.builder()
+                        .idempotencyKey("Idempotency-Key")
+                        .account("@example")
+                        .url(MultipartField.of<String>(missing))
+                        .file(MultipartField.of<InputStream>(missing))
+                        .build()
+                }
+                .isInstanceOf(IllegalStateException::class.java)
+                .hasMessage("Exactly one of `url` or `file` must be set")
+        }
     }
 }
