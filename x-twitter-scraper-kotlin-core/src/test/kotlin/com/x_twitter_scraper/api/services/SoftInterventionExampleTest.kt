@@ -12,6 +12,7 @@ import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import com.x_twitter_scraper.api.client.XTwitterScraperClient
 import com.x_twitter_scraper.api.client.okhttp.XTwitterScraperOkHttpClient
+import com.x_twitter_scraper.api.models.SearchTweet
 import com.x_twitter_scraper.api.models.SoftIntervention
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -84,17 +85,26 @@ internal class SoftInterventionExampleTest {
         checkNotNull(label)
         assertThat(label.displayType()).isEqualTo("Fosnr")
         assertThat(label.engagementNudge()).isEqualTo(true)
-        val text = checkNotNull(label.text())
-        assertThat(text.text()).isEqualTo("This Post may violate X's rules against Abuse.")
-        assertThat(text.rtl()).isEqualTo(false)
-        val entities = checkNotNull(text.entities())
-        assertThat(entities).hasSize(1)
-        assertThat(entities[0].fromIndex()).isEqualTo(40L)
-        assertThat(entities[0].toIndex()).isEqualTo(45L)
-        val ref = checkNotNull(entities[0].ref())
-        assertThat(ref.type()).isEqualTo("TimelineUrl")
-        assertThat(ref.url()).isEqualTo("https://help.x.com/rules-and-policies/public-interest")
-        assertThat(ref.urlType()).isEqualTo("ExternalUrl")
+        assertThat(label.text())
+            .isEqualTo(
+                SoftIntervention.Text.builder()
+                    .text("This Post may violate X's rules against Abuse.")
+                    .rtl(false)
+                    .addEntity(
+                        SearchTweet.Interstitial.Text.Entity.builder()
+                            .fromIndex(40L)
+                            .toIndex(45L)
+                            .ref(
+                                SearchTweet.Interstitial.Text.Entity.Ref.builder()
+                                    .type("TimelineUrl")
+                                    .url("https://help.x.com/rules-and-policies/public-interest")
+                                    .urlType("ExternalUrl")
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .build()
+            )
         val url = checkNotNull(label.url())
         assertThat(url.url()).isEqualTo("https://help.x.com/rules-and-policies/enforcement-options")
         assertThat(url.urlType()).isEqualTo("ExternalUrl")
