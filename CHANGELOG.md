@@ -9,6 +9,7 @@
 ### Features
 
 * Communities add the analytics read through `retrieveAnalytics`.
+* Posts and embedded posts return `softIntervention`, the label X shows under a post whose reach it limits.
 * Posts and embedded posts name the counts X did not send in `unknownCounts`.
 * Bulk retry can target specific accounts with `accountIds`.
 * Embedded parent, quoted and retweeted posts carry every tweet field and the author.
