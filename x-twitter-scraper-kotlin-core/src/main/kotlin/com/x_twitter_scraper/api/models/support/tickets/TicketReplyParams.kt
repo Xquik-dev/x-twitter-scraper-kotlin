@@ -8,14 +8,17 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.x_twitter_scraper.api.core.ExcludeMissing
+import com.x_twitter_scraper.api.core.JsonMissing
 import com.x_twitter_scraper.api.core.JsonValue
 import com.x_twitter_scraper.api.core.MultipartField
 import com.x_twitter_scraper.api.core.Params
-import com.x_twitter_scraper.api.core.checkRequired
+import com.x_twitter_scraper.api.core.checkAtLeastOne
+import com.x_twitter_scraper.api.core.checkKnown
 import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import com.x_twitter_scraper.api.core.toImmutable
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
+import java.io.InputStream
 import java.util.Collections
 import java.util.Objects
 
@@ -34,10 +37,11 @@ private constructor(
     fun idempotencyKey(): String? = idempotencyKey
 
     /**
-     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null.
+     * Body is optional when attachments are sent.
+     *
+     * @throws XTwitterScraperInvalidDataException if the multipart field has an unexpected type.
      */
-    fun body(): String = body.body()
+    fun body(): String? = body.body()
 
     /**
      * Returns the raw multipart value of [body].
@@ -45,6 +49,10 @@ private constructor(
      * Unlike [body], this method doesn't throw if the multipart field has an unexpected type.
      */
     fun _body_(): MultipartField<String> = this.body._body_()
+
+    fun attachments(): List<InputStream>? = body.attachments()
+
+    fun _attachments(): MultipartField<List<InputStream>> = body._attachments()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -61,10 +69,8 @@ private constructor(
         /**
          * Returns a mutable builder for constructing an instance of [TicketReplyParams].
          *
-         * The following fields are required:
-         * ```kotlin
-         * .body()
-         * ```
+         * Tickets allow up to 4 attachments, 10 MiB per image, 25 MiB per video, and 30 MiB per
+         * request.
          */
         fun builder() = Builder()
     }
@@ -97,6 +103,14 @@ private constructor(
 
         /** Sets [Builder.body] to an arbitrary multipart value. */
         fun body(body: MultipartField<String>) = apply { this.body.body(body) }
+
+        fun attachments(attachments: List<InputStream>) = apply { body.attachments(attachments) }
+
+        fun attachments(attachments: MultipartField<List<InputStream>>) = apply {
+            body.attachments(attachments)
+        }
+
+        fun addAttachment(attachment: InputStream) = apply { body.addAttachment(attachment) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -220,12 +234,7 @@ private constructor(
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
-         * The following fields are required:
-         * ```kotlin
-         * .body()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
+         * @throws IllegalStateException if neither `body` nor `attachments` is set.
          */
         fun build(): TicketReplyParams =
             TicketReplyParams(
@@ -238,8 +247,9 @@ private constructor(
     }
 
     fun _body(): Map<String, MultipartField<*>> =
-        (mapOf("body" to _body_()) +
+        (mapOf("body" to _body_(), "attachments" to _attachments()) +
                 _additionalBodyProperties().mapValues { (_, value) -> MultipartField.of(value) })
+            .filterValues { !it.value.isMissing() }
             .toImmutable()
 
     fun _pathParam(index: Int): String =
@@ -261,14 +271,17 @@ private constructor(
     class Body
     private constructor(
         private val body: MultipartField<String>,
+        private val attachments: MultipartField<List<InputStream>>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
         /**
-         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
-         *   is unexpectedly missing or null.
+         * Body is optional when attachments are sent.
+         *
+         * @throws XTwitterScraperInvalidDataException if the multipart field has an unexpected
+         *   type.
          */
-        fun body(): String = body.value.getRequired("body")
+        fun body(): String? = body.value.getNullable("body")
 
         /**
          * Returns the raw multipart value of [body].
@@ -276,6 +289,12 @@ private constructor(
          * Unlike [body], this method doesn't throw if the multipart field has an unexpected type.
          */
         @JsonProperty("body") @ExcludeMissing fun _body_(): MultipartField<String> = body
+
+        fun attachments(): List<InputStream>? = attachments.value.getNullable("attachments")
+
+        @JsonProperty("attachments")
+        @ExcludeMissing
+        fun _attachments(): MultipartField<List<InputStream>> = attachments
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -294,10 +313,8 @@ private constructor(
             /**
              * Returns a mutable builder for constructing an instance of [Body].
              *
-             * The following fields are required:
-             * ```kotlin
-             * .body()
-             * ```
+             * Tickets allow up to 4 attachments, 10 MiB per image, 25 MiB per video, and 30 MiB per
+             * request.
              */
             fun builder() = Builder()
         }
@@ -305,11 +322,14 @@ private constructor(
         /** A builder for [Body]. */
         class Builder internal constructor() {
 
-            private var body: MultipartField<String>? = null
+            private var body: MultipartField<String> = MultipartField.of(JsonMissing.of())
+            private var attachments: MultipartField<MutableList<InputStream>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(body: Body) = apply {
                 this.body = body.body
+                attachments =
+                    body.attachments.takeUnless { it.value.isMissing() }?.map { it.toMutableList() }
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
@@ -317,6 +337,28 @@ private constructor(
 
             /** Sets [Builder.body] to an arbitrary multipart value. */
             fun body(body: MultipartField<String>) = apply { this.body = body }
+
+            fun attachments(attachments: List<InputStream>) = apply {
+                this.attachments = attachmentField(attachments)
+            }
+
+            fun attachments(attachments: MultipartField<List<InputStream>>) = apply {
+                this.attachments = attachments.map { it.toMutableList() }
+            }
+
+            fun addAttachment(attachment: InputStream) = apply {
+                attachments =
+                    (attachments ?: attachmentField(emptyList())).also {
+                        checkKnown("attachments", it).add(attachment)
+                    }
+            }
+
+            private fun attachmentField(attachments: List<InputStream>) =
+                MultipartField.builder<MutableList<InputStream>>()
+                    .value(attachments.toMutableList())
+                    .filename("attachment")
+                    .contentType("application/octet-stream")
+                    .build()
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -342,15 +384,16 @@ private constructor(
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              *
-             * The following fields are required:
-             * ```kotlin
-             * .body()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
+             * @throws IllegalStateException if neither `body` nor `attachments` is set.
              */
-            fun build(): Body =
-                Body(checkRequired("body", body), additionalProperties.toMutableMap())
+            fun build(): Body {
+                checkAtLeastOne("body", body, "attachments", attachments)
+                return Body(
+                    body,
+                    (attachments ?: MultipartField.of(JsonMissing.of())).map { it.toImmutable() },
+                    additionalProperties.toMutableMap(),
+                )
+            }
         }
 
         private var validated: Boolean = false
@@ -370,6 +413,7 @@ private constructor(
             }
 
             body()
+            attachments()
             validated = true
         }
 
@@ -388,14 +432,16 @@ private constructor(
 
             return other is Body &&
                 body == other.body &&
+                attachments == other.attachments &&
                 additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(body, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(body, attachments, additionalProperties) }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() = "Body{body=$body, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "Body{body=$body, attachments=$attachments, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

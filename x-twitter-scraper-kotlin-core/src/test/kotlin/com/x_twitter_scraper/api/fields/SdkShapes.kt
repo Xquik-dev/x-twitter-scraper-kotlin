@@ -383,6 +383,7 @@ internal class SdkShapes(private val client: XTwitterScraperClient = recordingCl
             } catch (e: InvocationTargetException) {
                 val message = e.cause?.message.orEmpty()
                 val inputs = ALTERNATIVE.matchEntire(message)
+                val atLeastOne = AT_LEAST_ONE.matchEntire(message)
                 val requires = REQUIRES.matchEntire(message)
                 when {
                     inputs != null -> {
@@ -390,6 +391,7 @@ internal class SdkShapes(private val client: XTwitterScraperClient = recordingCl
                         alternatives[model] = names
                         set(builder, names.first(), Sample.A)
                     }
+                    atLeastOne != null -> set(builder, atLeastOne.groupValues[1], Sample.A)
                     requires != null -> {
                         val (name, dependency) = requires.destructured
                         dependencies.getOrPut(model) { mutableMapOf() }[name] = dependency
@@ -569,6 +571,7 @@ internal class SdkShapes(private val client: XTwitterScraperClient = recordingCl
         private const val MAX_REQUIRED = 64
         private val REQUIRED = Regex("^`(\\w+)` is required, but was not set$")
         private val ALTERNATIVE = Regex("^Exactly one of `(\\w+)` or `(\\w+)` must be set$")
+        private val AT_LEAST_ONE = Regex("^At least one of `(\\w+)` or `(\\w+)` must be set$")
         private val REQUIRES = Regex("^`(\\w+)` requires `(\\w+)`$")
         private val BUILDER_PLUMBING = setOf("additionalBodyProperties")
         private val BUILDER_PLUMBING_PREFIXES =

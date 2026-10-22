@@ -15,6 +15,8 @@ import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import com.x_twitter_scraper.api.core.jsonMapper
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
+import com.x_twitter_scraper.api.models.support.tickets.TicketCreateParams
+import com.x_twitter_scraper.api.models.support.tickets.TicketReplyParams
 import com.x_twitter_scraper.api.models.x.media.MediaUploadParams
 import com.x_twitter_scraper.api.models.x.profile.ProfileUpdateAvatarParams
 import com.x_twitter_scraper.api.models.x.profile.ProfileUpdateBannerParams
@@ -59,6 +61,16 @@ internal class GeneratedModelContractTest {
     @Test
     fun generatedRequestParamsPreserveBuilderContracts() {
         verifyGeneratedContracts(generatedParamClasses(), 100, ::verifyParams)
+    }
+
+    @Test
+    fun ticketParamsPreserveBuilderContractsWithEitherInput() {
+        listOf(TicketCreateParams::class.java, TicketReplyParams::class.java).forEach { paramClass
+            ->
+            verifyParams(paramClass, setOf("attachments"))
+            verifyParams(paramClass, setOf("body"))
+            verifyParams(paramClass, emptySet())
+        }
     }
 
     @Test
@@ -282,6 +294,9 @@ internal class GeneratedModelContractTest {
 
     private fun verifyParams(paramClass: Class<*>, omittedFields: Set<String>) {
         val builder = newBuilder(paramClass)
+        val omittedMethods =
+            omittedFields +
+                if ("attachments" in omittedFields) setOf("addAttachment") else emptySet()
         val unsupportedMethods =
             applyBuilderMutators(
                 builder,
@@ -296,7 +311,7 @@ internal class GeneratedModelContractTest {
                         assertThat(
                                 applyBuilderMutators(
                                     bodyBuilder,
-                                    shouldSkip = { it.name in omittedFields },
+                                    shouldSkip = { it.name in omittedMethods },
                                 )
                             )
                             .describedAs("Unsupported builder methods for ${type.name}")
@@ -306,7 +321,7 @@ internal class GeneratedModelContractTest {
                         sampleValue(type)
                     }
                 },
-                { it.name in omittedFields },
+                { it.name in omittedMethods },
             )
 
         assertThat(unsupportedMethods)
