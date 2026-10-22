@@ -33,17 +33,17 @@ Never commit credentials or runtime environment files.
 
 ## Change the SDK by hand
 
-Maintainers write and review every file in this repository by hand.
+Maintainers write and review every SDK source file by hand.
 No code generator runs.
 
 When the API changes, the [API coverage](#api-coverage) and [API fields](#api-fields) checks fail.
-Each failure names the operation or field that the SDK lacks.
-Add each one in the style of the code around it.
+Each failure names an operation or field that differs, and the check's section below says how to fix it.
+Copy the pattern of a sibling operation or model.
 
-1. Add the method to its service interface and `Impl` class in `x-twitter-scraper-kotlin-core/src/main/kotlin/com/x_twitter_scraper/api/services`, for the blocking and async clients.
+1. Add the method to its service interface, its `WithRawResponse` interface, and both `Impl` classes in `x-twitter-scraper-kotlin-core/src/main/kotlin/com/x_twitter_scraper/api/services/blocking` and `services/async`. A new service also needs a getter on its parent service.
 2. Add its params and response models in `x-twitter-scraper-kotlin-core/src/main/kotlin/com/x_twitter_scraper/api/models`.
 3. List a new workflow in the endpoint table of `README.md`.
-4. Add tests that call the blocking and async clients in `x-twitter-scraper-kotlin-core/src/test/kotlin/com/x_twitter_scraper/api/services`, with a JSON fixture in `x-twitter-scraper-kotlin-core/src/test/resources/examples`.
+4. Add model tests in `x-twitter-scraper-kotlin-core/src/test/kotlin/com/x_twitter_scraper/api/models`, and tests that call the blocking and async clients in `src/test/kotlin/com/x_twitter_scraper/api/services`, with a JSON fixture in `src/test/resources/examples`.
 5. Add a line to the `Unreleased` section of `CHANGELOG.md`.
 
 Keep every change additive.
@@ -51,9 +51,8 @@ Never remove or rename a public method, parameter, type, field, or the `com.x_tw
 To rename something, add the new name beside the old one and keep the old one working.
 
 Each request sends `X-Xquik-SDK: kotlin`, which Xquik reads to count SDK requests.
-Keep the other headers that `ClientOptions.Builder.build()` in `x-twitter-scraper-kotlin-core/src/main/kotlin/com/x_twitter_scraper/api/core/ClientOptions.kt` sets, since changing them changes every request the SDK sends.
-
-Publish each release from a maintained macOS machine, as [Releases](#releases) describes.
+Keep every other header the SDK sends unchanged.
+Installed releases send only the older language header, so Xquik still reads it.
 
 ## First contributions
 
