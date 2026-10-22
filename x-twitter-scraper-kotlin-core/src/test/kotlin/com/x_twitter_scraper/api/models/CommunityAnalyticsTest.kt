@@ -18,14 +18,19 @@ internal class CommunityAnalyticsTest {
 
     @Test
     fun create() {
-        val metric = CommunityAnalyticsMetric.builder().count(15298L).changePercent(-1.2).build()
+        val likes = CommunityAnalyticsMetric.builder().count(15298L).changePercent(-1.2).build()
+        val newMembers = CommunityAnalyticsMetric.builder().count(557L).changePercent(-1.5).build()
+        val posts = CommunityAnalyticsMetric.builder().count(5108L).changePercent(0.5).build()
+        val replies = CommunityAnalyticsMetric.builder().count(6851L).changePercent(-0.8).build()
+        val uniquePosters =
+            CommunityAnalyticsMetric.builder().count(1800L).changePercent(-0.3).build()
         val metrics =
             CommunityAnalytics.Metrics.builder()
-                .likes(metric)
-                .newMembers(metric)
-                .posts(metric)
-                .replies(metric)
-                .uniquePosters(metric)
+                .likes(likes)
+                .newMembers(newMembers)
+                .posts(posts)
+                .replies(replies)
+                .uniquePosters(uniquePosters)
                 .build()
         val communityAnalytics =
             CommunityAnalytics.builder()
@@ -38,11 +43,11 @@ internal class CommunityAnalyticsTest {
         assertThat(communityAnalytics.periodEndsAt())
             .isEqualTo(OffsetDateTime.parse("2026-10-16T23:59:59.999Z"))
         assertThat(communityAnalytics.metrics()).isEqualTo(metrics)
-        assertThat(metrics.likes()).isEqualTo(metric)
-        assertThat(metrics.newMembers()).isEqualTo(metric)
-        assertThat(metrics.posts()).isEqualTo(metric)
-        assertThat(metrics.replies()).isEqualTo(metric)
-        assertThat(metrics.uniquePosters()).isEqualTo(metric)
+        assertThat(metrics.likes()).isEqualTo(likes)
+        assertThat(metrics.newMembers()).isEqualTo(newMembers)
+        assertThat(metrics.posts()).isEqualTo(posts)
+        assertThat(metrics.replies()).isEqualTo(replies)
+        assertThat(metrics.uniquePosters()).isEqualTo(uniquePosters)
         assertThat(communityAnalytics.validate()).isSameAs(communityAnalytics)
         assertThat(communityAnalytics.isValid()).isTrue()
         assertThat(communityAnalytics.toBuilder().build()).isEqualTo(communityAnalytics)

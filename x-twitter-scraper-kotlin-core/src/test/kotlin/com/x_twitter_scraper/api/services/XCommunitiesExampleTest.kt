@@ -53,10 +53,7 @@ internal class XCommunitiesExampleTest {
                 )
         )
         val params =
-            CommunityRetrieveAnalyticsParams.builder()
-                .fields("id,periodEndsAt,metrics")
-                .omit("metrics.likes.changePercent")
-                .build()
+            CommunityRetrieveAnalyticsParams.builder().fields("id,periodEndsAt,metrics").build()
         val paramsWithId = params.toBuilder().id("1493446837214187523").build()
         val raw = client.x().communities().withRawResponse()
         val rawAsync = client.async().x().communities().withRawResponse()
@@ -78,8 +75,7 @@ internal class XCommunitiesExampleTest {
         verify(
             4,
             getRequestedFor(urlPathEqualTo("/x/communities/1493446837214187523/analytics"))
-                .withQueryParam("fields", equalTo("id,periodEndsAt,metrics"))
-                .withQueryParam("omit", equalTo("metrics.likes.changePercent")),
+                .withQueryParam("fields", equalTo("id,periodEndsAt,metrics")),
         )
         responses.forEach { response ->
             assertThat(response.id()).isEqualTo("1493446837214187523")
