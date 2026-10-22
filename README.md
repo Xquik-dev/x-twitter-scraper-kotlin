@@ -72,6 +72,7 @@ Call REST directly when a Maven dependency does not fit.
 | Extract an X home timeline | `GET /x/timeline` | `client.x()` |
 | Extract list tweets, members, or followers | `GET /x/lists/{id}/tweets`, `GET /x/lists/{id}/members` | `client.x().lists()` |
 | Search communities and collect their tweets | `GET /x/communities/search`, `GET /x/communities/{id}/tweets` | `client.x().communities()` |
+| Read community activity & growth | `GET /x/communities/{id}/analytics` | `client.x().communities()` |
 | Read bookmarks and bookmark folders | `GET /x/bookmarks`, `GET /x/bookmarks/folders` | `client.x().bookmarks()` |
 | Read notifications or direct messages | `GET /x/notifications`, `GET /x/dm/{userId}/history` | `client.x()`, `client.x().dm()` |
 | Discover X trends | `GET /x/trends` | `client.x().getTrends()` |

@@ -8,6 +8,7 @@ import com.google.errorprone.annotations.MustBeClosed
 import com.x_twitter_scraper.api.core.ClientOptions
 import com.x_twitter_scraper.api.core.RequestOptions
 import com.x_twitter_scraper.api.core.http.HttpResponseFor
+import com.x_twitter_scraper.api.models.CommunityAnalytics
 import com.x_twitter_scraper.api.models.CommunityPage
 import com.x_twitter_scraper.api.models.PaginatedTweets
 import com.x_twitter_scraper.api.models.PaginatedUsers
@@ -21,6 +22,7 @@ import com.x_twitter_scraper.api.models.x.communities.CommunityListSuggestedPara
 import com.x_twitter_scraper.api.models.x.communities.CommunityListSuggestedResponse
 import com.x_twitter_scraper.api.models.x.communities.CommunityListTopicsParams
 import com.x_twitter_scraper.api.models.x.communities.CommunityListTopicsResponse
+import com.x_twitter_scraper.api.models.x.communities.CommunityRetrieveAnalyticsParams
 import com.x_twitter_scraper.api.models.x.communities.CommunityRetrieveInfoParams
 import com.x_twitter_scraper.api.models.x.communities.CommunityRetrieveInfoResponse
 import com.x_twitter_scraper.api.models.x.communities.CommunityRetrieveMembersParams
@@ -72,6 +74,29 @@ interface CommunityServiceAsync {
         params: CommunityDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CommunityDeleteResponse
+
+    /**
+     * Returns community activity for X's latest period. Includes likes, new members, posts, replies
+     * & unique posters. Each metric has a count and a changePercent. Each request costs 1 credit.
+     */
+    suspend fun retrieveAnalytics(
+        id: String,
+        params: CommunityRetrieveAnalyticsParams = CommunityRetrieveAnalyticsParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CommunityAnalytics = retrieveAnalytics(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see retrieveAnalytics */
+    suspend fun retrieveAnalytics(
+        params: CommunityRetrieveAnalyticsParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CommunityAnalytics
+
+    /** @see retrieveAnalytics */
+    suspend fun retrieveAnalytics(
+        id: String,
+        requestOptions: RequestOptions,
+    ): CommunityAnalytics =
+        retrieveAnalytics(id, CommunityRetrieveAnalyticsParams.none(), requestOptions)
 
     /** Get community name, description and member count */
     suspend fun retrieveInfo(
@@ -252,6 +277,33 @@ interface CommunityServiceAsync {
             params: CommunityDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CommunityDeleteResponse>
+
+        /**
+         * Returns a raw HTTP response for `get /x/communities/{id}/analytics`, but is otherwise the
+         * same as [CommunityServiceAsync.retrieveAnalytics].
+         */
+        @MustBeClosed
+        suspend fun retrieveAnalytics(
+            id: String,
+            params: CommunityRetrieveAnalyticsParams = CommunityRetrieveAnalyticsParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CommunityAnalytics> =
+            retrieveAnalytics(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see retrieveAnalytics */
+        @MustBeClosed
+        suspend fun retrieveAnalytics(
+            params: CommunityRetrieveAnalyticsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CommunityAnalytics>
+
+        /** @see retrieveAnalytics */
+        @MustBeClosed
+        suspend fun retrieveAnalytics(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<CommunityAnalytics> =
+            retrieveAnalytics(id, CommunityRetrieveAnalyticsParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /x/communities/{id}/info`, but is otherwise the same

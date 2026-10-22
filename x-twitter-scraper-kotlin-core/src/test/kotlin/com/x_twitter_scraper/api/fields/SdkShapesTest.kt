@@ -38,8 +38,8 @@ internal class SdkShapesTest {
 
     @Test
     fun recordsTheMethodAndPathEachOperationSends() {
-        assertThat(operations).hasSize(183)
-        assertThat(operations.map { it.label }.distinct()).hasSize(180)
+        assertThat(operations).hasSize(184)
+        assertThat(operations.map { it.label }.distinct()).hasSize(181)
         assertThat(
                 operations.map {
                     val contentType = it.contentType?.substringBefore(';')

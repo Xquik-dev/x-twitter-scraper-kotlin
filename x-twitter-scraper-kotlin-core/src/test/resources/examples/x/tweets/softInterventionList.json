@@ -1,0 +1,148 @@
+{
+  "tweets": [
+    {
+      "id": "2102761519985332442",
+      "text": "A post X shows to fewer people.",
+      "bookmarkCount": 0,
+      "likeCount": 3,
+      "quoteCount": 0,
+      "replyCount": 1,
+      "retweetCount": 0,
+      "viewCount": 120,
+      "softIntervention": {
+        "displayType": "Fosnr",
+        "engagementNudge": true,
+        "text": {
+          "text": "This Post may violate X's rules against Abuse.",
+          "rtl": false,
+          "entities": [
+            {
+              "fromIndex": 40,
+              "toIndex": 45,
+              "ref": {
+                "type": "TimelineUrl",
+                "url": "https://help.x.com/rules-and-policies/public-interest",
+                "urlType": "ExternalUrl"
+              }
+            }
+          ]
+        },
+        "url": {
+          "url": "https://help.x.com/rules-and-policies/enforcement-options",
+          "urlType": "ExternalUrl"
+        }
+      },
+      "parentTweet": {
+        "id": "2102761519985332440",
+        "text": "The parent post.",
+        "bookmarkCount": 0,
+        "likeCount": 3,
+        "quoteCount": 0,
+        "replyCount": 1,
+        "retweetCount": 0,
+        "viewCount": 120,
+        "softIntervention": {
+          "displayType": "Fosnr",
+          "engagementNudge": true,
+          "text": {
+            "text": "This Post may violate X's rules against Abuse.",
+            "rtl": false,
+            "entities": [
+              {
+                "fromIndex": 40,
+                "toIndex": 45,
+                "ref": {
+                  "type": "TimelineUrl",
+                  "url": "https://help.x.com/rules-and-policies/public-interest",
+                  "urlType": "ExternalUrl"
+                }
+              }
+            ]
+          },
+          "url": {
+            "url": "https://help.x.com/rules-and-policies/enforcement-options",
+            "urlType": "ExternalUrl"
+          }
+        }
+      },
+      "quoted_tweet": {
+        "id": "2102761519985332441",
+        "text": "The quoted post.",
+        "bookmarkCount": 0,
+        "likeCount": 3,
+        "quoteCount": 0,
+        "replyCount": 1,
+        "retweetCount": 0,
+        "viewCount": 120,
+        "softIntervention": {
+          "displayType": "Fosnr",
+          "engagementNudge": true,
+          "text": {
+            "text": "This Post may violate X's rules against Abuse.",
+            "rtl": false,
+            "entities": [
+              {
+                "fromIndex": 40,
+                "toIndex": 45,
+                "ref": {
+                  "type": "TimelineUrl",
+                  "url": "https://help.x.com/rules-and-policies/public-interest",
+                  "urlType": "ExternalUrl"
+                }
+              }
+            ]
+          },
+          "url": {
+            "url": "https://help.x.com/rules-and-policies/enforcement-options",
+            "urlType": "ExternalUrl"
+          }
+        }
+      },
+      "retweeted_tweet": {
+        "id": "2102761519985332443",
+        "text": "The reposted post.",
+        "bookmarkCount": 0,
+        "likeCount": 3,
+        "quoteCount": 0,
+        "replyCount": 1,
+        "retweetCount": 0,
+        "viewCount": 120,
+        "softIntervention": {
+          "displayType": "Fosnr",
+          "engagementNudge": true,
+          "text": {
+            "text": "This Post may violate X's rules against Abuse.",
+            "rtl": false,
+            "entities": [
+              {
+                "fromIndex": 40,
+                "toIndex": 45,
+                "ref": {
+                  "type": "TimelineUrl",
+                  "url": "https://help.x.com/rules-and-policies/public-interest",
+                  "urlType": "ExternalUrl"
+                }
+              }
+            ]
+          },
+          "url": {
+            "url": "https://help.x.com/rules-and-policies/enforcement-options",
+            "urlType": "ExternalUrl"
+          }
+        }
+      }
+    },
+    {
+      "id": "2102761519985332444",
+      "text": "A post without a label.",
+      "bookmarkCount": 0,
+      "likeCount": 3,
+      "quoteCount": 0,
+      "replyCount": 1,
+      "retweetCount": 0,
+      "viewCount": 120
+    }
+  ],
+  "has_next_page": false,
+  "next_cursor": ""
+}
