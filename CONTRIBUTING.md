@@ -31,15 +31,29 @@ Gradle only adds checksums. Delete the entries of replaced versions from `gradle
 
 Never commit credentials or runtime environment files.
 
-## Generated code
+## Change the SDK by hand
 
-Most SDK files come from the public OpenAPI contract.
+Maintainers write and review every file in this repository by hand.
+No code generator runs.
 
-Preserve generated method names and response contracts.
+When the API changes, the [API coverage](#api-coverage) and [API fields](#api-fields) checks fail.
+Each failure names the operation or field that the SDK lacks.
+Add each one in the style of the code around it.
 
-Avoid generated-file changes when a generator fix exists.
+1. Add the method to its service interface and `Impl` class in `x-twitter-scraper-kotlin-core/src/main/kotlin/com/x_twitter_scraper/api/services`, for the blocking and async clients.
+2. Add its params and response models in `x-twitter-scraper-kotlin-core/src/main/kotlin/com/x_twitter_scraper/api/models`.
+3. List a new workflow in the endpoint table of `README.md`.
+4. Add tests that call the blocking and async clients in `x-twitter-scraper-kotlin-core/src/test/kotlin/com/x_twitter_scraper/api/services`, with a JSON fixture in `x-twitter-scraper-kotlin-core/src/test/resources/examples`.
+5. Add a line to the `Unreleased` section of `CHANGELOG.md`.
 
-Protect maintained runtime changes with focused regression tests.
+Keep every change additive.
+Never remove or rename a public method, parameter, type, field, or the `com.x_twitter_scraper.api` package.
+To rename something, add the new name beside the old one and keep the old one working.
+
+Each request sends `X-Xquik-SDK: kotlin`, which Xquik reads to count SDK requests.
+Keep the other headers that `ClientOptions.Builder.build()` in `x-twitter-scraper-kotlin-core/src/main/kotlin/com/x_twitter_scraper/api/core/ClientOptions.kt` sets, since changing them changes every request the SDK sends.
+
+Publish each release from a maintained macOS machine, as [Releases](#releases) describes.
 
 ## First contributions
 
@@ -135,7 +149,7 @@ Fix a failure by its line.
 
 - An operation the API has but the SDK lacks needs a method in both clients, or an entry in `excluded-operations.json` with a reason.
 - An excluded operation that the API no longer has, or that the SDK now implements, comes out of `excluded-operations.json`.
-- A request that the check cannot read needs the generated form, with string literals and `params._pathParam(n)` in `addPathSegments`.
+- A request that the check cannot read needs string literals and `params._pathParam(n)` in `addPathSegments`, like the other service `Impl` classes.
 
 `excluded-operations.json` holds groups of operations that share 1 reason.
 Each group needs a non-empty reason and at least 1 operation.
