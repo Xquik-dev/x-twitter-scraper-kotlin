@@ -418,6 +418,7 @@ private constructor(
 
             val headers = Headers.builder()
             val queryParams = QueryParams.builder()
+            headers.put("X-Xquik-SDK", "kotlin")
             headers.put("X-Stainless-Lang", "kotlin")
             headers.put("X-Stainless-Arch", getOsArch())
             headers.put("X-Stainless-OS", getOsName())
