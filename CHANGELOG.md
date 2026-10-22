@@ -8,6 +8,7 @@
 
 ### Features
 
+* Every request sends `X-Xquik-SDK: kotlin` beside the platform headers it already sends.
 * Communities add the analytics read through `retrieveAnalytics`.
 * Posts and embedded posts return `softIntervention`, the label X shows under a post whose reach it limits.
 * Posts and embedded posts name the counts X did not send in `unknownCounts`.
