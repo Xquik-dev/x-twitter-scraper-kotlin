@@ -7,14 +7,18 @@
 tests_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
 readonly tests_root
 
+source "$tests_root/scripts/lib/temp-paths.bash"
+exit_on_signals
+
 readonly local_tools=(bash git jq)
 
 readonly remote_tools=(codeql curl gh gpg java security shellcheck uvx)
 
 create_sandbox() {
     local tool tool_path
-    sandbox="$(mktemp -d "${TMPDIR:-/tmp}/xquik-kotlin-script-test.XXXXXX")"
+    temp_path sandbox xquik-kotlin-script-test
     sandbox="$(cd -- "$sandbox" && pwd -P)"
+    sandbox_pid=""
     sandbox_repo="$sandbox/repo"
     sandbox_bin="$sandbox/bin"
     sandbox_logs="$sandbox/logs"
@@ -33,10 +37,15 @@ create_sandbox() {
         chmod 755 "$sandbox_bin/$tool"
     done
     run_env=()
+    copy_file scripts/lib/temp-paths.bash
 }
 
 remove_sandbox() {
-    rm -rf -- "${sandbox:?}"
+    if [[ -n "${sandbox_pid:-}" ]]; then
+        kill -TERM -- "-$sandbox_pid" 2>/dev/null || true
+        wait "$sandbox_pid" 2>/dev/null || true
+    fi
+    remove_temp_paths
 }
 
 fake() {
@@ -89,26 +98,87 @@ add_origin() {
     sandbox_git push --quiet origin main
 }
 
-run_in_repo() {
-    run_status=0
-    (
-        cd -- "$sandbox_repo"
-        env -i \
-            FAKE_LOGS="$sandbox_logs" \
-            GIT_AUTHOR_EMAIL="tester@example.com" \
-            GIT_AUTHOR_NAME="Script Tester" \
-            GIT_COMMITTER_EMAIL="tester@example.com" \
-            GIT_COMMITTER_NAME="Script Tester" \
-            GIT_CONFIG_GLOBAL=/dev/null \
-            GIT_CONFIG_NOSYSTEM=1 \
-            HOME="$sandbox/home" \
-            PATH="$sandbox_bin:/usr/bin:/bin" \
-            TMPDIR="$sandbox/tmp" \
-            ${run_env[@]+"${run_env[@]}"} \
-            "$@"
-    ) >"$sandbox/stdout" 2>"$sandbox/stderr" </dev/null || run_status=$?
+exec_in_repo() {
+    cd -- "$sandbox_repo"
+    exec env -i \
+        FAKE_LOGS="$sandbox_logs" \
+        GIT_AUTHOR_EMAIL="tester@example.com" \
+        GIT_AUTHOR_NAME="Script Tester" \
+        GIT_COMMITTER_EMAIL="tester@example.com" \
+        GIT_COMMITTER_NAME="Script Tester" \
+        GIT_CONFIG_GLOBAL=/dev/null \
+        GIT_CONFIG_NOSYSTEM=1 \
+        HOME="$sandbox/home" \
+        PATH="$sandbox_bin:/usr/bin:/bin" \
+        TMPDIR="$sandbox/tmp" \
+        ${run_env[@]+"${run_env[@]}"} \
+        "$@"
+}
+
+read_run_output() {
     run_stdout="$(cat "$sandbox/stdout")"
     run_stderr="$(cat "$sandbox/stderr")"
+}
+
+run_in_repo() {
+    run_status=0
+    (exec_in_repo "$@") >"$sandbox/stdout" 2>"$sandbox/stderr" </dev/null || run_status=$?
+    read_run_output
+}
+
+run_in_repo_and_terminate_at() {
+    run_in_repo_and_signal_at TERM "$@"
+}
+
+run_in_repo_and_signal_at() {
+    local signal="$1" marker="$2" tries=0
+    shift
+    shift
+    run_status=0
+    set -m
+    (exec_in_repo "$@") >"$sandbox/stdout" 2>"$sandbox/stderr" </dev/null &
+    sandbox_pid=$!
+    set +m
+    until [[ -e "$sandbox_logs/$marker" ]]; do
+        if ((tries >= 200)) || ! kill -0 "$sandbox_pid" 2>/dev/null; then
+            kill -KILL -- "-$sandbox_pid" 2>/dev/null || true
+            wait "$sandbox_pid" || true
+            read_run_output
+            fail_test "The run never reached the step that writes $marker."
+        fi
+        sleep 0.05
+        tries=$((tries + 1))
+    done
+    kill -s "$signal" -- "-$sandbox_pid"
+    wait "$sandbox_pid" || run_status=$?
+    sandbox_pid=""
+    read_run_output
+}
+
+replace_step() {
+    cat >"$1" <<'EOF'
+#!/bin/sh
+prepared=false
+for workspace in "$TMPDIR"/*; do
+    [ -d "$workspace" ] || continue
+    mkdir -p "$workspace/cache"
+    echo "cache" >"$workspace/cache/entry"
+    chmod 400 "$workspace/cache/entry"
+    chmod 500 "$workspace/cache"
+    prepared=true
+done
+[ "$prepared" = true ] || exit 38
+echo "ready" >"$FAKE_LOGS/step-ready"
+if [ "${FAKE_STEP_STATUS:-37}" = wait ]; then
+    exec /bin/sleep 30
+fi
+exit "${FAKE_STEP_STATUS:-37}"
+EOF
+    chmod 755 "$1"
+}
+
+assert_no_temporary_entries() {
+    assert_equal "" "$(ls -A "$sandbox/tmp")" "the temporary folder after the run"
 }
 
 log_of() {
@@ -175,8 +245,9 @@ run_tests() {
         set +e
         (
             set -euo pipefail
-            create_sandbox
             trap remove_sandbox EXIT
+            exit_on_signals
+            create_sandbox
             "$name"
         )
         status=$?

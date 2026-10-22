@@ -11,6 +11,10 @@ source "$(dirname -- "$0")/lib/api-spec.sh"
 
 cd -- "$(dirname -- "$0")/.."
 
+source scripts/lib/temp-paths.bash
+trap remove_temp_paths EXIT
+exit_on_signals
+
 readonly exclusions_file="excluded-operations.json"
 readonly source_root="x-twitter-scraper-kotlin-core/src/main/kotlin/com/x_twitter_scraper/api"
 readonly client_options="$source_root/core/ClientOptions.kt"
@@ -22,8 +26,8 @@ fail() {
     exit 1
 }
 
-coverage_workspace="$(mktemp -d "${TMPDIR:-/tmp}/xquik-kotlin-api-coverage.XXXXXX")"
-trap 'rm -rf -- "$coverage_workspace"' EXIT
+declare coverage_workspace
+temp_path coverage_workspace xquik-kotlin-api-coverage
 readonly spec_file="$coverage_workspace/spec.json"
 readonly requests_file="$coverage_workspace/requests.json"
 

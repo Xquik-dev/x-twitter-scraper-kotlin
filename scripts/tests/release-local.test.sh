@@ -263,6 +263,7 @@ Dry run finished. Nothing was published, tagged or released." "stdout"
     assert_equal "" "$(log_of gpg)" "the gpg calls"
     assert_equal "" "$(log_of verify-release-signature)" "the signature checks"
     assert_nothing_released
+    assert_no_temporary_entries
 }
 
 test_a_release_uploads_with_secrets_in_the_environment_then_verifies_tags_and_releases() {
@@ -446,6 +447,34 @@ test_an_unknown_option_stops_with_the_usage_line() {
 
     assert_equal 2 "$run_status" "the exit code"
     assert_equal "Unknown option --force. Run bin/release-local or bin/release-local --dry-run." "$run_stderr" "stderr"
+}
+
+test_release_local_removes_read_only_temp_paths_after_a_failing_step() {
+    prepare_release
+    replace_step "$sandbox_repo/scripts/audit"
+    sandbox_git add --all
+    sandbox_git commit --quiet --message "Replace the audit step"
+    sandbox_git push --quiet origin main
+
+    run_in_repo bin/release-local --dry-run
+
+    assert_equal 37 "$run_status" "the exit code"
+    assert_equal "ready" "$(log_of step-ready)" "the failing step"
+    assert_no_temporary_entries
+}
+
+test_release_local_removes_read_only_temp_paths_after_sigterm() {
+    prepare_release
+    replace_step "$sandbox_repo/scripts/audit"
+    sandbox_git add --all
+    sandbox_git commit --quiet --message "Replace the audit step"
+    sandbox_git push --quiet origin main
+    run_env+=("FAKE_STEP_STATUS=wait")
+
+    run_in_repo_and_terminate_at step-ready bin/release-local --dry-run
+
+    assert_equal 143 "$run_status" "the exit code"
+    assert_no_temporary_entries
 }
 
 run_tests

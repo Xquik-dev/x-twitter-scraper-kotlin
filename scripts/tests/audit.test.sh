@@ -242,6 +242,7 @@ Dependency licenses and vulnerabilities passed policy." "$run_stdout" "stdout"
     assert_equal "scan source --no-ignore --format json --lockfile=./x-twitter-scraper-kotlin-client-okhttp/gradle.lockfile --lockfile=./x-twitter-scraper-kotlin-core/gradle.lockfile --lockfile=./x-twitter-scraper-kotlin/gradle.lockfile" \
         "$(log_of osv-scanner)" "the scanner call"
     assert_equal "checkLicense --no-parallel --no-configuration-cache --no-build-cache" "$(log_of gradlew)" "the Gradle call"
+    assert_no_temporary_entries
 }
 
 test_the_scan_skips_lockfiles_in_hidden_and_build_folders() {
@@ -281,6 +282,44 @@ test_a_license_failure_blocks_before_the_scan() {
 
     assert_equal 1 "$run_status" "the exit code"
     assert_equal "" "$(log_of osv-scanner)" "the scanner calls"
+}
+
+test_audit_removes_temp_paths_after_a_failing_step_when_chmod_fails() {
+    prepare_audit
+    fake chmod <<'EOF'
+#!/bin/sh
+echo "chmod failed" >&2
+exit 39
+EOF
+    run_env+=("FAKE_LICENSE_FAILS=1")
+
+    run_in_repo scripts/audit
+
+    assert_equal 1 "$run_status" "the exit code"
+    assert_equal "" "$run_stderr" "stderr"
+    assert_no_temporary_entries
+}
+
+test_audit_removes_read_only_temp_paths_after_a_failing_step() {
+    prepare_audit
+    replace_step "$sandbox_repo/gradlew"
+
+    run_in_repo scripts/audit
+
+    assert_equal 37 "$run_status" "the exit code"
+    assert_equal "ready" "$(log_of step-ready)" "the failing step"
+    assert_no_temporary_entries
+}
+
+test_audit_removes_read_only_temp_paths_after_sigterm() {
+    prepare_audit
+    replace_step "$sandbox_repo/gradlew"
+    run_env+=("FAKE_STEP_STATUS=wait")
+
+    run_in_repo_and_terminate_at step-ready scripts/audit
+
+    assert_equal 143 "$run_status" "the exit code"
+    assert_no_temporary_entries
 }
 
 run_tests

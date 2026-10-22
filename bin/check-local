@@ -8,6 +8,10 @@ set -euo pipefail
 
 cd -- "$(dirname -- "$0")/.."
 
+source scripts/lib/temp-paths.bash
+trap remove_temp_paths EXIT
+exit_on_signals
+
 readonly repository="Xquik-dev/x-twitter-scraper-kotlin"
 readonly status_context="xquik-local-checks"
 readonly status_limit=139
@@ -29,7 +33,8 @@ check_label=""
 check_hint="Fix the error above, then rerun."
 passed_checks=()
 status_sha=""
-workspace="$(mktemp -d "${TMPDIR:-/tmp}/xquik-kotlin-check.XXXXXX")"
+declare workspace
+temp_path workspace xquik-kotlin-check
 
 post_status() {
     if [[ -z "$status_sha" ]]; then
@@ -45,7 +50,7 @@ post_status() {
 
 finish() {
     local status=$?
-    rm -rf -- "${workspace:?}"
+    remove_temp_paths
     if [[ "$status" -ne 0 ]]; then
         echo "Check failed at $check_name. $check_hint" >&2
         post_status failure "Failed at $check_name."
