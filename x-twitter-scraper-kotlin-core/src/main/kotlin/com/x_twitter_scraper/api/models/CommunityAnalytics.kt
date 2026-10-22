@@ -265,7 +265,7 @@ private constructor(
         ) : this(likes, newMembers, posts, replies, uniquePosters, mutableMapOf())
 
         /**
-         * A community metric for X's latest period & its percent change.
+         * Likes on Community posts in X's latest period.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -273,7 +273,7 @@ private constructor(
         fun likes(): CommunityAnalyticsMetric = likes.getRequired("likes")
 
         /**
-         * A community metric for X's latest period & its percent change.
+         * Accounts that joined the Community in X's latest period.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -281,7 +281,7 @@ private constructor(
         fun newMembers(): CommunityAnalyticsMetric = newMembers.getRequired("newMembers")
 
         /**
-         * A community metric for X's latest period & its percent change.
+         * Community posts in X's latest period.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -289,7 +289,7 @@ private constructor(
         fun posts(): CommunityAnalyticsMetric = posts.getRequired("posts")
 
         /**
-         * A community metric for X's latest period & its percent change.
+         * Replies to Community posts in X's latest period.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -297,7 +297,7 @@ private constructor(
         fun replies(): CommunityAnalyticsMetric = replies.getRequired("replies")
 
         /**
-         * A community metric for X's latest period & its percent change.
+         * Distinct accounts that posted in the Community in X's latest period.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -398,13 +398,13 @@ private constructor(
                 additionalProperties = metrics.additionalProperties.toMutableMap()
             }
 
-            /** A community metric for X's latest period & its percent change. */
+            /** Likes on Community posts in X's latest period. */
             fun likes(likes: CommunityAnalyticsMetric) = likes(JsonField.of(likes))
 
             /** Sets [Builder.likes] to an arbitrary JSON value. */
             fun likes(likes: JsonField<CommunityAnalyticsMetric>) = apply { this.likes = likes }
 
-            /** A community metric for X's latest period & its percent change. */
+            /** Accounts that joined the Community in X's latest period. */
             fun newMembers(newMembers: CommunityAnalyticsMetric) =
                 newMembers(JsonField.of(newMembers))
 
@@ -413,13 +413,13 @@ private constructor(
                 this.newMembers = newMembers
             }
 
-            /** A community metric for X's latest period & its percent change. */
+            /** Community posts in X's latest period. */
             fun posts(posts: CommunityAnalyticsMetric) = posts(JsonField.of(posts))
 
             /** Sets [Builder.posts] to an arbitrary JSON value. */
             fun posts(posts: JsonField<CommunityAnalyticsMetric>) = apply { this.posts = posts }
 
-            /** A community metric for X's latest period & its percent change. */
+            /** Replies to Community posts in X's latest period. */
             fun replies(replies: CommunityAnalyticsMetric) = replies(JsonField.of(replies))
 
             /** Sets [Builder.replies] to an arbitrary JSON value. */
@@ -427,7 +427,7 @@ private constructor(
                 this.replies = replies
             }
 
-            /** A community metric for X's latest period & its percent change. */
+            /** Distinct accounts that posted in the Community in X's latest period. */
             fun uniquePosters(uniquePosters: CommunityAnalyticsMetric) =
                 uniquePosters(JsonField.of(uniquePosters))
 
