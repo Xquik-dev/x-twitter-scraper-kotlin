@@ -12,8 +12,10 @@ import com.x_twitter_scraper.api.core.ExcludeMissing
 import com.x_twitter_scraper.api.core.JsonField
 import com.x_twitter_scraper.api.core.JsonMissing
 import com.x_twitter_scraper.api.core.JsonValue
+import com.x_twitter_scraper.api.core.checkKnown
+import com.x_twitter_scraper.api.core.toImmutable
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
-import com.x_twitter_scraper.api.models.SearchTweet.Interstitial.Text
+import com.x_twitter_scraper.api.models.SearchTweet.Interstitial.Text.Entity
 import java.util.Collections
 import java.util.Objects
 
@@ -224,6 +226,223 @@ private constructor(
             (if (engagementNudge.asKnown() == null) 0 else 1) +
             (text.asKnown()?.validity() ?: 0) +
             (url.asKnown()?.validity() ?: 0)
+
+    class Text
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
+        private val entities: JsonField<List<Entity>>,
+        private val rtl: JsonField<Boolean>,
+        private val text: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("entities")
+            @ExcludeMissing
+            entities: JsonField<List<Entity>> = JsonMissing.of(),
+            @JsonProperty("rtl") @ExcludeMissing rtl: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("text") @ExcludeMissing text: JsonField<String> = JsonMissing.of(),
+        ) : this(entities, rtl, text, mutableMapOf())
+
+        /**
+         * Links inside the label, by character range.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun entities(): List<Entity>? = entities.getNullable("entities")
+
+        /**
+         * Whether the label reads right to left.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun rtl(): Boolean? = rtl.getNullable("rtl")
+
+        /**
+         * The label's text.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun text(): String? = text.getNullable("text")
+
+        /**
+         * Returns the raw JSON value of [entities].
+         *
+         * Unlike [entities], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("entities")
+        @ExcludeMissing
+        fun _entities(): JsonField<List<Entity>> = entities
+
+        /**
+         * Returns the raw JSON value of [rtl].
+         *
+         * Unlike [rtl], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("rtl") @ExcludeMissing fun _rtl(): JsonField<Boolean> = rtl
+
+        /**
+         * Returns the raw JSON value of [text].
+         *
+         * Unlike [text], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("text") @ExcludeMissing fun _text(): JsonField<String> = text
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Text]. */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [Text]. */
+        class Builder internal constructor() {
+
+            private var entities: JsonField<MutableList<Entity>>? = null
+            private var rtl: JsonField<Boolean> = JsonMissing.of()
+            private var text: JsonField<String> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(text: Text) = apply {
+                entities = text.entities.map { it.toMutableList() }
+                rtl = text.rtl
+                this.text = text.text
+                additionalProperties = text.additionalProperties.toMutableMap()
+            }
+
+            /** Links inside the label, by character range. */
+            fun entities(entities: List<Entity>) = entities(JsonField.of(entities))
+
+            /** Sets [Builder.entities] to an arbitrary JSON value. */
+            fun entities(entities: JsonField<List<Entity>>) = apply {
+                this.entities = entities.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [Entity] to [entities].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addEntity(entity: Entity) = apply {
+                entities =
+                    (entities ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("entities", it).add(entity)
+                    }
+            }
+
+            /** Whether the label reads right to left. */
+            fun rtl(rtl: Boolean) = rtl(JsonField.of(rtl))
+
+            /** Sets [Builder.rtl] to an arbitrary JSON value. */
+            fun rtl(rtl: JsonField<Boolean>) = apply { this.rtl = rtl }
+
+            /** The label's text. */
+            fun text(text: String) = text(JsonField.of(text))
+
+            /** Sets [Builder.text] to an arbitrary JSON value. */
+            fun text(text: JsonField<String>) = apply { this.text = text }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Text].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Text =
+                Text(
+                    (entities ?: JsonMissing.of()).map { it.toImmutable() },
+                    rtl,
+                    text,
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+         *   match its expected type.
+         */
+        fun validate(): Text = apply {
+            if (validated) {
+                return@apply
+            }
+
+            entities()?.forEach { it.validate() }
+            rtl()
+            text()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: XTwitterScraperInvalidDataException) {
+                false
+            }
+
+        internal fun validity(): Int =
+            (entities.asKnown()?.sumOf { it.validity() } ?: 0) +
+                (if (rtl.asKnown() == null) 0 else 1) +
+                (if (text.asKnown() == null) 0 else 1)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Text &&
+                entities == other.entities &&
+                rtl == other.rtl &&
+                text == other.text &&
+                additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy {
+            Objects.hash(entities, rtl, text, additionalProperties)
+        }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Text{entities=$entities, rtl=$rtl, text=$text, additionalProperties=$additionalProperties}"
+    }
 
     /** The page that explains the label. */
     class Url
