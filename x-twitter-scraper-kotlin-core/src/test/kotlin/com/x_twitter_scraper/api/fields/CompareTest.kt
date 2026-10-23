@@ -4,6 +4,10 @@
 
 package com.x_twitter_scraper.api.fields
 
+import com.fasterxml.jackson.core.type.TypeReference
+import com.x_twitter_scraper.api.core.JsonValue
+import com.x_twitter_scraper.api.core.jsonMapper
+import com.x_twitter_scraper.api.models.x.sports.SportsTeamRecord
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -15,6 +19,48 @@ internal class CompareTest {
         Shape.Fields(props.toMap(), open = open)
 
     private fun optional(shape: Shape = leaf) = Prop(shape, false, null)
+
+    private val typedRecords = object : TypeReference<Map<String, SportsTeamRecord>>() {}
+
+    private val untypedRecords = object : TypeReference<Map<String, JsonValue>>() {}
+
+    private fun openRecord(field: String) =
+        """{"type": "object", "additionalProperties": true, "properties": {"$field": {"type": "string"}}}"""
+
+    private fun map(values: String) = """{"type": "object", "additionalProperties": $values}"""
+
+    private fun recordsDifferences(records: String, sdkRecords: TypeReference<*>): List<String> {
+        val spec =
+            SpecShapes(jsonMapper().createObjectNode())
+                .node(jsonMapper().readTree(records), emptyList())
+                .first
+        val sdk = SdkShapes().shapeOf(sdkRecords.type)
+        val specFields = fields("records" to optional(spec))
+        val differences = compare(specFields, fields("records" to optional(sdk)), Side.RESPONSE)
+        return differences.map { "${it.kind.label} ${it.path}" }
+    }
+
+    @Test
+    fun reportsAFieldTheSdkLacksInTypedMapValues() {
+        val union = """{"anyOf": [${map(openRecord("streak"))}, ${map(openRecord("seed"))}]}"""
+        val parts = """{"allOf": [${map(openRecord("streak"))}, ${map(openRecord("seed"))}]}"""
+        val both = listOf("missing records{}.seed", "missing records{}.streak")
+
+        assertThat(recordsDifferences(map(openRecord("streak")), typedRecords))
+            .containsExactly("missing records{}.streak")
+        assertThat(recordsDifferences(union, typedRecords))
+            .containsExactlyInAnyOrderElementsOf(both)
+        assertThat(recordsDifferences(parts, typedRecords))
+            .containsExactlyInAnyOrderElementsOf(both)
+    }
+
+    @Test
+    fun leavesAMapFreeFormWhenEitherSideLeavesItsValuesUntyped() {
+        assertThat(recordsDifferences(map("true"), typedRecords)).isEmpty()
+        assertThat(recordsDifferences(map("{}"), typedRecords)).isEmpty()
+        assertThat(recordsDifferences(map(openRecord("streak")), untypedRecords)).isEmpty()
+        assertThat(recordsDifferences(openRecord("streak"), untypedRecords)).isEmpty()
+    }
 
     @Test
     fun countsAMissingObjectOnceAtItsTopPosition() {
@@ -34,10 +80,10 @@ internal class CompareTest {
             fields(
                 "events" to
                     optional(
-                        Shape.ListOf(fields("data" to optional(fields("followedAt" to optional()))))
+                        Shape.Many(fields("data" to optional(fields("followedAt" to optional()))))
                     )
             )
-        val sdk = fields("events" to optional(Shape.ListOf(fields("data" to optional(fields())))))
+        val sdk = fields("events" to optional(Shape.Many(fields("data" to optional(fields())))))
 
         assertThat(compare(spec, sdk, Side.RESPONSE))
             .containsExactly(Difference(Side.RESPONSE, Kind.MISSING, "events[].data.followedAt"))
@@ -128,7 +174,7 @@ internal class CompareTest {
             fields(
                 "items" to
                     optional(
-                        Shape.ListOf(
+                        Shape.Many(
                             fields("kind" to Prop(Shape.Leaf(setOf("a", "b")), true, true))
                         )
                     )
@@ -137,7 +183,7 @@ internal class CompareTest {
             fields(
                 "items" to
                     optional(
-                        Shape.ListOf(
+                        Shape.Many(
                             fields(
                                 "kind" to Prop(Shape.Leaf(setOf("a")), false, false),
                                 "old" to optional(),

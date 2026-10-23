@@ -160,6 +160,10 @@ internal class SpecShapes(private val root: JsonNode) {
         if (isObject && properties != null && properties.size() > 0) {
             return fields(schema, properties, stack) to nullable
         }
+        val mapValues = schema.get("additionalProperties")?.takeIf { it.isObject && it.size() > 0 }
+        if (isObject && mapValues != null && !schema.has("required")) {
+            return Shape.Many(node(mapValues, stack).first, Container.MAP) to nullable
+        }
         if (isObject) {
             return Shape.Free to nullable
         }
@@ -169,7 +173,7 @@ internal class SpecShapes(private val root: JsonNode) {
         if (kinds?.contains("array") == true) {
             val items = schema.get("items")
             if (items != null && !schema.has("prefixItems")) {
-                return Shape.ListOf(node(items, stack).first) to nullable
+                return Shape.Many(node(items, stack).first) to nullable
             }
         }
         return Shape.Leaf() to nullable
@@ -289,8 +293,9 @@ internal fun intersect(all: List<Shape>): Shape {
         val rest = parts.filterNot { it is Shape.AnyOf }
         return Shape.AnyOf(unions.single().variants.map { intersect(rest + it) })
     }
-    if (parts.all { it is Shape.ListOf }) {
-        return Shape.ListOf(intersect(parts.map { (it as Shape.ListOf).items }))
+    val many = parts.filterIsInstance<Shape.Many>()
+    if (many.size == parts.size && many.distinctBy { it.container }.size == 1) {
+        return Shape.Many(intersect(many.map { it.items }), many.first().container)
     }
     val objects = parts.filterIsInstance<Shape.Fields>()
     if (objects.isEmpty()) {
