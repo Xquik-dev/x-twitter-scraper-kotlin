@@ -80,10 +80,10 @@ internal class CompareTest {
             fields(
                 "events" to
                     optional(
-                        Shape.ListOf(fields("data" to optional(fields("followedAt" to optional()))))
+                        Shape.Many(fields("data" to optional(fields("followedAt" to optional()))))
                     )
             )
-        val sdk = fields("events" to optional(Shape.ListOf(fields("data" to optional(fields())))))
+        val sdk = fields("events" to optional(Shape.Many(fields("data" to optional(fields())))))
 
         assertThat(compare(spec, sdk, Side.RESPONSE))
             .containsExactly(Difference(Side.RESPONSE, Kind.MISSING, "events[].data.followedAt"))
@@ -174,7 +174,7 @@ internal class CompareTest {
             fields(
                 "items" to
                     optional(
-                        Shape.ListOf(
+                        Shape.Many(
                             fields("kind" to Prop(Shape.Leaf(setOf("a", "b")), true, true))
                         )
                     )
@@ -183,7 +183,7 @@ internal class CompareTest {
             fields(
                 "items" to
                     optional(
-                        Shape.ListOf(
+                        Shape.Many(
                             fields(
                                 "kind" to Prop(Shape.Leaf(setOf("a")), false, false),
                                 "old" to optional(),

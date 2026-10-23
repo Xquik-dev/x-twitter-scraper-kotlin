@@ -207,8 +207,11 @@ internal class SdkShapes(private val client: XTwitterScraperClient = recordingCl
         return when {
             raw in LEAVES -> Shape.Leaf()
             List::class.java.isAssignableFrom(raw) ->
-                Shape.ListOf(shapeOf((type as ParameterizedType).actualTypeArguments[0]))
-            Map::class.java.isAssignableFrom(raw) -> Shape.Free
+                Shape.Many(shapeOf((type as ParameterizedType).actualTypeArguments[0]))
+            Map::class.java.isAssignableFrom(raw) ->
+                shapeOf((type as ParameterizedType).actualTypeArguments[1]).let {
+                    if (it == Shape.Unknown) Shape.Free else Shape.Many(it, Container.MAP)
+                }
             JsonValue::class.java.isAssignableFrom(raw) -> Shape.Unknown
             else -> shapeOf(raw)
         }
