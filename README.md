@@ -4,6 +4,7 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.xquik.api/x-twitter-scraper-kotlin)](https://central.sonatype.com/artifact/com.xquik.api/x-twitter-scraper-kotlin/0.9.4)
 [![KDocs](https://javadoc.io/badge2/com.xquik.api/x-twitter-scraper-kotlin-core/0.9.4/javadoc.svg)](https://javadoc.io/doc/com.xquik.api/x-twitter-scraper-kotlin-core/0.9.4)
+[![Convex Component](https://www.convex.dev/components/badge/convex-xquik)](https://www.convex.dev/components/convex-xquik)
 
 Use this X API & Twitter API SDK to work with X from Kotlin.
 It works as a Twitter scraper & tweet scraper for search, profiles & followers.
