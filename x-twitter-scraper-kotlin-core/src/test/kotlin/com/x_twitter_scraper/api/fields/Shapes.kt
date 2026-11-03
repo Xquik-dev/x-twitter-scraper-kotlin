@@ -14,7 +14,7 @@ internal sealed interface Shape {
 
     data class Leaf(val values: Set<String>? = null) : Shape
 
-    data class ListOf(val items: Shape) : Shape
+    data class Many(val items: Shape, val container: Container = Container.LIST) : Shape
 
     data class Fields(
         val props: Map<String, Prop>,
@@ -23,6 +23,11 @@ internal sealed interface Shape {
     ) : Shape
 
     data class AnyOf(val variants: List<Shape>) : Shape
+}
+
+internal enum class Container(val suffix: String) {
+    LIST("[]"),
+    MAP("{}"),
 }
 
 internal data class Prop(val shape: Shape, val required: Boolean?, val nullable: Boolean?)
@@ -51,7 +56,7 @@ internal fun merge(shape: Shape): Shape =
             shape.copy(
                 props = shape.props.mapValues { (_, prop) -> prop.copy(shape = merge(prop.shape)) }
             )
-        is Shape.ListOf -> Shape.ListOf(merge(shape.items))
+        is Shape.Many -> shape.copy(items = merge(shape.items))
         is Shape.AnyOf -> mergeVariants(shape.variants.map(::merge))
         else -> shape
     }
@@ -85,9 +90,11 @@ private fun mergeVariants(all: List<Shape>): Shape {
         }
         return Shape.Fields(props, open = objects.any { it.open })
     }
-    val lists = variants.filterIsInstance<Shape.ListOf>()
-    if (lists.isNotEmpty()) {
-        return Shape.ListOf(mergeVariants(lists.map { it.items }))
+    for (container in Container.entries) {
+        val same = variants.filterIsInstance<Shape.Many>().filter { it.container == container }
+        if (same.isNotEmpty()) {
+            return Shape.Many(mergeVariants(same.map { it.items }), container)
+        }
     }
     val leaves = variants.filterIsInstance<Shape.Leaf>()
     if (leaves.isNotEmpty()) {
@@ -130,8 +137,8 @@ private fun compareTree(
                     .forEach { out += Difference(side, Kind.EXTRA, join(path, it)) }
             }
         }
-        spec is Shape.ListOf && sdk is Shape.ListOf ->
-            compareTree(spec.items, sdk.items, "$path[]", side, out)
+        spec is Shape.Many && sdk is Shape.Many && spec.container == sdk.container ->
+            compareTree(spec.items, sdk.items, path + spec.container.suffix, side, out)
         spec is Shape.Leaf && sdk is Shape.Leaf -> {
             if (spec.values != null && sdk.values != null && spec.values != sdk.values) {
                 out += Difference(side, Kind.ENUM, path)

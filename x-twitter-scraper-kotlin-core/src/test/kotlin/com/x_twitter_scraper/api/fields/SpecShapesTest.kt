@@ -88,7 +88,7 @@ internal class SpecShapesTest {
                     mapOf(
                         "tweets" to
                             Prop(
-                                Shape.ListOf(
+                                Shape.Many(
                                     Shape.Fields(
                                         mapOf(
                                             "id" to Prop(Shape.Leaf(), false, false),

@@ -390,6 +390,12 @@ private constructor(
 
             val ES = of("es")
 
+            val JA = of("ja")
+
+            val KO = of("ko")
+
+            val ZH = of("zh")
+
             fun of(value: String) = Locale(JsonField.of(value))
         }
 
@@ -398,6 +404,9 @@ private constructor(
             EN,
             TR,
             ES,
+            JA,
+            KO,
+            ZH,
         }
 
         /**
@@ -413,6 +422,9 @@ private constructor(
             EN,
             TR,
             ES,
+            JA,
+            KO,
+            ZH,
             /** An enum member indicating that [Locale] was instantiated with an unknown value. */
             _UNKNOWN,
         }
@@ -426,6 +438,9 @@ private constructor(
                 EN -> Value.EN
                 TR -> Value.TR
                 ES -> Value.ES
+                JA -> Value.JA
+                KO -> Value.KO
+                ZH -> Value.ZH
                 else -> Value._UNKNOWN
             }
 
@@ -440,6 +455,9 @@ private constructor(
                 EN -> Known.EN
                 TR -> Known.TR
                 ES -> Known.ES
+                JA -> Known.JA
+                KO -> Known.KO
+                ZH -> Known.ZH
                 else -> throw XTwitterScraperInvalidDataException("Unknown Locale: $value")
             }
 

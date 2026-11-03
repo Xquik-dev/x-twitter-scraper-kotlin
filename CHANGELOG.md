@@ -4,10 +4,23 @@
 
 ### Breaking changes
 
+* `CreditTopupBalanceResponse.builder()` requires `chargedCurrency` and `chargedMinorUnits`, which the API always sends. Code that builds the response by hand must set both.
 * `AccountBulkRetryParams._body()` returns `AccountBulkRetryParams.Body?` instead of `Map<String, JsonValue>?`. Code that calls `_body()` must change, and compiled callers must rebuild.
 
 ### Features
 
+* `client.monitors().posts()` adds post monitors. It has `create`, `retrieve`, `update`, `list`, `delete` and `retrieveMetrics`.
+* `client.x().sports()` adds NFL & college football reads. It has `listGames`, `retrieveScoreboard`, `retrieveBoxScore`, `retrievePlays`, `retrieveAudience`, `retrieveRoster`, `retrievePlayerProps` and `listPosts`.
+* `client.activity()` adds the activity log. `list` returns the account's activity rows, and `retrieve` returns the full record of 1 activity.
+* `client.x().users()` adds `retrieveShadowban`, which checks 1 account for a search ban, a search suggestion ban, reply deboosting, a reply lock, a hidden timeline, low engagement, a sensitive flag and withheld countries. `ShadowbanReport` also reads `checkedAt` and `overall`.
+* Events read `postId`, `postUrl`, `authorId` and `authorUsername` on post events, and the `post` monitor type. `EventListParams` filters by `postMonitorId`.
+* `EventType` adds the 10 post event types, such as `POST_REPLY_NEW`. Account and keyword monitors reject them.
+* Posts and embedded posts read `liveEventContext` and `unknownFields`, reaction contexts read `reactedToPost`, and media reads `editedWithNativeEditor`.
+* Profile and Space affiliation labels read `auxiliaryLabels`.
+* Top-ups and subscriptions take a `currency` from the new `Currency` model, and top-ups take `returnPath`. Their checkouts read `chargedCurrency`, and top-ups read `chargedMinorUnits`.
+* `EventStreamParams` takes `include` and `lookBack`.
+* `AccountUpdateLocaleParams.Locale` adds `JA`, `KO` and `ZH`.
+* Media downloads read `items`, reply pages read `unreachedReplies`, and extraction results read `verifiedType`.
 * Every request sends `X-Xquik-SDK: kotlin` beside the platform headers it already sends.
 * Communities add the analytics read through `retrieveAnalytics`.
 * Posts and embedded posts return `softIntervention`, the label X shows under a post whose reach it limits. Its `text()` returns `SoftIntervention.Text`.
