@@ -17,6 +17,7 @@ import com.x_twitter_scraper.api.core.checkRequired
 import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
+import com.x_twitter_scraper.api.models.Currency
 import java.util.Collections
 import java.util.Objects
 
@@ -59,6 +60,22 @@ private constructor(
      * Unlike [locale], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _locale(): JsonField<String> = body._locale()
+
+    /**
+     * Currency to pay in. Xquik converts the dollar amount at the latest daily ECB rate, or charges
+     * USD when those rates are more than 3 ECB working days old. chargedCurrency shows the currency
+     * charged.
+     */
+    fun currency(): Currency? = body.currency()
+
+    /** Returns the raw JSON value of [currency]. */
+    fun _currency(): JsonField<Currency> = body._currency()
+
+    /** Optional Xquik tool page to return to after Checkout, such as /en/x-article-reader. */
+    fun returnPath(): String? = body.returnPath()
+
+    /** Returns the raw JSON value of [returnPath]. */
+    fun _returnPath(): JsonField<String> = body._returnPath()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -110,6 +127,22 @@ private constructor(
 
         /** Sets [Builder.locale] to an arbitrary JSON value. */
         fun locale(locale: JsonField<String>) = apply { body.locale(locale) }
+
+        /**
+         * Currency to pay in. Xquik converts the dollar amount at the latest daily ECB rate, or
+         * charges USD when those rates are more than 3 ECB working days old. chargedCurrency shows
+         * the currency charged.
+         */
+        fun currency(currency: Currency) = apply { body.currency(currency) }
+
+        /** Sets [Builder.currency] to an arbitrary JSON value. */
+        fun currency(currency: JsonField<Currency>) = apply { body.currency(currency) }
+
+        /** Optional Xquik tool page to return to after Checkout, such as /en/x-article-reader. */
+        fun returnPath(returnPath: String) = apply { body.returnPath(returnPath) }
+
+        /** Sets [Builder.returnPath] to an arbitrary JSON value. */
+        fun returnPath(returnPath: JsonField<String>) = apply { body.returnPath(returnPath) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -259,6 +292,8 @@ private constructor(
     private constructor(
         private val dollars: JsonField<Long>,
         private val locale: JsonField<String>,
+        private val currency: JsonField<Currency>,
+        private val returnPath: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -266,7 +301,13 @@ private constructor(
         private constructor(
             @JsonProperty("dollars") @ExcludeMissing dollars: JsonField<Long> = JsonMissing.of(),
             @JsonProperty("locale") @ExcludeMissing locale: JsonField<String> = JsonMissing.of(),
-        ) : this(dollars, locale, mutableMapOf())
+            @JsonProperty("currency")
+            @ExcludeMissing
+            currency: JsonField<Currency> = JsonMissing.of(),
+            @JsonProperty("returnPath")
+            @ExcludeMissing
+            returnPath: JsonField<String> = JsonMissing.of(),
+        ) : this(dollars, locale, currency, returnPath, mutableMapOf())
 
         /**
          * Amount to top up in US dollars. Minimum 10.
@@ -284,6 +325,16 @@ private constructor(
         fun locale(): String? = locale.getNullable("locale")
 
         /**
+         * Currency to pay in. Xquik converts the dollar amount at the latest daily ECB rate, or
+         * charges USD when those rates are more than 3 ECB working days old. chargedCurrency shows
+         * the currency charged.
+         */
+        fun currency(): Currency? = currency.getNullable("currency")
+
+        /** Optional Xquik tool page to return to after Checkout, such as /en/x-article-reader. */
+        fun returnPath(): String? = returnPath.getNullable("returnPath")
+
+        /**
          * Returns the raw JSON value of [dollars].
          *
          * Unlike [dollars], this method doesn't throw if the JSON field has an unexpected type.
@@ -296,6 +347,14 @@ private constructor(
          * Unlike [locale], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("locale") @ExcludeMissing fun _locale(): JsonField<String> = locale
+
+        /** Returns the raw JSON value of [currency]. */
+        @JsonProperty("currency") @ExcludeMissing fun _currency(): JsonField<Currency> = currency
+
+        /** Returns the raw JSON value of [returnPath]. */
+        @JsonProperty("returnPath")
+        @ExcludeMissing
+        fun _returnPath(): JsonField<String> = returnPath
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -327,11 +386,15 @@ private constructor(
 
             private var dollars: JsonField<Long>? = null
             private var locale: JsonField<String> = JsonMissing.of()
+            private var currency: JsonField<Currency> = JsonMissing.of()
+            private var returnPath: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(body: Body) = apply {
                 dollars = body.dollars
                 locale = body.locale
+                currency = body.currency
+                returnPath = body.returnPath
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
@@ -346,6 +409,24 @@ private constructor(
 
             /** Sets [Builder.locale] to an arbitrary JSON value. */
             fun locale(locale: JsonField<String>) = apply { this.locale = locale }
+
+            /**
+             * Currency to pay in. Xquik converts the dollar amount at the latest daily ECB rate, or
+             * charges USD when those rates are more than 3 ECB working days old. chargedCurrency
+             * shows the currency charged.
+             */
+            fun currency(currency: Currency) = currency(JsonField.of(currency))
+
+            /** Sets [Builder.currency] to an arbitrary JSON value. */
+            fun currency(currency: JsonField<Currency>) = apply { this.currency = currency }
+
+            /**
+             * Optional Xquik tool page to return to after Checkout, such as /en/x-article-reader.
+             */
+            fun returnPath(returnPath: String) = returnPath(JsonField.of(returnPath))
+
+            /** Sets [Builder.returnPath] to an arbitrary JSON value. */
+            fun returnPath(returnPath: JsonField<String>) = apply { this.returnPath = returnPath }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -379,7 +460,13 @@ private constructor(
              * @throws IllegalStateException if any required field is unset.
              */
             fun build(): Body =
-                Body(checkRequired("dollars", dollars), locale, additionalProperties.toMutableMap())
+                Body(
+                    checkRequired("dollars", dollars),
+                    locale,
+                    currency,
+                    returnPath,
+                    additionalProperties.toMutableMap(),
+                )
         }
 
         private var validated: Boolean = false
@@ -400,6 +487,8 @@ private constructor(
 
             dollars()
             locale()
+            currency()?.validate()
+            returnPath()
             validated = true
         }
 
@@ -412,7 +501,10 @@ private constructor(
             }
 
         internal fun validity(): Int =
-            (if (dollars.asKnown() == null) 0 else 1) + (if (locale.asKnown() == null) 0 else 1)
+            (if (dollars.asKnown() == null) 0 else 1) +
+                (if (locale.asKnown() == null) 0 else 1) +
+                (currency.asKnown()?.validity() ?: 0) +
+                (if (returnPath.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -422,15 +514,19 @@ private constructor(
             return other is Body &&
                 dollars == other.dollars &&
                 locale == other.locale &&
+                currency == other.currency &&
+                returnPath == other.returnPath &&
                 additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(dollars, locale, additionalProperties) }
+        private val hashCode: Int by lazy {
+            Objects.hash(dollars, locale, currency, returnPath, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{dollars=$dollars, locale=$locale, additionalProperties=$additionalProperties}"
+            "Body{dollars=$dollars, locale=$locale, currency=$currency, returnPath=$returnPath, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

@@ -18,6 +18,7 @@ import com.x_twitter_scraper.api.models.monitors.MonitorListResponse
 import com.x_twitter_scraper.api.models.monitors.MonitorRetrieveParams
 import com.x_twitter_scraper.api.models.monitors.MonitorUpdateParams
 import com.x_twitter_scraper.api.services.blocking.monitors.KeywordService
+import com.x_twitter_scraper.api.services.blocking.monitors.PostService
 
 /** X account monitoring with 1-second checks */
 interface MonitorService {
@@ -36,6 +37,9 @@ interface MonitorService {
 
     /** X account monitoring with 1-second checks */
     fun keywords(): KeywordService
+
+    /** X account monitoring with 1-second checks */
+    fun posts(): PostService
 
     /**
      * Creates an account monitor. Monitors are unlimited. Active monitors check every 1 second and
@@ -120,6 +124,9 @@ interface MonitorService {
 
         /** X account monitoring with 1-second checks */
         fun keywords(): KeywordService.WithRawResponse
+
+        /** X account monitoring with 1-second checks */
+        fun posts(): PostService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /monitors`, but is otherwise the same as

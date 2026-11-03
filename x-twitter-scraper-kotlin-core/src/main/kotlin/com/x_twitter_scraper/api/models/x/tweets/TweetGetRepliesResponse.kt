@@ -45,6 +45,7 @@ private constructor(
     private val searchContext: JsonField<SearchContext>,
     private val searchedQuery: JsonField<String>,
     private val windowComplete: JsonField<Boolean>,
+    private val unreachedReplies: JsonField<Long>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -93,6 +94,9 @@ private constructor(
         @JsonProperty("windowComplete")
         @ExcludeMissing
         windowComplete: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("unreachedReplies")
+        @ExcludeMissing
+        unreachedReplies: JsonField<Long> = JsonMissing.of(),
     ) : this(
         hasNextPage,
         nextCursor,
@@ -109,6 +113,7 @@ private constructor(
         searchContext,
         searchedQuery,
         windowComplete,
+        unreachedReplies,
         mutableMapOf(),
     )
 
@@ -228,6 +233,12 @@ private constructor(
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun windowComplete(): Boolean? = windowComplete.getNullable("windowComplete")
+
+    /**
+     * Present on automatic pages without filters while X counts replies the read hasn't reached.
+     * The count drops as you read more pages.
+     */
+    fun unreachedReplies(): Long? = unreachedReplies.getNullable("unreachedReplies")
 
     /**
      * Returns the raw JSON value of [hasNextPage].
@@ -358,6 +369,11 @@ private constructor(
     @ExcludeMissing
     fun _windowComplete(): JsonField<Boolean> = windowComplete
 
+    /** Returns the raw JSON value of [unreachedReplies]. */
+    @JsonProperty("unreachedReplies")
+    @ExcludeMissing
+    fun _unreachedReplies(): JsonField<Long> = unreachedReplies
+
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -403,6 +419,7 @@ private constructor(
         private var searchContext: JsonField<SearchContext> = JsonMissing.of()
         private var searchedQuery: JsonField<String> = JsonMissing.of()
         private var windowComplete: JsonField<Boolean> = JsonMissing.of()
+        private var unreachedReplies: JsonField<Long> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(tweetGetRepliesResponse: TweetGetRepliesResponse) = apply {
@@ -421,6 +438,7 @@ private constructor(
             searchContext = tweetGetRepliesResponse.searchContext
             searchedQuery = tweetGetRepliesResponse.searchedQuery
             windowComplete = tweetGetRepliesResponse.windowComplete
+            unreachedReplies = tweetGetRepliesResponse.unreachedReplies
             additionalProperties = tweetGetRepliesResponse.additionalProperties.toMutableMap()
         }
 
@@ -579,6 +597,18 @@ private constructor(
             this.windowComplete = windowComplete
         }
 
+        /**
+         * Present on automatic pages without filters while X counts replies the read hasn't
+         * reached. The count drops as you read more pages.
+         */
+        fun unreachedReplies(unreachedReplies: Long) =
+            unreachedReplies(JsonField.of(unreachedReplies))
+
+        /** Sets [Builder.unreachedReplies] to an arbitrary JSON value. */
+        fun unreachedReplies(unreachedReplies: JsonField<Long>) = apply {
+            this.unreachedReplies = unreachedReplies
+        }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -629,6 +659,7 @@ private constructor(
                 searchContext,
                 searchedQuery,
                 windowComplete,
+                unreachedReplies,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -663,6 +694,7 @@ private constructor(
         searchContext()?.validate()
         searchedQuery()
         windowComplete()
+        unreachedReplies()
         validated = true
     }
 
@@ -689,7 +721,8 @@ private constructor(
             (if (readBackTo.asKnown() == null) 0 else 1) +
             (searchContext.asKnown()?.validity() ?: 0) +
             (if (searchedQuery.asKnown() == null) 0 else 1) +
-            (if (windowComplete.asKnown() == null) 0 else 1)
+            (if (windowComplete.asKnown() == null) 0 else 1) +
+            (if (unreachedReplies.asKnown() == null) 0 else 1)
 
     /** Evidence for direct-reply coverage and collector behavior. */
     class Diagnostic
@@ -3261,6 +3294,7 @@ private constructor(
             searchContext == other.searchContext &&
             searchedQuery == other.searchedQuery &&
             windowComplete == other.windowComplete &&
+            unreachedReplies == other.unreachedReplies &&
             additionalProperties == other.additionalProperties
     }
 
@@ -3281,6 +3315,7 @@ private constructor(
             searchContext,
             searchedQuery,
             windowComplete,
+            unreachedReplies,
             additionalProperties,
         )
     }
@@ -3288,5 +3323,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "TweetGetRepliesResponse{hasNextPage=$hasNextPage, nextCursor=$nextCursor, tweets=$tweets, diagnostic=$diagnostic, filteredCount=$filteredCount, hiddenReplies=$hiddenReplies, limitReached=$limitReached, message=$message, nestedReplies=$nestedReplies, orderPartial=$orderPartial, partialBefore=$partialBefore, readBackTo=$readBackTo, searchContext=$searchContext, searchedQuery=$searchedQuery, windowComplete=$windowComplete, additionalProperties=$additionalProperties}"
+        "TweetGetRepliesResponse{hasNextPage=$hasNextPage, nextCursor=$nextCursor, tweets=$tweets, diagnostic=$diagnostic, filteredCount=$filteredCount, hiddenReplies=$hiddenReplies, limitReached=$limitReached, message=$message, nestedReplies=$nestedReplies, orderPartial=$orderPartial, partialBefore=$partialBefore, readBackTo=$readBackTo, searchContext=$searchContext, searchedQuery=$searchedQuery, windowComplete=$windowComplete, unreachedReplies=$unreachedReplies, additionalProperties=$additionalProperties}"
 }

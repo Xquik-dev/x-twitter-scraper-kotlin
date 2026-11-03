@@ -67,6 +67,8 @@ import com.x_twitter_scraper.api.services.blocking.x.ProfileService
 import com.x_twitter_scraper.api.services.blocking.x.ProfileServiceImpl
 import com.x_twitter_scraper.api.services.blocking.x.SpaceService
 import com.x_twitter_scraper.api.services.blocking.x.SpaceServiceImpl
+import com.x_twitter_scraper.api.services.blocking.x.SportService
+import com.x_twitter_scraper.api.services.blocking.x.SportServiceImpl
 import com.x_twitter_scraper.api.services.blocking.x.TweetService
 import com.x_twitter_scraper.api.services.blocking.x.TweetServiceImpl
 import com.x_twitter_scraper.api.services.blocking.x.UserService
@@ -113,6 +115,8 @@ class XServiceImpl internal constructor(private val clientOptions: ClientOptions
     private val jobs: JobService by lazy { JobServiceImpl(clientOptions) }
 
     private val spaces: SpaceService by lazy { SpaceServiceImpl(clientOptions) }
+
+    private val sports: SportService by lazy { SportServiceImpl(clientOptions) }
 
     private val broadcasts: BroadcastService by lazy { BroadcastServiceImpl(clientOptions) }
 
@@ -168,6 +172,9 @@ class XServiceImpl internal constructor(private val clientOptions: ClientOptions
 
     /** X Space details, host, and speakers */
     override fun spaces(): SpaceService = spaces
+
+    /** NFL & college football games, scoreboards, plays & box scores */
+    override fun sports(): SportService = sports
 
     /** X live video details, watch counts, and broadcaster */
     override fun broadcasts(): BroadcastService = broadcasts
@@ -301,6 +308,10 @@ class XServiceImpl internal constructor(private val clientOptions: ClientOptions
             SpaceServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val sports: SportService.WithRawResponse by lazy {
+            SportServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         private val broadcasts: BroadcastService.WithRawResponse by lazy {
             BroadcastServiceImpl.WithRawResponseImpl(clientOptions)
         }
@@ -359,6 +370,9 @@ class XServiceImpl internal constructor(private val clientOptions: ClientOptions
 
         /** X Space details, host, and speakers */
         override fun spaces(): SpaceService.WithRawResponse = spaces
+
+        /** NFL & college football games, scoreboards, plays & box scores */
+        override fun sports(): SportService.WithRawResponse = sports
 
         /** X live video details, watch counts, and broadcaster */
         override fun broadcasts(): BroadcastService.WithRawResponse = broadcasts
