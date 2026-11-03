@@ -77,12 +77,42 @@ class EventType @JsonCreator private constructor(private val value: JsonField<St
 
         val PROFILE_FOLLOWING_CHANGED = of("profile.following.changed")
 
+        val POST_REPLY_NEW = of("post.reply.new")
+
+        val POST_QUOTE_NEW = of("post.quote.new")
+
+        val POST_LIKES_CHANGED = of("post.likes.changed")
+
+        val POST_RETWEETS_CHANGED = of("post.retweets.changed")
+
+        val POST_REPLIES_CHANGED = of("post.replies.changed")
+
+        val POST_QUOTES_CHANGED = of("post.quotes.changed")
+
+        val POST_BOOKMARKS_CHANGED = of("post.bookmarks.changed")
+
+        val POST_VIEWS_CHANGED = of("post.views.changed")
+
+        val POST_EDITED = of("post.edited")
+
+        val POST_DELETED = of("post.deleted")
+
         fun of(value: String) = EventType(JsonField.of(value))
     }
 
     /** An enum containing [EventType]'s known values. */
     enum class Known {
         PROFILE_FOLLOWING_CHANGED,
+        POST_REPLY_NEW,
+        POST_QUOTE_NEW,
+        POST_LIKES_CHANGED,
+        POST_RETWEETS_CHANGED,
+        POST_REPLIES_CHANGED,
+        POST_QUOTES_CHANGED,
+        POST_BOOKMARKS_CHANGED,
+        POST_VIEWS_CHANGED,
+        POST_EDITED,
+        POST_DELETED,
         PROFILE_FOLLOWERS_CHANGED,
         FOLLOWER_REMOVED,
         FOLLOWER_ADDED,
@@ -125,6 +155,16 @@ class EventType @JsonCreator private constructor(private val value: JsonField<St
      */
     enum class Value {
         PROFILE_FOLLOWING_CHANGED,
+        POST_REPLY_NEW,
+        POST_QUOTE_NEW,
+        POST_LIKES_CHANGED,
+        POST_RETWEETS_CHANGED,
+        POST_REPLIES_CHANGED,
+        POST_QUOTES_CHANGED,
+        POST_BOOKMARKS_CHANGED,
+        POST_VIEWS_CHANGED,
+        POST_EDITED,
+        POST_DELETED,
         PROFILE_FOLLOWERS_CHANGED,
         FOLLOWER_REMOVED,
         FOLLOWER_ADDED,
@@ -165,6 +205,16 @@ class EventType @JsonCreator private constructor(private val value: JsonField<St
     fun value(): Value =
         when (this) {
             PROFILE_FOLLOWING_CHANGED -> Value.PROFILE_FOLLOWING_CHANGED
+            POST_REPLY_NEW -> Value.POST_REPLY_NEW
+            POST_QUOTE_NEW -> Value.POST_QUOTE_NEW
+            POST_LIKES_CHANGED -> Value.POST_LIKES_CHANGED
+            POST_RETWEETS_CHANGED -> Value.POST_RETWEETS_CHANGED
+            POST_REPLIES_CHANGED -> Value.POST_REPLIES_CHANGED
+            POST_QUOTES_CHANGED -> Value.POST_QUOTES_CHANGED
+            POST_BOOKMARKS_CHANGED -> Value.POST_BOOKMARKS_CHANGED
+            POST_VIEWS_CHANGED -> Value.POST_VIEWS_CHANGED
+            POST_EDITED -> Value.POST_EDITED
+            POST_DELETED -> Value.POST_DELETED
             PROFILE_FOLLOWERS_CHANGED -> Value.PROFILE_FOLLOWERS_CHANGED
             FOLLOWER_REMOVED -> Value.FOLLOWER_REMOVED
             FOLLOWER_ADDED -> Value.FOLLOWER_ADDED
@@ -206,6 +256,16 @@ class EventType @JsonCreator private constructor(private val value: JsonField<St
     fun known(): Known =
         when (this) {
             PROFILE_FOLLOWING_CHANGED -> Known.PROFILE_FOLLOWING_CHANGED
+            POST_REPLY_NEW -> Known.POST_REPLY_NEW
+            POST_QUOTE_NEW -> Known.POST_QUOTE_NEW
+            POST_LIKES_CHANGED -> Known.POST_LIKES_CHANGED
+            POST_RETWEETS_CHANGED -> Known.POST_RETWEETS_CHANGED
+            POST_REPLIES_CHANGED -> Known.POST_REPLIES_CHANGED
+            POST_QUOTES_CHANGED -> Known.POST_QUOTES_CHANGED
+            POST_BOOKMARKS_CHANGED -> Known.POST_BOOKMARKS_CHANGED
+            POST_VIEWS_CHANGED -> Known.POST_VIEWS_CHANGED
+            POST_EDITED -> Known.POST_EDITED
+            POST_DELETED -> Known.POST_DELETED
             PROFILE_FOLLOWERS_CHANGED -> Known.PROFILE_FOLLOWERS_CHANGED
             FOLLOWER_REMOVED -> Known.FOLLOWER_REMOVED
             FOLLOWER_ADDED -> Known.FOLLOWER_ADDED

@@ -3013,6 +3013,7 @@ private constructor(
         private val urlType: JsonField<String>,
         private val userLabelDisplayType: JsonField<String>,
         private val userLabelType: JsonField<String>,
+        private val auxiliaryLabels: JsonField<List<UserAuxiliaryLabel>>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -3035,6 +3036,9 @@ private constructor(
             @JsonProperty("userLabelType")
             @ExcludeMissing
             userLabelType: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("auxiliaryLabels")
+            @ExcludeMissing
+            auxiliaryLabels: JsonField<List<UserAuxiliaryLabel>> = JsonMissing.of(),
         ) : this(
             badgeUrl,
             description,
@@ -3043,6 +3047,7 @@ private constructor(
             urlType,
             userLabelDisplayType,
             userLabelType,
+            auxiliaryLabels,
             mutableMapOf(),
         )
 
@@ -3071,6 +3076,10 @@ private constructor(
 
         /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun userLabelType(): String? = userLabelType.getNullable("userLabelType")
+
+        /** More labels X shows beside the affiliation, such as an automated account's owner. */
+        fun auxiliaryLabels(): List<UserAuxiliaryLabel>? =
+            auxiliaryLabels.getNullable("auxiliaryLabels")
 
         /**
          * Returns the raw JSON value of [badgeUrl].
@@ -3132,6 +3141,11 @@ private constructor(
         @ExcludeMissing
         fun _userLabelType(): JsonField<String> = userLabelType
 
+        /** Returns the raw JSON value of [auxiliaryLabels]. */
+        @JsonProperty("auxiliaryLabels")
+        @ExcludeMissing
+        fun _auxiliaryLabels(): JsonField<List<UserAuxiliaryLabel>> = auxiliaryLabels
+
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
             additionalProperties.put(key, value)
@@ -3163,6 +3177,7 @@ private constructor(
             private var urlType: JsonField<String> = JsonMissing.of()
             private var userLabelDisplayType: JsonField<String> = JsonMissing.of()
             private var userLabelType: JsonField<String> = JsonMissing.of()
+            private var auxiliaryLabels: JsonField<MutableList<UserAuxiliaryLabel>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(affiliatesHighlightedLabel: AffiliatesHighlightedLabel) = apply {
@@ -3173,6 +3188,8 @@ private constructor(
                 urlType = affiliatesHighlightedLabel.urlType
                 userLabelDisplayType = affiliatesHighlightedLabel.userLabelDisplayType
                 userLabelType = affiliatesHighlightedLabel.userLabelType
+                auxiliaryLabels =
+                    affiliatesHighlightedLabel.auxiliaryLabels.map { it.toMutableList() }
                 additionalProperties =
                     affiliatesHighlightedLabel.additionalProperties.toMutableMap()
             }
@@ -3223,6 +3240,23 @@ private constructor(
                 this.userLabelType = userLabelType
             }
 
+            /** More labels X shows beside the affiliation, such as an automated account's owner. */
+            fun auxiliaryLabels(auxiliaryLabels: List<UserAuxiliaryLabel>) =
+                auxiliaryLabels(JsonField.of(auxiliaryLabels))
+
+            /** Sets [Builder.auxiliaryLabels] to an arbitrary JSON value. */
+            fun auxiliaryLabels(auxiliaryLabels: JsonField<List<UserAuxiliaryLabel>>) = apply {
+                this.auxiliaryLabels = auxiliaryLabels.map { it.toMutableList() }
+            }
+
+            /** Adds a single [UserAuxiliaryLabel] to [auxiliaryLabels]. */
+            fun addAuxiliaryLabel(auxiliaryLabel: UserAuxiliaryLabel) = apply {
+                auxiliaryLabels =
+                    (auxiliaryLabels ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("auxiliaryLabels", it).add(auxiliaryLabel)
+                    }
+            }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -3256,6 +3290,7 @@ private constructor(
                     urlType,
                     userLabelDisplayType,
                     userLabelType,
+                    (auxiliaryLabels ?: JsonMissing.of()).map { it.toImmutable() },
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -3283,6 +3318,7 @@ private constructor(
             urlType()
             userLabelDisplayType()
             userLabelType()
+            auxiliaryLabels()?.forEach { it.validate() }
             validated = true
         }
 
@@ -3301,7 +3337,8 @@ private constructor(
                 (if (url.asKnown() == null) 0 else 1) +
                 (if (urlType.asKnown() == null) 0 else 1) +
                 (if (userLabelDisplayType.asKnown() == null) 0 else 1) +
-                (if (userLabelType.asKnown() == null) 0 else 1)
+                (if (userLabelType.asKnown() == null) 0 else 1) +
+                (auxiliaryLabels.asKnown()?.sumOf { it.validity() } ?: 0)
 
         /** Public metadata whose fields X defines. */
         class LongDescription
@@ -3423,6 +3460,7 @@ private constructor(
                 urlType == other.urlType &&
                 userLabelDisplayType == other.userLabelDisplayType &&
                 userLabelType == other.userLabelType &&
+                auxiliaryLabels == other.auxiliaryLabels &&
                 additionalProperties == other.additionalProperties
         }
 
@@ -3435,6 +3473,7 @@ private constructor(
                 urlType,
                 userLabelDisplayType,
                 userLabelType,
+                auxiliaryLabels,
                 additionalProperties,
             )
         }
@@ -3442,7 +3481,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "AffiliatesHighlightedLabel{badgeUrl=$badgeUrl, description=$description, longDescription=$longDescription, url=$url, urlType=$urlType, userLabelDisplayType=$userLabelDisplayType, userLabelType=$userLabelType, additionalProperties=$additionalProperties}"
+            "AffiliatesHighlightedLabel{badgeUrl=$badgeUrl, description=$description, longDescription=$longDescription, url=$url, urlType=$urlType, userLabelDisplayType=$userLabelDisplayType, userLabelType=$userLabelType, auxiliaryLabels=$auxiliaryLabels, additionalProperties=$additionalProperties}"
     }
 
     /** The parts of the birthday the account made public. */

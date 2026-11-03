@@ -11,6 +11,7 @@ import com.x_twitter_scraper.api.core.http.HttpResponseFor
 import com.x_twitter_scraper.api.models.PaginatedTweets
 import com.x_twitter_scraper.api.models.PaginatedUsers
 import com.x_twitter_scraper.api.models.UserProfile
+import com.x_twitter_scraper.api.models.x.users.ShadowbanReport
 import com.x_twitter_scraper.api.models.x.users.UserRemoveFollowerParams
 import com.x_twitter_scraper.api.models.x.users.UserRemoveFollowerResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveAffiliatesParams
@@ -43,6 +44,7 @@ import com.x_twitter_scraper.api.models.x.users.UserRetrieveMentionsParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveRepliesParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveSearchParams
+import com.x_twitter_scraper.api.models.x.users.UserRetrieveShadowbanParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveSimilarParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveSubscriptionsParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveTweetsParams
@@ -501,6 +503,27 @@ interface UserServiceAsync {
     /** @see retrieveLive */
     suspend fun retrieveLive(id: String, requestOptions: RequestOptions): UserRetrieveLiveResponse =
         retrieveLive(id, UserRetrieveLiveParams.none(), requestOptions)
+
+    /**
+     * Checks 1 X account for a search ban, a search suggestion ban & reply deboosting. It also says
+     * if the account is active, protected or suspended. Each profile, post, suggestion & reply in
+     * the answer costs 1 credit.
+     */
+    suspend fun retrieveShadowban(
+        id: String,
+        params: UserRetrieveShadowbanParams = UserRetrieveShadowbanParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ShadowbanReport = retrieveShadowban(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see retrieveShadowban */
+    suspend fun retrieveShadowban(
+        params: UserRetrieveShadowbanParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ShadowbanReport
+
+    /** @see retrieveShadowban */
+    suspend fun retrieveShadowban(id: String, requestOptions: RequestOptions): ShadowbanReport =
+        retrieveShadowban(id, UserRetrieveShadowbanParams.none(), requestOptions)
 
     /**
      * Returns the public accounts X lists as similar to the selected user, in X's order. X can list
@@ -1144,6 +1167,33 @@ interface UserServiceAsync {
             requestOptions: RequestOptions,
         ): HttpResponseFor<UserRetrieveLiveResponse> =
             retrieveLive(id, UserRetrieveLiveParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get /x/users/{id}/shadowban`, but is otherwise the same
+         * as [UserServiceAsync.retrieveShadowban].
+         */
+        @MustBeClosed
+        suspend fun retrieveShadowban(
+            id: String,
+            params: UserRetrieveShadowbanParams = UserRetrieveShadowbanParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ShadowbanReport> =
+            retrieveShadowban(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see retrieveShadowban */
+        @MustBeClosed
+        suspend fun retrieveShadowban(
+            params: UserRetrieveShadowbanParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ShadowbanReport>
+
+        /** @see retrieveShadowban */
+        @MustBeClosed
+        suspend fun retrieveShadowban(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<ShadowbanReport> =
+            retrieveShadowban(id, UserRetrieveShadowbanParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /x/users/{id}/similar`, but is otherwise the same as

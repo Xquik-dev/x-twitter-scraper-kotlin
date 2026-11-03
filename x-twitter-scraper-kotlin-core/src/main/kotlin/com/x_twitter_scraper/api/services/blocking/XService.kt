@@ -43,6 +43,7 @@ import com.x_twitter_scraper.api.services.blocking.x.ListService
 import com.x_twitter_scraper.api.services.blocking.x.MediaService
 import com.x_twitter_scraper.api.services.blocking.x.ProfileService
 import com.x_twitter_scraper.api.services.blocking.x.SpaceService
+import com.x_twitter_scraper.api.services.blocking.x.SportService
 import com.x_twitter_scraper.api.services.blocking.x.TweetService
 import com.x_twitter_scraper.api.services.blocking.x.UserService
 import com.x_twitter_scraper.api.services.blocking.x.WriteActionService
@@ -100,6 +101,9 @@ interface XService {
 
     /** X Space details, host, and speakers */
     fun spaces(): SpaceService
+
+    /** NFL & college football games, scoreboards, plays & box scores */
+    fun sports(): SportService
 
     /** X live video details, watch counts, and broadcaster */
     fun broadcasts(): BroadcastService
@@ -304,6 +308,9 @@ interface XService {
 
         /** X Space details, host, and speakers */
         fun spaces(): SpaceService.WithRawResponse
+
+        /** NFL & college football games, scoreboards, plays & box scores */
+        fun sports(): SportService.WithRawResponse
 
         /** X live video details, watch counts, and broadcaster */
         fun broadcasts(): BroadcastService.WithRawResponse

@@ -67,6 +67,8 @@ import com.x_twitter_scraper.api.services.async.x.ProfileServiceAsync
 import com.x_twitter_scraper.api.services.async.x.ProfileServiceAsyncImpl
 import com.x_twitter_scraper.api.services.async.x.SpaceServiceAsync
 import com.x_twitter_scraper.api.services.async.x.SpaceServiceAsyncImpl
+import com.x_twitter_scraper.api.services.async.x.SportServiceAsync
+import com.x_twitter_scraper.api.services.async.x.SportServiceAsyncImpl
 import com.x_twitter_scraper.api.services.async.x.TweetServiceAsync
 import com.x_twitter_scraper.api.services.async.x.TweetServiceAsyncImpl
 import com.x_twitter_scraper.api.services.async.x.UserServiceAsync
@@ -118,6 +120,8 @@ class XServiceAsyncImpl internal constructor(private val clientOptions: ClientOp
     private val jobs: JobServiceAsync by lazy { JobServiceAsyncImpl(clientOptions) }
 
     private val spaces: SpaceServiceAsync by lazy { SpaceServiceAsyncImpl(clientOptions) }
+
+    private val sports: SportServiceAsync by lazy { SportServiceAsyncImpl(clientOptions) }
 
     private val analysis: AnalysisServiceAsync by lazy { AnalysisServiceAsyncImpl(clientOptions) }
 
@@ -175,6 +179,9 @@ class XServiceAsyncImpl internal constructor(private val clientOptions: ClientOp
 
     /** X Space details, host, and speakers */
     override fun spaces(): SpaceServiceAsync = spaces
+
+    /** NFL & college football games, scoreboards, plays & box scores */
+    override fun sports(): SportServiceAsync = sports
 
     /** X live video details, watch counts, and broadcaster */
     override fun broadcasts(): BroadcastServiceAsync = broadcasts
@@ -308,6 +315,10 @@ class XServiceAsyncImpl internal constructor(private val clientOptions: ClientOp
             SpaceServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val sports: SportServiceAsync.WithRawResponse by lazy {
+            SportServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         private val broadcasts: BroadcastServiceAsync.WithRawResponse by lazy {
             BroadcastServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
@@ -366,6 +377,9 @@ class XServiceAsyncImpl internal constructor(private val clientOptions: ClientOp
 
         /** X Space details, host, and speakers */
         override fun spaces(): SpaceServiceAsync.WithRawResponse = spaces
+
+        /** NFL & college football games, scoreboards, plays & box scores */
+        override fun sports(): SportServiceAsync.WithRawResponse = sports
 
         /** X live video details, watch counts, and broadcaster */
         override fun broadcasts(): BroadcastServiceAsync.WithRawResponse = broadcasts

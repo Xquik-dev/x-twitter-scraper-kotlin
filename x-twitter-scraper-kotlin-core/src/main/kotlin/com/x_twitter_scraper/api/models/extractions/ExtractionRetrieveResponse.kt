@@ -1314,6 +1314,7 @@ private constructor(
         private val xUserId: JsonField<String>,
         private val xUsername: JsonField<String>,
         private val xVerified: JsonField<Boolean>,
+        private val verifiedType: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -1374,6 +1375,9 @@ private constructor(
             @JsonProperty("xVerified")
             @ExcludeMissing
             xVerified: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("verifiedType")
+            @ExcludeMissing
+            verifiedType: JsonField<String> = JsonMissing.of(),
         ) : this(
             id,
             bookmarkCount,
@@ -1396,6 +1400,7 @@ private constructor(
             xUserId,
             xUsername,
             xVerified,
+            verifiedType,
             mutableMapOf(),
         )
 
@@ -1505,6 +1510,12 @@ private constructor(
 
         /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
         fun xVerified(): Boolean? = xVerified.getNullable("xVerified")
+
+        /**
+         * Badge type X shows on the account, with outputPreset=flat, such as Business, Government
+         * or Blue. Absent when the account has none of these badges.
+         */
+        fun verifiedType(): String? = verifiedType.getNullable("verifiedType")
 
         /**
          * Returns the raw JSON value of [id].
@@ -1676,6 +1687,11 @@ private constructor(
          */
         @JsonProperty("xVerified") @ExcludeMissing fun _xVerified(): JsonField<Boolean> = xVerified
 
+        /** Returns the raw JSON value of [verifiedType]. */
+        @JsonProperty("verifiedType")
+        @ExcludeMissing
+        fun _verifiedType(): JsonField<String> = verifiedType
+
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
             additionalProperties.put(key, value)
@@ -1718,6 +1734,7 @@ private constructor(
             private var xUserId: JsonField<String> = JsonMissing.of()
             private var xUsername: JsonField<String> = JsonMissing.of()
             private var xVerified: JsonField<Boolean> = JsonMissing.of()
+            private var verifiedType: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(result: Result) = apply {
@@ -1742,6 +1759,7 @@ private constructor(
                 xUserId = result.xUserId
                 xUsername = result.xUsername
                 xVerified = result.xVerified
+                verifiedType = result.verifiedType
                 additionalProperties = result.additionalProperties.toMutableMap()
             }
 
@@ -1904,6 +1922,17 @@ private constructor(
             /** Sets [Builder.xVerified] to an arbitrary JSON value. */
             fun xVerified(xVerified: JsonField<Boolean>) = apply { this.xVerified = xVerified }
 
+            /**
+             * Badge type X shows on the account, with outputPreset=flat, such as Business,
+             * Government or Blue. Absent when the account has none of these badges.
+             */
+            fun verifiedType(verifiedType: String) = verifiedType(JsonField.of(verifiedType))
+
+            /** Sets [Builder.verifiedType] to an arbitrary JSON value. */
+            fun verifiedType(verifiedType: JsonField<String>) = apply {
+                this.verifiedType = verifiedType
+            }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -1951,6 +1980,7 @@ private constructor(
                     xUserId,
                     xUsername,
                     xVerified,
+                    verifiedType,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -1992,6 +2022,7 @@ private constructor(
             xUserId()
             xUsername()
             xVerified()
+            verifiedType()
             validated = true
         }
 
@@ -2024,7 +2055,8 @@ private constructor(
                 (if (xProfileImageUrl.asKnown() == null) 0 else 1) +
                 (if (xUserId.asKnown() == null) 0 else 1) +
                 (if (xUsername.asKnown() == null) 0 else 1) +
-                (if (xVerified.asKnown() == null) 0 else 1)
+                (if (xVerified.asKnown() == null) 0 else 1) +
+                (if (verifiedType.asKnown() == null) 0 else 1)
 
         /** Public metadata whose fields X defines. */
         class EnrichmentData
@@ -2159,6 +2191,7 @@ private constructor(
                 xUserId == other.xUserId &&
                 xUsername == other.xUsername &&
                 xVerified == other.xVerified &&
+                verifiedType == other.verifiedType &&
                 additionalProperties == other.additionalProperties
         }
 
@@ -2185,6 +2218,7 @@ private constructor(
                 xUserId,
                 xUsername,
                 xVerified,
+                verifiedType,
                 additionalProperties,
             )
         }
@@ -2192,7 +2226,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Result{id=$id, bookmarkCount=$bookmarkCount, createdAt=$createdAt, email=$email, enrichmentData=$enrichmentData, likeCount=$likeCount, media=$media, quoteCount=$quoteCount, replyCount=$replyCount, retweetCount=$retweetCount, tweetCreatedAt=$tweetCreatedAt, tweetId=$tweetId, tweetText=$tweetText, tweetUrl=$tweetUrl, viewCount=$viewCount, xDisplayName=$xDisplayName, xFollowersCount=$xFollowersCount, xProfileImageUrl=$xProfileImageUrl, xUserId=$xUserId, xUsername=$xUsername, xVerified=$xVerified, additionalProperties=$additionalProperties}"
+            "Result{id=$id, bookmarkCount=$bookmarkCount, createdAt=$createdAt, email=$email, enrichmentData=$enrichmentData, likeCount=$likeCount, media=$media, quoteCount=$quoteCount, replyCount=$replyCount, retweetCount=$retweetCount, tweetCreatedAt=$tweetCreatedAt, tweetId=$tweetId, tweetText=$tweetText, tweetUrl=$tweetUrl, viewCount=$viewCount, xDisplayName=$xDisplayName, xFollowersCount=$xFollowersCount, xProfileImageUrl=$xProfileImageUrl, xUserId=$xUserId, xUsername=$xUsername, xVerified=$xVerified, verifiedType=$verifiedType, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

@@ -29,6 +29,8 @@ import com.x_twitter_scraper.api.models.monitors.MonitorRetrieveParams
 import com.x_twitter_scraper.api.models.monitors.MonitorUpdateParams
 import com.x_twitter_scraper.api.services.blocking.monitors.KeywordService
 import com.x_twitter_scraper.api.services.blocking.monitors.KeywordServiceImpl
+import com.x_twitter_scraper.api.services.blocking.monitors.PostService
+import com.x_twitter_scraper.api.services.blocking.monitors.PostServiceImpl
 
 /** X account monitoring with 1-second checks */
 class MonitorServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -40,6 +42,8 @@ class MonitorServiceImpl internal constructor(private val clientOptions: ClientO
 
     private val keywords: KeywordService by lazy { KeywordServiceImpl(clientOptions) }
 
+    private val posts: PostService by lazy { PostServiceImpl(clientOptions) }
+
     override fun withRawResponse(): MonitorService.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): MonitorService =
@@ -47,6 +51,9 @@ class MonitorServiceImpl internal constructor(private val clientOptions: ClientO
 
     /** X account monitoring with 1-second checks */
     override fun keywords(): KeywordService = keywords
+
+    /** X account monitoring with 1-second checks */
+    override fun posts(): PostService = posts
 
     override fun create(
         params: MonitorCreateParams,
@@ -79,6 +86,10 @@ class MonitorServiceImpl internal constructor(private val clientOptions: ClientO
             KeywordServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val posts: PostService.WithRawResponse by lazy {
+            PostServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): MonitorService.WithRawResponse =
@@ -88,6 +99,9 @@ class MonitorServiceImpl internal constructor(private val clientOptions: ClientO
 
         /** X account monitoring with 1-second checks */
         override fun keywords(): KeywordService.WithRawResponse = keywords
+
+        /** X account monitoring with 1-second checks */
+        override fun posts(): PostService.WithRawResponse = posts
 
         private val createHandler: Handler<MonitorCreateResponse> =
             jsonHandler<MonitorCreateResponse>(clientOptions.jsonMapper)

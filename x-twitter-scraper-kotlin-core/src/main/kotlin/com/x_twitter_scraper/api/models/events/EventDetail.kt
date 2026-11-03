@@ -37,6 +37,10 @@ private constructor(
     private val username: JsonField<String>,
     private val xEventId: JsonField<String>,
     private val xUserId: JsonField<String>,
+    private val postId: JsonField<String>,
+    private val postUrl: JsonField<String>,
+    private val authorId: JsonField<String>,
+    private val authorUsername: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -62,6 +66,12 @@ private constructor(
         @JsonProperty("username") @ExcludeMissing username: JsonField<String> = JsonMissing.of(),
         @JsonProperty("xEventId") @ExcludeMissing xEventId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("xUserId") @ExcludeMissing xUserId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("postId") @ExcludeMissing postId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("postUrl") @ExcludeMissing postUrl: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("authorId") @ExcludeMissing authorId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("authorUsername")
+        @ExcludeMissing
+        authorUsername: JsonField<String> = JsonMissing.of(),
     ) : this(
         id,
         data,
@@ -75,6 +85,10 @@ private constructor(
         username,
         xEventId,
         xUserId,
+        postId,
+        postUrl,
+        authorId,
+        authorUsername,
         mutableMapOf(),
     )
 
@@ -161,6 +175,18 @@ private constructor(
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun xUserId(): String? = xUserId.getNullable("xUserId")
+
+    /** ID of the post a post event is about. Present on post events. */
+    fun postId(): String? = postId.getNullable("postId")
+
+    /** Link to the post a post event is about. Present on post events. */
+    fun postUrl(): String? = postUrl.getNullable("postUrl")
+
+    /** Permanent X user ID of the author of the post a post event is about. */
+    fun authorId(): String? = authorId.getNullable("authorId")
+
+    /** Username of the author of the post a post event is about. */
+    fun authorUsername(): String? = authorUsername.getNullable("authorUsername")
 
     /**
      * Returns the raw JSON value of [id].
@@ -253,6 +279,20 @@ private constructor(
      */
     @JsonProperty("xUserId") @ExcludeMissing fun _xUserId(): JsonField<String> = xUserId
 
+    /** Returns the raw JSON value of [postId]. */
+    @JsonProperty("postId") @ExcludeMissing fun _postId(): JsonField<String> = postId
+
+    /** Returns the raw JSON value of [postUrl]. */
+    @JsonProperty("postUrl") @ExcludeMissing fun _postUrl(): JsonField<String> = postUrl
+
+    /** Returns the raw JSON value of [authorId]. */
+    @JsonProperty("authorId") @ExcludeMissing fun _authorId(): JsonField<String> = authorId
+
+    /** Returns the raw JSON value of [authorUsername]. */
+    @JsonProperty("authorUsername")
+    @ExcludeMissing
+    fun _authorUsername(): JsonField<String> = authorUsername
+
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -298,6 +338,10 @@ private constructor(
         private var username: JsonField<String> = JsonMissing.of()
         private var xEventId: JsonField<String> = JsonMissing.of()
         private var xUserId: JsonField<String> = JsonMissing.of()
+        private var postId: JsonField<String> = JsonMissing.of()
+        private var postUrl: JsonField<String> = JsonMissing.of()
+        private var authorId: JsonField<String> = JsonMissing.of()
+        private var authorUsername: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(eventDetail: EventDetail) = apply {
@@ -313,6 +357,10 @@ private constructor(
             username = eventDetail.username
             xEventId = eventDetail.xEventId
             xUserId = eventDetail.xUserId
+            postId = eventDetail.postId
+            postUrl = eventDetail.postUrl
+            authorId = eventDetail.authorId
+            authorUsername = eventDetail.authorUsername
             additionalProperties = eventDetail.additionalProperties.toMutableMap()
         }
 
@@ -403,6 +451,32 @@ private constructor(
         /** Sets [Builder.xUserId] to an arbitrary JSON value. */
         fun xUserId(xUserId: JsonField<String>) = apply { this.xUserId = xUserId }
 
+        /** ID of the post a post event is about. Present on post events. */
+        fun postId(postId: String) = postId(JsonField.of(postId))
+
+        /** Sets [Builder.postId] to an arbitrary JSON value. */
+        fun postId(postId: JsonField<String>) = apply { this.postId = postId }
+
+        /** Link to the post a post event is about. Present on post events. */
+        fun postUrl(postUrl: String) = postUrl(JsonField.of(postUrl))
+
+        /** Sets [Builder.postUrl] to an arbitrary JSON value. */
+        fun postUrl(postUrl: JsonField<String>) = apply { this.postUrl = postUrl }
+
+        /** Permanent X user ID of the author of the post a post event is about. */
+        fun authorId(authorId: String) = authorId(JsonField.of(authorId))
+
+        /** Sets [Builder.authorId] to an arbitrary JSON value. */
+        fun authorId(authorId: JsonField<String>) = apply { this.authorId = authorId }
+
+        /** Username of the author of the post a post event is about. */
+        fun authorUsername(authorUsername: String) = authorUsername(JsonField.of(authorUsername))
+
+        /** Sets [Builder.authorUsername] to an arbitrary JSON value. */
+        fun authorUsername(authorUsername: JsonField<String>) = apply {
+            this.authorUsername = authorUsername
+        }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -453,6 +527,10 @@ private constructor(
                 username,
                 xEventId,
                 xUserId,
+                postId,
+                postUrl,
+                authorId,
+                authorUsername,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -484,6 +562,10 @@ private constructor(
         username()
         xEventId()
         xUserId()
+        postId()
+        postUrl()
+        authorId()
+        authorUsername()
         validated = true
     }
 
@@ -507,7 +589,11 @@ private constructor(
             (if (query.asKnown() == null) 0 else 1) +
             (if (username.asKnown() == null) 0 else 1) +
             (if (xEventId.asKnown() == null) 0 else 1) +
-            (if (xUserId.asKnown() == null) 0 else 1)
+            (if (xUserId.asKnown() == null) 0 else 1) +
+            (if (postId.asKnown() == null) 0 else 1) +
+            (if (postUrl.asKnown() == null) 0 else 1) +
+            (if (authorId.asKnown() == null) 0 else 1) +
+            (if (authorUsername.asKnown() == null) 0 else 1)
 
     /** Event payload - shape varies by event type (JSON) */
     class Data
@@ -624,6 +710,8 @@ private constructor(
 
             val KEYWORD = of("keyword")
 
+            val POST = of("post")
+
             fun of(value: String) = MonitorType(JsonField.of(value))
         }
 
@@ -631,6 +719,7 @@ private constructor(
         enum class Known {
             ACCOUNT,
             KEYWORD,
+            POST,
         }
 
         /**
@@ -645,6 +734,7 @@ private constructor(
         enum class Value {
             ACCOUNT,
             KEYWORD,
+            POST,
             /**
              * An enum member indicating that [MonitorType] was instantiated with an unknown value.
              */
@@ -659,6 +749,7 @@ private constructor(
             when (this) {
                 ACCOUNT -> Value.ACCOUNT
                 KEYWORD -> Value.KEYWORD
+                POST -> Value.POST
                 else -> Value._UNKNOWN
             }
 
@@ -672,6 +763,7 @@ private constructor(
             when (this) {
                 ACCOUNT -> Known.ACCOUNT
                 KEYWORD -> Known.KEYWORD
+                POST -> Known.POST
                 else -> throw XTwitterScraperInvalidDataException("Unknown MonitorType: $value")
             }
 
@@ -746,6 +838,10 @@ private constructor(
             username == other.username &&
             xEventId == other.xEventId &&
             xUserId == other.xUserId &&
+            postId == other.postId &&
+            postUrl == other.postUrl &&
+            authorId == other.authorId &&
+            authorUsername == other.authorUsername &&
             additionalProperties == other.additionalProperties
     }
 
@@ -763,6 +859,10 @@ private constructor(
             username,
             xEventId,
             xUserId,
+            postId,
+            postUrl,
+            authorId,
+            authorUsername,
             additionalProperties,
         )
     }
@@ -770,5 +870,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "EventDetail{id=$id, data=$data, monitorId=$monitorId, monitorType=$monitorType, occurredAt=$occurredAt, type=$type, keywordMonitorId=$keywordMonitorId, monitorName=$monitorName, query=$query, username=$username, xEventId=$xEventId, xUserId=$xUserId, additionalProperties=$additionalProperties}"
+        "EventDetail{id=$id, data=$data, monitorId=$monitorId, monitorType=$monitorType, occurredAt=$occurredAt, type=$type, keywordMonitorId=$keywordMonitorId, monitorName=$monitorName, query=$query, username=$username, xEventId=$xEventId, xUserId=$xUserId, postId=$postId, postUrl=$postUrl, authorId=$authorId, authorUsername=$authorUsername, additionalProperties=$additionalProperties}"
 }

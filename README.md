@@ -79,10 +79,14 @@ Call REST directly when a Maven dependency does not fit.
 | Discover X trends | `GET /x/trends` | `client.x().getTrends()` |
 | Export large X datasets | `POST /extractions` | `client.extractions()` |
 | Monitor tweet keywords or accounts | `POST /monitors/keywords`, `POST /monitors` | `client.monitors()` |
+| Track 1 post's replies, quotes, edits and hourly metrics | `POST /monitors/posts`, `GET /monitors/posts/{id}/metrics` | `client.monitors().posts()` |
 | Receive signed event deliveries | `POST /webhooks` | `client.webhooks()` |
 | Post, like, retweet, or follow | `POST /x/tweets`, `POST /x/users/{id}/follow` | `client.x().tweets()`, `client.x().users()` |
 | Send media or update a profile | `POST /x/media`, `PATCH /x/profile` | `client.x().media()`, `client.x().profile()` |
 | Manage connected X accounts | `GET /x/accounts`, `POST /x/accounts` | `client.x().accounts()` |
+| Read NFL & college football games, box scores, plays, audiences, rosters, player props and posts | `GET /x/sports/{league}/games`, `GET /x/sports/{league}/games/{id}/plays` | `client.x().sports()` |
+| Read the account's activity log and each activity's full record | `GET /activity`, `GET /activity/{id}` | `client.activity()` |
+| Check 1 account for a search ban, a suggestion ban and reply deboosting | `GET /x/users/{id}/shadowban` | `client.x().users().retrieveShadowban` |
 
 ## Install
 
