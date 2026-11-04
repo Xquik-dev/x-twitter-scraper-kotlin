@@ -26,12 +26,21 @@ import java.util.Objects
 class TweetCreateParams
 private constructor(
     private val idempotencyKey: String,
+    private val prefer: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun idempotencyKey(): String = idempotencyKey
+
+    /**
+     * A long write answers 202 with a status link, then lands on X. `wait=<seconds>` asks for the
+     * answer within that many seconds, up to 85. If the write is still running then, the API
+     * answers 202 with Location. Poll Location until `terminal` is true, and don't send the write
+     * again.
+     */
+    fun prefer(): String? = prefer
 
     /**
      * X account (@username or account ID)
@@ -136,18 +145,28 @@ private constructor(
     class Builder internal constructor() {
 
         private var idempotencyKey: String? = null
+        private var prefer: String? = null
         private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(tweetCreateParams: TweetCreateParams) = apply {
             idempotencyKey = tweetCreateParams.idempotencyKey
+            prefer = tweetCreateParams.prefer
             body = tweetCreateParams.body.toBuilder()
             additionalHeaders = tweetCreateParams.additionalHeaders.toBuilder()
             additionalQueryParams = tweetCreateParams.additionalQueryParams.toBuilder()
         }
 
         fun idempotencyKey(idempotencyKey: String) = apply { this.idempotencyKey = idempotencyKey }
+
+        /**
+         * A long write answers 202 with a status link, then lands on X. `wait=<seconds>` asks for
+         * the answer within that many seconds, up to 85. If the write is still running then, the
+         * API answers 202 with Location. Poll Location until `terminal` is true, and don't send the
+         * write again.
+         */
+        fun prefer(prefer: String?) = apply { this.prefer = prefer }
 
         /** Sets the entire request body. */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
@@ -331,6 +350,7 @@ private constructor(
         fun build(): TweetCreateParams =
             TweetCreateParams(
                 checkRequired("idempotencyKey", idempotencyKey),
+                prefer,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -343,6 +363,7 @@ private constructor(
         Headers.builder()
             .apply {
                 put("Idempotency-Key", idempotencyKey)
+                prefer?.let { put("Prefer", it) }
                 putAll(additionalHeaders)
             }
             .build()
@@ -689,14 +710,15 @@ private constructor(
 
         return other is TweetCreateParams &&
             idempotencyKey == other.idempotencyKey &&
+            prefer == other.prefer &&
             body == other.body &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(idempotencyKey, body, additionalHeaders, additionalQueryParams)
+        Objects.hash(idempotencyKey, prefer, body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "TweetCreateParams{idempotencyKey=$idempotencyKey, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "TweetCreateParams{idempotencyKey=$idempotencyKey, prefer=$prefer, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

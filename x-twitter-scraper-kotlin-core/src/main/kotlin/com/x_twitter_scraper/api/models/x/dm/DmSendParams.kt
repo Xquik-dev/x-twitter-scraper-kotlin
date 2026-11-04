@@ -27,6 +27,7 @@ class DmSendParams
 private constructor(
     private val userId: String?,
     private val idempotencyKey: String,
+    private val prefer: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -35,6 +36,14 @@ private constructor(
     fun userId(): String? = userId
 
     fun idempotencyKey(): String = idempotencyKey
+
+    /**
+     * A long write answers 202 with a status link, then lands on X. `wait=<seconds>` asks for the
+     * answer within that many seconds, up to 85. If the write is still running then, the API
+     * answers 202 with Location. Poll Location until `terminal` is true, and don't send the write
+     * again.
+     */
+    fun prefer(): String? = prefer
 
     /**
      * X account (@username or ID) sending the DM
@@ -108,6 +117,7 @@ private constructor(
 
         private var userId: String? = null
         private var idempotencyKey: String? = null
+        private var prefer: String? = null
         private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -115,6 +125,7 @@ private constructor(
         internal fun from(dmSendParams: DmSendParams) = apply {
             userId = dmSendParams.userId
             idempotencyKey = dmSendParams.idempotencyKey
+            prefer = dmSendParams.prefer
             body = dmSendParams.body.toBuilder()
             additionalHeaders = dmSendParams.additionalHeaders.toBuilder()
             additionalQueryParams = dmSendParams.additionalQueryParams.toBuilder()
@@ -123,6 +134,14 @@ private constructor(
         fun userId(userId: String?) = apply { this.userId = userId }
 
         fun idempotencyKey(idempotencyKey: String) = apply { this.idempotencyKey = idempotencyKey }
+
+        /**
+         * A long write answers 202 with a status link, then lands on X. `wait=<seconds>` asks for
+         * the answer within that many seconds, up to 85. If the write is still running then, the
+         * API answers 202 with Location. Poll Location until `terminal` is true, and don't send the
+         * write again.
+         */
+        fun prefer(prefer: String?) = apply { this.prefer = prefer }
 
         /** Sets the entire request body. */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
@@ -286,6 +305,7 @@ private constructor(
             DmSendParams(
                 userId,
                 checkRequired("idempotencyKey", idempotencyKey),
+                prefer,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -304,6 +324,7 @@ private constructor(
         Headers.builder()
             .apply {
                 put("Idempotency-Key", idempotencyKey)
+                prefer?.let { put("Prefer", it) }
                 putAll(additionalHeaders)
             }
             .build()
@@ -550,14 +571,15 @@ private constructor(
         return other is DmSendParams &&
             userId == other.userId &&
             idempotencyKey == other.idempotencyKey &&
+            prefer == other.prefer &&
             body == other.body &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(userId, idempotencyKey, body, additionalHeaders, additionalQueryParams)
+        Objects.hash(userId, idempotencyKey, prefer, body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "DmSendParams{userId=$userId, idempotencyKey=$idempotencyKey, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "DmSendParams{userId=$userId, idempotencyKey=$idempotencyKey, prefer=$prefer, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

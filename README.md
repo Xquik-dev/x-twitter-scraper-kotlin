@@ -2,8 +2,8 @@
 
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/13736/badge)](https://www.bestpractices.dev/projects/13736)
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.xquik.api/x-twitter-scraper-kotlin)](https://central.sonatype.com/artifact/com.xquik.api/x-twitter-scraper-kotlin/0.9.4)
-[![KDocs](https://javadoc.io/badge2/com.xquik.api/x-twitter-scraper-kotlin-core/0.9.4/javadoc.svg)](https://javadoc.io/doc/com.xquik.api/x-twitter-scraper-kotlin-core/0.9.4)
+[![Maven Central](https://img.shields.io/maven-central/v/com.xquik.api/x-twitter-scraper-kotlin)](https://central.sonatype.com/artifact/com.xquik.api/x-twitter-scraper-kotlin/0.10.0)
+[![KDocs](https://javadoc.io/badge2/com.xquik.api/x-twitter-scraper-kotlin-core/0.10.0/javadoc.svg)](https://javadoc.io/doc/com.xquik.api/x-twitter-scraper-kotlin-core/0.10.0)
 [![Convex Component](https://www.convex.dev/components/badge/convex-xquik)](https://www.convex.dev/components/convex-xquik)
 
 Use this X API & Twitter API SDK to work with X from Kotlin.
@@ -93,7 +93,7 @@ Call REST directly when a Maven dependency does not fit.
 Add the Gradle dependency.
 
 ```kotlin
-implementation("com.xquik.api:x-twitter-scraper-kotlin:0.9.4")
+implementation("com.xquik.api:x-twitter-scraper-kotlin:0.10.0")
 ```
 
 Or add the Maven dependency.
@@ -102,7 +102,7 @@ Or add the Maven dependency.
 <dependency>
   <groupId>com.xquik.api</groupId>
   <artifactId>x-twitter-scraper-kotlin</artifactId>
-  <version>0.9.4</version>
+  <version>0.10.0</version>
 </dependency>
 ```
 

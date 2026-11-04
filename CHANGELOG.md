@@ -1,11 +1,20 @@
 # Changelog
 
-## Unreleased
+## 0.10.0 (2026-11-04)
+
+[Full changelog from v0.9.3 to v0.10.0](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.9.3...v0.10.0)
 
 ### Breaking changes
 
 * `CreditTopupBalanceResponse.builder()` requires `chargedCurrency` and `chargedMinorUnits`, which the API always sends. Code that builds the response by hand must set both.
 * `AccountBulkRetryParams._body()` returns `AccountBulkRetryParams.Body?` instead of `Map<String, JsonValue>?`. Code that calls `_body()` must change, and compiled callers must rebuild.
+
+### Security
+
+* Update jackson-core & jackson-databind from 2.22.1 to 2.22.3, which fixes 7 advisories, 5 high & 2 moderate.
+* The jackson-core fixes are GHSA-7hhh-6rmp-j9qf & GHSA-p6pp-m3f8-5c89.
+* The jackson-databind fixes are GHSA-cxp5-3px4-pw24, GHSA-q4xh-88c3-wmh7, GHSA-wv8q-qhhj-9h54, GHSA-gx83-3vf8-gh7j & GHSA-wjgm-6hv5-3cvf.
+* The SDK's own JSON handling does not use the affected features. Your application gets the same Jackson version through the SDK, so update if it parses untrusted JSON with Jackson.
 
 ### Features
 
@@ -52,6 +61,8 @@
 * The core module exposes kotlinx-coroutines-core as an API dependency for the async event stream.
 * Response models add getters for missing API fields at every depth, and enum models add the API's new values.
 * Monitor and extraction requests accept `name` and email filters, and batch user requests accept `usernames`.
+* The 19 write methods, such as `x().tweets().create`, take `prefer`. They send it as the `Prefer` header. `wait=<seconds>` asks for the answer within that many seconds, up to 85. A write still running then answers 202 with its status link.
+* Error codes gain the 59 codes the API added, such as `PRICE_CHANGED` and `X_COMMUNITY_CREATION_CLOSED`. X takes no new Communities, so `x().communities().create` fails. It answers `x_community_creation_closed` and charges nothing.
 
 ### Bug Fixes
 
@@ -67,17 +78,6 @@
 * Media uploads now reject `isLongVideo` without a file.
 * `XAccount` and `XAccountDetail` drop a timestamp field the API stopped returning.
 * `accepted-field-differences.json` records the fields, required flags and values kept for existing callers.
-
-## 0.9.4 (2026-10-13)
-
-[Full changelog from v0.9.3 to v0.9.4](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.9.3...v0.9.4)
-
-### Security
-
-* Update jackson-core & jackson-databind from 2.22.1 to 2.22.3, which fixes 7 advisories, 5 high & 2 moderate.
-* The jackson-core fixes are GHSA-7hhh-6rmp-j9qf & GHSA-p6pp-m3f8-5c89.
-* The jackson-databind fixes are GHSA-cxp5-3px4-pw24, GHSA-q4xh-88c3-wmh7, GHSA-wv8q-qhhj-9h54, GHSA-gx83-3vf8-gh7j & GHSA-wjgm-6hv5-3cvf.
-* The SDK's own JSON handling does not use the affected features. Your application gets the same Jackson version through the SDK, so update if it parses untrusted JSON with Jackson.
 
 ### Documentation
 
