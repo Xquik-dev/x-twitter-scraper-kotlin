@@ -22,10 +22,16 @@ private constructor(
     private val format: Format,
     private val businessEmailOnly: Boolean?,
     private val emailDomains: String?,
+    private val change: Change?,
+    private val location: String?,
+    private val compare: String?,
     private val hasDescription: Boolean?,
     private val hasEmail: Boolean?,
     private val hasLocation: Boolean?,
     private val hasMedia: Boolean?,
+    private val hideFake: Boolean?,
+    private val hideInactive: Boolean?,
+    private val hasWebsite: Boolean?,
     private val lang: String?,
     private val maxFollowers: Long?,
     private val maxFollowing: Long?,
@@ -39,6 +45,8 @@ private constructor(
     private val minViews: Long?,
     private val search: String?,
     private val sinceDate: LocalDate?,
+    private val joinedUntil: LocalDate?,
+    private val joinedSince: LocalDate?,
     private val untilDate: LocalDate?,
     private val verified: Boolean?,
     private val additionalHeaders: Headers,
@@ -59,6 +67,22 @@ private constructor(
      */
     fun emailDomains(): String? = emailDomains
 
+    /**
+     * With compare, `added` keeps this run's new rows and `removed` keeps the earlier run's rows
+     * that this run lacks. The default is `added`. A run of another account ignores it.
+     */
+    fun change(): Change? = change
+
+    /** Keep accounts whose location contains this text. */
+    fun location(): String? = location
+
+    /**
+     * ID of another run of this tool. For an earlier whole run of the same account, the export
+     * holds only the rows that differ. For a run of another account, it holds only this run's rows
+     * that the other run also lists.
+     */
+    fun compare(): String? = compare
+
     /** Require a non-empty description. */
     fun hasDescription(): Boolean? = hasDescription
 
@@ -70,6 +94,18 @@ private constructor(
 
     /** Require media. */
     fun hasMedia(): Boolean? = hasMedia
+
+    /**
+     * Drop accounts with at least 3 of these signs. No posts, a default picture, an empty bio, or
+     * following at least 100 accounts and 10 times their followers.
+     */
+    fun hideFake(): Boolean? = hideFake
+
+    /** Drop accounts with under 1 post a month since joining that are at least 180 days old. */
+    fun hideInactive(): Boolean? = hideInactive
+
+    /** Require a website on the profile. */
+    fun hasWebsite(): Boolean? = hasWebsite
 
     /** Filter by language code. */
     fun lang(): String? = lang
@@ -113,6 +149,12 @@ private constructor(
      */
     fun sinceDate(): LocalDate? = sinceDate
 
+    /** Keep accounts that joined X before this UTC day. */
+    fun joinedUntil(): LocalDate? = joinedUntil
+
+    /** Keep accounts that joined X on this UTC day or later. */
+    fun joinedSince(): LocalDate? = joinedSince
+
     /**
      * Include results on or before this date, inclusive, through 23:59:59 UTC. An ISO 8601 time
      * ends at that instant. The filter drops results without a post date. An empty value sets no
@@ -152,10 +194,16 @@ private constructor(
         private var format: Format? = null
         private var businessEmailOnly: Boolean? = null
         private var emailDomains: String? = null
+        private var change: Change? = null
+        private var location: String? = null
+        private var compare: String? = null
         private var hasDescription: Boolean? = null
         private var hasEmail: Boolean? = null
         private var hasLocation: Boolean? = null
         private var hasMedia: Boolean? = null
+        private var hideFake: Boolean? = null
+        private var hideInactive: Boolean? = null
+        private var hasWebsite: Boolean? = null
         private var lang: String? = null
         private var maxFollowers: Long? = null
         private var maxFollowing: Long? = null
@@ -169,6 +217,8 @@ private constructor(
         private var minViews: Long? = null
         private var search: String? = null
         private var sinceDate: LocalDate? = null
+        private var joinedUntil: LocalDate? = null
+        private var joinedSince: LocalDate? = null
         private var untilDate: LocalDate? = null
         private var verified: Boolean? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -179,10 +229,16 @@ private constructor(
             format = extractionExportResultsParams.format
             businessEmailOnly = extractionExportResultsParams.businessEmailOnly
             emailDomains = extractionExportResultsParams.emailDomains
+            change = extractionExportResultsParams.change
+            location = extractionExportResultsParams.location
+            compare = extractionExportResultsParams.compare
             hasDescription = extractionExportResultsParams.hasDescription
             hasEmail = extractionExportResultsParams.hasEmail
             hasLocation = extractionExportResultsParams.hasLocation
             hasMedia = extractionExportResultsParams.hasMedia
+            hideFake = extractionExportResultsParams.hideFake
+            hideInactive = extractionExportResultsParams.hideInactive
+            hasWebsite = extractionExportResultsParams.hasWebsite
             lang = extractionExportResultsParams.lang
             maxFollowers = extractionExportResultsParams.maxFollowers
             maxFollowing = extractionExportResultsParams.maxFollowing
@@ -196,6 +252,8 @@ private constructor(
             minViews = extractionExportResultsParams.minViews
             search = extractionExportResultsParams.search
             sinceDate = extractionExportResultsParams.sinceDate
+            joinedUntil = extractionExportResultsParams.joinedUntil
+            joinedSince = extractionExportResultsParams.joinedSince
             untilDate = extractionExportResultsParams.untilDate
             verified = extractionExportResultsParams.verified
             additionalHeaders = extractionExportResultsParams.additionalHeaders.toBuilder()
@@ -222,6 +280,22 @@ private constructor(
          */
         fun emailDomains(emailDomains: String?) = apply { this.emailDomains = emailDomains }
 
+        /**
+         * With compare, `added` keeps this run's new rows and `removed` keeps the earlier run's
+         * rows that this run lacks. The default is `added`. A run of another account ignores it.
+         */
+        fun change(change: Change?) = apply { this.change = change }
+
+        /** Keep accounts whose location contains this text. */
+        fun location(location: String?) = apply { this.location = location }
+
+        /**
+         * ID of another run of this tool. For an earlier whole run of the same account, the export
+         * holds only the rows that differ. For a run of another account, it holds only this run's
+         * rows that the other run also lists.
+         */
+        fun compare(compare: String?) = apply { this.compare = compare }
+
         /** Require a non-empty description. */
         fun hasDescription(hasDescription: Boolean?) = apply {
             this.hasDescription = hasDescription
@@ -247,6 +321,27 @@ private constructor(
 
         /** Alias for [Builder.hasMedia]. */
         fun hasMedia(hasMedia: Boolean) = hasMedia(hasMedia as Boolean?)
+
+        /**
+         * Drop accounts with at least 3 of these signs. No posts, a default picture, an empty bio,
+         * or following at least 100 accounts and 10 times their followers.
+         */
+        fun hideFake(hideFake: Boolean?) = apply { this.hideFake = hideFake }
+
+        /** Alias for [Builder.hideFake]. */
+        fun hideFake(hideFake: Boolean) = hideFake(hideFake as Boolean?)
+
+        /** Drop accounts with under 1 post a month since joining that are at least 180 days old. */
+        fun hideInactive(hideInactive: Boolean?) = apply { this.hideInactive = hideInactive }
+
+        /** Alias for [Builder.hideInactive]. */
+        fun hideInactive(hideInactive: Boolean) = hideInactive(hideInactive as Boolean?)
+
+        /** Require a website on the profile. */
+        fun hasWebsite(hasWebsite: Boolean?) = apply { this.hasWebsite = hasWebsite }
+
+        /** Alias for [Builder.hasWebsite]. */
+        fun hasWebsite(hasWebsite: Boolean) = hasWebsite(hasWebsite as Boolean?)
 
         /** Filter by language code. */
         fun lang(lang: String?) = apply { this.lang = lang }
@@ -319,6 +414,12 @@ private constructor(
          * instant. The filter drops results without a post date. An empty value sets no filter.
          */
         fun sinceDate(sinceDate: LocalDate?) = apply { this.sinceDate = sinceDate }
+
+        /** Keep accounts that joined X before this UTC day. */
+        fun joinedUntil(joinedUntil: LocalDate?) = apply { this.joinedUntil = joinedUntil }
+
+        /** Keep accounts that joined X on this UTC day or later. */
+        fun joinedSince(joinedSince: LocalDate?) = apply { this.joinedSince = joinedSince }
 
         /**
          * Include results on or before this date, inclusive, through 23:59:59 UTC. An ISO 8601 time
@@ -449,10 +550,16 @@ private constructor(
                 checkRequired("format", format),
                 businessEmailOnly,
                 emailDomains,
+                change,
+                location,
+                compare,
                 hasDescription,
                 hasEmail,
                 hasLocation,
                 hasMedia,
+                hideFake,
+                hideInactive,
+                hasWebsite,
                 lang,
                 maxFollowers,
                 maxFollowing,
@@ -466,6 +573,8 @@ private constructor(
                 minViews,
                 search,
                 sinceDate,
+                joinedUntil,
+                joinedSince,
                 untilDate,
                 verified,
                 additionalHeaders.build(),
@@ -487,10 +596,16 @@ private constructor(
                 put("format", format.toString())
                 businessEmailOnly?.let { put("businessEmailOnly", it.toString()) }
                 emailDomains?.let { put("emailDomains", it) }
+                change?.let { put("change", it.toString()) }
+                location?.let { put("location", it) }
+                compare?.let { put("compare", it) }
                 hasDescription?.let { put("hasDescription", it.toString()) }
                 hasEmail?.let { put("hasEmail", it.toString()) }
                 hasLocation?.let { put("hasLocation", it.toString()) }
                 hasMedia?.let { put("hasMedia", it.toString()) }
+                hideFake?.let { put("hideFake", it.toString()) }
+                hideInactive?.let { put("hideInactive", it.toString()) }
+                hasWebsite?.let { put("hasWebsite", it.toString()) }
                 lang?.let { put("lang", it) }
                 maxFollowers?.let { put("maxFollowers", it.toString()) }
                 maxFollowing?.let { put("maxFollowing", it.toString()) }
@@ -504,6 +619,8 @@ private constructor(
                 minViews?.let { put("minViews", it.toString()) }
                 search?.let { put("search", it) }
                 sinceDate?.let { put("sinceDate", it.toString()) }
+                joinedUntil?.let { put("joinedUntil", it.toString()) }
+                joinedSince?.let { put("joinedSince", it.toString()) }
                 untilDate?.let { put("untilDate", it.toString()) }
                 verified?.let { put("verified", it.toString()) }
                 putAll(additionalQueryParams)
@@ -654,6 +771,120 @@ private constructor(
         override fun toString() = value.toString()
     }
 
+    /** Which rows to keep from a comparison with another run. */
+    class Change @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+        /** Returns this class instance's raw value. */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            val ADDED = of("added")
+
+            val REMOVED = of("removed")
+
+            fun of(value: String) = Change(JsonField.of(value))
+        }
+
+        /** An enum containing [Change]'s known values. */
+        enum class Known {
+            ADDED,
+            REMOVED,
+        }
+
+        /**
+         * An enum containing [Change]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [Change] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            ADDED,
+            REMOVED,
+            /** An enum member indicating that [Change] was instantiated with an unknown value. */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         */
+        fun value(): Value =
+            when (this) {
+                ADDED -> Value.ADDED
+                REMOVED -> Value.REMOVED
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * @throws XTwitterScraperInvalidDataException if this class instance's value is a not a
+         *   known member.
+         */
+        fun known(): Known =
+            when (this) {
+                ADDED -> Known.ADDED
+                REMOVED -> Known.REMOVED
+                else -> throw XTwitterScraperInvalidDataException("Unknown Change: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * @throws XTwitterScraperInvalidDataException if this class instance's value does not have
+         *   the expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString()
+                ?: throw XTwitterScraperInvalidDataException("Value is not a String")
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+         *   match its expected type.
+         */
+        fun validate(): Change = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: XTwitterScraperInvalidDataException) {
+                false
+            }
+
+        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Change && value == other.value
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
@@ -664,10 +895,16 @@ private constructor(
             format == other.format &&
             businessEmailOnly == other.businessEmailOnly &&
             emailDomains == other.emailDomains &&
+            change == other.change &&
+            location == other.location &&
+            compare == other.compare &&
             hasDescription == other.hasDescription &&
             hasEmail == other.hasEmail &&
             hasLocation == other.hasLocation &&
             hasMedia == other.hasMedia &&
+            hideFake == other.hideFake &&
+            hideInactive == other.hideInactive &&
+            hasWebsite == other.hasWebsite &&
             lang == other.lang &&
             maxFollowers == other.maxFollowers &&
             maxFollowing == other.maxFollowing &&
@@ -681,6 +918,8 @@ private constructor(
             minViews == other.minViews &&
             search == other.search &&
             sinceDate == other.sinceDate &&
+            joinedUntil == other.joinedUntil &&
+            joinedSince == other.joinedSince &&
             untilDate == other.untilDate &&
             verified == other.verified &&
             additionalHeaders == other.additionalHeaders &&
@@ -693,10 +932,16 @@ private constructor(
             format,
             businessEmailOnly,
             emailDomains,
+            change,
+            location,
+            compare,
             hasDescription,
             hasEmail,
             hasLocation,
             hasMedia,
+            hideFake,
+            hideInactive,
+            hasWebsite,
             lang,
             maxFollowers,
             maxFollowing,
@@ -710,6 +955,8 @@ private constructor(
             minViews,
             search,
             sinceDate,
+            joinedUntil,
+            joinedSince,
             untilDate,
             verified,
             additionalHeaders,
@@ -717,5 +964,5 @@ private constructor(
         )
 
     override fun toString() =
-        "ExtractionExportResultsParams{id=$id, format=$format, businessEmailOnly=$businessEmailOnly, emailDomains=$emailDomains, hasDescription=$hasDescription, hasEmail=$hasEmail, hasLocation=$hasLocation, hasMedia=$hasMedia, lang=$lang, maxFollowers=$maxFollowers, maxFollowing=$maxFollowing, maxPosts=$maxPosts, minFollowers=$minFollowers, minFollowing=$minFollowing, minLikes=$minLikes, minPosts=$minPosts, minReplies=$minReplies, minRetweets=$minRetweets, minViews=$minViews, search=$search, sinceDate=$sinceDate, untilDate=$untilDate, verified=$verified, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "ExtractionExportResultsParams{id=$id, format=$format, businessEmailOnly=$businessEmailOnly, emailDomains=$emailDomains, change=$change, location=$location, compare=$compare, hasDescription=$hasDescription, hasEmail=$hasEmail, hasLocation=$hasLocation, hasMedia=$hasMedia, hideFake=$hideFake, hideInactive=$hideInactive, hasWebsite=$hasWebsite, lang=$lang, maxFollowers=$maxFollowers, maxFollowing=$maxFollowing, maxPosts=$maxPosts, minFollowers=$minFollowers, minFollowing=$minFollowing, minLikes=$minLikes, minPosts=$minPosts, minReplies=$minReplies, minRetweets=$minRetweets, minViews=$minViews, search=$search, sinceDate=$sinceDate, joinedUntil=$joinedUntil, joinedSince=$joinedSince, untilDate=$untilDate, verified=$verified, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
