@@ -74,6 +74,7 @@ private constructor(
     private val sinceDate: LocalDate?,
     private val sinceId: String?,
     private val sinceTime: String?,
+    private val textOnlyTerms: String?,
     private val source: String?,
     private val toUser: String?,
     private val untilDate: LocalDate?,
@@ -300,6 +301,12 @@ private constructor(
      */
     fun sinceTime(): String? = sinceTime
 
+    /**
+     * Keeps a post only when at least 1 of these words or quoted phrases appears outside the
+     * author's name and username, such as in its text, a link, its card or a quoted post.
+     */
+    fun textOnlyTerms(): String? = textOnlyTerms
+
     /** X search no longer supports source. A Tweet search with it answers 424 & charges nothing. */
     fun source(): String? = source
 
@@ -410,6 +417,7 @@ private constructor(
         private var sinceDate: LocalDate? = null
         private var sinceId: String? = null
         private var sinceTime: String? = null
+        private var textOnlyTerms: String? = null
         private var source: String? = null
         private var toUser: String? = null
         private var untilDate: LocalDate? = null
@@ -475,6 +483,7 @@ private constructor(
             sinceDate = tweetSearchParams.sinceDate
             sinceId = tweetSearchParams.sinceId
             sinceTime = tweetSearchParams.sinceTime
+            textOnlyTerms = tweetSearchParams.textOnlyTerms
             source = tweetSearchParams.source
             toUser = tweetSearchParams.toUser
             untilDate = tweetSearchParams.untilDate
@@ -766,6 +775,12 @@ private constructor(
         fun sinceTime(sinceTime: String?) = apply { this.sinceTime = sinceTime }
 
         /**
+         * Keeps a post only when at least 1 of these words or quoted phrases appears outside the
+         * author's name and username, such as in its text, a link, its card or a quoted post.
+         */
+        fun textOnlyTerms(textOnlyTerms: String?) = apply { this.textOnlyTerms = textOnlyTerms }
+
+        /**
          * X search no longer supports source. A Tweet search with it answers 424 & charges nothing.
          */
         fun source(source: String?) = apply { this.source = source }
@@ -970,6 +985,7 @@ private constructor(
                 sinceDate,
                 sinceId,
                 sinceTime,
+                textOnlyTerms,
                 source,
                 toUser,
                 untilDate,
@@ -1041,6 +1057,7 @@ private constructor(
                 sinceDate?.let { put("sinceDate", it.toString()) }
                 sinceId?.let { put("sinceId", it) }
                 sinceTime?.let { put("sinceTime", it) }
+                textOnlyTerms?.let { put("textOnlyTerms", it) }
                 source?.let { put("source", it) }
                 toUser?.let { put("toUser", it) }
                 untilDate?.let { put("untilDate", it.toString()) }
@@ -1845,6 +1862,7 @@ private constructor(
             sinceDate == other.sinceDate &&
             sinceId == other.sinceId &&
             sinceTime == other.sinceTime &&
+            textOnlyTerms == other.textOnlyTerms &&
             source == other.source &&
             toUser == other.toUser &&
             untilDate == other.untilDate &&
@@ -1912,6 +1930,7 @@ private constructor(
             sinceDate,
             sinceId,
             sinceTime,
+            textOnlyTerms,
             source,
             toUser,
             untilDate,
@@ -1925,5 +1944,5 @@ private constructor(
         )
 
     override fun toString() =
-        "TweetSearchParams{q=$q, advancedQuery=$advancedQuery, anyWords=$anyWords, blueVerifiedOnly=$blueVerifiedOnly, boundingBox=$boundingBox, cardName=$cardName, cashtags=$cashtags, conversationId=$conversationId, cursor=$cursor, exactPhrase=$exactPhrase, excludeSource=$excludeSource, excludeWords=$excludeWords, fields=$fields, fromUser=$fromUser, geocode=$geocode, hashtags=$hashtags, inReplyToTweetId=$inReplyToTweetId, keywords=$keywords, language=$language, limit=$limit, listId=$listId, maxFaves=$maxFaves, maxId=$maxId, maxQuotes=$maxQuotes, maxReplies=$maxReplies, maxRetweets=$maxRetweets, mediaType=$mediaType, mentioning=$mentioning, minBookmarks=$minBookmarks, minFaves=$minFaves, minLikes=$minLikes, minQuotes=$minQuotes, minReplies=$minReplies, minRetweets=$minRetweets, minViews=$minViews, mode=$mode, nativeRetweets=$nativeRetweets, near=$near, news=$news, omit=$omit, place=$place, placeCountry=$placeCountry, pointRadius=$pointRadius, queryType=$queryType, quotes=$quotes, quotesOfTweetId=$quotesOfTweetId, replies=$replies, retweets=$retweets, retweetsOfTweetId=$retweetsOfTweetId, safe=$safe, sinceDate=$sinceDate, sinceId=$sinceId, sinceTime=$sinceTime, source=$source, toUser=$toUser, untilDate=$untilDate, untilTime=$untilTime, url=$url, verifiedOnly=$verifiedOnly, within=$within, withinTime=$withinTime, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "TweetSearchParams{q=$q, advancedQuery=$advancedQuery, anyWords=$anyWords, blueVerifiedOnly=$blueVerifiedOnly, boundingBox=$boundingBox, cardName=$cardName, cashtags=$cashtags, conversationId=$conversationId, cursor=$cursor, exactPhrase=$exactPhrase, excludeSource=$excludeSource, excludeWords=$excludeWords, fields=$fields, fromUser=$fromUser, geocode=$geocode, hashtags=$hashtags, inReplyToTweetId=$inReplyToTweetId, keywords=$keywords, language=$language, limit=$limit, listId=$listId, maxFaves=$maxFaves, maxId=$maxId, maxQuotes=$maxQuotes, maxReplies=$maxReplies, maxRetweets=$maxRetweets, mediaType=$mediaType, mentioning=$mentioning, minBookmarks=$minBookmarks, minFaves=$minFaves, minLikes=$minLikes, minQuotes=$minQuotes, minReplies=$minReplies, minRetweets=$minRetweets, minViews=$minViews, mode=$mode, nativeRetweets=$nativeRetweets, near=$near, news=$news, omit=$omit, place=$place, placeCountry=$placeCountry, pointRadius=$pointRadius, queryType=$queryType, quotes=$quotes, quotesOfTweetId=$quotesOfTweetId, replies=$replies, retweets=$retweets, retweetsOfTweetId=$retweetsOfTweetId, safe=$safe, sinceDate=$sinceDate, sinceId=$sinceId, sinceTime=$sinceTime, textOnlyTerms=$textOnlyTerms, source=$source, toUser=$toUser, untilDate=$untilDate, untilTime=$untilTime, url=$url, verifiedOnly=$verifiedOnly, within=$within, withinTime=$withinTime, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

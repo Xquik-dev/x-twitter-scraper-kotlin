@@ -25,6 +25,7 @@ class CommunityDeleteParams
 private constructor(
     private val id: String?,
     private val idempotencyKey: String,
+    private val prefer: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -33,6 +34,14 @@ private constructor(
     fun id(): String? = id
 
     fun idempotencyKey(): String = idempotencyKey
+
+    /**
+     * A long write answers 202 with a status link, then lands on X. `wait=<seconds>` asks for the
+     * answer within that many seconds, up to 85. If the write is still running then, the API
+     * answers 202 with Location. Poll Location until `terminal` is true, and don't send the write
+     * again.
+     */
+    fun prefer(): String? = prefer
 
     /**
      * X account (@username or ID) deleting the community
@@ -94,6 +103,7 @@ private constructor(
 
         private var id: String? = null
         private var idempotencyKey: String? = null
+        private var prefer: String? = null
         private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -101,6 +111,7 @@ private constructor(
         internal fun from(communityDeleteParams: CommunityDeleteParams) = apply {
             id = communityDeleteParams.id
             idempotencyKey = communityDeleteParams.idempotencyKey
+            prefer = communityDeleteParams.prefer
             body = communityDeleteParams.body.toBuilder()
             additionalHeaders = communityDeleteParams.additionalHeaders.toBuilder()
             additionalQueryParams = communityDeleteParams.additionalQueryParams.toBuilder()
@@ -109,6 +120,14 @@ private constructor(
         fun id(id: String?) = apply { this.id = id }
 
         fun idempotencyKey(idempotencyKey: String) = apply { this.idempotencyKey = idempotencyKey }
+
+        /**
+         * A long write answers 202 with a status link, then lands on X. `wait=<seconds>` asks for
+         * the answer within that many seconds, up to 85. If the write is still running then, the
+         * API answers 202 with Location. Poll Location until `terminal` is true, and don't send the
+         * write again.
+         */
+        fun prefer(prefer: String?) = apply { this.prefer = prefer }
 
         /** Sets the entire request body. */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
@@ -262,6 +281,7 @@ private constructor(
             CommunityDeleteParams(
                 id,
                 checkRequired("idempotencyKey", idempotencyKey),
+                prefer,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -280,6 +300,7 @@ private constructor(
         Headers.builder()
             .apply {
                 put("Idempotency-Key", idempotencyKey)
+                prefer?.let { put("Prefer", it) }
                 putAll(additionalHeaders)
             }
             .build()
@@ -490,14 +511,15 @@ private constructor(
         return other is CommunityDeleteParams &&
             id == other.id &&
             idempotencyKey == other.idempotencyKey &&
+            prefer == other.prefer &&
             body == other.body &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(id, idempotencyKey, body, additionalHeaders, additionalQueryParams)
+        Objects.hash(id, idempotencyKey, prefer, body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "CommunityDeleteParams{id=$id, idempotencyKey=$idempotencyKey, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "CommunityDeleteParams{id=$id, idempotencyKey=$idempotencyKey, prefer=$prefer, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
