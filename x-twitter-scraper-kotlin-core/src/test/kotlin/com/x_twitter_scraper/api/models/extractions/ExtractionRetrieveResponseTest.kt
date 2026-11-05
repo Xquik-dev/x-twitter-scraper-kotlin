@@ -34,6 +34,7 @@ internal class ExtractionRetrieveResponseTest {
                         .status(ExtractionRetrieveResponse.Job.Status.PENDING)
                         .toolType(ExtractionRetrieveResponse.Job.ToolType.FOLLOWER_EXPLORER)
                         .totalResults(0L)
+                        .url("https://dashboard.xquik.com/activity/a1")
                         .build()
                 )
                 .addResult(
@@ -92,6 +93,7 @@ internal class ExtractionRetrieveResponseTest {
                     .status(ExtractionRetrieveResponse.Job.Status.PENDING)
                     .toolType(ExtractionRetrieveResponse.Job.ToolType.FOLLOWER_EXPLORER)
                     .totalResults(0L)
+                    .url("https://dashboard.xquik.com/activity/a1")
                     .build()
             )
         assertThat(extractionRetrieveResponse.results())
@@ -156,6 +158,7 @@ internal class ExtractionRetrieveResponseTest {
                         .status(ExtractionRetrieveResponse.Job.Status.PENDING)
                         .toolType(ExtractionRetrieveResponse.Job.ToolType.FOLLOWER_EXPLORER)
                         .totalResults(0L)
+                        .url("https://dashboard.xquik.com/activity/a1")
                         .build()
                 )
                 .addResult(

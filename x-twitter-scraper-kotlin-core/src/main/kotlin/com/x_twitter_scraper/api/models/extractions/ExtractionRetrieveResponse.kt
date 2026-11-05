@@ -313,6 +313,7 @@ private constructor(
         private val status: JsonField<Status>,
         private val toolType: JsonField<ToolType>,
         private val totalResults: JsonField<Long>,
+        private val url: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -344,6 +345,7 @@ private constructor(
             @JsonProperty("totalResults")
             @ExcludeMissing
             totalResults: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of(),
         ) : this(
             id,
             completedAt,
@@ -355,6 +357,7 @@ private constructor(
             status,
             toolType,
             totalResults,
+            url,
             mutableMapOf(),
         )
 
@@ -412,6 +415,14 @@ private constructor(
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
         fun totalResults(): Long? = totalResults.getNullable("totalResults")
+
+        /**
+         * Dashboard page where a signed-in user follows this job & downloads its rows as CSV, XLSX,
+         * JSON, Markdown, PDF or text.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun url(): String? = url.getNullable("url")
 
         /**
          * Returns the raw JSON value of [id].
@@ -502,6 +513,13 @@ private constructor(
         @ExcludeMissing
         fun _totalResults(): JsonField<Long> = totalResults
 
+        /**
+         * Returns the raw JSON value of [url].
+         *
+         * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
+
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
             additionalProperties.put(key, value)
@@ -533,6 +551,7 @@ private constructor(
             private var status: JsonField<Status> = JsonMissing.of()
             private var toolType: JsonField<ToolType> = JsonMissing.of()
             private var totalResults: JsonField<Long> = JsonMissing.of()
+            private var url: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(job: Job) = apply {
@@ -546,6 +565,7 @@ private constructor(
                 status = job.status
                 toolType = job.toolType
                 totalResults = job.totalResults
+                url = job.url
                 additionalProperties = job.additionalProperties.toMutableMap()
             }
 
@@ -621,6 +641,15 @@ private constructor(
                 this.totalResults = totalResults
             }
 
+            /**
+             * Dashboard page where a signed-in user follows this job & downloads its rows as CSV,
+             * XLSX, JSON, Markdown, PDF or text.
+             */
+            fun url(url: String) = url(JsonField.of(url))
+
+            /** Sets [Builder.url] to an arbitrary JSON value. */
+            fun url(url: JsonField<String>) = apply { this.url = url }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -657,6 +686,7 @@ private constructor(
                     status,
                     toolType,
                     totalResults,
+                    url,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -687,6 +717,7 @@ private constructor(
             status()?.validate()
             toolType()?.validate()
             totalResults()
+            url()
             validated = true
         }
 
@@ -708,7 +739,8 @@ private constructor(
                 (if (resultsLimit.asKnown() == null) 0 else 1) +
                 (status.asKnown()?.validity() ?: 0) +
                 (toolType.asKnown()?.validity() ?: 0) +
-                (if (totalResults.asKnown() == null) 0 else 1)
+                (if (totalResults.asKnown() == null) 0 else 1) +
+                (if (url.asKnown() == null) 0 else 1)
 
         /** Why a terminal job stopped. */
         class CompletionReason
@@ -1264,6 +1296,7 @@ private constructor(
                 status == other.status &&
                 toolType == other.toolType &&
                 totalResults == other.totalResults &&
+                url == other.url &&
                 additionalProperties == other.additionalProperties
         }
 
@@ -1279,6 +1312,7 @@ private constructor(
                 status,
                 toolType,
                 totalResults,
+                url,
                 additionalProperties,
             )
         }
@@ -1286,7 +1320,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Job{id=$id, completedAt=$completedAt, completionReason=$completionReason, createdAt=$createdAt, effectiveResultsLimit=$effectiveResultsLimit, errorMessage=$errorMessage, resultsLimit=$resultsLimit, status=$status, toolType=$toolType, totalResults=$totalResults, additionalProperties=$additionalProperties}"
+            "Job{id=$id, completedAt=$completedAt, completionReason=$completionReason, createdAt=$createdAt, effectiveResultsLimit=$effectiveResultsLimit, errorMessage=$errorMessage, resultsLimit=$resultsLimit, status=$status, toolType=$toolType, totalResults=$totalResults, url=$url, additionalProperties=$additionalProperties}"
     }
 
     /** A public row from any supported extraction mode. */
