@@ -6,7 +6,7 @@
 [![KDocs](https://javadoc.io/badge2/com.xquik.api/x-twitter-scraper-kotlin-core/0.10.0/javadoc.svg)](https://javadoc.io/doc/com.xquik.api/x-twitter-scraper-kotlin-core/0.10.0)
 [![Convex Component](https://www.convex.dev/components/badge/convex-xquik)](https://www.convex.dev/components/convex-xquik)
 
-Use this X API & Twitter API SDK to work with X from Kotlin.
+Use the Xquik X API & Twitter API SDK to work with X from Kotlin.
 It works as a Twitter scraper & tweet scraper for search, profiles & followers.
 Scrape Twitter timelines, lists, communities & trends into typed Kotlin models.
 Manage media, webhooks, monitors & X automation with blocking & coroutine clients.
@@ -19,6 +19,44 @@ Xquik charges only for delivered, unique, filter-matching results and never pads
 > "Twitter" and "X" are trademarks of X Corp.
 
 [API reference](https://docs.xquik.com/api-reference/overview) | [Authentication](https://xquik.com/auth.md) | [KDocs](https://javadoc.io/doc/com.xquik.api/x-twitter-scraper-kotlin-core)
+
+## Install the Twitter API Kotlin SDK
+
+Add the Gradle dependency.
+
+```kotlin
+implementation("com.xquik.api:x-twitter-scraper-kotlin:0.10.0")
+```
+
+Or add the Maven dependency.
+
+```xml
+<dependency>
+  <groupId>com.xquik.api</groupId>
+  <artifactId>x-twitter-scraper-kotlin</artifactId>
+  <version>0.10.0</version>
+</dependency>
+```
+
+## Scrape tweets with the Twitter Kotlin client
+
+```kotlin
+import com.x_twitter_scraper.api.models.x.tweets.TweetSearchParams
+import com.x_twitter_scraper.api.models.x.tweets.TweetSearchResponse
+
+val params = TweetSearchParams.builder()
+    .q("from:elonmusk")
+    .limit(10L)
+    .build()
+
+val result: TweetSearchResponse = client.x().tweets().search(params)
+```
+
+Close the client when your application stops.
+
+```kotlin
+client.close()
+```
 
 <!-- trust:start -->
 
@@ -88,24 +126,6 @@ Call REST directly when a Maven dependency does not fit.
 | Read the account's activity log and each activity's full record | `GET /activity`, `GET /activity/{id}` | `client.activity()` |
 | Check 1 account for a search ban, a suggestion ban and reply deboosting | `GET /x/users/{id}/shadowban` | `client.x().users().retrieveShadowban` |
 
-## Install
-
-Add the Gradle dependency.
-
-```kotlin
-implementation("com.xquik.api:x-twitter-scraper-kotlin:0.10.0")
-```
-
-Or add the Maven dependency.
-
-```xml
-<dependency>
-  <groupId>com.xquik.api</groupId>
-  <artifactId>x-twitter-scraper-kotlin</artifactId>
-  <version>0.10.0</version>
-</dependency>
-```
-
 ## Verify Maven signatures
 
 Every Maven Central file has a detached OpenPGP signature. Set `VERSION`, then verify the artifact.
@@ -159,26 +179,6 @@ The client reads these settings.
 
 System properties override environment variables.
 
-## Search tweets
-
-```kotlin
-import com.x_twitter_scraper.api.models.x.tweets.TweetSearchParams
-import com.x_twitter_scraper.api.models.x.tweets.TweetSearchResponse
-
-val params = TweetSearchParams.builder()
-    .q("from:elonmusk")
-    .limit(10L)
-    .build()
-
-val result: TweetSearchResponse = client.x().tweets().search(params)
-```
-
-Close the client when your application stops.
-
-```kotlin
-client.close()
-```
-
 ## Use coroutines
 
 Call `async()` to use suspending methods.
@@ -227,12 +227,27 @@ Binary endpoints return `HttpResponse`. Close each response after reading it.
 - [Governance in GOVERNANCE.md](GOVERNANCE.md)
 - [OpenSSF evidence and current limitations in OPENSSF.md](OPENSSF.md)
 
+## Questions
+
+### Do I need an X developer account?
+
+No. Public reads need only an Xquik API key. Private reads & X account actions
+need a connected X account.
+
+### Is this the official X API?
+
+No. Xquik is an independent third-party service with its own REST API. This SDK
+calls that API, not the official X API.
+
 ## More Xquik tools
 
 - [X (Twitter) scraper API & Twitter MCP server](https://github.com/Xquik-dev/x-twitter-scraper) with REST, MCP & Skill setup.
 - Twitter API SDKs for [TypeScript](https://github.com/Xquik-dev/x-twitter-scraper-typescript), [Python](https://github.com/Xquik-dev/x-twitter-scraper-python), [Go](https://github.com/Xquik-dev/x-twitter-scraper-go), [Ruby](https://github.com/Xquik-dev/x-twitter-scraper-ruby), [Java](https://github.com/Xquik-dev/x-twitter-scraper-java), [C#](https://github.com/Xquik-dev/x-twitter-scraper-csharp) & [PHP](https://github.com/Xquik-dev/x-twitter-scraper-php).
 - [Twitter CLI & X CLI](https://github.com/Xquik-dev/x-twitter-scraper-cli) for terminal workflows.
 - [Twitter advanced search operators](https://github.com/Xquik-dev/x-twitter-advanced-search) with tested examples.
+- Twitter agent plugins for [OpenClaw](https://github.com/Xquik-dev/tweetclaw) & [Hermes Agent](https://github.com/Xquik-dev/hermes-tweet), and the [Twitter API documentation source](https://github.com/Xquik-dev/xquik-docs).
+- Twitter integrations for [n8n](https://github.com/Xquik-dev/n8n-nodes-xquik), [Prefect](https://github.com/Xquik-dev/prefect-xquik), [Haystack](https://github.com/Xquik-dev/xquik-haystack), [Paperclip](https://github.com/Xquik-dev/paperclip-plugin-xquik), [Terraform](https://github.com/Xquik-dev/terraform-provider-x-twitter-scraper), [Convex](https://github.com/Xquik-dev/xquik-convex), [Supabase](https://github.com/Xquik-dev/xquik-supabase) & [Strapi](https://github.com/Xquik-dev/strapi-plugin-xquik).
+- Twitter MCP for [AI agents](https://github.com/Xquik-dev/xquik-mcp), [VS Code](https://github.com/Xquik-dev/xquik-vscode) & [Raycast](https://github.com/Xquik-dev/xquik-raycast).
 - [Xquik X API & Twitter scraper](https://xquik.com) and the [Twitter API documentation](https://docs.xquik.com/api-reference/overview).
 
 ## License
