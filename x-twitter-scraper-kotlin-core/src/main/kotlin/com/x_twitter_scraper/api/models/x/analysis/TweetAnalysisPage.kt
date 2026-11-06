@@ -5653,7 +5653,6 @@ private constructor(
 
                         val IMAGES = of("images")
 
-
                         val TEXT_DESCRIPTIONS_ONLY = of("text_descriptions_only")
 
                         val NOT_SUPPLIED = of("not_supplied")
