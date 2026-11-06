@@ -98,7 +98,6 @@
       "POST /api/v1/extractions response required creditsRequired",
       "POST /api/v1/extractions response required estimatedResults",
       "POST /api/v1/extractions response required source",
-      "POST /api/v1/extractions response required url",
       "POST /api/v1/guest-wallets response required api_key",
       "POST /api/v1/guest-wallets response required authorization",
       "POST /api/v1/x/account-connection-challenges/{id}/submit response required createdAt",
