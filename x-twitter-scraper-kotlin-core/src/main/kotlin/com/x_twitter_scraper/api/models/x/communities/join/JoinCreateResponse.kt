@@ -1604,9 +1604,21 @@ private constructor(
 
             val UNRETWEET = of("unretweet")
 
+            val BOOKMARK = of("bookmark")
+
+            val UNBOOKMARK = of("unbookmark")
+
             val FOLLOW = of("follow")
 
             val UNFOLLOW = of("unfollow")
+
+            val BLOCK = of("block")
+
+            val UNBLOCK = of("unblock")
+
+            val MUTE = of("mute")
+
+            val UNMUTE = of("unmute")
 
             val REMOVE_FOLLOWER = of("remove_follower")
 
@@ -1641,8 +1653,14 @@ private constructor(
             UNLIKE,
             RETWEET,
             UNRETWEET,
+            BOOKMARK,
+            UNBOOKMARK,
             FOLLOW,
             UNFOLLOW,
+            BLOCK,
+            UNBLOCK,
+            MUTE,
+            UNMUTE,
             REMOVE_FOLLOWER,
             SEND_DM,
             UPLOAD_MEDIA,
@@ -1672,8 +1690,14 @@ private constructor(
             UNLIKE,
             RETWEET,
             UNRETWEET,
+            BOOKMARK,
+            UNBOOKMARK,
             FOLLOW,
             UNFOLLOW,
+            BLOCK,
+            UNBLOCK,
+            MUTE,
+            UNMUTE,
             REMOVE_FOLLOWER,
             SEND_DM,
             UPLOAD_MEDIA,
@@ -1701,8 +1725,14 @@ private constructor(
                 UNLIKE -> Value.UNLIKE
                 RETWEET -> Value.RETWEET
                 UNRETWEET -> Value.UNRETWEET
+                BOOKMARK -> Value.BOOKMARK
+                UNBOOKMARK -> Value.UNBOOKMARK
                 FOLLOW -> Value.FOLLOW
                 UNFOLLOW -> Value.UNFOLLOW
+                BLOCK -> Value.BLOCK
+                UNBLOCK -> Value.UNBLOCK
+                MUTE -> Value.MUTE
+                UNMUTE -> Value.UNMUTE
                 REMOVE_FOLLOWER -> Value.REMOVE_FOLLOWER
                 SEND_DM -> Value.SEND_DM
                 UPLOAD_MEDIA -> Value.UPLOAD_MEDIA
@@ -1731,8 +1761,14 @@ private constructor(
                 UNLIKE -> Known.UNLIKE
                 RETWEET -> Known.RETWEET
                 UNRETWEET -> Known.UNRETWEET
+                BOOKMARK -> Known.BOOKMARK
+                UNBOOKMARK -> Known.UNBOOKMARK
                 FOLLOW -> Known.FOLLOW
                 UNFOLLOW -> Known.UNFOLLOW
+                BLOCK -> Known.BLOCK
+                UNBLOCK -> Known.UNBLOCK
+                MUTE -> Known.MUTE
+                UNMUTE -> Known.UNMUTE
                 REMOVE_FOLLOWER -> Known.REMOVE_FOLLOWER
                 SEND_DM -> Known.SEND_DM
                 UPLOAD_MEDIA -> Known.UPLOAD_MEDIA
