@@ -49,4 +49,78 @@ internal class MediaDownloadResponseTest {
 
         assertThat(roundtrippedMediaDownloadResponse).isEqualTo(mediaDownloadResponse)
     }
+
+    @Test
+    fun readsTheCoverAndSizesOfAVideo() {
+        val response =
+            jsonMapper()
+                .readValue(
+                    downloadExample(
+                        """
+                        "mediaType": "video",
+                        "posterUrl": "https://media.xquik.com/tweet_1234567890/0.jpg",
+                        "qualities": [
+                          {
+                            "bitrate": 2176000,
+                            "height": 720,
+                            "url": "https://video.twimg.com/amplify_video/1/vid/avc1/1280x720/a.mp4",
+                            "width": 1280
+                          }
+                        ]
+                        """
+                    ),
+                    jacksonTypeRef<MediaDownloadResponse>(),
+                )
+
+        val item = checkNotNull(response.items()).single()
+        val quality = item.qualities().single()
+
+        assertThat(response.validate()).isSameAs(response)
+        assertThat(item.posterUrl()).isEqualTo("https://media.xquik.com/tweet_1234567890/0.jpg")
+        assertThat(quality.bitrate()).isEqualTo(2176000L)
+        assertThat(quality.height()).isEqualTo(720L)
+        assertThat(quality.width()).isEqualTo(1280L)
+        assertThat(quality.url())
+            .isEqualTo("https://video.twimg.com/amplify_video/1/vid/avc1/1280x720/a.mp4")
+    }
+
+    @Test
+    fun readsAPhotoWithoutACoverOrSizes() {
+        val response =
+            jsonMapper()
+                .readValue(
+                    downloadExample(""""mediaType": "photo", "posterUrl": null, "qualities": []"""),
+                    jacksonTypeRef<MediaDownloadResponse>(),
+                )
+
+        val item = checkNotNull(response.items()).single()
+
+        assertThat(response.validate()).isSameAs(response)
+        assertThat(item.posterUrl()).isNull()
+        assertThat(item.qualities()).isEmpty()
+    }
+
+    private fun downloadExample(mediaFields: String): String =
+        """
+        {
+          "tweetId": "1234567890",
+          "items": [
+            {
+              "id": "42",
+              "tweetId": "1234567890",
+              "mediaUrl": "https://media.xquik.com/tweet_1234567890/0.mp4",
+              "fileSize": "2097152",
+              "createdAt": "2026-10-16T11:00:00.000Z",
+              "authorUsername": "elonmusk",
+              "authorDisplayName": "Elon Musk",
+              "authorAvatar": null,
+              "tweetText": "Launch day.",
+              "likes": 1200,
+              "retweets": 340,
+              "views": 56000,
+              $mediaFields
+            }
+          ]
+        }
+        """
 }

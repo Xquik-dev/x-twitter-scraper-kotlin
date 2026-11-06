@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.x_twitter_scraper.api.core.Enum
 import com.x_twitter_scraper.api.core.JsonField
 import com.x_twitter_scraper.api.core.Params
-import com.x_twitter_scraper.api.core.checkRequired
 import com.x_twitter_scraper.api.core.http.Headers
 import com.x_twitter_scraper.api.core.http.QueryParams
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
@@ -21,7 +20,7 @@ import java.util.Objects
  */
 class TweetSearchParams
 private constructor(
-    private val q: String,
+    private val q: String?,
     private val advancedQuery: String?,
     private val anyWords: String?,
     private val blueVerifiedOnly: Boolean?,
@@ -88,17 +87,16 @@ private constructor(
 ) : Params {
 
     /**
-     * Query, Tweet ID, or URL. Alias query. Hyphens negate terms. Use exactPhrase for literals.
-     * `from:` & `-from:` take a handle or a user ID, also in an OR group. Valid bounds apply per
-     * page. `since:` & `until:` dates are UTC days, written YYYY-MM-DD. 25/12/2026 & 12/25/2026
-     * also work, since each has 1 reading. 04/01/2026 has 2 & answers 424 with the form to write.
-     * `since_time:` & `until_time:` take Unix seconds or an ISO 8601 time. `list:` takes a public
-     * List's ID. A private List answers 404 list_not_found. X searches up to 512 characters. A
-     * longer query answers 424 before any read, unless a term of its first OR group fits alone.
-     * When each OR alternative has `-filter:replies`, Xquik drops every reply X sends. Dropped
-     * replies cost nothing.
+     * Query, Tweet ID, or URL. Alias query. Optional when fromUser, keywords or another field forms
+     * the search. Without either, it answers 400 missing_query. Hyphens negate terms. Use
+     * exactPhrase for literals. `from:` & `-from:` take a handle or a user ID, also in an OR group.
+     * Valid bounds apply per page. `since:` & `until:` dates are UTC days, written YYYY-MM-DD.
+     * 25/12/2026 & 12/25/2026 also work. 04/01/2026 fits both orders & answers 424 with the form to
+     * write. `since_time:` & `until_time:` take Unix seconds or an ISO 8601 time. `list:` takes a
+     * public List's ID. A private List answers 404 list_not_found. Keep q to 512 characters. A
+     * longer one can answer 424 before any read, at no charge.
      */
-    fun q(): String = q
+    fun q(): String? = q
 
     /** Raw advanced search query appended as-is. */
     fun advancedQuery(): String? = advancedQuery
@@ -350,14 +348,7 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [TweetSearchParams].
-         *
-         * The following fields are required:
-         * ```kotlin
-         * .q()
-         * ```
-         */
+        /** Returns a mutable builder for constructing an instance of [TweetSearchParams]. */
         fun builder() = Builder()
     }
 
@@ -497,17 +488,16 @@ private constructor(
         }
 
         /**
-         * Query, Tweet ID, or URL. Alias query. Hyphens negate terms. Use exactPhrase for literals.
-         * `from:` & `-from:` take a handle or a user ID, also in an OR group. Valid bounds apply
-         * per page. `since:` & `until:` dates are UTC days, written YYYY-MM-DD. 25/12/2026 &
-         * 12/25/2026 also work, since each has 1 reading. 04/01/2026 has 2 & answers 424 with the
-         * form to write. `since_time:` & `until_time:` take Unix seconds or an ISO 8601 time.
-         * `list:` takes a public List's ID. A private List answers 404 list_not_found. X searches
-         * up to 512 characters. A longer query answers 424 before any read, unless a term of its
-         * first OR group fits alone. When each OR alternative has `-filter:replies`, Xquik drops
-         * every reply X sends. Dropped replies cost nothing.
+         * Query, Tweet ID, or URL. Alias query. Optional when fromUser, keywords or another field
+         * forms the search. Without either, it answers 400 missing_query. Hyphens negate terms. Use
+         * exactPhrase for literals. `from:` & `-from:` take a handle or a user ID, also in an OR
+         * group. Valid bounds apply per page. `since:` & `until:` dates are UTC days, written
+         * YYYY-MM-DD. 25/12/2026 & 12/25/2026 also work. 04/01/2026 fits both orders & answers 424
+         * with the form to write. `since_time:` & `until_time:` take Unix seconds or an ISO 8601
+         * time. `list:` takes a public List's ID. A private List answers 404 list_not_found. Keep q
+         * to 512 characters. A longer one can answer 424 before any read, at no charge.
          */
-        fun q(q: String) = apply { this.q = q }
+        fun q(q: String?) = apply { this.q = q }
 
         /** Raw advanced search query appended as-is. */
         fun advancedQuery(advancedQuery: String?) = apply { this.advancedQuery = advancedQuery }
@@ -922,17 +912,10 @@ private constructor(
          * Returns an immutable instance of [TweetSearchParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```kotlin
-         * .q()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): TweetSearchParams =
             TweetSearchParams(
-                checkRequired("q", q),
+                q,
                 advancedQuery,
                 anyWords,
                 blueVerifiedOnly,
@@ -1004,7 +987,7 @@ private constructor(
     override fun _queryParams(): QueryParams =
         QueryParams.builder()
             .apply {
-                put("q", q)
+                q?.let { put("q", it) }
                 advancedQuery?.let { put("advancedQuery", it) }
                 anyWords?.let { put("anyWords", it) }
                 blueVerifiedOnly?.let { put("blueVerifiedOnly", it.toString()) }

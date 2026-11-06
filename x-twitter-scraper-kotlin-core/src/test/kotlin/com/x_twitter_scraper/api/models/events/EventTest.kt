@@ -105,4 +105,17 @@ internal class EventTest {
         assertThat(event0.monitorName()).isNull()
         assertThat(event0.xUserId()).isNull()
     }
+
+    @Test
+    fun keepsTheFollowKindOfAFollowEvent() {
+        val event =
+            jsonMapper()
+                .readValue(
+                    """{"data":{"id":"2244994945","followKind":"refollow"}}""",
+                    jacksonTypeRef<Event>(),
+                )
+
+        assertThat(event.data()._additionalProperties()["followKind"])
+            .isEqualTo(JsonValue.from("refollow"))
+    }
 }

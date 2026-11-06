@@ -72,6 +72,7 @@ internal class PostServiceSpecExampleTest {
                 .name("Launch post")
                 .addEventType(PostMonitor.EventType.POST_REPLY_NEW)
                 .addEventType(PostMonitor.EventType.POST_LIKES_CHANGED)
+                .isActive(true)
                 .build()
 
         val response = client.monitors().posts().create(params)
@@ -94,7 +95,8 @@ internal class PostServiceSpecExampleTest {
                         {
                           "post": "https://x.com/NASA/status/2102761519985332442",
                           "name": "Launch post",
-                          "eventTypes": ["post.reply.new", "post.likes.changed"]
+                          "eventTypes": ["post.reply.new", "post.likes.changed"],
+                          "isActive": true
                         }
                         """
                     )
@@ -251,6 +253,16 @@ internal class PostServiceSpecExampleTest {
         assertThat(monitor.authorId()).isEqualTo("11348282")
         assertThat(monitor.authorUsername()).isEqualTo("NASA")
         assertThat(monitor.authorName()).isEqualTo("NASA")
+        assertThat(monitor.authorAffiliate())
+            .isEqualTo(
+                PostMonitor.AuthorAffiliate.builder()
+                    .badgeUrl(
+                        "https://pbs.twimg.com/profile_images/1955359038532653056/OSHY3ewP_bigger.jpg"
+                    )
+                    .description("X")
+                    .url("https://twitter.com/X")
+                    .build()
+            )
         assertThat(monitor.text()).isEqualTo("We shipped post monitors.")
         assertThat(monitor.postedAt()).isEqualTo(OffsetDateTime.parse("2026-09-29T17:19:49.000Z"))
         assertThat(monitor.eventTypes())
@@ -284,6 +296,11 @@ internal class PostServiceSpecExampleTest {
               "authorId": "11348282",
               "authorUsername": "NASA",
               "authorName": "NASA",
+              "authorAffiliate": {
+                "badgeUrl": "https://pbs.twimg.com/profile_images/1955359038532653056/OSHY3ewP_bigger.jpg",
+                "description": "X",
+                "url": "https://twitter.com/X"
+              },
               "text": "We shipped post monitors.",
               "postedAt": "2026-09-29T17:19:49.000Z",
               "eventTypes": [
