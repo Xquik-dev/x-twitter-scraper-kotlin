@@ -117,4 +117,17 @@ internal class EventDetailTest {
         assertThat(eventDetail0.monitorName()).isNull()
         assertThat(eventDetail0.xUserId()).isNull()
     }
+
+    @Test
+    fun keepsTheFollowKindOfAFollowEvent() {
+        val eventDetail =
+            jsonMapper()
+                .readValue(
+                    """{"data":{"id":"2244994945","followKind":"return"}}""",
+                    jacksonTypeRef<EventDetail>(),
+                )
+
+        assertThat(eventDetail.data()._additionalProperties()["followKind"])
+            .isEqualTo(JsonValue.from("return"))
+    }
 }

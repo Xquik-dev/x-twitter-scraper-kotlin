@@ -41,6 +41,7 @@ import com.x_twitter_scraper.api.models.x.tweets.TweetSearchParams
 import com.x_twitter_scraper.api.models.x.tweets.TweetSearchResponse
 import com.x_twitter_scraper.api.models.x.tweets.TweetTranslateParams
 import com.x_twitter_scraper.api.models.x.tweets.TweetTranslateResponse
+import com.x_twitter_scraper.api.services.async.x.tweets.BookmarkServiceAsync
 import com.x_twitter_scraper.api.services.async.x.tweets.LikeServiceAsync
 import com.x_twitter_scraper.api.services.async.x.tweets.RetweetServiceAsync
 
@@ -57,6 +58,9 @@ interface TweetServiceAsync {
      * The original service is not modified.
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): TweetServiceAsync
+
+    /** X write actions (tweets, likes, follows, DMs) */
+    fun bookmark(): BookmarkServiceAsync
 
     /** X write actions (tweets, likes, follows, DMs) */
     fun like(): LikeServiceAsync
@@ -385,6 +389,9 @@ interface TweetServiceAsync {
         fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): TweetServiceAsync.WithRawResponse
+
+        /** X write actions (tweets, likes, follows, DMs) */
+        fun bookmark(): BookmarkServiceAsync.WithRawResponse
 
         /** X write actions (tweets, likes, follows, DMs) */
         fun like(): LikeServiceAsync.WithRawResponse

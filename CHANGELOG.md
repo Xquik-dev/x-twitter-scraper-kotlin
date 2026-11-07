@@ -6,6 +6,8 @@
 
 ### Breaking changes
 
+* `TweetSearchParams.q` is optional, since `fromUser`, `keywords` or another field can form the search. `q()` returns `String?` instead of `String`, and `builder()` no longer requires it.
+* `ExtractionJob.builder()` requires `url`, which the API always sends. Code that builds the job by hand must set it.
 * `CreditTopupBalanceResponse.builder()` requires `chargedCurrency` and `chargedMinorUnits`, which the API always sends. Code that builds the response by hand must set both.
 * `AccountBulkRetryParams._body()` returns `AccountBulkRetryParams.Body?` instead of `Map<String, JsonValue>?`. Code that calls `_body()` must change, and compiled callers must rebuild.
 * `UserRetrieveInsightsResponse.Insights.builder()` requires `medianViews`, which the API always sends. Code that builds it by hand must set it.
@@ -19,6 +21,15 @@
 
 ### Features
 
+* `x().tweets().bookmark()` adds `create` and `delete`, which bookmark a post and remove the bookmark through a connected account.
+* `x().users().block()` and `x().users().mute()` add `create` and `delete`, which block, unblock, mute and unmute a user through a connected account.
+* Each write response's `Action` adds `BOOKMARK`, `UNBOOKMARK`, `BLOCK`, `UNBLOCK`, `MUTE` and `UNMUTE`.
+* Extraction results read `possiblySensitive`, `quotedMedia`, `quotedPossiblySensitive` and `quotedPost` with `outputPreset=flat`.
+* Post monitors read `authorAffiliate`, the organization badge beside the author's name. `PostCreateParams` takes `isActive`, and `false` creates the monitor paused.
+* Media download items read `posterUrl` and `qualities`, the cover image of a video or GIF and the MP4 sizes X stores.
+* Follow events carry `followKind` in `data`, which `_additionalProperties()` reads, and it tells a refollow from a return.
+* The 6 `x().analysis()` methods take `images` in `analysis`. The AI reads up to 4 images per post at no extra cost, and `false` keeps it to the text. `contextAvailability.media` adds `IMAGES`, for when the AI read them.
+* `ExtractionJob`, the `job` of `extractions().retrieve` and the accepted `extractions().run` response read `url`, the job's dashboard page with every row as a file.
 * `client.monitors().posts()` adds post monitors. It has `create`, `retrieve`, `update`, `list`, `delete` and `retrieveMetrics`.
 * `client.x().sports()` adds NFL & college football reads. It has `listGames`, `retrieveScoreboard`, `retrieveBoxScore`, `retrievePlays`, `retrieveAudience`, `retrieveRoster`, `retrievePlayerProps` and `listPosts`.
 * `client.activity()` adds the activity log. `list` returns the account's activity rows, and `retrieve` returns the full record of 1 activity.

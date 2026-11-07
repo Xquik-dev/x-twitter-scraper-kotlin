@@ -43,6 +43,7 @@ private constructor(
     private val metrics: JsonField<PostMetrics>,
     private val authorAvatarUrl: JsonField<String>,
     private val authorVerified: JsonField<AuthorVerified>,
+    private val authorAffiliate: JsonField<AuthorAffiliate>,
     private val media: JsonField<List<Media>>,
     private val baseline: JsonField<Baseline>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -88,6 +89,9 @@ private constructor(
         @JsonProperty("authorVerified")
         @ExcludeMissing
         authorVerified: JsonField<AuthorVerified> = JsonMissing.of(),
+        @JsonProperty("authorAffiliate")
+        @ExcludeMissing
+        authorAffiliate: JsonField<AuthorAffiliate> = JsonMissing.of(),
         @JsonProperty("media") @ExcludeMissing media: JsonField<List<Media>> = JsonMissing.of(),
         @JsonProperty("baseline") @ExcludeMissing baseline: JsonField<Baseline> = JsonMissing.of(),
     ) : this(
@@ -109,6 +113,7 @@ private constructor(
         metrics,
         authorAvatarUrl,
         authorVerified,
+        authorAffiliate,
         media,
         baseline,
         mutableMapOf(),
@@ -167,6 +172,9 @@ private constructor(
 
     /** The author's verified badge on X. Omitted when the author has none. */
     fun authorVerified(): AuthorVerified? = authorVerified.getNullable("authorVerified")
+
+    /** The organization badge X shows beside the author's name. Omitted when X shows none. */
+    fun authorAffiliate(): AuthorAffiliate? = authorAffiliate.getNullable("authorAffiliate")
 
     /** Photos, videos & GIFs on the post, in X's order. */
     fun media(): List<Media> = media.getRequired("media")
@@ -245,6 +253,11 @@ private constructor(
     @ExcludeMissing
     fun _authorVerified(): JsonField<AuthorVerified> = authorVerified
 
+    /** Returns the raw JSON value of [authorAffiliate]. */
+    @JsonProperty("authorAffiliate")
+    @ExcludeMissing
+    fun _authorAffiliate(): JsonField<AuthorAffiliate> = authorAffiliate
+
     /** Returns the raw JSON value of [media]. */
     @JsonProperty("media") @ExcludeMissing fun _media(): JsonField<List<Media>> = media
 
@@ -290,6 +303,7 @@ private constructor(
         private var metrics: JsonField<PostMetrics>? = null
         private var authorAvatarUrl: JsonField<String> = JsonMissing.of()
         private var authorVerified: JsonField<AuthorVerified> = JsonMissing.of()
+        private var authorAffiliate: JsonField<AuthorAffiliate> = JsonMissing.of()
         private var media: JsonField<MutableList<Media>>? = null
         private var baseline: JsonField<Baseline>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -313,6 +327,7 @@ private constructor(
             metrics = postMonitor.metrics
             authorAvatarUrl = postMonitor.authorAvatarUrl
             authorVerified = postMonitor.authorVerified
+            authorAffiliate = postMonitor.authorAffiliate
             media = postMonitor.media.map { it.toMutableList() }
             baseline = postMonitor.baseline
             additionalProperties = postMonitor.additionalProperties.toMutableMap()
@@ -449,6 +464,15 @@ private constructor(
             this.authorVerified = authorVerified
         }
 
+        /** The organization badge X shows beside the author's name. Omitted when X shows none. */
+        fun authorAffiliate(authorAffiliate: AuthorAffiliate) =
+            authorAffiliate(JsonField.of(authorAffiliate))
+
+        /** Sets [Builder.authorAffiliate] to an arbitrary JSON value. */
+        fun authorAffiliate(authorAffiliate: JsonField<AuthorAffiliate>) = apply {
+            this.authorAffiliate = authorAffiliate
+        }
+
         /** Photos, videos & GIFs on the post, in X's order. */
         fun media(media: List<Media>) = media(JsonField.of(media))
 
@@ -518,6 +542,7 @@ private constructor(
                 checkRequired("metrics", metrics),
                 authorAvatarUrl,
                 authorVerified,
+                authorAffiliate,
                 checkRequired("media", media).map { it.toImmutable() },
                 checkRequired("baseline", baseline),
                 additionalProperties.toMutableMap(),
@@ -555,6 +580,7 @@ private constructor(
         metrics().validate()
         authorAvatarUrl()
         authorVerified()?.validate()
+        authorAffiliate()?.validate()
         media().forEach { it.validate() }
         baseline().validate()
         validated = true
@@ -587,6 +613,7 @@ private constructor(
             (metrics.asKnown()?.validity() ?: 0) +
             (if (authorAvatarUrl.asKnown() == null) 0 else 1) +
             (authorVerified.asKnown()?.validity() ?: 0) +
+            (authorAffiliate.asKnown()?.validity() ?: 0) +
             (media.asKnown()?.sumOf { it.validity() } ?: 0) +
             (baseline.asKnown()?.validity() ?: 0)
 
@@ -696,6 +723,204 @@ private constructor(
         override fun hashCode() = value.hashCode()
 
         override fun toString() = value.toString()
+    }
+
+    /** The organization badge X shows beside the author's name. Omitted when X shows none. */
+    class AuthorAffiliate
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
+        private val badgeUrl: JsonField<String>,
+        private val description: JsonField<String>,
+        private val url: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("badgeUrl")
+            @ExcludeMissing
+            badgeUrl: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("description")
+            @ExcludeMissing
+            description: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of(),
+        ) : this(badgeUrl, description, url, mutableMapOf())
+
+        /** The organization's badge image. */
+        fun badgeUrl(): String = badgeUrl.getRequired("badgeUrl")
+
+        /** The organization's name, as X shows it. */
+        fun description(): String = description.getRequired("description")
+
+        /** The organization's X profile, when X links one. */
+        fun url(): String? = url.getNullable("url")
+
+        /** Returns the raw JSON value of [badgeUrl]. */
+        @JsonProperty("badgeUrl") @ExcludeMissing fun _badgeUrl(): JsonField<String> = badgeUrl
+
+        /** Returns the raw JSON value of [description]. */
+        @JsonProperty("description")
+        @ExcludeMissing
+        fun _description(): JsonField<String> = description
+
+        /** Returns the raw JSON value of [url]. */
+        @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [AuthorAffiliate].
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .badgeUrl()
+             * .description()
+             * ```
+             */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [AuthorAffiliate]. */
+        class Builder internal constructor() {
+
+            private var badgeUrl: JsonField<String>? = null
+            private var description: JsonField<String>? = null
+            private var url: JsonField<String> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(authorAffiliate: AuthorAffiliate) = apply {
+                badgeUrl = authorAffiliate.badgeUrl
+                description = authorAffiliate.description
+                url = authorAffiliate.url
+                additionalProperties = authorAffiliate.additionalProperties.toMutableMap()
+            }
+
+            /** The organization's badge image. */
+            fun badgeUrl(badgeUrl: String) = badgeUrl(JsonField.of(badgeUrl))
+
+            /** Sets [Builder.badgeUrl] to an arbitrary JSON value. */
+            fun badgeUrl(badgeUrl: JsonField<String>) = apply { this.badgeUrl = badgeUrl }
+
+            /** The organization's name, as X shows it. */
+            fun description(description: String) = description(JsonField.of(description))
+
+            /** Sets [Builder.description] to an arbitrary JSON value. */
+            fun description(description: JsonField<String>) = apply {
+                this.description = description
+            }
+
+            /** The organization's X profile, when X links one. */
+            fun url(url: String) = url(JsonField.of(url))
+
+            /** Sets [Builder.url] to an arbitrary JSON value. */
+            fun url(url: JsonField<String>) = apply { this.url = url }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [AuthorAffiliate].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .badgeUrl()
+             * .description()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): AuthorAffiliate =
+                AuthorAffiliate(
+                    checkRequired("badgeUrl", badgeUrl),
+                    checkRequired("description", description),
+                    url,
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+         *   match its expected type.
+         */
+        fun validate(): AuthorAffiliate = apply {
+            if (validated) {
+                return@apply
+            }
+
+            badgeUrl()
+            description()
+            url()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: XTwitterScraperInvalidDataException) {
+                false
+            }
+
+        internal fun validity(): Int =
+            (if (badgeUrl.asKnown() == null) 0 else 1) +
+                (if (description.asKnown() == null) 0 else 1) +
+                (if (url.asKnown() == null) 0 else 1)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is AuthorAffiliate &&
+                badgeUrl == other.badgeUrl &&
+                description == other.description &&
+                url == other.url &&
+                additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy {
+            Objects.hash(badgeUrl, description, url, additionalProperties)
+        }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "AuthorAffiliate{badgeUrl=$badgeUrl, description=$description, url=$url, additionalProperties=$additionalProperties}"
     }
 
     class Media
@@ -1233,6 +1458,7 @@ private constructor(
             metrics == other.metrics &&
             authorAvatarUrl == other.authorAvatarUrl &&
             authorVerified == other.authorVerified &&
+            authorAffiliate == other.authorAffiliate &&
             media == other.media &&
             baseline == other.baseline &&
             additionalProperties == other.additionalProperties
@@ -1258,6 +1484,7 @@ private constructor(
             metrics,
             authorAvatarUrl,
             authorVerified,
+            authorAffiliate,
             media,
             baseline,
             additionalProperties,
@@ -1267,7 +1494,7 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "PostMonitor{id=$id, name=$name, postId=$postId, postUrl=$postUrl, authorId=$authorId, authorUsername=$authorUsername, authorName=$authorName, text=$text, postedAt=$postedAt, eventTypes=$eventTypes, isActive=$isActive, createdAt=$createdAt, nextBillingAt=$nextBillingAt, pausedReason=$pausedReason, pausedAt=$pausedAt, metrics=$metrics, authorAvatarUrl=$authorAvatarUrl, authorVerified=$authorVerified, media=$media, baseline=$baseline, additionalProperties=$additionalProperties}"
+        "PostMonitor{id=$id, name=$name, postId=$postId, postUrl=$postUrl, authorId=$authorId, authorUsername=$authorUsername, authorName=$authorName, text=$text, postedAt=$postedAt, eventTypes=$eventTypes, isActive=$isActive, createdAt=$createdAt, nextBillingAt=$nextBillingAt, pausedReason=$pausedReason, pausedAt=$pausedAt, metrics=$metrics, authorAvatarUrl=$authorAvatarUrl, authorVerified=$authorVerified, authorAffiliate=$authorAffiliate, media=$media, baseline=$baseline, additionalProperties=$additionalProperties}"
 
     class EventType @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 

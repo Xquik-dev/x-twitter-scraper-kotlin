@@ -5651,6 +5651,8 @@ private constructor(
 
                     companion object {
 
+                        val IMAGES = of("images")
+
                         val TEXT_DESCRIPTIONS_ONLY = of("text_descriptions_only")
 
                         val NOT_SUPPLIED = of("not_supplied")
@@ -5660,6 +5662,7 @@ private constructor(
 
                     /** An enum containing [Media]'s known values. */
                     enum class Known {
+                        IMAGES,
                         TEXT_DESCRIPTIONS_ONLY,
                         NOT_SUPPLIED,
                     }
@@ -5674,6 +5677,7 @@ private constructor(
                      * - It was constructed with an arbitrary value using the [of] method.
                      */
                     enum class Value {
+                        IMAGES,
                         TEXT_DESCRIPTIONS_ONLY,
                         NOT_SUPPLIED,
                         /**
@@ -5689,6 +5693,7 @@ private constructor(
                      */
                     fun value(): Value =
                         when (this) {
+                            IMAGES -> Value.IMAGES
                             TEXT_DESCRIPTIONS_ONLY -> Value.TEXT_DESCRIPTIONS_ONLY
                             NOT_SUPPLIED -> Value.NOT_SUPPLIED
                             else -> Value._UNKNOWN
@@ -5702,6 +5707,7 @@ private constructor(
                      */
                     fun known(): Known =
                         when (this) {
+                            IMAGES -> Known.IMAGES
                             TEXT_DESCRIPTIONS_ONLY -> Known.TEXT_DESCRIPTIONS_ONLY
                             NOT_SUPPLIED -> Known.NOT_SUPPLIED
                             else ->

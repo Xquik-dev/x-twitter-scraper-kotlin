@@ -31,6 +31,7 @@ private constructor(
     private val resolvedXUserId: JsonField<String>,
     private val status: JsonField<Status>,
     private val statusUrl: JsonField<String>,
+    private val url: JsonField<String>,
     private val toolType: JsonField<ToolType>,
     private val waitUrl: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -58,6 +59,7 @@ private constructor(
         resolvedXUserId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("status") @ExcludeMissing status: JsonField<Status> = JsonMissing.of(),
         @JsonProperty("statusUrl") @ExcludeMissing statusUrl: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of(),
         @JsonProperty("toolType") @ExcludeMissing toolType: JsonField<ToolType> = JsonMissing.of(),
         @JsonProperty("waitUrl") @ExcludeMissing waitUrl: JsonField<String> = JsonMissing.of(),
     ) : this(
@@ -71,6 +73,7 @@ private constructor(
         resolvedXUserId,
         status,
         statusUrl,
+        url,
         toolType,
         waitUrl,
         mutableMapOf(),
@@ -120,6 +123,15 @@ private constructor(
 
     /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun statusUrl(): String? = statusUrl.getNullable("statusUrl")
+
+    /**
+     * Dashboard page of the job. A signed-in user follows its progress there and downloads every
+     * row as CSV, XLSX, JSON, Markdown, PDF or text, so give this link to a person who wants the
+     * whole list as a file.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun url(): String? = url.getNullable("url")
 
     /**
      * Identifier for the extraction tool used to run a job.
@@ -212,6 +224,13 @@ private constructor(
     @JsonProperty("statusUrl") @ExcludeMissing fun _statusUrl(): JsonField<String> = statusUrl
 
     /**
+     * Returns the raw JSON value of [url].
+     *
+     * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
+
+    /**
      * Returns the raw JSON value of [toolType].
      *
      * Unlike [toolType], this method doesn't throw if the JSON field has an unexpected type.
@@ -267,6 +286,7 @@ private constructor(
         private var resolvedXUserId: JsonField<String> = JsonMissing.of()
         private var status: JsonField<Status> = JsonMissing.of()
         private var statusUrl: JsonField<String> = JsonMissing.of()
+        private var url: JsonField<String> = JsonMissing.of()
         private var toolType: JsonField<ToolType> = JsonMissing.of()
         private var waitUrl: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -282,6 +302,7 @@ private constructor(
             resolvedXUserId = extractionRunResponse.resolvedXUserId
             status = extractionRunResponse.status
             statusUrl = extractionRunResponse.statusUrl
+            url = extractionRunResponse.url
             toolType = extractionRunResponse.toolType
             waitUrl = extractionRunResponse.waitUrl
             additionalProperties = extractionRunResponse.additionalProperties.toMutableMap()
@@ -352,6 +373,16 @@ private constructor(
         /** Sets [Builder.statusUrl] to an arbitrary JSON value. */
         fun statusUrl(statusUrl: JsonField<String>) = apply { this.statusUrl = statusUrl }
 
+        /**
+         * Dashboard page of the job. A signed-in user follows its progress there and downloads
+         * every row as CSV, XLSX, JSON, Markdown, PDF or text, so give this link to a person who
+         * wants the whole list as a file.
+         */
+        fun url(url: String) = url(JsonField.of(url))
+
+        /** Sets [Builder.url] to an arbitrary JSON value. */
+        fun url(url: JsonField<String>) = apply { this.url = url }
+
         /** Identifier for the extraction tool used to run a job. */
         fun toolType(toolType: ToolType) = toolType(JsonField.of(toolType))
 
@@ -410,6 +441,7 @@ private constructor(
                 resolvedXUserId,
                 status,
                 statusUrl,
+                url,
                 toolType,
                 waitUrl,
                 additionalProperties.toMutableMap(),
@@ -441,6 +473,7 @@ private constructor(
         resolvedXUserId()
         status()?.validate()
         statusUrl()
+        url()
         toolType()?.validate()
         waitUrl()
         validated = true
@@ -465,6 +498,7 @@ private constructor(
             (if (resolvedXUserId.asKnown() == null) 0 else 1) +
             (status.asKnown()?.validity() ?: 0) +
             (if (statusUrl.asKnown() == null) 0 else 1) +
+            (if (url.asKnown() == null) 0 else 1) +
             (toolType.asKnown()?.validity() ?: 0) +
             (if (waitUrl.asKnown() == null) 0 else 1)
 
@@ -855,6 +889,7 @@ private constructor(
             resolvedXUserId == other.resolvedXUserId &&
             status == other.status &&
             statusUrl == other.statusUrl &&
+            url == other.url &&
             toolType == other.toolType &&
             waitUrl == other.waitUrl &&
             additionalProperties == other.additionalProperties
@@ -872,6 +907,7 @@ private constructor(
             resolvedXUserId,
             status,
             statusUrl,
+            url,
             toolType,
             waitUrl,
             additionalProperties,
@@ -881,5 +917,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ExtractionRunResponse{allowed=$allowed, creditsAvailable=$creditsAvailable, creditsRequired=$creditsRequired, estimatedResults=$estimatedResults, source=$source, id=$id, pollAfterMs=$pollAfterMs, resolvedXUserId=$resolvedXUserId, status=$status, statusUrl=$statusUrl, toolType=$toolType, waitUrl=$waitUrl, additionalProperties=$additionalProperties}"
+        "ExtractionRunResponse{allowed=$allowed, creditsAvailable=$creditsAvailable, creditsRequired=$creditsRequired, estimatedResults=$estimatedResults, source=$source, id=$id, pollAfterMs=$pollAfterMs, resolvedXUserId=$resolvedXUserId, status=$status, statusUrl=$statusUrl, url=$url, toolType=$toolType, waitUrl=$waitUrl, additionalProperties=$additionalProperties}"
 }

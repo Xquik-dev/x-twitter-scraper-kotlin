@@ -34,6 +34,7 @@ internal class ExtractionRetrieveResponseTest {
                         .status(ExtractionRetrieveResponse.Job.Status.PENDING)
                         .toolType(ExtractionRetrieveResponse.Job.ToolType.FOLLOWER_EXPLORER)
                         .totalResults(0L)
+                        .url("https://dashboard.xquik.com/activity/a1")
                         .build()
                 )
                 .addResult(
@@ -92,6 +93,7 @@ internal class ExtractionRetrieveResponseTest {
                     .status(ExtractionRetrieveResponse.Job.Status.PENDING)
                     .toolType(ExtractionRetrieveResponse.Job.ToolType.FOLLOWER_EXPLORER)
                     .totalResults(0L)
+                    .url("https://dashboard.xquik.com/activity/a1")
                     .build()
             )
         assertThat(extractionRetrieveResponse.results())
@@ -156,6 +158,7 @@ internal class ExtractionRetrieveResponseTest {
                         .status(ExtractionRetrieveResponse.Job.Status.PENDING)
                         .toolType(ExtractionRetrieveResponse.Job.ToolType.FOLLOWER_EXPLORER)
                         .totalResults(0L)
+                        .url("https://dashboard.xquik.com/activity/a1")
                         .build()
                 )
                 .addResult(
@@ -232,5 +235,56 @@ internal class ExtractionRetrieveResponseTest {
                 .build()
         assertThat(extractionRetrieveResponse0.pollAfterMs()).isNull()
         assertThat(extractionRetrieveResponse0.waitUrl()).isNull()
+    }
+
+    @Test
+    fun readsTheQuotedPostOfAFlatRow() {
+        val result =
+            jsonMapper()
+                .readValue(
+                    """
+                    {
+                      "id": "1",
+                      "xUserId": "44196397",
+                      "createdAt": "2026-10-16T11:00:00.000Z",
+                      "possiblySensitive": true,
+                      "quotedMedia": [
+                        {
+                          "mediaUrl": "https://pbs.twimg.com/media/a.jpg",
+                          "type": "photo",
+                          "url": "https://t.co/a"
+                        }
+                      ],
+                      "quotedPossiblySensitive": false,
+                      "quotedPost": {
+                        "id": "2",
+                        "text": "Launch day.",
+                        "createdAt": "2026-10-15T09:00:00.000Z",
+                        "author": {
+                          "name": "Example",
+                          "userName": "example",
+                          "profilePicture": "https://pbs.twimg.com/profile_images/1/a.jpg"
+                        }
+                      }
+                    }
+                    """,
+                    jacksonTypeRef<ExtractionRetrieveResponse.Result>(),
+                )
+
+        val quotedPost = checkNotNull(result.quotedPost())
+        val author = checkNotNull(quotedPost.author())
+
+        assertThat(result.validate()).isSameAs(result)
+        assertThat(result.possiblySensitive()).isEqualTo(true)
+        assertThat(result.quotedPossiblySensitive()).isEqualTo(false)
+        assertThat(checkNotNull(result.quotedMedia()).single().mediaUrl())
+            .isEqualTo("https://pbs.twimg.com/media/a.jpg")
+        assertThat(quotedPost.id()).isEqualTo("2")
+        assertThat(quotedPost.text()).isEqualTo("Launch day.")
+        assertThat(quotedPost.createdAt()).isEqualTo("2026-10-15T09:00:00.000Z")
+        assertThat(author.name()).isEqualTo("Example")
+        assertThat(author.userName()).isEqualTo("example")
+        assertThat(author.profilePicture())
+            .isEqualTo("https://pbs.twimg.com/profile_images/1/a.jpg")
     }
 }

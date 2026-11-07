@@ -223,4 +223,14 @@ internal class TweetSearchParamsTest {
 
         assertThat(queryParams).isEqualTo(QueryParams.builder().put("q", "q").build())
     }
+
+    @Test
+    fun queryParamsWithoutQ() {
+        val params = TweetSearchParams.builder().fromUser("xquik").build()
+
+        val queryParams = params._queryParams()
+
+        assertThat(params.q()).isNull()
+        assertThat(queryParams).isEqualTo(QueryParams.builder().put("fromUser", "xquik").build())
+    }
 }

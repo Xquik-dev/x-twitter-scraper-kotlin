@@ -28,6 +28,7 @@ private constructor(
     private val status: JsonField<Status>,
     private val toolType: JsonField<ToolType>,
     private val totalResults: JsonField<Long>,
+    private val url: JsonField<String>,
     private val completedAt: JsonField<OffsetDateTime>,
     private val completionReason: JsonField<CompletionReason>,
     private val effectiveResultsLimit: JsonField<Long>,
@@ -47,6 +48,7 @@ private constructor(
         @JsonProperty("totalResults")
         @ExcludeMissing
         totalResults: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of(),
         @JsonProperty("completedAt")
         @ExcludeMissing
         completedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -68,6 +70,7 @@ private constructor(
         status,
         toolType,
         totalResults,
+        url,
         completedAt,
         completionReason,
         effectiveResultsLimit,
@@ -107,6 +110,15 @@ private constructor(
      *   unexpectedly missing or null.
      */
     fun totalResults(): Long = totalResults.getRequired("totalResults")
+
+    /**
+     * Dashboard page where a signed-in user follows this job & downloads its rows as CSV, XLSX,
+     * JSON, Markdown, PDF or text.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null.
+     */
+    fun url(): String = url.getRequired("url")
 
     /** @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type. */
     fun completedAt(): OffsetDateTime? = completedAt.getNullable("completedAt")
@@ -179,6 +191,13 @@ private constructor(
     fun _totalResults(): JsonField<Long> = totalResults
 
     /**
+     * Returns the raw JSON value of [url].
+     *
+     * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
+
+    /**
      * Returns the raw JSON value of [completedAt].
      *
      * Unlike [completedAt], this method doesn't throw if the JSON field has an unexpected type.
@@ -249,6 +268,7 @@ private constructor(
          * .status()
          * .toolType()
          * .totalResults()
+         * .url()
          * ```
          */
         fun builder() = Builder()
@@ -262,6 +282,7 @@ private constructor(
         private var status: JsonField<Status>? = null
         private var toolType: JsonField<ToolType>? = null
         private var totalResults: JsonField<Long>? = null
+        private var url: JsonField<String>? = null
         private var completedAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var completionReason: JsonField<CompletionReason> = JsonMissing.of()
         private var effectiveResultsLimit: JsonField<Long> = JsonMissing.of()
@@ -275,6 +296,7 @@ private constructor(
             status = extractionJob.status
             toolType = extractionJob.toolType
             totalResults = extractionJob.totalResults
+            url = extractionJob.url
             completedAt = extractionJob.completedAt
             completionReason = extractionJob.completionReason
             effectiveResultsLimit = extractionJob.effectiveResultsLimit
@@ -308,6 +330,15 @@ private constructor(
 
         /** Sets [Builder.totalResults] to an arbitrary JSON value. */
         fun totalResults(totalResults: JsonField<Long>) = apply { this.totalResults = totalResults }
+
+        /**
+         * Dashboard page where a signed-in user follows this job & downloads its rows as CSV, XLSX,
+         * JSON, Markdown, PDF or text.
+         */
+        fun url(url: String) = url(JsonField.of(url))
+
+        /** Sets [Builder.url] to an arbitrary JSON value. */
+        fun url(url: JsonField<String>) = apply { this.url = url }
 
         fun completedAt(completedAt: OffsetDateTime) = completedAt(JsonField.of(completedAt))
 
@@ -379,6 +410,7 @@ private constructor(
          * .status()
          * .toolType()
          * .totalResults()
+         * .url()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
@@ -390,6 +422,7 @@ private constructor(
                 checkRequired("status", status),
                 checkRequired("toolType", toolType),
                 checkRequired("totalResults", totalResults),
+                checkRequired("url", url),
                 completedAt,
                 completionReason,
                 effectiveResultsLimit,
@@ -419,6 +452,7 @@ private constructor(
         status().validate()
         toolType().validate()
         totalResults()
+        url()
         completedAt()
         completionReason()?.validate()
         effectiveResultsLimit()
@@ -441,6 +475,7 @@ private constructor(
             (status.asKnown()?.validity() ?: 0) +
             (toolType.asKnown()?.validity() ?: 0) +
             (if (totalResults.asKnown() == null) 0 else 1) +
+            (if (url.asKnown() == null) 0 else 1) +
             (if (completedAt.asKnown() == null) 0 else 1) +
             (completionReason.asKnown()?.validity() ?: 0) +
             (if (effectiveResultsLimit.asKnown() == null) 0 else 1) +
@@ -984,6 +1019,7 @@ private constructor(
             status == other.status &&
             toolType == other.toolType &&
             totalResults == other.totalResults &&
+            url == other.url &&
             completedAt == other.completedAt &&
             completionReason == other.completionReason &&
             effectiveResultsLimit == other.effectiveResultsLimit &&
@@ -999,6 +1035,7 @@ private constructor(
             status,
             toolType,
             totalResults,
+            url,
             completedAt,
             completionReason,
             effectiveResultsLimit,
@@ -1011,5 +1048,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ExtractionJob{id=$id, createdAt=$createdAt, status=$status, toolType=$toolType, totalResults=$totalResults, completedAt=$completedAt, completionReason=$completionReason, effectiveResultsLimit=$effectiveResultsLimit, errorMessage=$errorMessage, resultsLimit=$resultsLimit, additionalProperties=$additionalProperties}"
+        "ExtractionJob{id=$id, createdAt=$createdAt, status=$status, toolType=$toolType, totalResults=$totalResults, url=$url, completedAt=$completedAt, completionReason=$completionReason, effectiveResultsLimit=$effectiveResultsLimit, errorMessage=$errorMessage, resultsLimit=$resultsLimit, additionalProperties=$additionalProperties}"
 }

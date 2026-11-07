@@ -51,6 +51,8 @@ import com.x_twitter_scraper.api.models.x.tweets.TweetSearchParams
 import com.x_twitter_scraper.api.models.x.tweets.TweetSearchResponse
 import com.x_twitter_scraper.api.models.x.tweets.TweetTranslateParams
 import com.x_twitter_scraper.api.models.x.tweets.TweetTranslateResponse
+import com.x_twitter_scraper.api.services.async.x.tweets.BookmarkServiceAsync
+import com.x_twitter_scraper.api.services.async.x.tweets.BookmarkServiceAsyncImpl
 import com.x_twitter_scraper.api.services.async.x.tweets.LikeServiceAsync
 import com.x_twitter_scraper.api.services.async.x.tweets.LikeServiceAsyncImpl
 import com.x_twitter_scraper.api.services.async.x.tweets.RetweetServiceAsync
@@ -63,6 +65,8 @@ class TweetServiceAsyncImpl internal constructor(private val clientOptions: Clie
         WithRawResponseImpl(clientOptions)
     }
 
+    private val bookmark: BookmarkServiceAsync by lazy { BookmarkServiceAsyncImpl(clientOptions) }
+
     private val like: LikeServiceAsync by lazy { LikeServiceAsyncImpl(clientOptions) }
 
     private val retweet: RetweetServiceAsync by lazy { RetweetServiceAsyncImpl(clientOptions) }
@@ -71,6 +75,9 @@ class TweetServiceAsyncImpl internal constructor(private val clientOptions: Clie
 
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): TweetServiceAsync =
         TweetServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
+    /** X write actions (tweets, likes, follows, DMs) */
+    override fun bookmark(): BookmarkServiceAsync = bookmark
 
     /** X write actions (tweets, likes, follows, DMs) */
     override fun like(): LikeServiceAsync = like
@@ -180,6 +187,10 @@ class TweetServiceAsyncImpl internal constructor(private val clientOptions: Clie
         private val errorHandler: Handler<HttpResponse> =
             errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
+        private val bookmark: BookmarkServiceAsync.WithRawResponse by lazy {
+            BookmarkServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         private val like: LikeServiceAsync.WithRawResponse by lazy {
             LikeServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
@@ -194,6 +205,9 @@ class TweetServiceAsyncImpl internal constructor(private val clientOptions: Clie
             TweetServiceAsyncImpl.WithRawResponseImpl(
                 clientOptions.toBuilder().apply(modifier).build()
             )
+
+        /** X write actions (tweets, likes, follows, DMs) */
+        override fun bookmark(): BookmarkServiceAsync.WithRawResponse = bookmark
 
         /** X write actions (tweets, likes, follows, DMs) */
         override fun like(): LikeServiceAsync.WithRawResponse = like

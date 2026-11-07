@@ -313,6 +313,7 @@ private constructor(
         private val status: JsonField<Status>,
         private val toolType: JsonField<ToolType>,
         private val totalResults: JsonField<Long>,
+        private val url: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -344,6 +345,7 @@ private constructor(
             @JsonProperty("totalResults")
             @ExcludeMissing
             totalResults: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of(),
         ) : this(
             id,
             completedAt,
@@ -355,6 +357,7 @@ private constructor(
             status,
             toolType,
             totalResults,
+            url,
             mutableMapOf(),
         )
 
@@ -412,6 +415,14 @@ private constructor(
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
         fun totalResults(): Long? = totalResults.getNullable("totalResults")
+
+        /**
+         * Dashboard page where a signed-in user follows this job & downloads its rows as CSV, XLSX,
+         * JSON, Markdown, PDF or text.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun url(): String? = url.getNullable("url")
 
         /**
          * Returns the raw JSON value of [id].
@@ -502,6 +513,13 @@ private constructor(
         @ExcludeMissing
         fun _totalResults(): JsonField<Long> = totalResults
 
+        /**
+         * Returns the raw JSON value of [url].
+         *
+         * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
+
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
             additionalProperties.put(key, value)
@@ -533,6 +551,7 @@ private constructor(
             private var status: JsonField<Status> = JsonMissing.of()
             private var toolType: JsonField<ToolType> = JsonMissing.of()
             private var totalResults: JsonField<Long> = JsonMissing.of()
+            private var url: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(job: Job) = apply {
@@ -546,6 +565,7 @@ private constructor(
                 status = job.status
                 toolType = job.toolType
                 totalResults = job.totalResults
+                url = job.url
                 additionalProperties = job.additionalProperties.toMutableMap()
             }
 
@@ -621,6 +641,15 @@ private constructor(
                 this.totalResults = totalResults
             }
 
+            /**
+             * Dashboard page where a signed-in user follows this job & downloads its rows as CSV,
+             * XLSX, JSON, Markdown, PDF or text.
+             */
+            fun url(url: String) = url(JsonField.of(url))
+
+            /** Sets [Builder.url] to an arbitrary JSON value. */
+            fun url(url: JsonField<String>) = apply { this.url = url }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -657,6 +686,7 @@ private constructor(
                     status,
                     toolType,
                     totalResults,
+                    url,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -687,6 +717,7 @@ private constructor(
             status()?.validate()
             toolType()?.validate()
             totalResults()
+            url()
             validated = true
         }
 
@@ -708,7 +739,8 @@ private constructor(
                 (if (resultsLimit.asKnown() == null) 0 else 1) +
                 (status.asKnown()?.validity() ?: 0) +
                 (toolType.asKnown()?.validity() ?: 0) +
-                (if (totalResults.asKnown() == null) 0 else 1)
+                (if (totalResults.asKnown() == null) 0 else 1) +
+                (if (url.asKnown() == null) 0 else 1)
 
         /** Why a terminal job stopped. */
         class CompletionReason
@@ -1264,6 +1296,7 @@ private constructor(
                 status == other.status &&
                 toolType == other.toolType &&
                 totalResults == other.totalResults &&
+                url == other.url &&
                 additionalProperties == other.additionalProperties
         }
 
@@ -1279,6 +1312,7 @@ private constructor(
                 status,
                 toolType,
                 totalResults,
+                url,
                 additionalProperties,
             )
         }
@@ -1286,7 +1320,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Job{id=$id, completedAt=$completedAt, completionReason=$completionReason, createdAt=$createdAt, effectiveResultsLimit=$effectiveResultsLimit, errorMessage=$errorMessage, resultsLimit=$resultsLimit, status=$status, toolType=$toolType, totalResults=$totalResults, additionalProperties=$additionalProperties}"
+            "Job{id=$id, completedAt=$completedAt, completionReason=$completionReason, createdAt=$createdAt, effectiveResultsLimit=$effectiveResultsLimit, errorMessage=$errorMessage, resultsLimit=$resultsLimit, status=$status, toolType=$toolType, totalResults=$totalResults, url=$url, additionalProperties=$additionalProperties}"
     }
 
     /** A public row from any supported extraction mode. */
@@ -1315,6 +1349,10 @@ private constructor(
         private val xUsername: JsonField<String>,
         private val xVerified: JsonField<Boolean>,
         private val verifiedType: JsonField<String>,
+        private val possiblySensitive: JsonField<Boolean>,
+        private val quotedMedia: JsonField<List<TweetMedia>>,
+        private val quotedPossiblySensitive: JsonField<Boolean>,
+        private val quotedPost: JsonField<QuotedPost>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -1378,6 +1416,18 @@ private constructor(
             @JsonProperty("verifiedType")
             @ExcludeMissing
             verifiedType: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("possiblySensitive")
+            @ExcludeMissing
+            possiblySensitive: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("quotedMedia")
+            @ExcludeMissing
+            quotedMedia: JsonField<List<TweetMedia>> = JsonMissing.of(),
+            @JsonProperty("quotedPossiblySensitive")
+            @ExcludeMissing
+            quotedPossiblySensitive: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("quotedPost")
+            @ExcludeMissing
+            quotedPost: JsonField<QuotedPost> = JsonMissing.of(),
         ) : this(
             id,
             bookmarkCount,
@@ -1401,6 +1451,10 @@ private constructor(
             xUsername,
             xVerified,
             verifiedType,
+            possiblySensitive,
+            quotedMedia,
+            quotedPossiblySensitive,
+            quotedPost,
             mutableMapOf(),
         )
 
@@ -1516,6 +1570,39 @@ private constructor(
          * or Blue. Absent when the account has none of these badges.
          */
         fun verifiedType(): String? = verifiedType.getNullable("verifiedType")
+
+        /**
+         * X's sensitive flag on the post with outputPreset=flat. Default nested output uses
+         * enrichmentData.tweet.possiblySensitive.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun possiblySensitive(): Boolean? = possiblySensitive.getNullable("possiblySensitive")
+
+        /**
+         * Media of the quoted post with outputPreset=flat. Default nested output uses
+         * enrichmentData.tweet.quotedMedia.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun quotedMedia(): List<TweetMedia>? = quotedMedia.getNullable("quotedMedia")
+
+        /**
+         * X's sensitive flag on the quoted post with outputPreset=flat. Default nested output uses
+         * enrichmentData.tweet.quotedPossiblySensitive.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun quotedPossiblySensitive(): Boolean? =
+            quotedPossiblySensitive.getNullable("quotedPossiblySensitive")
+
+        /**
+         * The quoted post's ID, text, date & author with outputPreset=flat. Default nested output
+         * uses enrichmentData.tweet.quotedPost.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun quotedPost(): QuotedPost? = quotedPost.getNullable("quotedPost")
 
         /**
          * Returns the raw JSON value of [id].
@@ -1692,6 +1779,44 @@ private constructor(
         @ExcludeMissing
         fun _verifiedType(): JsonField<String> = verifiedType
 
+        /**
+         * Returns the raw JSON value of [possiblySensitive].
+         *
+         * Unlike [possiblySensitive], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("possiblySensitive")
+        @ExcludeMissing
+        fun _possiblySensitive(): JsonField<Boolean> = possiblySensitive
+
+        /**
+         * Returns the raw JSON value of [quotedMedia].
+         *
+         * Unlike [quotedMedia], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("quotedMedia")
+        @ExcludeMissing
+        fun _quotedMedia(): JsonField<List<TweetMedia>> = quotedMedia
+
+        /**
+         * Returns the raw JSON value of [quotedPossiblySensitive].
+         *
+         * Unlike [quotedPossiblySensitive], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("quotedPossiblySensitive")
+        @ExcludeMissing
+        fun _quotedPossiblySensitive(): JsonField<Boolean> = quotedPossiblySensitive
+
+        /**
+         * Returns the raw JSON value of [quotedPost].
+         *
+         * Unlike [quotedPost], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("quotedPost")
+        @ExcludeMissing
+        fun _quotedPost(): JsonField<QuotedPost> = quotedPost
+
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
             additionalProperties.put(key, value)
@@ -1735,6 +1860,10 @@ private constructor(
             private var xUsername: JsonField<String> = JsonMissing.of()
             private var xVerified: JsonField<Boolean> = JsonMissing.of()
             private var verifiedType: JsonField<String> = JsonMissing.of()
+            private var possiblySensitive: JsonField<Boolean> = JsonMissing.of()
+            private var quotedMedia: JsonField<MutableList<TweetMedia>>? = null
+            private var quotedPossiblySensitive: JsonField<Boolean> = JsonMissing.of()
+            private var quotedPost: JsonField<QuotedPost> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(result: Result) = apply {
@@ -1760,6 +1889,10 @@ private constructor(
                 xUsername = result.xUsername
                 xVerified = result.xVerified
                 verifiedType = result.verifiedType
+                possiblySensitive = result.possiblySensitive
+                quotedMedia = result.quotedMedia.map { it.toMutableList() }
+                quotedPossiblySensitive = result.quotedPossiblySensitive
+                quotedPost = result.quotedPost
                 additionalProperties = result.additionalProperties.toMutableMap()
             }
 
@@ -1933,6 +2066,64 @@ private constructor(
                 this.verifiedType = verifiedType
             }
 
+            /**
+             * X's sensitive flag on the post with outputPreset=flat. Default nested output uses
+             * enrichmentData.tweet.possiblySensitive.
+             */
+            fun possiblySensitive(possiblySensitive: Boolean) =
+                possiblySensitive(JsonField.of(possiblySensitive))
+
+            /** Sets [Builder.possiblySensitive] to an arbitrary JSON value. */
+            fun possiblySensitive(possiblySensitive: JsonField<Boolean>) = apply {
+                this.possiblySensitive = possiblySensitive
+            }
+
+            /**
+             * Media of the quoted post with outputPreset=flat. Default nested output uses
+             * enrichmentData.tweet.quotedMedia.
+             */
+            fun quotedMedia(quotedMedia: List<TweetMedia>) = quotedMedia(JsonField.of(quotedMedia))
+
+            /** Sets [Builder.quotedMedia] to an arbitrary JSON value. */
+            fun quotedMedia(quotedMedia: JsonField<List<TweetMedia>>) = apply {
+                this.quotedMedia = quotedMedia.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [TweetMedia] to [quotedMedia].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addQuotedMedia(quotedMedia: TweetMedia) = apply {
+                this.quotedMedia =
+                    (this.quotedMedia ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("quotedMedia", it).add(quotedMedia)
+                    }
+            }
+
+            /**
+             * X's sensitive flag on the quoted post with outputPreset=flat. Default nested output
+             * uses enrichmentData.tweet.quotedPossiblySensitive.
+             */
+            fun quotedPossiblySensitive(quotedPossiblySensitive: Boolean) =
+                quotedPossiblySensitive(JsonField.of(quotedPossiblySensitive))
+
+            /** Sets [Builder.quotedPossiblySensitive] to an arbitrary JSON value. */
+            fun quotedPossiblySensitive(quotedPossiblySensitive: JsonField<Boolean>) = apply {
+                this.quotedPossiblySensitive = quotedPossiblySensitive
+            }
+
+            /**
+             * The quoted post's ID, text, date & author with outputPreset=flat. Default nested
+             * output uses enrichmentData.tweet.quotedPost.
+             */
+            fun quotedPost(quotedPost: QuotedPost) = quotedPost(JsonField.of(quotedPost))
+
+            /** Sets [Builder.quotedPost] to an arbitrary JSON value. */
+            fun quotedPost(quotedPost: JsonField<QuotedPost>) = apply {
+                this.quotedPost = quotedPost
+            }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -1981,6 +2172,10 @@ private constructor(
                     xUsername,
                     xVerified,
                     verifiedType,
+                    possiblySensitive,
+                    (quotedMedia ?: JsonMissing.of()).map { it.toImmutable() },
+                    quotedPossiblySensitive,
+                    quotedPost,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -2023,6 +2218,10 @@ private constructor(
             xUsername()
             xVerified()
             verifiedType()
+            possiblySensitive()
+            quotedMedia()?.forEach { it.validate() }
+            quotedPossiblySensitive()
+            quotedPost()?.validate()
             validated = true
         }
 
@@ -2056,7 +2255,392 @@ private constructor(
                 (if (xUserId.asKnown() == null) 0 else 1) +
                 (if (xUsername.asKnown() == null) 0 else 1) +
                 (if (xVerified.asKnown() == null) 0 else 1) +
-                (if (verifiedType.asKnown() == null) 0 else 1)
+                (if (verifiedType.asKnown() == null) 0 else 1) +
+                (if (possiblySensitive.asKnown() == null) 0 else 1) +
+                (quotedMedia.asKnown()?.sumOf { it.validity() } ?: 0) +
+                (if (quotedPossiblySensitive.asKnown() == null) 0 else 1) +
+                (quotedPost.asKnown()?.validity() ?: 0)
+
+        /**
+         * The quoted post's ID, text, date & author with outputPreset=flat. Default nested output
+         * uses enrichmentData.tweet.quotedPost.
+         */
+        class QuotedPost
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val id: JsonField<String>,
+            private val author: JsonField<Author>,
+            private val createdAt: JsonField<String>,
+            private val text: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("author")
+                @ExcludeMissing
+                author: JsonField<Author> = JsonMissing.of(),
+                @JsonProperty("createdAt")
+                @ExcludeMissing
+                createdAt: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("text") @ExcludeMissing text: JsonField<String> = JsonMissing.of(),
+            ) : this(id, author, createdAt, text, mutableMapOf())
+
+            fun id(): String? = id.getNullable("id")
+
+            fun author(): Author? = author.getNullable("author")
+
+            fun createdAt(): String? = createdAt.getNullable("createdAt")
+
+            fun text(): String? = text.getNullable("text")
+
+            /** Returns the raw JSON value of [id]. */
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+            /** Returns the raw JSON value of [author]. */
+            @JsonProperty("author") @ExcludeMissing fun _author(): JsonField<Author> = author
+
+            /** Returns the raw JSON value of [createdAt]. */
+            @JsonProperty("createdAt")
+            @ExcludeMissing
+            fun _createdAt(): JsonField<String> = createdAt
+
+            /** Returns the raw JSON value of [text]. */
+            @JsonProperty("text") @ExcludeMissing fun _text(): JsonField<String> = text
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /** Returns a mutable builder for constructing an instance of [QuotedPost]. */
+                fun builder() = Builder()
+            }
+
+            /** A builder for [QuotedPost]. */
+            class Builder internal constructor() {
+
+                private var id: JsonField<String> = JsonMissing.of()
+                private var author: JsonField<Author> = JsonMissing.of()
+                private var createdAt: JsonField<String> = JsonMissing.of()
+                private var text: JsonField<String> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                internal fun from(quotedPost: QuotedPost) = apply {
+                    id = quotedPost.id
+                    author = quotedPost.author
+                    createdAt = quotedPost.createdAt
+                    text = quotedPost.text
+                    additionalProperties = quotedPost.additionalProperties.toMutableMap()
+                }
+
+                fun id(id: String) = id(JsonField.of(id))
+
+                /** Sets [Builder.id] to an arbitrary JSON value. */
+                fun id(id: JsonField<String>) = apply { this.id = id }
+
+                fun author(author: Author) = author(JsonField.of(author))
+
+                /** Sets [Builder.author] to an arbitrary JSON value. */
+                fun author(author: JsonField<Author>) = apply { this.author = author }
+
+                fun createdAt(createdAt: String) = createdAt(JsonField.of(createdAt))
+
+                /** Sets [Builder.createdAt] to an arbitrary JSON value. */
+                fun createdAt(createdAt: JsonField<String>) = apply { this.createdAt = createdAt }
+
+                fun text(text: String) = text(JsonField.of(text))
+
+                /** Sets [Builder.text] to an arbitrary JSON value. */
+                fun text(text: JsonField<String>) = apply { this.text = text }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [QuotedPost].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
+                fun build(): QuotedPost =
+                    QuotedPost(
+                        id,
+                        author,
+                        createdAt,
+                        text,
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't
+             *   match its expected type.
+             */
+            fun validate(): QuotedPost = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                id()
+                author()?.validate()
+                createdAt()
+                text()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: XTwitterScraperInvalidDataException) {
+                    false
+                }
+
+            internal fun validity(): Int =
+                (if (id.asKnown() == null) 0 else 1) +
+                    (author.asKnown()?.validity() ?: 0) +
+                    (if (createdAt.asKnown() == null) 0 else 1) +
+                    (if (text.asKnown() == null) 0 else 1)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is QuotedPost &&
+                    id == other.id &&
+                    author == other.author &&
+                    createdAt == other.createdAt &&
+                    text == other.text &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(id, author, createdAt, text, additionalProperties)
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "QuotedPost{id=$id, author=$author, createdAt=$createdAt, text=$text, additionalProperties=$additionalProperties}"
+
+            class Author
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+            private constructor(
+                private val name: JsonField<String>,
+                private val profilePicture: JsonField<String>,
+                private val userName: JsonField<String>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
+            ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("name")
+                    @ExcludeMissing
+                    name: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("profilePicture")
+                    @ExcludeMissing
+                    profilePicture: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("userName")
+                    @ExcludeMissing
+                    userName: JsonField<String> = JsonMissing.of(),
+                ) : this(name, profilePicture, userName, mutableMapOf())
+
+                fun name(): String? = name.getNullable("name")
+
+                fun profilePicture(): String? = profilePicture.getNullable("profilePicture")
+
+                fun userName(): String? = userName.getNullable("userName")
+
+                /** Returns the raw JSON value of [name]. */
+                @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+                /** Returns the raw JSON value of [profilePicture]. */
+                @JsonProperty("profilePicture")
+                @ExcludeMissing
+                fun _profilePicture(): JsonField<String> = profilePicture
+
+                /** Returns the raw JSON value of [userName]. */
+                @JsonProperty("userName")
+                @ExcludeMissing
+                fun _userName(): JsonField<String> = userName
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /** Returns a mutable builder for constructing an instance of [Author]. */
+                    fun builder() = Builder()
+                }
+
+                /** A builder for [Author]. */
+                class Builder internal constructor() {
+
+                    private var name: JsonField<String> = JsonMissing.of()
+                    private var profilePicture: JsonField<String> = JsonMissing.of()
+                    private var userName: JsonField<String> = JsonMissing.of()
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    internal fun from(author: Author) = apply {
+                        name = author.name
+                        profilePicture = author.profilePicture
+                        userName = author.userName
+                        additionalProperties = author.additionalProperties.toMutableMap()
+                    }
+
+                    fun name(name: String) = name(JsonField.of(name))
+
+                    /** Sets [Builder.name] to an arbitrary JSON value. */
+                    fun name(name: JsonField<String>) = apply { this.name = name }
+
+                    fun profilePicture(profilePicture: String) =
+                        profilePicture(JsonField.of(profilePicture))
+
+                    /** Sets [Builder.profilePicture] to an arbitrary JSON value. */
+                    fun profilePicture(profilePicture: JsonField<String>) = apply {
+                        this.profilePicture = profilePicture
+                    }
+
+                    fun userName(userName: String) = userName(JsonField.of(userName))
+
+                    /** Sets [Builder.userName] to an arbitrary JSON value. */
+                    fun userName(userName: JsonField<String>) = apply { this.userName = userName }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [Author].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
+                    fun build(): Author =
+                        Author(
+                            name,
+                            profilePicture,
+                            userName,
+                            additionalProperties.toMutableMap(),
+                        )
+                }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * @throws XTwitterScraperInvalidDataException if any value type in this object
+                 *   doesn't match its expected type.
+                 */
+                fun validate(): Author = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    name()
+                    profilePicture()
+                    userName()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: XTwitterScraperInvalidDataException) {
+                        false
+                    }
+
+                internal fun validity(): Int =
+                    (if (name.asKnown() == null) 0 else 1) +
+                        (if (profilePicture.asKnown() == null) 0 else 1) +
+                        (if (userName.asKnown() == null) 0 else 1)
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is Author &&
+                        name == other.name &&
+                        profilePicture == other.profilePicture &&
+                        userName == other.userName &&
+                        additionalProperties == other.additionalProperties
+                }
+
+                private val hashCode: Int by lazy {
+                    Objects.hash(name, profilePicture, userName, additionalProperties)
+                }
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() =
+                    "Author{name=$name, profilePicture=$profilePicture, userName=$userName, additionalProperties=$additionalProperties}"
+            }
+        }
 
         /** Public metadata whose fields X defines. */
         class EnrichmentData
@@ -2192,6 +2776,10 @@ private constructor(
                 xUsername == other.xUsername &&
                 xVerified == other.xVerified &&
                 verifiedType == other.verifiedType &&
+                possiblySensitive == other.possiblySensitive &&
+                quotedMedia == other.quotedMedia &&
+                quotedPossiblySensitive == other.quotedPossiblySensitive &&
+                quotedPost == other.quotedPost &&
                 additionalProperties == other.additionalProperties
         }
 
@@ -2219,6 +2807,10 @@ private constructor(
                 xUsername,
                 xVerified,
                 verifiedType,
+                possiblySensitive,
+                quotedMedia,
+                quotedPossiblySensitive,
+                quotedPost,
                 additionalProperties,
             )
         }
@@ -2226,7 +2818,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Result{id=$id, bookmarkCount=$bookmarkCount, createdAt=$createdAt, email=$email, enrichmentData=$enrichmentData, likeCount=$likeCount, media=$media, quoteCount=$quoteCount, replyCount=$replyCount, retweetCount=$retweetCount, tweetCreatedAt=$tweetCreatedAt, tweetId=$tweetId, tweetText=$tweetText, tweetUrl=$tweetUrl, viewCount=$viewCount, xDisplayName=$xDisplayName, xFollowersCount=$xFollowersCount, xProfileImageUrl=$xProfileImageUrl, xUserId=$xUserId, xUsername=$xUsername, xVerified=$xVerified, verifiedType=$verifiedType, additionalProperties=$additionalProperties}"
+            "Result{id=$id, bookmarkCount=$bookmarkCount, createdAt=$createdAt, email=$email, enrichmentData=$enrichmentData, likeCount=$likeCount, media=$media, quoteCount=$quoteCount, replyCount=$replyCount, retweetCount=$retweetCount, tweetCreatedAt=$tweetCreatedAt, tweetId=$tweetId, tweetText=$tweetText, tweetUrl=$tweetUrl, viewCount=$viewCount, xDisplayName=$xDisplayName, xFollowersCount=$xFollowersCount, xProfileImageUrl=$xProfileImageUrl, xUserId=$xUserId, xUsername=$xUsername, xVerified=$xVerified, verifiedType=$verifiedType, possiblySensitive=$possiblySensitive, quotedMedia=$quotedMedia, quotedPossiblySensitive=$quotedPossiblySensitive, quotedPost=$quotedPost, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
