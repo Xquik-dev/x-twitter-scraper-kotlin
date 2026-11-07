@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Features
+
+* Extraction tool types gain `USER_AFFILIATES`.
+
 ## 0.10.0 (2026-11-04)
 
 [Full changelog from v0.9.3 to v0.10.0](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.9.3...v0.10.0)
