@@ -6275,6 +6275,8 @@ private constructor(
 
             val TWEET_SEARCH_EXTRACTOR = of("tweet_search_extractor")
 
+            val USER_AFFILIATES = of("user_affiliates")
+
             val USER_LIKES = of("user_likes")
 
             val USER_MEDIA = of("user_media")
@@ -6306,6 +6308,7 @@ private constructor(
             SPACE_EXPLORER,
             THREAD_EXTRACTOR,
             TWEET_SEARCH_EXTRACTOR,
+            USER_AFFILIATES,
             USER_LIKES,
             USER_MEDIA,
             VERIFIED_FOLLOWER_EXPLORER,
@@ -6341,6 +6344,7 @@ private constructor(
             SPACE_EXPLORER,
             THREAD_EXTRACTOR,
             TWEET_SEARCH_EXTRACTOR,
+            USER_AFFILIATES,
             USER_LIKES,
             USER_MEDIA,
             VERIFIED_FOLLOWER_EXPLORER,
@@ -6374,6 +6378,7 @@ private constructor(
                 SPACE_EXPLORER -> Value.SPACE_EXPLORER
                 THREAD_EXTRACTOR -> Value.THREAD_EXTRACTOR
                 TWEET_SEARCH_EXTRACTOR -> Value.TWEET_SEARCH_EXTRACTOR
+                USER_AFFILIATES -> Value.USER_AFFILIATES
                 USER_LIKES -> Value.USER_LIKES
                 USER_MEDIA -> Value.USER_MEDIA
                 VERIFIED_FOLLOWER_EXPLORER -> Value.VERIFIED_FOLLOWER_EXPLORER
@@ -6408,6 +6413,7 @@ private constructor(
                 SPACE_EXPLORER -> Known.SPACE_EXPLORER
                 THREAD_EXTRACTOR -> Known.THREAD_EXTRACTOR
                 TWEET_SEARCH_EXTRACTOR -> Known.TWEET_SEARCH_EXTRACTOR
+                USER_AFFILIATES -> Known.USER_AFFILIATES
                 USER_LIKES -> Known.USER_LIKES
                 USER_MEDIA -> Known.USER_MEDIA
                 VERIFIED_FOLLOWER_EXPLORER -> Known.VERIFIED_FOLLOWER_EXPLORER
