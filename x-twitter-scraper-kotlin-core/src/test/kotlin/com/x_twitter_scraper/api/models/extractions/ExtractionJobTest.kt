@@ -103,6 +103,7 @@ internal class ExtractionJobTest {
                 .status(JsonMissing.of())
                 .toolType(JsonMissing.of())
                 .totalResults(JsonMissing.of())
+                .url(JsonMissing.of())
                 .build()
         assertThat(extractionJob0.completionReason()).isNull()
         assertThat(extractionJob0.effectiveResultsLimit()).isNull()
