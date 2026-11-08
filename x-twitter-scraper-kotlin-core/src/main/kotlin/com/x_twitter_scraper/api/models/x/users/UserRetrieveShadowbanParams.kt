@@ -22,6 +22,7 @@ private constructor(
     private val id: String?,
     private val fields: String?,
     private val omit: String?,
+    private val limit: Long?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -48,6 +49,12 @@ private constructor(
      */
     fun omit(): String? = omit
 
+    /**
+     * Recent posts to read for the timeline, engagement & reply checks. The read stops at this
+     * count, at the end of the timeline or after about 40 seconds. Left out, it reads 20.
+     */
+    fun limit(): Long? = limit
+
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -72,6 +79,7 @@ private constructor(
         private var id: String? = null
         private var fields: String? = null
         private var omit: String? = null
+        private var limit: Long? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -79,6 +87,7 @@ private constructor(
             id = userRetrieveShadowbanParams.id
             fields = userRetrieveShadowbanParams.fields
             omit = userRetrieveShadowbanParams.omit
+            limit = userRetrieveShadowbanParams.limit
             additionalHeaders = userRetrieveShadowbanParams.additionalHeaders.toBuilder()
             additionalQueryParams = userRetrieveShadowbanParams.additionalQueryParams.toBuilder()
         }
@@ -105,6 +114,15 @@ private constructor(
          * fields, it drops from the kept fields.
          */
         fun omit(omit: String?) = apply { this.omit = omit }
+
+        /**
+         * Recent posts to read for the timeline, engagement & reply checks. The read stops at this
+         * count, at the end of the timeline or after about 40 seconds. Left out, it reads 20.
+         */
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /** Alias for [Builder.limit]. */
+        fun limit(limit: Long) = limit(limit as Long?)
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -214,6 +232,7 @@ private constructor(
                 id,
                 fields,
                 omit,
+                limit,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -232,6 +251,7 @@ private constructor(
             .apply {
                 fields?.let { put("fields", it) }
                 omit?.let { put("omit", it) }
+                limit?.let { put("limit", it.toString()) }
                 putAll(additionalQueryParams)
             }
             .build()
@@ -245,13 +265,14 @@ private constructor(
             id == other.id &&
             fields == other.fields &&
             omit == other.omit &&
+            limit == other.limit &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(id, fields, omit, additionalHeaders, additionalQueryParams)
+        Objects.hash(id, fields, omit, limit, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "UserRetrieveShadowbanParams{id=$id, fields=$fields, omit=$omit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "UserRetrieveShadowbanParams{id=$id, fields=$fields, omit=$omit, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

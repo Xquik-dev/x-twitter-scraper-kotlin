@@ -15,6 +15,8 @@ import com.x_twitter_scraper.api.core.JsonMissing
 import com.x_twitter_scraper.api.core.JsonValue
 import com.x_twitter_scraper.api.core.checkRequired
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
+import com.x_twitter_scraper.api.models.ImageFilterSummary
+import com.x_twitter_scraper.api.models.TopicFilterSummary
 import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
@@ -34,6 +36,8 @@ private constructor(
     private val effectiveResultsLimit: JsonField<Long>,
     private val errorMessage: JsonField<String>,
     private val resultsLimit: JsonField<Long>,
+    private val topicFilter: JsonField<TopicFilterSummary>,
+    private val imageFilter: JsonField<ImageFilterSummary>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -64,6 +68,12 @@ private constructor(
         @JsonProperty("resultsLimit")
         @ExcludeMissing
         resultsLimit: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("topicFilter")
+        @ExcludeMissing
+        topicFilter: JsonField<TopicFilterSummary> = JsonMissing.of(),
+        @JsonProperty("imageFilter")
+        @ExcludeMissing
+        imageFilter: JsonField<ImageFilterSummary> = JsonMissing.of(),
     ) : this(
         id,
         createdAt,
@@ -76,6 +86,8 @@ private constructor(
         effectiveResultsLimit,
         errorMessage,
         resultsLimit,
+        topicFilter,
+        imageFilter,
         mutableMapOf(),
     )
 
@@ -244,6 +256,39 @@ private constructor(
     @ExcludeMissing
     fun _resultsLimit(): JsonField<Long> = resultsLimit
 
+    /**
+     * What the topic filter asked & how many posts it kept. Present when the request sent topic.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun topicFilter(): TopicFilterSummary? = topicFilter.getNullable("topicFilter")
+
+    /**
+     * Returns the raw JSON value of [topicFilter].
+     *
+     * Unlike [topicFilter], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("topicFilter")
+    @ExcludeMissing
+    fun _topicFilter(): JsonField<TopicFilterSummary> = topicFilter
+
+    /**
+     * What the image filter asked & how many posts it kept. Present when the request sent
+     * imageShows.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun imageFilter(): ImageFilterSummary? = imageFilter.getNullable("imageFilter")
+
+    /**
+     * Returns the raw JSON value of [imageFilter].
+     *
+     * Unlike [imageFilter], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("imageFilter")
+    @ExcludeMissing
+    fun _imageFilter(): JsonField<ImageFilterSummary> = imageFilter
+
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -288,6 +333,8 @@ private constructor(
         private var effectiveResultsLimit: JsonField<Long> = JsonMissing.of()
         private var errorMessage: JsonField<String> = JsonMissing.of()
         private var resultsLimit: JsonField<Long> = JsonMissing.of()
+        private var topicFilter: JsonField<TopicFilterSummary> = JsonMissing.of()
+        private var imageFilter: JsonField<ImageFilterSummary> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(extractionJob: ExtractionJob) = apply {
@@ -302,6 +349,8 @@ private constructor(
             effectiveResultsLimit = extractionJob.effectiveResultsLimit
             errorMessage = extractionJob.errorMessage
             resultsLimit = extractionJob.resultsLimit
+            topicFilter = extractionJob.topicFilter
+            imageFilter = extractionJob.imageFilter
             additionalProperties = extractionJob.additionalProperties.toMutableMap()
         }
 
@@ -379,6 +428,28 @@ private constructor(
         /** Sets [Builder.resultsLimit] to an arbitrary JSON value. */
         fun resultsLimit(resultsLimit: JsonField<Long>) = apply { this.resultsLimit = resultsLimit }
 
+        /**
+         * What the topic filter asked & how many posts it kept. Present when the request sent
+         * topic.
+         */
+        fun topicFilter(topicFilter: TopicFilterSummary) = topicFilter(JsonField.of(topicFilter))
+
+        /** Sets [Builder.topicFilter] to an arbitrary JSON value. */
+        fun topicFilter(topicFilter: JsonField<TopicFilterSummary>) = apply {
+            this.topicFilter = topicFilter
+        }
+
+        /**
+         * What the image filter asked & how many posts it kept. Present when the request sent
+         * imageShows.
+         */
+        fun imageFilter(imageFilter: ImageFilterSummary) = imageFilter(JsonField.of(imageFilter))
+
+        /** Sets [Builder.imageFilter] to an arbitrary JSON value. */
+        fun imageFilter(imageFilter: JsonField<ImageFilterSummary>) = apply {
+            this.imageFilter = imageFilter
+        }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -428,6 +499,8 @@ private constructor(
                 effectiveResultsLimit,
                 errorMessage,
                 resultsLimit,
+                topicFilter,
+                imageFilter,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -458,6 +531,8 @@ private constructor(
         effectiveResultsLimit()
         errorMessage()
         resultsLimit()
+        topicFilter()?.validate()
+        imageFilter()?.validate()
         validated = true
     }
 
@@ -470,7 +545,9 @@ private constructor(
         }
 
     internal fun validity(): Int =
-        (if (id.asKnown() == null) 0 else 1) +
+        (imageFilter.asKnown()?.validity() ?: 0) +
+            (topicFilter.asKnown()?.validity() ?: 0) +
+            (if (id.asKnown() == null) 0 else 1) +
             (if (createdAt.asKnown() == null) 0 else 1) +
             (status.asKnown()?.validity() ?: 0) +
             (toolType.asKnown()?.validity() ?: 0) +
@@ -1031,6 +1108,8 @@ private constructor(
             effectiveResultsLimit == other.effectiveResultsLimit &&
             errorMessage == other.errorMessage &&
             resultsLimit == other.resultsLimit &&
+            topicFilter == other.topicFilter &&
+            imageFilter == other.imageFilter &&
             additionalProperties == other.additionalProperties
     }
 
@@ -1047,6 +1126,8 @@ private constructor(
             effectiveResultsLimit,
             errorMessage,
             resultsLimit,
+            topicFilter,
+            imageFilter,
             additionalProperties,
         )
     }
@@ -1054,5 +1135,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ExtractionJob{id=$id, createdAt=$createdAt, status=$status, toolType=$toolType, totalResults=$totalResults, url=$url, completedAt=$completedAt, completionReason=$completionReason, effectiveResultsLimit=$effectiveResultsLimit, errorMessage=$errorMessage, resultsLimit=$resultsLimit, additionalProperties=$additionalProperties}"
+        "ExtractionJob{id=$id, createdAt=$createdAt, status=$status, toolType=$toolType, totalResults=$totalResults, url=$url, completedAt=$completedAt, completionReason=$completionReason, effectiveResultsLimit=$effectiveResultsLimit, errorMessage=$errorMessage, resultsLimit=$resultsLimit, topicFilter=$topicFilter, imageFilter=$imageFilter, additionalProperties=$additionalProperties}"
 }
