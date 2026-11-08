@@ -8,10 +8,15 @@
 * `x().tweets().search()` and `x().users().retrieveTweets()`, `retrieveReplies()` and `retrieveMedia()` take `topic` and `imageShows`, which keep only posts about a topic or posts whose photos show something. The page returns `topicFilter()` or `imageFilter()`, and each kept post returns `topicScore()` or `imageScore()`.
 * `extractions().run()` and `estimateCost()` take `topic` and `imageShows`, and each extraction job returns `topicFilter()` or `imageFilter()`.
 * `x().media().download()` takes `imageShows` and returns `imageFilter()`.
+* `x().media().download()` returns `unprocessedTweetIds()`, the posts Xquik had no time to read, at no charge. Send them again.
 * `x().users().retrieveFollowerAudit()` reads a follower audit of an account, with each follower's class, score and signals.
 * `x().users().retrieveInsights()` and `retrieveShadowban()` take `limit`, the number of recent posts to read.
 * A user insights sample adds `read()`, the posts the read covered with reposts and the pinned post included. `posts()` counts only those the averages used.
 * Extraction results return `isDeleted()`, and `x().getArticle()` returns the article's `unknownCounts()`.
+
+### Breaking changes
+
+* `Error.InnerError.LegacyErrorCode` and `Error.InnerError.StructuredError.Code` drop `TOO_MANY_TWEETS`, since the API no longer sends that code. A download now returns the posts it had no time to read in `unprocessedTweetIds()`. Code that names the constant must drop it.
 
 ## 0.10.0 (2026-11-04)
 

@@ -49,4 +49,12 @@ internal class ErrorTest {
 
         assertThat(roundtrippedError).isEqualTo(error)
     }
+
+    @Test
+    fun readsTheRemovedTooManyTweetsCodeAsUnknown() {
+        assertThat(Error.InnerError.LegacyErrorCode.of("too_many_tweets").value())
+            .isEqualTo(Error.InnerError.LegacyErrorCode.Value._UNKNOWN)
+        assertThat(Error.InnerError.StructuredError.Code.of("too_many_tweets").value())
+            .isEqualTo(Error.InnerError.StructuredError.Code.Value._UNKNOWN)
+    }
 }
