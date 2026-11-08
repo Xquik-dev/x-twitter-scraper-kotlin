@@ -714,8 +714,6 @@ private constructor(
 
                 val TOO_MANY_STREAMS = of("too_many_streams")
 
-                val TOO_MANY_TWEETS = of("too_many_tweets")
-
                 val TOPUP_IN_PROGRESS = of("topup_in_progress")
 
                 val UNKNOWN_FIELD = of("unknown_field")
@@ -935,7 +933,6 @@ private constructor(
                 TELEGRAM_UNAVAILABLE,
                 TOO_MANY_IDS,
                 TOO_MANY_STREAMS,
-                TOO_MANY_TWEETS,
                 TOPUP_IN_PROGRESS,
                 UNKNOWN_FIELD,
                 UNSUPPORTED_MEDIA_COMBINATION,
@@ -1115,7 +1112,6 @@ private constructor(
                 TELEGRAM_UNAVAILABLE,
                 TOO_MANY_IDS,
                 TOO_MANY_STREAMS,
-                TOO_MANY_TWEETS,
                 TOPUP_IN_PROGRESS,
                 UNKNOWN_FIELD,
                 UNSUPPORTED_MEDIA_COMBINATION,
@@ -1296,7 +1292,6 @@ private constructor(
                     TELEGRAM_UNAVAILABLE -> Value.TELEGRAM_UNAVAILABLE
                     TOO_MANY_IDS -> Value.TOO_MANY_IDS
                     TOO_MANY_STREAMS -> Value.TOO_MANY_STREAMS
-                    TOO_MANY_TWEETS -> Value.TOO_MANY_TWEETS
                     TOPUP_IN_PROGRESS -> Value.TOPUP_IN_PROGRESS
                     UNKNOWN_FIELD -> Value.UNKNOWN_FIELD
                     UNSUPPORTED_MEDIA_COMBINATION -> Value.UNSUPPORTED_MEDIA_COMBINATION
@@ -1475,7 +1470,6 @@ private constructor(
                     TELEGRAM_UNAVAILABLE -> Known.TELEGRAM_UNAVAILABLE
                     TOO_MANY_IDS -> Known.TOO_MANY_IDS
                     TOO_MANY_STREAMS -> Known.TOO_MANY_STREAMS
-                    TOO_MANY_TWEETS -> Known.TOO_MANY_TWEETS
                     TOPUP_IN_PROGRESS -> Known.TOPUP_IN_PROGRESS
                     UNKNOWN_FIELD -> Known.UNKNOWN_FIELD
                     UNSUPPORTED_MEDIA_COMBINATION -> Known.UNSUPPORTED_MEDIA_COMBINATION
@@ -2024,8 +2018,6 @@ private constructor(
 
                     val TOO_MANY_STREAMS = of("too_many_streams")
 
-                    val TOO_MANY_TWEETS = of("too_many_tweets")
-
                     val TOPUP_IN_PROGRESS = of("topup_in_progress")
 
                     val UNKNOWN_FIELD = of("unknown_field")
@@ -2245,7 +2237,6 @@ private constructor(
                     TELEGRAM_UNAVAILABLE,
                     TOO_MANY_IDS,
                     TOO_MANY_STREAMS,
-                    TOO_MANY_TWEETS,
                     TOPUP_IN_PROGRESS,
                     UNKNOWN_FIELD,
                     UNSUPPORTED_MEDIA_COMBINATION,
@@ -2425,7 +2416,6 @@ private constructor(
                     TELEGRAM_UNAVAILABLE,
                     TOO_MANY_IDS,
                     TOO_MANY_STREAMS,
-                    TOO_MANY_TWEETS,
                     TOPUP_IN_PROGRESS,
                     UNKNOWN_FIELD,
                     UNSUPPORTED_MEDIA_COMBINATION,
@@ -2605,7 +2595,6 @@ private constructor(
                         TELEGRAM_UNAVAILABLE -> Value.TELEGRAM_UNAVAILABLE
                         TOO_MANY_IDS -> Value.TOO_MANY_IDS
                         TOO_MANY_STREAMS -> Value.TOO_MANY_STREAMS
-                        TOO_MANY_TWEETS -> Value.TOO_MANY_TWEETS
                         TOPUP_IN_PROGRESS -> Value.TOPUP_IN_PROGRESS
                         UNKNOWN_FIELD -> Value.UNKNOWN_FIELD
                         UNSUPPORTED_MEDIA_COMBINATION -> Value.UNSUPPORTED_MEDIA_COMBINATION
@@ -2784,7 +2773,6 @@ private constructor(
                         TELEGRAM_UNAVAILABLE -> Known.TELEGRAM_UNAVAILABLE
                         TOO_MANY_IDS -> Known.TOO_MANY_IDS
                         TOO_MANY_STREAMS -> Known.TOO_MANY_STREAMS
-                        TOO_MANY_TWEETS -> Known.TOO_MANY_TWEETS
                         TOPUP_IN_PROGRESS -> Known.TOPUP_IN_PROGRESS
                         UNKNOWN_FIELD -> Known.UNKNOWN_FIELD
                         UNSUPPORTED_MEDIA_COMBINATION -> Known.UNSUPPORTED_MEDIA_COMBINATION

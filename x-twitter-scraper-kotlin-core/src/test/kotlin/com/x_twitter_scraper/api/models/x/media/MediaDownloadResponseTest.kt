@@ -39,6 +39,7 @@ internal class MediaDownloadResponseTest {
                 .totalMedia(5L)
                 .totalTweets(2L)
                 .tweetId("1234567890")
+                .unprocessedTweetIds(listOf("1234567892"))
                 .build()
 
         val roundtrippedMediaDownloadResponse =
@@ -98,6 +99,28 @@ internal class MediaDownloadResponseTest {
         assertThat(response.validate()).isSameAs(response)
         assertThat(item.posterUrl()).isNull()
         assertThat(item.qualities()).isEmpty()
+    }
+
+    @Test
+    fun keepsThePostsItHadNoTimeToRead() {
+        val response =
+            jsonMapper()
+                .readValue(
+                    """
+                    {
+                      "galleryUrl": "https://xquik.com/gallery/abc123",
+                      "totalMedia": 5,
+                      "totalTweets": 2,
+                      "unprocessedTweetIds": ["1234567892"]
+                    }
+                    """,
+                    jacksonTypeRef<MediaDownloadResponse>(),
+                )
+
+        assertThat(response.validate()).isSameAs(response)
+        assertThat(response.unprocessedTweetIds()).containsExactly("1234567892")
+        val extended = response.toBuilder().addUnprocessedTweetId("1234567893").build()
+        assertThat(extended.unprocessedTweetIds()).containsExactly("1234567892", "1234567893")
     }
 
     private fun downloadExample(mediaFields: String): String =
