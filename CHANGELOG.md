@@ -10,6 +10,7 @@
 * `x().media().download()` takes `imageShows` and returns `imageFilter()`.
 * `x().users().retrieveFollowerAudit()` reads a follower audit of an account, with each follower's class, score and signals.
 * `x().users().retrieveInsights()` and `retrieveShadowban()` take `limit`, the number of recent posts to read.
+* A user insights sample adds `read()`, the posts the read covered with reposts and the pinned post included. `posts()` counts only those the averages used.
 * Extraction results return `isDeleted()`, and `x().getArticle()` returns the article's `unknownCounts()`.
 
 ## 0.10.0 (2026-11-04)
