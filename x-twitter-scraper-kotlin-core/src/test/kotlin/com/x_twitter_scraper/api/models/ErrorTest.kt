@@ -51,10 +51,12 @@ internal class ErrorTest {
     }
 
     @Test
-    fun readsTheRemovedTooManyTweetsCodeAsUnknown() {
-        assertThat(Error.InnerError.LegacyErrorCode.of("too_many_tweets").value())
-            .isEqualTo(Error.InnerError.LegacyErrorCode.Value._UNKNOWN)
-        assertThat(Error.InnerError.StructuredError.Code.of("too_many_tweets").value())
-            .isEqualTo(Error.InnerError.StructuredError.Code.Value._UNKNOWN)
+    fun readsTheRemovedTooManyCodesAsUnknown() {
+        listOf("too_many_ids", "too_many_tweets").forEach { code ->
+            assertThat(Error.InnerError.LegacyErrorCode.of(code).value())
+                .isEqualTo(Error.InnerError.LegacyErrorCode.Value._UNKNOWN)
+            assertThat(Error.InnerError.StructuredError.Code.of(code).value())
+                .isEqualTo(Error.InnerError.StructuredError.Code.Value._UNKNOWN)
+        }
     }
 }

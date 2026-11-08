@@ -10,9 +10,9 @@ import com.x_twitter_scraper.api.core.http.QueryParams
 import java.util.Objects
 
 /**
- * Returns the newest posts of up to 20 users, named by user ID, username or profile link, in the
- * order named. Send ids or usernames, not both. Each post costs 1 credit. A user in unavailable_ids
- * or unprocessed_ids costs nothing.
+ * Returns the newest posts of users named by user ID, username or profile link, in the order named.
+ * Send ids or usernames, not both. Each post costs 1 credit. A user in unavailable_ids or
+ * unprocessed_ids costs nothing.
  */
 class UserRetrieveBatchTweetsParams
 private constructor(
@@ -35,8 +35,8 @@ private constructor(
     fun fields(): String? = fields
 
     /**
-     * Comma-separated numeric user IDs (1-20 values). Xquik ignores duplicate IDs and keeps the
-     * first-seen order.
+     * Comma-separated numeric IDs of the users to read posts from. Xquik ignores duplicate IDs and
+     * keeps the first-seen order.
      */
     fun ids(): String? = ids
 
@@ -47,14 +47,14 @@ private constructor(
     fun omit(): String? = omit
 
     /**
-     * Posts per user (1-20, default 20). A low credit balance can return fewer. Its aliases are
+     * Posts per user (1-300, default 20). A low credit balance can return fewer. Its aliases are
      * limit, count, max_results, maxItems, max_items & per_page.
      */
     fun pageSize(): Long? = pageSize
 
     /**
-     * Comma-separated X usernames, with or without @, or profile links such as x.com/nasa (1-20
-     * values), in place of ids. A name in another case is the same account. A number is a user ID.
+     * Comma-separated X usernames, with or without @, or profile links such as x.com/nasa, in place
+     * of ids. A name in another case is the same account. A number is a user ID.
      */
     fun usernames(): String? = usernames
 
@@ -108,8 +108,8 @@ private constructor(
         fun fields(fields: String?) = apply { this.fields = fields }
 
         /**
-         * Comma-separated numeric user IDs (1-20 values). Xquik ignores duplicate IDs and keeps the
-         * first-seen order.
+         * Comma-separated numeric IDs of the users to read posts from. Xquik ignores duplicate IDs
+         * and keeps the first-seen order.
          */
         fun ids(ids: String?) = apply { this.ids = ids }
 
@@ -120,8 +120,8 @@ private constructor(
         fun omit(omit: String?) = apply { this.omit = omit }
 
         /**
-         * Posts per user (1-20, default 20). A low credit balance can return fewer. Its aliases are
-         * limit, count, max_results, maxItems, max_items & per_page.
+         * Posts per user (1-300, default 20). A low credit balance can return fewer. Its aliases
+         * are limit, count, max_results, maxItems, max_items & per_page.
          */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
@@ -129,9 +129,8 @@ private constructor(
         fun pageSize(pageSize: Long) = pageSize(pageSize as Long?)
 
         /**
-         * Comma-separated X usernames, with or without @, or profile links such as x.com/nasa (1-20
-         * values), in place of ids. A name in another case is the same account. A number is a user
-         * ID.
+         * Comma-separated X usernames, with or without @, or profile links such as x.com/nasa, in
+         * place of ids. A name in another case is the same account. A number is a user ID.
          */
         fun usernames(usernames: String?) = apply { this.usernames = usernames }
 
