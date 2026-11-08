@@ -342,7 +342,7 @@ private constructor(
         fun postsPrivate(): Boolean = postsPrivate.getRequired("postsPrivate")
 
         /**
-         * The recent posts the averages read.
+         * The recent posts the read covered.
          *
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or
          *   is unexpectedly missing or null.
@@ -657,7 +657,7 @@ private constructor(
                 this.postsPrivate = postsPrivate
             }
 
-            /** The recent posts the averages read. */
+            /** The recent posts the read covered. */
             fun sample(sample: Sample) = sample(JsonField.of(sample))
 
             /** Sets [Builder.sample] to an arbitrary JSON value. */
@@ -1177,13 +1177,14 @@ private constructor(
                 "Averages{bookmarks=$bookmarks, engagements=$engagements, likes=$likes, quotes=$quotes, replies=$replies, reposts=$reposts, views=$views, additionalProperties=$additionalProperties}"
         }
 
-        /** The recent posts the averages read. */
+        /** The recent posts the read covered. */
         class Sample
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val newestAt: JsonField<OffsetDateTime>,
             private val oldestAt: JsonField<OffsetDateTime>,
             private val posts: JsonField<Double>,
+            private val read: JsonField<Double>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
@@ -1196,29 +1197,39 @@ private constructor(
                 @ExcludeMissing
                 oldestAt: JsonField<OffsetDateTime> = JsonMissing.of(),
                 @JsonProperty("posts") @ExcludeMissing posts: JsonField<Double> = JsonMissing.of(),
-            ) : this(newestAt, oldestAt, posts, mutableMapOf())
+                @JsonProperty("read") @ExcludeMissing read: JsonField<Double> = JsonMissing.of(),
+            ) : this(newestAt, oldestAt, posts, read, mutableMapOf())
 
             /**
-             * When the newest of them went up.
+             * When the newest post the averages used went up.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
              */
             fun newestAt(): OffsetDateTime? = newestAt.getNullable("newestAt")
 
             /**
-             * When the oldest of them went up.
+             * When the oldest post the averages used went up.
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
              */
             fun oldestAt(): OffsetDateTime? = oldestAt.getNullable("oldestAt")
 
             /**
-             * Posts read.
+             * Posts the averages used. Reposts and the pinned post stay out, so this can be lower
+             * than [read].
              *
              * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
              *   or is unexpectedly missing or null.
              */
             fun posts(): Double = posts.getRequired("posts")
+
+            /**
+             * Posts read, reposts and the pinned post included.
+             *
+             * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type
+             *   or is unexpectedly missing or null.
+             */
+            fun read(): Double = read.getRequired("read")
 
             /**
              * Returns the raw JSON value of [newestAt].
@@ -1247,6 +1258,13 @@ private constructor(
              */
             @JsonProperty("posts") @ExcludeMissing fun _posts(): JsonField<Double> = posts
 
+            /**
+             * Returns the raw JSON value of [read].
+             *
+             * Unlike [read], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("read") @ExcludeMissing fun _read(): JsonField<Double> = read
+
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
                 additionalProperties.put(key, value)
@@ -1269,6 +1287,7 @@ private constructor(
                  * .newestAt()
                  * .oldestAt()
                  * .posts()
+                 * .read()
                  * ```
                  */
                 fun builder() = Builder()
@@ -1280,16 +1299,18 @@ private constructor(
                 private var newestAt: JsonField<OffsetDateTime>? = null
                 private var oldestAt: JsonField<OffsetDateTime>? = null
                 private var posts: JsonField<Double>? = null
+                private var read: JsonField<Double>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 internal fun from(sample: Sample) = apply {
                     newestAt = sample.newestAt
                     oldestAt = sample.oldestAt
                     posts = sample.posts
+                    read = sample.read
                     additionalProperties = sample.additionalProperties.toMutableMap()
                 }
 
-                /** When the newest of them went up. */
+                /** When the newest post the averages used went up. */
                 fun newestAt(newestAt: OffsetDateTime?) = newestAt(JsonField.ofNullable(newestAt))
 
                 /** Sets [Builder.newestAt] to an arbitrary JSON value. */
@@ -1297,7 +1318,7 @@ private constructor(
                     this.newestAt = newestAt
                 }
 
-                /** When the oldest of them went up. */
+                /** When the oldest post the averages used went up. */
                 fun oldestAt(oldestAt: OffsetDateTime?) = oldestAt(JsonField.ofNullable(oldestAt))
 
                 /** Sets [Builder.oldestAt] to an arbitrary JSON value. */
@@ -1305,11 +1326,20 @@ private constructor(
                     this.oldestAt = oldestAt
                 }
 
-                /** Posts read. */
+                /**
+                 * Posts the averages used. Reposts and the pinned post stay out, so this can be
+                 * lower than [read].
+                 */
                 fun posts(posts: Double) = posts(JsonField.of(posts))
 
                 /** Sets [Builder.posts] to an arbitrary JSON value. */
                 fun posts(posts: JsonField<Double>) = apply { this.posts = posts }
+
+                /** Posts read, reposts and the pinned post included. */
+                fun read(read: Double) = read(JsonField.of(read))
+
+                /** Sets [Builder.read] to an arbitrary JSON value. */
+                fun read(read: JsonField<Double>) = apply { this.read = read }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -1343,6 +1373,7 @@ private constructor(
                  * .newestAt()
                  * .oldestAt()
                  * .posts()
+                 * .read()
                  * ```
                  *
                  * @throws IllegalStateException if any required field is unset.
@@ -1352,6 +1383,7 @@ private constructor(
                         checkRequired("newestAt", newestAt),
                         checkRequired("oldestAt", oldestAt),
                         checkRequired("posts", posts),
+                        checkRequired("read", read),
                         additionalProperties.toMutableMap(),
                     )
             }
@@ -1376,6 +1408,7 @@ private constructor(
                 newestAt()
                 oldestAt()
                 posts()
+                read()
                 validated = true
             }
 
@@ -1390,7 +1423,8 @@ private constructor(
             internal fun validity(): Int =
                 (if (newestAt.asKnown() == null) 0 else 1) +
                     (if (oldestAt.asKnown() == null) 0 else 1) +
-                    (if (posts.asKnown() == null) 0 else 1)
+                    (if (posts.asKnown() == null) 0 else 1) +
+                    (if (read.asKnown() == null) 0 else 1)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -1401,17 +1435,18 @@ private constructor(
                     newestAt == other.newestAt &&
                     oldestAt == other.oldestAt &&
                     posts == other.posts &&
+                    read == other.read &&
                     additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy {
-                Objects.hash(newestAt, oldestAt, posts, additionalProperties)
+                Objects.hash(newestAt, oldestAt, posts, read, additionalProperties)
             }
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Sample{newestAt=$newestAt, oldestAt=$oldestAt, posts=$posts, additionalProperties=$additionalProperties}"
+                "Sample{newestAt=$newestAt, oldestAt=$oldestAt, posts=$posts, read=$read, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {

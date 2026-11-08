@@ -9,6 +9,7 @@
     "postsPrivate": true,
     "sample": {
       "posts": 0,
+      "read": 0,
       "oldestAt": null,
       "newestAt": null
     },

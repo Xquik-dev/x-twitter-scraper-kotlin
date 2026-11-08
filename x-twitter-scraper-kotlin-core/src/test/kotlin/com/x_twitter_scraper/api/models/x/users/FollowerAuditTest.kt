@@ -40,6 +40,7 @@ internal class FollowerAuditTest {
 
         assertThat(parsed.account().userName()).isEqualTo("NASA")
         assertThat(parsed.account().sample().posts()).isEqualTo(20.0)
+        assertThat(parsed.account().sample().read()).isEqualTo(20.0)
         assertThat(parsed.coverage().total()).isEqualTo(92376187L)
         assertThat(parsed.quality().score()).isEqualTo(71L)
         assertThat(parsed.classes().first().percent()).isEqualTo(61.0)
@@ -283,6 +284,7 @@ internal class FollowerAuditTest {
                                 .newestAt(OffsetDateTime.parse("2026-11-02T22:12:05.000Z"))
                                 .oldestAt(OffsetDateTime.parse("2026-10-28T13:15:28.000Z"))
                                 .posts(20.0)
+                                .read(20.0)
                                 .build()
                         )
                         .topPostId("1852301447063109847")
