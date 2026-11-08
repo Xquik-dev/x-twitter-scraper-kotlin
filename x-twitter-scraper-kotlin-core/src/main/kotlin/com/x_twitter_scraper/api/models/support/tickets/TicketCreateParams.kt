@@ -253,7 +253,8 @@ private constructor(
          * .subject()
          * ```
          *
-         * @throws IllegalStateException if any required field is unset.
+         * @throws IllegalStateException if any required field is unset, or if `body` is blank and
+         *   no attachment is set.
          */
         fun build(): TicketCreateParams =
             TicketCreateParams(
@@ -430,15 +431,27 @@ private constructor(
              * .subject()
              * ```
              *
-             * @throws IllegalStateException if any required field is unset.
+             * @throws IllegalStateException if any required field is unset, or if `body` is blank
+             *   and no attachment is set.
              */
-            fun build(): Body =
-                Body(
-                    checkRequired("body", body),
-                    checkRequired("subject", subject),
-                    (attachments ?: MultipartField.of(JsonMissing.of())).map { it.toImmutable() },
-                    additionalProperties.toMutableMap(),
-                )
+            fun build(): Body {
+                val built =
+                    Body(
+                        checkRequired("body", body),
+                        checkRequired("subject", subject),
+                        (attachments ?: MultipartField.of(JsonMissing.of())).map {
+                            it.toImmutable()
+                        },
+                        additionalProperties.toMutableMap(),
+                    )
+                check(
+                    built.body.value.asString()?.isBlank() != true ||
+                        built.attachments.value.asKnown()?.isNotEmpty() == true
+                ) {
+                    "At least one of `body` or `attachments` must be set"
+                }
+                return built
+            }
         }
 
         private var validated: Boolean = false

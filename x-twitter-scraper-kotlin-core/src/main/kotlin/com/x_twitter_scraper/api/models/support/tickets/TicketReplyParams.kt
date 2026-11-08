@@ -225,7 +225,7 @@ private constructor(
          * .body()
          * ```
          *
-         * @throws IllegalStateException if any required field is unset.
+         * @throws IllegalStateException if any required field is unset, or if `body` is blank.
          */
         fun build(): TicketReplyParams =
             TicketReplyParams(
@@ -347,10 +347,13 @@ private constructor(
              * .body()
              * ```
              *
-             * @throws IllegalStateException if any required field is unset.
+             * @throws IllegalStateException if any required field is unset, or if `body` is blank.
              */
-            fun build(): Body =
-                Body(checkRequired("body", body), additionalProperties.toMutableMap())
+            fun build(): Body {
+                val text = checkRequired("body", body)
+                check(text.value.asString()?.isBlank() != true) { "`body` must not be blank" }
+                return Body(text, additionalProperties.toMutableMap())
+            }
         }
 
         private var validated: Boolean = false
