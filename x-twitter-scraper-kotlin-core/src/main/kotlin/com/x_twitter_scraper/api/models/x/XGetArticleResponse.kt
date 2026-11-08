@@ -17,6 +17,7 @@ import com.x_twitter_scraper.api.core.checkKnown
 import com.x_twitter_scraper.api.core.checkRequired
 import com.x_twitter_scraper.api.core.toImmutable
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
+import com.x_twitter_scraper.api.models.SearchTweet
 import java.util.Collections
 import java.util.Objects
 
@@ -201,6 +202,7 @@ private constructor(
         private val summaryText: JsonField<String>,
         private val title: JsonField<String>,
         private val viewCount: JsonField<Long>,
+        private val unknownCounts: JsonField<List<SearchTweet.UnknownCount>>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -258,6 +260,9 @@ private constructor(
             @JsonProperty("viewCount")
             @ExcludeMissing
             viewCount: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("unknownCounts")
+            @ExcludeMissing
+            unknownCounts: JsonField<List<SearchTweet.UnknownCount>> = JsonMissing.of(),
         ) : this(
             articleId,
             bodyMarkdown,
@@ -277,6 +282,7 @@ private constructor(
             summaryText,
             title,
             viewCount,
+            unknownCounts,
             mutableMapOf(),
         )
 
@@ -520,6 +526,24 @@ private constructor(
          */
         @JsonProperty("viewCount") @ExcludeMissing fun _viewCount(): JsonField<Long> = viewCount
 
+        /**
+         * X did not send these counts, so each 0 means unknown.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun unknownCounts(): List<SearchTweet.UnknownCount>? =
+            unknownCounts.getNullable("unknownCounts")
+
+        /**
+         * Returns the raw JSON value of [unknownCounts].
+         *
+         * Unlike [unknownCounts], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("unknownCounts")
+        @ExcludeMissing
+        fun _unknownCounts(): JsonField<List<SearchTweet.UnknownCount>> = unknownCounts
+
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
             additionalProperties.put(key, value)
@@ -559,6 +583,7 @@ private constructor(
             private var summaryText: JsonField<String> = JsonMissing.of()
             private var title: JsonField<String> = JsonMissing.of()
             private var viewCount: JsonField<Long> = JsonMissing.of()
+            private var unknownCounts: JsonField<MutableList<SearchTweet.UnknownCount>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(article: Article) = apply {
@@ -580,6 +605,7 @@ private constructor(
                 summaryText = article.summaryText
                 title = article.title
                 viewCount = article.viewCount
+                unknownCounts = article.unknownCounts.map { it.toMutableList() }
                 additionalProperties = article.additionalProperties.toMutableMap()
             }
 
@@ -716,6 +742,27 @@ private constructor(
             /** Sets [Builder.viewCount] to an arbitrary JSON value. */
             fun viewCount(viewCount: JsonField<Long>) = apply { this.viewCount = viewCount }
 
+            /** X did not send these counts, so each 0 means unknown. */
+            fun unknownCounts(unknownCounts: List<SearchTweet.UnknownCount>) =
+                unknownCounts(JsonField.of(unknownCounts))
+
+            /** Sets [Builder.unknownCounts] to an arbitrary JSON value. */
+            fun unknownCounts(unknownCounts: JsonField<List<SearchTweet.UnknownCount>>) = apply {
+                this.unknownCounts = unknownCounts.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [UnknownCount] to [unknownCounts].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addUnknownCount(unknownCount: SearchTweet.UnknownCount) = apply {
+                unknownCounts =
+                    (unknownCounts ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("unknownCounts", it).add(unknownCount)
+                    }
+            }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -760,6 +807,7 @@ private constructor(
                     summaryText,
                     title,
                     viewCount,
+                    (unknownCounts ?: JsonMissing.of()).map { it.toImmutable() },
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -798,6 +846,7 @@ private constructor(
             summaryText()
             title()
             viewCount()
+            unknownCounts()?.forEach { it.validate() }
             validated = true
         }
 
@@ -810,7 +859,8 @@ private constructor(
             }
 
         internal fun validity(): Int =
-            (if (articleId.asKnown() == null) 0 else 1) +
+            (unknownCounts.asKnown()?.sumOf { it.validity() } ?: 0) +
+                (if (articleId.asKnown() == null) 0 else 1) +
                 (if (bodyMarkdown.asKnown() == null) 0 else 1) +
                 (if (bodyText.asKnown() == null) 0 else 1) +
                 (if (bookmarkCount.asKnown() == null) 0 else 1) +
@@ -2546,6 +2596,7 @@ private constructor(
                 summaryText == other.summaryText &&
                 title == other.title &&
                 viewCount == other.viewCount &&
+                unknownCounts == other.unknownCounts &&
                 additionalProperties == other.additionalProperties
         }
 
@@ -2569,6 +2620,7 @@ private constructor(
                 summaryText,
                 title,
                 viewCount,
+                unknownCounts,
                 additionalProperties,
             )
         }
@@ -2576,7 +2628,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Article{articleId=$articleId, bodyMarkdown=$bodyMarkdown, bodyText=$bodyText, bookmarkCount=$bookmarkCount, contents=$contents, coverImageUrl=$coverImageUrl, coverMedia=$coverMedia, createdAt=$createdAt, lifecycleState=$lifecycleState, likeCount=$likeCount, metadata=$metadata, previewText=$previewText, quoteCount=$quoteCount, replyCount=$replyCount, retweetCount=$retweetCount, summaryText=$summaryText, title=$title, viewCount=$viewCount, additionalProperties=$additionalProperties}"
+            "Article{articleId=$articleId, bodyMarkdown=$bodyMarkdown, bodyText=$bodyText, bookmarkCount=$bookmarkCount, contents=$contents, coverImageUrl=$coverImageUrl, coverMedia=$coverMedia, createdAt=$createdAt, lifecycleState=$lifecycleState, likeCount=$likeCount, metadata=$metadata, previewText=$previewText, quoteCount=$quoteCount, replyCount=$replyCount, retweetCount=$retweetCount, summaryText=$summaryText, title=$title, viewCount=$viewCount, unknownCounts=$unknownCounts, additionalProperties=$additionalProperties}"
     }
 
     /** X Article author profile fields returned when available. */

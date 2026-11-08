@@ -5,6 +5,12 @@
 ### Features
 
 * Extraction tool types gain `USER_AFFILIATES`.
+* `x().tweets().search()` and `x().users().retrieveTweets()`, `retrieveReplies()` and `retrieveMedia()` take `topic` and `imageShows`, which keep only posts about a topic or posts whose photos show something. The page returns `topicFilter()` or `imageFilter()`, and each kept post returns `topicScore()` or `imageScore()`.
+* `extractions().run()` and `estimateCost()` take `topic` and `imageShows`, and each extraction job returns `topicFilter()` or `imageFilter()`.
+* `x().media().download()` takes `imageShows` and returns `imageFilter()`.
+* `x().users().retrieveFollowerAudit()` reads a follower audit of an account, with each follower's class, score and signals.
+* `x().users().retrieveInsights()` and `retrieveShadowban()` take `limit`, the number of recent posts to read.
+* Extraction results return `isDeleted()`, and `x().getArticle()` returns the article's `unknownCounts()`.
 
 ## 0.10.0 (2026-11-04)
 

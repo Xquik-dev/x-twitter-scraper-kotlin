@@ -17,6 +17,8 @@ import com.x_twitter_scraper.api.core.checkKnown
 import com.x_twitter_scraper.api.core.checkRequired
 import com.x_twitter_scraper.api.core.toImmutable
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
+import com.x_twitter_scraper.api.models.ImageFilterSummary
+import com.x_twitter_scraper.api.models.TopicFilterSummary
 import com.x_twitter_scraper.api.models.TweetMedia
 import java.time.OffsetDateTime
 import java.util.Collections
@@ -314,6 +316,8 @@ private constructor(
         private val toolType: JsonField<ToolType>,
         private val totalResults: JsonField<Long>,
         private val url: JsonField<String>,
+        private val topicFilter: JsonField<TopicFilterSummary>,
+        private val imageFilter: JsonField<ImageFilterSummary>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -346,6 +350,12 @@ private constructor(
             @ExcludeMissing
             totalResults: JsonField<Long> = JsonMissing.of(),
             @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("topicFilter")
+            @ExcludeMissing
+            topicFilter: JsonField<TopicFilterSummary> = JsonMissing.of(),
+            @JsonProperty("imageFilter")
+            @ExcludeMissing
+            imageFilter: JsonField<ImageFilterSummary> = JsonMissing.of(),
         ) : this(
             id,
             completedAt,
@@ -358,6 +368,8 @@ private constructor(
             toolType,
             totalResults,
             url,
+            topicFilter,
+            imageFilter,
             mutableMapOf(),
         )
 
@@ -520,6 +532,40 @@ private constructor(
          */
         @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
 
+        /**
+         * What the topic filter asked & how many posts it kept. Present when the request sent
+         * topic.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun topicFilter(): TopicFilterSummary? = topicFilter.getNullable("topicFilter")
+
+        /**
+         * Returns the raw JSON value of [topicFilter].
+         *
+         * Unlike [topicFilter], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("topicFilter")
+        @ExcludeMissing
+        fun _topicFilter(): JsonField<TopicFilterSummary> = topicFilter
+
+        /**
+         * What the image filter asked & how many posts it kept. Present when the request sent
+         * imageShows.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun imageFilter(): ImageFilterSummary? = imageFilter.getNullable("imageFilter")
+
+        /**
+         * Returns the raw JSON value of [imageFilter].
+         *
+         * Unlike [imageFilter], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("imageFilter")
+        @ExcludeMissing
+        fun _imageFilter(): JsonField<ImageFilterSummary> = imageFilter
+
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
             additionalProperties.put(key, value)
@@ -552,6 +598,8 @@ private constructor(
             private var toolType: JsonField<ToolType> = JsonMissing.of()
             private var totalResults: JsonField<Long> = JsonMissing.of()
             private var url: JsonField<String> = JsonMissing.of()
+            private var topicFilter: JsonField<TopicFilterSummary> = JsonMissing.of()
+            private var imageFilter: JsonField<ImageFilterSummary> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(job: Job) = apply {
@@ -566,6 +614,8 @@ private constructor(
                 toolType = job.toolType
                 totalResults = job.totalResults
                 url = job.url
+                topicFilter = job.topicFilter
+                imageFilter = job.imageFilter
                 additionalProperties = job.additionalProperties.toMutableMap()
             }
 
@@ -650,6 +700,30 @@ private constructor(
             /** Sets [Builder.url] to an arbitrary JSON value. */
             fun url(url: JsonField<String>) = apply { this.url = url }
 
+            /**
+             * What the topic filter asked & how many posts it kept. Present when the request sent
+             * topic.
+             */
+            fun topicFilter(topicFilter: TopicFilterSummary) =
+                topicFilter(JsonField.of(topicFilter))
+
+            /** Sets [Builder.topicFilter] to an arbitrary JSON value. */
+            fun topicFilter(topicFilter: JsonField<TopicFilterSummary>) = apply {
+                this.topicFilter = topicFilter
+            }
+
+            /**
+             * What the image filter asked & how many posts it kept. Present when the request sent
+             * imageShows.
+             */
+            fun imageFilter(imageFilter: ImageFilterSummary) =
+                imageFilter(JsonField.of(imageFilter))
+
+            /** Sets [Builder.imageFilter] to an arbitrary JSON value. */
+            fun imageFilter(imageFilter: JsonField<ImageFilterSummary>) = apply {
+                this.imageFilter = imageFilter
+            }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -687,6 +761,8 @@ private constructor(
                     toolType,
                     totalResults,
                     url,
+                    topicFilter,
+                    imageFilter,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -718,6 +794,8 @@ private constructor(
             toolType()?.validate()
             totalResults()
             url()
+            topicFilter()?.validate()
+            imageFilter()?.validate()
             validated = true
         }
 
@@ -730,7 +808,9 @@ private constructor(
             }
 
         internal fun validity(): Int =
-            (if (id.asKnown() == null) 0 else 1) +
+            (imageFilter.asKnown()?.validity() ?: 0) +
+                (topicFilter.asKnown()?.validity() ?: 0) +
+                (if (id.asKnown() == null) 0 else 1) +
                 (if (completedAt.asKnown() == null) 0 else 1) +
                 (completionReason.asKnown()?.validity() ?: 0) +
                 (if (createdAt.asKnown() == null) 0 else 1) +
@@ -1303,6 +1383,8 @@ private constructor(
                 toolType == other.toolType &&
                 totalResults == other.totalResults &&
                 url == other.url &&
+                topicFilter == other.topicFilter &&
+                imageFilter == other.imageFilter &&
                 additionalProperties == other.additionalProperties
         }
 
@@ -1319,6 +1401,8 @@ private constructor(
                 toolType,
                 totalResults,
                 url,
+                topicFilter,
+                imageFilter,
                 additionalProperties,
             )
         }
@@ -1326,7 +1410,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Job{id=$id, completedAt=$completedAt, completionReason=$completionReason, createdAt=$createdAt, effectiveResultsLimit=$effectiveResultsLimit, errorMessage=$errorMessage, resultsLimit=$resultsLimit, status=$status, toolType=$toolType, totalResults=$totalResults, url=$url, additionalProperties=$additionalProperties}"
+            "Job{id=$id, completedAt=$completedAt, completionReason=$completionReason, createdAt=$createdAt, effectiveResultsLimit=$effectiveResultsLimit, errorMessage=$errorMessage, resultsLimit=$resultsLimit, status=$status, toolType=$toolType, totalResults=$totalResults, url=$url, topicFilter=$topicFilter, imageFilter=$imageFilter, additionalProperties=$additionalProperties}"
     }
 
     /** A public row from any supported extraction mode. */
@@ -1359,6 +1443,7 @@ private constructor(
         private val quotedMedia: JsonField<List<TweetMedia>>,
         private val quotedPossiblySensitive: JsonField<Boolean>,
         private val quotedPost: JsonField<QuotedPost>,
+        private val isDeleted: JsonField<Boolean>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -1434,6 +1519,9 @@ private constructor(
             @JsonProperty("quotedPost")
             @ExcludeMissing
             quotedPost: JsonField<QuotedPost> = JsonMissing.of(),
+            @JsonProperty("isDeleted")
+            @ExcludeMissing
+            isDeleted: JsonField<Boolean> = JsonMissing.of(),
         ) : this(
             id,
             bookmarkCount,
@@ -1461,6 +1549,7 @@ private constructor(
             quotedMedia,
             quotedPossiblySensitive,
             quotedPost,
+            isDeleted,
             mutableMapOf(),
         )
 
@@ -1823,6 +1912,22 @@ private constructor(
         @ExcludeMissing
         fun _quotedPost(): JsonField<QuotedPost> = quotedPost
 
+        /**
+         * True on a post its author deleted from X after Xquik saw it, with outputPreset=flat.
+         * Default nested output uses enrichmentData.tweet.isDeleted. An account post list with a
+         * date range adds such posts from the last 30 days. Absent on every other row.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun isDeleted(): Boolean? = isDeleted.getNullable("isDeleted")
+
+        /**
+         * Returns the raw JSON value of [isDeleted].
+         *
+         * Unlike [isDeleted], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("isDeleted") @ExcludeMissing fun _isDeleted(): JsonField<Boolean> = isDeleted
+
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
             additionalProperties.put(key, value)
@@ -1870,6 +1975,7 @@ private constructor(
             private var quotedMedia: JsonField<MutableList<TweetMedia>>? = null
             private var quotedPossiblySensitive: JsonField<Boolean> = JsonMissing.of()
             private var quotedPost: JsonField<QuotedPost> = JsonMissing.of()
+            private var isDeleted: JsonField<Boolean> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(result: Result) = apply {
@@ -1899,6 +2005,7 @@ private constructor(
                 quotedMedia = result.quotedMedia.map { it.toMutableList() }
                 quotedPossiblySensitive = result.quotedPossiblySensitive
                 quotedPost = result.quotedPost
+                isDeleted = result.isDeleted
                 additionalProperties = result.additionalProperties.toMutableMap()
             }
 
@@ -2130,6 +2237,16 @@ private constructor(
                 this.quotedPost = quotedPost
             }
 
+            /**
+             * True on a post its author deleted from X after Xquik saw it, with outputPreset=flat.
+             * Default nested output uses enrichmentData.tweet.isDeleted. An account post list with
+             * a date range adds such posts from the last 30 days. Absent on every other row.
+             */
+            fun isDeleted(isDeleted: Boolean) = isDeleted(JsonField.of(isDeleted))
+
+            /** Sets [Builder.isDeleted] to an arbitrary JSON value. */
+            fun isDeleted(isDeleted: JsonField<Boolean>) = apply { this.isDeleted = isDeleted }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -2182,6 +2299,7 @@ private constructor(
                     (quotedMedia ?: JsonMissing.of()).map { it.toImmutable() },
                     quotedPossiblySensitive,
                     quotedPost,
+                    isDeleted,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -2228,6 +2346,7 @@ private constructor(
             quotedMedia()?.forEach { it.validate() }
             quotedPossiblySensitive()
             quotedPost()?.validate()
+            isDeleted()
             validated = true
         }
 
@@ -2240,7 +2359,8 @@ private constructor(
             }
 
         internal fun validity(): Int =
-            (if (id.asKnown() == null) 0 else 1) +
+            (if (isDeleted.asKnown() == null) 0 else 1) +
+                (if (id.asKnown() == null) 0 else 1) +
                 (if (bookmarkCount.asKnown() == null) 0 else 1) +
                 (if (createdAt.asKnown() == null) 0 else 1) +
                 (if (email.asKnown() == null) 0 else 1) +
@@ -2786,6 +2906,7 @@ private constructor(
                 quotedMedia == other.quotedMedia &&
                 quotedPossiblySensitive == other.quotedPossiblySensitive &&
                 quotedPost == other.quotedPost &&
+                isDeleted == other.isDeleted &&
                 additionalProperties == other.additionalProperties
         }
 
@@ -2817,6 +2938,7 @@ private constructor(
                 quotedMedia,
                 quotedPossiblySensitive,
                 quotedPost,
+                isDeleted,
                 additionalProperties,
             )
         }
@@ -2824,7 +2946,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Result{id=$id, bookmarkCount=$bookmarkCount, createdAt=$createdAt, email=$email, enrichmentData=$enrichmentData, likeCount=$likeCount, media=$media, quoteCount=$quoteCount, replyCount=$replyCount, retweetCount=$retweetCount, tweetCreatedAt=$tweetCreatedAt, tweetId=$tweetId, tweetText=$tweetText, tweetUrl=$tweetUrl, viewCount=$viewCount, xDisplayName=$xDisplayName, xFollowersCount=$xFollowersCount, xProfileImageUrl=$xProfileImageUrl, xUserId=$xUserId, xUsername=$xUsername, xVerified=$xVerified, verifiedType=$verifiedType, possiblySensitive=$possiblySensitive, quotedMedia=$quotedMedia, quotedPossiblySensitive=$quotedPossiblySensitive, quotedPost=$quotedPost, additionalProperties=$additionalProperties}"
+            "Result{id=$id, bookmarkCount=$bookmarkCount, createdAt=$createdAt, email=$email, enrichmentData=$enrichmentData, likeCount=$likeCount, media=$media, quoteCount=$quoteCount, replyCount=$replyCount, retweetCount=$retweetCount, tweetCreatedAt=$tweetCreatedAt, tweetId=$tweetId, tweetText=$tweetText, tweetUrl=$tweetUrl, viewCount=$viewCount, xDisplayName=$xDisplayName, xFollowersCount=$xFollowersCount, xProfileImageUrl=$xProfileImageUrl, xUserId=$xUserId, xUsername=$xUsername, xVerified=$xVerified, verifiedType=$verifiedType, possiblySensitive=$possiblySensitive, quotedMedia=$quotedMedia, quotedPossiblySensitive=$quotedPossiblySensitive, quotedPost=$quotedPost, isDeleted=$isDeleted, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

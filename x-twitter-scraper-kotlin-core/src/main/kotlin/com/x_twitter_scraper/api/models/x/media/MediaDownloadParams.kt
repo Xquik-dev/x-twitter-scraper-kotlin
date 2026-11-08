@@ -85,6 +85,24 @@ private constructor(
      */
     fun _tweetUrl(): JsonField<String> = body._tweetUrl()
 
+    /**
+     * Save only posts whose photos show this. Send charts, screenshots, product_photos, memes or
+     * people, or describe it in words, such as a rocket. AI-powered analysis checks posts with
+     * photos X doesn't mark sensitive & keeps scores of 0.5 or more. Each post saved costs 2
+     * credits, the AI analysis price, on top of its save price, & a post the filter drops costs
+     * nothing. imageFilter states the cutoff & counts.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun imageShows(): String? = body.imageShows()
+
+    /**
+     * Returns the raw JSON value of [imageShows].
+     *
+     * Unlike [imageShows], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _imageShows(): JsonField<String> = body._imageShows()
+
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     /** Additional headers to send with the request. */
@@ -149,6 +167,18 @@ private constructor(
 
         /** Sets [Builder.tweetUrl] to an arbitrary JSON value. */
         fun tweetUrl(tweetUrl: JsonField<String>) = apply { body.tweetUrl(tweetUrl) }
+
+        /**
+         * Save only posts whose photos show this. Send charts, screenshots, product_photos, memes
+         * or people, or describe it in words, such as a rocket. AI-powered analysis checks posts
+         * with photos X doesn't mark sensitive & keeps scores of 0.5 or more. Each post saved costs
+         * 2 credits, the AI analysis price, on top of its save price, & a post the filter drops
+         * costs nothing. imageFilter states the cutoff & counts.
+         */
+        fun imageShows(imageShows: String) = apply { body.imageShows(imageShows) }
+
+        /** Sets [Builder.imageShows] to an arbitrary JSON value. */
+        fun imageShows(imageShows: JsonField<String>) = apply { body.imageShows(imageShows) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -293,6 +323,7 @@ private constructor(
         private val tweetIds: JsonField<List<String>>,
         private val tweetInput: JsonField<String>,
         private val tweetUrl: JsonField<String>,
+        private val imageShows: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -308,7 +339,10 @@ private constructor(
             @JsonProperty("tweetUrl")
             @ExcludeMissing
             tweetUrl: JsonField<String> = JsonMissing.of(),
-        ) : this(tweetId, tweetIds, tweetInput, tweetUrl, mutableMapOf())
+            @JsonProperty("imageShows")
+            @ExcludeMissing
+            imageShows: JsonField<String> = JsonMissing.of(),
+        ) : this(tweetId, tweetIds, tweetInput, tweetUrl, imageShows, mutableMapOf())
 
         /**
          * Numeric tweet ID alias for tweetInput
@@ -370,6 +404,26 @@ private constructor(
          */
         @JsonProperty("tweetUrl") @ExcludeMissing fun _tweetUrl(): JsonField<String> = tweetUrl
 
+        /**
+         * Save only posts whose photos show this. Send charts, screenshots, product_photos, memes
+         * or people, or describe it in words, such as a rocket. AI-powered analysis checks posts
+         * with photos X doesn't mark sensitive & keeps scores of 0.5 or more. Each post saved costs
+         * 2 credits, the AI analysis price, on top of its save price, & a post the filter drops
+         * costs nothing. imageFilter states the cutoff & counts.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun imageShows(): String? = imageShows.getNullable("imageShows")
+
+        /**
+         * Returns the raw JSON value of [imageShows].
+         *
+         * Unlike [imageShows], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("imageShows")
+        @ExcludeMissing
+        fun _imageShows(): JsonField<String> = imageShows
+
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
             additionalProperties.put(key, value)
@@ -395,6 +449,7 @@ private constructor(
             private var tweetIds: JsonField<MutableList<String>>? = null
             private var tweetInput: JsonField<String> = JsonMissing.of()
             private var tweetUrl: JsonField<String> = JsonMissing.of()
+            private var imageShows: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(body: Body) = apply {
@@ -402,6 +457,7 @@ private constructor(
                 tweetIds = body.tweetIds.map { it.toMutableList() }
                 tweetInput = body.tweetInput
                 tweetUrl = body.tweetUrl
+                imageShows = body.imageShows
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
@@ -443,6 +499,18 @@ private constructor(
             /** Sets [Builder.tweetUrl] to an arbitrary JSON value. */
             fun tweetUrl(tweetUrl: JsonField<String>) = apply { this.tweetUrl = tweetUrl }
 
+            /**
+             * Save only posts whose photos show this. Send charts, screenshots, product_photos,
+             * memes or people, or describe it in words, such as a rocket. AI-powered analysis
+             * checks posts with photos X doesn't mark sensitive & keeps scores of 0.5 or more. Each
+             * post saved costs 2 credits, the AI analysis price, on top of its save price, & a post
+             * the filter drops costs nothing. imageFilter states the cutoff & counts.
+             */
+            fun imageShows(imageShows: String) = imageShows(JsonField.of(imageShows))
+
+            /** Sets [Builder.imageShows] to an arbitrary JSON value. */
+            fun imageShows(imageShows: JsonField<String>) = apply { this.imageShows = imageShows }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -473,6 +541,7 @@ private constructor(
                     (tweetIds ?: JsonMissing.of()).map { it.toImmutable() },
                     tweetInput,
                     tweetUrl,
+                    imageShows,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -497,6 +566,7 @@ private constructor(
             tweetIds()
             tweetInput()
             tweetUrl()
+            imageShows()
             validated = true
         }
 
@@ -509,7 +579,8 @@ private constructor(
             }
 
         internal fun validity(): Int =
-            (if (tweetId.asKnown() == null) 0 else 1) +
+            (if (imageShows.asKnown() == null) 0 else 1) +
+                (if (tweetId.asKnown() == null) 0 else 1) +
                 (tweetIds.asKnown()?.size ?: 0) +
                 (if (tweetInput.asKnown() == null) 0 else 1) +
                 (if (tweetUrl.asKnown() == null) 0 else 1)
@@ -524,17 +595,18 @@ private constructor(
                 tweetIds == other.tweetIds &&
                 tweetInput == other.tweetInput &&
                 tweetUrl == other.tweetUrl &&
+                imageShows == other.imageShows &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(tweetId, tweetIds, tweetInput, tweetUrl, additionalProperties)
+            Objects.hash(tweetId, tweetIds, tweetInput, tweetUrl, imageShows, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{tweetId=$tweetId, tweetIds=$tweetIds, tweetInput=$tweetInput, tweetUrl=$tweetUrl, additionalProperties=$additionalProperties}"
+            "Body{tweetId=$tweetId, tweetIds=$tweetIds, tweetInput=$tweetInput, tweetUrl=$tweetUrl, imageShows=$imageShows, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

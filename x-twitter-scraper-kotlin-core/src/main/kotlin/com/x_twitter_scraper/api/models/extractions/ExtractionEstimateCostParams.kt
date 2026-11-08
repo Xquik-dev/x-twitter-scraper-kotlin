@@ -1473,6 +1473,41 @@ private constructor(
      */
     fun _withinTime(): JsonField<String> = body._withinTime()
 
+    /**
+     * Keep only the posts about this topic, such as the Rust programming language. Each post the
+     * job reads is checked, only matching posts are stored, & each stored post costs 2 credits
+     * instead of its read price. A post the filter drops costs nothing. resultsLimit caps the posts
+     * read & checked. Works with tools that return posts. Send topic or imageShows, not both.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun topic(): String? = body.topic()
+
+    /**
+     * Returns the raw JSON value of [topic].
+     *
+     * Unlike [topic], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _topic(): JsonField<String> = body._topic()
+
+    /**
+     * Keep only the posts whose photos show this. Use charts, screenshots, product_photos, memes or
+     * people, or describe it in your own words. Each post with a safe photo is checked, & each
+     * stored post costs 2 credits instead of its read price. Posts without a safe photo aren't
+     * checked, billed or stored, & a post the filter drops costs nothing. resultsLimit caps the
+     * posts read. Works with tools that return posts. Send topic or imageShows, not both.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun imageShows(): String? = body.imageShows()
+
+    /**
+     * Returns the raw JSON value of [imageShows].
+     *
+     * Unlike [imageShows], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _imageShows(): JsonField<String> = body._imageShows()
+
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     /** Additional headers to send with the request. */
@@ -2326,6 +2361,31 @@ private constructor(
         /** Sets [Builder.withinTime] to an arbitrary JSON value. */
         fun withinTime(withinTime: JsonField<String>) = apply { body.withinTime(withinTime) }
 
+        /**
+         * Keep only the posts about this topic, such as the Rust programming language. Each post
+         * the job reads is checked, only matching posts are stored, & each stored post costs 2
+         * credits instead of its read price. A post the filter drops costs nothing. resultsLimit
+         * caps the posts read & checked. Works with tools that return posts. Send topic or
+         * imageShows, not both.
+         */
+        fun topic(topic: String) = apply { body.topic(topic) }
+
+        /** Sets [Builder.topic] to an arbitrary JSON value. */
+        fun topic(topic: JsonField<String>) = apply { body.topic(topic) }
+
+        /**
+         * Keep only the posts whose photos show this. Use charts, screenshots, product_photos,
+         * memes or people, or describe it in your own words. Each post with a safe photo is
+         * checked, & each stored post costs 2 credits instead of its read price. Posts without a
+         * safe photo aren't checked, billed or stored, & a post the filter drops costs nothing.
+         * resultsLimit caps the posts read. Works with tools that return posts. Send topic or
+         * imageShows, not both.
+         */
+        fun imageShows(imageShows: String) = apply { body.imageShows(imageShows) }
+
+        /** Sets [Builder.imageShows] to an arbitrary JSON value. */
+        fun imageShows(imageShows: JsonField<String>) = apply { body.imageShows(imageShows) }
+
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
         }
@@ -2574,6 +2634,8 @@ private constructor(
         private val verifiedType: JsonField<String>,
         private val within: JsonField<String>,
         private val withinTime: JsonField<String>,
+        private val topic: JsonField<String>,
+        private val imageShows: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -2838,6 +2900,10 @@ private constructor(
             @JsonProperty("withinTime")
             @ExcludeMissing
             withinTime: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("topic") @ExcludeMissing topic: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("imageShows")
+            @ExcludeMissing
+            imageShows: JsonField<String> = JsonMissing.of(),
         ) : this(
             toolType,
             advancedQuery,
@@ -2940,6 +3006,8 @@ private constructor(
             verifiedType,
             within,
             withinTime,
+            topic,
+            imageShows,
             mutableMapOf(),
         )
 
@@ -4535,6 +4603,45 @@ private constructor(
         @ExcludeMissing
         fun _withinTime(): JsonField<String> = withinTime
 
+        /**
+         * Keep only the posts about this topic, such as the Rust programming language. Each post
+         * the job reads is checked, only matching posts are stored, & each stored post costs 2
+         * credits instead of its read price. A post the filter drops costs nothing. resultsLimit
+         * caps the posts read & checked. Works with tools that return posts. Send topic or
+         * imageShows, not both.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun topic(): String? = topic.getNullable("topic")
+
+        /**
+         * Returns the raw JSON value of [topic].
+         *
+         * Unlike [topic], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("topic") @ExcludeMissing fun _topic(): JsonField<String> = topic
+
+        /**
+         * Keep only the posts whose photos show this. Use charts, screenshots, product_photos,
+         * memes or people, or describe it in your own words. Each post with a safe photo is
+         * checked, & each stored post costs 2 credits instead of its read price. Posts without a
+         * safe photo aren't checked, billed or stored, & a post the filter drops costs nothing.
+         * resultsLimit caps the posts read. Works with tools that return posts. Send topic or
+         * imageShows, not both.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun imageShows(): String? = imageShows.getNullable("imageShows")
+
+        /**
+         * Returns the raw JSON value of [imageShows].
+         *
+         * Unlike [imageShows], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("imageShows")
+        @ExcludeMissing
+        fun _imageShows(): JsonField<String> = imageShows
+
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
             additionalProperties.put(key, value)
@@ -4664,6 +4771,8 @@ private constructor(
             private var verifiedType: JsonField<String> = JsonMissing.of()
             private var within: JsonField<String> = JsonMissing.of()
             private var withinTime: JsonField<String> = JsonMissing.of()
+            private var topic: JsonField<String> = JsonMissing.of()
+            private var imageShows: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(body: Body) = apply {
@@ -4768,6 +4877,8 @@ private constructor(
                 verifiedType = body.verifiedType
                 within = body.within
                 withinTime = body.withinTime
+                topic = body.topic
+                imageShows = body.imageShows
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
@@ -5635,6 +5746,31 @@ private constructor(
             /** Sets [Builder.withinTime] to an arbitrary JSON value. */
             fun withinTime(withinTime: JsonField<String>) = apply { this.withinTime = withinTime }
 
+            /**
+             * Keep only the posts about this topic, such as the Rust programming language. Each
+             * post the job reads is checked, only matching posts are stored, & each stored post
+             * costs 2 credits instead of its read price. A post the filter drops costs nothing.
+             * resultsLimit caps the posts read & checked. Works with tools that return posts. Send
+             * topic or imageShows, not both.
+             */
+            fun topic(topic: String) = topic(JsonField.of(topic))
+
+            /** Sets [Builder.topic] to an arbitrary JSON value. */
+            fun topic(topic: JsonField<String>) = apply { this.topic = topic }
+
+            /**
+             * Keep only the posts whose photos show this. Use charts, screenshots, product_photos,
+             * memes or people, or describe it in your own words. Each post with a safe photo is
+             * checked, & each stored post costs 2 credits instead of its read price. Posts without
+             * a safe photo aren't checked, billed or stored, & a post the filter drops costs
+             * nothing. resultsLimit caps the posts read. Works with tools that return posts. Send
+             * topic or imageShows, not both.
+             */
+            fun imageShows(imageShows: String) = imageShows(JsonField.of(imageShows))
+
+            /** Sets [Builder.imageShows] to an arbitrary JSON value. */
+            fun imageShows(imageShows: JsonField<String>) = apply { this.imageShows = imageShows }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -5769,6 +5905,8 @@ private constructor(
                     verifiedType,
                     within,
                     withinTime,
+                    topic,
+                    imageShows,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -5890,6 +6028,8 @@ private constructor(
             verifiedType()
             within()
             withinTime()
+            topic()
+            imageShows()
             validated = true
         }
 
@@ -5902,7 +6042,9 @@ private constructor(
             }
 
         internal fun validity(): Int =
-            (toolType.asKnown()?.validity() ?: 0) +
+            (if (imageShows.asKnown() == null) 0 else 1) +
+                (if (topic.asKnown() == null) 0 else 1) +
+                (toolType.asKnown()?.validity() ?: 0) +
                 (if (advancedQuery.asKnown() == null) 0 else 1) +
                 (if (anyWords.asKnown() == null) 0 else 1) +
                 (if (bioContains.asKnown() == null) 0 else 1) +
@@ -6111,6 +6253,8 @@ private constructor(
                 verifiedType == other.verifiedType &&
                 within == other.within &&
                 withinTime == other.withinTime &&
+                topic == other.topic &&
+                imageShows == other.imageShows &&
                 additionalProperties == other.additionalProperties
         }
 
@@ -6217,6 +6361,8 @@ private constructor(
                 verifiedType,
                 within,
                 withinTime,
+                topic,
+                imageShows,
                 additionalProperties,
             )
         }
@@ -6224,7 +6370,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{toolType=$toolType, advancedQuery=$advancedQuery, anyWords=$anyWords, bioContains=$bioContains, blueVerifiedOnly=$blueVerifiedOnly, boundingBox=$boundingBox, businessEmailOnly=$businessEmailOnly, cardName=$cardName, cashtags=$cashtags, collectionStrategy=$collectionStrategy, conversationId=$conversationId, dedupeAcrossTargets=$dedupeAcrossTargets, dedupeMode=$dedupeMode, emailDomains=$emailDomains, enrichProfiles=$enrichProfiles, exactPhrase=$exactPhrase, excludeOriginalAuthor=$excludeOriginalAuthor, excludeSource=$excludeSource, excludeWords=$excludeWords, fromUser=$fromUser, geocode=$geocode, hasEmail=$hasEmail, hasLocation=$hasLocation, hasMediaOnly=$hasMediaOnly, hasWebsite=$hasWebsite, hashtags=$hashtags, inReplyToTweetId=$inReplyToTweetId, includeOriginalPost=$includeOriginalPost, includeSearchTerms=$includeSearchTerms, includeTargetMetadata=$includeTargetMetadata, language=$language, listId=$listId, locationContains=$locationContains, maxDepth=$maxDepth, maxFollowers=$maxFollowers, maxFollowing=$maxFollowing, maxId=$maxId, maxItemsPerTarget=$maxItemsPerTarget, maxLikes=$maxLikes, maxPagesPerTarget=$maxPagesPerTarget, maxPosts=$maxPosts, maxQuotes=$maxQuotes, maxReplies=$maxReplies, maxRetweets=$maxRetweets, mediaType=$mediaType, mentioning=$mentioning, minAccountAgeDays=$minAccountAgeDays, minBookmarks=$minBookmarks, minFaves=$minFaves, minFollowers=$minFollowers, minFollowing=$minFollowing, minPosts=$minPosts, minQuotes=$minQuotes, minReplies=$minReplies, minRetweets=$minRetweets, minViews=$minViews, nativeRetweets=$nativeRetweets, near=$near, news=$news, overlapMode=$overlapMode, place=$place, placeCountry=$placeCountry, pointRadius=$pointRadius, queryType=$queryType, quotes=$quotes, quotesOfTweetId=$quotesOfTweetId, relationTargets=$relationTargets, replies=$replies, resultsLimit=$resultsLimit, retweets=$retweets, retweetsOfTweetId=$retweetsOfTweetId, safe=$safe, scope=$scope, searchQueries=$searchQueries, searchQuery=$searchQuery, sinceDate=$sinceDate, sinceId=$sinceId, textOnlyTerms=$textOnlyTerms, sinceTime=$sinceTime, sort=$sort, source=$source, startCursor=$startCursor, targetCommunityId=$targetCommunityId, targetCommunityIds=$targetCommunityIds, targetListId=$targetListId, targetListIds=$targetListIds, targetSpaceId=$targetSpaceId, targetTweetId=$targetTweetId, targetTweetIds=$targetTweetIds, targetUsername=$targetUsername, targetUsernames=$targetUsernames, targets=$targets, toUser=$toUser, untilDate=$untilDate, untilTime=$untilTime, url=$url, usernameContains=$usernameContains, verifiedOnly=$verifiedOnly, verifiedType=$verifiedType, within=$within, withinTime=$withinTime, additionalProperties=$additionalProperties}"
+            "Body{toolType=$toolType, advancedQuery=$advancedQuery, anyWords=$anyWords, bioContains=$bioContains, blueVerifiedOnly=$blueVerifiedOnly, boundingBox=$boundingBox, businessEmailOnly=$businessEmailOnly, cardName=$cardName, cashtags=$cashtags, collectionStrategy=$collectionStrategy, conversationId=$conversationId, dedupeAcrossTargets=$dedupeAcrossTargets, dedupeMode=$dedupeMode, emailDomains=$emailDomains, enrichProfiles=$enrichProfiles, exactPhrase=$exactPhrase, excludeOriginalAuthor=$excludeOriginalAuthor, excludeSource=$excludeSource, excludeWords=$excludeWords, fromUser=$fromUser, geocode=$geocode, hasEmail=$hasEmail, hasLocation=$hasLocation, hasMediaOnly=$hasMediaOnly, hasWebsite=$hasWebsite, hashtags=$hashtags, inReplyToTweetId=$inReplyToTweetId, includeOriginalPost=$includeOriginalPost, includeSearchTerms=$includeSearchTerms, includeTargetMetadata=$includeTargetMetadata, language=$language, listId=$listId, locationContains=$locationContains, maxDepth=$maxDepth, maxFollowers=$maxFollowers, maxFollowing=$maxFollowing, maxId=$maxId, maxItemsPerTarget=$maxItemsPerTarget, maxLikes=$maxLikes, maxPagesPerTarget=$maxPagesPerTarget, maxPosts=$maxPosts, maxQuotes=$maxQuotes, maxReplies=$maxReplies, maxRetweets=$maxRetweets, mediaType=$mediaType, mentioning=$mentioning, minAccountAgeDays=$minAccountAgeDays, minBookmarks=$minBookmarks, minFaves=$minFaves, minFollowers=$minFollowers, minFollowing=$minFollowing, minPosts=$minPosts, minQuotes=$minQuotes, minReplies=$minReplies, minRetweets=$minRetweets, minViews=$minViews, nativeRetweets=$nativeRetweets, near=$near, news=$news, overlapMode=$overlapMode, place=$place, placeCountry=$placeCountry, pointRadius=$pointRadius, queryType=$queryType, quotes=$quotes, quotesOfTweetId=$quotesOfTweetId, relationTargets=$relationTargets, replies=$replies, resultsLimit=$resultsLimit, retweets=$retweets, retweetsOfTweetId=$retweetsOfTweetId, safe=$safe, scope=$scope, searchQueries=$searchQueries, searchQuery=$searchQuery, sinceDate=$sinceDate, sinceId=$sinceId, textOnlyTerms=$textOnlyTerms, sinceTime=$sinceTime, sort=$sort, source=$source, startCursor=$startCursor, targetCommunityId=$targetCommunityId, targetCommunityIds=$targetCommunityIds, targetListId=$targetListId, targetListIds=$targetListIds, targetSpaceId=$targetSpaceId, targetTweetId=$targetTweetId, targetTweetIds=$targetTweetIds, targetUsername=$targetUsername, targetUsernames=$targetUsernames, targets=$targets, toUser=$toUser, untilDate=$untilDate, untilTime=$untilTime, url=$url, usernameContains=$usernameContains, verifiedOnly=$verifiedOnly, verifiedType=$verifiedType, within=$within, withinTime=$withinTime, topic=$topic, imageShows=$imageShows, additionalProperties=$additionalProperties}"
     }
 
     /** Identifier for the extraction tool used to run a job. */

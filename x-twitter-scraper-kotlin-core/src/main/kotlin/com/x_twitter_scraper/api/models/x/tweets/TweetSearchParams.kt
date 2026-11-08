@@ -82,6 +82,8 @@ private constructor(
     private val verifiedOnly: Boolean?,
     private val within: String?,
     private val withinTime: String?,
+    private val topic: String?,
+    private val imageShows: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -338,6 +340,24 @@ private constructor(
     /** Keeps Tweets from a recent window, such as 90m or 7d. Use a whole number & s, m, h or d. */
     fun withinTime(): String? = withinTime
 
+    /**
+     * Keep only posts about this topic, such as the Rust programming language. AI-powered analysis
+     * asks of each post whether it is about the topic & keeps scores of 0.5 or more. It reads post
+     * text & safe photos. Each kept post costs 2 credits, the AI analysis price, instead of the
+     * read price, & a post the filter drops costs nothing. limit counts checked posts, & only kept
+     * posts come back. topicFilter states the cutoff & counts.
+     */
+    fun topic(): String? = topic
+
+    /**
+     * Keep only posts whose photos show this. Send charts, screenshots, product_photos, memes or
+     * people, or describe it in words, such as a rocket. AI-powered analysis checks posts with
+     * photos X doesn't mark sensitive & keeps scores of 0.5 or more. Other posts stay out at no
+     * charge. Each kept post costs 2 credits, the AI analysis price, instead of the read price, & a
+     * post the filter drops costs nothing. imageFilter states the cutoff & counts.
+     */
+    fun imageShows(): String? = imageShows
+
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -417,6 +437,8 @@ private constructor(
         private var verifiedOnly: Boolean? = null
         private var within: String? = null
         private var withinTime: String? = null
+        private var topic: String? = null
+        private var imageShows: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -483,6 +505,8 @@ private constructor(
             verifiedOnly = tweetSearchParams.verifiedOnly
             within = tweetSearchParams.within
             withinTime = tweetSearchParams.withinTime
+            topic = tweetSearchParams.topic
+            imageShows = tweetSearchParams.imageShows
             additionalHeaders = tweetSearchParams.additionalHeaders.toBuilder()
             additionalQueryParams = tweetSearchParams.additionalQueryParams.toBuilder()
         }
@@ -810,6 +834,24 @@ private constructor(
          */
         fun withinTime(withinTime: String?) = apply { this.withinTime = withinTime }
 
+        /**
+         * Keep only posts about this topic, such as the Rust programming language. AI-powered
+         * analysis asks of each post whether it is about the topic & keeps scores of 0.5 or more.
+         * It reads post text & safe photos. Each kept post costs 2 credits, the AI analysis price,
+         * instead of the read price, & a post the filter drops costs nothing. limit counts checked
+         * posts, & only kept posts come back. topicFilter states the cutoff & counts.
+         */
+        fun topic(topic: String?) = apply { this.topic = topic }
+
+        /**
+         * Keep only posts whose photos show this. Send charts, screenshots, product_photos, memes
+         * or people, or describe it in words, such as a rocket. AI-powered analysis checks posts
+         * with photos X doesn't mark sensitive & keeps scores of 0.5 or more. Other posts stay out
+         * at no charge. Each kept post costs 2 credits, the AI analysis price, instead of the read
+         * price, & a post the filter drops costs nothing. imageFilter states the cutoff & counts.
+         */
+        fun imageShows(imageShows: String?) = apply { this.imageShows = imageShows }
+
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
             putAllAdditionalHeaders(additionalHeaders)
@@ -977,6 +1019,8 @@ private constructor(
                 verifiedOnly,
                 within,
                 withinTime,
+                topic,
+                imageShows,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -1049,6 +1093,8 @@ private constructor(
                 verifiedOnly?.let { put("verifiedOnly", it.toString()) }
                 within?.let { put("within", it) }
                 withinTime?.let { put("withinTime", it) }
+                topic?.let { put("topic", it) }
+                imageShows?.let { put("imageShows", it) }
                 putAll(additionalQueryParams)
             }
             .build()
@@ -1854,6 +1900,8 @@ private constructor(
             verifiedOnly == other.verifiedOnly &&
             within == other.within &&
             withinTime == other.withinTime &&
+            topic == other.topic &&
+            imageShows == other.imageShows &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
@@ -1922,10 +1970,12 @@ private constructor(
             verifiedOnly,
             within,
             withinTime,
+            topic,
+            imageShows,
             additionalHeaders,
             additionalQueryParams,
         )
 
     override fun toString() =
-        "TweetSearchParams{q=$q, advancedQuery=$advancedQuery, anyWords=$anyWords, blueVerifiedOnly=$blueVerifiedOnly, boundingBox=$boundingBox, cardName=$cardName, cashtags=$cashtags, conversationId=$conversationId, cursor=$cursor, exactPhrase=$exactPhrase, excludeSource=$excludeSource, excludeWords=$excludeWords, fields=$fields, fromUser=$fromUser, geocode=$geocode, hashtags=$hashtags, inReplyToTweetId=$inReplyToTweetId, keywords=$keywords, language=$language, limit=$limit, listId=$listId, maxFaves=$maxFaves, maxId=$maxId, maxQuotes=$maxQuotes, maxReplies=$maxReplies, maxRetweets=$maxRetweets, mediaType=$mediaType, mentioning=$mentioning, minBookmarks=$minBookmarks, minFaves=$minFaves, minLikes=$minLikes, minQuotes=$minQuotes, minReplies=$minReplies, minRetweets=$minRetweets, minViews=$minViews, mode=$mode, nativeRetweets=$nativeRetweets, near=$near, news=$news, omit=$omit, place=$place, placeCountry=$placeCountry, pointRadius=$pointRadius, queryType=$queryType, quotes=$quotes, quotesOfTweetId=$quotesOfTweetId, replies=$replies, retweets=$retweets, retweetsOfTweetId=$retweetsOfTweetId, safe=$safe, sinceDate=$sinceDate, sinceId=$sinceId, sinceTime=$sinceTime, textOnlyTerms=$textOnlyTerms, source=$source, toUser=$toUser, untilDate=$untilDate, untilTime=$untilTime, url=$url, verifiedOnly=$verifiedOnly, within=$within, withinTime=$withinTime, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "TweetSearchParams{q=$q, advancedQuery=$advancedQuery, anyWords=$anyWords, blueVerifiedOnly=$blueVerifiedOnly, boundingBox=$boundingBox, cardName=$cardName, cashtags=$cashtags, conversationId=$conversationId, cursor=$cursor, exactPhrase=$exactPhrase, excludeSource=$excludeSource, excludeWords=$excludeWords, fields=$fields, fromUser=$fromUser, geocode=$geocode, hashtags=$hashtags, inReplyToTweetId=$inReplyToTweetId, keywords=$keywords, language=$language, limit=$limit, listId=$listId, maxFaves=$maxFaves, maxId=$maxId, maxQuotes=$maxQuotes, maxReplies=$maxReplies, maxRetweets=$maxRetweets, mediaType=$mediaType, mentioning=$mentioning, minBookmarks=$minBookmarks, minFaves=$minFaves, minLikes=$minLikes, minQuotes=$minQuotes, minReplies=$minReplies, minRetweets=$minRetweets, minViews=$minViews, mode=$mode, nativeRetweets=$nativeRetweets, near=$near, news=$news, omit=$omit, place=$place, placeCountry=$placeCountry, pointRadius=$pointRadius, queryType=$queryType, quotes=$quotes, quotesOfTweetId=$quotesOfTweetId, replies=$replies, retweets=$retweets, retweetsOfTweetId=$retweetsOfTweetId, safe=$safe, sinceDate=$sinceDate, sinceId=$sinceId, sinceTime=$sinceTime, textOnlyTerms=$textOnlyTerms, source=$source, toUser=$toUser, untilDate=$untilDate, untilTime=$untilTime, url=$url, verifiedOnly=$verifiedOnly, within=$within, withinTime=$withinTime, topic=$topic, imageShows=$imageShows, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
