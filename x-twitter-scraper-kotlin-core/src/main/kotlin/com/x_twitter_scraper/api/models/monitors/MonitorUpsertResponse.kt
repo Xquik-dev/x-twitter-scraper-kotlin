@@ -1,0 +1,534 @@
+// SPDX-FileCopyrightText: 2026 Xquik contributors
+//
+// SPDX-License-Identifier: Apache-2.0
+
+package com.x_twitter_scraper.api.models.monitors
+
+import com.fasterxml.jackson.annotation.JsonAnyGetter
+import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.x_twitter_scraper.api.core.ExcludeMissing
+import com.x_twitter_scraper.api.core.JsonField
+import com.x_twitter_scraper.api.core.JsonMissing
+import com.x_twitter_scraper.api.core.JsonValue
+import com.x_twitter_scraper.api.core.checkKnown
+import com.x_twitter_scraper.api.core.checkRequired
+import com.x_twitter_scraper.api.core.toImmutable
+import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
+import com.x_twitter_scraper.api.models.EventType
+import java.time.OffsetDateTime
+import java.util.Collections
+import java.util.Objects
+
+/** The monitor this call created or updated. */
+class MonitorUpsertResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
+private constructor(
+    private val id: JsonField<String>,
+    private val createdAt: JsonField<OffsetDateTime>,
+    private val eventTypes: JsonField<List<EventType>>,
+    private val isActive: JsonField<Boolean>,
+    private val nextBillingAt: JsonField<OffsetDateTime>,
+    private val username: JsonField<String>,
+    private val xUserId: JsonField<String>,
+    private val created: JsonField<Boolean>,
+    private val name: JsonField<String>,
+    private val pausedAt: JsonField<OffsetDateTime>,
+    private val pausedReason: JsonField<Monitor.PausedReason>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
+) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("createdAt")
+        @ExcludeMissing
+        createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("eventTypes")
+        @ExcludeMissing
+        eventTypes: JsonField<List<EventType>> = JsonMissing.of(),
+        @JsonProperty("isActive") @ExcludeMissing isActive: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("nextBillingAt")
+        @ExcludeMissing
+        nextBillingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("username") @ExcludeMissing username: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("xUserId") @ExcludeMissing xUserId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("created") @ExcludeMissing created: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("pausedAt")
+        @ExcludeMissing
+        pausedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("pausedReason")
+        @ExcludeMissing
+        pausedReason: JsonField<Monitor.PausedReason> = JsonMissing.of(),
+    ) : this(
+        id,
+        createdAt,
+        eventTypes,
+        isActive,
+        nextBillingAt,
+        username,
+        xUserId,
+        created,
+        name,
+        pausedAt,
+        pausedReason,
+        mutableMapOf(),
+    )
+
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null.
+     */
+    fun id(): String = id.getRequired("id")
+
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null.
+     */
+    fun createdAt(): OffsetDateTime = createdAt.getRequired("createdAt")
+
+    /**
+     * Array of event types to subscribe to.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null.
+     */
+    fun eventTypes(): List<EventType> = eventTypes.getRequired("eventTypes")
+
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null.
+     */
+    fun isActive(): Boolean = isActive.getRequired("isActive")
+
+    /**
+     * Next hourly credit charge time for this account monitorUpsertResponse.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null.
+     */
+    fun nextBillingAt(): OffsetDateTime = nextBillingAt.getRequired("nextBillingAt")
+
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null.
+     */
+    fun username(): String = username.getRequired("username")
+
+    /**
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null.
+     */
+    fun xUserId(): String = xUserId.getRequired("xUserId")
+
+    /**
+     * True when this call created the monitor or turned it back on, false when it updated a running
+     * monitor.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null.
+     */
+    fun created(): Boolean = created.getRequired("created")
+
+    /**
+     * Customer-set label of the account monitor, when set.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun name(): String? = name.getNullable("name")
+
+    /**
+     * When Xquik automatically paused this monitorUpsertResponse.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun pausedAt(): OffsetDateTime? = pausedAt.getNullable("pausedAt")
+
+    /**
+     * Why Xquik automatically paused this monitorUpsertResponse.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun pausedReason(): Monitor.PausedReason? = pausedReason.getNullable("pausedReason")
+
+    /**
+     * Returns the raw JSON value of [id].
+     *
+     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+    /**
+     * Returns the raw JSON value of [createdAt].
+     *
+     * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("createdAt")
+    @ExcludeMissing
+    fun _createdAt(): JsonField<OffsetDateTime> = createdAt
+
+    /**
+     * Returns the raw JSON value of [eventTypes].
+     *
+     * Unlike [eventTypes], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("eventTypes")
+    @ExcludeMissing
+    fun _eventTypes(): JsonField<List<EventType>> = eventTypes
+
+    /**
+     * Returns the raw JSON value of [isActive].
+     *
+     * Unlike [isActive], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("isActive") @ExcludeMissing fun _isActive(): JsonField<Boolean> = isActive
+
+    /**
+     * Returns the raw JSON value of [nextBillingAt].
+     *
+     * Unlike [nextBillingAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("nextBillingAt")
+    @ExcludeMissing
+    fun _nextBillingAt(): JsonField<OffsetDateTime> = nextBillingAt
+
+    /**
+     * Returns the raw JSON value of [username].
+     *
+     * Unlike [username], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("username") @ExcludeMissing fun _username(): JsonField<String> = username
+
+    /**
+     * Returns the raw JSON value of [xUserId].
+     *
+     * Unlike [xUserId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("xUserId") @ExcludeMissing fun _xUserId(): JsonField<String> = xUserId
+
+    /**
+     * Returns the raw JSON value of [created].
+     *
+     * Unlike [created], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("created") @ExcludeMissing fun _created(): JsonField<Boolean> = created
+
+    /**
+     * Returns the raw JSON value of [name].
+     *
+     * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+    /**
+     * Returns the raw JSON value of [pausedAt].
+     *
+     * Unlike [pausedAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("pausedAt") @ExcludeMissing fun _pausedAt(): JsonField<OffsetDateTime> = pausedAt
+
+    /**
+     * Returns the raw JSON value of [pausedReason].
+     *
+     * Unlike [pausedReason], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("pausedReason")
+    @ExcludeMissing
+    fun _pausedReason(): JsonField<Monitor.PausedReason> = pausedReason
+
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
+    @JsonAnyGetter
+    @ExcludeMissing
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
+
+    fun toBuilder() = Builder().from(this)
+
+    companion object {
+
+        /**
+         * Returns a mutable builder for constructing an instance of [MonitorUpsertResponse].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .id()
+         * .createdAt()
+         * .eventTypes()
+         * .isActive()
+         * .nextBillingAt()
+         * .username()
+         * .xUserId()
+         * .created()
+         * ```
+         */
+        fun builder() = Builder()
+    }
+
+    /** A builder for [MonitorUpsertResponse]. */
+    class Builder internal constructor() {
+
+        private var id: JsonField<String>? = null
+        private var createdAt: JsonField<OffsetDateTime>? = null
+        private var eventTypes: JsonField<MutableList<EventType>>? = null
+        private var isActive: JsonField<Boolean>? = null
+        private var nextBillingAt: JsonField<OffsetDateTime>? = null
+        private var username: JsonField<String>? = null
+        private var xUserId: JsonField<String>? = null
+        private var created: JsonField<Boolean>? = null
+        private var name: JsonField<String> = JsonMissing.of()
+        private var pausedAt: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var pausedReason: JsonField<Monitor.PausedReason> = JsonMissing.of()
+        private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+        internal fun from(monitorUpsertResponse: MonitorUpsertResponse) = apply {
+            id = monitorUpsertResponse.id
+            createdAt = monitorUpsertResponse.createdAt
+            eventTypes = monitorUpsertResponse.eventTypes.map { it.toMutableList() }
+            isActive = monitorUpsertResponse.isActive
+            nextBillingAt = monitorUpsertResponse.nextBillingAt
+            username = monitorUpsertResponse.username
+            xUserId = monitorUpsertResponse.xUserId
+            created = monitorUpsertResponse.created
+            name = monitorUpsertResponse.name
+            pausedAt = monitorUpsertResponse.pausedAt
+            pausedReason = monitorUpsertResponse.pausedReason
+            additionalProperties = monitorUpsertResponse.additionalProperties.toMutableMap()
+        }
+
+        fun id(id: String) = id(JsonField.of(id))
+
+        /** Sets [Builder.id] to an arbitrary JSON value. */
+        fun id(id: JsonField<String>) = apply { this.id = id }
+
+        fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
+
+        /** Sets [Builder.createdAt] to an arbitrary JSON value. */
+        fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
+
+        /** Array of event types to subscribe to. */
+        fun eventTypes(eventTypes: List<EventType>) = eventTypes(JsonField.of(eventTypes))
+
+        /** Sets [Builder.eventTypes] to an arbitrary JSON value. */
+        fun eventTypes(eventTypes: JsonField<List<EventType>>) = apply {
+            this.eventTypes = eventTypes.map { it.toMutableList() }
+        }
+
+        /**
+         * Adds a single [EventType] to [eventTypes].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addEventType(eventType: EventType) = apply {
+            eventTypes =
+                (eventTypes ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("eventTypes", it).add(eventType)
+                }
+        }
+
+        fun isActive(isActive: Boolean) = isActive(JsonField.of(isActive))
+
+        /** Sets [Builder.isActive] to an arbitrary JSON value. */
+        fun isActive(isActive: JsonField<Boolean>) = apply { this.isActive = isActive }
+
+        /** Next hourly credit charge time for this account monitorUpsertResponse. */
+        fun nextBillingAt(nextBillingAt: OffsetDateTime) =
+            nextBillingAt(JsonField.of(nextBillingAt))
+
+        /** Sets [Builder.nextBillingAt] to an arbitrary JSON value. */
+        fun nextBillingAt(nextBillingAt: JsonField<OffsetDateTime>) = apply {
+            this.nextBillingAt = nextBillingAt
+        }
+
+        fun username(username: String) = username(JsonField.of(username))
+
+        /** Sets [Builder.username] to an arbitrary JSON value. */
+        fun username(username: JsonField<String>) = apply { this.username = username }
+
+        fun xUserId(xUserId: String) = xUserId(JsonField.of(xUserId))
+
+        /** Sets [Builder.xUserId] to an arbitrary JSON value. */
+        fun xUserId(xUserId: JsonField<String>) = apply { this.xUserId = xUserId }
+
+        /**
+         * True when this call created the monitor or turned it back on, false when it updated a
+         * running monitor.
+         */
+        fun created(created: Boolean) = created(JsonField.of(created))
+
+        /** Sets [Builder.created] to an arbitrary JSON value. */
+        fun created(created: JsonField<Boolean>) = apply { this.created = created }
+
+        /** Customer-set label of the account monitor, when set. */
+        fun name(name: String) = name(JsonField.of(name))
+
+        /** Sets [Builder.name] to an arbitrary JSON value. */
+        fun name(name: JsonField<String>) = apply { this.name = name }
+
+        /** When Xquik automatically paused this monitorUpsertResponse. */
+        fun pausedAt(pausedAt: OffsetDateTime) = pausedAt(JsonField.of(pausedAt))
+
+        /** Sets [Builder.pausedAt] to an arbitrary JSON value. */
+        fun pausedAt(pausedAt: JsonField<OffsetDateTime>) = apply { this.pausedAt = pausedAt }
+
+        /** Why Xquik automatically paused this monitorUpsertResponse. */
+        fun pausedReason(pausedReason: Monitor.PausedReason) =
+            pausedReason(JsonField.of(pausedReason))
+
+        /** Sets [Builder.pausedReason] to an arbitrary JSON value. */
+        fun pausedReason(pausedReason: JsonField<Monitor.PausedReason>) = apply {
+            this.pausedReason = pausedReason
+        }
+
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            putAllAdditionalProperties(additionalProperties)
+        }
+
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            additionalProperties.put(key, value)
+        }
+
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
+
+        /**
+         * Returns an immutable instance of [MonitorUpsertResponse].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .id()
+         * .createdAt()
+         * .eventTypes()
+         * .isActive()
+         * .nextBillingAt()
+         * .username()
+         * .xUserId()
+         * .created()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): MonitorUpsertResponse =
+            MonitorUpsertResponse(
+                checkRequired("id", id),
+                checkRequired("createdAt", createdAt),
+                checkRequired("eventTypes", eventTypes).map { it.toImmutable() },
+                checkRequired("isActive", isActive),
+                checkRequired("nextBillingAt", nextBillingAt),
+                checkRequired("username", username),
+                checkRequired("xUserId", xUserId),
+                checkRequired("created", created),
+                name,
+                pausedAt,
+                pausedReason,
+                additionalProperties.toMutableMap(),
+            )
+    }
+
+    private var validated: Boolean = false
+
+    /**
+     * Validates that the types of all values in this object match their expected types recursively.
+     *
+     * This method is _not_ forwards compatible with new types from the API for existing fields.
+     *
+     * @throws XTwitterScraperInvalidDataException if any value type in this object doesn't match
+     *   its expected type.
+     */
+    fun validate(): MonitorUpsertResponse = apply {
+        if (validated) {
+            return@apply
+        }
+
+        id()
+        createdAt()
+        eventTypes().forEach { it.validate() }
+        isActive()
+        nextBillingAt()
+        username()
+        xUserId()
+        created()
+        name()
+        pausedAt()
+        pausedReason()?.validate()
+        validated = true
+    }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: XTwitterScraperInvalidDataException) {
+            false
+        }
+
+    internal fun validity(): Int =
+        (if (id.asKnown() == null) 0 else 1) +
+            (if (createdAt.asKnown() == null) 0 else 1) +
+            (eventTypes.asKnown()?.sumOf { it.validity() } ?: 0) +
+            (if (isActive.asKnown() == null) 0 else 1) +
+            (if (nextBillingAt.asKnown() == null) 0 else 1) +
+            (if (username.asKnown() == null) 0 else 1) +
+            (if (xUserId.asKnown() == null) 0 else 1) +
+            (if (created.asKnown() == null) 0 else 1) +
+            (if (name.asKnown() == null) 0 else 1) +
+            (if (pausedAt.asKnown() == null) 0 else 1) +
+            (pausedReason.asKnown()?.validity() ?: 0)
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return other is MonitorUpsertResponse &&
+            id == other.id &&
+            createdAt == other.createdAt &&
+            eventTypes == other.eventTypes &&
+            isActive == other.isActive &&
+            nextBillingAt == other.nextBillingAt &&
+            username == other.username &&
+            xUserId == other.xUserId &&
+            created == other.created &&
+            name == other.name &&
+            pausedAt == other.pausedAt &&
+            pausedReason == other.pausedReason &&
+            additionalProperties == other.additionalProperties
+    }
+
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            id,
+            createdAt,
+            eventTypes,
+            isActive,
+            nextBillingAt,
+            username,
+            xUserId,
+            created,
+            name,
+            pausedAt,
+            pausedReason,
+            additionalProperties,
+        )
+    }
+
+    override fun hashCode(): Int = hashCode
+
+    override fun toString() =
+        "MonitorUpsertResponse{id=$id, createdAt=$createdAt, eventTypes=$eventTypes, isActive=$isActive, nextBillingAt=$nextBillingAt, username=$username, xUserId=$xUserId, created=$created, name=$name, pausedAt=$pausedAt, pausedReason=$pausedReason, additionalProperties=$additionalProperties}"
+}

@@ -17,6 +17,8 @@ import com.x_twitter_scraper.api.models.monitors.MonitorListParams
 import com.x_twitter_scraper.api.models.monitors.MonitorListResponse
 import com.x_twitter_scraper.api.models.monitors.MonitorRetrieveParams
 import com.x_twitter_scraper.api.models.monitors.MonitorUpdateParams
+import com.x_twitter_scraper.api.models.monitors.MonitorUpsertParams
+import com.x_twitter_scraper.api.models.monitors.MonitorUpsertResponse
 import com.x_twitter_scraper.api.services.blocking.monitors.KeywordService
 import com.x_twitter_scraper.api.services.blocking.monitors.PostService
 
@@ -84,6 +86,25 @@ interface MonitorService {
     /** @see update */
     fun update(id: String, requestOptions: RequestOptions): Monitor =
         update(id, MonitorUpdateParams.none(), requestOptions)
+
+    /**
+     * Creates the monitor if it does not exist, or updates it if it does. Send the same call twice
+     * & you still have 1 monitor. A new monitor answers 201 & an update answers 200. Both carry
+     * `created`, so you know which one ran. Creating needs the credits of the first hour, then
+     * costs 30 credits an hour. A stopped monitor turns back on & counts as created. Updating is
+     * free & replaces the event types. It changes the name only when you send one.
+     */
+    fun upsert(
+        username: String,
+        params: MonitorUpsertParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): MonitorUpsertResponse = upsert(params.toBuilder().username(username).build(), requestOptions)
+
+    /** @see upsert */
+    fun upsert(
+        params: MonitorUpsertParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): MonitorUpsertResponse
 
     /** List monitors */
     fun list(
@@ -183,6 +204,25 @@ interface MonitorService {
         @MustBeClosed
         fun update(id: String, requestOptions: RequestOptions): HttpResponseFor<Monitor> =
             update(id, MonitorUpdateParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `put /monitors/username/{username}`, but is otherwise the
+         * same as [MonitorService.upsert].
+         */
+        @MustBeClosed
+        fun upsert(
+            username: String,
+            params: MonitorUpsertParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<MonitorUpsertResponse> =
+            upsert(params.toBuilder().username(username).build(), requestOptions)
+
+        /** @see upsert */
+        @MustBeClosed
+        fun upsert(
+            params: MonitorUpsertParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<MonitorUpsertResponse>
 
         /**
          * Returns a raw HTTP response for `get /monitors`, but is otherwise the same as

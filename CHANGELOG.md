@@ -7,6 +7,7 @@
 * Extraction tool types gain `USER_AFFILIATES`.
 * `x().tweets().search()` and `x().users().retrieveTweets()`, `retrieveReplies()` and `retrieveMedia()` take `topic` and `imageShows`, which keep only posts about a topic or posts whose photos show something. The page returns `topicFilter()` or `imageFilter()`, and each kept post returns `topicScore()` or `imageScore()`.
 * `extractions().run()` and `estimateCost()` take `topic` and `imageShows`, and each extraction job returns `topicFilter()` or `imageFilter()`.
+* `monitors().upsert()` creates the monitor of an account or updates it, so the same call twice still leaves 1 monitor. `created()` says which one ran.
 * `x().media().download()` takes `imageShows` and returns `imageFilter()`.
 * `x().media().download()` returns `unprocessedTweetIds()`, the posts Xquik had no time to read, at no charge. Send them again.
 * `x().users().retrieveFollowerAudit()` reads a follower audit of an account, with each follower's class, score and signals.
@@ -16,7 +17,7 @@
 
 ### Breaking changes
 
-* `Error.InnerError.LegacyErrorCode` and `Error.InnerError.StructuredError.Code` drop `TOO_MANY_TWEETS`, since the API no longer sends that code. A download now returns the posts it had no time to read in `unprocessedTweetIds()`. Code that names the constant must drop it.
+* `Error.InnerError.LegacyErrorCode` and `Error.InnerError.StructuredError.Code` drop `TOO_MANY_TWEETS` and 1 older code, since the API no longer sends them. A download now returns the posts it had no time to read in `unprocessedTweetIds()`. Code that names a dropped constant must drop it too.
 
 ## 0.10.0 (2026-11-04)
 
