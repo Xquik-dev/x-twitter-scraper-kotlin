@@ -21,9 +21,9 @@ private constructor(
 ) : Params {
 
     /**
-     * 1 to 100 posts, separated by commas. Each is a tweet ID or a tweet URL, such as
-     * x.com/nasa/status/20. Xquik reads a post named twice once. It skips any other entry & lists
-     * it under `skipped` with why. A batch without 1 post gets 400 `invalid_tweet_id`.
+     * Posts, separated by commas. Each is a tweet ID or a tweet URL, such as x.com/nasa/status/20.
+     * Xquik reads a post named twice once. It skips any other entry & lists it under `skipped` with
+     * why. A batch without 1 post gets 400 `invalid_tweet_id`.
      */
     fun ids(): String = ids
 
@@ -81,7 +81,7 @@ private constructor(
         }
 
         /**
-         * 1 to 100 posts, separated by commas. Each is a tweet ID or a tweet URL, such as
+         * Posts, separated by commas. Each is a tweet ID or a tweet URL, such as
          * x.com/nasa/status/20. Xquik reads a post named twice once. It skips any other entry &
          * lists it under `skipped` with why. A batch without 1 post gets 400 `invalid_tweet_id`.
          */

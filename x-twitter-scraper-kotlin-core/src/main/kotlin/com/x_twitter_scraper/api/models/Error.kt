@@ -710,8 +710,6 @@ private constructor(
 
                 val TELEGRAM_UNAVAILABLE = of("telegram_unavailable")
 
-                val TOO_MANY_IDS = of("too_many_ids")
-
                 val TOO_MANY_STREAMS = of("too_many_streams")
 
                 val TOPUP_IN_PROGRESS = of("topup_in_progress")
@@ -929,7 +927,6 @@ private constructor(
                 SUPPORT_MEDIA_RATE_LIMIT,
                 SUPPORT_REQUEST_RATE_LIMIT,
                 TELEGRAM_UNAVAILABLE,
-                TOO_MANY_IDS,
                 TOO_MANY_STREAMS,
                 TOPUP_IN_PROGRESS,
                 UNKNOWN_FIELD,
@@ -1107,7 +1104,6 @@ private constructor(
                 SUPPORT_MEDIA_RATE_LIMIT,
                 SUPPORT_REQUEST_RATE_LIMIT,
                 TELEGRAM_UNAVAILABLE,
-                TOO_MANY_IDS,
                 TOO_MANY_STREAMS,
                 TOPUP_IN_PROGRESS,
                 UNKNOWN_FIELD,
@@ -1286,7 +1282,6 @@ private constructor(
                     SUPPORT_MEDIA_RATE_LIMIT -> Value.SUPPORT_MEDIA_RATE_LIMIT
                     SUPPORT_REQUEST_RATE_LIMIT -> Value.SUPPORT_REQUEST_RATE_LIMIT
                     TELEGRAM_UNAVAILABLE -> Value.TELEGRAM_UNAVAILABLE
-                    TOO_MANY_IDS -> Value.TOO_MANY_IDS
                     TOO_MANY_STREAMS -> Value.TOO_MANY_STREAMS
                     TOPUP_IN_PROGRESS -> Value.TOPUP_IN_PROGRESS
                     UNKNOWN_FIELD -> Value.UNKNOWN_FIELD
@@ -1463,7 +1458,6 @@ private constructor(
                     SUPPORT_MEDIA_RATE_LIMIT -> Known.SUPPORT_MEDIA_RATE_LIMIT
                     SUPPORT_REQUEST_RATE_LIMIT -> Known.SUPPORT_REQUEST_RATE_LIMIT
                     TELEGRAM_UNAVAILABLE -> Known.TELEGRAM_UNAVAILABLE
-                    TOO_MANY_IDS -> Known.TOO_MANY_IDS
                     TOO_MANY_STREAMS -> Known.TOO_MANY_STREAMS
                     TOPUP_IN_PROGRESS -> Known.TOPUP_IN_PROGRESS
                     UNKNOWN_FIELD -> Known.UNKNOWN_FIELD
@@ -2008,8 +2002,6 @@ private constructor(
 
                     val TELEGRAM_UNAVAILABLE = of("telegram_unavailable")
 
-                    val TOO_MANY_IDS = of("too_many_ids")
-
                     val TOO_MANY_STREAMS = of("too_many_streams")
 
                     val TOPUP_IN_PROGRESS = of("topup_in_progress")
@@ -2227,7 +2219,6 @@ private constructor(
                     SUPPORT_MEDIA_RATE_LIMIT,
                     SUPPORT_REQUEST_RATE_LIMIT,
                     TELEGRAM_UNAVAILABLE,
-                    TOO_MANY_IDS,
                     TOO_MANY_STREAMS,
                     TOPUP_IN_PROGRESS,
                     UNKNOWN_FIELD,
@@ -2405,7 +2396,6 @@ private constructor(
                     SUPPORT_MEDIA_RATE_LIMIT,
                     SUPPORT_REQUEST_RATE_LIMIT,
                     TELEGRAM_UNAVAILABLE,
-                    TOO_MANY_IDS,
                     TOO_MANY_STREAMS,
                     TOPUP_IN_PROGRESS,
                     UNKNOWN_FIELD,
@@ -2583,7 +2573,6 @@ private constructor(
                         SUPPORT_MEDIA_RATE_LIMIT -> Value.SUPPORT_MEDIA_RATE_LIMIT
                         SUPPORT_REQUEST_RATE_LIMIT -> Value.SUPPORT_REQUEST_RATE_LIMIT
                         TELEGRAM_UNAVAILABLE -> Value.TELEGRAM_UNAVAILABLE
-                        TOO_MANY_IDS -> Value.TOO_MANY_IDS
                         TOO_MANY_STREAMS -> Value.TOO_MANY_STREAMS
                         TOPUP_IN_PROGRESS -> Value.TOPUP_IN_PROGRESS
                         UNKNOWN_FIELD -> Value.UNKNOWN_FIELD
@@ -2760,7 +2749,6 @@ private constructor(
                         SUPPORT_MEDIA_RATE_LIMIT -> Known.SUPPORT_MEDIA_RATE_LIMIT
                         SUPPORT_REQUEST_RATE_LIMIT -> Known.SUPPORT_REQUEST_RATE_LIMIT
                         TELEGRAM_UNAVAILABLE -> Known.TELEGRAM_UNAVAILABLE
-                        TOO_MANY_IDS -> Known.TOO_MANY_IDS
                         TOO_MANY_STREAMS -> Known.TOO_MANY_STREAMS
                         TOPUP_IN_PROGRESS -> Known.TOPUP_IN_PROGRESS
                         UNKNOWN_FIELD -> Known.UNKNOWN_FIELD

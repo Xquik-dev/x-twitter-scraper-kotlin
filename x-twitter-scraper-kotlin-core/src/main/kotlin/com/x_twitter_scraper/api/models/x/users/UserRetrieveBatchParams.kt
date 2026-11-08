@@ -42,8 +42,7 @@ private constructor(
     fun usernames(): String? = usernames
 
     /**
-     * Comma-separated numeric user IDs (1-100 values). Xquik ignores duplicate IDs and keeps the
-     * first-seen order.
+     * Comma-separated numeric user IDs. Xquik ignores duplicate IDs and keeps the first-seen order.
      */
     fun ids(): String = ids
 
@@ -199,8 +198,8 @@ private constructor(
         }
 
         /**
-         * Comma-separated numeric user IDs (1-100 values). Xquik ignores duplicate IDs and keeps
-         * the first-seen order.
+         * Comma-separated numeric user IDs. Xquik ignores duplicate IDs and keeps the first-seen
+         * order.
          */
         fun ids(ids: String) = apply { this.ids = ids }
 
