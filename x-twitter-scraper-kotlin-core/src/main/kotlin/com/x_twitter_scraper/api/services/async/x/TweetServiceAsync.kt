@@ -111,9 +111,10 @@ interface TweetServiceAsync {
     ): TweetDeleteResponse
 
     /**
-     * Returns liker profiles that X makes visible for the post. X can withhold liker identities
-     * even when the post reports likes. In that case this endpoint returns 424
-     * `favoriters_unavailable` instead of a misleading empty success.
+     * Returns who liked a post. X shows likers only to the post author. Xquik reads them through
+     * your connected X account that wrote the post. Without a connected account, it answers 424
+     * `account_required`. If none of your accounts wrote the post, it answers 424
+     * `favoriters_unavailable`.
      */
     suspend fun getFavoriters(
         id: String,

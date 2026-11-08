@@ -774,8 +774,6 @@ private constructor(
 
                 val X_LOGIN_FAILED = of("x_login_failed")
 
-                val X_LOGIN_PROXY_ERROR = of("x_login_proxy_error")
-
                 val X_LOGIN_RATE_LIMITED = of("x_login_rate_limited")
 
                 val X_LOGIN_SERVICE_UNAVAILABLE = of("x_login_service_unavailable")
@@ -963,7 +961,6 @@ private constructor(
                 X_LOGIN_CHALLENGE,
                 X_LOGIN_DENIED,
                 X_LOGIN_FAILED,
-                X_LOGIN_PROXY_ERROR,
                 X_LOGIN_RATE_LIMITED,
                 X_LOGIN_SERVICE_UNAVAILABLE,
                 X_LOGIN_SUSPENDED,
@@ -1142,7 +1139,6 @@ private constructor(
                 X_LOGIN_CHALLENGE,
                 X_LOGIN_DENIED,
                 X_LOGIN_FAILED,
-                X_LOGIN_PROXY_ERROR,
                 X_LOGIN_RATE_LIMITED,
                 X_LOGIN_SERVICE_UNAVAILABLE,
                 X_LOGIN_SUSPENDED,
@@ -1322,7 +1318,6 @@ private constructor(
                     X_LOGIN_CHALLENGE -> Value.X_LOGIN_CHALLENGE
                     X_LOGIN_DENIED -> Value.X_LOGIN_DENIED
                     X_LOGIN_FAILED -> Value.X_LOGIN_FAILED
-                    X_LOGIN_PROXY_ERROR -> Value.X_LOGIN_PROXY_ERROR
                     X_LOGIN_RATE_LIMITED -> Value.X_LOGIN_RATE_LIMITED
                     X_LOGIN_SERVICE_UNAVAILABLE -> Value.X_LOGIN_SERVICE_UNAVAILABLE
                     X_LOGIN_SUSPENDED -> Value.X_LOGIN_SUSPENDED
@@ -1500,7 +1495,6 @@ private constructor(
                     X_LOGIN_CHALLENGE -> Known.X_LOGIN_CHALLENGE
                     X_LOGIN_DENIED -> Known.X_LOGIN_DENIED
                     X_LOGIN_FAILED -> Known.X_LOGIN_FAILED
-                    X_LOGIN_PROXY_ERROR -> Known.X_LOGIN_PROXY_ERROR
                     X_LOGIN_RATE_LIMITED -> Known.X_LOGIN_RATE_LIMITED
                     X_LOGIN_SERVICE_UNAVAILABLE -> Known.X_LOGIN_SERVICE_UNAVAILABLE
                     X_LOGIN_SUSPENDED -> Known.X_LOGIN_SUSPENDED
@@ -2078,8 +2072,6 @@ private constructor(
 
                     val X_LOGIN_FAILED = of("x_login_failed")
 
-                    val X_LOGIN_PROXY_ERROR = of("x_login_proxy_error")
-
                     val X_LOGIN_RATE_LIMITED = of("x_login_rate_limited")
 
                     val X_LOGIN_SERVICE_UNAVAILABLE = of("x_login_service_unavailable")
@@ -2267,7 +2259,6 @@ private constructor(
                     X_LOGIN_CHALLENGE,
                     X_LOGIN_DENIED,
                     X_LOGIN_FAILED,
-                    X_LOGIN_PROXY_ERROR,
                     X_LOGIN_RATE_LIMITED,
                     X_LOGIN_SERVICE_UNAVAILABLE,
                     X_LOGIN_SUSPENDED,
@@ -2446,7 +2437,6 @@ private constructor(
                     X_LOGIN_CHALLENGE,
                     X_LOGIN_DENIED,
                     X_LOGIN_FAILED,
-                    X_LOGIN_PROXY_ERROR,
                     X_LOGIN_RATE_LIMITED,
                     X_LOGIN_SERVICE_UNAVAILABLE,
                     X_LOGIN_SUSPENDED,
@@ -2625,7 +2615,6 @@ private constructor(
                         X_LOGIN_CHALLENGE -> Value.X_LOGIN_CHALLENGE
                         X_LOGIN_DENIED -> Value.X_LOGIN_DENIED
                         X_LOGIN_FAILED -> Value.X_LOGIN_FAILED
-                        X_LOGIN_PROXY_ERROR -> Value.X_LOGIN_PROXY_ERROR
                         X_LOGIN_RATE_LIMITED -> Value.X_LOGIN_RATE_LIMITED
                         X_LOGIN_SERVICE_UNAVAILABLE -> Value.X_LOGIN_SERVICE_UNAVAILABLE
                         X_LOGIN_SUSPENDED -> Value.X_LOGIN_SUSPENDED
@@ -2803,7 +2792,6 @@ private constructor(
                         X_LOGIN_CHALLENGE -> Known.X_LOGIN_CHALLENGE
                         X_LOGIN_DENIED -> Known.X_LOGIN_DENIED
                         X_LOGIN_FAILED -> Known.X_LOGIN_FAILED
-                        X_LOGIN_PROXY_ERROR -> Known.X_LOGIN_PROXY_ERROR
                         X_LOGIN_RATE_LIMITED -> Known.X_LOGIN_RATE_LIMITED
                         X_LOGIN_SERVICE_UNAVAILABLE -> Known.X_LOGIN_SERVICE_UNAVAILABLE
                         X_LOGIN_SUSPENDED -> Known.X_LOGIN_SUSPENDED

@@ -27,6 +27,8 @@ import com.x_twitter_scraper.api.models.monitors.MonitorListParams
 import com.x_twitter_scraper.api.models.monitors.MonitorListResponse
 import com.x_twitter_scraper.api.models.monitors.MonitorRetrieveParams
 import com.x_twitter_scraper.api.models.monitors.MonitorUpdateParams
+import com.x_twitter_scraper.api.models.monitors.MonitorUpsertParams
+import com.x_twitter_scraper.api.models.monitors.MonitorUpsertResponse
 import com.x_twitter_scraper.api.services.async.monitors.KeywordServiceAsync
 import com.x_twitter_scraper.api.services.async.monitors.KeywordServiceAsyncImpl
 import com.x_twitter_scraper.api.services.async.monitors.PostServiceAsync
@@ -69,6 +71,11 @@ class MonitorServiceAsyncImpl internal constructor(private val clientOptions: Cl
         params: MonitorUpdateParams,
         requestOptions: RequestOptions,
     ): Monitor = withRawResponse().update(params, requestOptions).parse()
+
+    override suspend fun upsert(
+        params: MonitorUpsertParams,
+        requestOptions: RequestOptions,
+    ): MonitorUpsertResponse = withRawResponse().upsert(params, requestOptions).parse()
 
     override suspend fun list(
         params: MonitorListParams,
@@ -183,6 +190,35 @@ class MonitorServiceAsyncImpl internal constructor(private val clientOptions: Cl
             return errorHandler.handle(response).parseable {
                 response
                     .use { updateHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val upsertHandler: Handler<MonitorUpsertResponse> =
+            jsonHandler<MonitorUpsertResponse>(clientOptions.jsonMapper)
+
+        override suspend fun upsert(
+            params: MonitorUpsertParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<MonitorUpsertResponse> {
+            checkRequired("username", params.username())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("monitors", "username", params._pathParam(0))
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { upsertHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()
