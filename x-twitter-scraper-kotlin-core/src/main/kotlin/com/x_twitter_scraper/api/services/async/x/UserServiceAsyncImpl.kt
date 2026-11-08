@@ -30,6 +30,8 @@ import com.x_twitter_scraper.api.models.x.users.UserRetrieveBatchParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveBatchResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveBatchTweetsParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveBatchTweetsResponse
+import com.x_twitter_scraper.api.models.x.users.UserRetrieveFollowerAuditParams
+import com.x_twitter_scraper.api.models.x.users.UserRetrieveFollowerAuditResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveFollowerIdsParams
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveFollowerIdsResponse
 import com.x_twitter_scraper.api.models.x.users.UserRetrieveFollowersParams
@@ -179,6 +181,12 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
         params: UserRetrieveArticlesParams,
         requestOptions: RequestOptions,
     ): PaginatedTweets = withRawResponse().retrieveArticles(params, requestOptions).parse()
+
+    override suspend fun retrieveFollowerAudit(
+        params: UserRetrieveFollowerAuditParams,
+        requestOptions: RequestOptions,
+    ): UserRetrieveFollowerAuditResponse =
+        withRawResponse().retrieveFollowerAudit(params, requestOptions).parse()
 
     override suspend fun retrieveFollowerIds(
         params: UserRetrieveFollowerIdsParams,
@@ -712,6 +720,34 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
             return errorHandler.handle(response).parseable {
                 response
                     .use { retrieveArticlesHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val retrieveFollowerAuditHandler: Handler<UserRetrieveFollowerAuditResponse> =
+            jsonHandler<UserRetrieveFollowerAuditResponse>(clientOptions.jsonMapper)
+
+        override suspend fun retrieveFollowerAudit(
+            params: UserRetrieveFollowerAuditParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<UserRetrieveFollowerAuditResponse> {
+            checkRequired("id", params.id())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("x", "users", params._pathParam(0), "follower-audit")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { retrieveFollowerAuditHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()
