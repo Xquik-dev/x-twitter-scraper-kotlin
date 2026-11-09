@@ -45,14 +45,13 @@ private constructor(
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
-        internal fun from(
-            accountConnectionLinkDeleteParams: AccountConnectionLinkDeleteParams
-        ) = apply {
-            id = accountConnectionLinkDeleteParams.id
-            additionalHeaders = accountConnectionLinkDeleteParams.additionalHeaders.toBuilder()
-            additionalQueryParams =
-                accountConnectionLinkDeleteParams.additionalQueryParams.toBuilder()
-        }
+        internal fun from(accountConnectionLinkDeleteParams: AccountConnectionLinkDeleteParams) =
+            apply {
+                id = accountConnectionLinkDeleteParams.id
+                additionalHeaders = accountConnectionLinkDeleteParams.additionalHeaders.toBuilder()
+                additionalQueryParams =
+                    accountConnectionLinkDeleteParams.additionalQueryParams.toBuilder()
+            }
 
         fun id(id: String?) = apply { this.id = id }
 
