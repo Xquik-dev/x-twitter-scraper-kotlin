@@ -57,11 +57,13 @@ internal class AccountConnectionAttemptRetrieveResponseTest {
         val success =
             AccountConnectionAttemptRetrieveResponse.Success.builder()
                 .id("xatt_0123456789abcdef0123456789abcdef")
+                .accountId("42")
                 .build()
 
         val accountConnectionAttemptRetrieveResponse =
             AccountConnectionAttemptRetrieveResponse.ofSuccess(success)
 
+        assertThat(success.accountId()).isEqualTo("42")
         assertThat(accountConnectionAttemptRetrieveResponse.pending()).isNull()
         assertThat(accountConnectionAttemptRetrieveResponse.success()).isEqualTo(success)
         assertThat(accountConnectionAttemptRetrieveResponse.failed()).isNull()
@@ -75,6 +77,7 @@ internal class AccountConnectionAttemptRetrieveResponseTest {
             AccountConnectionAttemptRetrieveResponse.ofSuccess(
                 AccountConnectionAttemptRetrieveResponse.Success.builder()
                     .id("xatt_0123456789abcdef0123456789abcdef")
+                    .accountId("42")
                     .build()
             )
 
@@ -217,5 +220,30 @@ internal class AccountConnectionAttemptRetrieveResponseTest {
         val success0 =
             AccountConnectionAttemptRetrieveResponse.Success.builder().id(JsonMissing.of()).build()
         assertThat(success0.pollAfterMs()).isNull()
+        assertThat(success0.accountId()).isNull()
+    }
+
+    @Test
+    fun successReadsConnectedAccountId() {
+        val jsonMapper = jsonMapper()
+        val body =
+            """{"id":"xatt_0123456789abcdef0123456789abcdef","accountId":"42","object":"x_account_connection_attempt","status":"success"}"""
+
+        val response =
+            jsonMapper.readValue(body, jacksonTypeRef<AccountConnectionAttemptRetrieveResponse>())
+        val success = response.success()!!
+        val withoutAccountId = success.toBuilder().accountId(JsonMissing.of()).build()
+
+        assertThat(response.isValid()).isTrue()
+        assertThat(success.accountId()).isEqualTo("42")
+        assertThat(success._accountId().asKnown()).isEqualTo("42")
+        assertThat(jsonMapper.readTree(jsonMapper.writeValueAsString(response)))
+            .isEqualTo(jsonMapper.readTree(body))
+        assertThat(success.toBuilder().build()).isEqualTo(success)
+        assertThat(success.toBuilder().build().hashCode()).isEqualTo(success.hashCode())
+        assertThat(withoutAccountId).isNotEqualTo(success)
+        assertThat(withoutAccountId.accountId()).isNull()
+        assertThat(withoutAccountId.isValid()).isTrue()
+        assertThat(success.toString()).contains("accountId=42")
     }
 }
