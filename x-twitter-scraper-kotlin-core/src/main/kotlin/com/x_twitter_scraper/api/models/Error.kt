@@ -478,6 +478,11 @@ private constructor(
 
                 val ACCOUNT_ALREADY_CONNECTED = of("account_already_connected")
 
+                val X_ACCOUNT_CONNECT_PERMISSION_REQUIRED =
+                    of("x_account_connect_permission_required")
+
+                val X_ACCOUNT_MISMATCH = of("x_account_mismatch")
+
                 val ACCOUNT_NEEDS_REAUTH = of("account_needs_reauth")
 
                 val ACCOUNT_NOT_FOUND = of("account_not_found")
@@ -811,6 +816,8 @@ private constructor(
             enum class Known {
                 INTERNAL_ERROR,
                 ACCOUNT_ALREADY_CONNECTED,
+                X_ACCOUNT_CONNECT_PERMISSION_REQUIRED,
+                X_ACCOUNT_MISMATCH,
                 ACCOUNT_NEEDS_REAUTH,
                 ACCOUNT_NOT_FOUND,
                 ACCOUNT_REQUIRED,
@@ -988,6 +995,8 @@ private constructor(
             enum class Value {
                 INTERNAL_ERROR,
                 ACCOUNT_ALREADY_CONNECTED,
+                X_ACCOUNT_CONNECT_PERMISSION_REQUIRED,
+                X_ACCOUNT_MISMATCH,
                 ACCOUNT_NEEDS_REAUTH,
                 ACCOUNT_NOT_FOUND,
                 ACCOUNT_REQUIRED,
@@ -1166,6 +1175,9 @@ private constructor(
                 when (this) {
                     INTERNAL_ERROR -> Value.INTERNAL_ERROR
                     ACCOUNT_ALREADY_CONNECTED -> Value.ACCOUNT_ALREADY_CONNECTED
+                    X_ACCOUNT_CONNECT_PERMISSION_REQUIRED ->
+                        Value.X_ACCOUNT_CONNECT_PERMISSION_REQUIRED
+                    X_ACCOUNT_MISMATCH -> Value.X_ACCOUNT_MISMATCH
                     ACCOUNT_NEEDS_REAUTH -> Value.ACCOUNT_NEEDS_REAUTH
                     ACCOUNT_NOT_FOUND -> Value.ACCOUNT_NOT_FOUND
                     ACCOUNT_REQUIRED -> Value.ACCOUNT_REQUIRED
@@ -1342,6 +1354,9 @@ private constructor(
                 when (this) {
                     INTERNAL_ERROR -> Known.INTERNAL_ERROR
                     ACCOUNT_ALREADY_CONNECTED -> Known.ACCOUNT_ALREADY_CONNECTED
+                    X_ACCOUNT_CONNECT_PERMISSION_REQUIRED ->
+                        Known.X_ACCOUNT_CONNECT_PERMISSION_REQUIRED
+                    X_ACCOUNT_MISMATCH -> Known.X_ACCOUNT_MISMATCH
                     ACCOUNT_NEEDS_REAUTH -> Known.ACCOUNT_NEEDS_REAUTH
                     ACCOUNT_NOT_FOUND -> Known.ACCOUNT_NOT_FOUND
                     ACCOUNT_REQUIRED -> Known.ACCOUNT_REQUIRED
@@ -1770,6 +1785,11 @@ private constructor(
 
                     val ACCOUNT_ALREADY_CONNECTED = of("account_already_connected")
 
+                    val X_ACCOUNT_CONNECT_PERMISSION_REQUIRED =
+                        of("x_account_connect_permission_required")
+
+                    val X_ACCOUNT_MISMATCH = of("x_account_mismatch")
+
                     val ACCOUNT_NEEDS_REAUTH = of("account_needs_reauth")
 
                     val ACCOUNT_NOT_FOUND = of("account_not_found")
@@ -2103,6 +2123,8 @@ private constructor(
                 enum class Known {
                     INTERNAL_ERROR,
                     ACCOUNT_ALREADY_CONNECTED,
+                    X_ACCOUNT_CONNECT_PERMISSION_REQUIRED,
+                    X_ACCOUNT_MISMATCH,
                     ACCOUNT_NEEDS_REAUTH,
                     ACCOUNT_NOT_FOUND,
                     ACCOUNT_REQUIRED,
@@ -2280,6 +2302,8 @@ private constructor(
                 enum class Value {
                     INTERNAL_ERROR,
                     ACCOUNT_ALREADY_CONNECTED,
+                    X_ACCOUNT_CONNECT_PERMISSION_REQUIRED,
+                    X_ACCOUNT_MISMATCH,
                     ACCOUNT_NEEDS_REAUTH,
                     ACCOUNT_NOT_FOUND,
                     ACCOUNT_REQUIRED,
@@ -2457,6 +2481,9 @@ private constructor(
                     when (this) {
                         INTERNAL_ERROR -> Value.INTERNAL_ERROR
                         ACCOUNT_ALREADY_CONNECTED -> Value.ACCOUNT_ALREADY_CONNECTED
+                        X_ACCOUNT_CONNECT_PERMISSION_REQUIRED ->
+                            Value.X_ACCOUNT_CONNECT_PERMISSION_REQUIRED
+                        X_ACCOUNT_MISMATCH -> Value.X_ACCOUNT_MISMATCH
                         ACCOUNT_NEEDS_REAUTH -> Value.ACCOUNT_NEEDS_REAUTH
                         ACCOUNT_NOT_FOUND -> Value.ACCOUNT_NOT_FOUND
                         ACCOUNT_REQUIRED -> Value.ACCOUNT_REQUIRED
@@ -2633,6 +2660,9 @@ private constructor(
                     when (this) {
                         INTERNAL_ERROR -> Known.INTERNAL_ERROR
                         ACCOUNT_ALREADY_CONNECTED -> Known.ACCOUNT_ALREADY_CONNECTED
+                        X_ACCOUNT_CONNECT_PERMISSION_REQUIRED ->
+                            Known.X_ACCOUNT_CONNECT_PERMISSION_REQUIRED
+                        X_ACCOUNT_MISMATCH -> Known.X_ACCOUNT_MISMATCH
                         ACCOUNT_NEEDS_REAUTH -> Known.ACCOUNT_NEEDS_REAUTH
                         ACCOUNT_NOT_FOUND -> Known.ACCOUNT_NOT_FOUND
                         ACCOUNT_REQUIRED -> Known.ACCOUNT_REQUIRED

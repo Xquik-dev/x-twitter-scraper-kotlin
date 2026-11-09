@@ -59,4 +59,15 @@ internal class ErrorTest {
                 .isEqualTo(Error.InnerError.StructuredError.Code.Value._UNKNOWN)
         }
     }
+
+    @Test
+    fun readsTheConnectionLinkCodesAsKnown() {
+        listOf("x_account_connect_permission_required", "x_account_mismatch").forEach { code ->
+            val name = code.uppercase()
+            assertThat(Error.InnerError.LegacyErrorCode.of(code).value().name).isEqualTo(name)
+            assertThat(Error.InnerError.LegacyErrorCode.of(code).known().name).isEqualTo(name)
+            assertThat(Error.InnerError.StructuredError.Code.of(code).value().name).isEqualTo(name)
+            assertThat(Error.InnerError.StructuredError.Code.of(code).known().name).isEqualTo(name)
+        }
+    }
 }

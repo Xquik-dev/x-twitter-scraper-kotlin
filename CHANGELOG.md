@@ -15,10 +15,12 @@
 * `x().users().retrieveInsights()` and `retrieveShadowban()` take `limit`, the number of recent posts to read.
 * A user insights sample adds `read()`, the posts the read covered with reposts and the pinned post included. `posts()` counts only those the averages used.
 * Extraction results return `isDeleted()`, and `x().getArticle()` returns the article's `unknownCounts()`.
+* `x().accountConnectionLinks().create()` makes a link to a page Xquik hosts, where a person connects an X account with no Xquik signup. `retrieve()` reads the link and its status, and `delete()` revokes it. Error codes add `X_ACCOUNT_CONNECT_PERMISSION_REQUIRED` and `X_ACCOUNT_MISMATCH`.
 
 ### Breaking changes
 
 * `Error.InnerError.LegacyErrorCode` and `Error.InnerError.StructuredError.Code` drop `TOO_MANY_IDS`, `TOO_MANY_TWEETS` and 1 older code, since the API no longer sends them. A download now returns the posts it had no time to read in `unprocessedTweetIds()`. Code that names a dropped constant must drop it too.
+* `x().accounts().reauth()` returns 1 of 3 variants instead of the account. `asSanitizedXAccount()` holds the account, `asXAccountConnectionAttemptPending()` holds an attempt to poll with `x().accountConnectionAttempts().retrieve()`, and `asXAccountConnectionChallenge()` holds a challenge to answer. Code that read `id()` or `xUsername()` on the response calls `asSanitizedXAccount()` first.
 
 ## 0.10.0 (2026-11-04)
 
