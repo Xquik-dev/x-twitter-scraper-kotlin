@@ -137,7 +137,6 @@ private constructor(
         /** Sets [Builder.returnUrl] to an arbitrary JSON value. */
         fun returnUrl(returnUrl: JsonField<String>) = apply { body.returnUrl(returnUrl) }
 
-
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
         }
