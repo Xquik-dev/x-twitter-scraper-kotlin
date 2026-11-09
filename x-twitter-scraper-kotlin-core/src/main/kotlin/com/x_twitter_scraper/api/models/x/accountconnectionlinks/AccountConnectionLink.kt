@@ -119,7 +119,6 @@ private constructor(
 
     /**
      * Expected to always return the following:
-     *
      * ```kotlin
      * JsonValue.from("x_account_connection_link")
      * ```
