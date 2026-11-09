@@ -105,14 +105,13 @@ private constructor(
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
-        internal fun from(
-            accountConnectionLinkCreateParams: AccountConnectionLinkCreateParams
-        ) = apply {
-            body = accountConnectionLinkCreateParams.body.toBuilder()
-            additionalHeaders = accountConnectionLinkCreateParams.additionalHeaders.toBuilder()
-            additionalQueryParams =
-                accountConnectionLinkCreateParams.additionalQueryParams.toBuilder()
-        }
+        internal fun from(accountConnectionLinkCreateParams: AccountConnectionLinkCreateParams) =
+            apply {
+                body = accountConnectionLinkCreateParams.body.toBuilder()
+                additionalHeaders = accountConnectionLinkCreateParams.additionalHeaders.toBuilder()
+                additionalQueryParams =
+                    accountConnectionLinkCreateParams.additionalQueryParams.toBuilder()
+            }
 
         /** Sets the entire request body. */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
