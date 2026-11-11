@@ -14,6 +14,7 @@ class BookmarkListParams
 private constructor(
     private val cursor: String?,
     private val folderId: String?,
+    private val pageSize: Long?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -23,6 +24,9 @@ private constructor(
 
     /** Optional bookmark folder ID */
     fun folderId(): String? = folderId
+
+    /** Items per page, 1 to 100, default 20. Follow the next cursor for more. */
+    fun pageSize(): Long? = pageSize
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -45,12 +49,14 @@ private constructor(
 
         private var cursor: String? = null
         private var folderId: String? = null
+        private var pageSize: Long? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(bookmarkListParams: BookmarkListParams) = apply {
             cursor = bookmarkListParams.cursor
             folderId = bookmarkListParams.folderId
+            pageSize = bookmarkListParams.pageSize
             additionalHeaders = bookmarkListParams.additionalHeaders.toBuilder()
             additionalQueryParams = bookmarkListParams.additionalQueryParams.toBuilder()
         }
@@ -60,6 +66,12 @@ private constructor(
 
         /** Optional bookmark folder ID */
         fun folderId(folderId: String?) = apply { this.folderId = folderId }
+
+        /** Items per page, 1 to 100, default 20. Follow the next cursor for more. */
+        fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
+
+        /** Alias for [Builder.pageSize]. */
+        fun pageSize(pageSize: Long) = pageSize(pageSize as Long?)
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -168,6 +180,7 @@ private constructor(
             BookmarkListParams(
                 cursor,
                 folderId,
+                pageSize,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -180,6 +193,7 @@ private constructor(
             .apply {
                 cursor?.let { put("cursor", it) }
                 folderId?.let { put("folderId", it) }
+                pageSize?.let { put("pageSize", it.toString()) }
                 putAll(additionalQueryParams)
             }
             .build()
@@ -192,13 +206,14 @@ private constructor(
         return other is BookmarkListParams &&
             cursor == other.cursor &&
             folderId == other.folderId &&
+            pageSize == other.pageSize &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(cursor, folderId, additionalHeaders, additionalQueryParams)
+        Objects.hash(cursor, folderId, pageSize, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "BookmarkListParams{cursor=$cursor, folderId=$folderId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "BookmarkListParams{cursor=$cursor, folderId=$folderId, pageSize=$pageSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

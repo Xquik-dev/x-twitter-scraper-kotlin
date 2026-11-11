@@ -16,6 +16,7 @@
 * A user insights sample adds `read()`, the posts the read covered with reposts and the pinned post included. `posts()` counts only those the averages used.
 * Extraction results return `isDeleted()`, and `x().getArticle()` returns the article's `unknownCounts()`.
 * `x().accountConnectionLinks().create()` makes a link to a page Xquik hosts, where a person connects an X account with no Xquik signup. `retrieve()` reads the link and its status, and `delete()` revokes it. Error codes add `X_ACCOUNT_CONNECT_PERMISSION_REQUIRED` and `X_ACCOUNT_MISMATCH`.
+* `x().tweets().create()` takes `mediaIds`, the IDs that `POST /x/media` returns. Send `media` or `mediaIds`, not both. Error codes add `MEDIA_NOT_UPLOADED`.
 
 ### Breaking changes
 
