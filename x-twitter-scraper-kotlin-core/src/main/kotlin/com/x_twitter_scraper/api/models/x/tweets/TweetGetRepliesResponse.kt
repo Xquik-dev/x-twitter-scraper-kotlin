@@ -2643,6 +2643,8 @@ private constructor(
 
                     val PARTIAL_VIEW = of("partial_view")
 
+                    val REPORTED_HELD = of("reported_held")
+
                     val WINDOW_COVERED = of("window_covered")
 
                     val WINDOW_PASSED = of("window_passed")
@@ -2660,6 +2662,7 @@ private constructor(
                     PAGE_CAP,
                     REPEATED_CURSOR,
                     PARTIAL_VIEW,
+                    REPORTED_HELD,
                     WINDOW_COVERED,
                     WINDOW_PASSED,
                 }
@@ -2682,6 +2685,7 @@ private constructor(
                     PAGE_CAP,
                     REPEATED_CURSOR,
                     PARTIAL_VIEW,
+                    REPORTED_HELD,
                     WINDOW_COVERED,
                     WINDOW_PASSED,
                     /**
@@ -2705,6 +2709,7 @@ private constructor(
                         PAGE_CAP -> Value.PAGE_CAP
                         REPEATED_CURSOR -> Value.REPEATED_CURSOR
                         PARTIAL_VIEW -> Value.PARTIAL_VIEW
+                        REPORTED_HELD -> Value.REPORTED_HELD
                         WINDOW_COVERED -> Value.WINDOW_COVERED
                         WINDOW_PASSED -> Value.WINDOW_PASSED
                         else -> Value._UNKNOWN
@@ -2726,6 +2731,7 @@ private constructor(
                         PAGE_CAP -> Known.PAGE_CAP
                         REPEATED_CURSOR -> Known.REPEATED_CURSOR
                         PARTIAL_VIEW -> Known.PARTIAL_VIEW
+                        REPORTED_HELD -> Known.REPORTED_HELD
                         WINDOW_COVERED -> Known.WINDOW_COVERED
                         WINDOW_PASSED -> Known.WINDOW_PASSED
                         else ->
