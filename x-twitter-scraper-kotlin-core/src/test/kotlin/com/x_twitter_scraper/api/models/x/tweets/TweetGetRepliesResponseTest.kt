@@ -101,6 +101,16 @@ internal class TweetGetRepliesResponseTest {
     }
 
     @Test
+    fun readsReportedHeldStopReason() {
+        val stopReason =
+            TweetGetRepliesResponse.Diagnostic.StrategiesAttempted.StopReason.of("reported_held")
+
+        assertThat(stopReason.known().name).isEqualTo("REPORTED_HELD")
+        assertThat(stopReason.value().name).isEqualTo("REPORTED_HELD")
+        assertThat(stopReason.validate().asString()).isEqualTo("reported_held")
+    }
+
+    @Test
     fun create() {
         val tweetGetRepliesResponse =
             TweetGetRepliesResponse.builder()

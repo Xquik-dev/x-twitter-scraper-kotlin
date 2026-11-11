@@ -4,6 +4,7 @@
 
 ### Features
 
+* A replies strategy's `stopReason()` can be `REPORTED_HELD`, which says the read already holds every reply X reports.
 * Extraction tool types gain `USER_AFFILIATES`.
 * `x().tweets().search()` and `x().users().retrieveTweets()`, `retrieveReplies()` and `retrieveMedia()` take `topic` and `imageShows`, which keep only posts about a topic or posts whose photos show something. The page returns `topicFilter()` or `imageFilter()`, and each kept post returns `topicScore()` or `imageScore()`.
 * `extractions().run()` and `estimateCost()` take `topic` and `imageShows`, and each extraction job returns `topicFilter()` or `imageFilter()`.
