@@ -547,6 +547,8 @@ private constructor(
 
                 val MEDIA_DOWNLOAD_FAILED = of("media_download_failed")
 
+                val MEDIA_NOT_UPLOADED = of("media_not_uploaded")
+
                 val MEDIA_TOO_LARGE = of("media_too_large")
 
                 val MEDIA_UNAVAILABLE = of("media_unavailable")
@@ -850,6 +852,7 @@ private constructor(
                 LOGIN_COOLDOWN,
                 LOGIN_FAILED,
                 MEDIA_DOWNLOAD_FAILED,
+                MEDIA_NOT_UPLOADED,
                 MEDIA_TOO_LARGE,
                 MEDIA_UNAVAILABLE,
                 MISSING_PARAMS,
@@ -1029,6 +1032,7 @@ private constructor(
                 LOGIN_COOLDOWN,
                 LOGIN_FAILED,
                 MEDIA_DOWNLOAD_FAILED,
+                MEDIA_NOT_UPLOADED,
                 MEDIA_TOO_LARGE,
                 MEDIA_UNAVAILABLE,
                 MISSING_PARAMS,
@@ -1210,6 +1214,7 @@ private constructor(
                     LOGIN_COOLDOWN -> Value.LOGIN_COOLDOWN
                     LOGIN_FAILED -> Value.LOGIN_FAILED
                     MEDIA_DOWNLOAD_FAILED -> Value.MEDIA_DOWNLOAD_FAILED
+                    MEDIA_NOT_UPLOADED -> Value.MEDIA_NOT_UPLOADED
                     MEDIA_TOO_LARGE -> Value.MEDIA_TOO_LARGE
                     MEDIA_UNAVAILABLE -> Value.MEDIA_UNAVAILABLE
                     MISSING_PARAMS -> Value.MISSING_PARAMS
@@ -1389,6 +1394,7 @@ private constructor(
                     LOGIN_COOLDOWN -> Known.LOGIN_COOLDOWN
                     LOGIN_FAILED -> Known.LOGIN_FAILED
                     MEDIA_DOWNLOAD_FAILED -> Known.MEDIA_DOWNLOAD_FAILED
+                    MEDIA_NOT_UPLOADED -> Known.MEDIA_NOT_UPLOADED
                     MEDIA_TOO_LARGE -> Known.MEDIA_TOO_LARGE
                     MEDIA_UNAVAILABLE -> Known.MEDIA_UNAVAILABLE
                     MISSING_PARAMS -> Known.MISSING_PARAMS
@@ -1854,6 +1860,8 @@ private constructor(
 
                     val MEDIA_DOWNLOAD_FAILED = of("media_download_failed")
 
+                    val MEDIA_NOT_UPLOADED = of("media_not_uploaded")
+
                     val MEDIA_TOO_LARGE = of("media_too_large")
 
                     val MEDIA_UNAVAILABLE = of("media_unavailable")
@@ -2157,6 +2165,7 @@ private constructor(
                     LOGIN_COOLDOWN,
                     LOGIN_FAILED,
                     MEDIA_DOWNLOAD_FAILED,
+                    MEDIA_NOT_UPLOADED,
                     MEDIA_TOO_LARGE,
                     MEDIA_UNAVAILABLE,
                     MISSING_PARAMS,
@@ -2336,6 +2345,7 @@ private constructor(
                     LOGIN_COOLDOWN,
                     LOGIN_FAILED,
                     MEDIA_DOWNLOAD_FAILED,
+                    MEDIA_NOT_UPLOADED,
                     MEDIA_TOO_LARGE,
                     MEDIA_UNAVAILABLE,
                     MISSING_PARAMS,
@@ -2516,6 +2526,7 @@ private constructor(
                         LOGIN_COOLDOWN -> Value.LOGIN_COOLDOWN
                         LOGIN_FAILED -> Value.LOGIN_FAILED
                         MEDIA_DOWNLOAD_FAILED -> Value.MEDIA_DOWNLOAD_FAILED
+                        MEDIA_NOT_UPLOADED -> Value.MEDIA_NOT_UPLOADED
                         MEDIA_TOO_LARGE -> Value.MEDIA_TOO_LARGE
                         MEDIA_UNAVAILABLE -> Value.MEDIA_UNAVAILABLE
                         MISSING_PARAMS -> Value.MISSING_PARAMS
@@ -2695,6 +2706,7 @@ private constructor(
                         LOGIN_COOLDOWN -> Known.LOGIN_COOLDOWN
                         LOGIN_FAILED -> Known.LOGIN_FAILED
                         MEDIA_DOWNLOAD_FAILED -> Known.MEDIA_DOWNLOAD_FAILED
+                        MEDIA_NOT_UPLOADED -> Known.MEDIA_NOT_UPLOADED
                         MEDIA_TOO_LARGE -> Known.MEDIA_TOO_LARGE
                         MEDIA_UNAVAILABLE -> Known.MEDIA_UNAVAILABLE
                         MISSING_PARAMS -> Known.MISSING_PARAMS
