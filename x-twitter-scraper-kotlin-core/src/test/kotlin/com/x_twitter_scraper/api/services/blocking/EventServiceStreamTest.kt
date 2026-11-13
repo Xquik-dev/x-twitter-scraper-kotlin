@@ -161,11 +161,12 @@ internal class EventServiceStreamTest {
 
     @Test
     suspend fun firstReturnsBeforeTheNextEvent() {
+        pauseBeforeSecondEvent = Duration.ofSeconds(30)
         val client =
             XTwitterScraperOkHttpClientAsync.builder().baseUrl(baseUrl).apiKey("My API Key").build()
 
         try {
-            val event = withTimeout(1_000) { client.events().stream().first() }
+            val event = withTimeout(10_000) { client.events().stream().first() }
 
             assertThat(event.id()).isEqualTo("42")
         } finally {
@@ -194,11 +195,12 @@ internal class EventServiceStreamTest {
 
     @Test
     suspend fun takeReturnsBeforeTheNextEvent() {
+        pauseBeforeSecondEvent = Duration.ofSeconds(30)
         val client =
             XTwitterScraperOkHttpClientAsync.builder().baseUrl(baseUrl).apiKey("My API Key").build()
 
         try {
-            val events = withTimeout(1_000) { client.events().stream().take(1).toList() }
+            val events = withTimeout(10_000) { client.events().stream().take(1).toList() }
 
             assertThat(events.map { it.id() }).containsExactly("42")
         } finally {

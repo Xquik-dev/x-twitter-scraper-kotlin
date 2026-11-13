@@ -102,6 +102,27 @@ private constructor(
     fun queryType(): QueryType? = body.queryType()
 
     /**
+     * Keep only posts about this topic, the same as the Actors' topic input. AI-powered analysis
+     * asks "Is this post about <topic>?" of each post & keeps scores of 0.5 or more. Only kept
+     * posts are analyzed & cost 2 credits each, & a post the filter drops costs nothing.
+     * topicFilter states the cutoff & counts. Send topic or imageShows, not both.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun topic(): String? = body.topic()
+
+    /**
+     * Keep only posts whose photos show this, the same as the Actors' imageShows input. Send
+     * charts, screenshots, product_photos, memes or people, or describe it in words, such as a
+     * rocket. AI-powered analysis checks posts with photos X doesn't mark sensitive & keeps scores
+     * of 0.5 or more. Only kept posts are analyzed & cost 2 credits each. imageFilter states the
+     * cutoff & counts. Send topic or imageShows, not both.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun imageShows(): String? = body.imageShows()
+
+    /**
      * Analyze the quotes of 1 post. Send its ID or URL.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
@@ -201,6 +222,20 @@ private constructor(
      * Unlike [queryType], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _queryType(): JsonField<QueryType> = body._queryType()
+
+    /**
+     * Returns the raw JSON value of [topic].
+     *
+     * Unlike [topic], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _topic(): JsonField<String> = body._topic()
+
+    /**
+     * Returns the raw JSON value of [imageShows].
+     *
+     * Unlike [imageShows], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _imageShows(): JsonField<String> = body._imageShows()
 
     /**
      * Returns the raw JSON value of [quotesOf].
@@ -348,8 +383,31 @@ private constructor(
         /** Sets [Builder.queryType] to an arbitrary JSON value. */
         fun queryType(queryType: JsonField<QueryType>) = apply { body.queryType(queryType) }
 
+        /**
+         * Keep only posts about this topic, the same as the Actors' topic input. AI-powered
+         * analysis asks "Is this post about <topic>?" of each post & keeps scores of 0.5 or more.
+         * Only kept posts are analyzed & cost 2 credits each, & a post the filter drops costs
+         * nothing. topicFilter states the cutoff & counts. Send topic or imageShows, not both.
+         */
+        fun topic(topic: String) = apply { body.topic(topic) }
+
+        /**
+         * Keep only posts whose photos show this, the same as the Actors' imageShows input. Send
+         * charts, screenshots, product_photos, memes or people, or describe it in words, such as a
+         * rocket. AI-powered analysis checks posts with photos X doesn't mark sensitive & keeps
+         * scores of 0.5 or more. Only kept posts are analyzed & cost 2 credits each. imageFilter
+         * states the cutoff & counts. Send topic or imageShows, not both.
+         */
+        fun imageShows(imageShows: String) = apply { body.imageShows(imageShows) }
+
         /** Analyze the quotes of 1 post. Send its ID or URL. */
         fun quotesOf(quotesOf: String) = apply { body.quotesOf(quotesOf) }
+
+        /** Sets [Builder.topic] to an arbitrary JSON value. */
+        fun topic(topic: JsonField<String>) = apply { body.topic(topic) }
+
+        /** Sets [Builder.imageShows] to an arbitrary JSON value. */
+        fun imageShows(imageShows: JsonField<String>) = apply { body.imageShows(imageShows) }
 
         /** Sets [Builder.quotesOf] to an arbitrary JSON value. */
         fun quotesOf(quotesOf: JsonField<String>) = apply { body.quotesOf(quotesOf) }
@@ -571,6 +629,8 @@ private constructor(
         private val listId: JsonField<String>,
         private val query: JsonField<String>,
         private val queryType: JsonField<QueryType>,
+        private val topic: JsonField<String>,
+        private val imageShows: JsonField<String>,
         private val quotesOf: JsonField<String>,
         private val repliesTo: JsonField<String>,
         private val sinceTime: JsonField<SinceTime>,
@@ -596,6 +656,10 @@ private constructor(
             @JsonProperty("queryType")
             @ExcludeMissing
             queryType: JsonField<QueryType> = JsonMissing.of(),
+            @JsonProperty("topic") @ExcludeMissing topic: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("imageShows")
+            @ExcludeMissing
+            imageShows: JsonField<String> = JsonMissing.of(),
             @JsonProperty("quotesOf")
             @ExcludeMissing
             quotesOf: JsonField<String> = JsonMissing.of(),
@@ -625,6 +689,8 @@ private constructor(
             listId,
             query,
             queryType,
+            topic,
+            imageShows,
             quotesOf,
             repliesTo,
             sinceTime,
@@ -689,6 +755,27 @@ private constructor(
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
         fun queryType(): QueryType? = queryType.getNullable("queryType")
+
+        /**
+         * Keep only posts about this topic, the same as the Actors' topic input. AI-powered
+         * analysis asks "Is this post about <topic>?" of each post & keeps scores of 0.5 or more.
+         * Only kept posts are analyzed & cost 2 credits each, & a post the filter drops costs
+         * nothing. topicFilter states the cutoff & counts. Send topic or imageShows, not both.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun topic(): String? = topic.getNullable("topic")
+
+        /**
+         * Keep only posts whose photos show this, the same as the Actors' imageShows input. Send
+         * charts, screenshots, product_photos, memes or people, or describe it in words, such as a
+         * rocket. AI-powered analysis checks posts with photos X doesn't mark sensitive & keeps
+         * scores of 0.5 or more. Only kept posts are analyzed & cost 2 credits each. imageFilter
+         * states the cutoff & counts. Send topic or imageShows, not both.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun imageShows(): String? = imageShows.getNullable("imageShows")
 
         /**
          * Analyze the quotes of 1 post. Send its ID or URL.
@@ -796,6 +883,22 @@ private constructor(
         fun _queryType(): JsonField<QueryType> = queryType
 
         /**
+         * Returns the raw JSON value of [topic].
+         *
+         * Unlike [topic], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("topic") @ExcludeMissing fun _topic(): JsonField<String> = topic
+
+        /**
+         * Returns the raw JSON value of [imageShows].
+         *
+         * Unlike [imageShows], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("imageShows")
+        @ExcludeMissing
+        fun _imageShows(): JsonField<String> = imageShows
+
+        /**
          * Returns the raw JSON value of [quotesOf].
          *
          * Unlike [quotesOf], this method doesn't throw if the JSON field has an unexpected type.
@@ -878,6 +981,8 @@ private constructor(
             private var listId: JsonField<String> = JsonMissing.of()
             private var query: JsonField<String> = JsonMissing.of()
             private var queryType: JsonField<QueryType> = JsonMissing.of()
+            private var topic: JsonField<String> = JsonMissing.of()
+            private var imageShows: JsonField<String> = JsonMissing.of()
             private var quotesOf: JsonField<String> = JsonMissing.of()
             private var repliesTo: JsonField<String> = JsonMissing.of()
             private var sinceTime: JsonField<SinceTime> = JsonMissing.of()
@@ -895,6 +1000,8 @@ private constructor(
                 listId = body.listId
                 query = body.query
                 queryType = body.queryType
+                topic = body.topic
+                imageShows = body.imageShows
                 quotesOf = body.quotesOf
                 repliesTo = body.repliesTo
                 sinceTime = body.sinceTime
@@ -973,8 +1080,33 @@ private constructor(
             /** Sets [Builder.queryType] to an arbitrary JSON value. */
             fun queryType(queryType: JsonField<QueryType>) = apply { this.queryType = queryType }
 
+            /**
+             * Keep only posts about this topic, the same as the Actors' topic input. AI-powered
+             * analysis asks "Is this post about <topic>?" of each post & keeps scores of 0.5 or
+             * more. Only kept posts are analyzed & cost 2 credits each, & a post the filter drops
+             * costs nothing. topicFilter states the cutoff & counts. Send topic or imageShows, not
+             * both.
+             */
+            fun topic(topic: String) = topic(JsonField.of(topic))
+
+            /**
+             * Keep only posts whose photos show this, the same as the Actors' imageShows input.
+             * Send charts, screenshots, product_photos, memes or people, or describe it in words,
+             * such as a rocket. AI-powered analysis checks posts with photos X doesn't mark
+             * sensitive & keeps scores of 0.5 or more. Only kept posts are analyzed & cost 2
+             * credits each. imageFilter states the cutoff & counts. Send topic or imageShows, not
+             * both.
+             */
+            fun imageShows(imageShows: String) = imageShows(JsonField.of(imageShows))
+
             /** Analyze the quotes of 1 post. Send its ID or URL. */
             fun quotesOf(quotesOf: String) = quotesOf(JsonField.of(quotesOf))
+
+            /** Sets [Builder.topic] to an arbitrary JSON value. */
+            fun topic(topic: JsonField<String>) = apply { this.topic = topic }
+
+            /** Sets [Builder.imageShows] to an arbitrary JSON value. */
+            fun imageShows(imageShows: JsonField<String>) = apply { this.imageShows = imageShows }
 
             /** Sets [Builder.quotesOf] to an arbitrary JSON value. */
             fun quotesOf(quotesOf: JsonField<String>) = apply { this.quotesOf = quotesOf }
@@ -1097,6 +1229,8 @@ private constructor(
                     listId,
                     query,
                     queryType,
+                    topic,
+                    imageShows,
                     quotesOf,
                     repliesTo,
                     sinceTime,
@@ -1131,6 +1265,8 @@ private constructor(
             listId()
             query()
             queryType()?.validate()
+            topic()
+            imageShows()
             quotesOf()
             repliesTo()
             sinceTime()?.validate()
@@ -1157,6 +1293,8 @@ private constructor(
                 (if (listId.asKnown() == null) 0 else 1) +
                 (if (query.asKnown() == null) 0 else 1) +
                 (queryType.asKnown()?.validity() ?: 0) +
+                (if (topic.asKnown() == null) 0 else 1) +
+                (if (imageShows.asKnown() == null) 0 else 1) +
                 (if (quotesOf.asKnown() == null) 0 else 1) +
                 (if (repliesTo.asKnown() == null) 0 else 1) +
                 (sinceTime.asKnown()?.validity() ?: 0) +
@@ -1178,6 +1316,8 @@ private constructor(
                 listId == other.listId &&
                 query == other.query &&
                 queryType == other.queryType &&
+                topic == other.topic &&
+                imageShows == other.imageShows &&
                 quotesOf == other.quotesOf &&
                 repliesTo == other.repliesTo &&
                 sinceTime == other.sinceTime &&
@@ -1197,6 +1337,8 @@ private constructor(
                 listId,
                 query,
                 queryType,
+                topic,
+                imageShows,
                 quotesOf,
                 repliesTo,
                 sinceTime,
@@ -1211,7 +1353,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{analysis=$analysis, baseline=$baseline, cursor=$cursor, limit=$limit, listId=$listId, query=$query, queryType=$queryType, quotesOf=$quotesOf, repliesTo=$repliesTo, sinceTime=$sinceTime, texts=$texts, tweetIds=$tweetIds, untilTime=$untilTime, username=$username, additionalProperties=$additionalProperties}"
+            "Body{analysis=$analysis, baseline=$baseline, cursor=$cursor, limit=$limit, listId=$listId, query=$query, queryType=$queryType, topic=$topic, imageShows=$imageShows, quotesOf=$quotesOf, repliesTo=$repliesTo, sinceTime=$sinceTime, texts=$texts, tweetIds=$tweetIds, untilTime=$untilTime, username=$username, additionalProperties=$additionalProperties}"
     }
 
     /**
