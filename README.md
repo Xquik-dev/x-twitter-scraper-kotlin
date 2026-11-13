@@ -100,10 +100,10 @@ Checked on 2026-11-09. See each number with its date & source on [xquik.com/benc
 
 ## Verify Maven signatures
 
-Every Maven Central file has a detached OpenPGP signature. Set `VERSION`, then verify the artifact.
+Every Maven Central file has a detached OpenPGP signature. Run these commands to verify the artifact.
 
 ```sh
-version=VERSION
+version=0.9.3
 artifact="x-twitter-scraper-kotlin-$version.jar"
 base="https://repo.maven.apache.org/maven2/com/xquik/api/x-twitter-scraper-kotlin/$version"
 curl --fail --location --remote-name "$base/$artifact"
@@ -147,7 +147,16 @@ System properties override environment variables.
 Call `async()` to use suspending methods.
 
 ```kotlin
-val result = client.async().x().tweets().search(params)
+import com.x_twitter_scraper.api.models.x.tweets.TweetSearchParams
+import kotlinx.coroutines.runBlocking
+
+val params = TweetSearchParams.builder()
+    .q("from:NASA")
+    .limit(10L)
+    .build()
+
+val result = runBlocking { client.async().x().tweets().search(params) }
+println(result)
 ```
 
 ## Configure retries
