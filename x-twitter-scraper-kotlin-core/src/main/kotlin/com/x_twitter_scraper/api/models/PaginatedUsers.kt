@@ -273,9 +273,7 @@ private constructor(
             diagnostic: JsonField<UserRetrieveFollowersResponse.UserListCoverageResponse.Diagnostic>
         ) = apply { this.diagnostic = diagnostic }
 
-        /**
-         * Present on the last page of an empty list whose profile counts 0 accounts in it.
-         */
+        /** Present on the last page of an empty list whose profile counts 0 accounts in it. */
         fun windowComplete(windowComplete: Boolean) = windowComplete(JsonField.of(windowComplete))
 
         /**
