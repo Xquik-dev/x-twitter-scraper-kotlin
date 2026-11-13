@@ -656,9 +656,7 @@ private constructor(
             @JsonProperty("queryType")
             @ExcludeMissing
             queryType: JsonField<QueryType> = JsonMissing.of(),
-            @JsonProperty("topic")
-            @ExcludeMissing
-            topic: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("topic") @ExcludeMissing topic: JsonField<String> = JsonMissing.of(),
             @JsonProperty("imageShows")
             @ExcludeMissing
             imageShows: JsonField<String> = JsonMissing.of(),
@@ -891,7 +889,6 @@ private constructor(
          */
         @JsonProperty("topic") @ExcludeMissing fun _topic(): JsonField<String> = topic
 
-
         /**
          * Returns the raw JSON value of [imageShows].
          *
@@ -900,7 +897,6 @@ private constructor(
         @JsonProperty("imageShows")
         @ExcludeMissing
         fun _imageShows(): JsonField<String> = imageShows
-
 
         /**
          * Returns the raw JSON value of [quotesOf].
