@@ -4,6 +4,8 @@
 
 ### Features
 
+* `PaginatedTweets`, `SportsGamePosts`, `TweetSearchCoverageResponse` and `TweetGetRepliesResponse` carry `hiddenTimeline()`, present on an empty last page when X shows the account's timeline to nobody, so the page doesn't mean the account posted nothing.
+* Follower, following, verified follower, list member and list follower pages carry `windowComplete()`, present on the last page of an empty list whose profile counts 0 accounts in it.
 * A replies strategy's `stopReason()` can be `REPORTED_HELD`, which says the read already holds every reply X reports.
 * Extraction tool types gain `USER_AFFILIATES`.
 * `x().tweets().search()` and `x().users().retrieveTweets()`, `retrieveReplies()` and `retrieveMedia()` take `topic` and `imageShows`, which keep only posts about a topic or posts whose photos show something. The page returns `topicFilter()` or `imageFilter()`, and each kept post returns `topicScore()` or `imageScore()`.

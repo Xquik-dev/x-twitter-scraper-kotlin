@@ -44,6 +44,7 @@ private constructor(
     private val readBackTo: JsonField<OffsetDateTime>,
     private val searchContext: JsonField<SearchContext>,
     private val searchedQuery: JsonField<String>,
+    private val hiddenTimeline: JsonField<Boolean>,
     private val windowComplete: JsonField<Boolean>,
     private val unreachedReplies: JsonField<Long>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -91,6 +92,9 @@ private constructor(
         @JsonProperty("searchedQuery")
         @ExcludeMissing
         searchedQuery: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("hiddenTimeline")
+        @ExcludeMissing
+        hiddenTimeline: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("windowComplete")
         @ExcludeMissing
         windowComplete: JsonField<Boolean> = JsonMissing.of(),
@@ -112,6 +116,7 @@ private constructor(
         readBackTo,
         searchContext,
         searchedQuery,
+        hiddenTimeline,
         windowComplete,
         unreachedReplies,
         mutableMapOf(),
@@ -226,6 +231,15 @@ private constructor(
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun searchedQuery(): String? = searchedQuery.getNullable("searchedQuery")
+
+    /**
+     * Present on an empty last page when X shows this account's timeline to nobody. The page is
+     * empty because of that, so it doesn't mean the account posted nothing. A retry returns the
+     * same page.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun hiddenTimeline(): Boolean? = hiddenTimeline.getNullable("hiddenTimeline")
 
     /**
      * Present on a last page whose sources all read past its start time.
@@ -361,6 +375,15 @@ private constructor(
     fun _searchedQuery(): JsonField<String> = searchedQuery
 
     /**
+     * Returns the raw JSON value of [hiddenTimeline].
+     *
+     * Unlike [hiddenTimeline], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("hiddenTimeline")
+    @ExcludeMissing
+    fun _hiddenTimeline(): JsonField<Boolean> = hiddenTimeline
+
+    /**
      * Returns the raw JSON value of [windowComplete].
      *
      * Unlike [windowComplete], this method doesn't throw if the JSON field has an unexpected type.
@@ -418,6 +441,7 @@ private constructor(
         private var readBackTo: JsonField<OffsetDateTime> = JsonMissing.of()
         private var searchContext: JsonField<SearchContext> = JsonMissing.of()
         private var searchedQuery: JsonField<String> = JsonMissing.of()
+        private var hiddenTimeline: JsonField<Boolean> = JsonMissing.of()
         private var windowComplete: JsonField<Boolean> = JsonMissing.of()
         private var unreachedReplies: JsonField<Long> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -437,6 +461,7 @@ private constructor(
             readBackTo = tweetGetRepliesResponse.readBackTo
             searchContext = tweetGetRepliesResponse.searchContext
             searchedQuery = tweetGetRepliesResponse.searchedQuery
+            hiddenTimeline = tweetGetRepliesResponse.hiddenTimeline
             windowComplete = tweetGetRepliesResponse.windowComplete
             unreachedReplies = tweetGetRepliesResponse.unreachedReplies
             additionalProperties = tweetGetRepliesResponse.additionalProperties.toMutableMap()
@@ -589,8 +614,20 @@ private constructor(
             this.searchedQuery = searchedQuery
         }
 
+        /**
+         * Present on an empty last page when X shows this account's timeline to nobody. The page is
+         * empty because of that, so it doesn't mean the account posted nothing. A retry returns the
+         * same page.
+         */
+        fun hiddenTimeline(hiddenTimeline: Boolean) = hiddenTimeline(JsonField.of(hiddenTimeline))
+
         /** Present on a last page whose sources all read past its start time. */
         fun windowComplete(windowComplete: Boolean) = windowComplete(JsonField.of(windowComplete))
+
+        /** Sets [Builder.hiddenTimeline] to an arbitrary JSON value. */
+        fun hiddenTimeline(hiddenTimeline: JsonField<Boolean>) = apply {
+            this.hiddenTimeline = hiddenTimeline
+        }
 
         /** Sets [Builder.windowComplete] to an arbitrary JSON value. */
         fun windowComplete(windowComplete: JsonField<Boolean>) = apply {
@@ -658,6 +695,7 @@ private constructor(
                 readBackTo,
                 searchContext,
                 searchedQuery,
+                hiddenTimeline,
                 windowComplete,
                 unreachedReplies,
                 additionalProperties.toMutableMap(),
@@ -693,6 +731,7 @@ private constructor(
         readBackTo()
         searchContext()?.validate()
         searchedQuery()
+        hiddenTimeline()
         windowComplete()
         unreachedReplies()
         validated = true
@@ -721,6 +760,7 @@ private constructor(
             (if (readBackTo.asKnown() == null) 0 else 1) +
             (searchContext.asKnown()?.validity() ?: 0) +
             (if (searchedQuery.asKnown() == null) 0 else 1) +
+            (if (hiddenTimeline.asKnown() == null) 0 else 1) +
             (if (windowComplete.asKnown() == null) 0 else 1) +
             (if (unreachedReplies.asKnown() == null) 0 else 1)
 
@@ -3299,6 +3339,7 @@ private constructor(
             readBackTo == other.readBackTo &&
             searchContext == other.searchContext &&
             searchedQuery == other.searchedQuery &&
+            hiddenTimeline == other.hiddenTimeline &&
             windowComplete == other.windowComplete &&
             unreachedReplies == other.unreachedReplies &&
             additionalProperties == other.additionalProperties
@@ -3320,6 +3361,7 @@ private constructor(
             readBackTo,
             searchContext,
             searchedQuery,
+            hiddenTimeline,
             windowComplete,
             unreachedReplies,
             additionalProperties,
@@ -3329,5 +3371,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "TweetGetRepliesResponse{hasNextPage=$hasNextPage, nextCursor=$nextCursor, tweets=$tweets, diagnostic=$diagnostic, filteredCount=$filteredCount, hiddenReplies=$hiddenReplies, limitReached=$limitReached, message=$message, nestedReplies=$nestedReplies, orderPartial=$orderPartial, partialBefore=$partialBefore, readBackTo=$readBackTo, searchContext=$searchContext, searchedQuery=$searchedQuery, windowComplete=$windowComplete, unreachedReplies=$unreachedReplies, additionalProperties=$additionalProperties}"
+        "TweetGetRepliesResponse{hasNextPage=$hasNextPage, nextCursor=$nextCursor, tweets=$tweets, diagnostic=$diagnostic, filteredCount=$filteredCount, hiddenReplies=$hiddenReplies, limitReached=$limitReached, message=$message, nestedReplies=$nestedReplies, orderPartial=$orderPartial, partialBefore=$partialBefore, readBackTo=$readBackTo, searchContext=$searchContext, searchedQuery=$searchedQuery, hiddenTimeline=$hiddenTimeline, windowComplete=$windowComplete, unreachedReplies=$unreachedReplies, additionalProperties=$additionalProperties}"
 }
