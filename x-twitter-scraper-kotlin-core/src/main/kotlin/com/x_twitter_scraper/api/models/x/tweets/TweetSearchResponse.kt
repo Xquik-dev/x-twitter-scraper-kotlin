@@ -28,6 +28,7 @@ import com.x_twitter_scraper.api.core.checkRequired
 import com.x_twitter_scraper.api.core.getOrThrow
 import com.x_twitter_scraper.api.core.toImmutable
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
+import com.x_twitter_scraper.api.models.CoverageEndReason
 import com.x_twitter_scraper.api.models.PaginatedTweets
 import com.x_twitter_scraper.api.models.SearchTweet
 import java.time.OffsetDateTime
@@ -286,6 +287,7 @@ private constructor(
         private val searchContext: JsonField<SearchContext>,
         private val searchedQuery: JsonField<String>,
         private val hiddenTimeline: JsonField<Boolean>,
+        private val endReason: JsonField<CoverageEndReason>,
         private val windowComplete: JsonField<Boolean>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -319,6 +321,9 @@ private constructor(
             @JsonProperty("hiddenTimeline")
             @ExcludeMissing
             hiddenTimeline: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("endReason")
+            @ExcludeMissing
+            endReason: JsonField<CoverageEndReason> = JsonMissing.of(),
             @JsonProperty("windowComplete")
             @ExcludeMissing
             windowComplete: JsonField<Boolean> = JsonMissing.of(),
@@ -332,6 +337,7 @@ private constructor(
             searchContext,
             searchedQuery,
             hiddenTimeline,
+            endReason,
             windowComplete,
             mutableMapOf(),
         )
@@ -407,6 +413,14 @@ private constructor(
          * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
          */
         fun hiddenTimeline(): Boolean? = hiddenTimeline.getNullable("hiddenTimeline")
+
+        /**
+         * Present on a last page that X cut short. `stalled` means X returned no new results 2
+         * times in a row, 30 s apart. The list may hold more. Read it again later without cursor.
+         *
+         * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+         */
+        fun endReason(): CoverageEndReason? = endReason.getNullable("endReason")
 
         /**
          * Present on a last page whose sources all read past its start time.
@@ -499,6 +513,15 @@ private constructor(
         fun _hiddenTimeline(): JsonField<Boolean> = hiddenTimeline
 
         /**
+         * Returns the raw JSON value of [endReason].
+         *
+         * Unlike [endReason], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("endReason")
+        @ExcludeMissing
+        fun _endReason(): JsonField<CoverageEndReason> = endReason
+
+        /**
          * Returns the raw JSON value of [windowComplete].
          *
          * Unlike [windowComplete], this method doesn't throw if the JSON field has an unexpected
@@ -549,6 +572,7 @@ private constructor(
             private var searchContext: JsonField<SearchContext> = JsonMissing.of()
             private var searchedQuery: JsonField<String> = JsonMissing.of()
             private var hiddenTimeline: JsonField<Boolean> = JsonMissing.of()
+            private var endReason: JsonField<CoverageEndReason> = JsonMissing.of()
             private var windowComplete: JsonField<Boolean> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -562,6 +586,7 @@ private constructor(
                 searchContext = tweetSearchCoverageResponse.searchContext
                 searchedQuery = tweetSearchCoverageResponse.searchedQuery
                 hiddenTimeline = tweetSearchCoverageResponse.hiddenTimeline
+                endReason = tweetSearchCoverageResponse.endReason
                 windowComplete = tweetSearchCoverageResponse.windowComplete
                 additionalProperties =
                     tweetSearchCoverageResponse.additionalProperties.toMutableMap()
@@ -653,6 +678,13 @@ private constructor(
             fun hiddenTimeline(hiddenTimeline: Boolean) =
                 hiddenTimeline(JsonField.of(hiddenTimeline))
 
+            /**
+             * Present on a last page that X cut short. `stalled` means X returned no new results 2
+             * times in a row, 30 s apart. The list may hold more. Read it again later without
+             * cursor.
+             */
+            fun endReason(endReason: CoverageEndReason) = endReason(JsonField.of(endReason))
+
             /** Present on a last page whose sources all read past its start time. */
             fun windowComplete(windowComplete: Boolean) =
                 windowComplete(JsonField.of(windowComplete))
@@ -660,6 +692,11 @@ private constructor(
             /** Sets [Builder.hiddenTimeline] to an arbitrary JSON value. */
             fun hiddenTimeline(hiddenTimeline: JsonField<Boolean>) = apply {
                 this.hiddenTimeline = hiddenTimeline
+            }
+
+            /** Sets [Builder.endReason] to an arbitrary JSON value. */
+            fun endReason(endReason: JsonField<CoverageEndReason>) = apply {
+                this.endReason = endReason
             }
 
             /** Sets [Builder.windowComplete] to an arbitrary JSON value. */
@@ -712,6 +749,7 @@ private constructor(
                     searchContext,
                     searchedQuery,
                     hiddenTimeline,
+                    endReason,
                     windowComplete,
                     additionalProperties.toMutableMap(),
                 )
@@ -742,6 +780,7 @@ private constructor(
             searchContext()?.validate()
             searchedQuery()
             hiddenTimeline()
+            endReason()?.validate()
             windowComplete()
             validated = true
         }
@@ -764,6 +803,7 @@ private constructor(
                 (searchContext.asKnown()?.validity() ?: 0) +
                 (if (searchedQuery.asKnown() == null) 0 else 1) +
                 (if (hiddenTimeline.asKnown() == null) 0 else 1) +
+                (endReason.asKnown()?.validity() ?: 0) +
                 (if (windowComplete.asKnown() == null) 0 else 1)
 
         /** Coverage evidence across parallel search strategies. */
@@ -3002,6 +3042,7 @@ private constructor(
                 searchContext == other.searchContext &&
                 searchedQuery == other.searchedQuery &&
                 hiddenTimeline == other.hiddenTimeline &&
+                endReason == other.endReason &&
                 windowComplete == other.windowComplete &&
                 additionalProperties == other.additionalProperties
         }
@@ -3017,6 +3058,7 @@ private constructor(
                 searchContext,
                 searchedQuery,
                 hiddenTimeline,
+                endReason,
                 windowComplete,
                 additionalProperties,
             )
@@ -3025,6 +3067,6 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "TweetSearchCoverageResponse{diagnostic=$diagnostic, hasNextPage=$hasNextPage, nextCursor=$nextCursor, tweets=$tweets, filteredCount=$filteredCount, readBackTo=$readBackTo, searchContext=$searchContext, searchedQuery=$searchedQuery, hiddenTimeline=$hiddenTimeline, windowComplete=$windowComplete, additionalProperties=$additionalProperties}"
+            "TweetSearchCoverageResponse{diagnostic=$diagnostic, hasNextPage=$hasNextPage, nextCursor=$nextCursor, tweets=$tweets, filteredCount=$filteredCount, readBackTo=$readBackTo, searchContext=$searchContext, searchedQuery=$searchedQuery, hiddenTimeline=$hiddenTimeline, endReason=$endReason, windowComplete=$windowComplete, additionalProperties=$additionalProperties}"
     }
 }
