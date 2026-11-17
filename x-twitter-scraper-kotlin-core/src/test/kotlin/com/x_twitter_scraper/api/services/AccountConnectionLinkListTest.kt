@@ -30,7 +30,7 @@ import org.junit.jupiter.api.parallel.ResourceLock
 internal class AccountConnectionLinkListTest {
 
     private val page =
-        """{"links":[{"object":"x_account_connection_link","id":"xlink_BBBBBBBBBBBBBBBB","purpose":"connect","status":"pending","reference":"crm-user-8","returnUrl":null,"accountId":null,"xUserId":null,"xUsername":null,"health":null,"failure":null,"createdAt":"2026-11-08T13:00:00Z","expiresAt":"2026-11-08T13:30:00Z","completedAt":null},{"object":"x_account_connection_link","id":"xlink_AAAAAAAAAAAAAAAA","purpose":"connect","status":"connected","reference":"crm-user-7","returnUrl":"https://app.example.com/connected","accountId":"42","xUserId":"1234567890","xUsername":"your_x_username","health":"healthy","failure":null,"createdAt":"2026-11-08T12:00:00Z","expiresAt":"2026-11-08T12:30:00Z","completedAt":"2026-11-08T12:04:00Z"}],"hasMore":true,"nextCursor":"def456"}"""
+        """{"links":[{"object":"x_account_connection_link","id":"xlink_BBBBBBBBBBBBBBBB","purpose":"connect","status":"pending","reference":"crm-user-8","returnUrl":null,"apiKeyId":"17","accountId":null,"xUserId":null,"xUsername":null,"health":null,"failure":null,"createdAt":"2026-11-08T13:00:00Z","expiresAt":"2026-11-08T13:30:00Z","completedAt":null},{"object":"x_account_connection_link","id":"xlink_AAAAAAAAAAAAAAAA","purpose":"connect","status":"connected","reference":"crm-user-7","returnUrl":"https://app.example.com/connected","apiKeyId":null,"accountId":"42","xUserId":"1234567890","xUsername":"your_x_username","health":"healthy","failure":null,"createdAt":"2026-11-08T12:00:00Z","expiresAt":"2026-11-08T12:30:00Z","completedAt":"2026-11-08T12:04:00Z"}],"hasMore":true,"nextCursor":"def456"}"""
 
     private val params =
         AccountConnectionLinkListParams.builder().limit(20L).cursor("abc123").build()
@@ -59,6 +59,7 @@ internal class AccountConnectionLinkListTest {
                 AccountConnectionLink.Status.PENDING,
                 AccountConnectionLink.Status.CONNECTED,
             )
+        assertThat(page.links().map { it.apiKeyId() }).containsExactly("17", null)
         assertThat(page.links().map { it.url() }).containsOnlyNulls()
     }
 
