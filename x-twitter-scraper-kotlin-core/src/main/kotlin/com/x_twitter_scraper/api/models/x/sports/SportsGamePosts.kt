@@ -16,6 +16,7 @@ import com.x_twitter_scraper.api.core.checkKnown
 import com.x_twitter_scraper.api.core.checkRequired
 import com.x_twitter_scraper.api.core.toImmutable
 import com.x_twitter_scraper.api.errors.XTwitterScraperInvalidDataException
+import com.x_twitter_scraper.api.models.CoverageEndReason
 import com.x_twitter_scraper.api.models.SearchTweet
 import java.time.OffsetDateTime
 import java.util.Collections
@@ -33,6 +34,7 @@ private constructor(
     private val nextCursor: JsonField<String>,
     private val readBackTo: JsonField<OffsetDateTime>,
     private val hiddenTimeline: JsonField<Boolean>,
+    private val endReason: JsonField<CoverageEndReason>,
     private val windowComplete: JsonField<Boolean>,
     private val searchedQuery: JsonField<String>,
     private val searchContext: JsonField<SearchContext>,
@@ -60,6 +62,9 @@ private constructor(
         @JsonProperty("hiddenTimeline")
         @ExcludeMissing
         hiddenTimeline: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("endReason")
+        @ExcludeMissing
+        endReason: JsonField<CoverageEndReason> = JsonMissing.of(),
         @JsonProperty("windowComplete")
         @ExcludeMissing
         windowComplete: JsonField<Boolean> = JsonMissing.of(),
@@ -77,6 +82,7 @@ private constructor(
         nextCursor,
         readBackTo,
         hiddenTimeline,
+        endReason,
         windowComplete,
         searchedQuery,
         searchContext,
@@ -103,6 +109,12 @@ private constructor(
      * same page.
      */
     fun hiddenTimeline(): Boolean? = hiddenTimeline.getNullable("hiddenTimeline")
+
+    /**
+     * Present on a last page that X cut short. `stalled` means X returned no new results 2 times in
+     * a row, 30 s apart. The list may hold more. Read it again later without cursor.
+     */
+    fun endReason(): CoverageEndReason? = endReason.getNullable("endReason")
 
     /** Present on a last page whose sources all read past its start time. */
     fun windowComplete(): Boolean? = windowComplete.getNullable("windowComplete")
@@ -149,6 +161,11 @@ private constructor(
     @ExcludeMissing
     fun _hiddenTimeline(): JsonField<Boolean> = hiddenTimeline
 
+    /** Returns the raw JSON value of [endReason]. */
+    @JsonProperty("endReason")
+    @ExcludeMissing
+    fun _endReason(): JsonField<CoverageEndReason> = endReason
+
     /** Returns the raw JSON value of [windowComplete]. */
     @JsonProperty("windowComplete")
     @ExcludeMissing
@@ -194,6 +211,7 @@ private constructor(
         private var nextCursor: JsonField<String>? = null
         private var readBackTo: JsonField<OffsetDateTime> = JsonMissing.of()
         private var hiddenTimeline: JsonField<Boolean> = JsonMissing.of()
+        private var endReason: JsonField<CoverageEndReason> = JsonMissing.of()
         private var windowComplete: JsonField<Boolean> = JsonMissing.of()
         private var searchedQuery: JsonField<String> = JsonMissing.of()
         private var searchContext: JsonField<SearchContext> = JsonMissing.of()
@@ -207,6 +225,7 @@ private constructor(
             nextCursor = sportsGamePosts.nextCursor
             readBackTo = sportsGamePosts.readBackTo
             hiddenTimeline = sportsGamePosts.hiddenTimeline
+            endReason = sportsGamePosts.endReason
             windowComplete = sportsGamePosts.windowComplete
             searchedQuery = sportsGamePosts.searchedQuery
             searchContext = sportsGamePosts.searchContext
@@ -263,12 +282,23 @@ private constructor(
          */
         fun hiddenTimeline(hiddenTimeline: Boolean) = hiddenTimeline(JsonField.of(hiddenTimeline))
 
+        /**
+         * Present on a last page that X cut short. `stalled` means X returned no new results 2
+         * times in a row, 30 s apart. The list may hold more. Read it again later without cursor.
+         */
+        fun endReason(endReason: CoverageEndReason) = endReason(JsonField.of(endReason))
+
         /** Present on a last page whose sources all read past its start time. */
         fun windowComplete(windowComplete: Boolean) = windowComplete(JsonField.of(windowComplete))
 
         /** Sets [Builder.hiddenTimeline] to an arbitrary JSON value. */
         fun hiddenTimeline(hiddenTimeline: JsonField<Boolean>) = apply {
             this.hiddenTimeline = hiddenTimeline
+        }
+
+        /** Sets [Builder.endReason] to an arbitrary JSON value. */
+        fun endReason(endReason: JsonField<CoverageEndReason>) = apply {
+            this.endReason = endReason
         }
 
         /** Sets [Builder.windowComplete] to an arbitrary JSON value. */
@@ -339,6 +369,7 @@ private constructor(
                 checkRequired("nextCursor", nextCursor),
                 readBackTo,
                 hiddenTimeline,
+                endReason,
                 windowComplete,
                 searchedQuery,
                 searchContext,
@@ -366,6 +397,7 @@ private constructor(
         nextCursor()
         readBackTo()
         hiddenTimeline()
+        endReason()?.validate()
         windowComplete()
         searchedQuery()
         searchContext()?.validate()
@@ -388,6 +420,7 @@ private constructor(
             (if (nextCursor.asKnown() == null) 0 else 1) +
             (if (readBackTo.asKnown() == null) 0 else 1) +
             (if (hiddenTimeline.asKnown() == null) 0 else 1) +
+            (endReason.asKnown()?.validity() ?: 0) +
             (if (windowComplete.asKnown() == null) 0 else 1) +
             (if (searchedQuery.asKnown() == null) 0 else 1) +
             (searchContext.asKnown()?.validity() ?: 0) +
@@ -731,6 +764,7 @@ private constructor(
             nextCursor == other.nextCursor &&
             readBackTo == other.readBackTo &&
             hiddenTimeline == other.hiddenTimeline &&
+            endReason == other.endReason &&
             windowComplete == other.windowComplete &&
             searchedQuery == other.searchedQuery &&
             searchContext == other.searchContext &&
@@ -746,6 +780,7 @@ private constructor(
             nextCursor,
             readBackTo,
             hiddenTimeline,
+            endReason,
             windowComplete,
             searchedQuery,
             searchContext,
@@ -757,5 +792,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "SportsGamePosts{filteredCount=$filteredCount, tweets=$tweets, hasNextPage=$hasNextPage, nextCursor=$nextCursor, readBackTo=$readBackTo, hiddenTimeline=$hiddenTimeline, windowComplete=$windowComplete, searchedQuery=$searchedQuery, searchContext=$searchContext, query=$query, additionalProperties=$additionalProperties}"
+        "SportsGamePosts{filteredCount=$filteredCount, tweets=$tweets, hasNextPage=$hasNextPage, nextCursor=$nextCursor, readBackTo=$readBackTo, hiddenTimeline=$hiddenTimeline, endReason=$endReason, windowComplete=$windowComplete, searchedQuery=$searchedQuery, searchContext=$searchContext, query=$query, additionalProperties=$additionalProperties}"
 }
