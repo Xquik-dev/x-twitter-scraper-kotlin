@@ -5,6 +5,7 @@
 ### Features
 
 * `x().accountConnectionLinks().list()` pages through your connect links, newest first, as `AccountConnectionLinkListResponse`. Pass `nextCursor()` back as `cursor` while `hasMore()` is true.
+* `AccountConnectionLink` and `AccountConnectionLinkCreateResponse` carry `apiKeyId()`, the API key that made the link, null when a dashboard session made it. With `list()` it finds the links a leaked key made, so you can revoke them.
 * The 6 `x.analysis` params take `topic()` and `imageShows()`, and `TweetAnalysisPage` carries `topicFilter()` and `imageFilter()`, with the cutoff and counts of each filter.
 * `UserRetrieveMentionsParams` takes `ownThreads()`. With `replies` set to `exclude`, `exclude` here also leaves out replies to the author's own posts.
 * `PaginatedTweets`, `SportsGamePosts`, `TweetSearchCoverageResponse` and `TweetGetRepliesResponse` carry `hiddenTimeline()`, present on an empty last page when X shows the account's timeline to nobody, so the page doesn't mean the account posted nothing.
