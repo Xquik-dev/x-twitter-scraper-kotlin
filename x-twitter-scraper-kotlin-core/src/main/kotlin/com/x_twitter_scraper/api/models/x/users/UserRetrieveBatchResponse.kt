@@ -33,6 +33,8 @@ private constructor(
     private val requestedCount: JsonField<Long>,
     private val returnedCount: JsonField<Long>,
     private val unavailableIds: JsonField<List<String>>,
+    private val notFoundIds: JsonField<List<String>>,
+    private val suspendedIds: JsonField<List<String>>,
     private val unprocessedIds: JsonField<List<String>>,
     private val users: JsonField<List<UserProfile>>,
     private val failedIds: JsonField<List<String>>,
@@ -58,6 +60,12 @@ private constructor(
         @JsonProperty("unavailable_ids")
         @ExcludeMissing
         unavailableIds: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("not_found_ids")
+        @ExcludeMissing
+        notFoundIds: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("suspended_ids")
+        @ExcludeMissing
+        suspendedIds: JsonField<List<String>> = JsonMissing.of(),
         @JsonProperty("unprocessed_ids")
         @ExcludeMissing
         unprocessedIds: JsonField<List<String>> = JsonMissing.of(),
@@ -77,6 +85,8 @@ private constructor(
         requestedCount,
         returnedCount,
         unavailableIds,
+        notFoundIds,
+        suspendedIds,
         unprocessedIds,
         users,
         failedIds,
@@ -118,12 +128,30 @@ private constructor(
     fun returnedCount(): Long = returnedCount.getRequired("returned_count")
 
     /**
-     * Processed IDs with no returned profile, in first-seen request order.
+     * Processed IDs with no returned profile, in first-seen request order. [notFoundIds] and
+     * [suspendedIds] split them by X's answer.
      *
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null.
      */
     fun unavailableIds(): List<String> = unavailableIds.getRequired("unavailable_ids")
+
+    /**
+     * The unavailable IDs no account holds, as X answers for an account that was deactivated or
+     * deleted, in first-seen request order.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null.
+     */
+    fun notFoundIds(): List<String> = notFoundIds.getRequired("not_found_ids")
+
+    /**
+     * The unavailable IDs of accounts X suspended, in first-seen request order.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null.
+     */
+    fun suspendedIds(): List<String> = suspendedIds.getRequired("suspended_ids")
 
     /**
      * Requested IDs skipped because available credits limited processing. Retry these IDs after
@@ -209,6 +237,24 @@ private constructor(
     fun _unavailableIds(): JsonField<List<String>> = unavailableIds
 
     /**
+     * Returns the raw JSON value of [notFoundIds].
+     *
+     * Unlike [notFoundIds], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("not_found_ids")
+    @ExcludeMissing
+    fun _notFoundIds(): JsonField<List<String>> = notFoundIds
+
+    /**
+     * Returns the raw JSON value of [suspendedIds].
+     *
+     * Unlike [suspendedIds], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("suspended_ids")
+    @ExcludeMissing
+    fun _suspendedIds(): JsonField<List<String>> = suspendedIds
+
+    /**
      * Returns the raw JSON value of [unprocessedIds].
      *
      * Unlike [unprocessedIds], this method doesn't throw if the JSON field has an unexpected type.
@@ -266,6 +312,8 @@ private constructor(
          * .requestedCount()
          * .returnedCount()
          * .unavailableIds()
+         * .notFoundIds()
+         * .suspendedIds()
          * .unprocessedIds()
          * .users()
          * ```
@@ -281,6 +329,8 @@ private constructor(
         private var requestedCount: JsonField<Long>? = null
         private var returnedCount: JsonField<Long>? = null
         private var unavailableIds: JsonField<MutableList<String>>? = null
+        private var notFoundIds: JsonField<MutableList<String>>? = null
+        private var suspendedIds: JsonField<MutableList<String>>? = null
         private var unprocessedIds: JsonField<MutableList<String>>? = null
         private var users: JsonField<MutableList<UserProfile>>? = null
         private var failedIds: JsonField<MutableList<String>>? = null
@@ -294,6 +344,8 @@ private constructor(
             requestedCount = userRetrieveBatchResponse.requestedCount
             returnedCount = userRetrieveBatchResponse.returnedCount
             unavailableIds = userRetrieveBatchResponse.unavailableIds.map { it.toMutableList() }
+            notFoundIds = userRetrieveBatchResponse.notFoundIds.map { it.toMutableList() }
+            suspendedIds = userRetrieveBatchResponse.suspendedIds.map { it.toMutableList() }
             unprocessedIds = userRetrieveBatchResponse.unprocessedIds.map { it.toMutableList() }
             users = userRetrieveBatchResponse.users.map { it.toMutableList() }
             failedIds = userRetrieveBatchResponse.failedIds.map { it.toMutableList() }
@@ -332,13 +384,35 @@ private constructor(
             this.returnedCount = returnedCount
         }
 
-        /** Processed IDs with no returned profile, in first-seen request order. */
+        /**
+         * Processed IDs with no returned profile, in first-seen request order. [notFoundIds] and
+         * [suspendedIds] split them by X's answer.
+         */
         fun unavailableIds(unavailableIds: List<String>) =
             unavailableIds(JsonField.of(unavailableIds))
+
+        /**
+         * The unavailable IDs no account holds, as X answers for an account that was deactivated or
+         * deleted, in first-seen request order.
+         */
+        fun notFoundIds(notFoundIds: List<String>) = notFoundIds(JsonField.of(notFoundIds))
+
+        /** The unavailable IDs of accounts X suspended, in first-seen request order. */
+        fun suspendedIds(suspendedIds: List<String>) = suspendedIds(JsonField.of(suspendedIds))
 
         /** Sets [Builder.unavailableIds] to an arbitrary JSON value. */
         fun unavailableIds(unavailableIds: JsonField<List<String>>) = apply {
             this.unavailableIds = unavailableIds.map { it.toMutableList() }
+        }
+
+        /** Sets [Builder.notFoundIds] to an arbitrary JSON value. */
+        fun notFoundIds(notFoundIds: JsonField<List<String>>) = apply {
+            this.notFoundIds = notFoundIds.map { it.toMutableList() }
+        }
+
+        /** Sets [Builder.suspendedIds] to an arbitrary JSON value. */
+        fun suspendedIds(suspendedIds: JsonField<List<String>>) = apply {
+            this.suspendedIds = suspendedIds.map { it.toMutableList() }
         }
 
         /**
@@ -350,6 +424,30 @@ private constructor(
             unavailableIds =
                 (unavailableIds ?: JsonField.of(mutableListOf())).also {
                     checkKnown("unavailableIds", it).add(unavailableId)
+                }
+        }
+
+        /**
+         * Adds a single [String] to [notFoundIds].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addNotFoundId(notFoundId: String) = apply {
+            notFoundIds =
+                (notFoundIds ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("notFoundIds", it).add(notFoundId)
+                }
+        }
+
+        /**
+         * Adds a single [String] to [suspendedIds].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addSuspendedId(suspendedId: String) = apply {
+            suspendedIds =
+                (suspendedIds ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("suspendedIds", it).add(suspendedId)
                 }
         }
 
@@ -468,6 +566,8 @@ private constructor(
          * .requestedCount()
          * .returnedCount()
          * .unavailableIds()
+         * .notFoundIds()
+         * .suspendedIds()
          * .unprocessedIds()
          * .users()
          * ```
@@ -481,6 +581,8 @@ private constructor(
                 checkRequired("requestedCount", requestedCount),
                 checkRequired("returnedCount", returnedCount),
                 checkRequired("unavailableIds", unavailableIds).map { it.toImmutable() },
+                checkRequired("notFoundIds", notFoundIds).map { it.toImmutable() },
+                checkRequired("suspendedIds", suspendedIds).map { it.toImmutable() },
                 checkRequired("unprocessedIds", unprocessedIds).map { it.toImmutable() },
                 checkRequired("users", users).map { it.toImmutable() },
                 (failedIds ?: JsonMissing.of()).map { it.toImmutable() },
@@ -510,6 +612,8 @@ private constructor(
         requestedCount()
         returnedCount()
         unavailableIds()
+        notFoundIds()
+        suspendedIds()
         unprocessedIds()
         users().forEach { it.validate() }
         failedIds()
@@ -536,6 +640,8 @@ private constructor(
             (if (requestedCount.asKnown() == null) 0 else 1) +
             (if (returnedCount.asKnown() == null) 0 else 1) +
             (unavailableIds.asKnown()?.size ?: 0) +
+            (notFoundIds.asKnown()?.size ?: 0) +
+            (suspendedIds.asKnown()?.size ?: 0) +
             (unprocessedIds.asKnown()?.size ?: 0) +
             (users.asKnown()?.sumOf { it.validity() } ?: 0) +
             (failedIds.asKnown()?.size ?: 0) +
@@ -553,6 +659,8 @@ private constructor(
             requestedCount == other.requestedCount &&
             returnedCount == other.returnedCount &&
             unavailableIds == other.unavailableIds &&
+            notFoundIds == other.notFoundIds &&
+            suspendedIds == other.suspendedIds &&
             unprocessedIds == other.unprocessedIds &&
             users == other.users &&
             failedIds == other.failedIds &&
@@ -568,6 +676,8 @@ private constructor(
             requestedCount,
             returnedCount,
             unavailableIds,
+            notFoundIds,
+            suspendedIds,
             unprocessedIds,
             users,
             failedIds,
@@ -580,5 +690,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "UserRetrieveBatchResponse{nextCursor=$nextCursor, processedCount=$processedCount, requestedCount=$requestedCount, returnedCount=$returnedCount, unavailableIds=$unavailableIds, unprocessedIds=$unprocessedIds, users=$users, failedIds=$failedIds, filteredCount=$filteredCount, hasNextPage=$hasNextPage, additionalProperties=$additionalProperties}"
+        "UserRetrieveBatchResponse{nextCursor=$nextCursor, processedCount=$processedCount, requestedCount=$requestedCount, returnedCount=$returnedCount, unavailableIds=$unavailableIds, notFoundIds=$notFoundIds, suspendedIds=$suspendedIds, unprocessedIds=$unprocessedIds, users=$users, failedIds=$failedIds, filteredCount=$filteredCount, hasNextPage=$hasNextPage, additionalProperties=$additionalProperties}"
 }
