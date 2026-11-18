@@ -20,7 +20,7 @@ The Xquik REST API read 45 tweets per second on 2026-10-15. That cost $0.15 per 
 Add the Gradle dependency from [Maven Central](https://central.sonatype.com/artifact/com.xquik.api/x-twitter-scraper-kotlin).
 
 ```kotlin
-implementation("com.xquik.api:x-twitter-scraper-kotlin:0.9.3")
+implementation("com.xquik.api:x-twitter-scraper-kotlin:0.10.0")
 ```
 
 Or add the Maven dependency.
@@ -29,7 +29,7 @@ Or add the Maven dependency.
 <dependency>
   <groupId>com.xquik.api</groupId>
   <artifactId>x-twitter-scraper-kotlin</artifactId>
-  <version>0.9.3</version>
+  <version>0.10.0</version>
 </dependency>
 ```
 

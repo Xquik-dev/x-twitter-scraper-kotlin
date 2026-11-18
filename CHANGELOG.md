@@ -1,9 +1,30 @@
 # Changelog
 
-## Unreleased
+## 0.10.0 (2026-11-18)
+
+[Full changelog from v0.9.3 to v0.10.0](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.9.3...v0.10.0)
+
+### Breaking changes
+
+* `UserRetrieveBatchResponse.builder()` requires `notFoundIds` and `suspendedIds`, and `UserRetrieveBatchTweetsResponse.builder()` requires those and `protectedIds`, which the API always sends. Code that builds either response by hand must set them.
+* `Error.InnerError.LegacyErrorCode` and `Error.InnerError.StructuredError.Code` drop `TOO_MANY_IDS`, `TOO_MANY_TWEETS` and 1 older code, since the API no longer sends them. A download now returns the posts it had no time to read in `unprocessedTweetIds()`. Code that names a dropped constant must drop it too.
+* `x().accounts().reauth()` returns 1 of 3 variants instead of the account. `asSanitizedXAccount()` holds the account, `asXAccountConnectionAttemptPending()` holds an attempt to poll with `x().accountConnectionAttempts().retrieve()`, and `asXAccountConnectionChallenge()` holds a challenge to answer. Code that read `id()` or `xUsername()` on the response calls `asSanitizedXAccount()` first.
+* `TweetSearchParams.q` is optional, since `fromUser`, `keywords` or another field can form the search. `q()` returns `String?` instead of `String`, and `builder()` no longer requires it.
+* `ExtractionJob.builder()` requires `url`, which the API always sends. Code that builds the job by hand must set it.
+* `CreditTopupBalanceResponse.builder()` requires `chargedCurrency` and `chargedMinorUnits`, which the API always sends. Code that builds the response by hand must set both.
+* `AccountBulkRetryParams._body()` returns `AccountBulkRetryParams.Body?` instead of `Map<String, JsonValue>?`. Code that calls `_body()` must change, and compiled callers must rebuild.
+* `UserRetrieveInsightsResponse.Insights.builder()` requires `medianViews`, which the API always sends. Code that builds it by hand must set it.
+
+### Security
+
+* Update jackson-core & jackson-databind from 2.22.1 to 2.22.3, which fixes 7 advisories, 5 high & 2 moderate.
+* The jackson-core fixes are GHSA-7hhh-6rmp-j9qf & GHSA-p6pp-m3f8-5c89.
+* The jackson-databind fixes are GHSA-cxp5-3px4-pw24, GHSA-q4xh-88c3-wmh7, GHSA-wv8q-qhhj-9h54, GHSA-gx83-3vf8-gh7j & GHSA-wjgm-6hv5-3cvf.
+* The SDK's own JSON handling does not use the affected features. Your application gets the same Jackson version through the SDK, so update if it parses untrusted JSON with Jackson.
 
 ### Features
 
+* `x().users().retrieveBatch()` returns `notFoundIds()` and `suspendedIds()`, and `retrieveBatchTweets()` returns those and `protectedIds()`. They split `unavailableIds()` by X's answer. `notFoundIds()` holds accounts that were deactivated or deleted, `suspendedIds()` the accounts X suspended, and `protectedIds()` the users whose posts only approved followers see.
 * `x().accountConnectionLinks().list()` pages through your connect links, newest first, as `AccountConnectionLinkListResponse`. Pass `nextCursor()` back as `cursor` while `hasMore()` is true.
 * `AccountConnectionLink` and `AccountConnectionLinkCreateResponse` carry `apiKeyId()`, the API key that made the link, null when a dashboard session made it. With `list()` it finds the links a leaked key made, so you can revoke them.
 * `PaginatedTweets`, `PaginatedUsers`, `SportsGamePosts`, `TweetGetRepliesResponse` and `TweetSearchCoverageResponse` carry `endReason()`, a `CoverageEndReason` present on a last page that X cut short. `STALLED` means X returned no new results 2 times in a row, so the list may hold more. Read it again later without `cursor`.
@@ -27,33 +48,6 @@
 * Extraction results return `isDeleted()`, and `x().getArticle()` returns the article's `unknownCounts()`.
 * `x().accountConnectionLinks().create()` makes a link to a page Xquik hosts, where a person connects an X account with no Xquik signup. `retrieve()` reads the link and its status, and `delete()` revokes it. Error codes add `X_ACCOUNT_CONNECT_PERMISSION_REQUIRED` and `X_ACCOUNT_MISMATCH`.
 * `x().tweets().create()` takes `mediaIds`, the IDs that `POST /x/media` returns. Send `media` or `mediaIds`, not both. Error codes add `MEDIA_NOT_UPLOADED`.
-
-### Breaking changes
-
-* `Error.InnerError.LegacyErrorCode` and `Error.InnerError.StructuredError.Code` drop `TOO_MANY_IDS`, `TOO_MANY_TWEETS` and 1 older code, since the API no longer sends them. A download now returns the posts it had no time to read in `unprocessedTweetIds()`. Code that names a dropped constant must drop it too.
-* `x().accounts().reauth()` returns 1 of 3 variants instead of the account. `asSanitizedXAccount()` holds the account, `asXAccountConnectionAttemptPending()` holds an attempt to poll with `x().accountConnectionAttempts().retrieve()`, and `asXAccountConnectionChallenge()` holds a challenge to answer. Code that read `id()` or `xUsername()` on the response calls `asSanitizedXAccount()` first.
-
-## 0.10.0 (2026-11-04)
-
-[Full changelog from v0.9.3 to v0.10.0](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.9.3...v0.10.0)
-
-### Breaking changes
-
-* `TweetSearchParams.q` is optional, since `fromUser`, `keywords` or another field can form the search. `q()` returns `String?` instead of `String`, and `builder()` no longer requires it.
-* `ExtractionJob.builder()` requires `url`, which the API always sends. Code that builds the job by hand must set it.
-* `CreditTopupBalanceResponse.builder()` requires `chargedCurrency` and `chargedMinorUnits`, which the API always sends. Code that builds the response by hand must set both.
-* `AccountBulkRetryParams._body()` returns `AccountBulkRetryParams.Body?` instead of `Map<String, JsonValue>?`. Code that calls `_body()` must change, and compiled callers must rebuild.
-* `UserRetrieveInsightsResponse.Insights.builder()` requires `medianViews`, which the API always sends. Code that builds it by hand must set it.
-
-### Security
-
-* Update jackson-core & jackson-databind from 2.22.1 to 2.22.3, which fixes 7 advisories, 5 high & 2 moderate.
-* The jackson-core fixes are GHSA-7hhh-6rmp-j9qf & GHSA-p6pp-m3f8-5c89.
-* The jackson-databind fixes are GHSA-cxp5-3px4-pw24, GHSA-q4xh-88c3-wmh7, GHSA-wv8q-qhhj-9h54, GHSA-gx83-3vf8-gh7j & GHSA-wjgm-6hv5-3cvf.
-* The SDK's own JSON handling does not use the affected features. Your application gets the same Jackson version through the SDK, so update if it parses untrusted JSON with Jackson.
-
-### Features
-
 * `x().tweets().bookmark()` adds `create` and `delete`, which bookmark a post and remove the bookmark through a connected account.
 * `x().users().block()` and `x().users().mute()` add `create` and `delete`, which block, unblock, mute and unmute a user through a connected account.
 * Each write response's `Action` adds `BOOKMARK`, `UNBOOKMARK`, `BLOCK`, `UNBLOCK`, `MUTE` and `UNMUTE`.
