@@ -92,6 +92,9 @@ internal class XUsersExampleTest {
             assertThat(response.tweets()[0].viewCount()).isEqualTo(1500L)
             assertThat(response.tweets()[0].bookmarkCount()).isEqualTo(2L)
             assertThat(response.unavailableIds()).containsExactly("1234567890")
+            assertThat(response.notFoundIds()).containsExactly("1234567890")
+            assertThat(response.suspendedIds()).hasSize(0)
+            assertThat(response.protectedIds()).hasSize(0)
             assertThat(response.unprocessedIds()).hasSize(0)
         }
     }
