@@ -21,7 +21,10 @@ internal class UserRetrieveBatchResponseTest {
                 .processedCount(0L)
                 .requestedCount(0L)
                 .returnedCount(0L)
-                .addUnavailableId("unavailableId")
+                .addUnavailableId("notFoundId")
+                .addUnavailableId("suspendedId")
+                .addNotFoundId("notFoundId")
+                .addSuspendedId("suspendedId")
                 .addUnprocessedId("unprocessedId")
                 .addUser(UserProfile.builder().id("id").name("name").username("username").build())
                 .addFailedId("failedId")
@@ -32,7 +35,10 @@ internal class UserRetrieveBatchResponseTest {
         assertThat(userRetrieveBatchResponse.processedCount()).isEqualTo(0L)
         assertThat(userRetrieveBatchResponse.requestedCount()).isEqualTo(0L)
         assertThat(userRetrieveBatchResponse.returnedCount()).isEqualTo(0L)
-        assertThat(userRetrieveBatchResponse.unavailableIds()).containsExactly("unavailableId")
+        assertThat(userRetrieveBatchResponse.unavailableIds())
+            .containsExactly("notFoundId", "suspendedId")
+        assertThat(userRetrieveBatchResponse.notFoundIds()).containsExactly("notFoundId")
+        assertThat(userRetrieveBatchResponse.suspendedIds()).containsExactly("suspendedId")
         assertThat(userRetrieveBatchResponse.unprocessedIds()).containsExactly("unprocessedId")
         assertThat(userRetrieveBatchResponse.users())
             .containsExactly(
@@ -51,7 +57,10 @@ internal class UserRetrieveBatchResponseTest {
                 .processedCount(0L)
                 .requestedCount(0L)
                 .returnedCount(0L)
-                .addUnavailableId("unavailableId")
+                .addUnavailableId("notFoundId")
+                .addUnavailableId("suspendedId")
+                .addNotFoundId("notFoundId")
+                .addSuspendedId("suspendedId")
                 .addUnprocessedId("unprocessedId")
                 .addUser(UserProfile.builder().id("id").name("name").username("username").build())
                 .addFailedId("failedId")
@@ -83,6 +92,22 @@ internal class UserRetrieveBatchResponseTest {
     }
 
     @Test
+    fun readsTheUnavailableIdsSplitByXsAnswer() {
+        val userRetrieveBatchResponse =
+            jsonMapper()
+                .readValue(
+                    """{"users":[],"has_next_page":false,"next_cursor":"","requested_count":2,"processed_count":2,"returned_count":0,"unavailable_ids":["1234567890","2244994945"],"not_found_ids":["1234567890"],"suspended_ids":["2244994945"],"failed_ids":[],"unprocessed_ids":[]}""",
+                    jacksonTypeRef<UserRetrieveBatchResponse>(),
+                )
+
+        userRetrieveBatchResponse.validate()
+        assertThat(userRetrieveBatchResponse.unavailableIds())
+            .containsExactly("1234567890", "2244994945")
+        assertThat(userRetrieveBatchResponse.notFoundIds()).containsExactly("1234567890")
+        assertThat(userRetrieveBatchResponse.suspendedIds()).containsExactly("2244994945")
+    }
+
+    @Test
     fun keepsAdditionalFieldsOptional() {
         val userRetrieveBatchResponse0 =
             UserRetrieveBatchResponse.builder()
@@ -91,6 +116,8 @@ internal class UserRetrieveBatchResponseTest {
                 .requestedCount(JsonMissing.of())
                 .returnedCount(JsonMissing.of())
                 .unavailableIds(JsonMissing.of())
+                .notFoundIds(JsonMissing.of())
+                .suspendedIds(JsonMissing.of())
                 .unprocessedIds(JsonMissing.of())
                 .users(JsonMissing.of())
                 .build()
