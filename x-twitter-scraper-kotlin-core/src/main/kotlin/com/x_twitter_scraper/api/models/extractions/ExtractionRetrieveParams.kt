@@ -39,7 +39,7 @@ private constructor(
     /** Use outputMode=raw instead. */
     fun includeRaw(): Boolean? = includeRaw
 
-    /** Maximum results per page (1-1000, default 100). */
+    /** Maximum results per page (1-10000, default 100). */
     fun limit(): Long? = limit
 
     /**
@@ -111,7 +111,7 @@ private constructor(
         /** Alias for [Builder.includeRaw]. */
         fun includeRaw(includeRaw: Boolean) = includeRaw(includeRaw as Boolean?)
 
-        /** Maximum results per page (1-1000, default 100). */
+        /** Maximum results per page (1-10000, default 100). */
         fun limit(limit: Long?) = apply { this.limit = limit }
 
         /** Alias for [Builder.limit]. */
