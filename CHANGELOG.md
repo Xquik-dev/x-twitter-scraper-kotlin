@@ -3,6 +3,7 @@
 ## Unreleased
 
 - `Timeout.request()` now defaults to 80 seconds, up from 1 minute, since some API reads take longer than a minute to answer. The read and write timeouts follow it. The connect timeout and a stream's read timeout stay at 1 minute.
+- `SearchTweet`, `EmbeddedTweet` and `TweetDetail` read `communityUnavailable()` when X shows no Community for the post, with X's reason in `reason()` as X writes it, so parent, quoted and retweeted posts carry it too. Each `FootballScheduleGame` from `x().sports().listGames()` reads `rankings()`, the teams X ranks in its college football poll with their `rank()`, empty when X ranks neither team & for the NFL. `FootballScheduleGame.builder()` requires `rankings`, which the API always sends, so code that builds a game by hand must set it.
 
 ## 0.10.0 (2026-11-18)
 
