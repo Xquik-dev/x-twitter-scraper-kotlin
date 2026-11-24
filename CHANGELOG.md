@@ -1,11 +1,6 @@
 # Changelog
 
-## Unreleased
-
-- `Timeout.request()` now defaults to 80 seconds, up from 1 minute, since some API reads take longer than a minute to answer. The read and write timeouts follow it. The connect timeout and a stream's read timeout stay at 1 minute.
-- `SearchTweet`, `EmbeddedTweet` and `TweetDetail` read `communityUnavailable()` when X shows no Community for the post, with X's reason in `reason()` as X writes it, so parent, quoted and retweeted posts carry it too. Each `FootballScheduleGame` from `x().sports().listGames()` reads `rankings()`, the teams X ranks in its college football poll with their `rank()`, empty when X ranks neither team & for the NFL. `FootballScheduleGame.builder()` requires `rankings`, which the API always sends, so code that builds a game by hand must set it.
-
-## 0.10.0 (2026-11-18)
+## 0.10.0 (2026-11-24)
 
 [Full changelog from v0.9.3 to v0.10.0](https://github.com/Xquik-dev/x-twitter-scraper-kotlin/compare/v0.9.3...v0.10.0)
 
@@ -19,6 +14,7 @@
 * `CreditTopupBalanceResponse.builder()` requires `chargedCurrency` and `chargedMinorUnits`, which the API always sends. Code that builds the response by hand must set both.
 * `AccountBulkRetryParams._body()` returns `AccountBulkRetryParams.Body?` instead of `Map<String, JsonValue>?`. Code that calls `_body()` must change, and compiled callers must rebuild.
 * `UserRetrieveInsightsResponse.Insights.builder()` requires `medianViews`, which the API always sends. Code that builds it by hand must set it.
+* `FootballScheduleGame.builder()` requires `rankings`, which the API always sends. Code that builds a game by hand must set it.
 
 ### Security
 
@@ -29,6 +25,8 @@
 
 ### Features
 
+* `Timeout.request()` now defaults to 80 seconds, up from 1 minute, since some API reads take longer than a minute to answer. The read and write timeouts follow it. The connect timeout and a stream's read timeout stay at 1 minute.
+* `SearchTweet`, `EmbeddedTweet` and `TweetDetail` read `communityUnavailable()` when X shows no Community for the post, with X's reason in `reason()` as X writes it, so parent, quoted and retweeted posts carry it too. Each `FootballScheduleGame` from `x().sports().listGames()` reads `rankings()`, the teams X ranks in its college football poll with their `rank()`, empty when X ranks neither team & for the NFL.
 * `x().users().retrieveBatch()` returns `notFoundIds()` and `suspendedIds()`, and `retrieveBatchTweets()` returns those and `protectedIds()`. They split `unavailableIds()` by X's answer. `notFoundIds()` holds accounts that were deactivated or deleted, `suspendedIds()` the accounts X suspended, and `protectedIds()` the users whose posts only approved followers see.
 * `x().accountConnectionLinks().list()` pages through your connect links, newest first, as `AccountConnectionLinkListResponse`. Pass `nextCursor()` back as `cursor` while `hasMore()` is true.
 * `AccountConnectionLink` and `AccountConnectionLinkCreateResponse` carry `apiKeyId()`, the API key that made the link, null when a dashboard session made it. With `list()` it finds the links a leaked key made, so you can revoke them.
