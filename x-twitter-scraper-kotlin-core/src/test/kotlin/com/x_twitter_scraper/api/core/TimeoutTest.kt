@@ -19,7 +19,7 @@ internal class TimeoutTest {
         assertThat(timeout.request()).isEqualTo(Duration.ZERO)
         assertThat(timeout.read()).isEqualTo(Duration.ofMinutes(1))
         assertThat(timeout.connect()).isEqualTo(Duration.ofMinutes(1))
-        assertThat(timeout.write()).isEqualTo(Duration.ofMinutes(1))
+        assertThat(timeout.write()).isEqualTo(Duration.ofSeconds(80))
     }
 
     @Test
