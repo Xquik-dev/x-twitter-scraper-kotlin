@@ -20,6 +20,7 @@ import com.x_twitter_scraper.api.client.okhttp.XTwitterScraperOkHttpClient
 import com.x_twitter_scraper.api.client.okhttp.XTwitterScraperOkHttpClientAsync
 import com.x_twitter_scraper.api.models.x.sports.FootballBoxScore
 import com.x_twitter_scraper.api.models.x.sports.FootballPlays
+import com.x_twitter_scraper.api.models.x.sports.FootballPollRanking
 import com.x_twitter_scraper.api.models.x.sports.FootballSchedule
 import com.x_twitter_scraper.api.models.x.sports.FootballScoreboard
 import com.x_twitter_scraper.api.models.x.sports.SportListGamesParams
@@ -105,6 +106,11 @@ internal class SportServiceSpecExampleTest {
         assertThat(game.home().teamId()).isEqualTo("689566294702555136")
         assertThat(game.home().points()).isEqualTo(23L)
         assertThat(game.teamIds()).containsExactly("689566294702555136", "689566304366292992")
+        assertThat(game.rankings())
+            .containsExactly(
+                FootballPollRanking.builder().teamId("689566294702555136").rank(5L).build(),
+                FootballPollRanking.builder().teamId(null).rank(null).build(),
+            )
         val team = response.teams().getValue("689566294702555136")
         assertThat(team.name()).isEqualTo("San Francisco 49ers")
         assertThat(team.abbreviation()).isEqualTo("SF")
@@ -323,7 +329,17 @@ internal class SportServiceSpecExampleTest {
                       "spread": "text",
                       "total": "text"
                     }
-                  }
+                  },
+                  "rankings": [
+                    {
+                      "teamId": "689566294702555136",
+                      "rank": 5
+                    },
+                    {
+                      "teamId": null,
+                      "rank": null
+                    }
+                  ]
                 }
               ],
               "teams": {

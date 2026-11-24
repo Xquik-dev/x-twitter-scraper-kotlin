@@ -24,6 +24,7 @@ import com.x_twitter_scraper.api.models.SearchTweet.Card.Platform
 import com.x_twitter_scraper.api.models.SearchTweet.Card.UserReferenceError
 import com.x_twitter_scraper.api.models.SearchTweet.CashtagAttachment
 import com.x_twitter_scraper.api.models.SearchTweet.CommunityNote.Metadata as CommunityNoteMetadata
+import com.x_twitter_scraper.api.models.SearchTweet.CommunityUnavailable
 import com.x_twitter_scraper.api.models.SearchTweet.ConversationControl
 import com.x_twitter_scraper.api.models.SearchTweet.Coordinates
 import com.x_twitter_scraper.api.models.SearchTweet.ExclusiveContent
@@ -71,6 +72,7 @@ private constructor(
     private val cashtagAttachments: JsonField<List<CashtagAttachment>>,
     private val communityId: JsonField<String>,
     private val communityName: JsonField<String>,
+    private val communityUnavailable: JsonField<CommunityUnavailable>,
     private val communityNote: JsonField<CommunityNote>,
     private val contentDisclosure: JsonField<ContentDisclosure>,
     private val conversationControl: JsonField<ConversationControl>,
@@ -162,6 +164,9 @@ private constructor(
         @JsonProperty("communityName")
         @ExcludeMissing
         communityName: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("communityUnavailable")
+        @ExcludeMissing
+        communityUnavailable: JsonField<CommunityUnavailable> = JsonMissing.of(),
         @JsonProperty("communityNote")
         @ExcludeMissing
         communityNote: JsonField<CommunityNote> = JsonMissing.of(),
@@ -317,6 +322,7 @@ private constructor(
         cashtagAttachments,
         communityId,
         communityName,
+        communityUnavailable,
         communityNote,
         contentDisclosure,
         conversationControl,
@@ -482,6 +488,14 @@ private constructor(
      * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
      */
     fun communityName(): String? = communityName.getNullable("communityName")
+
+    /**
+     * Why X shows no Community for the post. Omitted when X names no reason.
+     *
+     * @throws XTwitterScraperInvalidDataException if the JSON field has an unexpected type.
+     */
+    fun communityUnavailable(): CommunityUnavailable? =
+        communityUnavailable.getNullable("communityUnavailable")
 
     /**
      * Community Note presentation metadata returned by X.
@@ -974,6 +988,16 @@ private constructor(
     @JsonProperty("communityName")
     @ExcludeMissing
     fun _communityName(): JsonField<String> = communityName
+
+    /**
+     * Returns the raw JSON value of [communityUnavailable].
+     *
+     * Unlike [communityUnavailable], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("communityUnavailable")
+    @ExcludeMissing
+    fun _communityUnavailable(): JsonField<CommunityUnavailable> = communityUnavailable
 
     /**
      * Returns the raw JSON value of [communityNote].
@@ -1499,6 +1523,7 @@ private constructor(
         private var cashtagAttachments: JsonField<MutableList<CashtagAttachment>>? = null
         private var communityId: JsonField<String> = JsonMissing.of()
         private var communityName: JsonField<String> = JsonMissing.of()
+        private var communityUnavailable: JsonField<CommunityUnavailable> = JsonMissing.of()
         private var communityNote: JsonField<CommunityNote> = JsonMissing.of()
         private var contentDisclosure: JsonField<ContentDisclosure> = JsonMissing.of()
         private var conversationControl: JsonField<ConversationControl> = JsonMissing.of()
@@ -1574,6 +1599,7 @@ private constructor(
             cashtagAttachments = embeddedTweet.cashtagAttachments.map { it.toMutableList() }
             communityId = embeddedTweet.communityId
             communityName = embeddedTweet.communityName
+            communityUnavailable = embeddedTweet.communityUnavailable
             communityNote = embeddedTweet.communityNote
             contentDisclosure = embeddedTweet.contentDisclosure
             conversationControl = embeddedTweet.conversationControl
@@ -1762,6 +1788,15 @@ private constructor(
         /** Sets [Builder.communityName] to an arbitrary JSON value. */
         fun communityName(communityName: JsonField<String>) = apply {
             this.communityName = communityName
+        }
+
+        /** Why X shows no Community for the post. Omitted when X names no reason. */
+        fun communityUnavailable(communityUnavailable: CommunityUnavailable) =
+            communityUnavailable(JsonField.of(communityUnavailable))
+
+        /** Sets [Builder.communityUnavailable] to an arbitrary JSON value. */
+        fun communityUnavailable(communityUnavailable: JsonField<CommunityUnavailable>) = apply {
+            this.communityUnavailable = communityUnavailable
         }
 
         /** Community Note presentation metadata returned by X. */
@@ -2341,6 +2376,7 @@ private constructor(
                 (cashtagAttachments ?: JsonMissing.of()).map { it.toImmutable() },
                 communityId,
                 communityName,
+                communityUnavailable,
                 communityNote,
                 contentDisclosure,
                 conversationControl,
@@ -2432,6 +2468,7 @@ private constructor(
         cashtagAttachments()?.forEach { it.validate() }
         communityId()
         communityName()
+        communityUnavailable()?.validate()
         communityNote()?.validate()
         contentDisclosure()?.validate()
         conversationControl()?.validate()
@@ -2516,6 +2553,7 @@ private constructor(
             (cashtagAttachments.asKnown()?.sumOf { it.validity() } ?: 0) +
             (if (communityId.asKnown() == null) 0 else 1) +
             (if (communityName.asKnown() == null) 0 else 1) +
+            (communityUnavailable.asKnown()?.validity() ?: 0) +
             (communityNote.asKnown()?.validity() ?: 0) +
             (contentDisclosure.asKnown()?.validity() ?: 0) +
             (conversationControl.asKnown()?.validity() ?: 0) +
@@ -5544,6 +5582,7 @@ private constructor(
             cashtagAttachments == other.cashtagAttachments &&
             communityId == other.communityId &&
             communityName == other.communityName &&
+            communityUnavailable == other.communityUnavailable &&
             communityNote == other.communityNote &&
             contentDisclosure == other.contentDisclosure &&
             conversationControl == other.conversationControl &&
@@ -5621,6 +5660,7 @@ private constructor(
             cashtagAttachments,
             communityId,
             communityName,
+            communityUnavailable,
             communityNote,
             contentDisclosure,
             conversationControl,
@@ -5684,5 +5724,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "EmbeddedTweet{id=$id, bookmarkCount=$bookmarkCount, unknownCounts=$unknownCounts, likeCount=$likeCount, quoteCount=$quoteCount, replyCount=$replyCount, retweetCount=$retweetCount, text=$text, viewCount=$viewCount, article=$article, author=$author, authorUnavailable=$authorUnavailable, card=$card, cashtagAttachments=$cashtagAttachments, communityId=$communityId, communityName=$communityName, communityNote=$communityNote, contentDisclosure=$contentDisclosure, conversationControl=$conversationControl, conversationId=$conversationId, coordinates=$coordinates, createdAt=$createdAt, displayTextRange=$displayTextRange, edit=$edit, entities=$entities, exclusiveContent=$exclusiveContent, geo=$geo, grokShareAttachment=$grokShareAttachment, grokTranslatedPost=$grokTranslatedPost, hasCommunityNotes=$hasCommunityNotes, inReplyToId=$inReplyToId, inReplyToUserId=$inReplyToUserId, inReplyToUsername=$inReplyToUsername, interstitial=$interstitial, isLimitedReply=$isLimitedReply, isNoteTweet=$isNoteTweet, isPinned=$isPinned, isQuoteStatus=$isQuoteStatus, isReply=$isReply, isRetweet=$isRetweet, isTranslatable=$isTranslatable, jetfuelAttachment=$jetfuelAttachment, lang=$lang, limitedActions=$limitedActions, media=$media, noteTweet=$noteTweet, parentTweet=$parentTweet, place=$place, possiblySensitive=$possiblySensitive, postCta=$postCta, previousCounts=$previousCounts, quotedTweetId=$quotedTweetId, quotedTweetPermalink=$quotedTweetPermalink, quotedTweetUnavailable=$quotedTweetUnavailable, quotedTweet=$quotedTweet, reactionContext=$reactionContext, retweetedAt=$retweetedAt, retweetedTweet=$retweetedTweet, scopes=$scopes, softIntervention=$softIntervention, source=$source, sportsContext=$sportsContext, subscriberBadge=$subscriberBadge, textHighlights=$textHighlights, tombstone=$tombstone, type=$type, unavailableAuthorId=$unavailableAuthorId, unmentionedUserIds=$unmentionedUserIds, url=$url, viewState=$viewState, liveEventContext=$liveEventContext, unknownFields=$unknownFields, additionalProperties=$additionalProperties}"
+        "EmbeddedTweet{id=$id, bookmarkCount=$bookmarkCount, unknownCounts=$unknownCounts, likeCount=$likeCount, quoteCount=$quoteCount, replyCount=$replyCount, retweetCount=$retweetCount, text=$text, viewCount=$viewCount, article=$article, author=$author, authorUnavailable=$authorUnavailable, card=$card, cashtagAttachments=$cashtagAttachments, communityId=$communityId, communityName=$communityName, communityUnavailable=$communityUnavailable, communityNote=$communityNote, contentDisclosure=$contentDisclosure, conversationControl=$conversationControl, conversationId=$conversationId, coordinates=$coordinates, createdAt=$createdAt, displayTextRange=$displayTextRange, edit=$edit, entities=$entities, exclusiveContent=$exclusiveContent, geo=$geo, grokShareAttachment=$grokShareAttachment, grokTranslatedPost=$grokTranslatedPost, hasCommunityNotes=$hasCommunityNotes, inReplyToId=$inReplyToId, inReplyToUserId=$inReplyToUserId, inReplyToUsername=$inReplyToUsername, interstitial=$interstitial, isLimitedReply=$isLimitedReply, isNoteTweet=$isNoteTweet, isPinned=$isPinned, isQuoteStatus=$isQuoteStatus, isReply=$isReply, isRetweet=$isRetweet, isTranslatable=$isTranslatable, jetfuelAttachment=$jetfuelAttachment, lang=$lang, limitedActions=$limitedActions, media=$media, noteTweet=$noteTweet, parentTweet=$parentTweet, place=$place, possiblySensitive=$possiblySensitive, postCta=$postCta, previousCounts=$previousCounts, quotedTweetId=$quotedTweetId, quotedTweetPermalink=$quotedTweetPermalink, quotedTweetUnavailable=$quotedTweetUnavailable, quotedTweet=$quotedTweet, reactionContext=$reactionContext, retweetedAt=$retweetedAt, retweetedTweet=$retweetedTweet, scopes=$scopes, softIntervention=$softIntervention, source=$source, sportsContext=$sportsContext, subscriberBadge=$subscriberBadge, textHighlights=$textHighlights, tombstone=$tombstone, type=$type, unavailableAuthorId=$unavailableAuthorId, unmentionedUserIds=$unmentionedUserIds, url=$url, viewState=$viewState, liveEventContext=$liveEventContext, unknownFields=$unknownFields, additionalProperties=$additionalProperties}"
 }
